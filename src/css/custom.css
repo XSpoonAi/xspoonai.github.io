@@ -1,0 +1,139 @@
+/**
+ * SpoonOS Brand Theme - Custom CSS for Docusaurus
+ * Agentic OS for a Sentient Economy
+ */
+
+/* SpoonOS Brand Colors */
+:root {
+  /* Primary Brand Colors - SpoonOS Orange */
+  --ifm-color-primary: #F6864D;
+  --ifm-color-primary-dark: #e6733d;
+  --ifm-color-primary-darker: #dc6935;
+  --ifm-color-primary-darkest: #c55e2e;
+  --ifm-color-primary-light: #f7935d;
+  --ifm-color-primary-lighter: #f99d6d;
+  --ifm-color-primary-lightest: #fabf95;
+
+  /* SpoonOS Background Colors */
+  --ifm-background-color: #F5F1E4;
+  --ifm-color-emphasis-0: #F5F1E4;
+  --ifm-color-emphasis-100: #F0F0DA;
+  --ifm-color-emphasis-200: #211A18;
+  --ifm-color-emphasis-300: #2A1A12;
+  --ifm-color-emphasis-400: #261C19;
+  --ifm-color-emphasis-500: #261C19;
+  --ifm-color-emphasis-600: #261C19;
+  --ifm-color-emphasis-700: #211A18;
+  --ifm-color-emphasis-800: #2A1A12;
+  --ifm-color-emphasis-900: #2A1A12;
+
+  /* Text Colors */
+  --ifm-heading-color: #261C19;
+  --ifm-color-content: #261C19;
+  --ifm-color-content-secondary: rgba(38, 28, 25, 0.8);
+
+  /* Card Colors */
+  --ifm-card-background-color: rgba(255, 255, 255, 0.8);
+  --ifm-card-border-color: rgba(246, 134, 77, 0.2);
+
+  /* Code styling */
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(246, 134, 77, 0.1);
+
+  /* Navbar */
+  --ifm-navbar-background-color: rgba(245, 241, 228, 0.95);
+  --ifm-navbar-link-color: #261C19;
+  --ifm-navbar-link-hover-color: #F6864D;
+
+  /* Footer */
+  --ifm-footer-background-color: #2A1A12;
+  --ifm-footer-color: #F0F0DA;
+  --ifm-footer-link-color: #F6864D;
+  --ifm-footer-title-color: #F0F0DA;
+}
+
+/* Dark Mode Theme */
+[data-theme='dark'] {
+  /* Dark mode primary colors - slightly lighter orange for dark backgrounds */
+  --ifm-color-primary: #F7935D;
+  --ifm-color-primary-dark: #f6864d;
+  --ifm-color-primary-darker: #f5733d;
+  --ifm-color-primary-darkest: #e66735;
+  --ifm-color-primary-light: #f99d6d;
+  --ifm-color-primary-lighter: #faa07d;
+  --ifm-color-primary-lightest: #fac39d;
+
+  /* Dark mode backgrounds */
+  --ifm-background-color: #211A18;
+  --ifm-color-emphasis-0: #211A18;
+  --ifm-color-emphasis-100: #2A1A12;
+  --ifm-color-emphasis-200: #F0F0DA;
+  --ifm-color-emphasis-300: #F5F1E4;
+  --ifm-color-emphasis-400: rgba(240, 240, 218, 0.8);
+  --ifm-color-emphasis-500: rgba(245, 241, 228, 0.6);
+  --ifm-color-emphasis-600: rgba(245, 241, 228, 0.4);
+  --ifm-color-emphasis-700: rgba(240, 240, 218, 0.3);
+  --ifm-color-emphasis-800: rgba(240, 240, 218, 0.2);
+  --ifm-color-emphasis-900: rgba(240, 240, 218, 0.1);
+
+  /* Dark mode text */
+  --ifm-heading-color: #F0F0DA;
+  --ifm-color-content: rgba(240, 240, 218, 0.9);
+  --ifm-color-content-secondary: rgba(240, 240, 218, 0.7);
+
+  /* Dark mode cards */
+  --ifm-card-background-color: rgba(42, 26, 18, 0.8);
+  --ifm-card-border-color: rgba(246, 134, 77, 0.3);
+
+  /* Dark mode navbar */
+  --ifm-navbar-background-color: rgba(33, 26, 24, 0.95);
+  --ifm-navbar-link-color: #F0F0DA;
+  --ifm-navbar-link-hover-color: #F7935D;
+
+  /* Dark mode footer */
+  --ifm-footer-background-color: #2A1A12;
+  --ifm-footer-color: #F0F0DA;
+  --ifm-footer-link-color: #F7935D;
+  --ifm-footer-title-color: #F0F0DA;
+
+  /* Dark mode code highlighting */
+  --docusaurus-highlighted-code-line-bg: rgba(247, 147, 93, 0.15);
+}
+
+/* Custom brand styling */
+.spoonos-brand-gradient {
+  background: linear-gradient(135deg, #F6864D 0%, #F7935D 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.spoonos-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(246, 134, 77, 0.2);
+  border-radius: 8px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+[data-theme='dark'] .spoonos-card {
+  background: rgba(42, 26, 18, 0.8);
+  border: 1px solid rgba(246, 134, 77, 0.3);
+}
+
+/* Custom button styles */
+.button-spoonos-primary {
+  background: linear-gradient(135deg, #F6864D 0%, #e6733d 100%);
+  color: #F0F0DA;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.button-spoonos-primary:hover {
+  background: linear-gradient(135deg, #e6733d 0%, #dc6935 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(246, 134, 77, 0.3);
+}
