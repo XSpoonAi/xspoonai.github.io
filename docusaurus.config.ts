@@ -24,6 +24,8 @@ const config: Config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'XSpoonAi', // Usually your GitHub org/user name.
   projectName: 'spoon-doc', // Usually your repo name.
+  // Ensure Docusaurus deploy pushes to the branch that GitHub Pages serves
+  deploymentBranch: 'gh-pages',
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -45,7 +47,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/XSpoonAi/spoon-core/tree/main/spoonos-cookbook/',
+            'https://github.com/XSpoonAi/spoon-doc/tree/main/',
         },
 
         theme: {
