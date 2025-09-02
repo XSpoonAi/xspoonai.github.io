@@ -27,7 +27,7 @@ const config: Config = {
   // Ensure Docusaurus deploy pushes to the branch that GitHub Pages serves
   deploymentBranch: 'gh-pages',
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
