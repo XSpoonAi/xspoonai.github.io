@@ -8,28 +8,33 @@ sidebar_position: 9
 
 The Graph System is a powerful workflow orchestration framework that enables you to create complex, multi-step AI workflows using a graph-based approach. It provides advanced state management, dynamic routing, parallel execution, monitoring, and robust error handling with enterprise-grade features.
 
+## Table of Contents
+
+1. [Graph Creation and Basic Usage](#graph-creation-and-basic-usage)
+2. [State Management](#state-management)
+3. [Node Development](#node-development)
+4. [Edge Configuration and Flow Control](#edge-configuration-and-flow-control)
+5. [Advanced Execution Patterns](#advanced-execution-patterns)
+6. [LLM Integration](#llm-integration)
+7. [Error Handling and Recovery](#error-handling-and-recovery)
+8. [Streaming and Monitoring](#streaming-and-monitoring)
+9. [Complex Workflows](#complex-workflows)
+
 ## Quick Start
 
 ### Basic Graph Example
 
 ```python
-from spoon_ai.graph import StateGraph, NodeContext, NodeResult
-from datetime import datetime
+from spoon_ai.graph import StateGraph
+from typing import TypedDict, Dict, Any
 
-# Define your state schema
-class WorkflowState:
-    input_text: str = ""
-    processed_text: str = ""
-    final_result: str = ""
-    confidence: float = 0.0
-    timestamp: str = ""
+class MyState(TypedDict):
+    counter: int
+    messages: list
+    completed: bool
 
-# Create the graph
-graph = StateGraph(WorkflowState)
-
-# Enable monitoring and cleanup
-graph.enable_monitoring(["execution_time", "success_rate", "node_performance"])
-graph.set_default_state_cleanup()
+# Create graph with state schema
+graph = StateGraph(MyState)
 
 # Define node functions
 async def process_input(state, context: NodeContext):

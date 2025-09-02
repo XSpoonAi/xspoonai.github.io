@@ -84,7 +84,7 @@ This documentation is part of the SpoonOS project and follows the same license t
 
 - **Main Repository**: [XSpoonAi/spoon-core](https://github.com/XSpoonAi/spoon-core)
 - **Official Website**: [SpoonOS Landing](https://spoonos.dev)
-- **Documentation**: [Developer Documentation](https://docs.spoonos.dev)
+- **Documentation**: [Developer Documentation](https://xspoonai.github.io/spoon-doc/)
 - **Community**: [GitHub Discussions](https://github.com/XSpoonAi/spoon-core/discussions)
 
 ---

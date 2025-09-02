@@ -10,8 +10,9 @@ This guide walks you through setting up the **SpoonOS Core Developer Framework (
 
 Before installing SpoonOS, ensure you have the following:
 
-- **Python 3.10 or higher** - SpoonOS requires modern Python features
+- **Python ≥ 3.10** - SpoonOS requires modern Python features
 - **pip** - Python package manager (usually comes with Python)
+- **uv** - Faster alternative to pip (optional)
 - **Git** - For cloning the repository
 - **Virtual environment tool** - `venv` (recommended) or `conda`
 
@@ -108,7 +109,7 @@ You should see the SpoonOS CLI interface:
 Welcome to the interactive CLI!
 Type 'help' for available commands.
 
-> 
+>
 ```
 
 ## Optional Dependencies

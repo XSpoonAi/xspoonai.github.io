@@ -6,32 +6,39 @@ sidebar_position: 8
 
 SCDF CLI is a powerful command-line tool that provides rich functionality, including interacting with AI agents, managing chat history, processing cryptocurrency transactions, and loading documents.
 
-## 📦 Prerequisite: Start the MCP Server
+## 📦 Prerequisites
 
-Before starting the CLI, make sure the MCP (Message Connectivity Protocol) server is running:
+Before starting the CLI, ensure you have:
 
-```bash
-python -m spoon_ai.tools.mcp_tools_collection
-```
+1. **Python Environment**: Python 3.8+ installed
+2. **Dependencies**: Install required packages
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Environment Variables**: Configure API keys (see Configuration section)
 
 ## 🚀 Start the CLI
 
-Once the MCP server is running, launch the CLI:
+Launch the CLI from your project root directory:
 
 ```bash
 python main.py
 ```
 
+This will start the interactive CLI session where you can execute commands.
+
 ## 📋 Available Agents
 
-The CLI includes these built-in agents:
+The CLI supports these built-in agents:
 
-| Agent | Aliases | Type | MCP Support | Description |
-|-------|---------|------|-------------|-------------|
-| `react` | `spoon_react` | SpoonReactAI | ❌ | Standard blockchain analysis agent |
-| `spoon_react_mcp` | - | SpoonReactMCP | ✅ | MCP-enabled blockchain agent |
+| Agent | Aliases | Type | Description |
+|-------|---------|------|-------------|
+| `react` | `spoon_react` | SpoonReactAI | Standard blockchain analysis agent |
+| `spoon_react_mcp` | - | SpoonReactMCP | MCP-enabled blockchain agent |
 
-**Note**: Additional agents can be configured in `config.json` (see examples below).
+**Note**: Additional custom agents can be configured in `config.json`.
 
 ### Loading Agents
 
@@ -115,19 +122,38 @@ The CLI includes these built-in agents:
 
 ### Environment Variables
 
-Set required API keys before starting:
+Configure required environment variables before starting the CLI:
 
 ```bash
-# Required for web search (Tavily MCP)
-export TAVILY_API_KEY="your-tavily-api-key"
+# LLM Provider API Keys (at least one required)
+export OPENAI_API_KEY="sk-your-openai-key"
+export ANTHROPIC_API_KEY="sk-ant-your-anthropic-key"
+export DEEPSEEK_API_KEY="your-deepseek-key"
+export GEMINI_API_KEY="your-gemini-key"
 
-# Required for web scraping (Firecrawl MCP)
-export FIRECRAWL_API_KEY="your-firecrawl-api-key"
+# Cryptocurrency APIs (for crypto operations)
+export OKX_API_KEY="your-okx-api-key"
+export OKX_SECRET_KEY="your-okx-secret-key"
+export OKX_API_PASSPHRASE="your-okx-passphrase"
+export OKX_PROJECT_ID="your-okx-project-id"
 
-# Required for LLM functionality
-export OPENAI_API_KEY="your-openai-api-key"
+# Price APIs (for token price lookups)
+export COINGECKO_API_KEY="your-coingecko-key"
+export BITQUERY_API_KEY="your-bitquery-key"
 
-# Optional: Debug mode
+# Blockchain Configuration
+export RPC_URL="https://eth.llamarpc.com"
+export PRIVATE_KEY="your-wallet-private-key"
+export CHAIN_ID="1"
+
+# Social Media (optional)
+export TELEGRAM_BOT_TOKEN="your-telegram-bot-token"
+export GITHUB_TOKEN="your-github-token"
+
+# Security
+export SECRET_KEY="your-jwt-secret-key"
+
+# Optional: Debug and Logging
 export DEBUG=true
 export LOG_LEVEL=debug
 ```
@@ -329,71 +355,58 @@ Agent 'my_research_agent' loaded successfully
 
 # Interact with agent
 > action chat "Research the latest AI trends"
-> action chat "Analyze Bitcoin market conditions"
-
-# Perform specific action
 > action react "Step-by-step analysis of DeFi protocols"
+
+# Chat management
+> action new          # Start new chat (clear history)
+> action list         # List available chat histories
+> action load chat_001  # Load specific chat history
+
+# MCP tools (if supported by current agent)
+> action list_mcp_tools
 ```
 
-### 3. Using Custom Built-in MCP Tools
+### 3. Using Built-in Tools with Agents
 
-#### Configuring Built-in MCP Tools
+#### Configuring Built-in Tools
+
+Built-in tools are configured in the agent's configuration and loaded automatically when the agent starts:
 
 ```json
 {
   "agents": {
-    "mcp_agent": {
-      "class": "SpoonReactMCP",
+    "crypto_agent": {
+      "class": "SpoonReactAI",
+      "description": "Crypto analysis agent with built-in tools",
+      "config": {
+        "max_steps": 10,
+        "temperature": 0.3
+      },
       "tools": [
         {
-          "name": "tavily_search",
-          "type": "mcp",
+          "name": "crypto_powerdata_cex",
+          "type": "builtin",
           "enabled": true,
-          "mcp_server": {
-            "command": "npx",
-            "args": ["--yes", "tavily-mcp"],
-            "env": {"TAVILY_API_KEY": "your-tavily-key"},
-            "transport": "stdio"
-          }
-        },
-        {
-          "name": "context7_docs",
-          "type": "mcp",
-          "enabled": true,
-          "mcp_server": {
-            "url": "https://mcp.context7.com/mcp",
-            "transport": "http",
+          "env": {
+            "OKX_API_KEY": "${OKX_API_KEY}",
+            "OKX_SECRET_KEY": "${OKX_SECRET_KEY}",
+            "OKX_API_PASSPHRASE": "${OKX_API_PASSPHRASE}"
+          },
+          "config": {
             "timeout": 30,
-            "headers": {
-              "User-Agent": "SpoonOS-CLI/1.0"
-            }
+            "max_retries": 3
           }
         },
         {
-          "name": "firecrawl_scraper",
-          "type": "mcp",
+          "name": "get_token_price",
+          "type": "builtin",
           "enabled": true,
-          "mcp_server": {
-            "url": "https://mcp.firecrawl.dev/{FIRECRAWL_API_KEY}/sse",
-            "transport": "sse",
-            "timeout": 60,
-            "reconnect_interval": 5,
-            "headers": {
-              "Accept": "text/event-stream",
-              "User-Agent": "SpoonOS-CLI/1.0",
-              "Cache-Control": "no-cache"
-            }
-          }
-        },
-        {
-          "name": "github_tools",
-          "type": "mcp",
-          "enabled": true,
-          "mcp_server": {
-            "command": "npx",
-            "args": ["-y", "@modelcontextprotocol/server-github"],
-            "env": {"GITHUB_TOKEN": "your-github-token"},
-            "transport": "stdio"
+          "env": {
+            "RPC_URL": "${RPC_URL}"
+          },
+          "config": {
+            "timeout": 30,
+            "max_retries": 3
           }
         }
       ]
@@ -402,55 +415,49 @@ Agent 'my_research_agent' loaded successfully
 }
 ```
 
-#### Using MCP Tools
+#### Using Built-in Tools
 
 ```bash
-# Load MCP agent
-> load-agent mcp_agent
+# Load agent with built-in tools
+> load-agent crypto_agent
 
-# List available MCP tools
-> action list_mcp_tools
-Available MCP tools:
-- tavily_search: Web search using Tavily API
-- context7_docs: Access Context7 documentation and libraries
-- firecrawl_scraper: Advanced web scraping and content extraction
-- github_tools: GitHub repository management
+# Use built-in crypto tools
+> action chat "Get Bitcoin price from CEX data"
+> action chat "Analyze ETH market trends"
 
-# Using MCP Tools for Search
-> action chat "Search for latest SpoonOS updates"
-> action chat "Find GitHub repositories related to AI agents"
-> action chat "Look up Context7 documentation for library information"
-> action chat "Scrape content from a website using Firecrawl"
-
-# List available MCP tools
-> action list_mcp_tools
-Available MCP tools:
-- tavily_search: Web search using Tavily API
-- context7_docs: Access Context7 documentation and libraries
-- firecrawl_scraper: Advanced web scraping and content extraction
-- github_tools: GitHub repository management
+# Check which tools are available
+> list-toolkit-tools crypto
 ```
 
-### 4. Interaction with External MCP
+### 4. Advanced Features
 
-#### MCP Tool Usage
-
-#### Available MCP Tools
-
-The CLI supports MCP (Model Context Protocol) tools that are configured in the agent configuration. These tools provide additional capabilities like web search, documentation access, and data processing.
-
-To see what MCP tools are available with your current agent:
+#### Chat History Management
 
 ```bash
-> action list_mcp_tools
+# Start new chat session
+> action new
+
+# List available chat histories
+> action list
+
+# Load specific chat history
+> action load chat_20250101_143022
+
+# Interactive chat mode (without arguments)
+> action chat
 ```
 
-MCP tools are automatically integrated with the agent's capabilities and can be used through natural language commands:
+#### System Information
 
 ```bash
-> action chat "Search for latest SpoonOS updates"
-> action chat "Find GitHub repositories related to AI agents"
-> action chat "Look up Context7 documentation for library information"
+# Get comprehensive system information
+> system-info
+
+# Check LLM provider status
+> llm-status
+
+# Validate configuration
+> validate-config
 ```
 
 ### 5. Using System Custom Tool Configuration
@@ -606,9 +613,10 @@ Preparing to transfer 0.1 SPO to 0x123...
 | Issue | Symptoms | Solution |
 |-------|----------|----------|
 | **Agent not found** | `Agent 'name' not found` | Use `list-agents` to check available agents, verify spelling |
-| **MCP connection failed** | `Failed to create transport` | Check API keys, verify MCP server is running |
-| **Tool not available** | `Tool 'name' not found` | Check `tool` config, verify MCP server enabled |
-| **API key missing** | Authentication errors | Set environment variables: `TAVILY_API_KEY`, `OPENAI_API_KEY` |
+| **Tool not available** | `Tool 'name' not found` | Check agent configuration, verify tool is enabled |
+| **API key missing** | Authentication errors | Set required environment variables (OPENAI_API_KEY, OKX_API_KEY, etc.) |
+| **Configuration error** | JSON parsing errors | Use `validate-config` to check configuration syntax |
+| **Agent loading failed** | Import or initialization errors | Check Python dependencies and environment setup |
 
 ### Debug Mode
 
@@ -624,8 +632,9 @@ python main.py
 
 1. **Check JSON syntax**: Use a JSON validator for `config.json`
 2. **Verify required fields**: Ensure all required parameters are present
-3. **Test MCP servers**: Verify external services are accessible
-4. **Check environment variables**: Confirm all API keys are set
+3. **Check environment variables**: Confirm all API keys are set
+4. **Validate agent configuration**: Use `validate-config` command
+5. **Test LLM connectivity**: Use `llm-status` to verify provider connections
 
 ## ✅ Next Steps
 
@@ -633,4 +642,5 @@ To extend CLI usage:
 
 - 🤖 [Explore agent capabilities](./agents)
 - 🔧 [Learn about built-in tools](./builtin-tools)
-- 🌐 [Use Web3 tools via MCP](./mcp-protocol)
+- ⚙️ [Configure agents and tools](./configuration)
+- 📊 [Use system diagnostics](./#system-diagnostics)

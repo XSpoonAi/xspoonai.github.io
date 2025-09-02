@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # 🤖 Agent Development Guide
 
-This guide provides a comprehensive walkthrough for developing and configuring agents in the SpoonOS Core Developer Framework (SCDF). We will use a practical example, the `SpoonMacroAnalysisAgent`, to illustrate key concepts, including agent definition, tool integration, and execution.
+This guide provides a comprehensive walkthrough for developing and configuring agents in the SpoonOS Core Developer Framework (SCDF). We will use practical examples to illustrate key concepts, including agent definition, tool integration, and execution.
 
 Agents are the core building blocks of SpoonOS. They combine language models with tools to create intelligent, autonomous systems that can reason, plan, and take actions.
 
@@ -28,10 +28,105 @@ Thought → Action → Observation → Thought → Action → ...
 
 ### Core Components
 
+#### Built-in Agent Classes
+
+SpoonOS provides two main agent classes:
+
+- **`SpoonReactAI`**: Standard agent for blockchain operations
+- **`SpoonReactMCP`**: Enhanced agent with MCP protocol support
+
+#### Tool Integration
+
+Agents can use various types of tools:
+
+- **Built-in Tools**: Python classes integrated directly into the framework
+- **MCP Tools**: External tools accessed via Model Context Protocol
+- **Custom Tools**: User-defined tools for specific functionality
+
+### Technical Implementation
+
+#### Creating Custom Agents
+
+```python
+from spoon_ai.agents import SpoonReactMCP
+from spoon_ai.tools import ToolManager
+
+class SpoonMacroAnalysisAgent(SpoonReactMCP):
+    name: str = "SpoonMacroAnalysisAgent"
+    system_prompt: str = (
+        '''You are a cryptocurrency market analyst. Your task is to provide a comprehensive
+        macroeconomic analysis of a given token.
+
+        To do this, you will perform the following steps:
+        1. Use the `crypto_power_data_cex` tool to get the latest candlestick data and
+           technical indicators.
+        2. Use the `tavily-search` tool to find the latest news and market sentiment.
+        3. Synthesize the data from both tools to form a holistic analysis.'''
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.available_tools = ToolManager([])
+```
+
+#### MCP Tool Configuration
+
+**Stdio-based Transport:**
+```python
+from spoon_ai.tools import MCPTool
+
+tavily_tool = MCPTool(
+    name="tavily-search",
+    description="Performs a web search using the Tavily API.",
+    mcp_config={
+        "command": "npx",
+        "args": ["--yes", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY")}
+    }
+)
+```
+
+**HTTP Transport:**
+```python
+firecrawl_tool = MCPTool(
+    name="firecrawl-scraper",
+    description="Advanced web scraping tool",
+    mcp_config={
+        "url": "https://mcp.firecrawl.dev/scrape",
+        "headers": {
+            "Authorization": f"Bearer {os.getenv('FIRECRAWL_API_KEY')}",
+            "Content-Type": "application/json"
+        }
+    }
+)
+```
+
 1. **LLM (Language Model)** - The "brain" that provides reasoning capabilities
 2. **Tools** - External capabilities the agent can use
 3. **Memory** - Context and conversation history
 4. **System Prompt** - Instructions that define the agent's behavior
+
+#### Built-in Tools Integration
+
+```python
+from spoon_toolkits.crypto.crypto_powerdata.tools import CryptoPowerDataCEXTool
+from spoon_toolkits.crypto.crypto_data_tools.price_data import GetTokenPriceTool
+
+# Initialize built-in tools
+crypto_tool = CryptoPowerDataCEXTool(
+    exchange="binance",
+    symbol="BTC/USDT",
+    timeframe="1h",
+    limit=100
+)
+
+price_tool = GetTokenPriceTool(
+    exchange="uniswap"
+)
+
+# Add tools to agent
+agent.available_tools.add_tools(crypto_tool, price_tool)
+```
 5. **Execution Loop** - The ReAct cycle that drives agent behavior
 
 ## Agent Types

@@ -8,18 +8,21 @@ SpoonOS uses a flexible configuration system that supports multiple setup method
 
 ## Configuration Methods
 
-SpoonOS supports three configuration approaches:
+SpoonOS supports multiple configuration approaches:
 
 1. **Environment Variables (.env file)** - Recommended for development
 2. **CLI Configuration** - Interactive setup
 3. **Direct config.json** - Advanced configurations
+4. **Tool-level Configuration** - Per-tool environment variables
 
 ### Configuration Priority
 
-SpoonOS uses a hybrid configuration system with the following priority:
+SpoonOS uses a unified configuration system with the following priority:
 
-1. **`config.json`** (Highest Priority) - Runtime configuration
-2. **`.env` file** (Fallback) - Initial setup values
+1. **Tool-level env vars** (Highest Priority) - Specific to individual tools
+2. **`config.json`** (High Priority) - Runtime configuration
+3. **System environment variables** (Medium Priority) - Global settings
+4. **`.env` file** (Fallback) - Initial setup values
 
 ## Method 1: Environment Variables (.env)
 
@@ -99,7 +102,7 @@ python main.py
 # Set OpenAI API key
 > config api_key openai sk-your-openai-key
 
-# Set Anthropic API key  
+# Set Anthropic API key
 > config api_key anthropic sk-ant-your-claude-key
 
 # Set default provider
@@ -174,9 +177,31 @@ For advanced configurations, edit `config.json` directly:
           "type": "builtin",
           "enabled": true,
           "env": {
-            "OKX_API_KEY": "your-okx-key",
-            "OKX_SECRET_KEY": "your-okx-secret",
-            "OKX_API_PASSPHRASE": "your-okx-passphrase"
+            "OKX_API_KEY": "${OKX_API_KEY}",
+            "OKX_SECRET_KEY": "${OKX_SECRET_KEY}",
+            "OKX_API_PASSPHRASE": "${OKX_API_PASSPHRASE}",
+            "OKX_PROJECT_ID": "${OKX_PROJECT_ID}"
+          },
+          "config": {
+            "timeout": 30,
+            "max_retries": 3,
+            "cache_duration": 300,
+            "default_exchange": "binance",
+            "default_timeframe": "1h",
+            "max_limit": 500
+          }
+        },
+        {
+          "name": "get_token_price",
+          "type": "builtin",
+          "enabled": true,
+          "env": {
+            "RPC_URL": "${RPC_URL}"
+          },
+          "config": {
+            "timeout": 30,
+            "max_retries": 3,
+            "exchange": "uniswap"
           }
         }
       ]
@@ -281,7 +306,7 @@ python main.py
 
 1. **Never commit API keys** to version control
 2. **Use environment variables** for sensitive data
-3. **Rotate keys regularly** 
+3. **Rotate keys regularly**
 4. **Use least privilege** - only grant necessary permissions
 5. **Monitor usage** - track API consumption
 
