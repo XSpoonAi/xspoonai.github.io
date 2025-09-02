@@ -259,7 +259,7 @@ Now that you have SpoonOS running, explore these advanced topics:
 
 ## Community and Support
 
-- **Documentation**: [SpoonOS Code Cook Book](https://spoonos.dev)
+- **Documentation**: [SpoonOS Code Cook Book](https://spoonai.io)
 - **GitHub**: [XSpoonAi/spoon-core](https://github.com/XSpoonAi/spoon-core)
 - **Issues**: [Report bugs and request features](https://github.com/XSpoonAi/spoon-core/issues)
 - **Discussions**: [Community discussions](https://github.com/XSpoonAi/spoon-core/discussions)

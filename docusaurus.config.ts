@@ -23,7 +23,7 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'XSpoonAi', // Usually your GitHub org/user name.
-  projectName: 'spoon-core', // Usually your repo name.
+  projectName: 'spoon-doc', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -112,8 +112,8 @@ const config: Config = {
               href: 'https://github.com/XSpoonAi/spoon-core',
             },
             {
-              label: 'GitHub Discussions',
-              href: 'https://github.com/XSpoonAi/spoon-core/discussions',
+              label: 'Discord',
+              href: 'https://discord.gg/G6y3ZCFK4h',
             },
             {
               label: 'Issues',
@@ -126,7 +126,7 @@ const config: Config = {
           items: [
             {
               label: 'SpoonOS Landing',
-              href: 'https://spoonos.dev',
+              href: 'https://spoonai.io',
             },
             {
               label: 'Examples',
