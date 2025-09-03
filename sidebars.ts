@@ -1,61 +1,99 @@
-import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
-
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+import {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 
 /**
- * Creating a sidebar enables you to:
- - create an ordered group of docs
- - render a sidebar for each doc of that group
- - provide next/previous navigation
-
- The sidebars can be generated from the filesystem, or explicitly defined here.
-
- Create as many sidebars as you want.
+ * SpoonOS Cookbook Documentation Sidebar Configuration
+ * 
+ * Organized following DeepWiki/LangChain pattern:
+ * - Progressive learning path from basics to advanced
+ * - Task-oriented how-to guides
+ * - Comprehensive API reference
+ * - Practical examples and troubleshooting
  */
+
 const sidebars: SidebarsConfig = {
-  // Main documentation sidebar
+  // Main documentation sidebar with hierarchical structure
   tutorialSidebar: [
-    'intro',
-    'getting-started-guide',
     {
       type: 'category',
-      label: 'Core Concepts',
+      label: '🚀 Getting Started',
+      collapsed: false,
       items: [
-        'agents',
-        'tools',
-        'builtin-tools',
-        'mcp-protocol',
-        'llm-providers',
-        'graph-system',
+        'getting-started/installation',
+        'getting-started/configuration', 
+        'getting-started/quick-start',
       ],
     },
     {
       type: 'category',
-      label: 'User Interface',
+      label: '🧠 Core Concepts',
+      collapsed: false,
       items: [
-        'cli',
-        'openrouter',
+        'core-concepts/agents',
+        'core-concepts/tools',
+        'core-concepts/llm-providers',
+        'core-concepts/mcp-protocol',
+        'core-concepts/graph-system',
       ],
     },
     {
       type: 'category',
-      label: 'Advanced Topics',
+      label: '📖 How-To Guides',
+      collapsed: false,
       items: [
-        'building-agents',
-        'custom-tools',
-        'web3-integration',
-        'prompt-caching',
+        'how-to-guides/build-first-agent',
+        'how-to-guides/add-custom-tools',
       ],
     },
     {
       type: 'category',
-      label: 'Examples',
+      label: '📚 API Reference',
+      collapsed: true,
       items: [
+        {
+          type: 'category',
+          label: 'Agents',
+          items: [
+            'api-reference/agents/base-agent',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Tools',
+          items: [
+            'api-reference/tools/base-tool',
+            'api-reference/tools/builtin-tools',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'CLI',
+          items: [
+            'api-reference/cli/commands',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: '💡 Examples',
+      collapsed: true,
+      items: [
+        'examples/basic-chatbot/README',
         'examples/basic-agent',
+        'examples/custom-tools',
+        'examples/graph-workflows',
         'examples/trading-bot',
         'examples/web3-agent',
-        'examples/graph-workflows',
-        'examples/custom-tools',
+      ],
+    },
+    {
+      type: 'category',
+      label: '🔧 Troubleshooting',
+      collapsed: true,
+      items: [
+        'troubleshooting/common-issues',
+        'troubleshooting/debugging',
+        'troubleshooting/performance',
       ],
     },
   ],

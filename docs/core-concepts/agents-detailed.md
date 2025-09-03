@@ -351,7 +351,8 @@ questions = [
 for question in questions:
     response = await agent.run(question)
     print(f"Q: {question}")
-    print(f"A: {response}\n")
+    print(f"A: {response}
+")
 ```
 
 ### 3. Configuration Management

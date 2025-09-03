@@ -406,26 +406,33 @@ async def main():
     print("=== Wallet Analysis ===")
     wallet_analysis = await agent.analyze_wallet("0x123...abc")  # Replace with real address
     print(wallet_analysis)
-    print("\n" + "="*50 + "\n")
+    print("
+" + "="*50 + "
+")
     
     # Example 2: Yield opportunities
     print("=== Yield Opportunities ===")
     yield_analysis = await agent.find_yield_opportunities(10000, "USDC", "medium")
     print(yield_analysis)
-    print("\n" + "="*50 + "\n")
+    print("
+" + "="*50 + "
+")
     
     # Example 3: Protocol analysis
     print("=== Protocol Analysis ===")
     protocol_analysis = await agent.analyze_defi_protocol("Uniswap")
     print(protocol_analysis)
-    print("\n" + "="*50 + "\n")
+    print("
+" + "="*50 + "
+")
     
     # Interactive mode
     print("=== Interactive Web3 Agent ===")
     print("Commands: 'wallet <address>', 'yield <amount> <token>', 'protocol <name>', 'quit'")
     
     while True:
-        command = input("\nWeb3 Agent> ").strip()
+        command = input("
+Web3 Agent> ").strip()
         
         if command.lower() == "quit":
             break

@@ -174,31 +174,39 @@ async def main():
     print("=== Example 1: Simple Question ===")
     response = await agent.chat("What is SpoonOS?")
     print(response)
-    print("\n" + "="*50 + "\n")
+    print("
+" + "="*50 + "
+")
 
     # Example 2: Documentation lookup
     print("=== Example 2: Documentation Lookup ===")
     response = await agent.chat("Look up React hooks documentation using Context7")
     print(response)
-    print("\n" + "="*50 + "\n")
+    print("
+" + "="*50 + "
+")
 
     # Example 3: Research request
     print("=== Example 3: Research Request ===")
     response = await agent.research_topic("Latest developments in AI agents")
     print(response)
-    print("\n" + "="*50 + "\n")
+    print("
+" + "="*50 + "
+")
 
     # Example 4: Interactive conversation
     print("=== Example 4: Interactive Chat ===")
     print("Chat with the agent (type 'quit' to exit):")
 
     while True:
-        user_input = input("\nYou: ")
+        user_input = input("
+You: ")
         if user_input.lower() in ['quit', 'exit', 'bye']:
             break
 
         response = await agent.chat(user_input)
-        print(f"\nAgent: {response}")
+        print(f"
+Agent: {response}")
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -234,7 +242,7 @@ from spoon_ai.chat import ChatBot
 agent = SpoonReactAI()
 
 # Configure the agent
-agent.llm = ChatBot(model_name="gpt-4.1")
+agent.llm = ChatBot(model_name="gpt-4o")
 agent.system_prompt = "You are a helpful assistant."
 agent.max_steps = 5
 
@@ -395,11 +403,13 @@ class MemoryAgent(BasicResearchAgent):
         if not self.conversation_history:
             return "No conversation history."
 
-        summary = f"Conversation with {len(self.conversation_history)} messages:\n"
+        summary = f"Conversation with {len(self.conversation_history)} messages:
+"
         for msg in self.conversation_history[-6:]:  # Last 6 messages
             role = msg["role"].title()
             content = msg["content"][:100] + "..." if len(msg["content"]) > 100 else msg["content"]
-            summary += f"- {role}: {content}\n"
+            summary += f"- {role}: {content}
+"
 
         return summary
 ```
