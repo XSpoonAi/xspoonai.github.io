@@ -27,7 +27,7 @@ const config: Config = {
   organizationName: 'XSpoonAi', // Usually your GitHub org/user name.
   projectName: 'spoon-doc', // Usually your repo name.
   // Ensure Docusaurus deploy pushes to the branch that GitHub Pages serves
-  deploymentBranch: 'gh-pages',
+  deploymentBranch: 'main',
 
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
