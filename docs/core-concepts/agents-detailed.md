@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 🤖 Agent Development Guide
+# Agents
 
 This guide provides a comprehensive walkthrough for developing and configuring agents in the SpoonOS Core Developer Framework (SCDF). We will use practical examples to illustrate key concepts, including agent definition, tool integration, and execution.
 
@@ -999,11 +999,46 @@ class DynamicConfigAgent(SpoonReactMCP):
 
 ## Next Steps
 
-- **[Tools](./tools)** - Learn about the tool system
-- **[Custom Tools](./custom-tools)** - Create your own tools
-- **[MCP Protocol](./mcp-protocol)** - Dynamic tool loading
-- **[MCP Mode Usage](./mcp-mode-usage)** - Advanced MCP integration
-- **[Graph System](./graph-system)** - Build complex workflows
-- **[Examples](./examples/basic-agent)** - See agents in action
+### 📚 **Agent Implementation Examples**
 
-Ready to build more sophisticated agents? Check out the [Tools](./tools) documentation! 🛠️
+#### 🎯 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/comprehensive_graph_demo.py)
+
+**Advanced agent patterns demonstrated:**
+- Long-lived agent architecture with persistent memory
+- Intelligent routing and decision-making workflows
+- Advanced state management and context preservation
+- Production-ready error handling and monitoring
+
+#### 🔍 [MCP Spoon Search Agent](../examples/mcp-spoon-search-agent.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
+
+**MCP integration patterns:**
+- Dynamic tool discovery and loading
+- Multi-tool orchestration and coordination
+- Real-time web search integration
+- Advanced error handling for distributed systems
+
+#### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
+
+**Domain-specific agent development:**
+- Cryptocurrency market analysis workflows
+- Real-time data processing and technical indicators
+- LLM-driven investment recommendations
+- Financial data validation and error handling
+
+### 🛠️ **Development Resources**
+
+- **[Tools System](./tools.md)** - Complete tool integration guide
+- **[Custom Tools](../how-to-guides/add-custom-tools.md)** - Build specialized tools
+- **[MCP Protocol](./mcp-protocol.md)** - Dynamic tool loading and execution
+- **[Graph System](./graph-system.md)** - Advanced workflow orchestration
+
+### 📖 **Additional Documentation**
+
+- **[API Reference](../api-reference/agents/base-agent.md)** - Complete agent API documentation
+- **[Performance Optimization](../troubleshooting/performance.md)** - Agent performance tuning
+- **[Troubleshooting](../troubleshooting/common-issues.md)** - Common issues and solutions
+
+Ready to build more sophisticated agents? Check out the [Tools](./tools.md) documentation! 🛠️

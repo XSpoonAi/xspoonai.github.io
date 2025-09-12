@@ -552,6 +552,6 @@ Process multiple requests efficiently:
 ## See Also
 
 - [Base Tool API](./base-tool.md)
-- [MCP Tools](./mcp-tools.md)
+- [MCP Protocol](../../core-concepts/mcp-protocol.md)
 - [Custom Tool Development](../../how-to-guides/add-custom-tools.md)
 - [Agent Configuration](../agents/base-agent.md)"}

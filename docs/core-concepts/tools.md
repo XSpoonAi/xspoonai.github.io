@@ -60,7 +60,6 @@ class CustomTool(BaseTool):
 - **[Built-in Tools Reference](../api-reference/tools/builtin-tools.md)** - Complete guide to using spoon-toolkit built-in tools
 - **[MCP Protocol Guide](./mcp-protocol.md)** - Detailed MCP tool configuration and usage
 - **[Custom Tools Guide](../how-to-guides/add-custom-tools.md)** - Learn to create your own tools
-- **[Examples](../examples/basic-chatbot/README.md)** - See tools in action
 
 Ready to use tools? Start with the [Built-in Tools Reference](../api-reference/tools/builtin-tools.md)! 🔧
 - **Access** real-time information
@@ -275,6 +274,85 @@ GOPLUS_API_KEY=your_key_here
 
 ## Next Steps
 
-- [MCP Protocol](./mcp-protocol.md) - Learn about dynamic tool discovery
-- [Custom Tool Development](../how-to-guides/add-custom-tools.md) - Build your own tools
-- [Tool Examples](../examples/custom-tools.md) - See practical examples
+### 📚 **Practical Examples**
+
+#### 🔍 [MCP Spoon Search Agent](../examples/mcp-spoon-search-agent.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
+
+**What it demonstrates:**
+- Complete MCP (Model Context Protocol) implementation
+- Integration of web search capabilities with cryptocurrency analysis
+- Real-time data correlation between multiple APIs
+- Dynamic tool discovery and orchestration
+
+**Key features:**
+- Tavily web search integration via MCP
+- Crypto PowerData tools for market analysis
+- Unified analysis combining search results with technical indicators
+- Production-ready error handling and API management
+
+#### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
+
+**What it demonstrates:**
+- Advanced cryptocurrency analysis using multiple tool types
+- Real-time technical indicator calculation (RSI, MACD, EMA)
+- Multi-timeframe data processing and correlation
+- LLM-driven decision making with tool integration
+
+**Key features:**
+- Real Binance API integration for live market data
+- Intelligent token selection and analysis
+- Comprehensive market sentiment analysis
+- Investment recommendations based on technical and fundamental data
+
+### 🛠️ **Development Guides**
+
+- **[MCP Protocol](./mcp-protocol.md)** - Learn about dynamic tool discovery and execution
+- **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build your own tools from scratch
+- **[Tool API Reference](../api-reference/tools/base-tool.md)** - Complete tool development documentation
+
+### 📖 **Additional Resources**
+
+- **[Built-in Tools Reference](../api-reference/tools/builtin-tools.md)** - Complete guide to spoon-toolkit
+- **[Graph System](../core-concepts/graph-system.md)** - Learn about workflow orchestration
+- **[Agent Architecture](../core-concepts/agents.md)** - Understand agent-tool integration patterns
+
+**What it demonstrates:**
+- Complete MCP (Model Context Protocol) implementation
+- Integration of web search capabilities with cryptocurrency analysis
+- Real-time data correlation between multiple APIs
+- Dynamic tool discovery and orchestration
+
+**Key features:**
+- Tavily web search integration via MCP
+- Crypto PowerData tools for market analysis
+- Unified analysis combining search results with technical indicators
+- Production-ready error handling and API management
+
+#### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/graph_crypto_analysis.py)
+
+**What it demonstrates:**
+- Advanced cryptocurrency analysis using multiple tool types
+- Real-time technical indicator calculation (RSI, MACD, EMA)
+- Multi-timeframe data processing and correlation
+- LLM-driven decision making with tool integration
+
+**Key features:**
+- Real Binance API integration for live market data
+- Intelligent token selection and analysis
+- Comprehensive market sentiment analysis
+- Investment recommendations based on technical and fundamental data
+
+### 🛠️ **Development Guides**
+
+- **[MCP Protocol](./mcp-protocol.md)** - Learn about dynamic tool discovery and execution
+- **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build your own tools from scratch
+- **[Tool API Reference](../api-reference/tools/base-tool.md)** - Complete tool development documentation
+
+### 📖 **Additional Resources**
+
+- **[Built-in Tools Reference](../api-reference/tools/builtin-tools.md)** - Complete guide to spoon-toolkit
+- **[Graph System](../core-concepts/graph-system.md)** - Learn about workflow orchestration
+- **[Agent Architecture](../core-concepts/agents.md)** - Understand agent-tool integration patterns

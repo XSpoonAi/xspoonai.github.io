@@ -445,7 +445,7 @@ python main.py
 
 ## See Also
 
-- [CLI Configuration](./configuration.md)
+- [CLI Configuration](../../getting-started/configuration.md)
 - [Agent API Reference](../agents/base-agent.md)
 - [Tool API Reference](../tools/base-tool.md)
 - [Troubleshooting Guide](../../troubleshooting/common-issues.md)

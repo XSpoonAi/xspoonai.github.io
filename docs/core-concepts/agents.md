@@ -7,7 +7,7 @@ Agents are the core intelligence layer of SpoonOS, providing reasoning, planning
 An agent is an AI system that can:
 
 - **Reason** about problems and goals
-- **Plan** sequences of actions to achieve objectives  
+- **Plan** sequences of actions to achieve objectives
 - **Execute** actions using available tools
 - **Learn** from feedback and adapt behavior
 
@@ -106,7 +106,7 @@ class CustomAgent(BaseAgent):
     def __init__(self, llm, tools=None):
         super().__init__(llm)
         self.tool_manager = ToolManager(tools or [])
-    
+
     async def run(self, message: str) -> str:
         # Custom agent logic here
         return await self.process_message(message)
@@ -177,6 +177,152 @@ response = await agent.run("Get Bitcoin price and analyze trends")
 
 ## Next Steps
 
-- [Tools](./tools.md) - Learn about available tools
-- [LLM Providers](./llm-providers.md) - Configure language models
-- [Build Your First Agent](../how-to-guides/build-first-agent.md) - Hands-on tutorial
+### 📚 **Agent Implementation Examples**
+
+#### 🎯 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/comprehensive_graph_demo.py)
+
+**What it demonstrates:**
+- Complete Graph agent implementation with intelligent routing
+- Long-lived agent architecture with persistent memory
+- Advanced state management and context preservation
+- Production-ready error handling and recovery
+
+**Key features:**
+- Dynamic query routing based on user intent (general_qa → short_term_trend → macro_trend → deep_research)
+- True parallel execution across multiple data sources
+- Memory persistence and conversation context
+- Real-time performance monitoring and metrics
+
+**Best for learning:**
+- Graph agent architecture patterns
+- Long-running process management
+- Advanced memory and state handling
+- Production deployment considerations
+
+#### 🔍 [MCP Spoon Search Agent](../examples/mcp-spoon-search-agent.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
+
+**What it demonstrates:**
+- MCP-enabled agent with dynamic tool discovery
+- Web search integration with cryptocurrency analysis
+- Multi-tool orchestration and data synthesis
+- Real-world agent deployment patterns
+
+**Key features:**
+- Tavily MCP server integration for web search
+- Crypto PowerData tools for market analysis
+- Unified analysis combining multiple data sources
+- Dynamic tool loading and validation
+
+**Best for learning:**
+- MCP protocol implementation
+- Multi-tool agent architecture
+- Real-time data integration patterns
+- Error handling in distributed systems
+
+#### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
+
+**What it demonstrates:**
+- Specialized cryptocurrency analysis agent
+- LLM-driven decision making throughout the workflow
+- Real-time market data processing and analysis
+- Investment recommendation generation
+
+**Key features:**
+- Real Binance API integration (no simulated data)
+- Technical indicator calculation (RSI, MACD, EMA, Bollinger Bands)
+- Multi-timeframe analysis and correlation
+- Risk assessment and market sentiment analysis
+
+**Best for learning:**
+- Domain-specific agent development
+- Financial data processing patterns
+- LLM-driven workflow automation
+- Real API integration in agents
+
+### 🛠️ **Development Guides**
+
+- **[Tools System](./tools.md)** - Complete guide to available tools and integrations
+- **[LLM Providers](./llm-providers.md)** - Configure and optimize language models
+- **[Build Your First Agent](../how-to-guides/build-first-agent.md)** - Step-by-step agent development tutorial
+
+### 📖 **Advanced Topics**
+
+- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Dynamic tool discovery and execution
+- **[API Reference](../api-reference/agents/base-agent.md)** - Complete agent API documentation
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/comprehensive_graph_demo.py)
+
+**What it demonstrates:**
+- Complete Graph agent implementation with intelligent routing
+- Long-lived agent architecture with persistent memory
+- Advanced state management and context preservation
+- Production-ready error handling and recovery
+
+**Key features:**
+- Dynamic query routing based on user intent (general_qa → short_term_trend → macro_trend → deep_research)
+- True parallel execution across multiple data sources
+- Memory persistence and conversation context
+- Real-time performance monitoring and metrics
+
+**Best for learning:**
+- Graph agent architecture patterns
+- Long-running process management
+- Advanced memory and state handling
+- Production deployment considerations
+
+#### 🔍 [MCP Spoon Search Agent](../examples/mcp-spoon-search-agent.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/spoon_search_agent.py)
+
+**What it demonstrates:**
+- MCP-enabled agent with dynamic tool discovery
+- Web search integration with cryptocurrency analysis
+- Multi-tool orchestration and data synthesis
+- Real-world agent deployment patterns
+
+**Key features:**
+- Tavily MCP server integration for web search
+- Crypto PowerData tools for market analysis
+- Unified analysis combining multiple data sources
+- Dynamic tool loading and validation
+
+**Best for learning:**
+- MCP protocol implementation
+- Multi-tool agent architecture
+- Real-time data integration patterns
+- Error handling in distributed systems
+
+#### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/graph_crypto_analysis.py)
+
+**What it demonstrates:**
+- Specialized cryptocurrency analysis agent
+- LLM-driven decision making throughout the workflow
+- Real-time market data processing and analysis
+- Investment recommendation generation
+
+**Key features:**
+- Real Binance API integration (no simulated data)
+- Technical indicator calculation (RSI, MACD, EMA, Bollinger Bands)
+- Multi-timeframe analysis and correlation
+- Risk assessment and market sentiment analysis
+
+**Best for learning:**
+- Domain-specific agent development
+- Financial data processing patterns
+- LLM-driven workflow automation
+- Real API integration in agents
+
+### 🛠️ **Development Guides**
+
+- **[Tools System](./tools.md)** - Complete guide to available tools and integrations
+- **[LLM Providers](./llm-providers.md)** - Configure and optimize language models
+- **[Build Your First Agent](../how-to-guides/build-first-agent.md)** - Step-by-step agent development tutorial
+
+### 📖 **Advanced Topics**
+
+- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Dynamic tool discovery and execution
+- **[API Reference](../api-reference/agents/base-agent.md)** - Complete agent API documentation

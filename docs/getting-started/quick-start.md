@@ -31,7 +31,7 @@ class GreetingTool(BaseTool):
         },
         "required": ["name"]
     }
-    
+
     async def execute(self, name: str) -> str:
         return f"Hello {name}! Welcome to SpoonOS! 🚀"
 
@@ -39,12 +39,12 @@ class GreetingTool(BaseTool):
 class MyFirstAgent(ToolCallAgent):
     name: str = "my_first_agent"
     description: str = "A friendly assistant with greeting capabilities"
-    
+
     system_prompt: str = """
     You are a helpful AI assistant built with SpoonOS framework.
     You can greet users and help with various tasks.
     """
-    
+
     avaliable_tools: ToolManager = ToolManager([GreetingTool()])
 
 async def main():
@@ -55,7 +55,7 @@ async def main():
             model_name="gpt-4.1"  # Framework default
         )
     )
-    
+
     # Run the agent - framework handles all error cases automatically
     response = await agent.run("Please greet me, my name is Alice")
     return response
@@ -83,12 +83,12 @@ from spoon_ai.tools.crypto_tools import CryptoTool
 class Web3Agent(ToolCallAgent):
     name: str = "web3_agent"
     description: str = "AI agent with Web3 and crypto capabilities"
-    
+
     system_prompt: str = """
     You are a Web3-native AI assistant with access to blockchain data.
     You can help with crypto prices, DeFi operations, and blockchain analysis.
     """
-    
+
     avaliable_tools: ToolManager = ToolManager([
         GreetingTool(),
         CryptoTool()
@@ -102,7 +102,7 @@ async def web3_demo():
             model_name="claude-sonnet-4-20250514"  # Framework default
         )
     )
-    
+
     # Framework automatically handles crypto data fetching and error cases
     response = await agent.run("What's the current price of Bitcoin?")
     return response
@@ -155,7 +155,7 @@ class MultiAgentSystem(GraphAgent):
 class BlockchainAnalysisTool(BaseTool):
     name: str = "blockchain_analysis"
     description: str = "Analyze blockchain transactions and patterns"
-    
+
     async def execute(self, address: str, chain: str = "ethereum") -> str:
         # Your custom blockchain analysis logic
         return f"Analysis results for {address} on {chain}"
@@ -182,4 +182,3 @@ Now that you understand the framework basics:
 - [Core Concepts](../core-concepts/agents.md) - Deep dive into agent architecture
 - [Built-in Tools](../core-concepts/tools.md) - Explore Web3 and crypto tools
 - [How-To Guides](../how-to-guides/build-first-agent.md) - Advanced agent patterns
-- [Examples](../examples/basic-chatbot/README.md) - Real-world implementations

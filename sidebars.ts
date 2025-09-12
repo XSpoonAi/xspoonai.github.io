@@ -2,7 +2,7 @@ import {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 
 /**
  * SpoonOS Cookbook Documentation Sidebar Configuration
- * 
+ *
  * Organized following DeepWiki/LangChain pattern:
  * - Progressive learning path from basics to advanced
  * - Task-oriented how-to guides
@@ -19,7 +19,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'getting-started/installation',
-        'getting-started/configuration', 
+        'getting-started/configuration',
         'getting-started/quick-start',
       ],
     },
@@ -51,6 +51,26 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
+          label: 'LLM System',
+          items: [
+            'api-reference/llm/index',
+            'api-reference/llm/llm-manager',
+            'api-reference/llm/provider-interface',
+            'api-reference/llm/config-manager',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Graph System',
+          items: [
+            'api-reference/graph/index',
+            'api-reference/graph/state-graph',
+            'api-reference/graph/graph-agent',
+            'api-reference/graph/base-node',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Agents',
           items: [
             'api-reference/agents/base-agent',
@@ -78,12 +98,9 @@ const sidebars: SidebarsConfig = {
       label: '💡 Examples',
       collapsed: true,
       items: [
-        'examples/basic-chatbot/README',
-        'examples/basic-agent',
-        'examples/custom-tools',
-        'examples/graph-workflows',
-        'examples/trading-bot',
-        'examples/web3-agent',
+        'examples/comprehensive-graph-demo',
+        'examples/graph-crypto-analysis',
+        'examples/mcp-spoon-search-agent',
       ],
     },
     {

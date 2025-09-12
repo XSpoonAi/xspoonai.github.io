@@ -341,8 +341,7 @@ print(f"Final response: {response2['content']}")
 
 ## See Also
 
-- [Graph Agent API](./graph-agent.md)
-- [ToolCall Agent API](./toolcall-agent.md)
+- [Agent Types](../../core-concepts/agents.md)
 - [Tool Manager API](../tools/base-tool.md)
-- [LLM Manager API](../llm/providers.md)
+- [LLM Providers](../../core-concepts/llm-providers.md)
 - [Agent Development Guide](../../how-to-guides/build-first-agent.md)"}

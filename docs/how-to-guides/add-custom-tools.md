@@ -46,12 +46,12 @@ class MyCustomTool(BaseTool):
         """Execute the tool logic - framework handles errors automatically"""
         # Your tool logic here
         processed_data = self.process_data(input_data, options or {})
-        
+
         return ToolResult(
             output=processed_data,
             system=f"Successfully processed {len(input_data)} characters"
         )
-    
+
     def process_data(self, data: str, options: Dict[str, Any]) -> str:
         """Your custom processing logic"""
         # Example: simple data transformation
@@ -74,7 +74,7 @@ parameters: dict = {
             "description": "A required parameter"
         },
         "optional_param": {
-            "type": "integer", 
+            "type": "integer",
             "description": "An optional parameter",
             "default": 42
         },
@@ -153,10 +153,10 @@ class BlockchainTool(BaseTool):
         # Framework handles validation and error cases automatically
         if not self.w3.is_address(address):
             return ToolResult(error="Invalid Ethereum address")
-        
+
         balance_wei = self.w3.eth.get_balance(address)
         balance_eth = self.w3.from_wei(balance_wei, 'ether')
-        
+
         return ToolResult(
             output={
                 "address": address,
@@ -250,12 +250,12 @@ from spoon_ai.tools.base import BaseTool, ToolResult
 class ConfigurableTool(BaseTool):
     name: str = "configurable_tool"
     description: str = "Tool that uses environment configuration"
-    
+
     def __init__(self):
         super().__init__()
         self.api_key = os.getenv("MY_API_KEY")
         self.base_url = os.getenv("MY_API_URL", "https://api.example.com")
-        
+
         if not self.api_key:
             raise ValueError("MY_API_KEY environment variable required")
 
@@ -280,7 +280,7 @@ class ConfigurableTool(BaseTool):
     def __init__(self, config: ToolConfig):
         super().__init__()
         self.config = config
-    
+
     async def execute(self, **kwargs) -> ToolResult:
         # Use self.config.api_key, etc.
         pass
@@ -295,10 +295,10 @@ async def execute(self, **kwargs) -> ToolResult:
     # Framework provides automatic input validation and error handling
     if not kwargs.get("required_param"):
         return ToolResult(error="Missing required parameter")
-    
+
     # Execute tool logic - framework handles network errors, timeouts, etc.
     result = await self.do_work(**kwargs)
-    
+
     return ToolResult(
         output=result,
         system="Operation completed successfully"
@@ -314,7 +314,7 @@ class MonitoredTool(BaseTool):
     async def execute(self, **kwargs) -> ToolResult:
         # Framework provides automatic logging and monitoring
         result = await self.do_work(**kwargs)
-        
+
         # Framework tracks:
         # - Execution time and performance metrics
         # - Success/failure rates
@@ -334,12 +334,12 @@ from your_tools import MyCustomTool
 @pytest.mark.asyncio
 async def test_my_custom_tool():
     tool = MyCustomTool()
-    
+
     # Test successful execution
     result = await tool.execute(input_data="test data")
     assert result.output is not None
     assert result.error is None
-    
+
     # Test error handling
     result = await tool.execute(input_data="")
     assert result.error is not None
@@ -347,7 +347,7 @@ async def test_my_custom_tool():
 @pytest.mark.asyncio
 async def test_tool_parameters():
     tool = MyCustomTool()
-    
+
     # Test with optional parameters
     result = await tool.execute(
         input_data="test",
@@ -365,13 +365,13 @@ from your_tools import MyCustomTool
 @pytest.mark.asyncio
 async def test_tool_manager_integration():
     tool_manager = ToolManager([MyCustomTool()])
-    
+
     # Test tool execution through manager
     result = await tool_manager.execute(
         name="my_custom_tool",
         tool_input={"input_data": "test"}
     )
-    
+
     assert result.output is not None
 ```
 
@@ -385,7 +385,7 @@ def generate_tool_docs(tools: List[BaseTool]) -> str:
     docs = "# Available Tools
 
 "
-    
+
     for tool in tools:
         docs += f"## {tool.name}
 
@@ -396,15 +396,15 @@ def generate_tool_docs(tools: List[BaseTool]) -> str:
         docs += "### Parameters
 
 "
-        
+
         for param, config in tool.parameters.get("properties", {}).items():
             required = param in tool.parameters.get("required", [])
             docs += f"- **{param}** ({'required' if required else 'optional'}): {config.get('description', '')}
 "
-        
+
         docs += "
 "
-    
+
     return docs
 ```
 
@@ -413,22 +413,22 @@ def generate_tool_docs(tools: List[BaseTool]) -> str:
 ```python
 class ToolRegistry:
     """Central registry for tool discovery"""
-    
+
     def __init__(self):
         self._tools = {}
-    
+
     def register(self, tool_class: type):
         """Register a tool class"""
         tool = tool_class()
         self._tools[tool.name] = tool_class
         return tool_class
-    
+
     def get_tool(self, name: str) -> BaseTool:
         """Get tool instance by name"""
         if name not in self._tools:
             raise ValueError(f"Tool {name} not found")
         return self._tools[name]()
-    
+
     def list_tools(self) -> List[str]:
         """List all registered tool names"""
         return list(self._tools.keys())
@@ -476,10 +476,118 @@ class MyTool(BaseTool):
 
 ## Next Steps
 
-- Explore the [Core Concepts: Tools](../core-concepts/tools.md) for deeper understanding
-- Check out [MCP Protocol](../core-concepts/mcp-protocol.md) for advanced integrations
-- See existing tools in `spoon-toolkit` for more examples
-- Join the community to share your custom tools
+### 📚 **Custom Tool Examples**
+
+#### 🔍 [MCP Spoon Search Agent](../examples/mcp-spoon-search-agent.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
+
+**Custom tool integration demonstrated:**
+- MCP server integration with custom search tools
+- Web search capabilities using Tavily MCP
+- Custom error handling for external API calls
+- Real-world custom tool deployment patterns
+
+**Key learning points:**
+- How to wrap external APIs as custom tools
+- MCP server integration patterns
+- Error handling for unreliable external services
+- Tool validation and testing strategies
+
+#### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
+
+**Financial tool development:**
+- Custom cryptocurrency data processing tools
+- Real-time technical indicator calculations
+- Multi-source data aggregation and validation
+- Financial data error handling and recovery
+
+**Key learning points:**
+- Domain-specific tool development patterns
+- Financial data validation techniques
+- Multi-API integration strategies
+- Performance optimization for data-intensive tools
+
+#### 🎯 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/comprehensive_graph_demo.py)
+
+**Advanced tool orchestration:**
+- Custom routing and decision-making tools
+- Memory management and context preservation tools
+- Parallel processing coordination tools
+- Performance monitoring and metrics tools
+
+**Key learning points:**
+- Complex tool interaction patterns
+- State management in custom tools
+- Performance optimization techniques
+- Error recovery in multi-tool workflows
+
+### 🛠️ **Development Resources**
+
+- **[Core Concepts: Tools](../core-concepts/tools.md)** - Complete tool system understanding
+- **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Advanced integration patterns
+- **[Tool API Reference](../api-reference/tools/base-tool.md)** - Complete development documentation
+
+### 📖 **Additional Resources**
+
+- **[Built-in Tools Reference](../api-reference/tools/builtin-tools.md)** - Explore existing tool implementations
+- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[Agent Architecture](../core-concepts/agents.md)** - Tool-agent integration patterns
+
+## Troubleshooting
+
+### Common Issues
+
+**Tool not found in manager:**
+
+- Ensure tool is properly added to ToolManager
+- Check tool name matches exactly
+- Verify tool class inherits from BaseTool
+
+**Parameter validation errors:**
+
+- Check JSON schema syntax in parameters
+- Ensure required parameters are marked correctly
+- Validate parameter types match schema
+
+**Execution failures:**
+
+- Leverage framework's automatic error handling
+- Check for missing dependencies or API keys
+- Use framework's built-in debugging features
+**Key learning points:**
+- Domain-specific tool development patterns
+- Financial data validation techniques
+- Multi-API integration strategies
+- Performance optimization for data-intensive tools
+
+#### 🎯 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/comprehensive_graph_demo.py)
+
+**Advanced tool orchestration:**
+- Custom routing and decision-making tools
+- Memory management and context preservation tools
+- Parallel processing coordination tools
+- Performance monitoring and metrics tools
+
+**Key learning points:**
+- Complex tool interaction patterns
+- State management in custom tools
+- Performance optimization techniques
+- Error recovery in multi-tool workflows
+
+### 🛠️ **Development Resources**
+
+- **[Core Concepts: Tools](../core-concepts/tools.md)** - Complete tool system understanding
+- **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Advanced integration patterns
+- **[Tool API Reference](../api-reference/tools/base-tool.md)** - Complete development documentation
+
+### 📖 **Additional Resources**
+
+- **[Built-in Tools Reference](../api-reference/tools/builtin-tools.md)** - Explore existing tool implementations
+- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[Agent Architecture](../core-concepts/agents.md)** - Tool-agent integration patterns
 
 ## Troubleshooting
 

@@ -22,7 +22,7 @@ graph TD
     C --> D[Tool 1]
     C --> E[Tool 2]
     C --> F[Tool N]
-    
+
     B --> G[Tool Discovery]
     B --> H[Tool Execution]
     B --> I[Resource Access]
@@ -91,7 +91,7 @@ class WeatherTool(BaseTool):
         },
         "required": ["location"]
     }
-    
+
     async def execute(self, location: str) -> dict:
         # Weather API call implementation
         return {"location": location, "temperature": 22, "condition": "sunny"}
@@ -129,7 +129,7 @@ response = await agent.run("What's the weather like in San Francisco?")
 class DocumentResource:
     def __init__(self, uri: str):
         self.uri = uri
-    
+
     async def read(self) -> str:
         # Read document content
         return "Document content here"
@@ -146,7 +146,7 @@ class AnalysisTool(BaseTool):
     async def execute(self, data_source: str) -> dict:
         # Get data using another tool
         data = await self.mcp_client.execute_tool("fetch_data", {"source": data_source})
-        
+
         # Process data
         analysis = self.analyze(data)
         return analysis
@@ -218,7 +218,7 @@ client = MCPClient(
 class AuthenticatedMCPServer:
     def __init__(self, api_key: str):
         self.api_key = api_key
-    
+
     def authenticate(self, request_key: str) -> bool:
         return request_key == self.api_key
 ```
@@ -229,12 +229,12 @@ class AuthenticatedMCPServer:
 # Define tool permissions
 class RestrictedTool(BaseTool):
     required_permissions = ["read_data", "write_files"]
-    
+
     async def execute(self, **kwargs):
         # Check permissions before execution
         if not self.check_permissions():
             raise PermissionError("Insufficient permissions")
-        
+
         return await self.perform_action(**kwargs)
 ```
 
@@ -246,11 +246,11 @@ class SecureTool(BaseTool):
     async def execute(self, user_input: str) -> str:
         # Sanitize input
         clean_input = self.sanitize_input(user_input)
-        
+
         # Validate against schema
         if not self.validate_input(clean_input):
             raise ValueError("Invalid input")
-        
+
         return await self.process(clean_input)
 ```
 
@@ -291,7 +291,7 @@ async def parallel_execution():
         mcp_tools.execute_tool("tool2", {"param": "value2"}),
         mcp_tools.execute_tool("tool3", {"param": "value3"})
     ]
-    
+
     results = await asyncio.gather(*tasks)
     return results
 ```
@@ -304,7 +304,7 @@ async def parallel_execution():
 # Integrate external APIs through MCP
 class APITool(BaseTool):
     name = "api_call"
-    
+
     async def execute(self, endpoint: str, method: str = "GET") -> dict:
         async with aiohttp.ClientSession() as session:
             async with session.request(method, endpoint) as response:
@@ -317,7 +317,7 @@ class APITool(BaseTool):
 # Database operations through MCP
 class DatabaseTool(BaseTool):
     name = "query_database"
-    
+
     async def execute(self, query: str) -> list:
         # Execute database query
         return await self.db.execute(query)
@@ -329,7 +329,7 @@ class DatabaseTool(BaseTool):
 # File system operations
 class FileTool(BaseTool):
     name = "read_file"
-    
+
     async def execute(self, filepath: str) -> str:
         with open(filepath, 'r') as f:
             return f.read()
@@ -370,7 +370,7 @@ result = await mcp_tools.execute_tool("weather_tool", {"location": "NYC"})
 
 # Framework automatically handles:
 # - Server connection issues
-# - Tool discovery failures  
+# - Tool discovery failures
 # - Execution timeouts
 # - Parameter validation errors
 ```
@@ -406,6 +406,68 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 
 ## Next Steps
 
-- [Tools](./tools.md) - Learn about the tool system
-- [Custom Tool Development](../how-to-guides/add-custom-tools.md) - Build MCP-compatible tools
-- [Integration Examples](../examples/mcp-integration.md) - See MCP in action
+### 📚 **MCP Implementation Examples**
+
+#### 🔍 [MCP Spoon Search Agent](../examples/mcp-spoon-search-agent.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
+
+**What it demonstrates:**
+- Complete MCP server integration and tool discovery
+- Real-world MCP implementation with Tavily web search
+- Dynamic tool loading and orchestration
+- Production-ready MCP error handling and recovery
+
+**Key features:**
+- Tavily MCP server integration via `npx tavily-mcp`
+- Automatic tool discovery and validation
+- Seamless integration with existing SpoonOS architecture
+- Advanced error handling for MCP server failures
+
+**Learning outcomes:**
+- How to initialize and manage MCP servers
+- Dynamic tool discovery patterns
+- MCP server error handling and recovery
+- Integration of MCP tools with LLM workflows
+
+### 🛠️ **Development Resources**
+
+- **[Tools System](./tools.md)** - Learn about the complete tool ecosystem
+- **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build MCP-compatible tools
+- **[MCP Tool Reference](../api-reference/tools/mcp-tools.md)** - MCP-specific tool documentation
+
+### 📖 **Additional Resources**
+
+- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[Agent Architecture](../core-concepts/agents.md)** - Agent-MCP integration patterns
+- **[API Reference](../api-reference/)** - Complete SpoonOS API documentation
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/spoon_search_agent.py)
+
+**What it demonstrates:**
+- Complete MCP server integration and tool discovery
+- Real-world MCP implementation with Tavily web search
+- Dynamic tool loading and orchestration
+- Production-ready MCP error handling and recovery
+
+**Key features:**
+- Tavily MCP server integration via `npx tavily-mcp`
+- Automatic tool discovery and validation
+- Seamless integration with existing SpoonOS architecture
+- Advanced error handling for MCP server failures
+
+**Learning outcomes:**
+- How to initialize and manage MCP servers
+- Dynamic tool discovery patterns
+- MCP server error handling and recovery
+- Integration of MCP tools with LLM workflows
+
+### 🛠️ **Development Resources**
+
+- **[Tools System](./tools.md)** - Learn about the complete tool ecosystem
+- **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build MCP-compatible tools
+- **[MCP Tool Reference](../api-reference/tools/mcp-tools.md)** - MCP-specific tool documentation
+
+### 📖 **Additional Resources**
+
+- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[Agent Architecture](../core-concepts/agents.md)** - Agent-MCP integration patterns
+- **[API Reference](../api-reference/)** - Complete SpoonOS API documentation

@@ -73,7 +73,7 @@ Unauthorized: API key not found
    ```bash
    # Correct format
    OPENAI_API_KEY=sk-your-actual-key-here
-   
+
    # Incorrect (no quotes needed)
    OPENAI_API_KEY="sk-your-actual-key-here"
    ```
@@ -111,7 +111,7 @@ ConfigurationError: Invalid configuration format
    {
      "key": "value",
    }
-   
+
    // Correct
    {
      "key": "value"
@@ -524,10 +524,39 @@ result = await tool.execute(symbol="BTC")
 - [API Reference](../api-reference/)
 - [How-To Guides](../how-to-guides/)
 
+### 📚 **Working Examples**
+
+#### 🎯 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/comprehensive_graph_demo.py)
+
+**Perfect for troubleshooting:**
+- Graph system setup and configuration
+- Memory management and state persistence issues
+- Parallel execution and routing problems
+- Production deployment patterns
+
+#### 🔍 [MCP Spoon Search Agent](../examples/mcp-spoon-search-agent.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
+
+**Great for debugging:**
+- MCP server connection and integration issues
+- Tool discovery and loading problems
+- API rate limiting and error handling
+- Multi-tool orchestration challenges
+
+#### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
+
+**Excellent for testing:**
+- Real API integration and authentication
+- Data processing and validation issues
+- Performance optimization problems
+- Complex workflow debugging
+
 ### Community Support
 - GitHub Issues: Report bugs and feature requests
 - Discord: Real-time community support
-- Documentation: Comprehensive guides and examples
+- Documentation: Comprehensive guides and working examples
 
 ### Diagnostic Information
 When reporting issues, include:
@@ -577,5 +606,32 @@ python main.py 2>&1 | tee spoon_debug.log
 
 - [Debugging Guide](./debugging.md)
 - [Performance Optimization](./performance.md)
-- [Configuration Reference](../api-reference/cli/configuration.md)
+- [System Requirements](../getting-started/installation.md)"}
+
+## Prevention Tips
+
+### Regular Maintenance
+- Keep dependencies updated
+- Rotate API keys regularly
+- Monitor system resources
+- Backup configuration files
+- Test in development environment first
+
+### Best Practices
+- Use version control for configurations
+- Implement proper error handling
+- Monitor API usage and costs
+- Set up alerts for critical issues
+- Document custom configurations
+
+### Environment Management
+- Use separate environments for development/production
+- Pin dependency versions in requirements.txt
+- Use environment variables for sensitive data
+- Regularly test backup and recovery procedures
+
+## See Also
+
+- [Debugging Guide](./debugging.md)
+- [Performance Optimization](./performance.md)
 - [System Requirements](../getting-started/installation.md)"}

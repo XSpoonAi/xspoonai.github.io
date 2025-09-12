@@ -27,23 +27,23 @@ def create_agent():
         llm_provider="openai",
         temperature=0.3
     )
-    
+
     # Create agent with tools
     agent = SpoonReactAI(
         llm=llm,
         tools=[CryptoTools()]
     )
-    
+
     return agent
 
 # Test the agent
 async def main():
     agent = create_agent()
-    
+
     # Framework handles all errors automatically
     response = await agent.run("Hello! What can you help me with?")
     response = await agent.run("What's the current price of Bitcoin?")
-    
+
     return response
 
 if __name__ == "__main__":
@@ -95,7 +95,7 @@ def create_enhanced_agent():
         llm_provider="openai",
         temperature=0.3
     )
-    
+
     # Add multiple tools
     agent = SpoonReactAI(
         llm=llm,
@@ -104,17 +104,17 @@ def create_enhanced_agent():
             GreetingTool()
         ]
     )
-    
+
     return agent
 
 # Test enhanced functionality
 async def test_enhanced_agent():
     agent = create_enhanced_agent()
-    
+
     # Framework automatically handles tool selection and execution
     response = await agent.run("Give me a formal greeting for John")
     response = await agent.run("Greet Alice casually and then tell her the Bitcoin price")
-    
+
     return response
 ```
 
@@ -127,50 +127,48 @@ class MemoryAgent:
     def __init__(self):
         self.agent = create_enhanced_agent()
         self.conversation_history = []
-    
+
     async def chat(self, message: str) -> str:
         # Add context from previous conversations
         context = self.build_context()
         full_message = f"{context}
 
 User: {message}"
-        
+
         # Get response
         response = await self.agent.run(full_message)
-        
+
         # Store in memory
         self.conversation_history.append({
             "user": message,
             "agent": response,
             "timestamp": time.time()
         })
-        
+
         return response
-    
+
     def build_context(self) -> str:
         if not self.conversation_history:
             return "This is the start of our conversation."
-        
+
         # Include last 3 exchanges for context
         recent = self.conversation_history[-3:]
         context_parts = []
-        
+
         for exchange in recent:
             context_parts.append(f"User: {exchange['user']}")
             context_parts.append(f"Agent: {exchange['agent']}")
-        
-        return "Previous conversation:
-" + "
-".join(context_parts)
+
+        return "Previous conversation:" + "".join(context_parts)
 
 # Test memory functionality
 async def test_memory_agent():
     agent = MemoryAgent()
-    
+
     # Framework maintains conversation context automatically
     response1 = await agent.chat("My name is Sarah")
     response2 = await agent.chat("What's my name?")  # Agent remembers Sarah
-    
+
     return response1, response2
 ```
 
@@ -185,7 +183,7 @@ class SimpleAgent:
     def __init__(self):
         # Framework handles all error cases automatically
         self.agent = create_enhanced_agent()
-    
+
     async def run(self, message: str) -> str:
         # Framework provides:
         # - Automatic retry with exponential backoff
@@ -197,11 +195,11 @@ class SimpleAgent:
 # Simple usage - no error handling needed
 async def test_agent():
     agent = SimpleAgent()
-    
+
     # Framework handles all error scenarios automatically
     response = await agent.run("Hello!")
     response = await agent.run("Perform a complex analysis")
-    
+
     return response
 ```
 
@@ -217,7 +215,7 @@ class ConfigurableAgent:
     def __init__(self, config_path: str = "agent_config.json"):
         self.config = self.load_config(config_path)
         self.agent = self.create_agent_from_config()
-    
+
     def load_config(self, config_path: str) -> dict:
         config_file = Path(config_path)
         if config_file.exists():
@@ -241,7 +239,7 @@ class ConfigurableAgent:
             with open(config_file, 'w') as f:
                 json.dump(default_config, f, indent=2)
             return default_config
-    
+
     def create_agent_from_config(self):
         # Create LLM from config
         llm_config = self.config["llm"]
@@ -250,16 +248,16 @@ class ConfigurableAgent:
             llm_provider=llm_config["provider"],
             temperature=llm_config["temperature"]
         )
-        
+
         # Create tools from config
         tools = []
         if "crypto_tools" in self.config["tools"]:
             tools.append(CryptoTools())
         if "greeting_tool" in self.config["tools"]:
             tools.append(GreetingTool())
-        
+
         return SpoonReactAI(llm=llm, tools=tools)
-    
+
     async def run(self, message: str) -> str:
         return await self.agent.run(message)
 
@@ -290,16 +288,16 @@ class TestMyAgent:
     @pytest.fixture
     async def agent(self):
         return create_enhanced_agent()
-    
+
     @pytest.mark.asyncio
     async def test_basic_greeting(self, agent):
         with patch.object(agent, 'run', new_callable=AsyncMock) as mock_run:
             mock_run.return_value = "Hello! How can I help you?"
-            
+
             response = await agent.run("Hello")
             assert "Hello" in response
             mock_run.assert_called_once_with("Hello")
-    
+
     @pytest.mark.asyncio
     async def test_crypto_tool_integration(self, agent):
         # Test that crypto tools are available
@@ -316,12 +314,12 @@ class TestMyAgent:
 async def integration_test():
     """Test complete agent workflow"""
     agent = create_enhanced_agent()
-    
+
     # Framework provides built-in validation and testing
     response1 = await agent.run("Hello")
     response2 = await agent.run("What's the Bitcoin price?")
     response3 = await agent.run("Give me a casual greeting for Alice")
-    
+
     # Framework automatically validates responses and tool execution
     return all([response1, response2, response3])
 
@@ -375,13 +373,13 @@ class ProductionAgent:
         self.agent = self.create_agent()
         self.conversation_history = []
         self.logger = logging.getLogger(self.__class__.__name__)
-    
+
     def load_config(self, config_path: str) -> dict:
         config_file = Path(config_path)
         if config_file.exists():
             with open(config_file, 'r') as f:
                 return json.load(f)
-        
+
         # Default configuration
         default_config = {
             "llm": {
@@ -394,12 +392,12 @@ class ProductionAgent:
             "retry_attempts": 3,
             "timeout": 30
         }
-        
+
         with open(config_file, 'w') as f:
             json.dump(default_config, f, indent=2)
-        
+
         return default_config
-    
+
     def create_agent(self):
         llm_config = self.config["llm"]
         llm = ChatBot(
@@ -407,15 +405,15 @@ class ProductionAgent:
             llm_provider=llm_config["provider"],
             temperature=llm_config["temperature"]
         )
-        
+
         tools = []
         if "crypto_tools" in self.config["tools"]:
             tools.append(CryptoTools())
         if "greeting_tool" in self.config["tools"]:
             tools.append(GreetingTool())
-        
+
         return SpoonReactAI(llm=llm, tools=tools)
-    
+
     async def chat(self, message: str) -> str:
         # Framework handles timeouts and errors automatically
         if self.config["memory"]["enabled"]:
@@ -423,38 +421,38 @@ class ProductionAgent:
             full_message = f"{context}\n\nUser: {message}"
         else:
             full_message = message
-        
+
         # Framework provides automatic timeout and error handling
         response = await self.agent.run(full_message)
-        
+
         # Store in memory
         if self.config["memory"]["enabled"]:
             self.store_conversation(message, response)
-        
+
         return response
-    
+
     def build_context(self) -> str:
         if not self.conversation_history:
             return "This is the start of our conversation."
-        
+
         max_history = self.config["memory"]["max_history"]
         recent = self.conversation_history[-max_history:]
-        
+
         context_parts = ["Previous conversation:"]
         for exchange in recent:
             context_parts.append(f"User: {exchange['user']}")
             context_parts.append(f"Agent: {exchange['agent']}")
-        
+
         return "
 ".join(context_parts)
-    
+
     def store_conversation(self, user_message: str, agent_response: str):
         self.conversation_history.append({
             "user": user_message,
             "agent": agent_response,
             "timestamp": time.time()
         })
-        
+
         # Limit history size
         max_history = self.config["memory"]["max_history"]
         if len(self.conversation_history) > max_history:
@@ -463,13 +461,13 @@ class ProductionAgent:
 # Usage example
 async def main():
     agent = ProductionAgent()
-    
+
     # Simple chat interface - framework handles all complexity
     while True:
-        user_input = input("\nYou: ")
+        user_input = input("You: ")
         if user_input.lower() in ['quit', 'exit', 'bye']:
             break
-        
+
         response = await agent.chat(user_input)
         # Response is automatically formatted and error-free
 
@@ -482,6 +480,3 @@ if __name__ == "__main__":
 Now that you've built your first agent, explore these advanced topics:
 
 - [Add Custom Tools](./add-custom-tools.md) - Create specialized tools
-- [Web3 Integration](./integrate-web3.md) - Add blockchain capabilities
-- [Deploy to Production](./deploy-production.md) - Production deployment
-- [Agent Examples](../examples/basic-agent.md) - More complex examples
