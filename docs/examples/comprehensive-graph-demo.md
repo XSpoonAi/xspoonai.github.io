@@ -36,7 +36,7 @@ This example demonstrates an advanced StateGraph workflow that showcases intelli
 ```bash
 # Required environment variables
 export OPENAI_API_KEY="your-openai-api-key"
-export CRYPTO_API_KEY="your-crypto-api-key"  # For market data
+export TAVILY_API_KEY="your-tavily-api-key"       # Search engine
 ```
 
 #### 🏃 **Quick Start**
