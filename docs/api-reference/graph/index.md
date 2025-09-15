@@ -355,3 +355,4 @@ metrics = compiled.get_execution_metrics()
 - [Graph Crypto Analysis](../../examples/graph-crypto-analysis.md) - Complete example
 - [Comprehensive Graph Demo](../../examples/comprehensive-graph-demo.md) - Advanced patterns
 - [Performance Optimization](../../troubleshooting/performance.md) - Tuning guides
+
