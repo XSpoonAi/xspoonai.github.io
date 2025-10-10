@@ -508,8 +508,8 @@ class MyTool(BaseTool):
 - Multi-API integration strategies
 - Performance optimization for data-intensive tools
 
-#### 🎯 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/comprehensive_graph_demo.py)
+#### 🎯 [Intent Graph Demo](../examples/intent-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
 
 **Advanced tool orchestration:**
 - Custom routing and decision-making tools
@@ -562,8 +562,8 @@ class MyTool(BaseTool):
 - Multi-API integration strategies
 - Performance optimization for data-intensive tools
 
-#### 🎯 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/comprehensive_graph_demo.py)
+#### 🎯 [Intent Graph Demo](../examples/intent-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/intent_graph_demo.py)
 
 **Advanced tool orchestration:**
 - Custom routing and decision-making tools

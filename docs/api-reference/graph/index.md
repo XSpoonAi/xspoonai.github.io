@@ -353,5 +353,5 @@ metrics = compiled.get_execution_metrics()
 
 - [Graph System Overview](../../core-concepts/graph-system.md) - Conceptual introduction
 - [Graph Crypto Analysis](../../examples/graph-crypto-analysis.md) - Complete example
-- [Comprehensive Graph Demo](../../examples/comprehensive-graph-demo.md) - Advanced patterns
+- [Intent Graph Demo](../../examples/intent-graph-demo.md) - Advanced patterns
 - [Performance Optimization](../../troubleshooting/performance.md) - Tuning guides

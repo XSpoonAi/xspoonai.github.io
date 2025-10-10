@@ -179,8 +179,8 @@ response = await agent.run("Get Bitcoin price and analyze trends")
 
 ### 📚 **Agent Implementation Examples**
 
-#### 🎯 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/comprehensive_graph_demo.py)
+#### 🎯 [Intent Graph Demo](../examples/intent-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
 
 **What it demonstrates:**
 - Complete Graph agent implementation with intelligent routing
@@ -253,7 +253,7 @@ response = await agent.run("Get Bitcoin price and analyze trends")
 - **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
 - **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Dynamic tool discovery and execution
 - **[API Reference](../api-reference/agents/base-agent.md)** - Complete agent API documentation
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/comprehensive_graph_demo.py)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/intent_graph_demo.py)
 
 **What it demonstrates:**
 - Complete Graph agent implementation with intelligent routing

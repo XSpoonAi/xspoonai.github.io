@@ -526,8 +526,8 @@ result = await tool.execute(symbol="BTC")
 
 ### 📚 **Working Examples**
 
-#### 🎯 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/comprehensive_graph_demo.py)
+#### 🎯 [Intent Graph Demo](../examples/intent-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
 
 **Perfect for troubleshooting:**
 - Graph system setup and configuration
