@@ -148,17 +148,6 @@ On Windows, you might need to:
 2. **Use Command Prompt or PowerShell** instead of bash
 3. **Install Microsoft Visual C++ Redistributable** if required
 
-### Network Issues
-
-If you're behind a corporate firewall:
-
-```bash
-# Use a proxy
-pip install --proxy=http://proxy.company.com:8080
-# Or configure pip proxy globally
-pip config set global.proxy http://proxy.company.com:8080
-```
-
 ## Upgrading
 
 To upgrade to the latest version:
