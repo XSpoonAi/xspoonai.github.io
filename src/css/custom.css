@@ -6,7 +6,7 @@
 /* SpoonOS Brand Colors */
 :root {
   /* Primary Brand Colors - SpoonOS Orange */
-  --ifm-color-primary: #F6864D;
+  --ifm-color-primary: #f6864d;
   --ifm-color-primary-dark: #e6733d;
   --ifm-color-primary-darker: #dc6935;
   --ifm-color-primary-darkest: #c55e2e;
@@ -15,21 +15,21 @@
   --ifm-color-primary-lightest: #fabf95;
 
   /* SpoonOS Background Colors */
-  --ifm-background-color: #F5F1E4;
-  --ifm-color-emphasis-0: #F5F1E4;
-  --ifm-color-emphasis-100: #F0F0DA;
-  --ifm-color-emphasis-200: #211A18;
-  --ifm-color-emphasis-300: #2A1A12;
-  --ifm-color-emphasis-400: #261C19;
-  --ifm-color-emphasis-500: #261C19;
-  --ifm-color-emphasis-600: #261C19;
-  --ifm-color-emphasis-700: #211A18;
-  --ifm-color-emphasis-800: #2A1A12;
-  --ifm-color-emphasis-900: #2A1A12;
+  --ifm-background-color: #f5f1e4;
+  --ifm-color-emphasis-0: #f5f1e4;
+  --ifm-color-emphasis-100: #f0f0da;
+  --ifm-color-emphasis-200: #211a18;
+  --ifm-color-emphasis-300: #2a1a12;
+  --ifm-color-emphasis-400: #261c19;
+  --ifm-color-emphasis-500: #261c19;
+  --ifm-color-emphasis-600: #261c19;
+  --ifm-color-emphasis-700: #211a18;
+  --ifm-color-emphasis-800: #2a1a12;
+  --ifm-color-emphasis-900: #2a1a12;
 
   /* Text Colors */
-  --ifm-heading-color: #261C19;
-  --ifm-color-content: #261C19;
+  --ifm-heading-color: #261c19;
+  --ifm-color-content: #261c19;
   --ifm-color-content-secondary: rgba(38, 28, 25, 0.8);
 
   /* Card Colors */
@@ -42,20 +42,20 @@
 
   /* Navbar */
   --ifm-navbar-background-color: rgba(245, 241, 228, 0.95);
-  --ifm-navbar-link-color: #261C19;
-  --ifm-navbar-link-hover-color: #F6864D;
+  --ifm-navbar-link-color: #261c19;
+  --ifm-navbar-link-hover-color: #f6864d;
 
   /* Footer */
-  --ifm-footer-background-color: #2A1A12;
-  --ifm-footer-color: #F0F0DA;
-  --ifm-footer-link-color: #F6864D;
-  --ifm-footer-title-color: #F0F0DA;
+  --ifm-footer-background-color: #2a1a12;
+  --ifm-footer-color: #f0f0da;
+  --ifm-footer-link-color: #f6864d;
+  --ifm-footer-title-color: #f0f0da;
 }
 
 /* Dark Mode Theme */
 [data-theme='dark'] {
   /* Dark mode primary colors - slightly lighter orange for dark backgrounds */
-  --ifm-color-primary: #F7935D;
+  --ifm-color-primary: #f7935d;
   --ifm-color-primary-dark: #f6864d;
   --ifm-color-primary-darker: #f5733d;
   --ifm-color-primary-darkest: #e66735;
@@ -64,11 +64,11 @@
   --ifm-color-primary-lightest: #fac39d;
 
   /* Dark mode backgrounds */
-  --ifm-background-color: #211A18;
-  --ifm-color-emphasis-0: #211A18;
-  --ifm-color-emphasis-100: #2A1A12;
-  --ifm-color-emphasis-200: #F0F0DA;
-  --ifm-color-emphasis-300: #F5F1E4;
+  --ifm-background-color: #211a18;
+  --ifm-color-emphasis-0: #211a18;
+  --ifm-color-emphasis-100: #2a1a12;
+  --ifm-color-emphasis-200: #f0f0da;
+  --ifm-color-emphasis-300: #f5f1e4;
   --ifm-color-emphasis-400: rgba(240, 240, 218, 0.8);
   --ifm-color-emphasis-500: rgba(245, 241, 228, 0.6);
   --ifm-color-emphasis-600: rgba(245, 241, 228, 0.4);
@@ -77,7 +77,7 @@
   --ifm-color-emphasis-900: rgba(240, 240, 218, 0.1);
 
   /* Dark mode text */
-  --ifm-heading-color: #F0F0DA;
+  --ifm-heading-color: #f0f0da;
   --ifm-color-content: rgba(240, 240, 218, 0.9);
   --ifm-color-content-secondary: rgba(240, 240, 218, 0.7);
 
@@ -87,14 +87,14 @@
 
   /* Dark mode navbar */
   --ifm-navbar-background-color: rgba(33, 26, 24, 0.95);
-  --ifm-navbar-link-color: #F0F0DA;
-  --ifm-navbar-link-hover-color: #F7935D;
+  --ifm-navbar-link-color: #f0f0da;
+  --ifm-navbar-link-hover-color: #f7935d;
 
   /* Dark mode footer */
-  --ifm-footer-background-color: #2A1A12;
-  --ifm-footer-color: #F0F0DA;
-  --ifm-footer-link-color: #F7935D;
-  --ifm-footer-title-color: #F0F0DA;
+  --ifm-footer-background-color: #2a1a12;
+  --ifm-footer-color: #f0f0da;
+  --ifm-footer-link-color: #f7935d;
+  --ifm-footer-title-color: #f0f0da;
 
   /* Dark mode code highlighting */
   --docusaurus-highlighted-code-line-bg: rgba(247, 147, 93, 0.15);
@@ -102,7 +102,7 @@
 
 /* Custom brand styling */
 .spoonos-brand-gradient {
-  background: linear-gradient(135deg, #F6864D 0%, #F7935D 100%);
+  background: linear-gradient(135deg, #f6864d 0%, #f7935d 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -123,8 +123,8 @@
 
 /* Custom button styles */
 .button-spoonos-primary {
-  background: linear-gradient(135deg, #F6864D 0%, #e6733d 100%);
-  color: #F0F0DA;
+  background: linear-gradient(135deg, #f6864d 0%, #e6733d 100%);
+  color: #f0f0da;
   border: none;
   border-radius: 6px;
   padding: 12px 24px;

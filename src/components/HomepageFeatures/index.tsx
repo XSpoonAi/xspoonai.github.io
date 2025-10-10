@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react';
+import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
@@ -15,8 +15,8 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Build powerful ReAct agents with reasoning and action capabilities.
-        Support for multiple LLM providers including OpenAI, Anthropic, and DeepSeek.
+        Build powerful ReAct agents with reasoning and action capabilities. Support for multiple LLM
+        providers including OpenAI, Anthropic, and DeepSeek.
       </>
     ),
   },
@@ -25,8 +25,8 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        First-class Web3 integration with blockchain tools, DeFi protocols,
-        and decentralized infrastructure. Built for the sentient economy.
+        First-class Web3 integration with blockchain tools, DeFi protocols, and decentralized
+        infrastructure. Built for the sentient economy.
       </>
     ),
   },
@@ -35,14 +35,14 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Modular tool system with MCP protocol support. Easy to extend with
-        custom tools and integrate with external APIs and services.
+        Modular tool system with MCP protocol support. Easy to extend with custom tools and
+        integrate with external APIs and services.
       </>
     ),
   },
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({ title, Svg, description }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
