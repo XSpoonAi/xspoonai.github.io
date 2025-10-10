@@ -117,28 +117,33 @@ This command will show:
 ### Common Issues
 
 1. **Python Version Too Old**
-   ```bash
-   python --version
-   # Should show 3.11 or higher
-   ```
+
+```bash
+python --version
+# Should show 3.11 or higher
+```
 
 2. **Permission Denied**
-   ```bash
-   # Use user installation
-   pip install --user
-   # Or use virtual environment
-   python -m venv spoon_env
-   source spoon_env/bin/activate  # Linux/macOS
-   # spoon_env\Scripts\activate    # Windows
-   pip install    ```
+
+```bash
+# Use user installation
+pip install --user
+# Or use virtual environment
+python -m venv spoon_env
+source spoon_env/bin/activate  # Linux/macOS
+# spoon_env\Scripts\activate    # Windows
+pip install
+```
 
 3. **Dependency Conflicts**
-   ```bash
-   # Upgrade pip
-   pip install --upgrade pip
 
-   # Install in isolated environment
-   pip install --isolated    ```
+```bash
+# Upgrade pip
+pip install --upgrade pip
+
+# Install in isolated environment
+pip install --isolated
+```
 
 ### Windows-Specific Issues
 
@@ -153,19 +158,22 @@ On Windows, you might need to:
 To upgrade to the latest version:
 
 ```bash
-pip install --upgrade ```
+pip install --upgrade spoon-cli
+```
 
 ## Uninstalling
 
-To remove :
+To remove spoon-cli:
 
 ```bash
-pip uninstall ```
+pip uninstall spoon-cli
+```
 
 Note: This will not remove configuration files or chat histories you may have created.
 
 ## Next Steps
 
 After installation, proceed to:
-- [Configuration Guide](./configuration.md) - Learn how to configure - [Basic Usage](./basic-usage.md) - Start using - [Advanced Features](./advanced-features.md) - Explore advanced capabilities
-
+- [Configuration Guide](./configuration.md) - Learn how to configure
+- [Basic Usage](./basic-usage.md) - Start using
+- [Advanced Features](./advanced-features.md) - Explore advanced capabilities
