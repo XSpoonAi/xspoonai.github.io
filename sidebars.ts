@@ -46,6 +46,18 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: '💻 CLI Usage',
+      collapsed: false,
+      items: [
+        'cli/installation',
+        'cli/configuration',
+        'cli/basic-usage',
+        'cli/advanced-features',
+        'cli/troubleshooting',
+      ],
+    },
+    {
+      type: 'category',
       label: '📚 API Reference',
       collapsed: true,
       items: [
@@ -84,13 +96,6 @@ const sidebars: SidebarsConfig = {
             'api-reference/tools/builtin-tools',
           ],
         },
-        {
-          type: 'category',
-          label: 'CLI',
-          items: [
-            'api-reference/cli/commands',
-          ],
-        },
       ],
     },
     {
@@ -98,7 +103,7 @@ const sidebars: SidebarsConfig = {
       label: '💡 Examples',
       collapsed: true,
       items: [
-        'examples/comprehensive-graph-demo',
+        'examples/intent-graph-demo',
         'examples/graph-crypto-analysis',
         'examples/mcp-spoon-search-agent',
       ],

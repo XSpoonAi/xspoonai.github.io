@@ -433,7 +433,7 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 
 - **[Tools System](./tools.md)** - Learn about the complete tool ecosystem
 - **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build MCP-compatible tools
-- **[MCP Tool Reference](../api-reference/tools/mcp-tools.md)** - MCP-specific tool documentation
+- **[MCP Tool Reference](../api-reference/tools/builtin-tools.md)** - MCP-specific tool documentation
 
 ### 📖 **Additional Resources**
 
@@ -464,7 +464,7 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 
 - **[Tools System](./tools.md)** - Learn about the complete tool ecosystem
 - **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build MCP-compatible tools
-- **[MCP Tool Reference](../api-reference/tools/mcp-tools.md)** - MCP-specific tool documentation
+- **[MCP Tool Reference](../api-reference/tools/builtin-tools.md)** - MCP-specific tool documentation
 
 ### 📖 **Additional Resources**
 

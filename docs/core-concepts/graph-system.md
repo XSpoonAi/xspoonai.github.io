@@ -270,8 +270,8 @@ See a full working version in the Cookbook example linked below.
 - Comprehensive market analysis with actionable insights
 - Production-ready error handling and performance optimization
 
-#### 🔧 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/comprehensive_graph_demo.py)
+#### 🔧 [Intent Graph Demo](../examples/intent-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
 
 **What it demonstrates:**
 - Intelligent query routing system (general_qa → short_term_trend → macro_trend → deep_research)
@@ -312,8 +312,8 @@ See a full working version in the Cookbook example linked below.
 - Comprehensive market analysis with actionable insights
 - Production-ready error handling and performance optimization
 
-#### 🔧 [Comprehensive Graph Demo](../examples/comprehensive-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/comprehensive_graph_demo.py)
+#### 🔧 [Intent Graph Demo](../examples/intent-graph-demo.md)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/intent_graph_demo.py)
 
 **What it demonstrates:**
 - Intelligent query routing system (general_qa → short_term_trend → macro_trend → deep_research)

@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Comprehensive Graph Demo
+# Intent Graph Demo
 
 This example demonstrates an advanced StateGraph workflow that showcases intelligent query routing, parallel execution, and memory management - a production-ready implementation of complex multi-step processes.
 
@@ -48,8 +48,8 @@ cd spoon-cookbook/example
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the comprehensive graph demo
-python comprehensive_graph_demo.py
+# Run the intent graph demo
+python intent_graph_demo.py
 ```
 
 #### 🔍 **What to Observe**
@@ -71,81 +71,9 @@ python comprehensive_graph_demo.py
 
 #### 📁 **Source Code & Documentation**
 
-- **GitHub Link**: [Comprehensive Graph Demo](https://github.com/XSpoonAi/spoon-core/blob/main/examples/comprehensive_graph_demo.py)
+- **GitHub Link**: [Intent Graph Demo](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
 - **Related Files**:
-  - `spoon-core/examples/comprehensive_graph_demo.py` - Core implementation
-  - `spoon-core/spoon_ai/graph/` - Graph system components
-  - `docs/core-concepts/graph-system.md` - Graph system documentation
-
-#### 🎓 **Learning Objectives**
-
-This example teaches you:
-- How to build complex, multi-step workflows using StateGraph
-- Advanced LLM integration patterns and prompt engineering
-- Parallel processing techniques for performance optimization
-- Memory management and state persistence in long-running processes
-- Error handling and recovery in distributed systems
-
-#### 💡 **Best Practices Demonstrated**
-
-- **Modular Design** - Clean separation of concerns with focused nodes
-- **Scalable Architecture** - Easy to extend with new analysis types
-- **Resource Efficiency** - Optimized for both speed and memory usage
-- **Maintainable Code** - Well-documented and structured implementation
-
-
-
-#### 🚀 **Key Features Demonstrated**
-
-- **StateGraph Architecture** - Complete implementation of SpoonOS graph system
-- **LLM Integration** - Advanced prompt engineering and response processing
-- **Tool Orchestration** - Seamless integration of multiple data sources
-- **Error Handling** - Robust error recovery and fallback mechanisms
-- **Performance Monitoring** - Built-in metrics and execution tracking
-
-#### 📋 **Prerequisites**
-
-```bash
-# Required environment variables
-export OPENAI_API_KEY="your-openai-api-key"
-export CRYPTO_API_KEY="your-crypto-api-key"  # For market data
-```
-
-#### 🏃 **Quick Start**
-
-```bash
-# Navigate to examples directory
-cd spoon-cookbook/example
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the comprehensive graph demo
-python comprehensive_graph_demo.py
-```
-
-#### 🔍 **What to Observe**
-
-**Execution Flow:**
-- Watch how the system intelligently routes queries to appropriate analysis paths
-- Observe parallel data fetching across multiple timeframes simultaneously
-- See how memory is loaded and updated throughout the process
-
-**Performance Metrics:**
-- Monitor execution times for different routing paths
-- Compare sequential vs parallel processing performance
-- Track memory usage and optimization
-
-**Advanced Behaviors:**
-- See how the LLM makes routing decisions based on query intent
-- Watch real-time data integration from multiple sources
-- Observe how the system maintains context across complex workflows
-
-#### 📁 **Source Code & Documentation**
-
-- **GitHub Link**: [Comprehensive Graph Demo](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/comprehensive_graph_demo.py)
-- **Related Files**:
-  - `spoon-core/examples/comprehensive_graph_demo.py` - Core implementation
+  - `spoon-core/examples/intent_graph_demo.py` - Core implementation
   - `spoon-core/spoon_ai/graph/` - Graph system components
   - `docs/core-concepts/graph-system.md` - Graph system documentation
 
