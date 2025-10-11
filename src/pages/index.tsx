@@ -1,4 +1,4 @@
-import type { ComponentProps, FC, ReactNode, SVGProps } from "react";
+import type { FC, ReactNode, SVGProps } from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
@@ -37,6 +37,62 @@ export default function Home(): ReactNode {
         "Modular tool system with MCP protocol support. Easy to extend with custom tools and integrate with external APIs and services.",
     },
   ];
+
+  const footerLinks: Array<{
+    title: string;
+    items: Array<{ label: string; href: string; internal?: boolean }>;
+  }> = [
+    {
+      title: "Documentation",
+      items: [
+        {
+          label: "Getting Started",
+          href: "docs/getting-started/quick-start/",
+          internal: true,
+        },
+        {
+          label: "Installation",
+          href: "docs/getting-started/installation/",
+          internal: true,
+        },
+        {
+          label: "Configuration",
+          href: "docs/getting-started/configuration/",
+          internal: true,
+        },
+      ],
+    },
+    {
+      title: "Community",
+      items: [
+        {
+          label: "GitHub",
+          href: "https://github.com/XSpoonAi/spoon-core",
+        },
+        {
+          label: "Discord",
+          href: "https://discord.gg/G6y3ZCFK4h",
+        },
+        {
+          label: "Issues",
+          href: "https://github.com/XSpoonAi/spoon-core/issues",
+        },
+      ],
+    },
+    {
+      title: "More",
+      items: [
+        {
+          label: "SpoonOS Landing",
+          href: "https://spoonai.io",
+        },
+        {
+          label: "Examples",
+          href: "https://github.com/XSpoonAi/spoon-core/tree/main/examples",
+        },
+      ],
+    },
+  ] as const;
 
   return (
     <>
@@ -133,6 +189,31 @@ export default function Home(): ReactNode {
             />
           ))}
         </section>
+
+        <footer className="flex flex-col gap-[60px] mx-auto text-white max-w-[600px]">
+          <div className="flex gap-5 mx-auto text-white justify-center w-full">
+            {footerLinks.map((v) => (
+              <div className="flex flex-col flex-1 pl-[30px]">
+                <h3 className="text-[#D9D9D9] font-bold">{v.title}</h3>
+                <div className="flex flex-col">
+                  {v.items.map((x) => (
+                    <a
+                      href={x.href}
+                      className="text-[#D9D9D9]"
+                      target={x.internal ? "_self" : "_blank"}
+                    >
+                      {x.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <aside className="mb-[68px] mx-auto text-[#D9D9D9]">
+            {`Copyright © ${new Date().getFullYear()} XSpoonAi. Built with SpoonOS.`}
+          </aside>
+        </footer>
       </div>
     </>
   );
