@@ -8,6 +8,7 @@ import styles from "./index.module.css";
 // TODO: font family
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
+  // static/img/landing-bg.jpg
 
   return (
     <>
@@ -23,7 +24,7 @@ export default function Home(): ReactNode {
       <div className="bg-black min-h-screen max-w-screen">
         {/* header */}
         {/* TODO: hover style */}
-        <header className="h-[110px] flex items-center mb-10">
+        <header className="h-[110px] flex items-center mb-10 justify-center">
           <div
             className="flex justify-between items-center max-w-[1568px] w-full mx-20"
             style={{
