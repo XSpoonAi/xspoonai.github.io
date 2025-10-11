@@ -1,14 +1,42 @@
-import type { ReactNode } from "react";
+import type { ComponentProps, FC, ReactNode, SVGProps } from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Head from "@docusaurus/Head";
 import Link from "@docusaurus/Link";
 import { SpoonOSLogo } from "../components/shared/spoon-os-logo";
 import styles from "./index.module.css";
+import { GradientCard } from "../components/shared/gradient-card";
+import { Card1Brain } from "../svgs/card-1-brain";
+import { Card2Atom } from "../svgs/card-2-atom";
+import { Card3Cube } from "../svgs/card-3-cube";
 
 // TODO: font family
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
   // static/img/landing-bg.jpg
+  const cards: Array<{
+    title: string;
+    icon: FC<SVGProps<SVGSVGElement>>;
+    description: string;
+  }> = [
+    {
+      icon: Card1Brain,
+      title: `Intelligent \n Agents`,
+      description:
+        "Build powerful ReAct agents with reasoning and action capabilities. Support for multiple LLM providers including OpenAI, Anthropic, and DeepSeek.",
+    },
+    {
+      icon: Card2Atom,
+      title: "Web3 \n Native",
+      description:
+        "First-class Web3 integration with blockchain tools, DeFi protocols, and decentralized infrastructure. Built for the sentient economy.",
+    },
+    {
+      icon: Card3Cube,
+      title: "Extensible \n Architecture",
+      description:
+        "Modular tool system with MCP protocol support. Easy to extend with custom tools and integrate with external APIs and services.",
+    },
+  ];
 
   return (
     <>
@@ -94,6 +122,17 @@ export default function Home(): ReactNode {
             </Link>
           </div>
         </main>
+
+        <section className="flex max-w-[1172px] gap-5 mx-auto justify-between mt-[150px] mb-[250px]">
+          {cards.map((v, i) => (
+            <GradientCard
+              key={i}
+              title={v.title}
+              description={v.description}
+              Icon={v.icon}
+            />
+          ))}
+        </section>
       </div>
     </>
   );
