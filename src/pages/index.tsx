@@ -8,6 +8,9 @@ import { GradientCard } from "../components/shared/gradient-card";
 import { Card1Brain } from "../svgs/card-1-brain";
 import { Card2Atom } from "../svgs/card-2-atom";
 import { Card3Cube } from "../svgs/card-3-cube";
+import "@fontsource/dm-sans"; // Defaults to weight 400
+import "@fontsource/dm-sans/400.css"; // Specify weight
+import "@fontsource/dm-sans/400-italic.css"; // Specify weight and style
 
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
@@ -102,7 +105,7 @@ export default function Home(): ReactNode {
         />
       </Head>
 
-      <div className="bg-[#020402] min-h-screen max-w-screen">
+      <div className="bg-[#020402] min-h-screen max-w-screen font-sans">
         <header className="h-[110px] flex items-center mb-10 justify-center">
           <div
             className="flex justify-between items-center max-w-[1568px] w-full mx-20"

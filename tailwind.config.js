@@ -7,14 +7,11 @@ module.exports = {
   },
   important: true, // Make Tailwind utilities more specific
   darkMode: ["class", '[data-theme="dark"]'],
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx,html}",
-    "./docs/**/*.{md,mdx}",
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx,html}", "./docs/**/*.{md,mdx}"],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Inter"', ...fontFamily.sans],
+        sans: ['"DM Sans"', ...fontFamily.sans],
         jakarta: ['"Plus Jakarta Sans"', ...fontFamily.sans],
         mono: ['"Fira Code"', ...fontFamily.mono],
       },
