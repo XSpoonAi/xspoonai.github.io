@@ -8,7 +8,6 @@ import { GradientCard } from "../components/shared/gradient-card";
 import { Card1Brain } from "../svgs/card-1-brain";
 import { Card2Atom } from "../svgs/card-2-atom";
 import { Card3Cube } from "../svgs/card-3-cube";
-import { HomeBg } from "../components/shared/home-bg";
 
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
@@ -103,8 +102,8 @@ export default function Home(): ReactNode {
         />
       </Head>
 
-      <div className="bg-black min-h-screen max-w-screen">
-        <header className="h-[110px] flex items-center mb-10 justify-center relative z-10">
+      <div className="bg-[#020402] min-h-screen max-w-screen">
+        <header className="h-[110px] flex items-center mb-10 justify-center">
           <div
             className="flex justify-between items-center max-w-[1568px] w-full mx-20"
             style={{
@@ -137,22 +136,23 @@ export default function Home(): ReactNode {
         </header>
 
         <main
-          className="flex flex-col py-[200px] min-h-[1333px]"
+          className="flex flex-col min-h-[1333px]"
           style={{
             backgroundImage: 'url("/img/home-bg.jpg")',
-            backgroundSize: "100% auto",
-            backgroundPosition: "top",
+            backgroundSize: "100% 100%",
+            backgroundPosition: "bottom",
             backgroundRepeat: "no-repeat",
           }}
         >
-          <h2 className="text-white mx-auto text-4xl relative z-10">SpoonOS</h2>
+          {/* TODO: image? */}
+          <h2 className="text-white mx-auto text-5xl">SpoonOS</h2>
 
-          <h2 className="flex flex-col text-[100px] font-bold bg-[linear-gradient(92.67deg,#58FF98_0%,#59FF98_8.04%,#5AFF9A_15.48%,#5DFF9C_22.42%,#61FEA0_28.94%,#66FEA4_35.13%,#6CFDAA_41.1%,#73FDB0_46.93%,#7AFCB6_52.71%,#83FBBE_58.54%,#8CFAC6_64.51%,#96F9CF_70.71%,#A1F8D9_77.23%,#ACF7E3_84.16%,#B8F6ED_91.6%,#C4F5F8_99.64%)] bg-clip-text text-transparent mx-auto mt-7 mb-8 relative z-10">
+          <h2 className="flex flex-col text-[100px] font-bold bg-[linear-gradient(92.67deg,#58FF98_0%,#59FF98_8.04%,#5AFF9A_15.48%,#5DFF9C_22.42%,#61FEA0_28.94%,#66FEA4_35.13%,#6CFDAA_41.1%,#73FDB0_46.93%,#7AFCB6_52.71%,#83FBBE_58.54%,#8CFAC6_64.51%,#96F9CF_70.71%,#A1F8D9_77.23%,#ACF7E3_84.16%,#B8F6ED_91.6%,#C4F5F8_99.64%)] bg-clip-text text-transparent mx-auto mt-7 mb-8">
             <span className="text-center">Agentic OS for a</span>
             <span className="text-center">Sentient Economy</span>
           </h2>
 
-          <div className="flex gap-5 mx-auto relative z-10">
+          <div className="flex gap-5 mx-auto">
             <Link
               href="docs/getting-started/quick-start/"
               className="relative inline-block rounded-[50px] px-[30px] py-3 text-2xl font-medium text-[#B1FFCF] bg-transparent hover:no-underline"
@@ -177,42 +177,42 @@ export default function Home(): ReactNode {
               <span className={styles.gradientBorder} />
             </Link>
           </div>
+
+          <section className="flex max-w-[1172px] gap-5 mx-auto justify-between mt-[150px]">
+            {cards.map((v, i) => (
+              <GradientCard
+                key={i}
+                title={v.title}
+                description={v.description}
+                Icon={v.icon}
+              />
+            ))}
+          </section>
+
+          <footer className="flex flex-col gap-[60px] mx-auto text-white max-w-[600px] mt-[250px]">
+            <div className="flex gap-5 mx-auto text-white justify-center w-full">
+              {footerLinks.map((v) => (
+                <div className="flex flex-col flex-1 pl-[30px]">
+                  <h3 className="text-[#D9D9D9] font-bold">{v.title}</h3>
+                  <div className="flex flex-col">
+                    {v.items.map((x) => (
+                      <a
+                        href={x.href}
+                        className="text-[#D9D9D9]"
+                        target={x.internal ? "_self" : "_blank"}
+                      >
+                        {x.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </footer>
         </main>
 
-        <section className="flex max-w-[1172px] gap-5 mx-auto justify-between mt-[150px] mb-[250px] relative z-10">
-          {cards.map((v, i) => (
-            <GradientCard
-              key={i}
-              title={v.title}
-              description={v.description}
-              Icon={v.icon}
-            />
-          ))}
-        </section>
-
-        <footer className="flex flex-col gap-[60px] mx-auto text-white max-w-[600px] relative z-10">
-          <div className="flex gap-5 mx-auto text-white justify-center w-full">
-            {footerLinks.map((v) => (
-              <div className="flex flex-col flex-1 pl-[30px]">
-                <h3 className="text-[#D9D9D9] font-bold">{v.title}</h3>
-                <div className="flex flex-col">
-                  {v.items.map((x) => (
-                    <a
-                      href={x.href}
-                      className="text-[#D9D9D9]"
-                      target={x.internal ? "_self" : "_blank"}
-                    >
-                      {x.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <aside className="mb-[68px] mx-auto text-[#D9D9D9]">
-            {`Copyright © ${new Date().getFullYear()} XSpoonAi. Built with SpoonOS.`}
-          </aside>
+        <footer className="mb-[68px] text-center text-[#D9D9D9]">
+          {`Copyright © ${new Date().getFullYear()} XSpoonAi. Built with SpoonOS.`}
         </footer>
       </div>
     </>
