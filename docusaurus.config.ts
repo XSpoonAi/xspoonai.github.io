@@ -1,58 +1,61 @@
-import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
-import type * as Preset from '@docusaurus/preset-classic';
+import { themes as prismThemes } from "prism-react-renderer";
+import type { Config } from "@docusaurus/types";
+import type * as Preset from "@docusaurus/preset-classic";
+import tailwindPlugin from "./plugins/tailwind-config.cjs";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'SpoonOS',
-  tagline: 'Agentic OS for a Sentient Economy',
-  favicon: 'img/favicon.ico',
+  title: "SpoonOS",
+  tagline: "Agentic OS for a Sentient Economy",
+  favicon: "img/favicon.ico",
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
 
+  plugins: [tailwindPlugin],
+
   // Set the production url of your site here
-  url: 'https://xspoonai.github.io',
+  url: "https://xspoonai.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: "/",
   // Avoid GH Pages redirect issues and inconsistent URLs
   trailingSlash: true,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'XSpoonAi', // Usually your GitHub org/user name.
-  projectName: 'xspoonai.github.io', // Usually your repo name.
+  organizationName: "XSpoonAi", // Usually your GitHub org/user name.
+  projectName: "xspoonai.github.io", // Usually your repo name.
   // Ensure Docusaurus deploy pushes to the branch that GitHub Pages serves
-  deploymentBranch: 'main',
+  deploymentBranch: "main",
 
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: "warn",
+  onBrokenMarkdownLinks: "warn",
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: "en",
+    locales: ["en"],
   },
 
   presets: [
     [
-      'classic',
+      "classic",
       {
         docs: {
-          sidebarPath: './sidebars.ts',
+          sidebarPath: "./sidebars.ts",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/XSpoonAi/spoon-doc/tree/main/',
+          editUrl: "https://github.com/XSpoonAi/spoon-doc/tree/main/",
         },
 
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: "./src/css/custom.css",
         },
       } satisfies Preset.Options,
     ],
@@ -60,80 +63,80 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/spoonos-social-card.jpg',
+    image: "img/spoonos-social-card.jpg",
     colorMode: {
-      defaultMode: 'light',
+      defaultMode: "light",
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'SpoonOS',
+      title: "SpoonOS",
       logo: {
-        alt: 'SpoonOS Logo',
-        src: 'img/logo.png',
+        alt: "SpoonOS Logo",
+        src: "img/logo.png",
       },
       items: [
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Documentation',
+          type: "docSidebar",
+          sidebarId: "tutorialSidebar",
+          position: "left",
+          label: "Documentation",
         },
 
         {
-          href: 'https://github.com/XSpoonAi/spoon-core',
-          label: 'GitHub',
-          position: 'right',
+          href: "https://github.com/XSpoonAi/spoon-core",
+          label: "GitHub",
+          position: "right",
         },
       ],
     },
     footer: {
-      style: 'dark',
+      style: "dark",
       links: [
         {
-          title: 'Documentation',
+          title: "Documentation",
           items: [
             {
-              label: 'Getting Started',
-              to: '/docs/intro',
+              label: "Getting Started",
+              to: "/docs/intro",
             },
             {
-              label: 'Installation',
-              to: '/docs/installation',
+              label: "Installation",
+              to: "/docs/installation",
             },
             {
-              label: 'Configuration',
-              to: '/docs/configuration',
+              label: "Configuration",
+              to: "/docs/configuration",
             },
           ],
         },
         {
-          title: 'Community',
+          title: "Community",
           items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/XSpoonAi/spoon-core',
+              label: "GitHub",
+              href: "https://github.com/XSpoonAi/spoon-core",
             },
             {
-              label: 'Discord',
-              href: 'https://discord.gg/G6y3ZCFK4h',
+              label: "Discord",
+              href: "https://discord.gg/G6y3ZCFK4h",
             },
             {
-              label: 'Issues',
-              href: 'https://github.com/XSpoonAi/spoon-core/issues',
+              label: "Issues",
+              href: "https://github.com/XSpoonAi/spoon-core/issues",
             },
           ],
         },
         {
-          title: 'More',
+          title: "More",
           items: [
             {
-              label: 'SpoonOS Landing',
-              href: 'https://spoonai.io',
+              label: "SpoonOS Landing",
+              href: "https://spoonai.io",
             },
             {
-              label: 'Examples',
-              href: 'https://github.com/XSpoonAi/spoon-core/tree/main/examples',
+              label: "Examples",
+              href: "https://github.com/XSpoonAi/spoon-core/tree/main/examples",
             },
           ],
         },
