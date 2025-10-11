@@ -1,4 +1,4 @@
-import {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+import { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 
 /**
  * SpoonOS Cookbook Documentation Sidebar Configuration
@@ -39,10 +39,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: '📖 How-To Guides',
       collapsed: false,
-      items: [
-        'how-to-guides/build-first-agent',
-        'how-to-guides/add-custom-tools',
-      ],
+      items: ['how-to-guides/build-first-agent', 'how-to-guides/add-custom-tools'],
     },
     {
       type: 'category',
@@ -84,17 +81,12 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Agents',
-          items: [
-            'api-reference/agents/base-agent',
-          ],
+          items: ['api-reference/agents/base-agent'],
         },
         {
           type: 'category',
           label: 'Tools',
-          items: [
-            'api-reference/tools/base-tool',
-            'api-reference/tools/builtin-tools',
-          ],
+          items: ['api-reference/tools/base-tool', 'api-reference/tools/builtin-tools'],
         },
       ],
     },
