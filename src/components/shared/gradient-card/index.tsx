@@ -21,7 +21,7 @@ export const GradientCard: FC<
       <div
         className="absolute inset-0 rounded-[10px] pointer-events-none"
         style={{
-          padding: "2px",
+          padding: "1px",
           background: "linear-gradient(180deg, #58FF98 0%, #15562E 100%)",
           WebkitMask:
             "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",

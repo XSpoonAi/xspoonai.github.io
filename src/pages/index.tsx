@@ -182,7 +182,7 @@ export default function Home(): ReactNode {
             </Link>
           </div>
 
-          <section className="flex max-w-[1172px] gap-5 mx-auto justify-between mt-[150px]">
+          <section className="flex max-w-[1172px] gap-5 mx-auto justify-between mt-[128px]">
             {cards.map((v, i) => (
               <GradientCard
                 key={i}
