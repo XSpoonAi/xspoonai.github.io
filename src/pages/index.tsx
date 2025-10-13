@@ -11,6 +11,23 @@ import { Card3Cube } from "../svgs/card-3-cube";
 import "@fontsource/dm-sans"; // Defaults to weight 400
 import "@fontsource/dm-sans/400.css"; // Specify weight
 import "@fontsource/dm-sans/400-italic.css"; // Specify weight and style
+import { DiscordLogo, NeoLogo, XLogo } from "../components/shared/social-logos";
+
+const socialsLinks = [
+  {
+    icon: DiscordLogo,
+    link: "https://discord.com/invite/G6y3ZCFK4h",
+  },
+  {
+    icon: NeoLogo,
+    // TODO: neo logo?
+    link: "https://discord.com/invite/G6y3ZCFK4h",
+  },
+  {
+    icon: XLogo,
+    link: "https://x.com/SpoonOS_ai",
+  },
+];
 
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
@@ -193,16 +210,16 @@ export default function Home(): ReactNode {
             ))}
           </section>
 
-          <footer className="flex flex-col gap-[60px] mx-auto text-white max-w-[600px] mt-[250px]">
-            <div className="flex gap-5 mx-auto text-white justify-center w-full">
+          <footer className="flex flex-col mx-auto text-white mt-[250px] relative z-10 max-w-7xl w-full h-[296px] mb-10 pt-8 pb-10 justify-between backdrop-blur-[10px] bg-[#08231280] rounded-[10px]">
+            <div className="flex gap-[128px] text-white justify-center w-[630px] mx-auto">
               {footerLinks.map((v) => (
-                <div className="flex flex-col flex-1 pl-[30px]">
+                <div className="flex flex-col flex-1">
                   <h3 className="text-[#D9D9D9] font-bold">{v.title}</h3>
-                  <div className="flex flex-col">
+                  <div className="flex flex-col gap-2">
                     {v.items.map((x) => (
                       <a
                         href={x.href}
-                        className="text-[#D9D9D9]"
+                        className="text-[#D9D9D9] hover:text-white hover:no-underline font-medium text-nowrap"
                         target={x.internal ? "_self" : "_blank"}
                       >
                         {x.label}
@@ -212,12 +229,24 @@ export default function Home(): ReactNode {
                 </div>
               ))}
             </div>
+            {/* TODO: border and shadow */}
+            {/* <span className={styles.footerGradientBorder}></span> */}
+
+            <footer className="text-[#D9D9D9] w-[644px] mx-auto flex justify-between h-8 items-center">
+              <span>
+                {`Copyright © ${new Date().getFullYear()} SpoonAi. Built with SpoonOS.`}
+              </span>
+              <div className="flex gap-10">
+                {/* TODO: neo link and neo logo? */}
+                {socialsLinks.map((v) => (
+                  <a href={v.link} target="_blank">
+                    <v.icon />
+                  </a>
+                ))}
+              </div>
+            </footer>
           </footer>
         </main>
-
-        <footer className="mb-[68px] text-center text-[#D9D9D9]">
-          {`Copyright © ${new Date().getFullYear()} XSpoonAi. Built with SpoonOS.`}
-        </footer>
       </div>
     </>
   );
