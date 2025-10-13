@@ -106,31 +106,31 @@ export default function Home(): ReactNode {
       </Head>
 
       <div className="bg-[#020402] min-h-screen max-w-screen font-sans">
-        <header className="h-[110px] flex items-center mb-10 justify-center">
-          <div
-            className="flex justify-between items-center max-w-[1568px] w-full mx-20"
-            style={{
-              borderBottom: "1px solid white",
-            }}
-          >
-            <h1 className="flex gap-[18px] items-end">
-              <SpoonOSLogo className="size-12" />
-              <a href="/" className="text-white">
+        <header
+          className="h-[74px] flex items-center justify-center mb-10"
+          style={{
+            borderBottom: "1px solid white",
+          }}
+        >
+          <div className="flex justify-between items-center max-w-[1568px] w-full mx-20 h-full">
+            <h1 className="flex gap-3 items-center h-full my-auto">
+              <SpoonOSLogo className="size-8" />
+              <a href="/" className="text-white text-xl">
                 SpoonOS
               </a>
             </h1>
 
-            <div className="flex gap-[46px] items-center text-2xl font-medium">
+            <div className="flex gap-[46px] items-center">
               <Link
                 href="docs/getting-started/installation/"
-                className="text-white"
+                className="text-[#D9D9D9] hover:text-white hover:no-underline font-medium"
               >
                 Document
               </Link>
               <a
                 href="https://github.com/XSpoonAi/spoon-core"
                 target="_blank"
-                className="text-white"
+                className="text-[#D9D9D9] hover:text-white hover:no-underline font-medium"
               >
                 GitHub
               </a>
