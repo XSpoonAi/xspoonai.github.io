@@ -229,8 +229,6 @@ export default function Home(): ReactNode {
                 </div>
               ))}
             </div>
-            {/* TODO: border and shadow */}
-            {/* <span className={styles.footerGradientBorder}></span> */}
 
             <footer className="text-[#D9D9D9] w-[644px] mx-auto flex justify-between h-8 items-center">
               <span>
@@ -245,6 +243,8 @@ export default function Home(): ReactNode {
                 ))}
               </div>
             </footer>
+
+            <span className={styles.footerGradientBorder}></span>
           </footer>
         </main>
       </div>
