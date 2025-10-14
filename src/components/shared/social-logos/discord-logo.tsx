@@ -1,6 +1,6 @@
-import type { FC, ComponentProps } from "react";
+import type { FC, ComponentProps } from 'react';
 
-export const DiscordLogo: FC<ComponentProps<"svg">> = ({ ...props }) => {
+export const DiscordLogo: FC<ComponentProps<'svg'>> = ({ ...props }) => {
   return (
     <svg
       width="22"

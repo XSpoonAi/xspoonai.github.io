@@ -1,6 +1,6 @@
-import type { FC, ComponentProps } from "react";
+import type { FC, ComponentProps } from 'react';
 
-export const Card1Brain: FC<ComponentProps<"svg">> = ({ ...props }) => {
+export const Card1Brain: FC<ComponentProps<'svg'>> = ({ ...props }) => {
   return (
     <svg
       width="46"

@@ -1,13 +1,10 @@
-const path = require("path");
+const path = require('path');
 
 function tailwindPlugin(context, options) {
   return {
-    name: "docusaurus-tailwindcss",
+    name: 'docusaurus-tailwindcss',
     configurePostCss(postcssOptions) {
-      postcssOptions.plugins.push(
-        require("tailwindcss"),
-        require("autoprefixer")
-      );
+      postcssOptions.plugins.push(require('tailwindcss'), require('autoprefixer'));
       return postcssOptions;
     },
   };
