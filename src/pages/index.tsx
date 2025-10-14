@@ -114,7 +114,7 @@ export default function Home(): ReactNode {
   return (
     <>
       <Head>
-        <title>{`${siteConfig.title} - Code Cook Book`}</title>
+        <title>{`${siteConfig.title} - Code Cookbook`}</title>
         <meta
           name="description"
           content="SpoonOS Core Developer Framework - Agentic OS for the Sentient Economy. Build powerful AI agents with Web3 integration."
@@ -129,7 +129,7 @@ export default function Home(): ReactNode {
           }}
         >
           <div className="flex h-full w-full max-w-[1568px] items-center justify-between px-4 sm:px-8 md:px-12 lg:px-20">
-            <h1 className="my-auto flex h-full items-center gap-2 sm:gap-3">
+            <h1 className="flex gap-2 items-center my-auto h-full sm:gap-3">
               <SpoonOSLogo className="size-6 sm:size-8" />
               <a href="/" className="text-lg text-white sm:text-xl">
                 SpoonOS
@@ -168,11 +168,11 @@ export default function Home(): ReactNode {
           </h2>
 
           <h2 className="mx-auto mb-6 mt-4 flex flex-col bg-[linear-gradient(92.67deg,#58FF98_0%,#59FF98_8.04%,#5AFF9A_15.48%,#5DFF9C_22.42%,#61FEA0_28.94%,#66FEA4_35.13%,#6CFDAA_41.1%,#73FDB0_46.93%,#7AFCB6_52.71%,#83FBBE_58.54%,#8CFAC6_64.51%,#96F9CF_70.71%,#A1F8D9_77.23%,#ACF7E3_84.16%,#B8F6ED_91.6%,#C4F5F8_99.64%)] bg-clip-text px-4 text-[32px] font-bold text-transparent sm:mb-8 sm:mt-7 sm:text-[48px] md:text-[64px] lg:text-[80px] xl:text-[100px]">
-            <span className="text-center font-sans">Agentic OS for a</span>
-            <span className="text-center font-sans">Sentient Economy</span>
+            <span className="font-sans text-center">Agentic OS for a</span>
+            <span className="font-sans text-center">Sentient Economy</span>
           </h2>
 
-          <div className="mx-auto flex flex-col gap-3 px-4 sm:flex-row sm:gap-5">
+          <div className="flex flex-col gap-3 px-4 mx-auto sm:flex-row sm:gap-5">
             <Link
               href="docs/getting-started/quick-start/"
               className="relative inline-block rounded-[50px] bg-transparent px-4 py-2 text-center text-lg font-medium text-[#B1FFCF] transition-all hover:text-[#B1FFCFB2] hover:no-underline hover:shadow-[inset_0_0_20px_5px_#58FF9880] sm:px-6 sm:py-3 sm:text-xl md:px-[30px] md:text-2xl"
@@ -209,7 +209,7 @@ export default function Home(): ReactNode {
               {footerLinks.map(v => (
                 <div className="flex flex-col items-center md:items-start">
                   <h3 className="mb-2 font-bold text-[#D9D9D9]">{v.title}</h3>
-                  <div className="flex flex-col items-center gap-2 md:items-start">
+                  <div className="flex flex-col gap-2 items-center md:items-start">
                     {v.items.map(x => (
                       <a
                         href={x.href}
@@ -225,7 +225,7 @@ export default function Home(): ReactNode {
             </div>
 
             <footer className="mx-auto mt-6 flex h-auto w-full max-w-[630px] flex-col items-center gap-4 text-[#D9D9D9] sm:mt-8 md:h-8 md:flex-row md:justify-between md:gap-0">
-              <span className="text-center text-xs sm:text-sm md:text-left">{`Copyright © ${new Date().getFullYear()} SpoonAi. Built with SpoonOS.`}</span>
+              <span className="text-xs text-center sm:text-sm md:text-left">{`Copyright © ${new Date().getFullYear()} SpoonAi. Built with SpoonOS.`}</span>
               <div className="flex gap-6 sm:gap-10">
                 {socialsLinks.map(v => (
                   <a href={v.link} target="_blank">
