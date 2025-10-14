@@ -1,4 +1,4 @@
-const { fontFamily } = require("tailwindcss/defaultTheme");
+const { fontFamily } = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,8 +6,8 @@ module.exports = {
     preflight: false, // Keep false to avoid conflicts with Docusaurus styles
   },
   important: true, // Make Tailwind utilities more specific
-  darkMode: ["class", '[data-theme="dark"]'],
-  content: ["./src/**/*.{js,jsx,ts,tsx,html}", "./docs/**/*.{md,mdx}"],
+  darkMode: ['class', '[data-theme="dark"]'],
+  content: ['./src/**/*.{js,jsx,ts,tsx,html}', './docs/**/*.{md,mdx}'],
   theme: {
     extend: {
       fontFamily: {
@@ -16,11 +16,11 @@ module.exports = {
         mono: ['"Fira Code"', ...fontFamily.mono],
       },
       borderRadius: {
-        sm: "4px",
+        sm: '4px',
       },
       screens: {
-        sm: "0px",
-        lg: "997px",
+        sm: '0px',
+        lg: '997px',
       },
       colors: {},
     },

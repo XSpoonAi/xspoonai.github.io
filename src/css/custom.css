@@ -57,7 +57,7 @@
 }
 
 /* Dark Mode Theme */
-[data-theme="dark"] {
+[data-theme='dark'] {
   /* Dark mode primary colors - slightly lighter orange for dark backgrounds */
   --ifm-color-primary: #f7935d;
   --ifm-color-primary-dark: #f6864d;
@@ -120,7 +120,7 @@
   backdrop-filter: blur(10px);
 }
 
-[data-theme="dark"] .spoonos-card {
+[data-theme='dark'] .spoonos-card {
   background: rgba(42, 26, 18, 0.8);
   border: 1px solid rgba(246, 134, 77, 0.3);
 }
