@@ -8,9 +8,9 @@ import { GradientCard } from '../components/shared/gradient-card';
 import { Card1Brain } from '../svgs/card-1-brain';
 import { Card2Atom } from '../svgs/card-2-atom';
 import { Card3Cube } from '../svgs/card-3-cube';
-import '@fontsource/dm-sans'; // Defaults to weight 400
-import '@fontsource/dm-sans/400.css'; // Specify weight
-import '@fontsource/dm-sans/400-italic.css'; // Specify weight and style
+import '@fontsource/dm-sans';
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/400-italic.css';
 import { DiscordLogo, NeoLogo, XLogo } from '../components/shared/social-logos';
 
 const socialsLinks = [
@@ -20,7 +20,6 @@ const socialsLinks = [
   },
   {
     icon: NeoLogo,
-    // TODO: neo logo?
     link: 'https://discord.com/invite/G6y3ZCFK4h',
   },
   {
@@ -124,30 +123,30 @@ export default function Home(): ReactNode {
 
       <div className="max-w-screen min-h-screen bg-[#020402] font-sans">
         <header
-          className="mb-10 flex h-[74px] items-center justify-center"
+          className="mb-6 flex h-[60px] items-center justify-center sm:mb-10 sm:h-[74px]"
           style={{
             borderBottom: '0.5px solid white',
           }}
         >
-          <div className="mx-20 flex h-full w-full max-w-[1568px] items-center justify-between">
-            <h1 className="my-auto flex h-full items-center gap-3">
-              <SpoonOSLogo className="size-8" />
-              <a href="/" className="text-xl text-white">
+          <div className="flex h-full w-full max-w-[1568px] items-center justify-between px-4 sm:px-8 md:px-12 lg:px-20">
+            <h1 className="my-auto flex h-full items-center gap-2 sm:gap-3">
+              <SpoonOSLogo className="size-6 sm:size-8" />
+              <a href="/" className="text-lg text-white sm:text-xl">
                 SpoonOS
               </a>
             </h1>
 
-            <div className="flex items-center gap-[46px]">
+            <div className="flex items-center gap-4 sm:gap-8 md:gap-[46px]">
               <Link
                 href="docs/getting-started/installation/"
-                className="font-medium text-[#D9D9D9] hover:text-white hover:no-underline"
+                className="text-sm font-medium text-[#D9D9D9] hover:text-white hover:no-underline sm:text-base"
               >
                 Document
               </Link>
               <a
                 href="https://github.com/XSpoonAi/spoon-core"
                 target="_blank"
-                className="font-medium text-[#D9D9D9] hover:text-white hover:no-underline"
+                className="text-sm font-medium text-[#D9D9D9] hover:text-white hover:no-underline sm:text-base"
               >
                 GitHub
               </a>
@@ -156,27 +155,27 @@ export default function Home(): ReactNode {
         </header>
 
         <main
-          className="mt-20 flex min-h-[1333px] flex-col"
+          className="mt-10 flex min-h-[800px] flex-col sm:mt-16 md:mt-20 md:min-h-[1000px] lg:min-h-[1333px]"
           style={{
             backgroundImage: 'url("/img/home-bg.jpg")',
-            backgroundSize: '100% 100%',
-            backgroundPosition: 'bottom',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center bottom',
             backgroundRepeat: 'no-repeat',
           }}
         >
-          {/* TODO: image? */}
-          <h2 className="mx-auto mb-6 text-5xl text-white">SpoonOS</h2>
+          <h2 className="mx-auto mb-3 text-3xl text-white sm:mb-6 sm:text-4xl md:text-5xl">
+            SpoonOS
+          </h2>
 
-          <h2 className="mx-auto mb-8 mt-7 flex flex-col bg-[linear-gradient(92.67deg,#58FF98_0%,#59FF98_8.04%,#5AFF9A_15.48%,#5DFF9C_22.42%,#61FEA0_28.94%,#66FEA4_35.13%,#6CFDAA_41.1%,#73FDB0_46.93%,#7AFCB6_52.71%,#83FBBE_58.54%,#8CFAC6_64.51%,#96F9CF_70.71%,#A1F8D9_77.23%,#ACF7E3_84.16%,#B8F6ED_91.6%,#C4F5F8_99.64%)] bg-clip-text text-[100px] font-bold text-transparent">
+          <h2 className="mx-auto mb-6 mt-4 flex flex-col bg-[linear-gradient(92.67deg,#58FF98_0%,#59FF98_8.04%,#5AFF9A_15.48%,#5DFF9C_22.42%,#61FEA0_28.94%,#66FEA4_35.13%,#6CFDAA_41.1%,#73FDB0_46.93%,#7AFCB6_52.71%,#83FBBE_58.54%,#8CFAC6_64.51%,#96F9CF_70.71%,#A1F8D9_77.23%,#ACF7E3_84.16%,#B8F6ED_91.6%,#C4F5F8_99.64%)] bg-clip-text px-4 text-[32px] font-bold text-transparent sm:mb-8 sm:mt-7 sm:text-[48px] md:text-[64px] lg:text-[80px] xl:text-[100px]">
             <span className="text-center font-sans">Agentic OS for a</span>
             <span className="text-center font-sans">Sentient Economy</span>
           </h2>
 
-          {/* TODO: font OPPO Sans 4.0 */}
-          <div className="mx-auto flex gap-5">
+          <div className="mx-auto flex flex-col gap-3 px-4 sm:flex-row sm:gap-5">
             <Link
               href="docs/getting-started/quick-start/"
-              className="relative inline-block rounded-[50px] bg-transparent px-[30px] py-3 text-2xl font-medium text-[#B1FFCF] transition-all hover:text-[#B1FFCFB2] hover:no-underline hover:shadow-[inset_0_0_20px_5px_#58FF9880]"
+              className="relative inline-block rounded-[50px] bg-transparent px-4 py-2 text-center text-lg font-medium text-[#B1FFCF] transition-all hover:text-[#B1FFCFB2] hover:no-underline hover:shadow-[inset_0_0_20px_5px_#58FF9880] sm:px-6 sm:py-3 sm:text-xl md:px-[30px] md:text-2xl"
               style={{
                 position: 'relative',
                 zIndex: 10,
@@ -188,7 +187,7 @@ export default function Home(): ReactNode {
 
             <Link
               href="docs/getting-started/installation/"
-              className="relative inline-block rounded-[50px] bg-transparent px-[30px] py-3 text-2xl font-medium text-[#B1FFCF] transition-all hover:text-[#B1FFCFB2] hover:no-underline hover:shadow-[inset_0_0_20px_5px_#58FF9880]"
+              className="relative inline-block rounded-[50px] bg-transparent px-4 py-2 text-center text-lg font-medium text-[#B1FFCF] transition-all hover:text-[#B1FFCFB2] hover:no-underline hover:shadow-[inset_0_0_20px_5px_#58FF9880] sm:px-6 sm:py-3 sm:text-xl md:px-[30px] md:text-2xl"
               style={{
                 position: 'relative',
                 zIndex: 10,
@@ -199,22 +198,22 @@ export default function Home(): ReactNode {
             </Link>
           </div>
 
-          <section className="mx-auto mt-[128px] flex max-w-[1172px] justify-between gap-5">
+          <section className="mx-auto mt-16 flex max-w-[1172px] flex-col justify-between gap-6 px-4 sm:mt-24 md:mt-[128px] lg:flex-row lg:gap-5 lg:px-8">
             {cards.map((v, i) => (
               <GradientCard key={i} title={v.title} description={v.description} Icon={v.icon} />
             ))}
           </section>
 
-          <footer className="relative z-10 mx-auto mb-10 mt-[250px] flex h-[296px] w-full max-w-7xl flex-col justify-between rounded-[10px] bg-[#08231280] pb-10 pt-8 text-white backdrop-blur-[10px]">
-            <div className="mx-auto flex w-[630px] justify-center gap-[128px] text-white">
+          <footer className="relative z-10 mx-auto mb-6 mt-24 flex h-auto min-h-[296px] w-[calc(100%-2rem)] max-w-7xl flex-col justify-between rounded-[10px] bg-[#08231280] px-4 pb-6 pt-6 text-white backdrop-blur-[10px] sm:mb-10 sm:mt-40 sm:w-[calc(100%-4rem)] sm:px-6 sm:pb-10 sm:pt-8 lg:mt-[250px]">
+            <div className="mx-auto flex w-full max-w-[630px] flex-col items-center justify-center gap-6 text-white md:flex-row md:items-start md:justify-between">
               {footerLinks.map(v => (
-                <div className="flex flex-1 flex-col">
-                  <h3 className="font-bold text-[#D9D9D9]">{v.title}</h3>
-                  <div className="flex flex-col gap-2">
+                <div className="flex flex-col items-center md:items-start">
+                  <h3 className="mb-2 font-bold text-[#D9D9D9]">{v.title}</h3>
+                  <div className="flex flex-col items-center gap-2 md:items-start">
                     {v.items.map(x => (
                       <a
                         href={x.href}
-                        className="text-nowrap font-medium text-[#D9D9D9] hover:text-white hover:no-underline"
+                        className="text-center text-sm font-medium text-[#D9D9D9] hover:text-white hover:no-underline sm:text-base md:text-left"
                         target={x.internal ? '_self' : '_blank'}
                       >
                         {x.label}
@@ -225,10 +224,9 @@ export default function Home(): ReactNode {
               ))}
             </div>
 
-            <footer className="mx-auto flex h-8 w-[644px] items-center justify-between text-[#D9D9D9]">
-              <span>{`Copyright © ${new Date().getFullYear()} SpoonAi. Built with SpoonOS.`}</span>
-              <div className="flex gap-10">
-                {/* TODO: neo link and neo logo? */}
+            <footer className="mx-auto mt-6 flex h-auto w-full max-w-[630px] flex-col items-center gap-4 text-[#D9D9D9] sm:mt-8 md:h-8 md:flex-row md:justify-between md:gap-0">
+              <span className="text-center text-xs sm:text-sm md:text-left">{`Copyright © ${new Date().getFullYear()} SpoonAi. Built with SpoonOS.`}</span>
+              <div className="flex gap-6 sm:gap-10">
                 {socialsLinks.map(v => (
                   <a href={v.link} target="_blank">
                     <v.icon />
