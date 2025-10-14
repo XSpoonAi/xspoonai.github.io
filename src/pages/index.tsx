@@ -27,91 +27,91 @@ const socialsLinks = [
     icon: XLogo,
     link: "https://x.com/SpoonOS_ai",
   },
-];
+] as const;
+
+const cards: Array<{
+  title: string;
+  icon: FC<SVGProps<SVGSVGElement>>;
+  description: string;
+}> = [
+  {
+    icon: Card1Brain,
+    title: `Intelligent \n Agents`,
+    description:
+      "Build powerful ReAct agents with reasoning and action capabilities. Support for multiple LLM providers including OpenAI, Anthropic, and DeepSeek.",
+  },
+  {
+    icon: Card2Atom,
+    title: "Web3 \n Native",
+    description:
+      "First-class Web3 integration with blockchain tools, DeFi protocols, and decentralized infrastructure. Built for the sentient economy.",
+  },
+  {
+    icon: Card3Cube,
+    title: "Extensible \n Architecture",
+    description:
+      "Modular tool system with MCP protocol support. Easy to extend with custom tools and integrate with external APIs and services.",
+  },
+] as const;
+
+const footerLinks: Array<{
+  title: string;
+  items: Array<{ label: string; href: string; internal?: boolean }>;
+}> = [
+  {
+    title: "Documentation",
+    items: [
+      {
+        label: "Getting Started",
+        href: "docs/getting-started/quick-start/",
+        internal: true,
+      },
+      {
+        label: "Installation",
+        href: "docs/getting-started/installation/",
+        internal: true,
+      },
+      {
+        label: "Configuration",
+        href: "docs/getting-started/configuration/",
+        internal: true,
+      },
+    ],
+  },
+  {
+    title: "Community",
+    items: [
+      {
+        label: "GitHub",
+        href: "https://github.com/XSpoonAi/spoon-core",
+      },
+      {
+        label: "Discord",
+        href: "https://discord.gg/G6y3ZCFK4h",
+      },
+      {
+        label: "Issues",
+        href: "https://github.com/XSpoonAi/spoon-core/issues",
+      },
+    ],
+  },
+  {
+    title: "More",
+    items: [
+      {
+        label: "SpoonOS Landing",
+        href: "https://spoonai.io",
+      },
+      {
+        label: "Examples",
+        href: "https://github.com/XSpoonAi/spoon-core/tree/main/examples",
+      },
+    ],
+  },
+] as const;
 
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
-  const cards: Array<{
-    title: string;
-    icon: FC<SVGProps<SVGSVGElement>>;
-    description: string;
-  }> = [
-    {
-      icon: Card1Brain,
-      title: `Intelligent \n Agents`,
-      description:
-        "Build powerful ReAct agents with reasoning and action capabilities. Support for multiple LLM providers including OpenAI, Anthropic, and DeepSeek.",
-    },
-    {
-      icon: Card2Atom,
-      title: "Web3 \n Native",
-      description:
-        "First-class Web3 integration with blockchain tools, DeFi protocols, and decentralized infrastructure. Built for the sentient economy.",
-    },
-    {
-      icon: Card3Cube,
-      title: "Extensible \n Architecture",
-      description:
-        "Modular tool system with MCP protocol support. Easy to extend with custom tools and integrate with external APIs and services.",
-    },
-  ];
-
-  const footerLinks: Array<{
-    title: string;
-    items: Array<{ label: string; href: string; internal?: boolean }>;
-  }> = [
-    {
-      title: "Documentation",
-      items: [
-        {
-          label: "Getting Started",
-          href: "docs/getting-started/quick-start/",
-          internal: true,
-        },
-        {
-          label: "Installation",
-          href: "docs/getting-started/installation/",
-          internal: true,
-        },
-        {
-          label: "Configuration",
-          href: "docs/getting-started/configuration/",
-          internal: true,
-        },
-      ],
-    },
-    {
-      title: "Community",
-      items: [
-        {
-          label: "GitHub",
-          href: "https://github.com/XSpoonAi/spoon-core",
-        },
-        {
-          label: "Discord",
-          href: "https://discord.gg/G6y3ZCFK4h",
-        },
-        {
-          label: "Issues",
-          href: "https://github.com/XSpoonAi/spoon-core/issues",
-        },
-      ],
-    },
-    {
-      title: "More",
-      items: [
-        {
-          label: "SpoonOS Landing",
-          href: "https://spoonai.io",
-        },
-        {
-          label: "Examples",
-          href: "https://github.com/XSpoonAi/spoon-core/tree/main/examples",
-        },
-      ],
-    },
-  ] as const;
-
   return (
     <>
       <Head>
