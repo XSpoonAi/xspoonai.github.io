@@ -98,15 +98,15 @@ const config: Config = {
           items: [
             {
               label: 'Getting Started',
-              to: '/docs/intro',
+              to: '/docs/getting-started/quick-start/',
             },
             {
               label: 'Installation',
-              to: '/docs/installation',
+              to: '/docs/getting-started/installation/',
             },
             {
               label: 'Configuration',
-              to: '/docs/configuration',
+              to: '/docs/getting-started/configuration/',
             },
           ],
         },
