@@ -11,7 +11,7 @@ import { Card3Cube } from '../svgs/card-3-cube';
 import '@fontsource/dm-sans';
 import '@fontsource/dm-sans/400.css';
 import '@fontsource/dm-sans/400-italic.css';
-import { DiscordLogo, NeoLogo, XLogo } from '../components/shared/social-logos';
+import { DiscordLogo, YoutubeLogo, XLogo } from '../components/shared/social-logos';
 
 const socialsLinks = [
   {
@@ -19,8 +19,8 @@ const socialsLinks = [
     link: 'https://discord.com/invite/G6y3ZCFK4h',
   },
   {
-    icon: NeoLogo,
-    link: 'https://discord.com/invite/G6y3ZCFK4h',
+    icon: YoutubeLogo,
+    link: 'https://www.youtube.com/@SpoonOS_ai',
   },
   {
     icon: XLogo,
