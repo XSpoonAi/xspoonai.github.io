@@ -8,7 +8,7 @@ import tailwindPlugin from './plugins/tailwind-config.cjs';
 const config: Config = {
   title: 'SpoonOS',
   tagline: 'Agentic OS for a Sentient Economy',
-  favicon: 'img/spoon-os-logo.png',
+  favicon: 'img/spoon-os-favicon.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
