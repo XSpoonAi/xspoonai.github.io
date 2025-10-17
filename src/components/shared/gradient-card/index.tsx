@@ -30,10 +30,10 @@ export const GradientCard: FC<
       ></div>
 
       <Icon className="relative z-10 size-10" />
-      <h3 className="relative z-10 mb-8 mt-4 whitespace-pre-line text-[30px] text-lg font-bold text-[#D9D9D9]">
+      <h3 className="relative z-10 mb-8 mt-4 whitespace-pre-line text-[30px] font-bold text-[#D9D9D9]">
         {title}
       </h3>
-      <p className="relative z-10 text-xs font-medium leading-relaxed text-[#D9D9D9] xs:text-sm sm:text-sm">
+      <p className="relative z-10 text-sm font-medium text-[#D9D9D9]">
         {description}
       </p>
     </div>
