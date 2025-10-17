@@ -157,7 +157,7 @@ export default function Home(): ReactNode {
           </div>
         </header>
 
-        <main className="relative mt-6 flex min-h-[600px] flex-col overflow-hidden xs:mt-8 sm:mt-12 md:mt-16 lg:mt-20 md:min-h-[800px] lg:min-h-[1000px] xl:min-h-[1333px]">
+        <main className="relative mt-6 flex min-h-[600px] flex-col overflow-hidden xs:mt-8 sm:mt-12 md:mt-16 md:min-h-[800px] lg:mt-20 lg:min-h-[1000px] xl:min-h-[1333px]">
           <img
             src="/img/home-bg.jpg"
             alt=""
@@ -200,17 +200,22 @@ export default function Home(): ReactNode {
             ))}
           </section>
 
-          <footer className="relative z-10 mx-auto mb-4 flex h-auto min-h-[240px] w-[calc(100%-1rem)] max-w-7xl flex-col justify-between rounded-[8px] bg-[#08231280] px-3 pb-4 pt-5 text-white backdrop-blur-[10px] xs:mb-6 xs:min-h-[260px] xs:w-[calc(100%-1.5rem)] xs:rounded-[10px] xs:px-4 xs:pb-5 xs:pt-6 sm:mb-8 sm:mt-20 sm:min-h-[280px] sm:w-[calc(100%-3rem)] sm:px-5 sm:pb-8 sm:pt-7 md:mb-10 md:mt-30 md:min-h-[296px] md:w-[calc(100%-4rem)] md:px-6 md:pb-10 md:pt-8 lg:mt-40">
+          <footer className="md:mt-30 relative z-10 mx-auto mb-4 flex h-auto min-h-[240px] w-[calc(100%-1rem)] max-w-7xl flex-col justify-between rounded-[8px] bg-[#08231280] px-3 pb-4 pt-5 text-white backdrop-blur-[10px] xs:mb-6 xs:min-h-[260px] xs:w-[calc(100%-1.5rem)] xs:rounded-[10px] xs:px-4 xs:pb-5 xs:pt-6 sm:mb-8 sm:mt-20 sm:min-h-[280px] sm:w-[calc(100%-3rem)] sm:px-5 sm:pb-8 sm:pt-7 md:mb-10 md:min-h-[296px] md:w-[calc(100%-4rem)] md:px-6 md:pb-10 md:pt-8 lg:mt-40">
             <div className="mx-auto flex w-full max-w-[630px] flex-col items-center justify-center gap-4 text-white xs:gap-5 sm:gap-6 md:flex-row md:items-start md:justify-between">
               {footerLinks.map(v => (
-                <div key={v.title} className="flex flex-col items-center gap-2 xs:gap-2.5 sm:gap-3 md:items-start">
-                  <h3 className="mb-1 text-sm font-bold text-[#D9D9D9] xs:mb-1.5 xs:text-base sm:mb-2 sm:text-base">{v.title}</h3>
+                <div
+                  key={v.title}
+                  className="flex flex-col items-center gap-2 xs:gap-2.5 sm:gap-3 md:items-start"
+                >
+                  <h3 className="mb-1 text-sm font-bold text-[#D9D9D9] xs:mb-1.5 xs:text-base sm:mb-2 sm:text-base">
+                    {v.title}
+                  </h3>
                   <div className="flex flex-col items-center gap-1.5 xs:gap-2 sm:gap-2.5 md:items-start md:gap-3">
                     {v.items.map(x => (
                       <a
                         key={x.label}
                         href={x.href}
-                        className="text-center text-xs font-medium text-[#D9D9D9] hover:text-white hover:no-underline xs:text-sm sm:text-sm md:text-base md:text-left"
+                        className="text-center text-xs font-medium text-[#D9D9D9] hover:text-white hover:no-underline xs:text-sm sm:text-sm md:text-left md:text-base"
                         target={x.internal ? '_self' : '_blank'}
                       >
                         {x.label}
@@ -222,10 +227,15 @@ export default function Home(): ReactNode {
             </div>
 
             <footer className="mx-auto mt-4 flex h-auto w-full max-w-[630px] flex-col items-center gap-3 text-[#D9D9D9] xs:mt-5 xs:gap-3.5 sm:mt-6 sm:gap-4 md:mt-8 md:h-8 md:flex-row md:justify-between md:gap-0">
-              <span className="text-center text-[10px] xs:text-xs sm:text-xs md:text-sm md:text-left">{`Copyright © ${new Date().getFullYear()} SpoonAi. Built with SpoonOS.`}</span>
+              <span className="text-center text-[10px] xs:text-xs sm:text-xs md:text-left md:text-sm">{`Copyright © ${new Date().getFullYear()} SpoonAi. Built with SpoonOS.`}</span>
               <div className="flex gap-4 xs:gap-5 sm:gap-8 md:gap-10">
                 {socialsLinks.map((v, i) => (
-                  <a key={i} href={v.link} target="_blank" className="hover:opacity-80 transition-opacity">
+                  <a
+                    key={i}
+                    href={v.link}
+                    target="_blank"
+                    className="transition-opacity hover:opacity-80"
+                  >
                     <v.icon className="h-4 w-4 xs:h-5 xs:w-5 sm:h-5 sm:w-5 md:h-6 md:w-6" />
                   </a>
                 ))}
