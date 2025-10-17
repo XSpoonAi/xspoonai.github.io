@@ -12,6 +12,7 @@ import '@fontsource/dm-sans';
 import '@fontsource/dm-sans/400.css';
 import '@fontsource/dm-sans/400-italic.css';
 import { DiscordLogo, YoutubeLogo, XLogo } from '../components/shared/social-logos';
+import { SpoonOSText } from '../components/shared/spoon-os-text';
 
 const socialsLinks = [
   {
@@ -98,12 +99,16 @@ const footerLinks: Array<{
     title: 'More',
     items: [
       {
-        label: 'SpoonOS Landing',
+        label: 'SpoonOS',
         href: 'https://spoonai.io',
       },
       {
         label: 'Examples',
-        href: 'https://github.com/XSpoonAi/spoon-core/tree/main/examples',
+        href: 'https://xspoonai.github.io/docs/examples/intent-graph-demo/',
+      },
+      {
+        label: 'Blog',
+        href: 'https://x.com/SpoonOS_ai/articles',
       },
     ],
   },
@@ -122,17 +127,14 @@ export default function Home(): ReactNode {
       </Head>
 
       <div className="max-w-screen min-h-screen bg-[#020402] font-sans">
-        <header
-          className="mb-6 flex h-[60px] items-center justify-center sm:mb-10 sm:h-[74px]"
-          style={{
-            borderBottom: '0.5px solid white',
-          }}
-        >
+        <header className="relative mb-6 flex h-[60px] items-center justify-center bg-[#091A1080] backdrop-blur-[10px] sm:mb-10 sm:h-[74px]">
+          {/* border */}
+          <span className="absolute bottom-0 h-[1px] w-full bg-gradient-to-r from-[rgba(47,135,81,0)] via-[#1D5432] to-[rgba(65,186,111,0)]" />
           <div className="flex h-full w-full max-w-[1568px] items-center justify-between px-4 sm:px-8 md:px-12 lg:px-20">
-            <h1 className="my-auto flex h-full items-center gap-2 sm:gap-3">
-              <SpoonOSLogo className="size-6 sm:size-8" />
-              <a href="/" className="text-lg text-white sm:text-xl">
-                SpoonOS
+            <h1 className="my-auto flex h-full items-center justify-center gap-2 sm:gap-3">
+              <SpoonOSLogo className="h-[18px] w-14" />
+              <a href="/">
+                <SpoonOSText />
               </a>
             </h1>
 
@@ -154,25 +156,18 @@ export default function Home(): ReactNode {
           </div>
         </header>
 
-        <main
-          className="mt-10 flex min-h-[800px] flex-col sm:mt-16 md:mt-20 md:min-h-[1000px] lg:min-h-[1333px]"
-          style={{
-            backgroundImage: 'url("/img/home-bg.jpg")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center bottom',
-            backgroundRepeat: 'no-repeat',
-          }}
-        >
-          <h2 className="mx-auto mb-3 text-3xl text-white sm:mb-6 sm:text-4xl md:text-5xl">
-            SpoonOS
-          </h2>
-
-          <h2 className="mx-auto mb-6 mt-4 flex flex-col bg-[linear-gradient(92.67deg,#58FF98_0%,#59FF98_8.04%,#5AFF9A_15.48%,#5DFF9C_22.42%,#61FEA0_28.94%,#66FEA4_35.13%,#6CFDAA_41.1%,#73FDB0_46.93%,#7AFCB6_52.71%,#83FBBE_58.54%,#8CFAC6_64.51%,#96F9CF_70.71%,#A1F8D9_77.23%,#ACF7E3_84.16%,#B8F6ED_91.6%,#C4F5F8_99.64%)] bg-clip-text px-4 text-[32px] font-bold text-transparent sm:mb-8 sm:mt-7 sm:text-[48px] md:text-[64px] lg:text-[80px] xl:text-[100px]">
+        <main className="relative mt-10 flex min-h-[800px] flex-col overflow-hidden sm:mt-16 md:mt-20 md:min-h-[1000px] lg:min-h-[1333px]">
+          <img
+            src="/img/home-bg.jpg"
+            alt=""
+            className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-bottom opacity-20"
+          />
+          <h2 className="z-50 mx-auto mb-6 mt-4 flex flex-col bg-[linear-gradient(92.67deg,#58FF98_0%,#59FF98_8.04%,#5AFF9A_15.48%,#5DFF9C_22.42%,#61FEA0_28.94%,#66FEA4_35.13%,#6CFDAA_41.1%,#73FDB0_46.93%,#7AFCB6_52.71%,#83FBBE_58.54%,#8CFAC6_64.51%,#96F9CF_70.71%,#A1F8D9_77.23%,#ACF7E3_84.16%,#B8F6ED_91.6%,#C4F5F8_99.64%)] bg-clip-text px-4 text-[32px] font-bold text-transparent sm:mb-8 sm:mt-7 sm:text-[48px] md:text-[64px] lg:text-[80px] xl:text-[100px]">
             <span className="text-center font-sans">Agentic OS for a</span>
             <span className="text-center font-sans">Sentient Economy</span>
           </h2>
 
-          <div className="mx-auto flex flex-col gap-3 px-4 sm:flex-row sm:gap-5">
+          <div className="mx-auto -mt-6 mb-[175px] flex flex-col gap-3 px-4 sm:flex-row sm:gap-5">
             <Link
               href="docs/getting-started/quick-start/"
               className="relative inline-block rounded-[50px] bg-transparent px-4 py-2 text-center text-lg font-medium text-[#B1FFCF] transition-all hover:text-[#B1FFCFB2] hover:no-underline hover:shadow-[inset_0_0_20px_5px_#58FF9880] sm:px-6 sm:py-3 sm:text-xl md:px-[30px] md:text-2xl"
@@ -198,18 +193,18 @@ export default function Home(): ReactNode {
             </Link>
           </div>
 
-          <section className="mx-auto mt-16 flex max-w-[1172px] flex-col justify-between gap-6 px-4 sm:mt-24 md:mt-[128px] lg:flex-row lg:gap-5 lg:px-8">
+          <section className="mx-auto mb-10 flex max-w-[1172px] flex-col justify-between gap-6 px-4 lg:flex-row lg:gap-5 lg:px-8">
             {cards.map((v, i) => (
               <GradientCard key={i} title={v.title} description={v.description} Icon={v.icon} />
             ))}
           </section>
 
-          <footer className="relative z-10 mx-auto mb-6 mt-24 flex h-auto min-h-[296px] w-[calc(100%-2rem)] max-w-7xl flex-col justify-between rounded-[10px] bg-[#08231280] px-4 pb-6 pt-6 text-white backdrop-blur-[10px] sm:mb-10 sm:mt-40 sm:w-[calc(100%-4rem)] sm:px-6 sm:pb-10 sm:pt-8 lg:mt-[250px]">
+          <footer className="relative z-10 mx-auto flex h-auto min-h-[296px] w-[calc(100%-2rem)] max-w-7xl flex-col justify-between rounded-[10px] bg-[#08231280] px-4 pb-6 pt-6 text-white backdrop-blur-[10px] sm:mb-10 sm:mt-40 sm:w-[calc(100%-4rem)] sm:px-6 sm:pb-10 sm:pt-8">
             <div className="mx-auto flex w-full max-w-[630px] flex-col items-center justify-center gap-6 text-white md:flex-row md:items-start md:justify-between">
               {footerLinks.map(v => (
-                <div className="flex flex-col items-center md:items-start">
+                <div className="flex flex-col items-center gap-3 md:items-start">
                   <h3 className="mb-2 font-bold text-[#D9D9D9]">{v.title}</h3>
-                  <div className="flex flex-col items-center gap-2 md:items-start">
+                  <div className="flex flex-col items-center gap-3 md:items-start">
                     {v.items.map(x => (
                       <a
                         href={x.href}
