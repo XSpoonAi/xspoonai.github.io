@@ -236,7 +236,7 @@ export default function Home(): ReactNode {
                     target="_blank"
                     className="transition-opacity hover:opacity-80"
                   >
-                    <v.icon className="h-4 w-4 xs:h-5 xs:w-5 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+                    <v.icon />
                   </a>
                 ))}
               </div>
