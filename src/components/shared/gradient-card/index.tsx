@@ -33,7 +33,7 @@ export const GradientCard: FC<
       <h3 className="relative z-10 mb-8 mt-4 whitespace-pre-line text-[30px] font-bold text-[#D9D9D9]">
         {title}
       </h3>
-      <p className="relative z-10 text-xs font-medium text-[#D9D9D9]">
+      <p className="relative z-10 text-sm font-medium text-[#D9D9D9]">
         {description}
       </p>
     </div>
