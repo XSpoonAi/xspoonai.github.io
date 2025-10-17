@@ -2,33 +2,71 @@
 sidebar_position: 1
 ---
 
+
 # Intent Graph Demo
 
-This example demonstrates an advanced StateGraph workflow that showcases intelligent query routing, parallel execution, and memory management - a production-ready implementation of complex multi-step processes.
+This example demonstrates an intelligent StateGraph workflow with advanced query routing, parallel execution, and memory management using the modern declarative graph building system.
 
-#### 🎯 **Core Functionality**
+#### 📊 **Workflow Diagram**
 
-**Intelligent Query Routing System:**
-- **LLM-powered intent classification** - Automatically categorizes user queries into: `general_qa`, `short_term_trend`, `macro_trend`, or `deep_research`
-- **Dynamic routing logic** - Routes queries to specialized analysis paths based on detected intent
-- **Context-aware decision making** - Uses conversation history and market context for routing decisions
+```mermaid
+graph TD
+    A[User Query] --> B[Bootstrap Session]
+    B --> C[Load Memory]
+    C --> D[Plan Analysis]
+    D --> E{LLM Intent Analysis}
+    E -->|general_qa| F[General Q&A]
+    E -->|short_term_trend| G[Extract Symbol]
+    E -->|macro_trend| H[Extract Symbol]
+    E -->|deep_research| I[Deep Research Search]
 
-**True Parallel Data Processing:**
-- **Concurrent data fetching** - Simultaneously retrieves data from multiple timeframes (15m, 30m, 1h, 4h, daily, weekly)
-- **Real-time market data** - Integrates with live cryptocurrency APIs for accurate, current information
-- **Performance optimization** - Parallel execution significantly reduces total processing time
+    G --> J[Short-term Data Collection]
+    H --> K[Macro Data Collection]
+    I --> L[Research Sources]
+
+    J --> M[Short-term Summary]
+    K --> N[Macro Summary]
+    L --> O[Research Report]
+
+    M --> P[Review Trade]
+    N --> P
+    O --> P
+    F --> P
+
+    P --> Q[Update Memory]
+    Q --> R[Finalize Response]
+    R --> S[END]
+
+    style A fill:#e1f5fe
+    style S fill:#c8e6c9
+    style E fill:#fff3e0
+    style P fill:#fce4ec
+```
+
+#### 🎯 **Core Features**
+
+**Intelligent Query Routing:**
+- LLM-powered intent classification into: `general_qa`, `short_term_trend`, `macro_trend`, or `deep_research`
+- Dynamic routing based on detected intent and conversation history
+- Context-aware decision making with market context
+
+**Parallel Data Processing:**
+- Concurrent data fetching across multiple timeframes (15m, 30m, 1h, 4h, daily, weekly)
+- Real-time cryptocurrency data integration
+- Performance optimization through parallel execution
 
 **Advanced Memory Management:**
-- **Persistent conversation context** - Maintains user preferences and analysis history across sessions
-- **Intelligent memory updates** - Automatically stores learned patterns and market insights
-- **State preservation** - Saves analysis results and routing decisions for future reference
+- Persistent conversation context across sessions
+- Automatic storage of learned patterns and market insights
+- State preservation for analysis results and routing decisions
 
-#### 🚀 **Key Features Demonstrated**
+#### 🚀 **Key Capabilities**
 
-- **StateGraph Architecture** - Complete implementation of SpoonOS graph system
+- **Declarative Graph Building** - `GraphTemplate`, `NodeSpec`, `EdgeSpec` for modular workflows
+- **High-Level API Integration** - `HighLevelGraphAPI` for automatic parameter inference
 - **LLM Integration** - Advanced prompt engineering and response processing
-- **Tool Orchestration** - Seamless integration of multiple data sources
-- **Error Handling** - Robust error recovery and fallback mechanisms
+- **Tool Orchestration** - Multi-source data integration (PowerData, Tavily, EVM swap)
+- **Error Handling** - Robust recovery with duplicate log prevention
 - **Performance Monitoring** - Built-in metrics and execution tracking
 
 #### 📋 **Prerequisites**
@@ -48,49 +86,55 @@ cd spoon-cookbook/example
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the intent graph demo
+# Run the declarative intent graph demo
 python intent_graph_demo.py
 ```
 
 #### 🔍 **What to Observe**
 
-**Execution Flow:**
-- Watch how the system intelligently routes queries to appropriate analysis paths
-- Observe parallel data fetching across multiple timeframes simultaneously
-- See how memory is loaded and updated throughout the process
+**Architecture:**
+- How `GraphTemplate` and `NodeSpec` simplify workflow construction
+- `HighLevelGraphAPI` automatically inferring parameters from queries
+- Modular node implementations with better separation of concerns
 
-**Performance Metrics:**
-- Monitor execution times for different routing paths
-- Compare sequential vs parallel processing performance
-- Track memory usage and optimization
+**Execution Flow:**
+- Intelligent routing to appropriate analysis paths based on query intent
+- Parallel data fetching across multiple timeframes
+- Memory loading and updates throughout the process
+
+**Performance:**
+- Execution times for different routing paths
+- Parallel vs sequential processing performance
+- Memory usage optimization and duplicate log prevention
 
 **Advanced Behaviors:**
-- See how the LLM makes routing decisions based on query intent
-- Watch real-time data integration from multiple sources
-- Observe how the system maintains context across complex workflows
+- LLM-powered routing decisions based on intent analysis
+- Real-time data integration from multiple sources
+- Context maintenance across complex workflows
 
-#### 📁 **Source Code & Documentation**
+#### 📁 **Source Code**
 
-- **GitHub Link**: [Intent Graph Demo](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
-- **Related Files**:
-  - `spoon-core/examples/intent_graph_demo.py` - Core implementation
-  - `spoon-core/spoon_ai/graph/` - Graph system components
-  - `docs/core-concepts/graph-system.md` - Graph system documentation
+- **Main Example**: [intent_graph_demo.py](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
+- **Supporting Modules**:
+  - `spoon_ai/graph/` - Core graph system and declarative builders
+  - `spoon_ai/graph/builder.py` - High-level API and parameter inference
+  - [Graph System Docs](../core-concepts/graph-system.md)
 
-#### 🎓 **Learning Objectives**
+#### 🎓 **Learning Outcomes**
 
-This example teaches you:
-- How to build complex, multi-step workflows using StateGraph
-- Advanced LLM integration patterns and prompt engineering
-- Parallel processing techniques for performance optimization
-- Memory management and state persistence in long-running processes
-- Error handling and recovery in distributed systems
+- Using declarative graph building (`GraphTemplate`, `NodeSpec`, `EdgeSpec`)
+- Leveraging `HighLevelGraphAPI` for automatic parameter inference
+- Implementing modular, maintainable node functions
+- Advanced LLM integration and prompt engineering
+- Parallel processing for performance optimization
+- Memory management in long-running processes
+- Error handling and recovery strategies
 
-#### 💡 **Best Practices Demonstrated**
+#### 💡 **Best Practices**
 
-- **Modular Design** - Clean separation of concerns with focused nodes
-- **Scalable Architecture** - Easy to extend with new analysis types
-- **Resource Efficiency** - Optimized for both speed and memory usage
-- **Maintainable Code** - Well-documented and structured implementation
-
+- Declarative architecture for improved modularity
+- High-level API usage for automatic parameter inference
+- Scalable design for easy extension
+- Resource-efficient implementation
+- Maintainable, well-documented code
 

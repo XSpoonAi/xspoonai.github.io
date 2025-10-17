@@ -331,7 +331,7 @@ GOPLUS_API_KEY=your_key_here
 - Production-ready error handling and API management
 
 #### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/graph_crypto_analysis.py)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
 
 **What it demonstrates:**
 - Advanced cryptocurrency analysis using multiple tool types

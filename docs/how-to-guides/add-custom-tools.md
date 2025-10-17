@@ -563,7 +563,7 @@ class MyTool(BaseTool):
 - Performance optimization for data-intensive tools
 
 #### 🎯 [Intent Graph Demo](../examples/intent-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/intent_graph_demo.py)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
 
 **Advanced tool orchestration:**
 - Custom routing and decision-making tools

@@ -1,22 +1,30 @@
 # Graph System
 
-The Graph System in SpoonOS enables complex, multi-step workflows through a structured, node-and-edge execution engine called `StateGraph`.
+The Graph System in SpoonOS enables complex, multi-step workflows through a modern declarative execution engine that supports intelligent routing, parallel execution, and state management. Built around `StateGraph` with powerful declarative building tools.
 
 ## What you get
 
-- **Deterministic control flow**: explicit nodes and edges
-- **Intelligent routing**: LLM router, rule-based, and conditional functions
-- **Parallel execution**: run branches concurrently with join strategies
-- **State management**: type-safe, reducer-based merging across steps
-- **Memory integration**: persist context across runs or update memory as a node
+- **Declarative graph construction**: `GraphTemplate`, `NodeSpec`, and `EdgeSpec` for modular workflows
+- **High-level API integration**: `HighLevelGraphAPI` for automatic parameter inference and intent analysis
+- **Intelligent routing**: LLM router, rule-based, and conditional functions with priority systems
+- **Advanced parallel execution**: concurrent branches with join strategies, timeouts, and retry policies
+- **Type-safe state management**: Pydantic-based configuration and reducer-based merging
+- **Memory integration**: persistent context across runs with automatic memory updates
 
 ---
 
-## Quick Start with StateGraph
+## Declarative Graph Building (Recommended)
+
+The modern approach uses `GraphTemplate` for declarative construction, making graphs more maintainable and reusable.
 
 ```python
 from typing import TypedDict, Dict, Any, Optional, Annotated
-from spoon_ai.graph import StateGraph, END
+from spoon_ai.graph import (
+    StateGraph, END, GraphTemplate, NodeSpec, EdgeSpec,
+    ParallelGroupSpec, ParallelGroupConfig, GraphConfig,
+    HighLevelGraphAPI
+)
+from spoon_ai.graph.builder import DeclarativeGraphBuilder
 
 
 class MyState(TypedDict):
@@ -26,53 +34,126 @@ class MyState(TypedDict):
     memory: Annotated[Optional[Dict[str, Any]], None]
 
 
-async def analyze_intent(state: MyState) -> Dict[str, Any]:
-    # Use your LLM manager here in real code
+async def analyze_intent(state: MyState, config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """LLM-powered intent analysis with automatic parameter inference"""
     query = state.get("user_query", "").lower()
     intent = "greet" if "hello" in query else "other"
     return {"intent": intent}
 
 
-async def generate_result(state: MyState) -> Dict[str, Any]:
+async def generate_result(state: MyState, config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Generate response based on detected intent"""
     intent = state.get("intent", "other")
     if intent == "greet":
         return {"result": "Hi! How can I help?"}
     return {"result": "Let me analyze that..."}
 
 
-def build_graph() -> StateGraph:
-    graph = StateGraph(MyState)
-    graph.add_node("analyze_intent", analyze_intent)
-    graph.add_node("generate_result", generate_result)
-    graph.set_entry_point("analyze_intent")
-    graph.add_edge("analyze_intent", "generate_result")
-    graph.add_edge("generate_result", END)
+def build_declarative_graph() -> StateGraph:
+    """Build graph using declarative templates"""
+
+    # Define nodes with specifications
+    nodes = [
+        NodeSpec("analyze_intent", analyze_intent),
+        NodeSpec("generate_result", generate_result),
+    ]
+
+    # Define edges
+    edges = [
+        EdgeSpec("analyze_intent", "generate_result"),
+        EdgeSpec("generate_result", END),
+    ]
+
+    # Define parallel groups (if needed)
+    parallel_groups = []
+
+    # Configure graph settings
+    config = GraphConfig(
+        max_iterations=100,
+        state_reducer_max_list_length=50
+    )
+
+    # Create template
+    template = GraphTemplate(
+        entry_point="analyze_intent",
+        nodes=nodes,
+        edges=edges,
+        parallel_groups=parallel_groups,
+        config=config
+    )
+
+    # Build graph
+    builder = DeclarativeGraphBuilder(MyState)
+    graph = builder.build(template)
+
+    # Enable monitoring
+    if hasattr(graph, "enable_monitoring"):
+        graph.enable_monitoring([
+            "execution_time",
+            "llm_response_quality",
+            "routing_performance"
+        ])
+
     return graph
+
+
+# High-level API usage
+async def run_with_high_level_api(query: str) -> Dict[str, Any]:
+    """Use HighLevelGraphAPI for automatic parameter inference"""
+    api = HighLevelGraphAPI()
+
+    # Automatically infer parameters and build state
+    intent = await api.intent_analyzer.analyze(query)
+    initial_state = await api.state_builder.build_state_for_query(query)
+
+    # Build and run graph
+    graph = build_declarative_graph()
+    compiled = graph.compile()
+
+    return await compiled.invoke(initial_state)
 ```
 
 Execute:
 
 ```python
-compiled = build_graph().compile()
+# Simple execution
+compiled = build_declarative_graph().compile()
 result = await compiled.invoke({"user_query": "hello graph"})
 print(result["result"])  # Hi! How can I help?
+
+# Advanced execution with high-level API
+result = await run_with_high_level_api("analyze crypto trends")
 ```
 
 ---
 
 ## Intelligent Routing
 
-SpoonOS offers three complementary routing styles. You can combine them; precedence is: LLM router → intelligent rules → regular edges.
+SpoonOS offers advanced routing capabilities with priority-based decision making. Routes are evaluated in order: LLM router → intelligent rules → conditional edges → regular edges.
 
-### 1) LLM-Powered Router
+### 1) High-Level API Router (Recommended)
 
 ```python
-graph.enable_llm_routing(config={"model": "gpt-4", "temperature": 0.1, "max_tokens": 64})
+# Using HighLevelGraphAPI for automatic intent-based routing
+async def route_with_high_level_api(state: MyState) -> str:
+    api = HighLevelGraphAPI()
+    intent = await api.intent_analyzer.analyze(state.get("user_query", ""))
+    return api.intent_analyzer.get_route_for_intent(intent)
 ```
 
-The engine will ask the LLM to select the best next node name based on the query and state. Results are validated against available nodes.
+### 2) LLM-Powered Router
 
-### 2) Conditional Edges (function-based)
+```python
+# Configure LLM router with priority system
+graph.enable_llm_routing(config={
+    "model": "gpt-4",
+    "temperature": 0.1,
+    "max_tokens": 64,
+    "priority": 10  # Higher priority than rules
+})
+```
+
+### 3) Conditional Edges (function-based)
 
 ```python
 def route_after_intent(state: MyState) -> str:
@@ -85,67 +166,124 @@ graph.add_conditional_edges(
 )
 ```
 
-### 3) Rules and Patterns
+### 4) Rules and Patterns
 
 ```python
-graph.add_routing_rule("analyze_intent", lambda s, q: "price" in q, target_node="fetch_prices", priority=10)
-graph.add_pattern_routing("analyze_intent", r"buy|sell|trade", target_node="make_decision", priority=5)
+# Add routing rules with priorities
+graph.add_routing_rule(
+    "analyze_intent",
+    lambda s, q: "price" in q,
+    target_node="fetch_prices",
+    priority=10
+)
+graph.add_pattern_routing(
+    "analyze_intent",
+    r"buy|sell|trade",
+    target_node="make_decision",
+    priority=5
+)
 ```
 
 ---
 
-## Parallel Execution
+## Advanced Parallel Execution
 
-Group nodes and run them concurrently with explicit join strategies.
+Define parallel groups with sophisticated control strategies for optimal performance.
 
 ```python
+# Configure parallel group with advanced settings
+parallel_config = ParallelGroupConfig(
+    join_strategy="all_complete",  # all, quorum, any_first
+    error_strategy="collect_errors",  # ignore_errors, fail_fast, collect_errors
+    timeout=30,
+    retry_policy={
+        "max_retries": 3,
+        "backoff_factor": 2.0,
+        "circuit_breaker_threshold": 5
+    },
+    max_in_flight=10
+)
+
 graph.add_parallel_group(
     "fetch_group",
     ["fetch_prices", "fetch_social", "fetch_news"],
-    {"join_strategy": "all_complete", "error_strategy": "ignore_errors", "timeout": 15}
+    config=parallel_config
 )
 ```
 
-If the current node belongs to a parallel group, the engine gathers all branch updates and merges them into state using reducers.
+Advanced join strategies:
+- **`all_complete`**: Wait for all branches (default)
+- **`quorum`**: Wait for majority (e.g., 2 out of 3)
+- **`any_first`**: Return first successful result
 
 ---
 
 ## Memory Integration
 
-You can integrate memory in two ways:
+### A) High-Level API Memory (Recommended)
 
-### A) Agent Memory (recommended for agent use)
-
-Use `GraphAgent` persistent memory to store messages and metadata.
+Use `HighLevelGraphAPI` for automatic memory management.
 
 ```python
-from spoon_ai.graph import GraphAgent
+async def load_memory_with_api(state: MyState) -> Dict[str, Any]:
+    api = HighLevelGraphAPI()
+    memory = await api.memory_manager.load_context(state.get("user_name", "default"))
+    return {"memory": memory}
 
-graph = build_graph()
-agent = GraphAgent(name="demo", graph=graph, preserve_state=True)
-await agent.run("hello")
-stats = agent.get_memory_statistics()
+async def update_memory_with_api(state: MyState) -> Dict[str, Any]:
+    api = HighLevelGraphAPI()
+    await api.memory_manager.update_context(
+        state.get("user_name", "default"),
+        {"last_intent": state.get("intent", "unknown")}
+    )
+    return {}
 ```
 
-### B) Node-Level Memory (demo-style)
+### B) Node-Level Memory (Custom)
 
-Add memory as regular nodes at graph entry/exit to load/update per-user context.
+Add memory nodes for fine-grained control.
 
 ```python
 async def load_memory(state: MyState) -> Dict[str, Any]:
-    # read your JSON or DB here; keep it small and safe
-    return {"memory": {"greet_count": 3}}
+    # Custom memory loading logic
+    return {"memory": {"preferences": {}, "history": []}}
 
 async def update_memory(state: MyState) -> Dict[str, Any]:
-    # write back learned patterns/statistics
+    # Custom memory update logic
     return {"memory": state.get("memory", {})}
+```
 
-graph.add_node("load_memory", load_memory)
-graph.add_node("update_memory", update_memory)
-graph.add_edge("__start__", "load_memory")  # entry
-graph.add_edge("load_memory", "analyze_intent")
-graph.add_edge("generate_result", "update_memory")
-graph.add_edge("update_memory", END)
+---
+
+## Configuration-Driven Design
+
+Use `GraphConfig` for comprehensive graph configuration.
+
+```python
+# Configure graph behavior
+config = GraphConfig(
+    max_iterations=100,
+    state_reducer_max_list_length=50,
+    enable_monitoring=True,
+    monitoring_metrics=[
+        "execution_time",
+        "llm_response_quality",
+        "routing_performance",
+        "parallel_branch_efficiency"
+    ],
+    router_config={
+        "llm_router_priority": 10,
+        "rule_router_priority": 5
+    }
+)
+
+template = GraphTemplate(
+    entry_point="analyze_intent",
+    nodes=nodes,
+    edges=edges,
+    parallel_groups=parallel_groups,
+    config=config
+)
 ```
 
 ---
@@ -153,100 +291,129 @@ graph.add_edge("update_memory", END)
 ## Monitoring and Metrics
 
 ```python
-graph.enable_monitoring(["execution_time", "success_rate", "routing_performance"])
+# Enable comprehensive monitoring
+graph.enable_monitoring([
+    "execution_time",
+    "success_rate",
+    "routing_performance",
+    "llm_response_quality",
+    "parallel_branch_efficiency"
+])
+
 compiled = graph.compile()
 result = await compiled.invoke({"user_query": "..."})
+
+# Get detailed metrics
 metrics = compiled.get_execution_metrics()
+print(f"Execution time: {metrics.get('execution_time', 0)}s")
+print(f"LLM calls: {metrics.get('llm_calls', 0)}")
+print(f"Routing accuracy: {metrics.get('routing_accuracy', 0)}%")
 ```
 
 ---
 
-## End-to-End Example (Intent → Parallel Fetch → Analysis → Memory)
+## End-to-End Declarative Example
 
-The full example (used in our demo) routes a crypto query into `general_qa`, `short_term_trend`, `macro_trend`, or `deep_research`, runs true parallel data fetching, and updates memory before finishing.
+Complete example using declarative templates and high-level API.
 
 ```python
-from typing import TypedDict, Dict, Any, Optional, Annotated
-from spoon_ai.graph import StateGraph, END
+from spoon_ai.graph import (
+    StateGraph, END, GraphTemplate, NodeSpec, EdgeSpec,
+    ParallelGroupSpec, GraphConfig, HighLevelGraphAPI
+)
+from spoon_ai.graph.builder import DeclarativeGraphBuilder
 
 
-class AdvancedState(TypedDict):
+class CryptoAnalysisState(TypedDict):
     user_query: str
-    user_name: str
-    session_id: str
     symbol: str
-    query_analysis: Annotated[Optional[Dict[str, Any]], None]
-    final_output: str
-    memory_state: Annotated[Optional[Dict[str, Any]], None]
+    timeframes: List[str]
+    market_data: Dict[str, Any]
+    analysis_result: str
+    memory: Annotated[Optional[Dict[str, Any]], None]
 
 
-async def initialize_session(state: AdvancedState) -> Dict[str, Any]:
-    return {"session_id": "session_...", "final_output": ""}
+async def fetch_market_data(state: CryptoAnalysisState, config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Fetch market data for multiple timeframes in parallel"""
+    symbol = state.get("symbol", "BTC")
+    timeframes = state.get("timeframes", ["1h", "4h"])
+
+    # Parallel fetching logic here
+    return {"market_data": {"symbol": symbol, "data": "..."}}
 
 
-async def analyze_query_intent(state: AdvancedState) -> Dict[str, Any]:
-    # Ask LLM to classify into: general_qa | short_term_trend | macro_trend | deep_research
-    category = "macro_trend"  # pretend LLM said so
-    return {"query_analysis": {"query_type": category}}
+async def analyze_market(state: CryptoAnalysisState, config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """LLM-powered market analysis"""
+    # Analysis logic here
+    return {"analysis_result": "Market analysis complete"}
 
 
-async def load_memory(state: AdvancedState) -> Dict[str, Any]:
-    return {"memory_state": {"learned_patterns": {"query_type_counts": {"macro_trend": 12}}}}
+def build_crypto_analysis_graph() -> StateGraph:
+    """Build complete crypto analysis workflow"""
 
+    nodes = [
+        NodeSpec("fetch_market_data", fetch_market_data, parallel_group="data_collection"),
+        NodeSpec("analyze_market", analyze_market),
+    ]
 
-async def update_memory(state: AdvancedState) -> Dict[str, Any]:
-    # persist updated counts, last summary, per-symbol stats, etc.
-    return {}
+    edges = [
+        EdgeSpec("fetch_market_data", "analyze_market"),
+        EdgeSpec("analyze_market", END),
+    ]
 
+    parallel_groups = [
+        ParallelGroupSpec(
+            name="data_collection",
+            nodes=["fetch_market_data"],
+            config=ParallelGroupConfig(join_strategy="all_complete")
+        )
+    ]
 
-def build_advanced_graph() -> StateGraph:
-    g = StateGraph(AdvancedState).enable_monitoring(["execution_time"])
-    g.add_node("initialize_session", initialize_session)
-    g.add_node("load_memory", load_memory)
-    g.add_node("analyze_query_intent", analyze_query_intent)
-    # ... add: extract_symbol, fetch_15m/30m/1h, fetch_4h/1d/1w, search_news, analysis nodes, etc.
-    g.add_node("update_memory", update_memory)
-
-    g.set_entry_point("initialize_session")
-    g.add_edge("initialize_session", "load_memory")
-    g.add_edge("load_memory", "analyze_query_intent")
-
-    # Conditional routing (function based)
-    def route(state: AdvancedState) -> str:
-        qt = (state.get("query_analysis") or {}).get("query_type", "general_qa")
-        return qt
-
-    g.add_conditional_edges(
-        "analyze_query_intent",
-        route,
-        {
-            "general_qa": "general_qa",
-            "short_term_trend": "extract_symbol",
-            "macro_trend": "extract_symbol",
-            "deep_research": "deep_research_search",
-        },
+    config = GraphConfig(
+        max_iterations=100,
+        enable_monitoring=True,
+        monitoring_metrics=["execution_time", "data_quality"]
     )
 
-    # All terminal paths go through memory update
-    g.add_edge("general_qa", "update_memory")
-    g.add_edge("analyze_macro_trend", "update_memory")
-    g.add_edge("analyze_short_term_trend", "update_memory")
-    g.add_edge("deep_research_synthesize", "update_memory")
-    g.add_edge("update_memory", END)
-    return g
-```
+    template = GraphTemplate(
+        entry_point="fetch_market_data",
+        nodes=nodes,
+        edges=edges,
+        parallel_groups=parallel_groups,
+        config=config
+    )
 
-See a full working version in the Cookbook example linked below.
+    builder = DeclarativeGraphBuilder(CryptoAnalysisState)
+    return builder.build(template)
+
+
+# High-level API integration
+async def run_crypto_analysis(query: str) -> Dict[str, Any]:
+    """Complete analysis using high-level API"""
+    api = HighLevelGraphAPI()
+
+    # Automatic parameter inference
+    intent = await api.intent_analyzer.analyze(query)
+    initial_state = await api.state_builder.build_state_for_query(query)
+    initial_state.update(await api.parameter_inferencer.infer_parameters(query, intent))
+
+    # Build and execute graph
+    graph = build_crypto_analysis_graph()
+    compiled = graph.compile()
+
+    return await compiled.invoke(initial_state)
+```
 
 ---
 
 ## Best Practices
 
-- **Keep nodes focused**: one responsibility per node
-- **Prefer conditional edges** for deterministic routing; layer LLM router for flexibility
-- **Use parallel groups** for I/O-bound branches; choose join strategies wisely
-- **Bound state growth**: reducers should cap list sizes; keep memory small
-- **Monitor** execution and inspect `compiled.get_execution_metrics()`
+- **Use declarative templates**: `GraphTemplate` + `NodeSpec` for maintainable workflows
+- **Leverage high-level API**: `HighLevelGraphAPI` for automatic parameter inference
+- **Configure parallel execution**: Use `ParallelGroupConfig` for optimal performance
+- **Implement proper error handling**: Use retry policies and circuit breakers
+- **Monitor performance**: Enable metrics and use `get_execution_metrics()`
+- **Keep state bounded**: Configure `state_reducer_max_list_length` to prevent memory issues
 
 ---
 
@@ -254,37 +421,37 @@ See a full working version in the Cookbook example linked below.
 
 ### 📚 **Hands-on Examples**
 
-#### 🎯 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
+#### 🎯 [Declarative Crypto Analysis](../examples/graph-crypto-analysis.md)
 **GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
 
 **What it demonstrates:**
-- Complete end-to-end cryptocurrency analysis pipeline
+- Complete end-to-end cryptocurrency analysis pipeline using declarative templates
 - LLM-driven decision making from data collection to investment recommendations
-- Real-time technical indicator calculation (RSI, MACD, EMA)
-- Multi-timeframe analysis with parallel data processing
-- Advanced state management and error recovery
+- Real-time technical indicator calculation (RSI, MACD, EMA) with PowerData toolkit
+- Multi-timeframe analysis with advanced parallel processing
+- High-level API integration for automatic parameter inference
 
 **Key features:**
-- Real Binance API integration (no simulated data)
-- Intelligent token selection based on market conditions
+- Declarative `GraphTemplate` construction
+- `HighLevelGraphAPI` for intent analysis and parameter inference
+- Real Binance API integration with error recovery
 - Comprehensive market analysis with actionable insights
-- Production-ready error handling and performance optimization
 
-#### 🔧 [Intent Graph Demo](../examples/intent-graph-demo.md)
+#### 🔧 [Declarative Intent Graph Demo](../examples/intent-graph-demo.md)
 **GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
 
 **What it demonstrates:**
-- Intelligent query routing system (general_qa → short_term_trend → macro_trend → deep_research)
-- True parallel execution across multiple timeframes (15m, 30m, 1h, 4h, daily, weekly)
+- Intelligent query routing system using `HighLevelGraphAPI`
+- True parallel execution across multiple timeframes
 - Advanced memory management with persistent context
 - LLM-powered routing decisions and summarization
-- Production-style graph architecture
+- Declarative graph construction with fresh node implementations
 
 **Key features:**
+- `GraphTemplate` and `NodeSpec` for modular workflow construction
+- `ParameterInferenceEngine` for automatic parameter extraction
 - Dynamic workflow routing based on user intent
 - Concurrent data fetching for optimal performance
-- Memory persistence across graph executions
-- Comprehensive error handling and recovery
 
 ### 🛠️ **Integration Guides**
 
@@ -294,48 +461,6 @@ See a full working version in the Cookbook example linked below.
 
 ### 📖 **Additional Resources**
 
-- **[StateGraph API Reference](../api-reference/tools/base-tool.md)** - Complete API documentation
-- **[Performance Optimization](../troubleshooting/performance.md)** - Graph performance tuning guides
-- **[Troubleshooting](../troubleshooting/common-issues.md)** - Common issues and solutions
-
-
-**What it demonstrates:**
-- Complete end-to-end cryptocurrency analysis pipeline
-- LLM-driven decision making from data collection to investment recommendations
-- Real-time technical indicator calculation (RSI, MACD, EMA)
-- Multi-timeframe analysis with parallel data processing
-- Advanced state management and error recovery
-
-**Key features:**
-- Real Binance API integration (no simulated data)
-- Intelligent token selection based on market conditions
-- Comprehensive market analysis with actionable insights
-- Production-ready error handling and performance optimization
-
-#### 🔧 [Intent Graph Demo](../examples/intent-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/intent_graph_demo.py)
-
-**What it demonstrates:**
-- Intelligent query routing system (general_qa → short_term_trend → macro_trend → deep_research)
-- True parallel execution across multiple timeframes (15m, 30m, 1h, 4h, daily, weekly)
-- Advanced memory management with persistent context
-- LLM-powered routing decisions and summarization
-- Production-style graph architecture
-
-**Key features:**
-- Dynamic workflow routing based on user intent
-- Concurrent data fetching for optimal performance
-- Memory persistence across graph executions
-- Comprehensive error handling and recovery
-
-### 🛠️ **Integration Guides**
-
-- **[Tools Integration](./tools.md)** - Learn how to integrate external capabilities and APIs
-- **[Agent Architecture](./agents.md)** - Understand when to wrap graphs with long-lived agents
-- **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Explore dynamic tool discovery and execution
-
-### 📖 **Additional Resources**
-
-- **[StateGraph API Reference](../api-reference/tools/base-tool.md)** - Complete API documentation
+- **[Graph Builder API](../api-reference/graph/)** - Complete declarative API documentation
 - **[Performance Optimization](../troubleshooting/performance.md)** - Graph performance tuning guides
 - **[Troubleshooting](../troubleshooting/common-issues.md)** - Common issues and solutions

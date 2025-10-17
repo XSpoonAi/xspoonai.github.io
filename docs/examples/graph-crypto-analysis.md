@@ -4,31 +4,87 @@ sidebar_position: 2
 
 # Graph Crypto Analysis
 
-This example implements a complete cryptocurrency research and analysis pipeline that demonstrates end-to-end LLM-driven decision making, from data collection through technical analysis to investment recommendations.
+This example implements a complete cryptocurrency research and analysis pipeline using the declarative graph building system, demonstrating end-to-end LLM-driven decision making for market analysis and investment recommendations.
 
-#### 🎯 **Core Functionality**
+#### 📊 **Workflow Diagram**
 
-**Intelligent Market Analysis System:**
-- **LLM-driven token selection** - The system analyzes market data and intelligently selects tokens for deeper analysis based on real-time market conditions
-- **Multi-timeframe analysis** - Simultaneously processes data from multiple timeframes (1m, 5m, 15m, 1h, 4h, daily) for comprehensive market view
-- **Dynamic decision flow** - Every step in the analysis process is guided by LLM decisions, creating adaptive and context-aware analysis
+```mermaid
+graph TD
+    A[Start] --> B[Fetch Binance Market Data]
+    B --> C[Select Top 10 Pairs by Volume]
+    C --> D[Prepare Token List]
+
+    D --> E[Parallel Token Analysis]
+    E --> F1[Token 1: Technical + News Analysis]
+    E --> F2[Token 2: Technical + News Analysis]
+    E --> F3[Token 3: Technical + News Analysis]
+    E --> F4[Token 4: Technical + News Analysis]
+    E --> F5[Token 5: Technical + News Analysis]
+    E --> F6[Token 6: Technical + News Analysis]
+    E --> F7[Token 7: Technical + News Analysis]
+    E --> F8[Token 8: Technical + News Analysis]
+    E --> F9[Token 9: Technical + News Analysis]
+    E --> F10[Token 10: Technical + News Analysis]
+
+    F1 --> G[Aggregate All Results]
+    F2 --> G
+    F3 --> G
+    F4 --> G
+    F5 --> G
+    F6 --> G
+    F7 --> G
+    F8 --> G
+    F9 --> G
+    F10 --> G
+
+    G --> H[LLM Final Aggregation]
+    H --> I[Generate Market Report]
+    I --> J[END]
+
+    style A fill:#e1f5fe
+    style J fill:#c8e6c9
+    style E fill:#fff3e0
+    style G fill:#fce4ec
+
+    subgraph "Technical Analysis"
+        F1
+        F2
+        F3
+        F4
+        F5
+        F6
+        F7
+        F8
+        F9
+        F10
+    end
+```
+
+#### 🎯 **Core Features**
+
+**Intelligent Market Analysis:**
+- LLM-driven token selection based on real-time market conditions
+- Multi-timeframe analysis (1h, 4h) for comprehensive market view
+- Dynamic decision flow guided by LLM analysis at each step
 
 **Advanced Technical Analysis:**
-- **Real-time indicator calculation** - Computes technical indicators (RSI, MACD, EMA, Bollinger Bands) using live market data
-- **Market sentiment analysis** - Analyzes price patterns, volume, and market momentum
-- **Risk assessment** - Evaluates market volatility and risk metrics for each analyzed token
+- Real-time indicator calculation (RSI, MACD, EMA) using PowerData toolkit
+- Market sentiment analysis and momentum evaluation
+- Risk assessment and volatility metrics for each token
 
 **LLM-Powered Synthesis:**
-- **Intelligent summarization** - Synthesizes complex market data into clear, actionable insights
-- **Investment recommendations** - Provides data-driven buy/sell/hold recommendations with reasoning
-- **Market outlook generation** - Creates short-term and macro-level market predictions
+- Intelligent summarization of complex market data
+- Data-driven investment recommendations with reasoning
+- Short-term and macro-level market outlook generation
 
-#### 🚀 **Key Features Demonstrated**
+#### 🚀 **Key Capabilities**
 
-- **Complete Graph Workflow** - End-to-end implementation from data ingestion to final recommendations
-- **Real API Integration** - Uses actual Binance and cryptocurrency APIs for live data
-- **LLM Decision Making** - Every major decision in the workflow is LLM-driven
-- **Advanced State Management** - Maintains complex analysis state throughout the process
+- **Declarative Graph Building** - `GraphTemplate`, `NodeSpec`, `EdgeSpec` for modular workflows
+- **High-Level API Integration** - `HighLevelGraphAPI` for automatic parameter inference
+- **Complete Workflow** - End-to-end from data ingestion to final recommendations
+- **Real API Integration** - Live Binance and cryptocurrency data via PowerData toolkit
+- **LLM Decision Making** - Every major decision guided by LLM analysis
+- **Advanced State Management** - Complex analysis state throughout the process
 - **Error Recovery** - Robust error handling and fallback mechanisms
 
 #### 📋 **Prerequisites**
@@ -49,28 +105,33 @@ cd spoon-cookbook/example
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the crypto analysis
+# Run the declarative crypto analysis
 python graph_crypto_analysis.py
 ```
 
 #### 🔍 **What to Observe**
 
-**Data Flow Analysis:**
-- Watch how the system fetches and processes real market data from multiple sources
-- Observe how the LLM analyzes raw data and makes intelligent decisions
-- See the step-by-step analysis process from data collection to final recommendations
+**Architecture:**
+- How `GraphTemplate` and `NodeSpec` simplify workflow construction
+- `HighLevelGraphAPI` automatically inferring parameters from queries
+- Modular node implementations with better separation of concerns
+
+**Data Flow:**
+- Real market data fetching from Binance API and PowerData toolkit
+- LLM analysis of raw data for intelligent decision making
+- Step-by-step process from data collection to final recommendations
 
 **Technical Analysis:**
-- Monitor how technical indicators are calculated in real-time
-- Observe how the system correlates different data sources
-- Track how market sentiment is analyzed and quantified
+- Real-time indicator calculation using PowerData toolkit
+- Correlation of different data sources
+- Market sentiment analysis and quantification
 
 **LLM Decision Process:**
-- See how the LLM evaluates different tokens and selects analysis targets
-- Watch the synthesis process that combines technical and fundamental analysis
-- Observe how investment recommendations are generated with detailed reasoning
+- Token evaluation and selection for analysis
+- Synthesis combining technical and fundamental analysis
+- Investment recommendations with detailed reasoning
 
-#### 📊 **Analysis Output Example**
+#### 📊 **Sample Output**
 
 ```
 🔍 MARKET ANALYSIS REPORT
@@ -93,30 +154,31 @@ python graph_crypto_analysis.py
 The current market shows strong bullish momentum with BTC leading...
 ```
 
-#### 📁 **Source Code & Documentation**
+#### 📁 **Source Code**
 
-- **GitHub Link**: [Graph Crypto Analysis](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
-- **Related Files**:
-  - `spoon-core/examples/graph_crypto_analysis.py` - Full implementation
-  - `spoon-core/spoon_ai/tools/crypto_tools.py` - Crypto analysis tools
-  - `spoon-core/spoon_ai/graph/` - Graph system utilities
-  - `docs/core-concepts/tools.md` - Tool system documentation
+- **Main Example**: [graph_crypto_analysis.py](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
+- **Supporting Modules**:
+  - `spoon_ai/graph/builder.py` - Declarative templates and high-level API
+  - `spoon_ai/tools/crypto_tools.py` - PowerData integration helpers
+  - `spoon_ai/graph/` - Core engine and monitoring utilities
+  - [Tool System Docs](../core-concepts/tools.md)
 
-#### 🎓 **Learning Objectives**
+#### 🎓 **Learning Outcomes**
 
-This example teaches you:
-- How to build complete end-to-end analysis systems with LLM integration
+- Using declarative graph building (`GraphTemplate`, `NodeSpec`, `EdgeSpec`)
+- Leveraging `HighLevelGraphAPI` for automatic parameter inference
+- Implementing modular, maintainable node functions
+- Building complete end-to-end analysis systems with LLM integration
 - Advanced cryptocurrency market analysis techniques
 - Real-time data processing and technical indicator calculation
 - LLM-driven decision making in complex workflows
 - Error handling and data validation in financial applications
 
-#### 💡 **Best Practices Demonstrated**
+#### 💡 **Best Practices**
 
-- **Data Validation** - Comprehensive validation of market data and API responses
-- **Error Resilience** - Robust error handling for network and API failures
-- **Performance Optimization** - Efficient data processing and caching strategies
-- **Security** - Safe handling of API keys and sensitive financial data
-- **Modular Architecture** - Clean separation between data collection, analysis, and presentation
-
-
+- Declarative architecture for improved modularity
+- High-level API usage for automatic parameter inference
+- Data validation and comprehensive error handling
+- Performance optimization and efficient data processing
+- Security considerations for API keys and financial data
+- Modular architecture with clean separation of concerns
