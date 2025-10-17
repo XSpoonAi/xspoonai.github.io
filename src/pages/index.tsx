@@ -163,35 +163,37 @@ export default function Home(): ReactNode {
             alt=""
             className="pointer-events-none absolute inset-0 z-0 h-full w-full bg-[url('/img/home-bg.jpg')] bg-cover bg-center opacity-20"
           />
-          <h2 className="z-50 mx-auto mb-4 mt-2 flex flex-col bg-[linear-gradient(92.67deg,#58FF98_0%,#59FF98_8.04%,#5AFF9A_15.48%,#5DFF9C_22.42%,#61FEA0_28.94%,#66FEA4_35.13%,#6CFDAA_41.1%,#73FDB0_46.93%,#7AFCB6_52.71%,#83FBBE_58.54%,#8CFAC6_64.51%,#96F9CF_70.71%,#A1F8D9_77.23%,#ACF7E3_84.16%,#B8F6ED_91.6%,#C4F5F8_99.64%)] bg-clip-text px-3 text-[24px] font-bold text-transparent xs:mb-5 xs:mt-3 xs:px-4 xs:text-[28px] sm:mb-6 sm:mt-5 sm:text-[40px] md:mb-8 md:mt-7 md:text-[56px] lg:text-[72px] xl:text-[88px] 2xl:text-[100px]">
-            <span className="text-center font-sans leading-tight">Agentic OS for a</span>
-            <span className="text-center font-sans leading-tight">Sentient Economy</span>
-          </h2>
+          <div className="z-50 mx-auto mb-20 mt-2 flex flex-col items-center gap-[18px] px-3 text-center xs:mb-24 xs:mt-3 xs:px-4 sm:mb-32 sm:mt-5 md:mb-40 md:mt-7 lg:mb-48">
+            <h2 className="flex flex-col gap-[18px] bg-[linear-gradient(92.67deg,#58FF98_0%,#59FF98_8.04%,#5AFF9A_15.48%,#5DFF9C_22.42%,#61FEA0_28.94%,#66FEA4_35.13%,#6CFDAA_41.1%,#73FDB0_46.93%,#7AFCB6_52.71%,#83FBBE_58.54%,#8CFAC6_64.51%,#96F9CF_70.71%,#A1F8D9_77.23%,#ACF7E3_84.16%,#B8F6ED_91.6%,#C4F5F8_99.64%)] bg-clip-text text-[24px] font-bold text-transparent xs:text-[28px] sm:text-[40px] md:text-[56px] lg:text-[72px] xl:text-[88px] 2xl:text-[100px]">
+              <span className="text-center font-sans leading-none">Agentic OS for a</span>
+              <span className="text-center font-sans leading-none">Sentient Economy</span>
+            </h2>
 
-          <div className="mx-auto -mt-2 mb-20 flex flex-col gap-2 px-3 xs:-mt-4 xs:mb-24 xs:gap-3 xs:px-4 sm:-mt-6 sm:mb-32 sm:flex-row sm:gap-4 md:mb-40 md:gap-5 lg:mb-48">
-            <Link
-              href="docs/getting-started/quick-start/"
-              className="relative inline-block rounded-[50px] bg-transparent px-3 py-1.5 text-center text-sm font-medium text-[#B1FFCF] transition-all hover:text-[#B1FFCFB2] hover:no-underline hover:shadow-[inset_0_0_20px_5px_#58FF9880] xs:px-4 xs:py-2 xs:text-base sm:px-5 sm:py-2.5 sm:text-lg md:px-6 md:py-3 md:text-xl lg:px-[30px] lg:text-2xl"
-              style={{
-                position: 'relative',
-                zIndex: 10,
-              }}
-            >
-              Get Started
-              <span className={styles.gradientBorder} />
-            </Link>
+            <div className="flex flex-col gap-2 xs:gap-3 sm:flex-row sm:gap-4 md:gap-5">
+              <Link
+                href="docs/getting-started/quick-start/"
+                className="relative inline-block rounded-[50px] bg-transparent px-3 py-1.5 text-center text-sm font-medium text-[#B1FFCF] transition-all hover:text-[#B1FFCFB2] hover:no-underline hover:shadow-[inset_0_0_20px_5px_#58FF9880] xs:px-4 xs:py-2 xs:text-base sm:px-5 sm:py-2.5 sm:text-lg md:px-6 md:py-3 md:text-xl lg:px-[30px] lg:text-2xl"
+                style={{
+                  position: 'relative',
+                  zIndex: 10,
+                }}
+              >
+                Get Started
+                <span className={styles.gradientBorder} />
+              </Link>
 
-            <Link
-              href="docs/getting-started/installation/"
-              className="relative inline-block rounded-[50px] bg-transparent px-3 py-1.5 text-center text-sm font-medium text-[#B1FFCF] transition-all hover:text-[#B1FFCFB2] hover:no-underline hover:shadow-[inset_0_0_20px_5px_#58FF9880] xs:px-4 xs:py-2 xs:text-base sm:px-5 sm:py-2.5 sm:text-lg md:px-6 md:py-3 md:text-xl lg:px-[30px] lg:text-2xl"
-              style={{
-                position: 'relative',
-                zIndex: 10,
-              }}
-            >
-              Quick Install
-              <span className={styles.gradientBorder} />
-            </Link>
+              <Link
+                href="docs/getting-started/installation/"
+                className="relative inline-block rounded-[50px] bg-transparent px-3 py-1.5 text-center text-sm font-medium text-[#B1FFCF] transition-all hover:text-[#B1FFCFB2] hover:no-underline hover:shadow-[inset_0_0_20px_5px_#58FF9880] xs:px-4 xs:py-2 xs:text-base sm:px-5 sm:py-2.5 sm:text-lg md:px-6 md:py-3 md:text-xl lg:px-[30px] lg:text-2xl"
+                style={{
+                  position: 'relative',
+                  zIndex: 10,
+                }}
+              >
+                Quick Install
+                <span className={styles.gradientBorder} />
+              </Link>
+            </div>
           </div>
 
           <section className="mx-auto mb-8 flex max-w-[1172px] flex-col justify-between gap-4 px-3 xs:mb-10 xs:gap-5 xs:px-4 sm:gap-6 sm:px-6 md:px-8 lg:flex-row lg:gap-5 lg:px-8 xl:px-10">
@@ -205,7 +207,7 @@ export default function Home(): ReactNode {
               {footerLinks.map(v => (
                 <div
                   key={v.title}
-                  className="flex flex-col items-center gap-2 xs:gap-2.5 sm:gap-3 md:items-start"
+                  className="flex basis-[130px] flex-col items-center gap-2 xs:gap-2.5 sm:gap-3 md:items-start"
                 >
                   <h3 className="mb-1 text-sm font-bold text-[#D9D9D9] xs:mb-1.5 xs:text-base sm:mb-2 sm:text-base">
                     {v.title}
@@ -227,7 +229,7 @@ export default function Home(): ReactNode {
             </div>
 
             <footer className="mx-auto mt-4 flex h-auto w-full max-w-[630px] flex-col items-center gap-3 text-[#D9D9D9] xs:mt-5 xs:gap-3.5 sm:mt-6 sm:gap-4 md:mt-8 md:h-8 md:flex-row md:justify-between md:gap-0">
-              <span className="text-center text-[10px] xs:text-xs sm:text-xs md:text-left md:text-sm">{`Copyright © ${new Date().getFullYear()} SpoonAi. Built with SpoonOS.`}</span>
+              <span className="text-center text-[10px] xs:text-xs sm:text-xs md:text-left md:text-sm">{`Copyright © ${new Date().getFullYear()} SpoonAI. Built with SpoonOS.`}</span>
               <div className="flex gap-4 xs:gap-5 sm:gap-8 md:gap-10">
                 {socialsLinks.map((v, i) => (
                   <a
