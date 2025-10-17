@@ -29,11 +29,11 @@ export const GradientCard: FC<
         }}
       ></div>
 
-      <Icon className="relative z-10 h-8 w-8 xs:h-10 xs:w-10 sm:h-11 sm:w-11 md:h-12 md:w-12" />
-      <h3 className="relative z-10 mb-3 mt-2 whitespace-pre-line text-lg font-bold text-[#D9D9D9] xs:mb-4 xs:mt-2.5 xs:text-xl sm:mb-5 sm:mt-3 sm:text-2xl md:mb-[22px] md:mt-[10px] md:text-[28px] lg:text-3xl">
+      <Icon className="relative z-10 size-10" />
+      <h3 className="relative z-10 mb-8 mt-4 whitespace-pre-line text-[30px] text-lg font-bold text-[#D9D9D9]">
         {title}
       </h3>
-      <p className="relative z-10 text-xs font-medium leading-relaxed text-[#D9D9D9] xs:text-sm sm:text-sm md:text-base">
+      <p className="relative z-10 text-xs font-medium leading-relaxed text-[#D9D9D9] xs:text-sm sm:text-sm">
         {description}
       </p>
     </div>
