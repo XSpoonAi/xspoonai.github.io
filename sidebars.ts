@@ -33,6 +33,7 @@ const sidebars: SidebarsConfig = {
         'core-concepts/llm-providers',
         'core-concepts/mcp-protocol',
         'core-concepts/graph-system',
+        'core-concepts/Short-term memory',
       ],
     },
     {
