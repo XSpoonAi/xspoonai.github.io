@@ -15,7 +15,7 @@ SpoonOS's graph system enables:
 ## Core Components
 
 ### [StateGraph](state-graph.md)
-The main graph execution engine providing LangGraph-style workflow orchestration.
+The main graph execution engine providing workflow orchestration.
 
 **Key Features:**
 - Node and edge management
