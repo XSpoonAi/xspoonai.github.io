@@ -45,7 +45,7 @@ class MyFirstAgent(ToolCallAgent):
     You can greet users and help with various tasks.
     """
 
-    avaliable_tools: ToolManager = ToolManager([GreetingTool()])
+    available_tools: ToolManager = ToolManager([GreetingTool()])
 
 async def main():
     # Initialize agent with LLM
@@ -89,7 +89,7 @@ class Web3Agent(ToolCallAgent):
     You can help with crypto prices, DeFi operations, and blockchain analysis.
     """
 
-    avaliable_tools: ToolManager = ToolManager([
+    available_tools: ToolManager = ToolManager([
         GreetingTool(),
         CryptoTool()
     ])
@@ -125,7 +125,7 @@ SpoonOS eliminates common development complexity:
 # Simple agent creation - no error handling needed
 agent = ToolCallAgent(
     llm=ChatBot(llm_provider="openai", model_name="gpt-4.1"),
-    avaliable_tools=ToolManager([CryptoTool(), Web3Tool()])
+    available_tools=ToolManager([CryptoTool(), Web3Tool()])
 )
 
 
@@ -169,7 +169,7 @@ from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
 
 agent = ToolCallAgent(
     llm=ChatBot(llm_provider="anthropic", model_name="claude-sonnet-4-20250514"),
-    avaliable_tools=ToolManager([
+    available_tools=ToolManager([
         MCPToolsCollection()  # Automatically discovers MCP tools
     ])
 )
