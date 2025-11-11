@@ -15,7 +15,19 @@ const config: Config = {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
 
-  plugins: [tailwindPlugin],
+  plugins: [
+    tailwindPlugin,
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'toolkit',
+        path: 'Toolkit',
+        routeBasePath: 'Toolkit',
+        sidebarPath: './toolkitSidebars.ts',
+        editUrl: 'https://github.com/XSpoonAi/spoon-doc/tree/main/',
+      },
+    ],
+  ],
 
   themes: ['@docusaurus/theme-mermaid'],
 
@@ -87,6 +99,13 @@ const config: Config = {
           sidebarId: 'tutorialSidebar',
           position: 'left',
           label: 'Documentation',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'toolkitSidebar',
+          docsPluginId: 'toolkit',
+          position: 'left',
+          label: 'Toolkit',
         },
 
         {
