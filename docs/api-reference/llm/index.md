@@ -6,6 +6,8 @@ The LLM (Large Language Model) system in SpoonOS provides a unified, provider-ag
 
 SpoonOS's LLM system offers:
 
+- > **Note (Nov 2025):** The core Python SDK reads provider settings from environment variables. The `spoon-cli` toolchain loads `config.json` and exports those values into the environment automatically. When using the SDK directly, set the relevant `*_API_KEY`, `*_BASE_URL`, and related environment variables before creating `ConfigurationManager()`.
+
 - **Provider Agnosticism**: Unified API across all providers
 - **Automatic Fallback**: Intelligent provider switching on failures
 - **Load Balancing**: Distribute requests across multiple providers
@@ -59,10 +61,14 @@ Handles configuration loading, validation, and management from multiple sources.
 - Configuration templates and merging
 
 ```python
+import os
 from spoon_ai.llm import ConfigurationManager
 
-config_manager = ConfigurationManager("config.json")
-config_manager.set_provider_config("openai", {...})
+# Export provider settings into environment variables
+os.environ["OPENAI_API_KEY"] = "sk-..."
+os.environ["DEFAULT_LLM_PROVIDER"] = "openai"
+
+config_manager = ConfigurationManager()
 ```
 
 ## Quick Start
@@ -82,18 +88,27 @@ response = await llm_manager.chat(messages)
 print(response.content)
 ```
 
-### With Configuration
 
-```python
-from spoon_ai.llm import ConfigurationManager, LLMManager
+### Controlling Provider Priority
 
-# Load configuration
-config_manager = ConfigurationManager("config.json")
-llm_manager = LLMManager(config_manager=config_manager)
+You can steer which provider is used first—and how the system falls back—purely via environment variables:
 
-# Chat with specific provider
-response = await llm_manager.chat(messages, provider="openai")
+```bash
+# Prefer Anthropic by default
+export DEFAULT_LLM_PROVIDER=anthropic
+
+# Allow fallback to OpenAI, then Gemini
+export LLM_FALLBACK_CHAIN="anthropic,openai,gemini"
 ```
+
+On Windows PowerShell:
+
+```powershell
+$env:DEFAULT_LLM_PROVIDER = "anthropic"
+$env:LLM_FALLBACK_CHAIN = "anthropic,openai,gemini"
+```
+
+After setting the variables, simply instantiate `ConfigurationManager()` as usual; no code changes are needed. The `spoon-cli` configuration workflow writes these variables for you whenever it loads `config.json`.
 
 ### Streaming Responses
 
@@ -240,7 +255,7 @@ LLM_RETRY_ATTEMPTS=3
 ```python
 from spoon_ai.llm import ConfigurationManager
 
-config_manager = ConfigurationManager()
+config_manager = ConfigurationManager()  # uses environment variables by default
 
 # Configure providers
 config_manager.set_provider_config("openai", {
@@ -515,7 +530,7 @@ llm_manager.set_primary_provider("gemini")  # Generally faster
 ```python
 from spoon_ai.llm import ConfigurationManager
 
-config_manager = ConfigurationManager()
+config_manager = ConfigurationManager()  # refreshes from environment variables
 errors = config_manager.validate_config(your_config)
 for error in errors:
     print(f"Config error: {error}")
