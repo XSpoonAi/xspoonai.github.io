@@ -13,6 +13,7 @@ const toolkitSidebars: SidebarsConfig = {
       items: [
         'crypto/data-tools',
         'crypto/powerdata',
+        'crypto/solana',
         'crypto/evm',
         'crypto/neo',
       ],
