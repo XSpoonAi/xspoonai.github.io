@@ -333,6 +333,5 @@ agent2 = GraphAgent("my_agent", my_graph)  # Loads previous memory
 ## See Also
 
 - [StateGraph API](state-graph.md) - Underlying graph execution engine
-- [Memory System](../../core-concepts/memory-system.md) - Memory management details
+- [Memory System](../../core-concepts/Short-term%20memory.md) - Memory management details
 - [Agent Architecture](../../core-concepts/agents-detailed.md) - Agent design patterns
-

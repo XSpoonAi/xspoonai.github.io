@@ -267,7 +267,7 @@ graph.add_edge("step1", "step2")
 
 ## See Also
 
-- **[Getting Started](../../getting-started/quick-start.md)**: Quick start guide
+- **[Getting Started](../getting-started/quick-start.md)**: Quick start guide
 - **[Core Concepts](../../core-concepts/)**: Understanding SpoonOS architecture
 - **[Examples](../../examples/)**: Complete working examples
 - **[Troubleshooting](../../troubleshooting/)**: Common issues and solutions
