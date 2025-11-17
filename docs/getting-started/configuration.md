@@ -72,7 +72,7 @@ Create a `config.json` file for dynamic configuration:
 Test your configuration:
 
 ```bash
-python -c "from spoon_ai.config.manager import ConfigManager; print('✅ Configuration loaded successfully')"
+python -c "from spoon_ai.utils.config_manager import ConfigManager; print('✅ Configuration loaded successfully')"
 ```
 
 The framework automatically validates your configuration and provides helpful error messages if any issues are detected.

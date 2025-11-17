@@ -37,27 +37,32 @@ Key points:
 
 ```mermaid
 flowchart TD
-    A[User task -> SpoonReact agent] --> B[Step 1: http_probe tool<br/>Probe paywalled URL without payment]
+    A[User task -> SpoonReact agent] --> B[Step 1: http_probe tool<br/>Unauthenticated probe of paywalled URL]
+    B -->|HTTP 200| J[Step 4: Agent parses body/headers<br/>No payment required]
     B -->|HTTP 402| C[Step 2: x402_paywalled_request tool<br/>Parse paywall requirements]
-    C --> D[X402PaymentService.build_payment_requirements<br/>Merge paywall + config + overrides]
-    D --> E["Signer selection<br/>PRIVATE_KEY (preferred)<br/>or Turnkey fallback"]
-    E --> F["Typed-data build (TransferWithAuthorization)<br/>Chain ID + verifying contract"]
+    C --> D[Merge paywall + config overrides]
+    D --> E[Signer selection<br/>PRIVATE_KEY preferred, Turnkey fallback]
+    E --> F[Typed-data build<br/>TransferWithAuthorization payload]
     F --> G[Signature via eth_account or Turnkey]
     G --> H[Encode header -> X-PAYMENT]
-    H --> I[Step 3: Paid retry to target URL]
-    I -->|HTTP 200 + X-PAYMENT-RESPONSE| J[Step 4: Agent parses body + receipt]
-    J --> K[Memory/log update + ReAct summary output]
+    H --> I[Step 3: Paid retry with X-PAYMENT header]
+    I --> P1
 
-    subgraph "Paywall server (your FastAPI router)"
-        P1[Incoming request with X-PAYMENT] --> P2[verify_payment -> Facilitator API]
-        P2 --> P3[Optional settle_payment]
-        P3 --> P4[Invoke target agent/tooling]
-        P4 --> P5[Return result + X-PAYMENT-RESPONSE header]
+    subgraph "Paywall server (FastAPI /x402)"
+        P1[Incoming request carrying X-PAYMENT] --> P2[verify_payment -> Facilitator API]
+        P2 --> P3{Valid payment?}
+        P3 -- No --> P4[Return HTTP 402 + error]
+        P3 -- Yes --> P5[Optional settle_payment]
+        P5 --> P6[Invoke agent/tooling]
+        P6 --> P7[Return HTTP 200 + X-PAYMENT-RESPONSE]
     end
 
-    H -.-> P1
-    P5 -.-> J
+    P4 -.-> C
+    P7 --> J
+    J --> K[Memory/log update + ReAct summary output]
 ```
+
+If the paid retry fails (for example `verify_payment` rejects the header or the facilitator reports an error), the paywall server immediately returns another `402` or error payload and the agent decides whether to run `x402_paywalled_request` again with corrected parameters. A successful verification moves straight into settlement and target agent execution, so there is no additional retry cycle once the `X-PAYMENT` header is accepted.
 
 ## Operational checklist
 
