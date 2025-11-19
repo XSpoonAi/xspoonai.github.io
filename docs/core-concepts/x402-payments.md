@@ -30,7 +30,7 @@ X402_DEMO_URL=https://www.x402.org/protected
 Key points:
 
 - The system always prefers the local `PRIVATE_KEY`. If that variable is empty and Turnkey credentials (`TURNKEY_*`) exist, SpoonOS transparently switches to hosted signing.
-- The `x402` block in `config.json` mirrors these defaults (branding, description, timeout, etc.). Update it when you need per-environment variance.
+- In CLI workflows (spoon-cli or the legacy `main.py` CLI), the `x402` block in the CLI `config.json` mirrors these defaults (branding, description, timeout, etc.). Update that file when you need per-environment variance. The core SDK still reads values from environment variables.
 - Setting `X402_DEFAULT_ASSET` ensures all typed-data domains reference the real USDC contract so signatures pass facilitator validation.
 
 ## Runtime lifecycle

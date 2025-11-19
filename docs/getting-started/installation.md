@@ -8,14 +8,34 @@
 
 ## Quick Installation
 
-### 1. Clone the Repository
+### Option A: Install from PyPI (recommended)
+
+You can use the published PyPI packages without cloning the repository:
+
+1. Create and activate a virtual environment
 
 ```bash
-git clone https://github.com/XSpoonAi/spoon-core.git
-cd spoon-core
+# macOS/Linux
+python3 -m venv spoon-env
+source spoon-env/bin/activate
+
+# Windows (PowerShell)
+python -m venv spoon-env
+.\spoon-env\Scripts\Activate.ps1
 ```
 
-### 2. Create Virtual Environment
+2. Install the core SDK (and optionally the toolkits package)
+
+```bash
+pip install spoon-ai-sdk        # core framework
+pip install spoon-toolkits      # optional: extended blockchain & data toolkits
+```
+
+### Option B: Use a local repository checkout
+
+If you are working inside this monorepo (for example you already opened it in your IDE), you can install directly from the local folders without needing to `git clone` again.
+
+1. Create Virtual Environment
 
 ```bash
 # macOS/Linux
@@ -31,15 +51,19 @@ python -m venv spoon-env
 > Use `python3` for all commands unless you have explicitly configured `python`
 > to target Python 3.12 or later.
 
-### 3. Install Dependencies
+2. Install core package in editable mode
 
 ```bash
-pip install -r requirements.txt
+cd core
+pip install -e .
 ```
 
-### 4. Install as Package (Optional)
+3. (Optional) Install Toolkits Package from local repo
+
+If you want to use the extended blockchain and data tools from `spoon_toolkits`, install the **spoon-toolkits** package from the `spoon-toolkits` folder:
 
 ```bash
+cd spoon-toolkits
 pip install -e .
 ```
 

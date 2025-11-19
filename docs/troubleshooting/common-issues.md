@@ -15,10 +15,10 @@ ModuleNotFoundError: No module named 'asyncio'
 ```
 
 **Solution:**
-1. Ensure Python 3.10+ is installed:
+1. Ensure Python 3.12+ is installed:
    ```bash
    python --version
-   # Should show Python 3.10.0 or higher
+   # Should show Python 3.12.0 or higher
    ```
 
 2. Create a new virtual environment:
@@ -137,33 +137,22 @@ ImportError: cannot import name 'MyAgent'
 ```
 
 **Solution:**
-1. Check agent configuration in `config.json`:
-   ```json
-   {
-     "agents": {
-       "my_agent": {
-         "class": "SpoonReactAI",
-         "description": "My custom agent"
-       }
-     }
-   }
-   ```
 
-2. Verify agent class exists:
+1. Verify agent class exists:
    ```python
    from spoon_ai.agents import SpoonReactAI
    # Should not raise ImportError
    ```
 
-3. Check for typos in agent names and class names
+2. Check for typos in agent names and class names
 
-4. List available agents:
+3. List available agents:
    ```bash
    python main.py
    > list-agents
    ```
 
-### Tool Loading Issues
+### Tool Loading Issues (CLI `config.json`)
 
 **Problem:** Tools not available or failing to load
 
@@ -176,29 +165,16 @@ ModuleNotFoundError: No module named 'spoon_toolkits'
 **Solution:**
 1. Install spoon-toolkit package:
    ```bash
-   pip install -e spoon-toolkit/
+   pip install spoon-toolkits
    ```
 
-2. Check tool configuration:
-   ```json
-   {
-     "tools": [
-       {
-         "name": "crypto_tool",
-         "type": "builtin",
-         "enabled": true
-       }
-     ]
-   }
-   ```
-
-3. Verify environment variables for tools:
+2. Verify environment variables for tools:
    ```bash
    echo $OKX_API_KEY
    echo $COINGECKO_API_KEY
    ```
 
-4. List available tools:
+3. List available tools:
    ```bash
    python main.py
    > list-toolkit-categories
@@ -236,34 +212,6 @@ TimeoutError: Request timed out
    python main.py
    > llm-status
    ```
-
-### Rate Limiting
-
-**Problem:** API rate limits exceeded
-
-**Symptoms:**
-```bash
-RateLimitError: Rate limit exceeded
-HTTPError: 429 Too Many Requests
-```
-
-**Solution:**
-1. Implement exponential backoff in configuration:
-   ```json
-   {
-     "llm": {
-       "retry_attempts": 3,
-       "retry_delay": 1.0,
-       "exponential_backoff": true
-     }
-   }
-   ```
-
-2. Use multiple API keys for load balancing
-
-3. Reduce request frequency
-
-4. Upgrade to higher tier API plan
 
 ## MCP (Model Context Protocol) Issues
 

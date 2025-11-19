@@ -5,7 +5,7 @@ Get up and running with SpoonOS framework in under 5 minutes.
 ## Prerequisites
 
 - [Installation](./installation.md) completed
-- [Configuration](./configuration.md) set up with API keys
+- [Configuration](./configuration.md) set up with at least one provider API key (for example `OPENAI_API_KEY`)
 
 ## Your First Agent
 
@@ -51,8 +51,8 @@ async def main():
     # Initialize agent with LLM
     agent = MyFirstAgent(
         llm=ChatBot(
-            llm_provider="openai",
-            model_name="gpt-4.1"  # Framework default
+            llm_provider="openai",         # or "anthropic", "gemini", "deepseek", "openrouter"
+            model_name="gpt-5.1"   # Framework default for OpenAI
         )
     )
 
@@ -112,7 +112,7 @@ async def web3_demo():
 
 The SpoonOS framework provides:
 
-- **Multiple LLM Providers**: OpenAI, Anthropic, Google, DeepSeek
+- **Multiple LLM Providers**: OpenAI (`openai`), Anthropic (`anthropic`), Google Gemini (`gemini`), DeepSeek (`deepseek`), OpenRouter (`openrouter`)
 - **Built-in Tools**: Crypto, DeFi, social media, data analysis
 - **Agent Types**: ReAct, ToolCall, Graph-based agents
 - **MCP Integration**: Dynamic tool discovery and execution

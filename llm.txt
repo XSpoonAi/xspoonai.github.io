@@ -1,0 +1,232 @@
+SpoonOS Cookbook – LLM-Focused Summary
+=====================================
+
+This file condenses the most important information from the Cookbook for Large Language Model (LLM) usage. It is designed to be fed into an AI assistant so contestants can quickly troubleshoot and navigate the project.
+
+Project Layout (LLM-Relevant)
+-----------------------------
+
+- `core/` – Python SDK (`spoon_ai` / `spoon-ai-sdk`):
+  - LLM providers, ChatBot, graph system, x402 payments, MCP integration.
+  - Docs: `core/doc/installation.md`, `core/doc/configuration.md`, `core/doc/cli.md`, `core/README.md`.
+- `spoon-cli/` – CLI package (`spoon-cli` entrypoint):
+  - Reads `config.json`, writes environment variables, and runs agents interactively.
+- `toolkit/` – `spoon_toolkits` package:
+  - Extra blockchain and data tools (OKX, Chainbase, GoPlusLabs, Neo, etc).
+- `cookbook/docs/` – main user-facing docs for this monorepo:
+  - `getting-started/` – installation, configuration, quick-start.
+  - `core-concepts/` – agents, tools, LLM providers, MCP protocol.
+  - `api-reference/llm/` – detailed LLM system docs.
+  - `examples/` – graph-crypto analysis, intent-graph demo, MCP search agent, etc.
+
+Python & Dependencies
+---------------------
+
+- All core packages now target **Python 3.12+**.
+- `core/pyproject.toml` and `core/requirements.txt` are generated for Python 3.12.
+- `toolkit/pyproject.toml`, `spoon-cli/pyproject.toml`, and `spoon-did/pyproject.toml` also specify `requires-python >= 3.12`.
+- For development:
+  - Create a virtualenv.
+  - Install from source with `pip install -r requirements.txt` then `pip install -e .` (or `uv` equivalents).
+
+Minimal LLM Setup (Recommended for Contests)
+-------------------------------------------
+
+Goal: run examples with as little configuration as possible.
+
+1. Install core SDK (from repo root):
+
+   - `cd core`
+   - `pip install -r requirements.txt`
+   - `pip install -e .`
+
+2. Create `.env` in `core/` (or your project root) with **only Gemini** enabled:
+
+   ```bash
+   GEMINI_API_KEY=your_gemini_key_here
+   DEFAULT_LLM_PROVIDER=gemini
+   DEFAULT_MODEL=gemini-2.5-pro
+   GEMINI_MAX_TOKENS=20000
+   ```
+
+3. Load `.env` in your script:
+
+   ```python
+   from dotenv import load_dotenv
+   load_dotenv(override=True)
+   ```
+
+4. Use `ChatBot` with `llm_provider="gemini"`:
+
+   ```python
+   from spoon_ai.chat import ChatBot
+
+   llm = ChatBot(
+       llm_provider="gemini",
+       model_name="gemini-2.5-pro",
+   )
+   ```
+
+Environment Variable Conventions
+--------------------------------
+
+For each provider, configuration is mainly driven by environment variables. The LLM configuration manager (`spoon_ai.llm.config.ConfigurationManager`) uses these keys:
+
+- API keys:
+  - `OPENAI_API_KEY`
+  - `ANTHROPIC_API_KEY`
+  - `GEMINI_API_KEY`
+  - `DEEPSEEK_API_KEY`
+  - `OPENROUTER_API_KEY`
+- Optional global defaults:
+  - `DEFAULT_LLM_PROVIDER` – e.g. `gemini`, `openai`, `anthropic`, `deepseek`, `openrouter`.
+  - `DEFAULT_MODEL` – e.g. `gemini-2.5-pro`, `gpt-4.1`.
+  - `DEFAULT_TEMPERATURE`
+  - `LLM_TIMEOUT`
+  - `LLM_RETRY_ATTEMPTS`
+- Provider-specific overrides:
+  - `<PROVIDER>_MODEL` – e.g. `GEMINI_MODEL`, `OPENAI_MODEL`.
+  - `<PROVIDER>_MAX_TOKENS` – e.g. `GEMINI_MAX_TOKENS` (recommended: `20000`).
+  - `<PROVIDER>_BASE_URL` – optional custom endpoints.
+
+The config manager for providers ignores obvious placeholder API keys (e.g. `your_api_key_here`). Missing or placeholder keys simply mean that provider is treated as unavailable.
+
+SDK vs CLI Configuration
+------------------------
+
+- **Python SDK (`spoon_ai`)**
+  - Reads from environment variables only (including `.env` loaded via `python-dotenv`).
+  - Uses `ConfigurationManager` inside `ChatBot` / `LLMManager`.
+  - No direct reading of `config.json`.
+
+- **CLI (`spoon-cli` / `python main.py`)**
+  - Maintains a `config.json` file and exposes `config` commands.
+  - CLI config manager loads `config.json`, then exports values into **environment variables** for the process.
+  - Core SDK still sees only environment variables, not `config.json` directly.
+
+Available LLM Providers & Identifiers
+-------------------------------------
+
+`llm_provider` / provider names:
+
+- `openai` – OpenAI GPT-4.1, GPT-4o, etc.
+- `anthropic` – Claude Sonnet 4 20250514 and other Claude models.
+- `gemini` – Google Gemini 2.5 Pro (and family).
+- `deepseek` – DeepSeek Reasoner, DeepSeek-V3, etc.
+- `openrouter` – OpenAI-compatible API exposing multiple models.
+
+Typical usage:
+
+```python
+llm = ChatBot(
+    llm_provider="gemini",        # or openai / anthropic / deepseek / openrouter
+    model_name="gemini-2.5-pro",
+)
+```
+
+Auto-Selection & Fallback
+-------------------------
+
+- `ConfigurationManager.get_default_provider()` chooses a provider in this order:
+  1. `DEFAULT_LLM_PROVIDER` env var (if set).
+  2. Provider detected from injected config (CLI).
+  3. First provider with a non-placeholder API key in priority order:
+     - `openai`, `anthropic`, `openrouter`, `deepseek`, `gemini`.
+- Fallback chain:
+  - Controlled via `LLM_FALLBACK_CHAIN` (comma-separated provider names).
+  - If not set, it is inferred from available providers in order.
+
+Max Tokens for Gemini
+---------------------
+
+- Default `max_tokens` for Gemini in `ConfigurationManager` is set to **20000** for safer contest workloads.
+- You can override per environment:
+
+  ```bash
+  GEMINI_MAX_TOKENS=20000
+  ```
+
+Core Quick Start Pattern
+------------------------
+
+The Cookbook `getting-started/quick-start.md` demonstrates a basic agent:
+
+- Define tools (e.g. `GreetingTool`) by subclassing `BaseTool`.
+- Define an agent (e.g. `MyFirstAgent`) from `ToolCallAgent`.
+- Provide a `ChatBot` instance as `llm` with a configured provider.
+- Call `await agent.run(prompt)` to execute.
+
+Key imports:
+
+- `from spoon_ai.chat import ChatBot`
+- `from spoon_ai.agents.toolcall import ToolCallAgent`
+- `from spoon_ai.tools.base import BaseTool`
+- `from spoon_ai.tools import ToolManager`
+
+Toolkits Installation & Usage
+-----------------------------
+
+- Extra crypto/data tools live in the `spoon_toolkits` package.
+- Install:
+
+  ```bash
+  pip install spoon-toolkits
+  # or from this repo:
+  cd toolkit
+  pip install -e .
+  ```
+
+- Usage examples (after install):
+  - `from spoon_toolkits.chainbase import ChainbaseTools`
+  - `from spoon_toolkits.gopluslabs import GoPlusLabsTools`
+  - `from spoon_toolkits.storage import StorageTools`
+
+Graph & Intent Examples
+-----------------------
+
+Important example docs and how they relate to LLMs:
+
+- `cookbook/docs/examples/graph-crypto-analysis.md`
+  - Demonstrates graph-based workflows that call LLMs plus Web3 tools to analyze markets.
+- `cookbook/docs/examples/intent-graph-demo.md`
+  - Shows how “intent graph” workflows use stateful nodes plus LLM reasoning to route tasks.
+- `cookbook/docs/examples/mcp-spoon-search-agent.md`
+  - Example of an MCP-enabled agent that discovers and uses external tools (e.g. search).
+
+When reading these examples, look for:
+
+- Where `ChatBot` / `LLMManager` is instantiated.
+- Which `llm_provider` and models are used.
+- How tools are registered and passed to agents.
+
+Technical Highlights to Showcase
+--------------------------------
+
+These are the main “feature hooks” contestants should be encouraged to use:
+
+- **Unified LLM Manager**
+  - Multi-provider abstraction with fallback chains and provider selection via env.
+- **Graph System**
+  - StateGraph-like graphs with typed state, nodes, edges, and streaming execution.
+- **MCP Integration**
+  - First-class MCP support for both stdio and SSE tools; dynamic tool discovery via `MCPToolsCollection`.
+- **Short-Term Memory**
+  - Automatic context trimming and summarization configurable via `ShortTermMemoryConfig`.
+- **x402 Payments**
+  - Paywalled agent invocation over HTTP with x402 facilitator, integrated in `spoon_ai.payments`.
+- **Toolkits**
+  - Rich Web3 and data tools via `spoon_toolkits` (crypto data, security analysis, storage, etc.).
+
+Suggested Flow for Contestants
+------------------------------
+
+1. Install core SDK (`core/`) and set up a minimal Gemini-only `.env`.
+2. Run a simple agent using `ChatBot(llm_provider="gemini")` to verify configuration.
+3. Add one or two built-in tools (`CryptoTools`, Web3 tools) via `ToolManager`.
+4. For more advanced scenarios:
+   - Introduce a graph-based workflow (see `graph-crypto-analysis` / `intent-graph-demo`).
+   - Wire MCP tools (search, GitHub, Brave) using `MCPToolsCollection`.
+   - Optionally integrate x402 payments for gated actions.
+
+This summary should give an AI assistant enough structure to answer “where is X?”, “how do I configure provider Y?”, and “how do I plug LLMs into graphs/MCP/tools?” without needing the full docs.
+

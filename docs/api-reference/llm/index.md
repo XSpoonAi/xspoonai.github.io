@@ -214,40 +214,21 @@ for i, response in enumerate(responses):
 ### Environment Variables
 
 ```bash
-# API Keys (required)
+# API Keys (required - set at least one)
 OPENAI_API_KEY=sk-your_key
 ANTHROPIC_API_KEY=sk-ant-your_key
-GOOGLE_API_KEY=your_key
+GEMINI_API_KEY=your_gemini_key
 DEEPSEEK_API_KEY=your_key
 
 # Global Settings (optional)
-DEFAULT_LLM_PROVIDER=openai
-DEFAULT_MODEL=gpt-4.1
+DEFAULT_LLM_PROVIDER=openai          # or anthropic / gemini / deepseek / openrouter
+DEFAULT_MODEL=gpt-5.1
 DEFAULT_TEMPERATURE=0.3
 LLM_TIMEOUT=30
 LLM_RETRY_ATTEMPTS=3
-```
 
-### JSON Configuration
-
-```json
-{
-  "llm": {
-    "default_provider": "openai",
-    "timeout": 30,
-    "providers": {
-      "openai": {
-        "api_key": "sk-...",
-        "model": "gpt-4.1",
-        "temperature": 0.7
-      },
-      "anthropic": {
-        "api_key": "sk-ant-...",
-        "model": "claude-sonnet-4-20250514"
-      }
-    }
-  }
-}
+# Provider-specific overrides (optional)
+GEMINI_MAX_TOKENS=20000
 ```
 
 ### Runtime Configuration

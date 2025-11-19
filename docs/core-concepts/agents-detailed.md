@@ -172,8 +172,8 @@ agent = SpoonReactMCP(
     max_steps=15
 )
 
-# Agent can also load configuration from config.json
-# The config.json file defines available MCP tools
+# When using the CLI (main.py / spoon-cli), agents and MCP tools are defined in the CLI's `config.json` file.
+# When using the SDK directly (as in this example), configure tools and agents in Python code instead of reading config.json.
 ```
 
 ## Creating Custom Agents
