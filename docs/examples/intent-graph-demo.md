@@ -81,7 +81,7 @@ export TAVILY_API_KEY="your-tavily-api-key"       # Search engine
 
 ```bash
 # Navigate to examples directory
-cd spoon-cookbook/example
+cd spoon-core/example
 
 # Install dependencies
 pip install -r requirements.txt

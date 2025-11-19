@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Python 3.11 or higher
+- Python 3.12 or higher
 - Git
 - Virtual environment (recommended)
 
@@ -29,7 +29,7 @@ python -m venv spoon-env
 
 > 💡 On newer Apple Silicon Macs the `python` shim may not point to Python 3.
 > Use `python3` for all commands unless you have explicitly configured `python`
-> to target Python 3.10 or later.
+> to target Python 3.12 or later.
 
 ### 3. Install Dependencies
 
