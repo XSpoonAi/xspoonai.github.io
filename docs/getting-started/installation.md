@@ -54,7 +54,8 @@ python -m venv spoon-env
 2. Install core package in editable mode
 
 ```bash
-cd core
+git clone https://github.com/XSpoonAi/spoon-core.git
+cd spoon-core
 pip install -e .
 ```
 
@@ -63,41 +64,10 @@ pip install -e .
 If you want to use the extended blockchain and data tools from `spoon_toolkits`, install the **spoon-toolkits** package from the `spoon-toolkits` folder:
 
 ```bash
+git clone https://github.com/XSpoonAi/spoon-toolkits.git
 cd spoon-toolkits
 pip install -e .
 ```
-
-## Verification
-
-Test your installation by creating a simple agent:
-
-```python
-# test_installation.py
-import asyncio
-from spoon_ai.chat import ChatBot
-
-async def test_installation():
-    # Test basic LLM functionality - framework handles errors automatically
-    llm = ChatBot(
-        llm_provider="openai",  # or your preferred provider
-        model_name="gpt-4.1"  # Framework default
-    )
-
-    # Framework provides automatic validation and error handling
-    return "✅ SpoonOS framework installed successfully!"
-
-if __name__ == "__main__":
-    result = asyncio.run(test_installation())
-    print(result)
-```
-
-Run the test:
-
-```bash
-python test_installation.py
-```
-
-You should see success messages indicating the framework is ready.
 
 ## Framework Validation
 
