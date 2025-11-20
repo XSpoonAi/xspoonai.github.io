@@ -44,6 +44,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'how-to-guides/build-first-agent',
         'how-to-guides/add-custom-tools',
+        'how-to-guides/vibe-coding',
         'how-to-guides/x402-payments',
       ],
     },
@@ -126,3 +127,4 @@ const sidebars: SidebarsConfig = {
 };
 
 export default sidebars;
+
