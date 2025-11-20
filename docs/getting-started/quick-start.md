@@ -78,7 +78,7 @@ The agent will respond with a personalized greeting and offer to help with vario
 Enhance your agent with blockchain tools:
 
 ```python
-from spoon_ai.tools.crypto_tools import CryptoTool
+from spoon_ai.tools.crypto_tools import get_crypto_tools
 
 class Web3Agent(ToolCallAgent):
     name: str = "web3_agent"
@@ -91,7 +91,8 @@ class Web3Agent(ToolCallAgent):
 
     available_tools: ToolManager = ToolManager([
         GreetingTool(),
-        CryptoTool()
+        # Loads all crypto/Web3 tools from spoon-toolkits (requires `pip install -e spoon-toolkits`)
+        *get_crypto_tools()
     ])
 
 # Usage

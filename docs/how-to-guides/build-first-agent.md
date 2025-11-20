@@ -17,7 +17,7 @@ Create a new file `my_first_agent.py`:
 ```python
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
-from spoon_ai.tools.crypto_tools import CryptoTools
+from spoon_ai.tools.crypto_tools import get_crypto_tools
 
 # Create your first agent
 def create_agent():
@@ -31,7 +31,7 @@ def create_agent():
     # Create agent with tools
     agent = SpoonReactAI(
         llm=llm,
-        tools=[CryptoTools()]
+        tools=[*get_crypto_tools()]  # requires `pip install -e toolkit`
     )
 
     return agent
@@ -48,7 +48,7 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
-    result = asyncio.run(main())
+    asyncio.run(main())
 ```
 
 ### Run Your Agent
@@ -93,22 +93,28 @@ def create_enhanced_agent():
     llm = ChatBot(
         model_name="gpt-4.1",
         llm_provider="openai",
-        temperature=0.3
+        temperature=0.3,
+        enable_short_term_memory=True,
+        short_term_memory_config={
+            "max_tokens": 8000,
+            "strategy": "summarize",
+            "messages_to_keep": 6,
+        },
     )
 
     # Add multiple tools
     agent = SpoonReactAI(
         llm=llm,
         tools=[
-            CryptoTools(),
+            *get_crypto_tools(),
             GreetingTool()
         ]
     )
 
     return agent
 
-# Test enhanced functionality
-async def test_enhanced_agent():
+# Run enhanced agent (same entry style as Step 1)
+async def main_enhanced():
     agent = create_enhanced_agent()
 
     # Framework automatically handles tool selection and execution
@@ -116,9 +122,26 @@ async def test_enhanced_agent():
     response = await agent.run("Greet Alice casually and then tell her the Bitcoin price")
 
     return response
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main_enhanced())
+
+### Optional: Stream responses
+
+If you want token-by-token output (works with any supported provider):
+
+```python
+async def stream_demo():
+    llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
+    messages = [{"role": "user", "content": "Stream a 3-step plan to learn SpoonOS"}]
+    async for chunk in llm.astream(messages=messages):
+        print(chunk.delta or "", end="", flush=True)
 ```
 
 ## Step 3: Add Memory and Context
+
+> Tip: Short-term memory trimming/summarization is already enabled in `create_enhanced_agent` via `enable_short_term_memory=True`. Use a higher `max_tokens` or switch `strategy` to `"trim"` if you prefer dropping history instead of summarizing.
 
 ### Agent with Memory
 
@@ -252,7 +275,7 @@ class ConfigurableAgent:
         # Create tools from config
         tools = []
         if "crypto_tools" in self.config["tools"]:
-            tools.append(CryptoTools())
+            tools.extend(get_crypto_tools())
         if "greeting_tool" in self.config["tools"]:
             tools.append(GreetingTool())
 
@@ -342,7 +365,7 @@ from typing import List, Dict, Any
 
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
-from spoon_ai.tools.crypto_tools import CryptoTools
+from spoon_ai.tools.crypto_tools import get_crypto_tools
 from spoon_ai.tools.base import BaseTool
 
 # Configure logging
@@ -408,7 +431,7 @@ class ProductionAgent:
 
         tools = []
         if "crypto_tools" in self.config["tools"]:
-            tools.append(CryptoTools())
+            tools.extend(get_crypto_tools())
         if "greeting_tool" in self.config["tools"]:
             tools.append(GreetingTool())
 
