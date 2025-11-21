@@ -24,6 +24,7 @@ on:
       - 'cookbook/package.json'
       - 'cookbook/package-lock.json'
       - 'cookbook/.github/workflows/llm-bundle.yml'
+  workflow_dispatch:
 
 jobs:
   build-llm:
