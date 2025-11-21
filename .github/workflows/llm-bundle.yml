@@ -40,7 +40,7 @@ jobs:
       - run: npm run generate-llm
       - name: Ensure llm.txt is committed
         run: |
-          git diff --stat --exit-code llm.txt || (echo "::error ::llm.txt is out of date. Run 'npm run generate-llm', add llm.txt, and commit/push the change." && exit 1)
+          git diff --stat --ignore-cr-at-eol --exit-code llm.txt || (echo "::error ::llm.txt is out of date. Run 'npm run generate-llm', add llm.txt, and commit/push the change." && exit 1)
       - name: Upload llm.txt
         if: always()
         uses: actions/upload-artifact@v4
