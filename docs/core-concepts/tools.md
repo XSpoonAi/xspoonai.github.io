@@ -1,356 +1,94 @@
-# Tools
+# Tools Overview
 
-Tools are the hands and eyes of your agents - they provide the capabilities to interact with the external world. SpoonOS supports both built-in tools and custom tools through a flexible, extensible architecture.
+Tools are callable capabilities that agents use to interact with external systems. In `spoon_ai` a tool is any `BaseTool` subclass, and tools are orchestrated through `ToolManager` or via the MCP (Model Context Protocol) client/server components.
 
-## What are Tools?
+## Tool Shapes
 
-Tools in SpoonOS are discrete capabilities that agents can use to:
-
-- **Access external APIs** (web search, databases, APIs)
-- **Perform calculations** (math, data analysis, statistics)
-- **Manipulate data** (file operations, data processing)
-- **Interact with services** (blockchain, social media, messaging)
-- **Execute code** (Python, shell commands, scripts)
-
-## Tool Types
-
-### 1. Built-in Tools
-
-Built-in tools are core capabilities provided by the **spoon-toolkit** package. These tools are directly integrated into SpoonOS and include:
-
-> To use `spoon_toolkits.*` modules, install the toolkits package alongside the core SDK:
->
-> ```bash
-> pip install spoon-toolkits
-> ```
-
-- **Crypto Data Tools**: Price data, trading history, wallet analysis, liquidity analysis
-- **Data Platform Tools**: AI-powered search, academic research, social media analysis
-- **ThirdWeb Tools**: Blockchain data and transaction analysis
-- **Neo Blockchain Tools**: Complete Neo ecosystem tools (addresses, assets, contracts, transactions)
-- **Crypto PowerData Tools**: Advanced market data and technical analysis
-
-**📖 For detailed usage and configuration, see: [Built-in Tools Reference](../api-reference/tools/builtin-tools.md)**
-
-### 2. MCP Tools
-
-MCP (Model Context Protocol) tools enable dynamic tool loading from external servers. These tools provide:
-
-- **Dynamic Discovery**: Tools loaded at runtime without restarts
-- **Multiple Transports**: Support for stdio, HTTP, and SSE communication
-- **Extensible Architecture**: Easy integration of third-party tools
-- **Process Isolation**: Tools run in separate processes for stability
-
-**📖 For detailed MCP protocol usage and configuration, see: [MCP Protocol Guide](./mcp-protocol.md)**
-
-### 3. Custom Tools
-
-Tools you create for specific use cases:
-
+### Local tools (`BaseTool`)
 ```python
 from spoon_ai.tools.base import BaseTool
 
-class CustomTool(BaseTool):
-    name: str = "my_custom_tool"
-    description: str = "Does something specific"
-
-    async def execute(self, **kwargs) -> str:
-        # Your custom logic here
-        return "Tool result"
-```
-
-**📖 For detailed custom tool development, see: [How-To Guide: Add Custom Tools](../how-to-guides/add-custom-tools.md)**
-
-## Next Steps
-
-- **[Built-in Tools Reference](../api-reference/tools/builtin-tools.md)** - Complete guide to using spoon-toolkit built-in tools
-- **[MCP Protocol Guide](./mcp-protocol.md)** - Detailed MCP tool configuration and usage
-- **[Custom Tools Guide](../how-to-guides/add-custom-tools.md)** - Learn to create your own tools
-
-Ready to use tools? Start with the [Built-in Tools Reference](../api-reference/tools/builtin-tools.md)! 🔧
-- **Access** real-time information
-
-## Built-in Tools
-
-### Crypto & Trading Tools
-
-**CryptoTools** - Market data and price information
-```python
-from spoon_ai.tools.crypto_tools import CryptoTools
-
-# Get current Bitcoin price
-price = await CryptoTools.get_token_price("BTC")
-```
-
-**Web3Tools** - Blockchain interaction
-```python
-from spoon_ai.tools.web3_tools import Web3Tools
-
-# Get wallet balance
-balance = await web3_tools.GetAccountBalanceToo("0x742d35Cc6634C0532925a3b8D4C9db96590e4265")
-```
-
-### Data & Analysis Tools
-
-**ChainbaseTools** - Comprehensive blockchain data
-```python
-from spoon_toolkits.chainbase import ChainbaseTools
-
-# Get token information
-token_info = await chainbase_tools.GetTokenMetadataTool("0xA0b86a33E6441E6C8D3c8C7C5b998e7d8e4C8e8e")
-```
-
-### Storage Tools
-
-**StorageTools** - Decentralized storage
-```python
-from spoon_toolkits.storage import StorageTools
-
-# Upload file to IPFS
-hash = await storage_tools.upload_file("document.pdf")
-```
-
-## Tool Manager
-
-The Tool Manager handles tool registration, discovery, and execution:
-
-```python
-from spoon_ai.tools import ToolManager
-from spoon_ai.tools.crypto_tools import CryptoTools
-
-# Create tool manager
-tool_manager = ToolManager([
-    CryptoTools(),
-    Web3Tools()
-])
-
-# Execute tool
-result = await tool_manager.execute_tool("get_token_price", {"symbol": "BTC"})
-```
-
-## MCP (Model Context Protocol) Tools
-
-MCP enables dynamic tool discovery and execution:
-
-```python
-from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
-
-# Initialize MCP tools
-mcp_tools = MCPToolsCollection()
-
-# Discover available tools
-tools = await mcp_tools.discover_tools()
-
-# Execute MCP tool
-result = await mcp_tools.execute("weather_tool", {"location": "New York"})
-```
-
-## Creating Custom Tools
-
-### Basic Tool Structure
-
-```python
-from spoon_ai.tools.base import BaseTool
-from typing import Dict, Any
-
-class CustomTool(BaseTool):
-    name: str = "custom_tool"
-    description: str = "Description of what this tool does"
-    parameters: dict = {
+class HelloTool(BaseTool):
+    name = "hello"
+    description = "Return a greeting"
+    parameters = {
         "type": "object",
         "properties": {
-            "param1": {"type": "string", "description": "Parameter description"}
+            "name": {"type": "string", "description": "Who to greet"}
         },
-        "required": ["param1"]
+        "required": ["name"]
     }
 
-    async def execute(self, param1: str) -> str:
-        # Tool implementation
-        return f"Result: {param1}"
+    async def execute(self, name: str) -> str:
+        return f"Hello, {name}!"
 ```
+`__call__` forwards to `execute`, so `await tool(name="Ricky")` works.
 
-### Tool Registration
-
+### Tool Manager
+`ToolManager` registers tools and executes them by name.
 ```python
-# Register custom tool
 from spoon_ai.tools import ToolManager
+manager = ToolManager([HelloTool()])
 
-tool_manager = ToolManager([CustomTool()])
-
-# Use in agent
-agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
-    tools=[CustomTool()]
-)
+result = await manager.execute(name="hello", tool_input={"name": "Ricky"})
 ```
+Utility helpers:
+- `to_params()` → list of OpenAI/JSON‑schema tool specs
+- `add_tool(s)`, `remove_tool`, `get_tool`
+- Optional semantic indexing (`index_tools`, `query_tools`) uses Pinecone + OpenAI embeddings (needs `PINECONE_API_KEY`, `OPENAI_API_KEY`).
 
-### Advanced Tool Features
-
-**Async Operations**
+### Crypto toolkit (optional)
+If `spoon-toolkits` is installed, you can load its crypto tools:
 ```python
-import aiohttp
+from spoon_ai.tools.crypto_tools import get_crypto_tools, create_crypto_tool_manager
 
-class APITool(BaseTool):
-    async def execute(self, endpoint: str) -> dict:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(endpoint) as response:
-                return await response.json()
+tools = get_crypto_tools()              # returns instantiated toolkit tools
+manager = create_crypto_tool_manager()  # ToolManager with all crypto tools
 ```
+Environment variables for these tools depend on the specific provider (e.g., `OKX_API_KEY`, `BITQUERY_API_KEY`, `RPC_URL`, etc.).
 
-**Error Handling**
-
+### MCP client tools (`MCPTool`)
+`MCPTool` lets an agent call tools hosted on an MCP server.
 ```python
-class RobustTool(BaseTool):
-    async def execute(self, data: str) -> str:
-        # Framework handles errors automatically with graceful degradation
-        return self.process_data(data)
-```
+from spoon_ai.tools.mcp_tool import MCPTool
 
-## Tool Configuration
-
-### Environment Variables
-```bash
-# API Keys for tools
-COINGECKO_API_KEY=your_key_here
-CHAINBASE_API_KEY=your_key_here
-GOPLUS_API_KEY=your_key_here
-```
-
-### Runtime Configuration
-```json
-{
-  "tools": {
-    "enabled": ["crypto_tools", "web3_tools"],
-    "crypto_tools": {
-      "default_currency": "USD",
-      "cache_duration": 300
+mcp_tool = MCPTool(
+    mcp_config={
+        "url": "http://localhost:8765",      # or ws://..., or command/args for stdio
+        "transport": "sse",                  # optional: "sse" (default) | "http"
+        "timeout": 30,
+        "max_retries": 3,
     }
-  }
-}
+)
+# The tool’s schema/description is fetched dynamically from the MCP server.
 ```
+`MCPTool.execute(...)` will fetch the server’s tool list, align the name/parameters, and perform retries and health checks.
+
+### MCP server (`MCPToolsCollection`)
+You can expose local or toolkit tools as an MCP server:
+```python
+from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
+import asyncio
+
+mcp_tools = MCPToolsCollection()  # wraps spoon-toolkits tools if installed
+asyncio.run(mcp_tools.run(port=8765))  # SSE server by default
+```
+This uses `fastmcp` under the hood and auto-registers each tool as an MCP `FunctionTool`.
+
+## Configuration
+- **Core**: none required for basic tools.  
+- **Embedding index (optional)**: `OPENAI_API_KEY`, `PINECONE_API_KEY`.  
+- **Crypto/toolkit tools**: provider-specific keys (e.g., `OKX_API_KEY`, `BITQUERY_API_KEY`, `RPC_URL`, `GOPLUSLABS_API_KEY`).  
+- **MCP**: set transport target via `mcp_config` (`url` or `command` + `args`/`env`).  
 
 ## Best Practices
+- Keep tools single-purpose with clear `parameters` JSON schema.
+- Validate inputs inside `execute`; raise rich errors for better agent feedback.
+- Prefer async I/O in `execute` to avoid blocking the event loop.
+- Reuse `ToolManager` for name-based dispatch and tool metadata generation.
+- When using toolkit or MCP tools, fail gracefully if optional dependencies or servers are missing.
 
-### Tool Design
-
-- **Single Responsibility** - Each tool should have one clear purpose
-- **Clear Parameters** - Use descriptive parameter names and types
-- **Error Handling** - Leverage framework's automatic error handling
-- **Documentation** - Provide clear descriptions and examples
-
-### Performance
-
-- **Caching** - Cache expensive API calls when appropriate
-- **Async Operations** - Use async/await for I/O operations
-- **Rate Limiting** - Respect API rate limits
-
-### Security
-
-- **Input Validation** - Validate all input parameters
-- **API Key Management** - Store keys securely in environment variables
-- **Permission Checks** - Verify permissions before executing sensitive operations
-
-## Tool Categories
-
-### Data Sources
-
-- Market data APIs (CoinGecko, CoinMarketCap)
-- Blockchain data (Chainbase, Alchemy)
-- Social media APIs (Twitter, Discord)
-
-### Execution Tools
-
-- Blockchain transactions (Web3, Solana)
-- File operations (Storage, IPFS)
-- Communication (Email, Slack)
-
-### Analysis Tools
-
-- Security scanning (GoPlus Labs)
-- Technical analysis (Trading indicators)
-- Data processing (Pandas, NumPy)
-
-## Next Steps
-
-### 📚 **Practical Examples**
-
-#### 🔍 [MCP Spoon Search Agent](../examples/mcp-spoon-search-agent.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
-
-**What it demonstrates:**
-- Complete MCP (Model Context Protocol) implementation
-- Integration of web search capabilities with cryptocurrency analysis
-- Real-time data correlation between multiple APIs
-- Dynamic tool discovery and orchestration
-
-**Key features:**
-- Tavily web search integration via MCP
-- Crypto PowerData tools for market analysis
-- Unified analysis combining search results with technical indicators
-- Production-ready error handling and API management
-
-#### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
-
-**What it demonstrates:**
-- Advanced cryptocurrency analysis using multiple tool types
-- Real-time technical indicator calculation (RSI, MACD, EMA)
-- Multi-timeframe data processing and correlation
-- LLM-driven decision making with tool integration
-
-**Key features:**
-- Real Binance API integration for live market data
-- Intelligent token selection and analysis
-- Comprehensive market sentiment analysis
-- Investment recommendations based on technical and fundamental data
-
-### 🛠️ **Development Guides**
-
-- **[MCP Protocol](./mcp-protocol.md)** - Learn about dynamic tool discovery and execution
-- **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build your own tools from scratch
-- **[Tool API Reference](../api-reference/tools/base-tool.md)** - Complete tool development documentation
-
-### 📖 **Additional Resources**
-
-- **[Built-in Tools Reference](../api-reference/tools/builtin-tools.md)** - Complete guide to spoon-toolkit
-- **[Graph System](../core-concepts/graph-system.md)** - Learn about workflow orchestration
-- **[Agent Architecture](../core-concepts/agents.md)** - Understand agent-tool integration patterns
-
-**What it demonstrates:**
-- Complete MCP (Model Context Protocol) implementation
-- Integration of web search capabilities with cryptocurrency analysis
-- Real-time data correlation between multiple APIs
-- Dynamic tool discovery and orchestration
-
-**Key features:**
-- Tavily web search integration via MCP
-- Crypto PowerData tools for market analysis
-- Unified analysis combining search results with technical indicators
-- Production-ready error handling and API management
-
-#### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
-
-**What it demonstrates:**
-- Advanced cryptocurrency analysis using multiple tool types
-- Real-time technical indicator calculation (RSI, MACD, EMA)
-- Multi-timeframe data processing and correlation
-- LLM-driven decision making with tool integration
-
-**Key features:**
-- Real Binance API integration for live market data
-- Intelligent token selection and analysis
-- Comprehensive market sentiment analysis
-- Investment recommendations based on technical and fundamental data
-
-### 🛠️ **Development Guides**
-
-- **[MCP Protocol](./mcp-protocol.md)** - Learn about dynamic tool discovery and execution
-- **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build your own tools from scratch
-- **[Tool API Reference](../api-reference/tools/base-tool.md)** - Complete tool development documentation
-
-### 📖 **Additional Resources**
-
-- **[Built-in Tools Reference](../api-reference/tools/builtin-tools.md)** - Complete guide to spoon-toolkit
-- **[Graph System](../core-concepts/graph-system.md)** - Learn about workflow orchestration
-- **[Agent Architecture](../core-concepts/agents.md)** - Understand agent-tool integration patterns
+## See Also
+- API reference: `../api-reference/tools/base-tool.md`
+- MCP protocol details: `./mcp-protocol.md`
+- Custom tool guide: `../how-to-guides/add-custom-tools.md`
