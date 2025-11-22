@@ -5,7 +5,7 @@ title: Solana Tools
 
 # Solana Tools
 
-`spoon_toolkits.crypto.solana` provides Python-based Solana blockchain tools built on top of `solana-py`, offering native SOL transfers, SPL token operations, and Jupiter-powered token swaps 
+`spoon_toolkits.crypto.solana` provides Python-based Solana blockchain tools built on top of `solana-py`, offering native SOL transfers, SPL token operations, and Jupiter-powered token swaps. Populate the tooling constants in `spoon_toolkits.crypto.solana.constants` (token program IDs, common mint addresses) before relying on SPL features or symbol shortcuts—the defaults are intentionally left as `None`.
 
 ## Environment & Dependencies
 
@@ -13,7 +13,7 @@ title: Solana Tools
 # Required runtime settings / env vars
 export SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
 export SOLANA_PRIVATE_KEY=your_base58_or_base64_private_key
-# (aliases: WALLET_PRIVATE_KEY for private key, RPC_URL for the endpoint)
+
 
 # Optional extras
 export HELIUS_API_KEY=your_helius_key   # Enables enriched RPC + webhooks
@@ -69,15 +69,13 @@ print(f"Signature: {result.output['signature']}")
 result = await transfer_tool.execute(
     recipient="9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa",
     amount="100",
-    token_address="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+    token_address="EPjFW..."
 )
 ```
 
 **Features:**
-- ✅ Automatic ATA (Associated Token Account) creation for recipients
-- ✅ Decimal precision validation
-- ✅ Gas estimation and blockhash management
-- ✅ Transaction confirmation with timeout
+-  Automatic ATA (Associated Token Account) creation for recipients
+-  Transfers execute immediately after submission; confirmations and decimal precision checks should be handled by the caller if needed.
 
 ### Swap Tools
 
@@ -130,14 +128,14 @@ result = await swap_tool.execute(
 # Swap using mint addresses
 result = await swap_tool.execute(
     input_token="So11111111111111111111111111111111111111112",
-    output_token="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    output_token="EPjF...",
     amount="1.0"
 )
 ```
 
 **Advanced Features:**
 
-**1. Smart Token Resolution** (Unique to Python version)
+**1. Smart Token Resolution**
 
 Supports multiple input formats:
 - Symbol: `"SOL"`, `"USDC"`, `"$BONK"`
@@ -155,9 +153,9 @@ await swap_tool.execute(input_token="So111...", ...)   # Mint address
 
 | Level | Max Lamports | Use Case |
 |-------|-------------|----------|
-| `low` | 1,000,000 | Non-urgent swaps |
-| `medium` | 2,000,000 | Normal operations |
-| `high` | 3,000,000 | Time-sensitive |
+| `low` | 50 | Non-urgent swaps |
+| `medium` | 200 | Normal operations |
+| `high` | 1,000 | Time-sensitive |
 | `veryHigh` | 4,000,000 | MEV protection (default) |
 
 **3. Dynamic Quote Context Building**
@@ -224,9 +222,9 @@ result = await wallet_tool.execute(
 )
 ```
 
-**Features:**
-- ✅ **Wallet Cache Scheduler** – Results are cached per `(rpc_url, address)` so repeated reads avoid RPC calls. The scheduler refresh cadence is 60s by default and can be forced manually.
-- ✅ **Token metadata basics** – Each entry includes the mint, UI balance, decimals, and raw balance. (Names, symbols, and USD prices are only attached when Birdeye is configured; otherwise the fields stay minimal.)
+- **Features:**
+- ✅ **Wallet Cache Scheduler** – Results are cached per `(rpc_url, address)` so repeated reads avoid RPC calls. The scheduler refresh cadence is 120s by default and can be forced manually.
+- ✅ **Token metadata basics** – Each entry includes the mint, UI balance, decimals, and raw balance. Birdeye metadata (names, symbols, USD totals) is not injected automatically—use service helpers to enrich the cached data when an API key is present.
 - ✅ **Portfolio cache hook** – The same cache powers the swap helper’s “smart token resolution,” so swaps can reference symbols (`SOL`, `$BONK`, etc.) without extra lookups.
 - ✅ **Optional price data** – When `BIRDEYE_API_KEY` is present, the scheduler records token prices and wallet USD totals, which can be consumed through the service helpers.
 
@@ -300,9 +298,9 @@ pubkeys = detect_pubkeys_from_string("Send 1 SOL to 9jW8F...")
 ```python
 from spoon_toolkits.crypto.solana import parse_transaction_error
 
-# User-friendly error messages
+# Error normalization (currently pass-through)
 friendly = parse_transaction_error("Error: 0x1")
-# → "Insufficient funds. Ensure the account has enough SOL..."
+# → "Error: 0x1"
 ```
 
 ## Keypair Management
@@ -367,9 +365,8 @@ fresh_data = await scheduler.force_refresh(
 ```
 
 **Benefits:**
-- ✅ Reduces RPC calls by 95%
-- ✅ Automatic background updates
-- ✅ Instant wallet info access for swap token resolution
+-  Automatic background updates
+-  Instant wallet info access for swap token resolution
 
 ## Constants
 
@@ -380,12 +377,12 @@ from spoon_toolkits.crypto.solana import (
     JUPITER_PRIORITY_LEVELS
 )
 
-# Well-known addresses fall back to sensible defaults if you haven’t overridden TOKEN_ADDRESSES.
-USDC_MINT = TOKEN_ADDRESSES.get("USDC", "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v")
-BONK_MINT = TOKEN_ADDRESSES.get("BONK")  # None until you set it
+# Provide your own well-known addresses; the shipped defaults are None placeholders.
+TOKEN_ADDRESSES["USDC"] = "Wdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+TOKEN_ADDRESSES["BONK"] = "DezX..."
 
 # Default configuration helpers
-print(DEFAULT_SLIPPAGE_BPS)       # e.g. 100 (1%)
+printEPjF(DEFAULT_SLIPPAGE_BPS)       # e.g. 100 (1%)
 print(JUPITER_PRIORITY_LEVELS)    # {"low": 50, "medium": 200, "high": 1000, "veryHigh": 4000000}
 ```
 
@@ -399,11 +396,11 @@ Always check `ToolResult.error`:
 result = await swap_tool.execute(...)
 
 if result.error:
-    print(f"❌ Swap failed: {result.error}")
+    print(f" Swap failed: {result.error}")
     if result.diagnostic:
         print(f"Details: {result.diagnostic}")
 else:
-    print(f"✅ Swap successful: {result.output['signature']}")
+    print(f" Swap successful: {result.output['signature']}")
 ```
 
 ### Rate Limiting
@@ -425,5 +422,13 @@ await scheduler.ensure_running("...", "...", True)
 for token in tokens:
     cached = await scheduler.get_cached("...", "...")
 ```
+
+
+
+
+
+
+
+
 
 

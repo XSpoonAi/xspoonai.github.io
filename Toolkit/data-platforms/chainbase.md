@@ -40,7 +40,7 @@ export CHAINBASE_PATH=/sse                              # optional SSE path
 - `ContractCallTool` – invoke read-only contract functions by supplying ABI JSON and params.
 - `GetTokenMetadataTool` – ERC-20 metadata (name, symbol, decimals, total supply).
 
-Every tool returns the raw JSON Chainbase response: `{"code": ..., "message": ..., "data": [...]}`. You can feed the payload directly into prompts or downstream analytics without reshaping.
+On success every tool returns Chainbase’s raw JSON payload: `{"code": ..., "message": ..., "data": [...]}`. When anything fails (missing API key, HTTP error, etc.) the wrapper returns `{"error": "..."}` instead of raising, so always check for an `error` key before consuming `data`.
 
 ## Usage Examples
 

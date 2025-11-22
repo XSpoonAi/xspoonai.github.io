@@ -100,8 +100,8 @@ result = await tool.execute(
     indicators_config='{"ema": [{"timeperiod": 12}, {"timeperiod": 26}], "rsi": [{"timeperiod": 14}]}',
 )
 
-ohlcv_rows = result.output["data"]
-metadata = result.output.get("metadata")
+ohlcv_rows = result.output            # only the candle rows are returned
+# metadata is not exposed by the ToolResult wrapper yet
 ```
 
 ### DEX analytics on OKX Web3
@@ -118,7 +118,7 @@ result = await dex.execute(
     indicators_config='{"macd": [{"fastperiod": 12, "slowperiod": 26, "signalperiod": 9}], "bb": [{"period": 20, "std": 2}]}',
 )
 
-candles = result.output["data"]
+candles = result.output               # ToolResult output already contains the payload
 ```
 
 ### Real-time price snapshot
@@ -148,4 +148,4 @@ print(catalog.output["indicators"])   # list of indicator metadata with defaults
 - `CryptoPowerDataMCPServer` keeps track of running threads so you can query `status()` or stop everything on shutdown.
 - `mcp_bridge.py` wires FastMCP methods into the dual transport so CLI agents and browser extensions consume the same tool definitions.
 
-When you need streaming OHLCV updates (vs. periodic `execute` calls), run the SSE server and subscribe to `/mcp` with a persistent session ID. The same OKX rate limiting (`rate_limit_requests_per_second`) and retry envelopes apply regardless of transport.
+The current HTTP/SSE server keeps an `/mcp` SSE connection alive with heartbeats, but tool responses are delivered via JSON-RPC POST replies rather than pushed over the SSE channel. Keep calling the tools periodically if you need fresh data; the same OKX rate limiting (`rate_limit_requests_per_second`) and retry envelopes apply regardless of transport.

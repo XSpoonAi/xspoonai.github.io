@@ -24,12 +24,13 @@ Set optional `BUCKET_NAME` when using the helper coroutines in `aioz_tools.py`; 
 - `DeleteAiozObjectTool` – remove a single object.
 - `GenerateAiozPresignedUrlTool` – produce temporary download URLs.
 
-All methods return status strings (✅ success / ❌ failure). Wrap calls in agents that interpret the prefix to decide next steps.
+Bucket/object mutations emit emoji-prefixed status strings (✅ success / ❌ failure). Wrap calls in agents that interpret the prefix to decide next steps.
 
 ### Return semantics & shared helpers
 - Success responses look like `✅ Uploaded 'file' to 'bucket'`.
 - Failures bubble up `botocore` messages but remain human readable: `❌ Failed to upload ... (Error: ...)`.
 - `AiozListBucketsTool` returns a newline-separated string (emojis included) such as `📁 bucket-a`; parse the string if you need structured output.
+- `GenerateAiozPresignedUrlTool` returns the raw URL string on success (no emoji prefix). Failures return `❌ ...` strings coming from `_generate_presigned_url`.
 - `GenerateAiozPresignedUrlTool` accepts `expires_in` in seconds; the default is 3600. AIOZ supports up to 7 days—set higher values when sharing large datasets.
 
 ## Usage Examples
@@ -48,11 +49,8 @@ url = await presigner.execute(bucket_name="research-artifacts", object_key="repo
 print(url)
 ```
 
-### CLI smoke test
-```
-python spoon_toolkits/storage/aioz/aioz_tools.py list-buckets
-```
-The helper script reads the same environment variables, making it an easy credential check.
+### Module self-test
+Running the module directly executes the async test harness in `aioz_tools.py`, which performs list/upload/presign/download/delete flows using the configured credentials and `BUCKET_NAME`. Use this as a credential check, but be aware it will create/delete real objects rather than accept CLI arguments.
 
 ## Operation Tips
 - **Endpoint style**: `S3Tool` forces path-style URLs; keep bucket names DNS-safe to avoid signature issues.

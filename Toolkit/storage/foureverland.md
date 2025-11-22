@@ -26,8 +26,9 @@ All inherit from `FourEverlandStorageTool`, which itself extends `S3Tool`. That 
 ## Return formats & shared behavior
 - Most methods return strings starting with `✅`/`❌`. Agents can parse the first character to branch logic quickly.
 - `ListFourEverlandBuckets` returns a newline-separated string with emoji prefixes (e.g., `📁 bucket-name`). Parse the string manually if structured data is required.
-- `GenerateFourEverlandPresignedUrl` accepts `expires_in` (default 3600). 4EVERLAND caps presigned URLs at 24h—higher values raise a validation error.
+- `GenerateFourEverlandPresignedUrl` returns the presigned URL directly (no emoji prefix) and accepts `expires_in` (default 3600). 4EVERLAND caps presigned URLs at 24h—higher values raise a validation error.
 - Exceptions from boto3 bubble up only when the helper must return structured data; otherwise they’re converted to the `❌ ... (Error: ...)` string.
+- Upload helpers derive the destination key from `os.path.basename(file_path)`; rename via `copy_object` after upload if you need nested prefixes.
 
 ## Usage examples
 
@@ -42,11 +43,6 @@ print(await uploader.execute(bucket_name="governance-data", file_path="/tmp/summ
 
 lister = ListFourEverlandBuckets()
 print(await lister.execute())
-```
-
-CLI verification:
-```
-python spoon_toolkits/storage/foureverland/foureverland_tools.py list-buckets
 ```
 
 ## Provider-specific notes

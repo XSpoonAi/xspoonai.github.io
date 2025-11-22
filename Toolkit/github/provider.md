@@ -6,7 +6,7 @@
 export GITHUB_TOKEN=ghp_your_personal_access_token   # repo scope recommended
 ```
 
-- The constructor reads `GITHUB_TOKEN` automatically. Pass `GitHubProvider(token="ghp_...")` to override per request.
+- The constructor reads `GITHUB_TOKEN` automatically and raises `ValueError` immediately if no token is available. Pass `GitHubProvider(token="ghp_...")` to override per request.
 - The underlying transport hits `https://api.github.com/graphql`. Rate limits (5,000 points/hour) and GraphQL errors are raised as Python exceptions, so always wrap calls in `try/except`.
 
 ## Initialization
@@ -18,6 +18,13 @@ provider = GitHubProvider()
 ```
 
 Provide the token only once per provider instance. Each method is `async`, so you can reuse the same instance across awaits.
+
+When you need deterministic cleanup (for example in long-running services), use the provider as a context manager; it will close the underlying `gql.Client` transport automatically:
+
+```python
+with GitHubProvider() as provider:
+    repo = await provider.fetch_repository_info("XSpoonAi", "spoon-core")
+```
 
 ## Built-in Methods
 

@@ -13922,34 +13922,35 @@ FILE: Toolkit/crypto/data-tools.md
 ## Environment & Dependencies
 
 ```bash
-export BITQUERY_API_KEY=your_rest_key              # legacy modules
+export BITQUERY_API_KEY=your_rest_key              # reserved for future REST helpers
 export BITQUERY_CLIENT_ID=your_oauth_client_id     # required by Bitquery OAuth
 export BITQUERY_CLIENT_SECRET=your_oauth_secret
-export RPC_URL=https://eth.llamarpc.com            
+export RPC_URL=https://eth.llamarpc.com
 ```
 
-- `Get*`/`Alert*` tools depend on `web3` (for Uniswap) and respect `RPC_URL`. Provide a reliable mainnet endpoint to avoid public-rate limits.
+- `Get*` price tools pull the RPC URL from the environment automatically; alert helpers default to a bundled Alchemy mainnet URL unless you pass a custom endpoint when instantiating them.
 - `PredictPrice` requires `pandas`, `scikit-learn`, and `numpy`. Install toolkit extras via `pip install -r requirements.txt` at the project root or install modules individually.
 - `LendingRateMonitorTool` performs concurrent HTTP requests using `aiohttp`; event loops must be active (use `nest_asyncio` in notebooks if necessary).
+- `SuddenPriceIncreaseTool` currently relies exclusively on CoinGecko’s REST feed; the Bitquery enrichment hook exists in code but is not wired up yet, so providing `BITQUERY_API_KEY` has no effect today.
 
 ## Tool Catalog 
 
 ### Spot & Historical Pricing
-- `GetTokenPriceTool` resolves ERC-20 pairs to the canonical Uniswap v3 pool, fetches slot0, and converts ticks into human prices.
-- `Get24hStatsTool` and `GetKlineDataTool` expose the same provider stack for downstream analytics (volatility, TWAP, etc.).
+- `GetTokenPriceTool` resolves supported ERC-20 pairs (ETH, USDC, USDT, DAI, WBTC by default) to the canonical Uniswap v3 pool, fetches slot0, and converts ticks into human prices.
+- `Get24hStatsTool` uses the same provider stack for downstream analytics, while `GetKlineDataTool` is currently a placeholder that returns an empty list until a Graph/event-log integration ships.
 
 ### Alerting & Monitoring
 - `PriceThresholdAlertTool` compares live prices with a configurable ±% drift versus prior day.
 - `LpRangeCheckTool` reads Uniswap positions, current ticks, and warns when LPs approach range boundaries (`buffer_ticks`).
-- `SuddenPriceIncreaseTool` scans Bitquery datasets for large-cap, high-volume tokens with rapid appreciation—ideal for whale or listing alerts.
-- `CryptoMarketMonitor` abstracts “set-and-forget” monitors by POSTing well-formed payloads to the monitoring daemon you run (defaults to `localhost:8888` but can be swapped).
+- `SuddenPriceIncreaseTool` filters CoinGecko’s REST feed for large-cap, high-volume tokens with rapid appreciation; Bitquery enrichment is planned but not enabled.
+- `CryptoMarketMonitor` POSTs well-formed payloads to the monitoring daemon bundled at `http://localhost:8888/monitoring/tasks` (`blockchain_monitor.py`). Change the URL in that module if your scheduler lives elsewhere.
 
 ### Wallet Intelligence
 - `WalletAnalysis`, `TokenHolders`, and `TradingHistory` share the Bitquery GraphQL templates embedded in their modules so you always know the dataset (`combined` vs `archive`) and filters before execution.
-- Pagination is driven by the `limit` clauses inside the template; adjust the class constants if you need bigger windows.
+- Pagination and filters live directly inside each template string (e.g., `TokenHolders` enforces `Amount >= 10,000,000`). Edit the template if you need a different threshold or window; no exposed class constants exist today. These helpers return the Bitquery JSON fragments directly rather than wrapping results in `ToolResult`.
 
 ### DeFi Rates & Liquidity
-- `LendingRateMonitorTool` merges DeFiLlama pools with Aave/Compound/Morpho APIs, derives utilization, and wraps the result in `ToolResult` for consumption by governance agents.
+- `LendingRateMonitorTool` merges DeFiLlama pools with first-party Aave subgraphs today (Compound/Morpho data arrives via DeFiLlama’s feed only), derives utilization, and wraps the result in `ToolResult`. Every response also includes an `arbitrage_opportunities` array summarizing large APY spreads.
 - `UniswapLiquidity` emits the latest Mint/Burn events so you can approximate real-time liquidity deltas without running a listener yourself.
 - `PredictPrice` is intentionally heavyweight (builds a RandomForest and scaler); cache the fitted estimator in your application if you call it frequently.
 
@@ -13963,7 +13964,6 @@ tool = GetTokenPriceTool()
 result = await tool.execute(symbol="ETH-USDC")
 
 print(result.output["price"])         # structured response
-print(result.diagnostic["pool"])      # extra context for logging
 ```
 
 ### Long-running alert inside an agent
@@ -13984,13 +13984,13 @@ asyncio.run(monitor())
 ```
 
 Tips:
-- Most tools return dictionaries; when a class subclasses `DexBaseTool`, the `ToolResult.output` mirrors the Bitquery JSON fragment shown in the GraphQL template.
+- Synchronous price tools return dictionaries nested inside `ToolResult.output`, whereas the Bitquery GraphQL helpers (`WalletAnalysis`, `TokenHolders`, `TradingHistory`, `UniswapLiquidity`) currently return the raw template output.
 - Async utilities (`PriceThresholdAlertTool`, `LendingRateMonitorTool`) already shield you from rate spikes with short sleeps; avoid spawning excessive parallel loops unless you also raise Bitquery limits.
 
 ## Operational Notes
 
 - Centralize credential management: add the Bitquery OAuth keys to your `.env` and load them before instantiating tools to prevent runtime `ValueError`s from `DexBaseTool.oAuth()`.
-- Because Uniswap calls hit your RPC, failures there do **not** imply Bitquery downtime—inspect `ToolResult.diagnostic` for the precise failure domain.
+- Because Uniswap calls hit your RPC, failures there do **not** imply Bitquery downtime—inspect the `error` string inside `ToolResult.output` or the returned dictionary to isolate the failure domain.
 - The monitoring helper in `blockchain_monitor.py` assumes a scheduler reachable at `http://localhost:8888/monitoring/tasks`. Override `api_url` in the module before deploying if your infra differs.
 - `PredictPrice` fetches up to ~1000 rows per query. If Bitquery throttles you, lower the template limit or use a paid API plan.
 
@@ -14005,12 +14005,11 @@ FILE: Toolkit/crypto/evm.md
 ```bash
 export EVM_PROVIDER_URL=https://mainnet.infura.io/v3/...
 export EVM_PRIVATE_KEY=0xyourSignerKey
-export EVM_CHAIN_ID=1            # optional; inferred via RPC when omitted
 # Optional global fallback used by other crypto toolkits
 export RPC_URL=https://eth.llamarpc.com
 ```
 
-- Every tool accepts `rpc_url`/`private_key` overrides per call; defaults resolve to `EVM_PROVIDER_URL` and `EVM_PRIVATE_KEY`, then `RPC_URL`.
+- All tools accept an `rpc_url` override, but only transaction senders (`EvmTransferTool`, `EvmErc20TransferTool`, `EvmSwapTool`, `EvmBridgeTool`) take `private_key`/signer inputs; read-only helpers rely solely on RPC access.
 - `web3.py` is lazily imported inside each execute path, so include it (and `requests`) in your runtime environment.
 - Aggregator-backed tools call public REST APIs (Bebop or LiFi). If you operate behind a proxy, ensure outbound HTTPS is allowed.
 
@@ -14055,7 +14054,7 @@ Receipts are awaited with reasonable timeouts; if the transaction reverts, `Tool
 - Accepts `gas_price_gwei`; otherwise uses the RPC’s `gas_price`.
 
 ### `EvmBalanceTool`
-- Returns native balances (Ether-equivalent) when `token_address` is omitted, or ERC-20 balances plus decimals when provided.
+- Returns native balances (Ether-equivalent) when `token_address` is omitted, or ERC-20 balances converted using on-chain decimals. Outputs include only the formatted balance value (no decimals field).
 - Useful for guardrails before making transfers or swaps.
 
 ### `EvmSwapTool`
@@ -14094,32 +14093,42 @@ FILE: Toolkit/crypto/neo.md
 ```bash
 export NEO_MAINNET_RPC=https://mainmagnet.ngd.network:443   # overrides default mainnet RPC
 export NEO_TESTNET_RPC=https://testmagnet.ngd.network:443   # overrides default testnet RPC
-export NEO_RPC_TIMEOUT=20                                   # seconds
+export NEO_RPC_TIMEOUT=20                                   # seconds (defaults to 60 if unset)
 export NEO_RPC_ALLOW_INSECURE=false                         # set true to skip TLS verification
 ```
 
 - Each tool accepts `network` (`"mainnet"` / `"testnet"`) so you can switch clusters per call. If you omit it, `NeoProvider` defaults to testnet.
-- The provider reuses a single `aiohttp` session with optional insecure mode—handy when you test against private RPC nodes.
 - Address inputs may be Base58 (e.g., `Nf2C...`) or `0x` script hashes; `NeoProvider` normalizes them internally before hitting RPCs.
+- `NEO_RPC_TIMEOUT` defaults to 60 seconds in `NeoProvider`. Set the env var to override that per deployment.
 
 ## Toolkit Map
 
 | Module | Highlights |
 | --- | --- |
-| `address_tools.py` | Counts, info lookups, NEP-17 transfer history, ad-hoc tagging across multiple addresses. |
-| `asset_tools.py` | Asset metadata by hash/name, portfolio snapshots per address, NEP-17/NEP-11 balance queries. |
+| `address_tools.py` | Address counts/info, RPC validation, per-contract NEP-17 sent/received totals, and paginated transfer history. |
+| `asset_tools.py` | Asset metadata by hash/name, bulk metadata lookups, and contract/address holding snapshots via `GetAssetInfoByAssetAndAddress`. |
 | `block_tools.py` | Block count, block-by-height/hash, best-hash, rewards, and rolling recent block summaries. |
-| `transaction_tools.py` | Transaction counts, raw tx retrieval (by hash or block), and transfer event extraction. |
-| `contract_tools.py` / `sc_call_tools.py` | Contract inventories, verified contract metadata, invoke history filtered by contract/address/tx. |
+| `transaction_tools.py` | Transaction counts, raw tx retrieval (by block hash/height/address/transaction hash), and transfer event extraction. |
+| `contract_tools.py` / `sc_call_tools.py` | Contract inventories, verified contract metadata, and smart-contract call traces filtered by contract/address/tx. |
 | `nep_tools.py` | Specialized NEP-11/NEP-17 transfer feeds (by address, block height, contract hash) plus balance helpers. |
 | `governance_tools.py` / `voting_tools.py` | Committee info, candidate/voter tallies, on-chain vote call traces. |
 | `log_state_tools.py` | Application log/state fetchers for debugging contract execution. |
 | `neo_provider.py`, `base.py` | Shared provider, RPC request helpers, normalization utilities, and graceful fallbacks when neo-mamba lacks a direct method. |
 
+###  Official N3 RPC helpers
+
+| Tool | RPC | Description |
+| --- | --- | --- |
+| `ValidateAddressTool` (`address_tools.py`) | `validateaddress` | Calls the official RPC to confirm if an address/script hash is valid for the selected network and returns metadata. |
+
+
 ## Usage Patterns
+
+> **Note on outputs:** every `BaseTool` wraps the payload in a formatted string such as `"Address info: {...}"`. When you need the underlying dict, strip the prefix and parse it (e.g., with `ast.literal_eval` or `json.loads` after replacing single quotes).
 
 ### Address intelligence
 ```python
+from ast import literal_eval
 from spoon_toolkits.crypto.neo import GetAddressInfoTool
 
 tool = GetAddressInfoTool()
@@ -14127,45 +14136,95 @@ result = await tool.execute(
     address="Nf2CXE8s1R6yoZ6e52xX5yb7Z9Uv7S3N1h",
     network="mainnet",
 )
-balances = result.output  # includes NEP-17 balances + script hash
+prefix, _, payload = result.output.partition(": ")
+balances = literal_eval(payload)  # includes NEP-17 balances + script hash
 ```
 
-### Asset metadata & balances
 ```python
-from spoon_toolkits.crypto.neo import GetAssetInfoByHashTool, GetAssetsInfoByUserAddressTool
+from ast import literal_eval
+from spoon_toolkits.crypto.neo import ValidateAddressTool
+
+validation = await ValidateAddressTool().execute(
+    address="NaU3shtZqnR1H6XnDTxghorgkXN687C444",
+    network="testnet",
+)
+_, _, payload = validation.output.partition(": ")
+metadata = literal_eval(payload)  # {"isvalid": True, "address": "...", ...}
+```
+
+### Asset metadata & holdings
+```python
+from ast import literal_eval
+from spoon_toolkits.crypto.neo import (
+    GetAssetInfoByHashTool,
+    GetAssetInfoByAssetAndAddressTool,
+)
 
 asset_info = await GetAssetInfoByHashTool().execute(
     asset_hash="0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5",  # GAS
     network="mainnet",
 )
+_, _, asset_payload = asset_info.output.partition(": ")
+asset_dict = literal_eval(asset_payload)
 
-portfolio = await GetAssetsInfoByUserAddressTool().execute(
+holding = await GetAssetInfoByAssetAndAddressTool().execute(
+    asset_hash="0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5",
     address="Nf2CXE8s1R6yoZ6e52xX5yb7Z9Uv7S3N1h",
     network="mainnet",
-    Limit=50,
 )
+_, _, holding_payload = holding.output.partition(": ")
+holding_dict = literal_eval(holding_payload)  # contract/address balance snapshot
 ```
 
 ### Block & transaction lookups
 ```python
-from spoon_toolkits.crypto.neo import GetBlockByHeightTool, GetRawTransactionByHashTool
+from ast import literal_eval
+from spoon_toolkits.crypto.neo import (
+    GetBlockByHeightTool,
+    GetRawTransactionByTransactionHashTool,
+)
 
 block = await GetBlockByHeightTool().execute(block_height=4500000, network="mainnet")
-tx = await GetRawTransactionByHashTool().execute(transaction_hash="0x...", network="mainnet")
+_, _, block_payload = block.output.partition(": ")
+block_dict = literal_eval(block_payload)
+
+tx = await GetRawTransactionByTransactionHashTool().execute(
+    transaction_hash="0x...",
+    network="mainnet",
+)
+_, _, tx_payload = tx.output.partition(": ")
+tx_dict = literal_eval(tx_payload)
 ```
 
 ### Governance snapshots
 ```python
+from ast import literal_eval
 from spoon_toolkits.crypto.neo import GetCommitteeInfoTool, GetVotesByCandidateAddressTool
 
 committee = await GetCommitteeInfoTool().execute(network="mainnet")
+_, _, committee_payload = committee.output.partition(": ")
+committee_dict = literal_eval(committee_payload)
+
 votes = await GetVotesByCandidateAddressTool().execute(candidate_address="NVSX...", network="mainnet")
+_, _, votes_payload = votes.output.partition(": ")
+votes_dict = literal_eval(votes_payload)
 ```
 
+### Token volume totals per address & contract
+```python
+from ast import literal_eval
+from spoon_toolkits.crypto.neo import GetTotalSentAndReceivedTool
+
+volume = await GetTotalSentAndReceivedTool().execute(
+    contract_hash="0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5",
+    address="Nf2CXE8s1R6yoZ6e52xX5yb7Z9Uv7S3N1h",
+    network="mainnet",
+)
+_, _, volume_payload = volume.output.partition(": ")
+volume_dict = literal_eval(volume_payload)  # {"received": "...", "sent": "..."}
+```
 ## Operational Notes
 
-- Some RPC extensions (e.g., `GetTagByAddresses`) are not fully implemented in `neo-mamba`. The toolkit surfaces shim behaviors or explanatory messages so agents fail gracefully; check `ToolResult.output` for strings such as “not available with current implementation”.
-- Long-running scans (e.g., iterating transfers) reuse `NeoProvider._make_request` with built-in retries governed by `NEO_RPC_TIMEOUT`. For heavy workflows, pool results externally rather than looping inside a single tool call.
 - Always `await` tool execution; the provider relies on async context managers to open/close RPC sessions cleanly. If you compose multiple calls, instantiate the tool once and re-use it to avoid repeated class construction overhead.
 
 ---
@@ -14272,8 +14331,8 @@ result = await tool.execute(
     indicators_config='{"ema": [{"timeperiod": 12}, {"timeperiod": 26}], "rsi": [{"timeperiod": 14}]}',
 )
 
-ohlcv_rows = result.output["data"]
-metadata = result.output.get("metadata")
+ohlcv_rows = result.output            # only the candle rows are returned
+# metadata is not exposed by the ToolResult wrapper yet
 ```
 
 ### DEX analytics on OKX Web3
@@ -14290,7 +14349,7 @@ result = await dex.execute(
     indicators_config='{"macd": [{"fastperiod": 12, "slowperiod": 26, "signalperiod": 9}], "bb": [{"period": 20, "std": 2}]}',
 )
 
-candles = result.output["data"]
+candles = result.output               # ToolResult output already contains the payload
 ```
 
 ### Real-time price snapshot
@@ -14320,7 +14379,7 @@ print(catalog.output["indicators"])   # list of indicator metadata with defaults
 - `CryptoPowerDataMCPServer` keeps track of running threads so you can query `status()` or stop everything on shutdown.
 - `mcp_bridge.py` wires FastMCP methods into the dual transport so CLI agents and browser extensions consume the same tool definitions.
 
-When you need streaming OHLCV updates (vs. periodic `execute` calls), run the SSE server and subscribe to `/mcp` with a persistent session ID. The same OKX rate limiting (`rate_limit_requests_per_second`) and retry envelopes apply regardless of transport.
+The current HTTP/SSE server keeps an `/mcp` SSE connection alive with heartbeats, but tool responses are delivered via JSON-RPC POST replies rather than pushed over the SSE channel. Keep calling the tools periodically if you need fresh data; the same OKX rate limiting (`rate_limit_requests_per_second`) and retry envelopes apply regardless of transport.
 
 ---
 
@@ -14333,7 +14392,7 @@ title: Solana Tools
 
 # Solana Tools
 
-`spoon_toolkits.crypto.solana` provides Python-based Solana blockchain tools built on top of `solana-py`, offering native SOL transfers, SPL token operations, and Jupiter-powered token swaps 
+`spoon_toolkits.crypto.solana` provides Python-based Solana blockchain tools built on top of `solana-py`, offering native SOL transfers, SPL token operations, and Jupiter-powered token swaps. Populate the tooling constants in `spoon_toolkits.crypto.solana.constants` (token program IDs, common mint addresses) before relying on SPL features or symbol shortcuts—the defaults are intentionally left as `None`.
 
 ## Environment & Dependencies
 
@@ -14341,7 +14400,7 @@ title: Solana Tools
 # Required runtime settings / env vars
 export SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
 export SOLANA_PRIVATE_KEY=your_base58_or_base64_private_key
-# (aliases: WALLET_PRIVATE_KEY for private key, RPC_URL for the endpoint)
+
 
 # Optional extras
 export HELIUS_API_KEY=your_helius_key   # Enables enriched RPC + webhooks
@@ -14397,15 +14456,13 @@ print(f"Signature: {result.output['signature']}")
 result = await transfer_tool.execute(
     recipient="9jW8FPr6BSSsemWPV22UUCzSqkVdTp6HTyPqeqyuBbCa",
     amount="100",
-    token_address="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+    token_address="EPjFW..."
 )
 ```
 
 **Features:**
-- ✅ Automatic ATA (Associated Token Account) creation for recipients
-- ✅ Decimal precision validation
-- ✅ Gas estimation and blockhash management
-- ✅ Transaction confirmation with timeout
+-  Automatic ATA (Associated Token Account) creation for recipients
+-  Transfers execute immediately after submission; confirmations and decimal precision checks should be handled by the caller if needed.
 
 ### Swap Tools
 
@@ -14458,14 +14515,14 @@ result = await swap_tool.execute(
 # Swap using mint addresses
 result = await swap_tool.execute(
     input_token="So11111111111111111111111111111111111111112",
-    output_token="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    output_token="EPjF...",
     amount="1.0"
 )
 ```
 
 **Advanced Features:**
 
-**1. Smart Token Resolution** (Unique to Python version)
+**1. Smart Token Resolution**
 
 Supports multiple input formats:
 - Symbol: `"SOL"`, `"USDC"`, `"$BONK"`
@@ -14483,9 +14540,9 @@ await swap_tool.execute(input_token="So111...", ...)   # Mint address
 
 | Level | Max Lamports | Use Case |
 |-------|-------------|----------|
-| `low` | 1,000,000 | Non-urgent swaps |
-| `medium` | 2,000,000 | Normal operations |
-| `high` | 3,000,000 | Time-sensitive |
+| `low` | 50 | Non-urgent swaps |
+| `medium` | 200 | Normal operations |
+| `high` | 1,000 | Time-sensitive |
 | `veryHigh` | 4,000,000 | MEV protection (default) |
 
 **3. Dynamic Quote Context Building**
@@ -14552,9 +14609,9 @@ result = await wallet_tool.execute(
 )
 ```
 
-**Features:**
-- ✅ **Wallet Cache Scheduler** – Results are cached per `(rpc_url, address)` so repeated reads avoid RPC calls. The scheduler refresh cadence is 60s by default and can be forced manually.
-- ✅ **Token metadata basics** – Each entry includes the mint, UI balance, decimals, and raw balance. (Names, symbols, and USD prices are only attached when Birdeye is configured; otherwise the fields stay minimal.)
+- **Features:**
+- ✅ **Wallet Cache Scheduler** – Results are cached per `(rpc_url, address)` so repeated reads avoid RPC calls. The scheduler refresh cadence is 120s by default and can be forced manually.
+- ✅ **Token metadata basics** – Each entry includes the mint, UI balance, decimals, and raw balance. Birdeye metadata (names, symbols, USD totals) is not injected automatically—use service helpers to enrich the cached data when an API key is present.
 - ✅ **Portfolio cache hook** – The same cache powers the swap helper’s “smart token resolution,” so swaps can reference symbols (`SOL`, `$BONK`, etc.) without extra lookups.
 - ✅ **Optional price data** – When `BIRDEYE_API_KEY` is present, the scheduler records token prices and wallet USD totals, which can be consumed through the service helpers.
 
@@ -14628,9 +14685,9 @@ pubkeys = detect_pubkeys_from_string("Send 1 SOL to 9jW8F...")
 ```python
 from spoon_toolkits.crypto.solana import parse_transaction_error
 
-# User-friendly error messages
+# Error normalization (currently pass-through)
 friendly = parse_transaction_error("Error: 0x1")
-# → "Insufficient funds. Ensure the account has enough SOL..."
+# → "Error: 0x1"
 ```
 
 ## Keypair Management
@@ -14695,9 +14752,8 @@ fresh_data = await scheduler.force_refresh(
 ```
 
 **Benefits:**
-- ✅ Reduces RPC calls by 95%
-- ✅ Automatic background updates
-- ✅ Instant wallet info access for swap token resolution
+-  Automatic background updates
+-  Instant wallet info access for swap token resolution
 
 ## Constants
 
@@ -14708,12 +14764,12 @@ from spoon_toolkits.crypto.solana import (
     JUPITER_PRIORITY_LEVELS
 )
 
-# Well-known addresses fall back to sensible defaults if you haven’t overridden TOKEN_ADDRESSES.
-USDC_MINT = TOKEN_ADDRESSES.get("USDC", "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v")
-BONK_MINT = TOKEN_ADDRESSES.get("BONK")  # None until you set it
+# Provide your own well-known addresses; the shipped defaults are None placeholders.
+TOKEN_ADDRESSES["USDC"] = "Wdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+TOKEN_ADDRESSES["BONK"] = "DezX..."
 
 # Default configuration helpers
-print(DEFAULT_SLIPPAGE_BPS)       # e.g. 100 (1%)
+printEPjF(DEFAULT_SLIPPAGE_BPS)       # e.g. 100 (1%)
 print(JUPITER_PRIORITY_LEVELS)    # {"low": 50, "medium": 200, "high": 1000, "veryHigh": 4000000}
 ```
 
@@ -14727,11 +14783,11 @@ Always check `ToolResult.error`:
 result = await swap_tool.execute(...)
 
 if result.error:
-    print(f"❌ Swap failed: {result.error}")
+    print(f" Swap failed: {result.error}")
     if result.diagnostic:
         print(f"Details: {result.diagnostic}")
 else:
-    print(f"✅ Swap successful: {result.output['signature']}")
+    print(f" Swap successful: {result.output['signature']}")
 ```
 
 ### Rate Limiting
@@ -14798,7 +14854,7 @@ export CHAINBASE_PATH=/sse                              # optional SSE path
 - `ContractCallTool` – invoke read-only contract functions by supplying ABI JSON and params.
 - `GetTokenMetadataTool` – ERC-20 metadata (name, symbol, decimals, total supply).
 
-Every tool returns the raw JSON Chainbase response: `{"code": ..., "message": ..., "data": [...]}`. You can feed the payload directly into prompts or downstream analytics without reshaping.
+On success every tool returns Chainbase’s raw JSON payload: `{"code": ..., "message": ..., "data": [...]}`. When anything fails (missing API key, HTTP error, etc.) the wrapper returns `{"error": "..."}` instead of raising, so always check for an `error` key before consuming `data`.
 
 ## Usage Examples
 
@@ -14862,17 +14918,18 @@ Internally, the server mounts three subdomains (`Balance`, `Basic`, `TokenAPI`) 
 
 FILE: Toolkit/data-platforms/desearch.md
 
-`spoon_toolkits.data_platforms.desearch` wraps the official DeSearch SDK in async helpers, builtin Spoon tools, and FastMCP servers so agents can query real-time web, social, and academic sources without writing raw HTTP logic.
+`spoon_toolkits.data_platforms.desearch` wraps the official DeSearch SDK in async helpers, builtin Spoon tools, and FastMCP servers so agents can query real-time web, social, and academic sources without writing raw HTTP logic. The async helpers (used by MCP and builtin tools) decorate responses with a `{"error": "..."}` payload when the SDK raises, so callers should check for that key before dereferencing results.
 
 ## Environment & Configuration
 
 ```bash
 export DESEARCH_API_KEY=your_actual_key            # required
-export DESEARCH_BASE_URL=https://api.desearch.ai   # optional override
-export DESEARCH_TIMEOUT=30                         # optional (seconds)
+export DESEARCH_BASE_URL=https://api.desearch.ai   # optional (not currently consumed)
+export DESEARCH_TIMEOUT=30                         # optional (read but not yet wired into SDK calls)
 ```
 
 - `env.py` loads `.env` via `python-dotenv`, so store the variables beside the process that imports the package.
+- `DESEARCH_BASE_URL`/`DESEARCH_TIMEOUT` are parsed for future use but the current helpers always talk to the SDK defaults; changing these env vars today has no effect without modifying the code.
 - The helpers enforce `limit >= 10`, mirroring the SDK requirements.
 
 ## Package Layout
@@ -14882,7 +14939,7 @@ export DESEARCH_TIMEOUT=30                         # optional (seconds)
 | `__init__.py` | Mounts `ai_search` and `web_search` FastMCP sub-servers and re-exports helper coroutines plus `mcp_server`. |
 | `ai_search_official.py` | Async tools for AI/meta search, Reddit/Twitter feeds, and academic datasets. Decorated with `@mcp.tool()`. |
 | `web_search_official.py` | Web search plus Twitter post/link lookups using the official SDK. |
-| `builtin_tools.py` | `BaseTool` wrappers (`DesearchAISearchTool`, etc.) for spoon-core usage without MCP. |
+| `builtin_tools.py` | `BaseTool` wrappers (`DesearchAISearchTool`, etc.) for spoon-core usage without MCP. These return the same dicts as the async helpers (including any `"error"` payloads), so callers must handle error cases explicitly. |
 | `cache.py` | `time_cache` decorator that memoizes tool responses for ~5 minutes. |
 | `example.py`, `test_integration.py`, `README.md` | Usage demos, live API smoke tests, and a deeper quick-start. |
 
@@ -14932,6 +14989,10 @@ from spoon_toolkits.data_platforms.desearch.builtin_tools import DesearchAISearc
 
 tool = DesearchAISearchTool()
 response = await tool.execute(query="Solana MEV research", platforms="web,reddit", limit=10)
+
+if not response.get("success"):
+    raise RuntimeError(response.get("error"))
+
 print(response["data"]["results"].keys())
 ```
 
@@ -14952,7 +15013,7 @@ Internally, the server mounts `ai_search` and `web_search` namespaces, so you ca
 
 - Use the provided `test_integration.py` before shipping: it validates your API key and SDK wiring.
 - Responses are dictionaries (e.g., `{"query": ..., "results": ..., "count": ...}`); check for `"error"` keys when handling failures.
-- Increase or decrease `DESEARCH_TIMEOUT` based on network conditions; the helpers pass the value downstream when the SDK supports it.
+- `DESEARCH_TIMEOUT` is parsed but currently unused; adjust it only after wiring the value into the helper functions or SDK client initialization in your fork.
 - Remove cached entries by restarting the process if you need uncached data while debugging.
 - Rate limits come from the DeSearch API; stagger large batches or broaden queries rather than hammering the same endpoint.
 
@@ -14960,37 +15021,40 @@ Internally, the server mounts `ai_search` and `web_search` namespaces, so you ca
 
 FILE: Toolkit/data-platforms/thirdweb.md
 
-`spoon_toolkits.data_platforms.third_web` wraps the Thirdweb Insight REST API in async `BaseTool` classes so Spoon agents can fetch contract events, multichain transfers, transactions, and block data without crafting HTTP requests by hand.
+`spoon_toolkits.data_platforms.third_web` wraps the Thirdweb Insight REST API in async `BaseTool` classes so Spoon agents can fetch contract events, multichain transfers, transactions, and block data without crafting HTTP requests by hand. Some tools require you to supply a `client_id` argument, while others read `THIRDWEB_CLIENT_ID` from the environment—make sure to supply credentials in the format each tool expects.
 
 ## Environment & Configuration
 
 ```bash
-export THIRDWEB_CLIENT_ID=your_client_id          # used by most tools
+export THIRDWEB_CLIENT_ID=your_client_id          # used by tools that read from env
 ```
 
-- Some tools (such as `GetContractEventsFromThirdwebInsight`) allow a `client_id` argument, letting you override the global key for multi-tenant agents.
-- Requests use a 100-second timeout and raise descriptive errors if Insight responds with non-success status codes.
+- Tools fall into two credential styles:
+  1. `GetContractEventsFromThirdwebInsight`, `GetBlocksFromThirdwebInsight`, and `GetWalletTransactionsFromThirdwebInsight` require a `client_id` argument on every call and never look at `THIRDWEB_CLIENT_ID`.
+  2. `GetMultichainTransfersFromThirdwebInsight`, `GetTransactionsTool`, `GetContractTransactionsTool`, and `GetContractTransactionsBySignatureTool` exclusively read `THIRDWEB_CLIENT_ID` and do not expose a per-call override.
+- Requests use a 100-second timeout where implemented; a few helpers (notably the block fetcher) currently omit the timeout parameter and will rely on `requests` defaults until updated.
+- Each tool catches exceptions and returns either a formatted status string (prefixed with ✅/❌) or a dict like `{"error": "..."}`—errors do not raise, and successful calls may return strings rather than raw JSON.
 
 ## Package Layout
 
 | Module | Purpose |
 | --- | --- |
-| `third_web_tools.py` | Houses every `BaseTool` plus lightweight async test helpers. Import from `spoon_toolkits.data_platforms.third_web.third_web_tools`. |
+| `third_web_tools.py` | Houses every `BaseTool` plus lightweight async test helpers. Some `execute` methods return human-readable strings (with emojis and counts) instead of the raw Insight JSON object—inspect the tool docstrings before assuming `dict` output. Import from `spoon_toolkits.data_platforms.third_web.third_web_tools`. |
 
 ## Tooling Highlights
 
 ### Events and Transfers
-- `GetContractEventsFromThirdwebInsight` - fetch decoded events for a contract + signature (`Transfer(address,address,uint256)`, etc.) with paging metadata.
-- `GetMultichainTransfersFromThirdwebInsight` - scan recent transfers for a list of chain IDs (defaults to USDT events exposed by Insight).
+- `GetContractEventsFromThirdwebInsight` - fetch decoded events for a contract + signature (`Transfer(address,address,uint256)`, etc.) with paging metadata. Requires you to pass `client_id` explicitly; returns a status string summarizing the page and event count plus the JSON dump.
+- `GetMultichainTransfersFromThirdwebInsight` - scan recent transfers for a list of chain IDs (defaults to USDT events exposed by Insight). Reads `THIRDWEB_CLIENT_ID` from the environment and returns the raw Insight JSON dict.
 
 ### Transactions and Blocks
-- `GetTransactionsTool` - consolidate recent transactions across multiple chains.
-- `GetContractTransactionsTool` - view activity for a single contract.
-- `GetContractTransactionsBySignatureTool` - narrow contract activity down to a specific function signature.
-- `GetBlocksFromThirdwebInsight` - stream the latest blocks per chain with optional sort field and order.
-- `GetWalletTransactionsFromThirdwebInsight` - list wallet transactions across multiple chains, sorted by block number or timestamp.
+- `GetTransactionsTool` - consolidate recent transactions across multiple chains. Reads `THIRDWEB_CLIENT_ID` and returns the raw Insight JSON dict.
+- `GetContractTransactionsTool` - view activity for a single contract. Reads `THIRDWEB_CLIENT_ID`.
+- `GetContractTransactionsBySignatureTool` - narrow contract activity down to a specific function signature. Reads `THIRDWEB_CLIENT_ID`.
+- `GetBlocksFromThirdwebInsight` - stream the latest blocks per chain with optional sort field and order. Requires a per-call `client_id` and currently returns a formatted status string (`"✅ Success ..."`) rather than the JSON dict; also omits the explicit 100-second timeout, so the default `requests` timeout applies.
+- `GetWalletTransactionsFromThirdwebInsight` - list wallet transactions across multiple chains, sorted by block number or timestamp. Requires a per-call `client_id` and returns a status string similar to the block tool.
 
-Every tool reads `THIRDWEB_CLIENT_ID` when `client_id` is not provided explicitly and returns the raw Insight JSON payload (`{"data": [...], "meta": {...}}`) so you can feed it directly to downstream logic.
+Depending on the helper, `client_id` may need to be passed explicitly, and successful responses may be either raw JSON dicts or formatted status strings. If you need structured data, parse the portion after the newline in the status strings (they contain the serialized JSON response). Always check for `❌` or an `"error"` key to detect failures because network/Insight errors are caught instead of raised.
 
 ## Usage Examples
 
@@ -15006,7 +15070,13 @@ result = await tool.execute(
     event_signature="Transfer(address,address,uint256)",
     limit=5,
 )
-print(result)
+if result.startswith("❌"):
+    raise RuntimeError(result)
+
+# Returned string includes JSON after the newline
+summary, _, raw_json = result.partition("\n")
+print(summary)
+print(raw_json)
 ```
 
 ### Aggregate transfers across chains
@@ -15031,13 +15101,17 @@ history = await wallet_tool.execute(
     sort_by="block_timestamp",
     sort_order="desc",
 )
-print(history["data"])
+if history.startswith("❌"):
+    raise RuntimeError(history)
+
+_, _, raw_history = history.partition("\n")
+print(raw_history)
 ```
 
 ## Operational Notes
 
-- Set `THIRDWEB_CLIENT_ID` in your runtime environment (or pass `client_id` per call) before invoking any tool; missing keys raise `ValueError` to prevent ambiguous outcomes.
-- HTTP errors bubble up through `requests.raise_for_status()` so you can distinguish network failures from empty result sets.
+- Set `THIRDWEB_CLIENT_ID` in your runtime environment for the env-driven tools, and pass `client_id` for the helpers that require it; missing credentials surface as `ValueError` strings in the result.
+- HTTP errors are caught and reported in the returned string/dict instead of bubbling up through `requests.raise_for_status()`, so alerting logic should look for `❌` prefixes or `"error"` keys.
 - Test helpers at the bottom of `third_web_tools.py` (`test_get_contract_events`, etc.) offer quick sanity checks - run them with `python third_web_tools.py` once your credentials are configured.
 - Insight endpoints enforce per-client rate limits; stagger large batch pulls by adjusting `limit` or splitting chain lists across multiple requests.
 
@@ -15045,7 +15119,7 @@ print(history["data"])
 
 FILE: Toolkit/github/analysis-tools.md
 
-`spoon_toolkits.github.github_analysis_tool` bundles three ready-made `BaseTool` classes that call the GitHub GraphQL API via `GitHubProvider`. They are ideal when you want actionable repository stats without writing custom GraphQL queries.
+`spoon_toolkits.github.github_analysis_tool` bundles three ready-made `BaseTool` classes that call the GitHub GraphQL API via `GitHubProvider`. Each tool simply returns the raw list of entities (`issues`, `pull requests`, `commits`) interpolated into a single string (e.g., `"GitHub issues: [{...}, ...]"`), so you get the data without crafting queries yourself but will need to parse/count manually if you want aggregates.
 
 ## Environment
 
@@ -15058,13 +15132,13 @@ export GITHUB_TOKEN=ghp_your_personal_access_token   # repo scope recommended
 
 ## Tool Catalog
 
-| Tool | Parameters | Output highlights | Use cases |
+| Tool | Parameters | Raw data returned | Use cases |
 | --- | --- | --- | --- |
-| `GetGitHubIssuesTool` | `owner`, `repo`, `start_date`, `end_date`, optional `token` | `total_count`, `issues_list` (state, labels, comment counts, author), `date_range` | Bug triage dashboards, changelog assembly, governance transparency |
-| `GetGitHubPullRequestsTool` | Same window parameters | `pull_requests_list` with review totals, commit counts, merge timestamps | Contributor scorecards, weekly PR digests |
-| `GetGitHubCommitsTool` | Same window parameters | `commits_list` including message, author, additions/deletions, `changedFiles` | Release notes, productivity metrics, feature tracking |
+| `GetGitHubIssuesTool` | `owner`, `repo`, `start_date`, `end_date`, optional `token` | List of up to 100 issues with `title`, `state`, labels, comment totals, author, timestamps | Bug triage dashboards, changelog assembly, governance transparency |
+| `GetGitHubPullRequestsTool` | Same window parameters | List of up to 100 pull requests with merge info, review counts, commit totals, labels | Contributor scorecards, weekly PR digests |
+| `GetGitHubCommitsTool` | Same window parameters | Default branch history (first 100 commits) including message, author name/email, additions/deletions, `changedFiles` | Release notes, productivity metrics, feature tracking |
 
-All parameters accept ISO `YYYY-MM-DD` strings. The window is inclusive and aligned to UTC.
+All parameters accept ISO `YYYY-MM-DD` strings. The window is inclusive and aligned to UTC. Because the code returns only the raw list embedded in a string, there is no built-in `total_count` or `date_range` metadata—add that logic in your calling code if required.
 
 ## Usage Patterns
 
@@ -15073,17 +15147,23 @@ All parameters accept ISO `YYYY-MM-DD` strings. The window is inclusive and alig
 from spoon_toolkits.github.github_analysis_tool import GetGitHubIssuesTool
 
 issues_tool = GetGitHubIssuesTool()
-issues = await issues_tool.execute(
+issues_result = await issues_tool.execute(
     owner="XSpoonAi",
     repo="spoon-core",
     start_date="2024-01-01",
     end_date="2024-02-01",
 )
 
-if issues.error:
-    raise RuntimeError(issues.error)
+if issues_result.error:
+    raise RuntimeError(issues_result.error)
 
-for issue in issues.output["issues_list"]:
+raw_issues = issues_result.output  # e.g., "GitHub issues: [{...}, {...}]"
+print(raw_issues)
+
+# Optionally convert the trailing list into Python data:
+from ast import literal_eval
+issues_payload = literal_eval(raw_issues.replace("GitHub issues: ", "", 1))
+for issue in issues_payload:
     print(issue["title"], issue["state"])
 ```
 
@@ -15113,9 +15193,9 @@ if any(result.error for result in (issues, prs, commits)):
     raise RuntimeError("GitHub API call failed")
 
 summary = {
-    "issues": issues.output["total_count"],
-    "pull_requests": prs.output["total_count"],
-    "commits": commits.output["total_count"],
+    "issues": len(literal_eval(issues.output.replace("GitHub issues: ", "", 1))),
+    "pull_requests": len(literal_eval(prs.output.replace("GitHub pull requests: ", "", 1))),
+    "commits": len(literal_eval(commits.output.replace("GitHub commits: ", "", 1))),
 }
 ```
 
@@ -15123,7 +15203,7 @@ summary = {
 
 - Inspect `ToolResult.error` before consuming `output`. Authentication failures, invalid repo names, or GraphQL validation errors are surfaced there.
 - If GitHub throttles you, the GraphQL API returns `errors: [{"type": "RATE_LIMITED", ...}]`; the tool passes that text through the `error` field.
-- Dates outside the repository lifetime simply return `total_count = 0`; no error is raised.
+- Dates outside the repository lifetime simply return an empty list (so the output string becomes `"GitHub <entity>: []"`); no error is raised.
 
 Use these tools when you need standardized analytics quickly. If you outgrow the default fields, switch to the lower-level `GitHubProvider` documented separately to craft custom queries.
 
@@ -15139,7 +15219,7 @@ FILE: Toolkit/github/provider.md
 export GITHUB_TOKEN=ghp_your_personal_access_token   # repo scope recommended
 ```
 
-- The constructor reads `GITHUB_TOKEN` automatically. Pass `GitHubProvider(token="ghp_...")` to override per request.
+- The constructor reads `GITHUB_TOKEN` automatically and raises `ValueError` immediately if no token is available. Pass `GitHubProvider(token="ghp_...")` to override per request.
 - The underlying transport hits `https://api.github.com/graphql`. Rate limits (5,000 points/hour) and GraphQL errors are raised as Python exceptions, so always wrap calls in `try/except`.
 
 ## Initialization
@@ -15151,6 +15231,13 @@ provider = GitHubProvider()
 ```
 
 Provide the token only once per provider instance. Each method is `async`, so you can reuse the same instance across awaits.
+
+When you need deterministic cleanup (for example in long-running services), use the provider as a context manager; it will close the underlying `gql.Client` transport automatically:
+
+```python
+with GitHubProvider() as provider:
+    repo = await provider.fetch_repository_info("XSpoonAi", "spoon-core")
+```
 
 ## Built-in Methods
 
@@ -15216,337 +15303,11 @@ Welcome to the Spoon Toolkit catalog. Everything here is a ready-to-use agent he
 
 - **Crypto** – Market data, EVM utilities, Neo RPC helpers, Chainbase-powered analytics, and more. Use these when your agent needs to trade, monitor, or analyze on-chain activity.
 - **Data Platforms** – Providers such as Chainbase, Thirdweb, and Desearch for structured blockchain data without writing bespoke HTTP clients.
-- **Security** – Token risk scores, phishing detectors, dApp approval audits, and address-risk lookups, designed to keep automated agents from interacting with malicious counterparties.
 - **GitHub Intelligence** – Repository scanners and provider hooks that summarize repos, issues, and activity.
 - **Social Media** – Discord, Telegram, Twitter, and Email helpers for outreach and notification workflows.
 - **Storage** – Off-chain storage bridges (AIOZ, Oort, Foureverland) so agents can archive artifacts or publish outputs.
 
 Navigate the sidebar on the left to dive into any module. Each page documents the environment variables, key classes, and concrete usage snippets for that toolkit.
-
----
-
-FILE: Toolkit/security/address-risk.md
-
----
-title: Address & Protocol Reputation
----
-
-# Address & Protocol Reputation
-
-Use these helpers to vet EOAs, contracts, and launch patterns before allowing agents to interact with them.
-
-## Environment
-
-```bash
-export GO_PLUS_LABS_APP_KEY=your_app_key
-export GO_PLUS_LABS_APP_SECRET=your_app_secret
-```
-
-The GoPlusLabs HTTP clients load the variables above at import time and immediately request an access token. If either variable is unset, the token call itself fails with an HTTP 4xx error before any tool executes, so set both values (or load them from a secrets manager) prior to importing the module. All RPC calls run through shared `httpx.AsyncClient` instances, so populate the variables once per process.
-
-## Malicious Address Checks
-
-`malicious_address.py` exposes `check_malicious_address(contract_address, chain_name='')`.
-- Normalises the address, optionally converts `chain_name` to an ID, and queries `/address_security/`.
-- Returns threat labels such as `phishing_activities`, `mixer`, `blacklist_doubt`, `sanctioned`, and counts of malicious contracts deployed.
-- Pass an empty `chain_name` to aggregate findings across networks; otherwise specify a chain for focused results.
-
-**Response fields**
-
-| Key | Description |
-| --- | --- |
-| `phishing_activities`, `mixer`, `blacklist_doubt` | `"1"` when the address matches GoPlus’ threat feeds |
-| `malicious_contract_count` | Number of high-risk contracts deployed by the address |
-| `label_list` | Additional annotations, e.g., exchange labels or airdrop roles |
-| `updated_time` | Timestamp (seconds) of the latest detection event |
-
-## Rug Pull Detection
-
-`rug_pull_detection(contract_address, chain_name)` inspects ownership privileges and withdrawal patterns:
-- Flags approval abuse, privileged withdraws, self-destruct permissions, and proxy usage.
-- Returns owner metadata (`owner_address`, `owner_type`) to feed governance rules.
-
-## Chain Metadata
-
-`supported_chains.py` offers two important utilities:
-- `supported_chains()` (resource `resource://SupportedChains`) – list of chain names currently covered by GoPlusLabs.
-- `chain_name_to_id(name)` – resolves user-friendly names to API IDs (`"Ethereum" -> "1"`).
-
-Cache behaviour is shared across these functions, so repeated lookups stay within rate limits.
-
-### Example
-
-```python
-from spoon_toolkits.security.gopluslabs.malicious_address import check_malicious_address
-
-labels = await check_malicious_address("0xEvil", "Ethereum")
-if labels.get("phishing_activities") == "1":
-    raise ValueError("Sender flagged for phishing")
-```
-
-## Caching & Errors
-
-- Every public coroutine is wrapped with `@time_cache(max_age_seconds=300)`, so repeated lookups within five minutes hit the in-memory cache (per process). Pass distinct parameters to force a refresh, or restart the agent for an immediate purge.
-- GoPlusLabs occasionally returns HTTP 429 or structured error payloads; the shared HTTP client raises a Python exception in those cases, which you should catch to retry/back off.
-- When `chain_name` is invalid, `chain_name_to_id` raises `NotImplementedError("Chain <name> not supported.")`. Use `supported_chains()` to validate user input before calling the scanners.
-
----
-
-FILE: Toolkit/security/approvals.md
-
----
-title: Approval Intelligence
----
-
-# Approval Intelligence
-
-`approval_security.py` inventories token allowances and evaluates spender contracts using GoPlusLabs v1/v2 APIs. All functions share the `time_cache()` decorator, so repeated calls within the TTL reuse cached responses.
-
-## Environment
-
-```bash
-export GO_PLUS_LABS_APP_KEY=your_app_key
-export GO_PLUS_LABS_APP_SECRET=your_app_secret
-```
-
-These values hydrate a bearer token for the shared HTTP clients defined in `http_client.py`. Set them before importing the module; otherwise the token request itself fails with an HTTP 4xx error and the module never finishes loading.
-
-## Contract Safety Snapshot
-
-```python
-from spoon_toolkits.security.gopluslabs.approval_security import check_approval_security
-report = await check_approval_security("0xUniswapRouter", "Ethereum")
-```
-
-The result details contract metadata, open-source status, proxy usage, and `malicious_behavior` tags for downstream filtering.
-
-**Response fields**
-
-| Key | Description |
-| --- | --- |
-| `contract_security` | Verification status, open-source flag, proxy detection |
-| `malicious_behavior` | List of GoPlus threat labels (honeypot, fake_token, rug_pull, etc.) |
-| `creator_address`, `deploy_timestamp` | Provenance data for the spender |
-| `security_source` | Indicates whether the data came from on-chain scans or audits |
-
-## ERC-20 Allowances
-
-`erc20_approval_security(contract_address, chain_name)` fetches outstanding approvals granted by an EOA. Each entry contains:
-- `approved_contract` and categorized behaviors (`malicious_behavior`).
-- `approved_amount`, timestamps, and transaction hashes (`initial_approval_hash`).
-- Token metadata (decimals, symbol) and verification flags.
-
-Additional keys: `token_symbol`, `token_contract`, `spender_type`, `approve_time`, `dex`, and boolean strings (`is_verified`, `is_open_source`).
-
-## ERC-721 / ERC-1155 Allowances
-
-`erc721_approval_security` and `erc1155_approval_security` mirror the structure but capture NFT-specific approval scopes:
-- Per-token approvals (`approved_token_id`).
-- `approved_for_all` flags for marketplace integrations.
-- Verification/open-source status of the target contracts.
-
-## Usage Tips
-
-- Normalize addresses before calling: the helpers internally call `normalize_ethereum_contract_address`.
-- Allow an empty `chain_name` if you want GoPlusLabs to infer chains, but prefer explicit chains to avoid surprises.
-- Layer results with wallet analytics (e.g., Whale tracking) to decide when to revoke allowances automatically.
-
-## Caching & Error Handling
-
-- All approval helpers are decorated with `@time_cache(max_age_seconds=300)`; expect up to a five-minute delay before a revoked allowance disappears from cached results.
-- GoPlusLabs returns HTTP error codes for invalid chains, missing addresses, or rate limits. The shared HTTP client raises `httpx.HTTPStatusError`, so wrap calls in `try/except` if you need retries.
-- Responses use strings for booleans (`"1"`, `"0"`) and numeric fields; coerce them to integers/floats before arithmetic.
-
----
-
-FILE: Toolkit/security/dapp-phishing.md
-
----
-title: dApp & Site Review
----
-
-# dApp & Site Review
-
-Evaluate project websites and contract bundles before agents surface them to users or execute automated flows.
-
-## Environment
-
-```bash
-export GO_PLUS_LABS_APP_KEY=your_app_key
-export GO_PLUS_LABS_APP_SECRET=your_app_secret
-```
-
-The dApp and phishing scanners share the same HTTP clients and caching layer as the other GoPlus modules. Credentials are loaded once at import, and the module immediately requests an access token—if either value is missing, that HTTP call fails before any tool executes.
-
-## dApp Security
-
-`dapp_security.py` defines `get_nft_security(url)` (the name is historical; it checks full dApp stacks).
-- Queries `/dapp_security/?url=...` and returns `audit_info`, contract inventories, and malicious behavior flags.
-- Contract entries include creator addresses, deployment timestamps, open-source status, and any GoPlusLabs threat tags.
-- `trust_list` and `is_audit` fields help quickly spot vetted ecosystems.
-
-**Response highlights**
-
-| Key | Description |
-| --- | --- |
-| `audit_info` | Map of audit firms and reports attached to the project |
-| `contract_list` | Array of contracts with `contract_address`, `chain_id`, verification flags |
-| `malicious_behavior` | Aggregated tags covering rug, phishing, fake_token, etc. |
-| `risk_score` | Normalized 0–100 trust score from GoPlus |
-
-## Phishing Sites
-
-`phishing_site.py` provides `get_nft_security(url)` (again, legacy name) to classify URLs as phishing or safe.
-- Returns a `phishing_site` flag plus `website_contract_security` entries with contract standard, NFT risk characteristics, and `address_risk` labels.
-- Useful for safeguarding webhook callbacks, prompt-injected URLs, or user-submitted domains.
-
-**Response highlights**
-
-| Key | Description |
-| --- | --- |
-| `phishing_site` | `"1"` if GoPlus flagged the domain |
-| `website_contract_security` | Contracts referenced by the site (standard, chain, security labels) |
-| `dapp` | Basic metadata: project name, category, listed marketplaces |
-| `detected_time` | Unix timestamp of last phishing detection |
-
-### Example
-
-```python
-from spoon_toolkits.security.gopluslabs.phishing_site import get_nft_security as check_site
-
-site_report = await check_site("go-ethdenver.com")
-if site_report.get("phishing_site") == 1:
-    raise ValueError("Domain flagged as phishing, abort visit")
-```
-
-Pair these scanners with the token and approval checks to build multi-step policy guards in SpoonOS agents.
-
-## Caching & Errors
-
-- Both helpers use `@time_cache(max_age_seconds=300)`. If a domain’s status changes (e.g., cleared phishing record), cached responses may lag by up to five minutes.
-- HTTP failures or invalid URLs raise exceptions from the shared HTTP client; catch them to trigger retries or fallbacks.
-- GoPlus returns strings for booleans; compare against `"1"`/`"0"` instead of Python `True`/`False`.
-
----
-
-FILE: Toolkit/security/internals.md
-
----
-title: Shared Utilities
----
-
-# Shared Utilities
-
-The GoPlusLabs integration packages several helpers that keep the tooling efficient and consistent across modules.
-
-## Environment Requirements
-
-```bash
-export GO_PLUS_LABS_APP_KEY=your_app_key
-export GO_PLUS_LABS_APP_SECRET=your_app_secret
-```
-
-`env.py` loads these variables via `python-dotenv` on import. Set them once per process; every security helper (tokens, approvals, phishing, etc.) relies on the same values and the module immediately makes an access-token request during import.
-
-## HTTP Clients
-
-`http_client.py` generates a bearer token via `get_token()` and instantiates two `httpx.AsyncClient` objects:
-- `go_plus_labs_client_v1` targets `https://api.gopluslabs.io/api/v1`.
-- `go_plus_labs_client_v2` targets `https://api.gopluslabs.io/api/v2`.
-
-Both attach an async `raise_on_4xx_5xx` hook so callers only deal with successful JSON payloads or Python exceptions. The clients are created at import time, so reuse them instead of spinning up new sessions.
-
-## Caching
-
-`time_cache(max_age_seconds=300)` wraps coroutine functions with an LRU cache that invalidates entries on a time salt. This keeps frequently accessed risk reports (e.g., the same contract address within five minutes) local while still refreshing periodically.
-
-## Address Normalisation
-
-`utils.normalize_ethereum_contract_address` ensures every EVM address is 0x-prefixed, 42 characters long, and hexadecimal. Raise early if a user submits malformed data.
-
-## Environment Loading
-
-`env.py` uses `dotenv` to pull `GO_PLUS_LABS_APP_KEY` and `GO_PLUS_LABS_APP_SECRET` from the environment at import time. Double-check the secret variable name (`GO_PLUS_LABS_APP_SECRET`) in your deployment manifests.
-
-Leverage these utilities when extending the security toolkit—keeping caching, HTTP usage, and normalisation consistent reduces the chances of subtle bugs or rate-limit regressions.
-
-## Signature Data Decode (Preview)
-
-`signature_data_decode.py` defines an MCP tool stub named `get_abi_decode_info(chain_name, data, contract_address='')`. The implementation currently raises `NotImplementedError` because the input contract ABI schema is still being finalized (see the GoPlus docs at [docs.gopluslabs.io/reference/getabidatainfousingpost](https://docs.gopluslabs.io/reference/getabidatainfousingpost)). If you plan to extend this area:
-
-- Expect to provide `data` as a raw hex string (function selector + calldata) and optionally the target `contract_address`.
-- Once implemented, wire the helper into the shared `time_cache` decorator and HTTP clients to match the rest of the security stack.
-- Update this document with parameter and response details when the API contract stabilizes.
-
----
-
-FILE: Toolkit/security/token-risk.md
-
----
-title: Token & NFT Risk
----
-
-# Token & NFT Risk
-
-The token scanners wrap GoPlusLabs endpoints for both EVM contracts and Solana SPL assets. Each function is decorated with `time_cache()` to avoid hammering the API while still returning fresh data for fast-moving markets.
-
-## Environment
-
-```bash
-export GO_PLUS_LABS_APP_KEY=your_app_key
-export GO_PLUS_LABS_APP_SECRET=your_app_secret
-```
-
-Credentials are loaded as soon as `token_security.py` is imported. If either value is missing, the initial token request fails with an HTTP error, so set them in your agent runtime or `.env` file upfront.
-
-## ERC-20 / EVM Tokens
-
-`token_security.py` exposes `get_token_risk_and_security_data(chain_name, contract_address)`.
-The helper normalises the address (`normalize_ethereum_contract_address`) and resolves the chain ID using `chain_name_to_id` before querying `/token_security/{chain_id}`.
-
-Common response fields:
-- Ownership & minting privileges (`can_take_back_ownership`, `is_mintable`, `is_proxy`).
-- Trading health (`is_honeypot`, `buy_tax`, `sell_tax`, `personal_slippage_modifiable`).
-- Liquidity signals (`dex` pairs, LP holder distribution, `lp_total_supply`).
-- Holder intel (`holders`, whale percentages, blacklist tags).
-- Upgrade risk (`is_proxy`, `owner_address`, `owner_balance`).
-- Market metadata (`token_name`, `token_symbol`, `total_supply`, `price_change_24h`).
-
-### Example
-
-```python
-from spoon_toolkits.security.gopluslabs.token_security import get_token_risk_and_security_data
-
-report = await get_token_risk_and_security_data("Ethereum", "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
-risks = report[0]
-if risks["is_honeypot"] == "1":
-    raise ValueError("Abort swap: honeypot flag present")
-```
-
-## Solana Tokens
-
-`get_token_security_for_solana(contract_address)` validates the 44-character address, requests `/solana/token_security`, and returns governance flags (freeze/mint authorities, metadata mutability) plus DEX pricing/TVL snapshots.
-
-Key fields: `is_mutable`, `freeze_authority`, `mint_authority`, `liquidity`, `pair_symbol`, and `honeypot_and_anti_whale` metadata from Solana DEX integrations.
-
-## NFT Collections
-
-`nft_security.py` provides `get_nft_security(chain_name, contract_address, token_id='')`.
-It surfaces:
-- Collection metadata (supply, verification status, sales volume).
-- Privileged operations (mint/burn/self-destruct).
-- Oversupply detection, approval restrictions, and red flags for derivative collections.
-
-Use the optional `token_id` when interrogating a specific collectible.
-
-For multi-chain agents, combine these scanners with `SupportedChains` to validate user-supplied chain names before execution.
-
-## Caching & Error Handling
-
-- All token/NFT functions use `@time_cache(max_age_seconds=300)`; identical calls within five minutes reuse cached JSON. Include a timestamp tag or random salt in requests if you must bypass the cache.
-- GoPlus returns `"N/A"` or `"Unknown"` when liquidity or holder data is missing—handle those values before casting to numbers.
-- Invalid chain names raise `NotImplementedError("Chain <name> not supported.")` from `chain_name_to_id`. Call `supported_chains()` first when accepting user input.
-- HTTP errors (network issues, rate limits) bubble up as `httpx.HTTPStatusError`. Wrap calls in `try/except` to implement backoff or fallback providers.
 
 ---
 
@@ -15563,8 +15324,8 @@ title: Social Media Toolkit
 ## Shared Architecture
 
 - **Base classes** – Every tool inherits from `SocialMediaToolBase`, which defines `send_message()` and `validate_config()`. Notification-only adapters extend `NotificationToolBase`; interactive bots (Discord/Telegram) extend `InteractiveToolBase` and add `start_bot()` / `stop_bot()`.
-- **Models** – All `execute()` methods accept a `MessageRequest` subclass (e.g., `DiscordMessageRequest`, `EmailMessageRequest`) and return a `MessageResponse` with `{success: bool, message: str, data?: dict}`. This makes the tools drop-in ready for FastMCP exposure.
-- **Helper coroutines** – Each adapter exports a `send_*` convenience function (`send_discord_message`, `send_email`, etc.) for one-off notifications.
+- **Models** – Most `execute()` methods accept a `MessageRequest` subclass (e.g., `DiscordMessageRequest`, `EmailMessageRequest`) and return a `MessageResponse` with `{success: bool, message: str, data?: dict}`. Twitter exposes dedicated entry points `execute_tweet`, `execute_reply`, and `execute_like` instead of a single `execute()`.
+- **Helper coroutines** – Each adapter exports convenience helpers: Discord/Telegram/Email provide `send_*` functions that create the tool, run `validate_config()`, and return `{success, message}`; Twitter offers `post_tweet`, `reply_to_tweet`, and `like_tweet` helpers that also include a `data` payload on success.
 - **Config validation** – `validate_config()` logs a warning when required credentials are missing; call it during startup to fail fast rather than silently dropping messages.
 
 ## Environment Reference
@@ -15572,11 +15333,13 @@ title: Social Media Toolkit
 | Channel | Required variables | Optional variables |
 | --- | --- | --- |
 | **Discord** | `DISCORD_BOT_TOKEN` | `DISCORD_DEFAULT_CHANNEL_ID` |
-| **Telegram** | `TELEGRAM_BOT_TOKEN` | `TELEGRAM_DEFAULT_CHAT_ID` |
+| **Telegram** | `TELEGRAM_BOT_TOKEN` | `TELEGRAM_DEFAULT_CHAT_ID`* |
 | **Twitter/X** | `TWITTER_CONSUMER_KEY`, `TWITTER_CONSUMER_SECRET`, `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_TOKEN_SECRET` | `TWITTER_BEARER_TOKEN`, `TWITTER_USER_ID` |
 | **Email (SMTP)** | `EMAIL_SMTP_SERVER`, `EMAIL_SMTP_PORT`, `EMAIL_SMTP_USER`, `EMAIL_SMTP_PASSWORD`, `EMAIL_FROM` | `EMAIL_DEFAULT_RECIPIENTS` |
 
 Set these variables before importing the corresponding tool. Missing credentials surface when `validate_config()` runs or when the client attempts its first API call.
+
+\*The current Telegram implementation falls back to a hard-coded placeholder chat ID when `chat_id` isn’t provided. Supply the chat explicitly or override `default_chat_id` after instantiation until configuration support is added.
 
 ## Discord
 
@@ -15615,18 +15378,19 @@ telegram = TelegramTool()
 await telegram.send_message("🔔 Validator risk threshold exceeded")
 ```
 
-Rate limits are per bot token; Telegram will throttle after ~30 messages/s. Catch exceptions from `send_message` to implement backoff if you broadcast alerts in bursts.
+Rate limits are per bot token; Telegram will throttle after ~30 messages/s. `send_message` logs failures and returns `False` instead of raising, so check the boolean result and trigger your own retry/backoff logic. Provide a `chat_id` unless you have overridden `default_chat_id`, because the bundled placeholder (`"0000000000"`) is not a usable channel.
 
 ## Twitter / X
 
 - **Module**: `twitter_tool.py`
 - **Client**: `spoon_ai.social_media.twitter.TwitterClient`
 - **Key methods**:
+  - `execute_tweet(TwitterTweetRequest)` / `execute_reply(TwitterReplyRequest)` / `execute_like(TwitterLikeRequest)` – MCP-friendly entry points for posting, replying, and liking.
+  - `send_message(message, tags=None)` – convenience layer that appends hashtags or mentions before delegating to the client.
   - `post_tweet(message)` – publish a new status.
   - `reply_to_tweet(tweet_id, message)` – threaded replies.
   - `like_tweet(tweet_id)` – reaction utility for engagement workflows.
-  - `send_message(message, tags=None)` – convenience layer that appends hashtags or mentions.
-  - `execute(TwitterMessageRequest)` – returns a `MessageResponse` for MCP.
+  - `read_timeline(count=None)` / `get_tweet_replies(tweet_id, count)` – read helpers for downstream analysis.
 - **Usage**:
 
 ```python
@@ -15677,12 +15441,14 @@ For lightweight scripts, use the helper coroutines:
 ```python
 from spoon_toolkits.social_media.discord_tool import send_discord_message
 from spoon_toolkits.social_media.email_tool import send_email
+from spoon_toolkits.social_media.twitter_tool import post_tweet
 
 await send_discord_message("Indexing complete")
 await send_email("Pipeline healthy", ["ops@example.com"])
+tweet_result = await post_tweet("Publishing release notes #SpoonAI")
 ```
 
-These functions internally instantiate the tool, run `validate_config()`, and return `{success, message}` dictionaries.
+Discord/Telegram/Email helpers return `{success, message}` dictionaries. Twitter helpers also include a `data` object with the API response (tweet ID, etc.) when successful.
 
 ## Operational Tips
 
@@ -15721,12 +15487,13 @@ Set optional `BUCKET_NAME` when using the helper coroutines in `aioz_tools.py`; 
 - `DeleteAiozObjectTool` – remove a single object.
 - `GenerateAiozPresignedUrlTool` – produce temporary download URLs.
 
-All methods return status strings (✅ success / ❌ failure). Wrap calls in agents that interpret the prefix to decide next steps.
+Bucket/object mutations emit emoji-prefixed status strings (✅ success / ❌ failure). Wrap calls in agents that interpret the prefix to decide next steps.
 
 ### Return semantics & shared helpers
 - Success responses look like `✅ Uploaded 'file' to 'bucket'`.
 - Failures bubble up `botocore` messages but remain human readable: `❌ Failed to upload ... (Error: ...)`.
 - `AiozListBucketsTool` returns a newline-separated string (emojis included) such as `📁 bucket-a`; parse the string if you need structured output.
+- `GenerateAiozPresignedUrlTool` returns the raw URL string on success (no emoji prefix). Failures return `❌ ...` strings coming from `_generate_presigned_url`.
 - `GenerateAiozPresignedUrlTool` accepts `expires_in` in seconds; the default is 3600. AIOZ supports up to 7 days—set higher values when sharing large datasets.
 
 ## Usage Examples
@@ -15745,11 +15512,8 @@ url = await presigner.execute(bucket_name="research-artifacts", object_key="repo
 print(url)
 ```
 
-### CLI smoke test
-```
-python spoon_toolkits/storage/aioz/aioz_tools.py list-buckets
-```
-The helper script reads the same environment variables, making it an easy credential check.
+### Module self-test
+Running the module directly executes the async test harness in `aioz_tools.py`, which performs list/upload/presign/download/delete flows using the configured credentials and `BUCKET_NAME`. Use this as a credential check, but be aware it will create/delete real objects rather than accept CLI arguments.
 
 ## Operation Tips
 - **Endpoint style**: `S3Tool` forces path-style URLs; keep bucket names DNS-safe to avoid signature issues.
@@ -15800,8 +15564,9 @@ All inherit from `FourEverlandStorageTool`, which itself extends `S3Tool`. That 
 ## Return formats & shared behavior
 - Most methods return strings starting with `✅`/`❌`. Agents can parse the first character to branch logic quickly.
 - `ListFourEverlandBuckets` returns a newline-separated string with emoji prefixes (e.g., `📁 bucket-name`). Parse the string manually if structured data is required.
-- `GenerateFourEverlandPresignedUrl` accepts `expires_in` (default 3600). 4EVERLAND caps presigned URLs at 24h—higher values raise a validation error.
+- `GenerateFourEverlandPresignedUrl` returns the presigned URL directly (no emoji prefix) and accepts `expires_in` (default 3600). 4EVERLAND caps presigned URLs at 24h—higher values raise a validation error.
 - Exceptions from boto3 bubble up only when the helper must return structured data; otherwise they’re converted to the `❌ ... (Error: ...)` string.
+- Upload helpers derive the destination key from `os.path.basename(file_path)`; rename via `copy_object` after upload if you need nested prefixes.
 
 ## Usage examples
 
@@ -15816,11 +15581,6 @@ print(await uploader.execute(bucket_name="governance-data", file_path="/tmp/summ
 
 lister = ListFourEverlandBuckets()
 print(await lister.execute())
-```
-
-CLI verification:
-```
-python spoon_toolkits/storage/foureverland/foureverland_tools.py list-buckets
 ```
 
 ## Provider-specific notes
@@ -15874,10 +15634,11 @@ These tools inherit retry and formatting logic from `S3Tool`; responses are conc
 ## Return & error semantics
 
 - Bucket/object operations return emoji-prefixed strings (`✅ Created bucket ...`, `❌ Failed to delete object ... (Error: AccessDenied)`); parse them if you need structured status codes.
-- `OortListObjectsTool` returns a newline-separated string of bullet points (e.g., `• key (Size: 123)`), and `OortListBucketsTool` emits emoji-prefixed bucket names. Convert these strings yourself if your workflow requires JSON.
-- Batch delete accepts `object_keys` list; failures include per-key messages from AWS in the response string.
-- Presigned URLs honour `expires_in` (default 3600). OORT supports up to 12 hours per token.
-- Boto3 exceptions only bubble up when returning structured data; otherwise they are embedded in the failure string.
+- `OortListObjectsTool` returns a newline-separated string of bullet points (e.g., `• key (Size: 123)`), and `OortListBucketsTool` emits emoji-prefixed bucket names. Convert these strings yourself if your workflow requires JSON. Errors raised by `_list_objects` propagate as `RuntimeError`, so wrap the call if you need graceful handling.
+- Batch delete accepts an `object_keys` list and replies with the count requested for deletion (`🗑️ Deleted N objects ...`). It does not currently surface per-key AWS errors.
+- Presigned URLs honour `expires_in` (default 3600). OORT supports up to 12 hours per token. The `OortGeneratePresignedUrlTool` returns the raw URL string without emoji prefixes.
+- Boto3 exceptions only bubble up when returning structured data (list objects) or presigned URL failures; otherwise they are embedded in the failure string.
+- Upload helpers derive the destination key from `os.path.basename(file_path)`. Use `_copy_object` if you need to rename or place objects under prefixes.
 
 ## Usage examples
 
@@ -15902,10 +15663,11 @@ CLI check:
 ```
 python spoon_toolkits/storage/oort/oort_tools.py list-buckets
 ```
+When run without arguments the module executes the async tests defined at the bottom (create/upload/download flows). Treat it as an integration check rather than an argument-driven CLI.
 
 ## Operational Tips
 
-- **Batch delete**: `OortDeleteObjectsTool` leverages `_delete_objects`; pass up to 1000 keys per call. Errors list the keys that failed so you can retry selectively.
+- **Batch delete**: `OortDeleteObjectsTool` leverages `_delete_objects`; pass up to 1000 keys per call, but expect only a count in the response. Retry the entire batch or reissue with smaller sets if something fails.
 - **Bucket lifecycle**: Newly created buckets may take a few seconds to propagate; handle `BucketAlreadyExists` by retrying with backoff or generating unique names.
 - **Endpoint**: Keep `OORT_ENDPOINT_URL` aligned with your account’s region; otherwise you may see `PermanentRedirect`.
 - **Permissions**: Ensure your key pair has `s3:ListAllMyBuckets` and object-level permissions; lacking one results in `❌ ... AccessDenied`.
