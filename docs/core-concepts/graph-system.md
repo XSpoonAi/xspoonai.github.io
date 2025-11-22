@@ -19,12 +19,12 @@ The modern approach uses `GraphTemplate` for declarative construction, making gr
 
 ```python
 from typing import TypedDict, Dict, Any, Optional, Annotated
-from spoon_ai.graph import (
-    StateGraph, END, GraphTemplate, NodeSpec, EdgeSpec,
-    ParallelGroupSpec, ParallelGroupConfig, GraphConfig,
-    HighLevelGraphAPI
+from spoon_ai.graph.builder import (
+    DeclarativeGraphBuilder, GraphTemplate, NodeSpec, EdgeSpec,
+    ParallelGroupSpec, ParallelGroupConfig, HighLevelGraphAPI
 )
-from spoon_ai.graph.builder import DeclarativeGraphBuilder
+from spoon_ai.graph.config import GraphConfig
+from spoon_ai.graph import StateGraph, END
 
 
 class MyState(TypedDict):
@@ -68,10 +68,7 @@ def build_declarative_graph() -> StateGraph:
     parallel_groups = []
 
     # Configure graph settings
-    config = GraphConfig(
-        max_iterations=100,
-        state_reducer_max_list_length=50
-    )
+    config = GraphConfig(max_iterations=100)
 
     # Create template
     template = GraphTemplate(
@@ -100,11 +97,9 @@ def build_declarative_graph() -> StateGraph:
 # High-level API usage
 async def run_with_high_level_api(query: str) -> Dict[str, Any]:
     """Use HighLevelGraphAPI for automatic parameter inference"""
-    api = HighLevelGraphAPI()
+    api = HighLevelGraphAPI(MyState)
 
-    # Automatically infer parameters and build state
-    intent = await api.intent_analyzer.analyze(query)
-    initial_state = await api.state_builder.build_state_for_query(query)
+    intent, initial_state = await api.build_initial_state(query)
 
     # Build and run graph
     graph = build_declarative_graph()
@@ -136,9 +131,10 @@ SpoonOS offers advanced routing capabilities with priority-based decision making
 ```python
 # Using HighLevelGraphAPI for automatic intent-based routing
 async def route_with_high_level_api(state: MyState) -> str:
-    api = HighLevelGraphAPI()
+    api = HighLevelGraphAPI(MyState)
     intent = await api.intent_analyzer.analyze(state.get("user_query", ""))
-    return api.intent_analyzer.get_route_for_intent(intent)
+    # Route based on the detected intent category
+    return intent.category
 ```
 
 ### 2) LLM-Powered Router
@@ -148,8 +144,7 @@ async def route_with_high_level_api(state: MyState) -> str:
 graph.enable_llm_routing(config={
     "model": "gpt-4",
     "temperature": 0.1,
-    "max_tokens": 64,
-    "priority": 10  # Higher priority than rules
+    "max_tokens": 64
 })
 ```
 
@@ -261,20 +256,14 @@ Use `GraphConfig` for comprehensive graph configuration.
 
 ```python
 # Configure graph behavior
+from spoon_ai.graph.config import RouterConfig
+
 config = GraphConfig(
     max_iterations=100,
-    state_reducer_max_list_length=50,
-    enable_monitoring=True,
-    monitoring_metrics=[
-        "execution_time",
-        "llm_response_quality",
-        "routing_performance",
-        "parallel_branch_efficiency"
-    ],
-    router_config={
-        "llm_router_priority": 10,
-        "rule_router_priority": 5
-    }
+    router=RouterConfig(
+        allow_llm=True,
+        default_target="generate_result"
+    )
 )
 
 template = GraphTemplate(
@@ -284,6 +273,10 @@ template = GraphTemplate(
     parallel_groups=parallel_groups,
     config=config
 )
+
+# Enable monitoring on the graph instance
+graph = DeclarativeGraphBuilder(MyState).build(template)
+graph.enable_monitoring(["execution_time", "routing_performance"])
 ```
 
 ---
@@ -317,11 +310,12 @@ print(f"Routing accuracy: {metrics.get('routing_accuracy', 0)}%")
 Complete example using declarative templates and high-level API.
 
 ```python
-from spoon_ai.graph import (
-    StateGraph, END, GraphTemplate, NodeSpec, EdgeSpec,
-    ParallelGroupSpec, GraphConfig, HighLevelGraphAPI
+from spoon_ai.graph import StateGraph, END
+from spoon_ai.graph.builder import (
+    DeclarativeGraphBuilder, GraphTemplate, NodeSpec, EdgeSpec,
+    ParallelGroupSpec, HighLevelGraphAPI
 )
-from spoon_ai.graph.builder import DeclarativeGraphBuilder
+from spoon_ai.graph.config import GraphConfig
 
 
 class CryptoAnalysisState(TypedDict):
@@ -390,12 +384,11 @@ def build_crypto_analysis_graph() -> StateGraph:
 # High-level API integration
 async def run_crypto_analysis(query: str) -> Dict[str, Any]:
     """Complete analysis using high-level API"""
-    api = HighLevelGraphAPI()
+    api = HighLevelGraphAPI(CryptoAnalysisState)
 
     # Automatic parameter inference
-    intent = await api.intent_analyzer.analyze(query)
-    initial_state = await api.state_builder.build_state_for_query(query)
-    initial_state.update(await api.parameter_inferencer.infer_parameters(query, intent))
+    intent, initial_state = await api.build_initial_state(query)
+    initial_state.update(await api.parameter_inference.infer_parameters(query, intent))
 
     # Build and execute graph
     graph = build_crypto_analysis_graph()

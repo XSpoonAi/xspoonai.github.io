@@ -12,9 +12,10 @@ Learn how to create a custom AI agent from scratch using SpoonOS.
 
 ### Create Agent File
 
-Create a new file `my_first_agent.py`:
+Create a new file `my_first_agent.py` (works with Gemini, OpenAI, or any configured provider):
 
 ```python
+import os
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
 from spoon_ai.tools.crypto_tools import get_crypto_tools
@@ -23,8 +24,10 @@ from spoon_ai.tools.crypto_tools import get_crypto_tools
 def create_agent():
     # Configure LLM
     llm = ChatBot(
-        model_name="gpt-4.1",
-        llm_provider="openai",
+        # Pick up provider/model from env to support Gemini out of the box.
+        # Example: set DEFAULT_LLM_PROVIDER=gemini and GEMINI_API_KEY=***
+        llm_provider=os.getenv("LLM_PROVIDER") or os.getenv("DEFAULT_LLM_PROVIDER") or "gemini",
+        model_name=os.getenv("LLM_MODEL") or "gemini-2.5-pro",
         temperature=0.3
     )
 
@@ -90,9 +93,10 @@ class GreetingTool(BaseTool):
 
 ```python
 def create_enhanced_agent():
+    import os
     llm = ChatBot(
-        model_name="gpt-4.1",
-        llm_provider="openai",
+        llm_provider=os.getenv("LLM_PROVIDER") or os.getenv("DEFAULT_LLM_PROVIDER") or "gemini",
+        model_name=os.getenv("LLM_MODEL") or "gemini-2.5-pro",
         temperature=0.3,
         enable_short_term_memory=True,
         short_term_memory_config={
@@ -248,8 +252,8 @@ class ConfigurableAgent:
             # Default configuration
             default_config = {
                 "llm": {
-                    "provider": "openai",
-                    "model": "gpt-4.1",
+                    "provider": "gemini",
+                    "model": "gemini-2.5-pro",
                     "temperature": 0.3
                 },
                 "tools": ["crypto_tools", "greeting_tool"],

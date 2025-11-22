@@ -40,26 +40,37 @@ graph TD
 ### Basic MCP Server
 
 ```python
+import asyncio
 from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
 
-# Initialize MCP tools collection
 mcp_tools = MCPToolsCollection()
 
-# Start MCP server
-await mcp_tools.start_server(port=8000)
+async def main():
+    # Runs a FastMCP SSE server. Change the port as needed.
+    await mcp_tools.run(port=8765)
+
+asyncio.run(main())
 ```
 
 ### MCP Client Configuration
 
 ```python
+import asyncio
 from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
-from spoon_ai.agents import SpoonReactAI
 
-# Create agent with MCP capabilities
-agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
-    mcp_servers=["http://localhost:8000"]
-)
+class MCPEnabledClient(MCPClientMixin):
+    def __init__(self, transport: str):
+        super().__init__(transport)
+
+client = MCPEnabledClient("ws://localhost:8765")
+
+async def list_tools():
+    async with client.get_session() as session:
+        return await session.list_tools()
+
+tools = asyncio.run(list_tools())
+for tool in tools:
+    print(f"{tool.name}: {tool.description}")
 ```
 
 ## Tool Discovery
@@ -67,19 +78,20 @@ agent = SpoonReactAI(
 ### Automatic Discovery
 
 ```python
-# Discover all available tools
-tools = await mcp_tools.discover_tools()
+async def discover_tools():
+    async with client.get_session() as session:
+        return await session.list_tools()
 
+tools = asyncio.run(discover_tools())
 for tool in tools:
-    print(f"Tool: {tool.name}")
-    print(f"Description: {tool.description}")
-    print(f"Parameters: {tool.parameters}")
+    print(tool.name)
 ```
 
 ### Tool Registration
 
 ```python
 from spoon_ai.tools.base import BaseTool
+from spoon_ai.tools.mcp_tools_collection import mcp_tools
 
 class WeatherTool(BaseTool):
     name = "get_weather"
@@ -96,8 +108,8 @@ class WeatherTool(BaseTool):
         # Weather API call implementation
         return {"location": location, "temperature": 22, "condition": "sunny"}
 
-# Register tool with MCP server
-mcp_tools.register_tool(WeatherTool())
+# Register tool with the running MCP server
+asyncio.run(mcp_tools.add_tool(WeatherTool()))
 ```
 
 ## Tool Execution
@@ -105,66 +117,20 @@ mcp_tools.register_tool(WeatherTool())
 ### Direct Execution
 
 ```python
-# Execute tool directly
-result = await mcp_tools.execute_tool(
-    tool_name="get_weather",
-    parameters={"location": "New York"}
-)
+# Execute tool via MCP client
+result = asyncio.run(client.call_mcp_tool("get_weather", location="New York"))
+print(result)
 ```
 
 ### Agent-Driven Execution
 
 ```python
-# Agent automatically discovers and uses tools
+from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
+
+# Agent that can consume MCP tools discovered via its transport
+agent = SpoonReactMCP()
 response = await agent.run("What's the weather like in San Francisco?")
-# Agent will discover weather tool and execute it automatically
-```
-
-## Advanced MCP Features
-
-### Resource Access
-
-```python
-# Access external resources through MCP
-class DocumentResource:
-    def __init__(self, uri: str):
-        self.uri = uri
-
-    async def read(self) -> str:
-        # Read document content
-        return "Document content here"
-
-# Register resource
-mcp_tools.register_resource("document://example.txt", DocumentResource)
-```
-
-### Tool Chaining
-
-```python
-# Tools can call other tools through MCP
-class AnalysisTool(BaseTool):
-    async def execute(self, data_source: str) -> dict:
-        # Get data using another tool
-        data = await self.mcp_client.execute_tool("fetch_data", {"source": data_source})
-
-        # Process data
-        analysis = self.analyze(data)
-        return analysis
-```
-
-### Error Handling
-
-The framework provides automatic error handling for MCP operations:
-
-```python
-# Framework handles errors automatically with graceful degradation
-result = await mcp_tools.execute_tool("weather_tool", {"location": "New York"})
-
-# Automatic handling includes:
-# - Tool not found: Returns informative error message
-# - Connection failures: Automatic retry with backoff
-# - Timeout errors: Graceful timeout with fallback
-# - Server unavailable: Automatic server switching if configured
+print(response)
 ```
 
 ## MCP Configuration

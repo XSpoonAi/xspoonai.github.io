@@ -1,16 +1,14 @@
 # Configuration
 
-SpoonOS uses a flexible configuration system with environment variables and (for the CLI only) JSON configuration files.
-
-> **Note (Nov 2025):** When you use the Python SDK directly (`spoon-ai-sdk` / `spoon_ai` imports), configuration is read from environment variables only (shell + `.env`). The `spoon-cli` tool reads `config.json` and exports those values into environment variables before running agents.
+SpoonOS is **env-first**. The core Python SDK only reads environment variables (including values from a `.env` file). The `spoon-cli` workflow is the only place `config.json` is read; the CLI loads that file and exports the values into the environment before starting agents.
 
 ## Configuration Priority
 
-At runtime, the effective priority is (later sources override earlier ones):
+At runtime (latest wins):
 
-1. Built-in defaults in the SDK
-2. Shell / `.env` environment variables
-3. Values materialized by `spoon-cli` from `config.json` (CLI workflows only)
+1. Built-in defaults in the SDK  
+2. Environment variables (`.env` or shell)  
+3. Values exported by `spoon-cli` from `config.json` (CLI only)
 
 ## Environment Variables
 
@@ -34,26 +32,9 @@ WEB3_PROVIDER_URL=https://mainnet.infura.io/v3/your_project_id
 PRIVATE_KEY=your_private_key_here
 ```
 
-## Runtime Configuration
+## CLI Configuration File (optional)
 
-Create a `config.json` file for dynamic configuration (used by the CLI; the core SDK still reads from environment variables):
-
-```json
-{
-  "llm": {
-    "provider": "openai",
-    "model": "gpt-4.1",
-    "temperature": 0.3
-  },
-  "tools": {
-    "enabled": ["crypto_tools", "web3_tools", "mcp_tools"]
-  },
-  "web3": {
-    "default_chain": "ethereum",
-    "gas_limit": 21000
-  }
-}
-```
+If you use `spoon-cli`, manage CLI-specific settings in `config.json`. The CLI exports that file into environment variables automatically; the SDK does **not** read it directly. See `docs/cli/configuration.md` for the full schema and commands.
 
 ## API Key Setup
 
