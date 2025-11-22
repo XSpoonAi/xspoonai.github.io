@@ -7,12 +7,11 @@
 ```bash
 export EVM_PROVIDER_URL=https://mainnet.infura.io/v3/...
 export EVM_PRIVATE_KEY=0xyourSignerKey
-export EVM_CHAIN_ID=1            # optional; inferred via RPC when omitted
 # Optional global fallback used by other crypto toolkits
 export RPC_URL=https://eth.llamarpc.com
 ```
 
-- Every tool accepts `rpc_url`/`private_key` overrides per call; defaults resolve to `EVM_PROVIDER_URL` and `EVM_PRIVATE_KEY`, then `RPC_URL`.
+- All tools accept an `rpc_url` override, but only transaction senders (`EvmTransferTool`, `EvmErc20TransferTool`, `EvmSwapTool`, `EvmBridgeTool`) take `private_key`/signer inputs; read-only helpers rely solely on RPC access.
 - `web3.py` is lazily imported inside each execute path, so include it (and `requests`) in your runtime environment.
 - Aggregator-backed tools call public REST APIs (Bebop or LiFi). If you operate behind a proxy, ensure outbound HTTPS is allowed.
 
@@ -57,7 +56,7 @@ Receipts are awaited with reasonable timeouts; if the transaction reverts, `Tool
 - Accepts `gas_price_gwei`; otherwise uses the RPC’s `gas_price`.
 
 ### `EvmBalanceTool`
-- Returns native balances (Ether-equivalent) when `token_address` is omitted, or ERC-20 balances plus decimals when provided.
+- Returns native balances (Ether-equivalent) when `token_address` is omitted, or ERC-20 balances converted using on-chain decimals. Outputs include only the formatted balance value (no decimals field).
 - Useful for guardrails before making transfers or swaps.
 
 ### `EvmSwapTool`

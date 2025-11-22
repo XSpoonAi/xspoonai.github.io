@@ -9,8 +9,8 @@ title: Social Media Toolkit
 ## Shared Architecture
 
 - **Base classes** – Every tool inherits from `SocialMediaToolBase`, which defines `send_message()` and `validate_config()`. Notification-only adapters extend `NotificationToolBase`; interactive bots (Discord/Telegram) extend `InteractiveToolBase` and add `start_bot()` / `stop_bot()`.
-- **Models** – All `execute()` methods accept a `MessageRequest` subclass (e.g., `DiscordMessageRequest`, `EmailMessageRequest`) and return a `MessageResponse` with `{success: bool, message: str, data?: dict}`. This makes the tools drop-in ready for FastMCP exposure.
-- **Helper coroutines** – Each adapter exports a `send_*` convenience function (`send_discord_message`, `send_email`, etc.) for one-off notifications.
+- **Models** – Most `execute()` methods accept a `MessageRequest` subclass (e.g., `DiscordMessageRequest`, `EmailMessageRequest`) and return a `MessageResponse` with `{success: bool, message: str, data?: dict}`. Twitter exposes dedicated entry points `execute_tweet`, `execute_reply`, and `execute_like` instead of a single `execute()`.
+- **Helper coroutines** – Each adapter exports convenience helpers: Discord/Telegram/Email provide `send_*` functions that create the tool, run `validate_config()`, and return `{success, message}`; Twitter offers `post_tweet`, `reply_to_tweet`, and `like_tweet` helpers that also include a `data` payload on success.
 - **Config validation** – `validate_config()` logs a warning when required credentials are missing; call it during startup to fail fast rather than silently dropping messages.
 
 ## Environment Reference
@@ -18,11 +18,13 @@ title: Social Media Toolkit
 | Channel | Required variables | Optional variables |
 | --- | --- | --- |
 | **Discord** | `DISCORD_BOT_TOKEN` | `DISCORD_DEFAULT_CHANNEL_ID` |
-| **Telegram** | `TELEGRAM_BOT_TOKEN` | `TELEGRAM_DEFAULT_CHAT_ID` |
+| **Telegram** | `TELEGRAM_BOT_TOKEN` | `TELEGRAM_DEFAULT_CHAT_ID`* |
 | **Twitter/X** | `TWITTER_CONSUMER_KEY`, `TWITTER_CONSUMER_SECRET`, `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_TOKEN_SECRET` | `TWITTER_BEARER_TOKEN`, `TWITTER_USER_ID` |
 | **Email (SMTP)** | `EMAIL_SMTP_SERVER`, `EMAIL_SMTP_PORT`, `EMAIL_SMTP_USER`, `EMAIL_SMTP_PASSWORD`, `EMAIL_FROM` | `EMAIL_DEFAULT_RECIPIENTS` |
 
 Set these variables before importing the corresponding tool. Missing credentials surface when `validate_config()` runs or when the client attempts its first API call.
+
+\*The current Telegram implementation falls back to a hard-coded placeholder chat ID when `chat_id` isn’t provided. Supply the chat explicitly or override `default_chat_id` after instantiation until configuration support is added.
 
 ## Discord
 
@@ -61,18 +63,19 @@ telegram = TelegramTool()
 await telegram.send_message("🔔 Validator risk threshold exceeded")
 ```
 
-Rate limits are per bot token; Telegram will throttle after ~30 messages/s. Catch exceptions from `send_message` to implement backoff if you broadcast alerts in bursts.
+Rate limits are per bot token; Telegram will throttle after ~30 messages/s. `send_message` logs failures and returns `False` instead of raising, so check the boolean result and trigger your own retry/backoff logic. Provide a `chat_id` unless you have overridden `default_chat_id`, because the bundled placeholder (`"0000000000"`) is not a usable channel.
 
 ## Twitter / X
 
 - **Module**: `twitter_tool.py`
 - **Client**: `spoon_ai.social_media.twitter.TwitterClient`
 - **Key methods**:
+  - `execute_tweet(TwitterTweetRequest)` / `execute_reply(TwitterReplyRequest)` / `execute_like(TwitterLikeRequest)` – MCP-friendly entry points for posting, replying, and liking.
+  - `send_message(message, tags=None)` – convenience layer that appends hashtags or mentions before delegating to the client.
   - `post_tweet(message)` – publish a new status.
   - `reply_to_tweet(tweet_id, message)` – threaded replies.
   - `like_tweet(tweet_id)` – reaction utility for engagement workflows.
-  - `send_message(message, tags=None)` – convenience layer that appends hashtags or mentions.
-  - `execute(TwitterMessageRequest)` – returns a `MessageResponse` for MCP.
+  - `read_timeline(count=None)` / `get_tweet_replies(tweet_id, count)` – read helpers for downstream analysis.
 - **Usage**:
 
 ```python
@@ -123,12 +126,14 @@ For lightweight scripts, use the helper coroutines:
 ```python
 from spoon_toolkits.social_media.discord_tool import send_discord_message
 from spoon_toolkits.social_media.email_tool import send_email
+from spoon_toolkits.social_media.twitter_tool import post_tweet
 
 await send_discord_message("Indexing complete")
 await send_email("Pipeline healthy", ["ops@example.com"])
+tweet_result = await post_tweet("Publishing release notes #SpoonAI")
 ```
 
-These functions internally instantiate the tool, run `validate_config()`, and return `{success, message}` dictionaries.
+Discord/Telegram/Email helpers return `{success, message}` dictionaries. Twitter helpers also include a `data` object with the API response (tweet ID, etc.) when successful.
 
 ## Operational Tips
 

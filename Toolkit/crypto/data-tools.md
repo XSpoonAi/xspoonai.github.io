@@ -6,34 +6,35 @@
 ## Environment & Dependencies
 
 ```bash
-export BITQUERY_API_KEY=your_rest_key              # legacy modules
+export BITQUERY_API_KEY=your_rest_key              # reserved for future REST helpers
 export BITQUERY_CLIENT_ID=your_oauth_client_id     # required by Bitquery OAuth
 export BITQUERY_CLIENT_SECRET=your_oauth_secret
-export RPC_URL=https://eth.llamarpc.com            
+export RPC_URL=https://eth.llamarpc.com
 ```
 
-- `Get*`/`Alert*` tools depend on `web3` (for Uniswap) and respect `RPC_URL`. Provide a reliable mainnet endpoint to avoid public-rate limits.
+- `Get*` price tools pull the RPC URL from the environment automatically; alert helpers default to a bundled Alchemy mainnet URL unless you pass a custom endpoint when instantiating them.
 - `PredictPrice` requires `pandas`, `scikit-learn`, and `numpy`. Install toolkit extras via `pip install -r requirements.txt` at the project root or install modules individually.
 - `LendingRateMonitorTool` performs concurrent HTTP requests using `aiohttp`; event loops must be active (use `nest_asyncio` in notebooks if necessary).
+- `SuddenPriceIncreaseTool` currently relies exclusively on CoinGecko’s REST feed; the Bitquery enrichment hook exists in code but is not wired up yet, so providing `BITQUERY_API_KEY` has no effect today.
 
 ## Tool Catalog 
 
 ### Spot & Historical Pricing
-- `GetTokenPriceTool` resolves ERC-20 pairs to the canonical Uniswap v3 pool, fetches slot0, and converts ticks into human prices.
-- `Get24hStatsTool` and `GetKlineDataTool` expose the same provider stack for downstream analytics (volatility, TWAP, etc.).
+- `GetTokenPriceTool` resolves supported ERC-20 pairs (ETH, USDC, USDT, DAI, WBTC by default) to the canonical Uniswap v3 pool, fetches slot0, and converts ticks into human prices.
+- `Get24hStatsTool` uses the same provider stack for downstream analytics, while `GetKlineDataTool` is currently a placeholder that returns an empty list until a Graph/event-log integration ships.
 
 ### Alerting & Monitoring
 - `PriceThresholdAlertTool` compares live prices with a configurable ±% drift versus prior day.
 - `LpRangeCheckTool` reads Uniswap positions, current ticks, and warns when LPs approach range boundaries (`buffer_ticks`).
-- `SuddenPriceIncreaseTool` scans Bitquery datasets for large-cap, high-volume tokens with rapid appreciation—ideal for whale or listing alerts.
-- `CryptoMarketMonitor` abstracts “set-and-forget” monitors by POSTing well-formed payloads to the monitoring daemon you run (defaults to `localhost:8888` but can be swapped).
+- `SuddenPriceIncreaseTool` filters CoinGecko’s REST feed for large-cap, high-volume tokens with rapid appreciation; Bitquery enrichment is planned but not enabled.
+- `CryptoMarketMonitor` POSTs well-formed payloads to the monitoring daemon bundled at `http://localhost:8888/monitoring/tasks` (`blockchain_monitor.py`). Change the URL in that module if your scheduler lives elsewhere.
 
 ### Wallet Intelligence
 - `WalletAnalysis`, `TokenHolders`, and `TradingHistory` share the Bitquery GraphQL templates embedded in their modules so you always know the dataset (`combined` vs `archive`) and filters before execution.
-- Pagination is driven by the `limit` clauses inside the template; adjust the class constants if you need bigger windows.
+- Pagination and filters live directly inside each template string (e.g., `TokenHolders` enforces `Amount >= 10,000,000`). Edit the template if you need a different threshold or window; no exposed class constants exist today. These helpers return the Bitquery JSON fragments directly rather than wrapping results in `ToolResult`.
 
 ### DeFi Rates & Liquidity
-- `LendingRateMonitorTool` merges DeFiLlama pools with Aave/Compound/Morpho APIs, derives utilization, and wraps the result in `ToolResult` for consumption by governance agents.
+- `LendingRateMonitorTool` merges DeFiLlama pools with first-party Aave subgraphs today (Compound/Morpho data arrives via DeFiLlama’s feed only), derives utilization, and wraps the result in `ToolResult`. Every response also includes an `arbitrage_opportunities` array summarizing large APY spreads.
 - `UniswapLiquidity` emits the latest Mint/Burn events so you can approximate real-time liquidity deltas without running a listener yourself.
 - `PredictPrice` is intentionally heavyweight (builds a RandomForest and scaler); cache the fitted estimator in your application if you call it frequently.
 
@@ -47,7 +48,6 @@ tool = GetTokenPriceTool()
 result = await tool.execute(symbol="ETH-USDC")
 
 print(result.output["price"])         # structured response
-print(result.diagnostic["pool"])      # extra context for logging
 ```
 
 ### Long-running alert inside an agent
@@ -68,12 +68,12 @@ asyncio.run(monitor())
 ```
 
 Tips:
-- Most tools return dictionaries; when a class subclasses `DexBaseTool`, the `ToolResult.output` mirrors the Bitquery JSON fragment shown in the GraphQL template.
+- Synchronous price tools return dictionaries nested inside `ToolResult.output`, whereas the Bitquery GraphQL helpers (`WalletAnalysis`, `TokenHolders`, `TradingHistory`, `UniswapLiquidity`) currently return the raw template output.
 - Async utilities (`PriceThresholdAlertTool`, `LendingRateMonitorTool`) already shield you from rate spikes with short sleeps; avoid spawning excessive parallel loops unless you also raise Bitquery limits.
 
 ## Operational Notes
 
 - Centralize credential management: add the Bitquery OAuth keys to your `.env` and load them before instantiating tools to prevent runtime `ValueError`s from `DexBaseTool.oAuth()`.
-- Because Uniswap calls hit your RPC, failures there do **not** imply Bitquery downtime—inspect `ToolResult.diagnostic` for the precise failure domain.
+- Because Uniswap calls hit your RPC, failures there do **not** imply Bitquery downtime—inspect the `error` string inside `ToolResult.output` or the returned dictionary to isolate the failure domain.
 - The monitoring helper in `blockchain_monitor.py` assumes a scheduler reachable at `http://localhost:8888/monitoring/tasks`. Override `api_url` in the module before deploying if your infra differs.
 - `PredictPrice` fetches up to ~1000 rows per query. If Bitquery throttles you, lower the template limit or use a paid API plan.

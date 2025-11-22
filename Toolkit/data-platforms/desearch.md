@@ -1,15 +1,16 @@
 
-`spoon_toolkits.data_platforms.desearch` wraps the official DeSearch SDK in async helpers, builtin Spoon tools, and FastMCP servers so agents can query real-time web, social, and academic sources without writing raw HTTP logic.
+`spoon_toolkits.data_platforms.desearch` wraps the official DeSearch SDK in async helpers, builtin Spoon tools, and FastMCP servers so agents can query real-time web, social, and academic sources without writing raw HTTP logic. The async helpers (used by MCP and builtin tools) decorate responses with a `{"error": "..."}` payload when the SDK raises, so callers should check for that key before dereferencing results.
 
 ## Environment & Configuration
 
 ```bash
 export DESEARCH_API_KEY=your_actual_key            # required
-export DESEARCH_BASE_URL=https://api.desearch.ai   # optional override
-export DESEARCH_TIMEOUT=30                         # optional (seconds)
+export DESEARCH_BASE_URL=https://api.desearch.ai   # optional (not currently consumed)
+export DESEARCH_TIMEOUT=30                         # optional (read but not yet wired into SDK calls)
 ```
 
 - `env.py` loads `.env` via `python-dotenv`, so store the variables beside the process that imports the package.
+- `DESEARCH_BASE_URL`/`DESEARCH_TIMEOUT` are parsed for future use but the current helpers always talk to the SDK defaults; changing these env vars today has no effect without modifying the code.
 - The helpers enforce `limit >= 10`, mirroring the SDK requirements.
 
 ## Package Layout
@@ -19,7 +20,7 @@ export DESEARCH_TIMEOUT=30                         # optional (seconds)
 | `__init__.py` | Mounts `ai_search` and `web_search` FastMCP sub-servers and re-exports helper coroutines plus `mcp_server`. |
 | `ai_search_official.py` | Async tools for AI/meta search, Reddit/Twitter feeds, and academic datasets. Decorated with `@mcp.tool()`. |
 | `web_search_official.py` | Web search plus Twitter post/link lookups using the official SDK. |
-| `builtin_tools.py` | `BaseTool` wrappers (`DesearchAISearchTool`, etc.) for spoon-core usage without MCP. |
+| `builtin_tools.py` | `BaseTool` wrappers (`DesearchAISearchTool`, etc.) for spoon-core usage without MCP. These return the same dicts as the async helpers (including any `"error"` payloads), so callers must handle error cases explicitly. |
 | `cache.py` | `time_cache` decorator that memoizes tool responses for ~5 minutes. |
 | `example.py`, `test_integration.py`, `README.md` | Usage demos, live API smoke tests, and a deeper quick-start. |
 
@@ -69,6 +70,10 @@ from spoon_toolkits.data_platforms.desearch.builtin_tools import DesearchAISearc
 
 tool = DesearchAISearchTool()
 response = await tool.execute(query="Solana MEV research", platforms="web,reddit", limit=10)
+
+if not response.get("success"):
+    raise RuntimeError(response.get("error"))
+
 print(response["data"]["results"].keys())
 ```
 
@@ -89,6 +94,6 @@ Internally, the server mounts `ai_search` and `web_search` namespaces, so you ca
 
 - Use the provided `test_integration.py` before shipping: it validates your API key and SDK wiring.
 - Responses are dictionaries (e.g., `{"query": ..., "results": ..., "count": ...}`); check for `"error"` keys when handling failures.
-- Increase or decrease `DESEARCH_TIMEOUT` based on network conditions; the helpers pass the value downstream when the SDK supports it.
+- `DESEARCH_TIMEOUT` is parsed but currently unused; adjust it only after wiring the value into the helper functions or SDK client initialization in your fork.
 - Remove cached entries by restarting the process if you need uncached data while debugging.
 - Rate limits come from the DeSearch API; stagger large batches or broaden queries rather than hammering the same endpoint.
