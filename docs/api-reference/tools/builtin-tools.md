@@ -270,33 +270,6 @@ result = await tool.execute(action="get_market_data")
 - `list_files(provider)`: List stored files
 - `delete_file(file_hash, provider)`: Delete file from storage
 
-### Security Tools
-
-#### GoPlusLabsTools
-**Description:** Security detection (token, NFT, phishing, rug pulls)
-**Module:** `spoon_toolkits.gopluslabs`
-
-**Configuration:**
-```json
-{
-  "name": "security_tools",
-  "type": "builtin",
-  "enabled": true,
-  "env": {
-    "GOPLUSLABS_API_KEY": "${GOPLUSLABS_API_KEY}"
-  },
-  "config": {
-    "timeout": 30,
-    "max_retries": 3
-  }
-}
-```
-
-**Methods:**
-- `check_token_security(contract_address, chain)`: Analyze token security
-- `check_nft_security(contract_address, chain)`: Analyze NFT security
-- `check_phishing_site(url)`: Check if URL is phishing
-- `check_rug_pull_risk(contract_address)`: Assess rug pull risk
 
 ## Agent Integration Examples
 
