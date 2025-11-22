@@ -23,7 +23,7 @@ from spoon_ai.graph.builder import (
     DeclarativeGraphBuilder, GraphTemplate, NodeSpec, EdgeSpec,
     ParallelGroupSpec, ParallelGroupConfig, HighLevelGraphAPI
 )
-from spoon_ai.graph.config import GraphConfig
+from spoon_ai.graph.config import GraphConfig, ParallelRetryPolicy
 from spoon_ai.graph import StateGraph, END
 
 
@@ -97,7 +97,7 @@ def build_declarative_graph() -> StateGraph:
 # High-level API usage
 async def run_with_high_level_api(query: str) -> Dict[str, Any]:
     """Use HighLevelGraphAPI for automatic parameter inference"""
-    api = HighLevelGraphAPI(MyState)
+    api = HighLevelGraphAPI(state_schema=MyState)
 
     intent, initial_state = await api.build_initial_state(query)
 
@@ -131,7 +131,7 @@ SpoonOS offers advanced routing capabilities with priority-based decision making
 ```python
 # Using HighLevelGraphAPI for automatic intent-based routing
 async def route_with_high_level_api(state: MyState) -> str:
-    api = HighLevelGraphAPI(MyState)
+    api = HighLevelGraphAPI(state_schema=MyState)
     intent = await api.intent_analyzer.analyze(state.get("user_query", ""))
     # Route based on the detected intent category
     return intent.category
@@ -188,14 +188,14 @@ Define parallel groups with sophisticated control strategies for optimal perform
 ```python
 # Configure parallel group with advanced settings
 parallel_config = ParallelGroupConfig(
-    join_strategy="all_complete",  # all, quorum, any_first
+    join_strategy="all",  # accepts aliases like "all_complete", quorum, any_first
     error_strategy="collect_errors",  # ignore_errors, fail_fast, collect_errors
     timeout=30,
-    retry_policy={
-        "max_retries": 3,
-        "backoff_factor": 2.0,
-        "circuit_breaker_threshold": 5
-    },
+    retry_policy=ParallelRetryPolicy(
+        max_retries=3,
+        backoff_multiplier=2.0,
+    ),
+    circuit_breaker_threshold=5,
     max_in_flight=10
 )
 
@@ -207,7 +207,7 @@ graph.add_parallel_group(
 ```
 
 Advanced join strategies:
-- **`all_complete`**: Wait for all branches (default)
+- **`all`** (alias `all_complete`): Wait for all branches (default)
 - **`quorum`**: Wait for majority (e.g., 2 out of 3)
 - **`any_first`**: Return first successful result
 
@@ -217,20 +217,20 @@ Advanced join strategies:
 
 ### A) High-Level API Memory (Recommended)
 
-Use `HighLevelGraphAPI` for automatic memory management.
+Use the built-in `Memory` helper for persistence alongside your graphs.
 
 ```python
-async def load_memory_with_api(state: MyState) -> Dict[str, Any]:
-    api = HighLevelGraphAPI()
-    memory = await api.memory_manager.load_context(state.get("user_name", "default"))
-    return {"memory": memory}
+from spoon_ai.graph.agent import Memory
 
+# Load memory into state before execution
+async def load_memory_with_api(state: MyState) -> Dict[str, Any]:
+    mem = Memory(session_id=state.get("user_name", "default"))
+    return {"memory": mem.get_messages(), "__memory_obj__": mem}
+
+# Update memory after execution
 async def update_memory_with_api(state: MyState) -> Dict[str, Any]:
-    api = HighLevelGraphAPI()
-    await api.memory_manager.update_context(
-        state.get("user_name", "default"),
-        {"last_intent": state.get("intent", "unknown")}
-    )
+    mem = state.get("__memory_obj__") or Memory(session_id=state.get("user_name", "default"))
+    mem.add_message({"content": state.get("intent", "unknown")})
     return {}
 ```
 
@@ -252,7 +252,7 @@ async def update_memory(state: MyState) -> Dict[str, Any]:
 
 ## Configuration-Driven Design
 
-Use `GraphConfig` for comprehensive graph configuration.
+Use `GraphConfig` for comprehensive graph configuration. Supported fields today are `max_iterations`, `router`, `state_validators`, and `parallel_groups`—legacy options like `state_reducer_max_list_length` or `enable_monitoring` are not part of the current API.
 
 ```python
 # Configure graph behavior
@@ -359,15 +359,11 @@ def build_crypto_analysis_graph() -> StateGraph:
         ParallelGroupSpec(
             name="data_collection",
             nodes=["fetch_market_data"],
-            config=ParallelGroupConfig(join_strategy="all_complete")
+            config=ParallelGroupConfig(join_strategy="all")  # "all_complete" is accepted; "all" is preferred
         )
     ]
 
-    config = GraphConfig(
-        max_iterations=100,
-        enable_monitoring=True,
-        monitoring_metrics=["execution_time", "data_quality"]
-    )
+    config = GraphConfig(max_iterations=100)
 
     template = GraphTemplate(
         entry_point="fetch_market_data",
@@ -384,11 +380,13 @@ def build_crypto_analysis_graph() -> StateGraph:
 # High-level API integration
 async def run_crypto_analysis(query: str) -> Dict[str, Any]:
     """Complete analysis using high-level API"""
-    api = HighLevelGraphAPI(CryptoAnalysisState)
+    api = HighLevelGraphAPI(state_schema=CryptoAnalysisState)
 
-    # Automatic parameter inference
+    # Automatic parameter inference is included in build_initial_state
     intent, initial_state = await api.build_initial_state(query)
-    initial_state.update(await api.parameter_inference.infer_parameters(query, intent))
+    # If you need additional parameters, call:
+    # extra = await api.parameter_inference.infer_parameters(query, intent)
+    # initial_state.update(extra)
 
     # Build and execute graph
     graph = build_crypto_analysis_graph()
@@ -490,7 +488,7 @@ Conflicts typically trace back to duplicated session IDs—compose unique identi
 - **Configure parallel execution**: Use `ParallelGroupConfig` for optimal performance
 - **Implement proper error handling**: Use retry policies and circuit breakers
 - **Monitor performance**: Enable metrics and use `get_execution_metrics()`
-- **Keep state bounded**: Configure `state_reducer_max_list_length` to prevent memory issues
+- **Keep state bounded**: Use `state_validators` or custom reducers; `GraphConfig` currently supports `max_iterations`, `router`, `state_validators`, and `parallel_groups`
 
 ---
 

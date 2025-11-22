@@ -94,9 +94,9 @@ from spoon_ai.tools.base import BaseTool
 from spoon_ai.tools.mcp_tools_collection import mcp_tools
 
 class WeatherTool(BaseTool):
-    name = "get_weather"
-    description = "Get current weather for a location"
-    parameters = {
+    name: str = "get_weather"
+    description: str = "Get current weather for a location"
+    parameters: dict = {
         "type": "object",
         "properties": {
             "location": {"type": "string", "description": "City name"}
@@ -162,22 +162,24 @@ print(response)
 ### Client Configuration
 
 ```python
-from spoon_ai.tools.mcp_client import MCPClient
+from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
 
-# Configure MCP client
-client = MCPClient(
-    servers=[
-        "http://localhost:8000",
-        "https://api.example.com/mcp"
-    ],
-    timeout=30,
-    retry_attempts=3
-)
+
+class ConfiguredMCPClient(MCPClientMixin):
+    def __init__(self, transport: str, *, timeout: int = 30):
+        super().__init__(transport)
+        self.timeout = timeout
+
+
+# Configure MCP client using FastMCP transport (SSE/WS)
+client = ConfiguredMCPClient("ws://localhost:8765", timeout=30)
 ```
 
 ## Security Considerations
 
 ### Authentication
+
+> **Note:** `AuthenticatedMCPServer` is a conceptual example and not shipped in `spoon_ai`. Implement authentication using your FastMCP server framework (e.g., middleware or request hooks).
 
 ```python
 # Server-side authentication
@@ -224,25 +226,35 @@ class SecureTool(BaseTool):
 
 ### Connection Pooling
 
-```python
-# Use connection pooling for multiple MCP servers
-from spoon_ai.tools.mcp_pool import MCPConnectionPool
+> **Note:** `MCPConnectionPool` is not provided by `spoon_ai`. The `MCPClientMixin` already reuses sessions per task; wrap it or your FastMCP client in your own pooling logic if you need cross-server pooling.
 
-pool = MCPConnectionPool(
-    servers=["http://server1:8000", "http://server2:8000"],
-    max_connections=10,
-    timeout=30
-)
+```python
+# Reuse sessions via MCPClientMixin (simplest pooling strategy)
+from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
+
+class PooledMCPClient(MCPClientMixin):
+    def __init__(self, transport: str):
+        super().__init__(transport)
+
+client = PooledMCPClient("ws://localhost:8765")
+
+async def use_pool():
+    async with client.get_session() as session:
+        return await session.list_tools()
 ```
 
 ### Caching
 
-```python
-# Cache tool discovery results
-from spoon_ai.tools.mcp_cache import MCPCache
+> **Note:** `MCPCache` is not included in `spoon_ai`. Use a simple in-memory cache or a library like `functools.lru_cache` for discovery results.
 
-cache = MCPCache(ttl=300)  # 5-minute cache
-tools = await cache.get_or_fetch("tools", mcp_tools.discover_tools)
+```python
+# Minimal in-memory cache for tool discovery
+tool_cache: dict[str, list] = {}
+
+async def get_tools_cached():
+    if "tools" not in tool_cache:
+        tool_cache["tools"] = await mcp_tools.discover_tools()
+    return tool_cache["tools"]
 ```
 
 ### Async Operations

@@ -1,7 +1,4 @@
 
-
-
-
 ---
 
 ## Overview
@@ -34,7 +31,7 @@ Because context windows are finite, applications benefit from strategies that tr
 
 
 ##  Quick Start: ChatBot with Built-in Memory
- When you initialise `ChatBot` with `enable_short_term_memory=True` (the default), it creates a `ShortTermMemoryManager` internally. Before every LLM call, the chatbot feeds the running history into the manager, which handles trimming or summarising and (optionally) saving checkpoints. 
+ When you initialise `ChatBot` with `enable_short_term_memory=True` (the default), it creates a `ShortTermMemoryManager` internally. Before every LLM call, the chatbot feeds the running history into the manager, which handles trimming or summarising and (optionally) saving checkpoints.
  You can still access the same manager manually via `chatbot.short_term_memory_manager` if you want to tweak the behaviour or call its methods directly, as shown in the next section.
 
 ```python
@@ -54,7 +51,7 @@ print(reply)
 
 ---
 
-##  Manage short-term memory by using `ShortTermMemoryManager` 
+##  Manage short-term memory by using `ShortTermMemoryManager`
 
 ```python
 import asyncio
@@ -88,13 +85,15 @@ llm_ready, removals, summary = asyncio.run(
         summary_model="anthropic/claude-3.5-sonnet",
         llm_manager=chatbot.llm_manager,
         llm_provider=chatbot.llm_provider,
-        existing_summary=chatbot.latest_summary or "",
+        existing_summary=chatbot.latest_summary() or "",
     )
 )
 ```
 
- `llm_ready` — condensed history you can pass to the LLM  
+ `llm_ready` — condensed history you can pass to the LLM
  `removals` — list of RemoveMessage directives:apply removals to your persisted history using spoon_ai.graph.reducers.add_messages.
+
+Note: both `summarize_messages()` and `ChatBot.ask()` invoke your configured LLM. Ensure `chatbot.llm_manager`/`chatbot.llm_provider` (and any required API keys or env vars) are set so these examples can run end‑to‑end.
 
 
 ```python
@@ -146,5 +145,4 @@ for entry in graph.checkpointer.iter_checkpoint_history(config):
     print("Tuple history entry:", entry)
 ```
 
-
-
+If you are using a compiled graph (`CompiledGraph`), call `graph.graph.get_state(config)` and `graph.graph.get_state_history(config)` instead; the snippet above assumes `graph` is a `StateGraph`.
