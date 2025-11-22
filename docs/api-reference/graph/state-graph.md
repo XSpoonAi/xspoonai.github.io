@@ -54,20 +54,22 @@ graph = StateGraph(MyState)
 graph.add_node("analyzer", analyze_query)
 ```
 
-#### `add_edge(start_node: str, end_node: str) -> StateGraph`
+#### `add_edge(start_node: str, end_node: str, condition: Callable[[State], bool] | None = None) -> StateGraph`
 
-Add an unconditional edge between nodes.
+Add an edge between nodes. When `condition` is provided, the edge is only taken if the predicate returns `True`.
 
 **Parameters:**
 - `start_node` (str): Starting node name
 - `end_node` (str): Ending node name
+- `condition` (callable, optional): Predicate that receives the current state
 
 **Returns:**
 - `StateGraph`: Self for method chaining
 
 **Example:**
 ```python
-graph.add_edge("analyzer", "summarizer")
+graph.add_edge("analyzer", "summarizer")                     # unconditional
+graph.add_edge("retryable_step", "retryable_step", lambda s: s["needs_retry"])
 ```
 
 #### `set_entry_point(node_name: str) -> StateGraph`
