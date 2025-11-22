@@ -73,7 +73,7 @@ Ready to use tools? Start with the [Built-in Tools Reference](../api-reference/t
 from spoon_ai.tools.crypto_tools import CryptoTools
 
 # Get current Bitcoin price
-price = await crypto_tools.get_price("BTC")
+price = await CryptoTools.get_token_price("BTC")
 ```
 
 **Web3Tools** - Blockchain interaction
@@ -81,7 +81,7 @@ price = await crypto_tools.get_price("BTC")
 from spoon_ai.tools.web3_tools import Web3Tools
 
 # Get wallet balance
-balance = await web3_tools.get_balance("0x742d35Cc6634C0532925a3b8D4C9db96590e4265")
+balance = await web3_tools.GetAccountBalanceToo("0x742d35Cc6634C0532925a3b8D4C9db96590e4265")
 ```
 
 ### Data & Analysis Tools
@@ -91,15 +91,7 @@ balance = await web3_tools.get_balance("0x742d35Cc6634C0532925a3b8D4C9db96590e42
 from spoon_toolkits.chainbase import ChainbaseTools
 
 # Get token information
-token_info = await chainbase_tools.get_token_info("0xA0b86a33E6441E6C8D3c8C7C5b998e7d8e4C8e8e")
-```
-
-**GoPlusLabsTools** - Security analysis
-```python
-from spoon_toolkits.gopluslabs import GoPlusLabsTools
-
-# Check token security
-security = await goplus_tools.token_security("0xA0b86a33E6441E6C8D3c8C7C5b998e7d8e4C8e8e")
+token_info = await chainbase_tools.GetTokenMetadataTool("0xA0b86a33E6441E6C8D3c8C7C5b998e7d8e4C8e8e")
 ```
 
 ### Storage Tools
@@ -127,7 +119,7 @@ tool_manager = ToolManager([
 ])
 
 # Execute tool
-result = await tool_manager.execute_tool("get_price", {"symbol": "BTC"})
+result = await tool_manager.execute_tool("get_token_price", {"symbol": "BTC"})
 ```
 
 ## MCP (Model Context Protocol) Tools
