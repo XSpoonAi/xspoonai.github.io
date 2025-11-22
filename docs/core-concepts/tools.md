@@ -18,6 +18,12 @@ Tools in SpoonOS are discrete capabilities that agents can use to:
 
 Built-in tools are core capabilities provided by the **spoon-toolkit** package. These tools are directly integrated into SpoonOS and include:
 
+> To use `spoon_toolkits.*` modules, install the toolkits package alongside the core SDK:
+>
+> ```bash
+> pip install spoon-toolkits
+> ```
+
 - **Crypto Data Tools**: Price data, trading history, wallet analysis, liquidity analysis
 - **Data Platform Tools**: AI-powered search, academic research, social media analysis
 - **ThirdWeb Tools**: Blockchain data and transaction analysis

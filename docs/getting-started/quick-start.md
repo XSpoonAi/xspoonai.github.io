@@ -5,7 +5,7 @@ Get up and running with SpoonOS framework in under 5 minutes.
 ## Prerequisites
 
 - [Installation](./installation.md) completed
-- [Configuration](./configuration.md) set up with API keys
+- [Configuration](./configuration.md) set up with at least one provider API key (for example `OPENAI_API_KEY`)
 
 ## Your First Agent
 
@@ -45,14 +45,14 @@ class MyFirstAgent(ToolCallAgent):
     You can greet users and help with various tasks.
     """
 
-    avaliable_tools: ToolManager = ToolManager([GreetingTool()])
+    available_tools: ToolManager = ToolManager([GreetingTool()])
 
 async def main():
     # Initialize agent with LLM
     agent = MyFirstAgent(
         llm=ChatBot(
-            llm_provider="openai",
-            model_name="gpt-4.1"  # Framework default
+            llm_provider="openai",         # or "anthropic", "gemini", "deepseek", "openrouter"
+            model_name="gpt-5.1"   # Framework default for OpenAI
         )
     )
 
@@ -78,7 +78,7 @@ The agent will respond with a personalized greeting and offer to help with vario
 Enhance your agent with blockchain tools:
 
 ```python
-from spoon_ai.tools.crypto_tools import CryptoTool
+from spoon_ai.tools.crypto_tools import get_crypto_tools
 
 class Web3Agent(ToolCallAgent):
     name: str = "web3_agent"
@@ -89,9 +89,10 @@ class Web3Agent(ToolCallAgent):
     You can help with crypto prices, DeFi operations, and blockchain analysis.
     """
 
-    avaliable_tools: ToolManager = ToolManager([
+    available_tools: ToolManager = ToolManager([
         GreetingTool(),
-        CryptoTool()
+        # Loads all crypto/Web3 tools from spoon-toolkits (requires `pip install -e spoon-toolkits`)
+        *get_crypto_tools()
     ])
 
 # Usage
@@ -112,7 +113,7 @@ async def web3_demo():
 
 The SpoonOS framework provides:
 
-- **Multiple LLM Providers**: OpenAI, Anthropic, Google, DeepSeek
+- **Multiple LLM Providers**: OpenAI (`openai`), Anthropic (`anthropic`), Google Gemini (`gemini`), DeepSeek (`deepseek`), OpenRouter (`openrouter`)
 - **Built-in Tools**: Crypto, DeFi, social media, data analysis
 - **Agent Types**: ReAct, ToolCall, Graph-based agents
 - **MCP Integration**: Dynamic tool discovery and execution
@@ -125,7 +126,7 @@ SpoonOS eliminates common development complexity:
 # Simple agent creation - no error handling needed
 agent = ToolCallAgent(
     llm=ChatBot(llm_provider="openai", model_name="gpt-4.1"),
-    avaliable_tools=ToolManager([CryptoTool(), Web3Tool()])
+    available_tools=ToolManager([CryptoTool(), Web3Tool()])
 )
 
 
@@ -169,7 +170,7 @@ from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
 
 agent = ToolCallAgent(
     llm=ChatBot(llm_provider="anthropic", model_name="claude-sonnet-4-20250514"),
-    avaliable_tools=ToolManager([
+    available_tools=ToolManager([
         MCPToolsCollection()  # Automatically discovers MCP tools
     ])
 )

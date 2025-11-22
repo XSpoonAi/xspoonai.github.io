@@ -274,7 +274,7 @@ response = await agent.run("Get Bitcoin price and analyze trends")
 - Production deployment considerations
 
 #### 🔍 [MCP Spoon Search Agent](../examples/mcp-spoon-search-agent.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/spoon_search_agent.py)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
 
 **What it demonstrates:**
 - MCP-enabled agent with dynamic tool discovery

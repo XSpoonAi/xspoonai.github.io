@@ -406,6 +406,90 @@ async def run_crypto_analysis(query: str) -> Dict[str, Any]:
 
 ---
 
+## Memory System Integration
+
+The graph runtime builds on the SpoonOS Memory System to persist context, metadata, and execution state across runs. Every compiled graph can attach a `Memory` store so routers, reducers, and agents reason over accumulated history without bespoke plumbing.
+
+### Overview
+
+- Persistent JSON-backed storage keyed by `session_id`
+- Chronological message history with metadata enrichment
+- Query helpers for search and time-based filtering
+- Automatic wiring inside `GraphAgent` and high-level APIs
+
+### Core Components
+
+```python
+from spoon_ai.graph.agent import Memory
+
+# Use default storage path (~/.spoon_ai/memory)
+default_memory = Memory()
+
+# Customize location and session isolation
+scoped_memory = Memory(storage_path="./custom_memory", session_id="my_session")
+```
+
+- **Persistent storage** keeps transcripts and state checkpoints on disk
+- **Session management** separates contexts per agent or user
+- **Metadata fields** let reducers store structured state
+- **Search helpers** (`search_messages`, `get_recent_messages`) surface relevant history
+
+### Basic Usage Patterns
+
+```python
+message = {"role": "user", "content": "Hello, how can I help?"}
+scoped_memory.add_message(message)
+
+all_messages = scoped_memory.get_messages()
+recent = scoped_memory.get_recent_messages(hours=24)
+metadata = scoped_memory.get_metadata("last_topic")
+```
+
+Use metadata to thread routing hints and conversation topics, and prune history with retention policies or manual cleanup (`memory.clear()`).
+
+### Graph Workflow Integration
+
+`GraphAgent` wires memory automatically and exposes statistics for monitoring:
+
+```python
+from spoon_ai.graph import GraphAgent, StateGraph
+
+agent = GraphAgent(
+    name="crypto_analyzer",
+    graph=my_graph,
+    memory_path="./agent_memory",
+    session_id="crypto_session"
+)
+
+result = await agent.run("Analyze BTC trends")
+stats = agent.get_memory_statistics()
+print(stats["total_messages"])
+```
+
+Switch between sessions to isolate experiments (`agent.load_session("research_session")`) or inject custom `Memory` subclasses for domain-specific validation.
+
+### Advanced Patterns
+
+- Call `memory.get_statistics()` to monitor file size, last update time, and record counts
+- Implement custom subclasses to enforce schemas or add enrichment hooks
+- Use time-window retrieval for reducers that need the most recent facts only
+- Build automated cleanup jobs for oversized stores (>10MB) to keep execution tight
+
+### Troubleshooting
+
+```python
+import json
+try:
+    with open(scoped_memory.session_file, "r") as fh:
+        json.load(fh)
+except json.JSONDecodeError:
+    scoped_memory.clear()  # Reset corrupted memory files
+```
+
+Conflicts typically trace back to duplicated session IDs—compose unique identifiers with timestamps or agent names to avoid contention.
+
+---
+
 ## Best Practices
 
 - **Use declarative templates**: `GraphTemplate` + `NodeSpec` for maintainable workflows
@@ -460,7 +544,8 @@ async def run_crypto_analysis(query: str) -> Dict[str, Any]:
 - **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Explore dynamic tool discovery and execution
 
 ### 📖 **Additional Resources**
-
+- **[State Management](../api-reference/graph/state-graph.md)** - Reducer configuration guide
+- **[Agents Detailed](./agents-detailed.md)** - Long-lived agent design patterns
 - **[Graph Builder API](../api-reference/graph/)** - Complete declarative API documentation
 - **[Performance Optimization](../troubleshooting/performance.md)** - Graph performance tuning guides
 - **[Troubleshooting](../troubleshooting/common-issues.md)** - Common issues and solutions

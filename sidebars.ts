@@ -33,13 +33,20 @@ const sidebars: SidebarsConfig = {
         'core-concepts/llm-providers',
         'core-concepts/mcp-protocol',
         'core-concepts/graph-system',
+        'core-concepts/Short-term memory',
+        'core-concepts/x402-payments',
       ],
     },
     {
       type: 'category',
       label: '📖 How-To Guides',
       collapsed: false,
-      items: ['how-to-guides/build-first-agent', 'how-to-guides/add-custom-tools'],
+      items: [
+        'how-to-guides/build-first-agent',
+        'how-to-guides/add-custom-tools',
+        'how-to-guides/vibe-coding',
+        'how-to-guides/x402-payments',
+      ],
     },
     {
       type: 'category',
@@ -88,6 +95,11 @@ const sidebars: SidebarsConfig = {
           label: 'Tools',
           items: ['api-reference/tools/base-tool', 'api-reference/tools/builtin-tools'],
         },
+        {
+          type: 'category',
+          label: 'Payments',
+          items: ['api-reference/payments/x402'],
+        },
       ],
     },
     {
@@ -98,6 +110,7 @@ const sidebars: SidebarsConfig = {
         'examples/intent-graph-demo',
         'examples/graph-crypto-analysis',
         'examples/mcp-spoon-search-agent',
+        'examples/x402-react-agent',
       ],
     },
     {
@@ -114,3 +127,4 @@ const sidebars: SidebarsConfig = {
 };
 
 export default sidebars;
+

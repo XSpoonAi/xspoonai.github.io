@@ -28,7 +28,7 @@ pip install -e .
 
 ### Minimum Requirements
 
-- **Python**: 3.11 or higher
+- **Python**: 3.12 or higher
 - **Operating System**: Linux, macOS, or Windows
 - **Memory**: 4GB RAM minimum, 8GB recommended
 - **Disk Space**: 500MB for installation
@@ -120,7 +120,7 @@ This command will show:
 
 ```bash
 python --version
-# Should show 3.11 or higher
+# Should show 3.12 or higher
 ```
 
 2. **Permission Denied**

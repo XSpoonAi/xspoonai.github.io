@@ -154,7 +154,7 @@ class MyAgent(SpoonReactAI):
         self.max_steps = 10
 
         # Set up tools (if any)
-        self.avaliable_tools = ToolManager([])
+        self.available_tools = ToolManager([])
 ```
 
 ### 2. SpoonReactMCP
@@ -172,8 +172,8 @@ agent = SpoonReactMCP(
     max_steps=15
 )
 
-# Agent can also load configuration from config.json
-# The config.json file defines available MCP tools
+# When using the CLI (main.py / spoon-cli), agents and MCP tools are defined in the CLI's `config.json` file.
+# When using the SDK directly (as in this example), configure tools and agents in Python code instead of reading config.json.
 ```
 
 ## Creating Custom Agents
@@ -216,7 +216,7 @@ class WeatherAgent(SpoonReactAI):
 
         # Set up tools
         weather_tool = WeatherTool()
-        self.avaliable_tools = ToolManager([weather_tool])
+        self.available_tools = ToolManager([weather_tool])
 ```
 
 ### Advanced Agent with Multiple Tools
@@ -252,7 +252,7 @@ class ResearchAgent(SpoonReactAI):
             )
             tools.append(search_tool)
 
-        self.avaliable_tools = ToolManager(tools)
+        self.available_tools = ToolManager(tools)
         self.system_prompt = """
         You are a research assistant with access to web search tools.
 
@@ -367,8 +367,8 @@ agent.max_steps = 20
 agent.system_prompt = "You are an expert assistant."
 
 # Check available tools
-if hasattr(agent, 'avaliable_tools'):
-    tools = agent.avaliable_tools.list_tools()
+if hasattr(agent, 'available_tools'):
+    tools = agent.available_tools.list_tools()
     print(f"Available tools: {tools}")
 ```
 
@@ -407,7 +407,7 @@ class DataAnalysisAgent(ToolCallAgent):
             DatabaseTool(),    # Data access
         ]
 
-        self.avaliable_tools = ToolManager(tools)
+        self.available_tools = ToolManager(tools)
 ```
 
 ### 3. Error Handling
@@ -550,7 +550,7 @@ class MCPEnabledAgent(SpoonReactMCP):
         )
 
         # Create tool manager
-        self.avaliable_tools = ToolManager([search_tool, context7_tool])
+        self.available_tools = ToolManager([search_tool, context7_tool])
 
         self.system_prompt = """
         You are a research assistant with access to multiple MCP tools:
@@ -669,7 +669,7 @@ class ComprehensiveMCPAgent(SpoonReactMCP):
             ))
 
         # Create tool manager
-        self.avaliable_tools = ToolManager(mcp_tools)
+        self.available_tools = ToolManager(mcp_tools)
 
         self.system_prompt = """
         You are a comprehensive AI assistant with the following MCP tools:

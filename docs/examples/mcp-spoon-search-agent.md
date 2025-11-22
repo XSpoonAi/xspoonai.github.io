@@ -48,7 +48,7 @@ npx --version              # Ensure npx is available
 
 ```bash
 # Navigate to examples directory
-cd spoon-cookbook/example
+cd spoon-core/example
 
 # Install dependencies
 pip install -r requirements.txt

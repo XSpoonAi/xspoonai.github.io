@@ -440,7 +440,7 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 - **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Agent-MCP integration patterns
 - **[API Reference](../api-reference/)** - Complete SpoonOS API documentation
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-ai/tree/main/spoon-cookbook/example/spoon_search_agent.py)
+**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
 
 **What it demonstrates:**
 - Complete MCP server integration and tool discovery

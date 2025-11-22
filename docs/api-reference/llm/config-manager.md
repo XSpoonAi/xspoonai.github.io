@@ -2,6 +2,8 @@
 
 The `ConfigurationManager` handles loading, validation, and management of LLM provider configurations from various sources including environment variables, configuration files, and runtime settings.
 
+> **Note (Nov 2025):** The core SDK now defaults to environment-driven configuration. Use the `spoon-cli` configuration manager (or set environment variables manually) to sync `config.json` values before instantiating `ConfigurationManager()`.
+
 ## Class Definition
 
 ```python
@@ -57,8 +59,13 @@ Load configuration from a JSON or TOML file.
 
 **Example:**
 ```python
+import os
+from spoon_ai.llm import ConfigurationManager
+
+# Populate required environment variables before instantiating the manager
+os.environ["OPENAI_API_KEY"] = "sk-..."
+
 config_manager = ConfigurationManager()
-config = config_manager.load_from_file("config.json")
 ```
 
 ### `load_from_env() -> Dict[str, Any]`
@@ -77,6 +84,13 @@ Load configuration from environment variables.
 
 config = config_manager.load_from_env()
 ```
+
+Environment overrides also control provider priority:
+
+- `DEFAULT_LLM_PROVIDER` selects the preferred provider (e.g. `anthropic`).
+- `LLM_FALLBACK_CHAIN` lists comma-separated providers for cascading retries (e.g. `anthropic,openai,gemini`).
+
+When using `spoon-cli`, these variables are exported automatically after `config.json` loads. If you instantiate the SDK directly, set them yourself before calling `ConfigurationManager()`.
 
 ### `merge_configs(base_config: Dict, override_config: Dict) -> Dict[str, Any]`
 
@@ -272,13 +286,13 @@ temperature = 0.2
 # Provider API Keys
 OPENAI_API_KEY=sk-your_openai_key_here
 ANTHROPIC_API_KEY=sk-ant-your_anthropic_key_here
-GOOGLE_API_KEY=your_google_key_here
+GEMINI_API_KEY=your_gemini_key_here
 DEEPSEEK_API_KEY=your_deepseek_key_here
 OPENROUTER_API_KEY=sk-or-your_openrouter_key_here
 
 # Global Settings
-DEFAULT_LLM_PROVIDER=openai
-DEFAULT_MODEL=gpt-4.1
+DEFAULT_LLM_PROVIDER=gemini
+DEFAULT_MODEL=gemini-2.5-pro
 DEFAULT_TEMPERATURE=0.3
 LLM_TIMEOUT=30
 LLM_RETRY_ATTEMPTS=3
@@ -287,6 +301,7 @@ LLM_RETRY_ATTEMPTS=3
 OPENAI_MODEL=gpt-4.1
 ANTHROPIC_MODEL=claude-sonnet-4-20250514
 GEMINI_MODEL=gemini-2.5-pro
+GEMINI_MAX_TOKENS=20000
 ```
 
 ## Configuration Priority
@@ -394,7 +409,7 @@ decrypted = config_manager.decrypt_config(encrypted_config)
 import os
 from spoon_ai.llm import ConfigurationManager
 
-config_manager = ConfigurationManager()
+config_manager = ConfigurationManager()  # environment-first configuration
 
 # Secure: Load from environment
 config_manager.set_provider_config("openai", {
@@ -432,27 +447,12 @@ llm_manager = LLMManager(config_manager=config_manager)
 
 ## Integration Examples
 
-### With LLMManager
-
-```python
-from spoon_ai.llm import ConfigurationManager, LLMManager
-
-# Initialize configuration
-config_manager = ConfigurationManager("config.json")
-
-# Create LLM manager with configuration
-llm_manager = LLMManager(config_manager=config_manager)
-
-# Configuration changes are automatically picked up
-response = await llm_manager.chat(messages)
-```
-
 ### Programmatic Configuration
 
 ```python
 from spoon_ai.llm import ConfigurationManager
 
-config_manager = ConfigurationManager()
+config_manager = ConfigurationManager()  # defaults to environment variables
 
 # Configure providers programmatically
 providers = {

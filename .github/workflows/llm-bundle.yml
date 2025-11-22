@@ -1,0 +1,61 @@
+name: LLM Bundle
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - 'Toolkit/**'
+      - 'static/**'
+      - 'sidebars.ts'
+      - 'toolkitSidebars.ts'
+      - 'scripts/generate-llm.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/llm-bundle.yml'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'Toolkit/**'
+      - 'static/**'
+      - 'sidebars.ts'
+      - 'toolkitSidebars.ts'
+      - 'scripts/generate-llm.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/llm-bundle.yml'
+  workflow_dispatch:
+
+jobs:
+  build-llm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: ./package-lock.json
+      - run: npm ci
+      - run: npm run generate-llm
+      - name: Auto-commit updated llm.txt on push
+        if: github.event_name == 'push'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update llm bundle"
+          file_pattern: llm.txt
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+      - name: Ensure llm.txt is committed
+        if: github.event_name != 'push'
+        run: |
+          git diff --stat --ignore-cr-at-eol --exit-code llm.txt || (echo "::error ::llm.txt is out of date. Run 'npm run generate-llm', add llm.txt, and commit/push the change." && exit 1)
+      - name: Upload llm.txt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: llm.txt
+          path: llm.txt

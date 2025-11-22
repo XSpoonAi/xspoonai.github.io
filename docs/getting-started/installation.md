@@ -2,88 +2,81 @@
 
 ## Prerequisites
 
-- Python 3.10 or higher
+- Python 3.12 or higher
 - Git
 - Virtual environment (recommended)
 
 ## Quick Installation
 
-### 1. Clone the Repository
+### Option A: Install from PyPI (recommended)
+
+You can use the published PyPI packages without cloning the repository:
+
+1. Create and activate a virtual environment
 
 ```bash
-git clone https://github.com/SpoonOS/spoon-core.git
-cd spoon-core
-```
+# macOS/Linux
+python3 -m venv spoon-env
+source spoon-env/bin/activate
 
-### 2. Create Virtual Environment
-
-```bash
+# Windows (PowerShell)
 python -m venv spoon-env
-source spoon-env/bin/activate  # Linux/macOS
-# or
-spoon-env\Scripts\activate     # Windows
+.\spoon-env\Scripts\Activate.ps1
 ```
 
-### 3. Install Dependencies
+2. Install the core SDK (and optionally the toolkits package)
 
 ```bash
-pip install -r requirements.txt
+pip install spoon-ai-sdk        # core framework
+pip install spoon-toolkits      # optional: extended blockchain & data toolkits
 ```
 
-### 4. Install as Package (Optional)
+### Option B: Use a local repository checkout
+
+If you are working inside this monorepo (for example you already opened it in your IDE), you can install directly from the local folders without needing to `git clone` again.
+
+1. Create Virtual Environment
 
 ```bash
+# macOS/Linux
+python3 -m venv spoon-env
+source spoon-env/bin/activate
+
+# Windows (PowerShell)
+python -m venv spoon-env
+.\spoon-env\Scripts\Activate.ps1
+```
+
+> 💡 On newer Apple Silicon Macs the `python` shim may not point to Python 3.
+> Use `python3` for all commands unless you have explicitly configured `python`
+> to target Python 3.12 or later.
+
+2. Install core package in editable mode
+
+```bash
+git clone https://github.com/XSpoonAi/spoon-core.git
+cd spoon-core
 pip install -e .
 ```
 
-## Verification
+3. (Optional) Install Toolkits Package from local repo
 
-Test your installation by creating a simple agent:
-
-```python
-# test_installation.py
-import asyncio
-from spoon_ai.chat import ChatBot
-
-async def test_installation():
-    # Test basic LLM functionality - framework handles errors automatically
-    llm = ChatBot(
-        llm_provider="openai",  # or your preferred provider
-        model_name="gpt-4.1"  # Framework default
-    )
-    
-    # Framework provides automatic validation and error handling
-    return "✅ SpoonOS framework installed successfully!"
-
-if __name__ == "__main__":
-    result = asyncio.run(test_installation())
-    print(result)
-```
-
-Run the test:
+If you want to use the extended blockchain and data tools from `spoon_toolkits`, install the **spoon-toolkits** package from the `spoon-toolkits` folder:
 
 ```bash
-python test_installation.py
+git clone https://github.com/XSpoonAi/spoon-toolkits.git
+cd spoon-toolkits
+pip install -e .
 ```
-
-You should see success messages indicating the framework is ready.
 
 ## Framework Validation
 
 The SpoonOS framework includes built-in validation that automatically:
 
 - Checks API key configuration
-- Validates provider connectivity  
+- Validates provider connectivity
 - Ensures proper dependency installation
 - Provides clear error messages if issues are found
-
-## Alternative: CLI Interface
-
-You can also test using the CLI interface:
-
-```bash
-python main.py
-```
 
 ## Next Steps
 

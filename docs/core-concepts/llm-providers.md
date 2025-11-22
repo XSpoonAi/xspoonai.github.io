@@ -91,11 +91,11 @@ from spoon_ai.llm.manager import LLMManager
 # Initialize with multiple providers
 llm_manager = LLMManager(
     primary_provider="openai",
-    fallback_providers=["anthropic", "google"],
+    fallback_providers=["anthropic", "gemini"],
     model_preferences={
         "openai": "gpt-4.1",
         "anthropic": "claude-sonnet-4-20250514",
-        "google": "gemini-2.5-pro",
+        "gemini": "gemini-2.5-pro",
         "deepseek": "deepseek-reasoner"
     }
 )
@@ -112,7 +112,7 @@ response = await llm_manager.generate("Explain quantum computing")
 # Provider API Keys
 OPENAI_API_KEY=sk-your_openai_key_here
 ANTHROPIC_API_KEY=sk-ant-your_anthropic_key_here
-GOOGLE_API_KEY=your_google_key_here
+GEMINI_API_KEY=your_gemini_key_here
 DEEPSEEK_API_KEY=your_deepseek_key_here
 OPENROUTER_API_KEY=sk-or-your_openrouter_key_here
 

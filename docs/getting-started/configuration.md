@@ -1,37 +1,42 @@
 # Configuration
 
-SpoonOS uses a flexible configuration system with environment variables and JSON configuration files.
+SpoonOS uses a flexible configuration system with environment variables and (for the CLI only) JSON configuration files.
+
+> **Note (Nov 2025):** When you use the Python SDK directly (`spoon-ai-sdk` / `spoon_ai` imports), configuration is read from environment variables only (shell + `.env`). The `spoon-cli` tool reads `config.json` and exports those values into environment variables before running agents.
 
 ## Configuration Priority
 
-Configuration is loaded in the following order (later sources override earlier ones):
+At runtime, the effective priority is (later sources override earlier ones):
 
-1. Default values
-2. `.env` file
-3. `config.json` file
+1. Built-in defaults in the SDK
+2. Shell / `.env` environment variables
+3. Values materialized by `spoon-cli` from `config.json` (CLI workflows only)
 
 ## Environment Variables
 
 Create a `.env` file in your project root:
 
 ```bash
-# LLM Provider API Keys
+# LLM Provider API Keys (set at least one)
+GEMINI_API_KEY=your_gemini_key_here        # recommended for Quick Start
 OPENAI_API_KEY=your_openai_key_here
 ANTHROPIC_API_KEY=your_anthropic_key_here
-GOOGLE_API_KEY=your_google_key_here
-
-# Web3 Configuration
-WEB3_PROVIDER_URL=https://mainnet.infura.io/v3/your_project_id
-PRIVATE_KEY=your_private_key_here
+DEEPSEEK_API_KEY=your_deepseek_key_here
+OPENROUTER_API_KEY=your_openrouter_key_here
 
 # Optional: Default LLM Settings
-DEFAULT_LLM_PROVIDER=openai
-DEFAULT_MODEL=gpt-4
+DEFAULT_LLM_PROVIDER=gemini                # or openai / anthropic / deepseek / openrouter
+DEFAULT_MODEL=gemini-2.5-pro
+GEMINI_MAX_TOKENS=20000                    # recommended context limit for Gemini
+
+# Web3 Configuration (only needed for on-chain tools)
+WEB3_PROVIDER_URL=https://mainnet.infura.io/v3/your_project_id
+PRIVATE_KEY=your_private_key_here
 ```
 
 ## Runtime Configuration
 
-Create a `config.json` file for dynamic configuration:
+Create a `config.json` file for dynamic configuration (used by the CLI; the core SDK still reads from environment variables):
 
 ```json
 {
@@ -72,7 +77,7 @@ Create a `config.json` file for dynamic configuration:
 Test your configuration:
 
 ```bash
-python -c "from spoon_ai.config.manager import ConfigManager; print('✅ Configuration loaded successfully')"
+python -c "from spoon_ai.utils.config_manager import ConfigManager; print('✅ Configuration loaded successfully')"
 ```
 
 The framework automatically validates your configuration and provides helpful error messages if any issues are detected.
