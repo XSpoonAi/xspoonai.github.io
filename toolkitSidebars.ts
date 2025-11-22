@@ -30,18 +30,6 @@ const toolkitSidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Security',
-      collapsed: false,
-      items: [
-        'security/token-risk',
-        'security/approvals',
-        'security/address-risk',
-        'security/dapp-phishing',
-        'security/internals',
-      ],
-    },
-    {
-      type: 'category',
       label: 'GitHub Intelligence',
       collapsed: false,
       items: [
