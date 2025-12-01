@@ -39,6 +39,14 @@ const toolkitSidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'memory',
+      collapsed: false,
+      items: [
+        'memory/mem0',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Social Media',
       collapsed: false,
       items: [
