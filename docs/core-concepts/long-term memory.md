@@ -1,14 +1,8 @@
-# Long-Term Memory with Mem0
+# Long-Term Memory
 
-Spoon-core ships a lightweight Mem0 wrapper (`SpoonMem0`) that lets agents persist and recall user context across sessions. This page shows the key API and a minimal end-to-end demo.
+Long-term memory lets agents persist and recall user context across sessions using the Mem0 service. SpoonOS provides `SpoonMem0`, a lightweight wrapper around `mem0.MemoryClient` with safe defaults, automatic user/agent scoping, and graceful fallbacks when the service is unavailable.
 
-## What SpoonMem0 does
-- Wraps `mem0.MemoryClient` with safe defaults and fallbacks.
-- Builds metadata/filters with `user_id`/`agent_id` so memories stay scoped per user (injects `user_id` into filters/metadata if absent, and passes collection when set).
-- Provides sync/async helpers to add, search, and list memories.
-- Gracefully disables itself if `mem0ai` or `MEM0_API_KEY` is missing; when the client isn’t ready or a call fails, helpers return empty results rather than raising.
-
-Core class: `spoon_ai.memory.mem0_client.SpoonMem0`
+**Core class:** `spoon_ai.memory.mem0_client.SpoonMem0`
 
 ### Initialization
 ```python

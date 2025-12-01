@@ -1,19 +1,15 @@
-# x402 Payments in SpoonOS
+# x402 Payments
 
-x402 is the payment rail SpoonOS uses to gate agent capabilities behind verifiable, instant crypto authorizations via signed typed-data and an HTTP 402 paywall pattern. This page explains the concepts you need before wiring the APIs or running demos, and ships with a facilitator service plus a FastAPI paywall router to verify and settle payments.
+x402 is the payment rail for gating agent capabilities behind verifiable crypto authorizations. It uses signed typed-data and an HTTP 402 paywall pattern—agents can autonomously discover paywall requirements, sign payments, retry, and continue workflows.
 
-## What do you use it for?
-- Gating agent or tool invocations so expensive or sensitive actions only run after a verified payment.
-- Building paywalled HTTP endpoints that can be called by Spoon agents or external clients.
-- Letting agents autonomously discover paywall requirements, sign, retry, and continue workflows.
+**Key characteristics:**
 
-## Why choose x402 here?
-- **Fast & verifiable**: Uses TransferWithAuthorization-style payloads; signatures are facilitator-verified before execution.
-- **Drop-in**: The paywall router and tools (`x402_paywalled_request`, `x402_create_payment`) are prebuilt—no custom cryptography required.
-- **Multi-signer**: Automatically prefers local keys, with Turnkey fallback when you need hosted signing.
-- **Observable**: Standardized receipts (`X-PAYMENT-RESPONSE`) make logging and analytics straightforward.
+- **Fast & verifiable** — TransferWithAuthorization-style payloads verified by facilitator before execution
+- **Drop-in** — Prebuilt paywall router and tools (`x402_paywalled_request`, `x402_create_payment`)
+- **Multi-signer** — Local keys preferred, with Turnkey fallback for hosted signing
+- **Observable** — Standardized receipts (`X-PAYMENT-RESPONSE`) for logging and analytics
 
-## Mental model
+## Components
 
 | Piece | Role inside SpoonOS |
 | --- | --- |

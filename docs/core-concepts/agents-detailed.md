@@ -2,27 +2,15 @@
 sidebar_position: 5
 ---
 
-# Agents
+# Agents (Detailed Guide)
 
-This guide provides a comprehensive walkthrough for developing and configuring agents in the SpoonOS Core Developer Framework (SCDF). We will use practical examples to illustrate key concepts, including agent definition, tool integration, and execution.
-
-Agents are the core building blocks of SpoonOS. They combine language models with tools to create intelligent, autonomous systems that can reason, plan, and take actions.
-
-## What is an Agent?
-
-An agent in SpoonOS is an intelligent entity that:
-
-- **Reasons** about problems and situations
-- **Plans** sequences of actions to achieve goals
-- **Executes** actions using available tools
-- **Learns** from interactions and feedback
-- **Adapts** to new situations and requirements
+This guide provides a comprehensive walkthrough for developing and configuring agents in SpoonOS. Agents combine language models with tools to create intelligent, autonomous systems that reason about problems, plan action sequences, execute tools, and adapt based on feedback.
 
 ## Agent Architecture
 
 SpoonOS agents follow the **ReAct (Reasoning + Acting)** pattern:
 
-```
+```text
 Thought → Action → Observation → Thought → Action → ...
 ```
 

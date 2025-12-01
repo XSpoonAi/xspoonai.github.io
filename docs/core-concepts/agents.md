@@ -1,10 +1,6 @@
 # Agents
 
-Agents are the core intelligence layer of SpoonOS, combining LLM reasoning with planning, tools/graphs, memory, and recovery.
-
-- **What**: Decision-makers that reason about goals, plan actions, execute tools, and adapt through learning, with built-in memory and error handling.
-- **Why/When**: Automate multi-step tasks, orchestrate capabilities, and expose consistent behavior via CLI/HTTP/Python.
-- **Differentiators**: Structured ReAct/Graph loops, plug-in tools/memory/routers, and operational features like retries, monitoring, and provider fallbacks.
+Agents are the core intelligence layer of SpoonOS—decision-makers that reason about goals, plan actions, execute tools, and adapt through learning. They combine LLM reasoning with structured execution loops (ReAct or Graph), pluggable tools and memory, and operational features like retries, monitoring, and provider fallbacks.
 
 ## Agent Types
 

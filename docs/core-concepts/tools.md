@@ -1,20 +1,17 @@
-# Tools Overview
+# Tools
 
-Tools are callable capabilities that agents use to interact with external systems. In `spoon_ai`, a tool is any `BaseTool` subclass, orchestrated through `ToolManager` or exposed/consumed via the MCP (Model Context Protocol) client/server components.
+Tools are callable capabilities that agents use to interact with external systems—data sources, APIs, blockchains, and utilities. In SpoonOS, a tool is any `BaseTool` subclass with JSON-schema parameters and runtime validation. Tools are orchestrated through `ToolManager` locally or exposed/consumed via MCP (Model Context Protocol) for federated discovery.
 
-## What do you use them for?
-- Giving agents safe, parameterized access to data sources, APIs, blockchains, and utilities.
-- Composing richer behaviors without hard-coding API calls inside prompts.
-- Sharing capabilities across agents through MCP servers.
+**Key characteristics:**
 
-## Why use SpoonOS tools?
-- **Typed + validated**: JSON-schema parameters and runtime checks reduce LLM misuse.
-- **Pluggable**: ToolManager handles registration, lookup, and metadata for multiple providers.
-- **Extensible**: Works locally, with toolkit bundles, or over MCP for federated tool discovery.
+- **Typed + validated** — JSON-schema parameters reduce LLM misuse
+- **Pluggable** — ToolManager handles registration, lookup, and metadata
+- **Extensible** — Works locally, with toolkit bundles, or over MCP
 
-## Tool Shapes
+## Tool Types
 
 ### Local tools (`BaseTool`)
+
 ```python
 from spoon_ai.tools.base import BaseTool
 

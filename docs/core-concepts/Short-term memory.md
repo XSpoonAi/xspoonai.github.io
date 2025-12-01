@@ -1,5 +1,6 @@
+# Short-Term Memory
 
----
+Short-term memory enables AI agents to retain context within a conversation session. It manages the message history passed to LLMs, handling trimming and summarization to stay within context window limits while preserving relevant information.
 
 ## Overview
 
@@ -29,9 +30,9 @@ Because context windows are finite, applications benefit from strategies that tr
 
 ---
 
+## Quick Start: ChatBot with Built-in Memory
 
-##  Quick Start: ChatBot with Built-in Memory
- When you initialise `ChatBot` with `enable_short_term_memory=True` (the default), it creates a `ShortTermMemoryManager` internally. Before every LLM call, the chatbot feeds the running history into the manager, which handles trimming or summarising and (optionally) saving checkpoints.
+When you initialise `ChatBot` with `enable_short_term_memory=True` (the default), it creates a `ShortTermMemoryManager` internally. Before every LLM call, the chatbot feeds the running history into the manager, which handles trimming or summarising and (optionally) saving checkpoints.
  You can still access the same manager manually via `chatbot.short_term_memory_manager` if you want to tweak the behaviour or call its methods directly, as shown in the next section.
 
 ```python
@@ -51,7 +52,7 @@ print(reply)
 
 ---
 
-##  Manage short-term memory by using `ShortTermMemoryManager`
+## Manage short-term memory by using `ShortTermMemoryManager`
 
 ```python
 import asyncio
@@ -95,7 +96,6 @@ llm_ready, removals, summary = asyncio.run(
 
 Note: both `summarize_messages()` and `ChatBot.ask()` invoke your configured LLM. Ensure `chatbot.llm_manager`/`chatbot.llm_provider` (and any required API keys or env vars) are set so these examples can run end‑to‑end.
 
-
 ```python
 from spoon_ai.chat import ChatBot
 from spoon_ai.graph.reducers import add_messages
@@ -125,7 +125,7 @@ when summarization trims older turns.
 
 ---
 
-##  Inspecting Thread State and Checkpoints
+## Inspecting Thread State and Checkpoints
 
 every time the graph runs, you can retrieve the latest snapshot (messages plus metadata), iterate the full checkpoint history, or read a `CheckpointTuple` for an external consumer. This makes it easy to debug memory behaviour, replay from any checkpoint, or sync state to persistent storage. The example below shows how to fetch the most recent summary, list all checkpoints, and view the tuple-style payload.
 

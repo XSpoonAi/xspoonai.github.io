@@ -1,17 +1,8 @@
 # MCP Protocol
 
-The Model Context Protocol (MCP) enables dynamic tool discovery and execution, allowing agents to access external capabilities at runtime.
+The Model Context Protocol (MCP) is a standardized protocol for dynamic tool discovery and execution. It allows agents to discover available tools at runtime, execute them with proper parameter validation, and access external APIs without code changes.
 
-## What is MCP?
-
-MCP is a standardized protocol that allows AI agents to:
-
-- **Discover** available tools and resources dynamically
-- **Execute** tools with proper parameter validation
-- **Access** external APIs and services seamlessly
-- **Extend** capabilities without code changes
-
-## How MCP Works
+## Architecture
 
 ### Architecture Overview
 
