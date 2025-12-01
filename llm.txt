@@ -8305,6 +8305,114 @@ if response.provider != "openai":
 
 ---
 
+FILE: docs/core-concepts/long-term memory.md
+
+# Long-Term Memory with Mem0
+
+Spoon-core ships a lightweight Mem0 wrapper (`SpoonMem0`) that lets agents persist and recall user context across sessions. This page shows the key API and a minimal end-to-end demo.
+
+## What SpoonMem0 does
+- Wraps `mem0.MemoryClient` with safe defaults and fallbacks.
+- Builds metadata/filters with `user_id`/`agent_id` so memories stay scoped per user (injects `user_id` into filters/metadata if absent, and passes collection when set).
+- Provides sync/async helpers to add, search, and list memories.
+- Gracefully disables itself if `mem0ai` or `MEM0_API_KEY` is missing; when the client isn’t ready or a call fails, helpers return empty results rather than raising.
+
+Core class: `spoon_ai.memory.mem0_client.SpoonMem0`
+
+### Initialization
+```python
+from spoon_ai.memory.mem0_client import SpoonMem0
+
+mem0 = SpoonMem0(
+    {
+        "api_key": "YOUR_MEM0_API_KEY",        # or set MEM0_API_KEY env var
+        "user_id": "user_123",                 # or agent_id
+        "collection": "my_namespace",          # optional namespace/collection
+        "metadata": {"project": "demo"},       # merged into every write
+        "filters": {"project": "demo"},        # merged into every query
+        "async_mode": False,                   # sync writes by default
+    }
+)
+if not mem0.is_ready():
+    print("Mem0 not available")
+```
+
+### Add memory
+```python
+# add a conversation (sync)
+mem0.add_memory([
+    {"role": "user", "content": "I love Solana meme coins"},
+    {"role": "assistant", "content": "Got it, will focus on Solana"},
+], user_id="user_123")  # async_mode is taken from mem0_config (defaults to False)
+
+# add a single text helper
+mem0.add_text("Prefers low gas fees")  # same async_mode default applies
+```
+
+Async variant: `await mem0.aadd_memory(messages, user_id=...)`
+
+### Search memory
+```python
+results = mem0.search_memory(
+    "Solana meme coins high risk",
+    user_id="user_123",
+    limit=5,
+)
+for r in results:  # results is a list of strings extracted from Mem0 responses
+    print("-", r)
+```
+
+Async variant: `await mem0.asearch_memory(query, user_id=...)`
+
+### Get all memory
+```python
+all_memories = mem0.get_all_memory(user_id="user_123", limit=20)  # returns [] if client is not ready or call fails
+```
+
+## Demo: Intelligent Web3 Portfolio Assistant
+Path: `examples/mem0_agent_demo.py`
+
+Key idea: The agent (ChatBot) is configured with Mem0 so it can recall user preferences after restart.
+
+```python
+from spoon_ai.chat import ChatBot
+
+USER_ID = "crypto_whale_001"
+SYSTEM_PROMPT = "...portfolio assistant..."
+
+mem0_config = {
+    "user_id": USER_ID,
+    "metadata": {"project": "web3-portfolio-assistant"},
+    "async_mode": False,  # sync writes so next query sees the data
+}
+
+# Create an LLM with long-term memory enabled
+llm = ChatBot(
+    llm_provider="openrouter",
+    model_name="openai/gpt-5.1",
+    enable_long_term_memory=True,
+    mem0_config=mem0_config,
+)
+```
+
+Flow:
+1) **Session 1** – capture preferences: user says they are a high-risk Solana meme trader; model replies; Mem0 stores the interaction.
+2) **Session 2** – reload a fresh ChatBot with the same `mem0_config`; the agent recalls past preferences (via Mem0 search) before answering.
+3) **Session 3** – user pivots to safe Arbitrum yield; new info is stored; subsequent queries reflect updated preferences.
+
+Run the demo:
+```bash
+python examples/mem0_agent_demo.py
+```
+
+## Notes & Best Practices
+- Always set `MEM0_API_KEY` or pass `api_key` in `mem0_config`.
+- Use a stable `user_id` (or `agent_id`) so memories stay scoped; include `collection`/`filters` if you want stricter isolation. The wrapper injects `user_id` into filters and metadata if missing.
+- Keep `async_mode=False` during demos/tests to avoid read-after-write delays; the wrapper always uses `mem0_config.get("async_mode", False)` for adds (no per-call override).
+- Handle absence gracefully: `SpoonMem0.is_ready()` lets you disable LTM if Mem0 isn’t installed or configured; helpers will otherwise return empty results when the client is unavailable.
+
+---
+
 FILE: docs/core-concepts/mcp-protocol.md
 
 # MCP Protocol
@@ -15308,6 +15416,85 @@ Welcome to the Spoon Toolkit catalog. Everything here is a ready-to-use agent he
 - **Storage** – Off-chain storage bridges (AIOZ, Oort, Foureverland) so agents can archive artifacts or publish outputs.
 
 Navigate the sidebar on the left to dive into any module. Each page documents the environment variables, key classes, and concrete usage snippets for that toolkit.
+
+---
+
+FILE: Toolkit/memory/mem0.md
+
+# Memory Tools (Mem0)
+
+Spoon-toolkit provides Mem0-powered tools that plug into spoon-core agents for long-term memory. They wrap `spoon_ai.memory.mem0_client.SpoonMem0` and expose a consistent tool interface. `ToolResult.output` carries the raw Mem0 response (not a formatted string); validation failures or an unready client return `ToolResult.error` (e.g., “Client not ready”, “No content provided.”) instead of raising.
+
+## Available tools
+- `AddMemoryTool` — store text or conversation snippets.
+- `SearchMemoryTool` — semantic/natural-language search over stored memories.
+- `GetAllMemoryTool` — list memories (with paging/filters).
+- `UpdateMemoryTool` — update an existing memory by memory_id.
+- `DeleteMemoryTool` — delete a memory by memory_id.
+
+All tools accept `mem0_config` (api_key/user_id/collection/metadata/filters/etc.) or an injected `SpoonMem0` client. If `mem0ai` or `MEM0_API_KEY` is missing, client initialization may fail; otherwise an unready client yields `ToolResult.error` rather than an exception.
+
+Parameter merging behavior:
+- `user_id` defaults to `mem0_config.user_id`/`agent_id` (or the client’s user_id) and is also injected into filters if missing.
+- `collection`, `metadata`, and `filters` from the injected client/config are merged into each call; per-call metadata/filters override on conflict.
+- `async_mode` is only forwarded when passed to `AddMemoryTool.execute`; it is not auto-propagated from `mem0_config` by these wrappers (rely on `SpoonMem0` defaults if needed).
+
+## Quick usage (agent-side)
+```python
+from spoon_ai.agents.spoon_react import SpoonReactAI
+from spoon_ai.chat import ChatBot
+from spoon_ai.tools.tool_manager import ToolManager
+from spoon_toolkits.memory import (
+    AddMemoryTool, SearchMemoryTool, GetAllMemoryTool, UpdateMemoryTool, DeleteMemoryTool
+)
+
+MEM0_CFG = {
+    "user_id": "defi_user_001",
+    "metadata": {"project": "demo"},
+    "async_mode": False,   # sync writes to avoid read-after-write delays
+    "collection": "demo_mem",
+}
+
+class MemoryAgent(SpoonReactAI):
+    mem0_config = MEM0_CFG
+    available_tools = ToolManager([
+        AddMemoryTool(mem0_config=MEM0_CFG),
+        SearchMemoryTool(mem0_config=MEM0_CFG),
+        GetAllMemoryTool(mem0_config=MEM0_CFG),
+        UpdateMemoryTool(mem0_config=MEM0_CFG),
+        DeleteMemoryTool(mem0_config=MEM0_CFG),
+    ])
+
+agent = MemoryAgent(
+    llm=ChatBot(llm_provider="openrouter", model_name="anthropic/claude-3.5-sonnet", enable_long_term_memory=False),
+)
+```
+
+## Demo flow (from `spoon-core/examples/mem0_tool_agent.py`)
+The example walks through capture → recall → update → delete:
+
+1) **Capture**: `add_memory` with user preferences. Immediately verify with `get_all_memory` (same `user_id`) and then `search_memory` to show stored content.
+2) **Recall**: Build a fresh agent with the same `mem0_config` and `search_memory` to retrieve prior preferences.
+3) **Update**: `add_memory` new preference + `update_memory` a specific record (by id) to reflect the pivot; then `search_memory` again to confirm recency.
+4) **Delete**: `delete_memory` the updated record; `get_all_memory` to show remaining memories.
+
+Run the example:
+```bash
+python spoon-core/examples/mem0_tool_agent.py
+```
+
+## Tool parameters (summary)
+- Shared: `user_id`, `metadata`, `filters`, `collection` inherited via `mem0_config` or passed per-call.
+- Add: `content` or `messages`, `role` (default `user`), `async_mode`.
+- Search: `query`, `limit`/`top_k`, optional filters.
+- GetAll: `page`, `page_size`/`limit`/`top_k`, filters.
+- Update: `memory_id` (required), `text`, `metadata`.
+- Delete: `memory_id` (required).
+
+## Best practices
+- Keep a stable `user_id`/`collection` for scoping; pass it explicitly on each call for consistency.
+- Use `async_mode=False` when you need immediate read-after-write in demos/tests.
+- If you pass a custom `SpoonMem0` via `mem0_client`, you can reuse a single client across tools to avoid repeated pings/initialization.
 
 ---
 
