@@ -1,6 +1,17 @@
 # x402 Payments in SpoonOS
 
-x402 is the payment rail SpoonOS uses to gate agent capabilities behind verifiable, instant crypto authorizations. This page explains the concepts you need before wiring the APIs or running demos.
+x402 is the payment rail SpoonOS uses to gate agent capabilities behind verifiable, instant crypto authorizations via signed typed-data and an HTTP 402 paywall pattern. This page explains the concepts you need before wiring the APIs or running demos, and ships with a facilitator service plus a FastAPI paywall router to verify and settle payments.
+
+## What do you use it for?
+- Gating agent or tool invocations so expensive or sensitive actions only run after a verified payment.
+- Building paywalled HTTP endpoints that can be called by Spoon agents or external clients.
+- Letting agents autonomously discover paywall requirements, sign, retry, and continue workflows.
+
+## Why choose x402 here?
+- **Fast & verifiable**: Uses TransferWithAuthorization-style payloads; signatures are facilitator-verified before execution.
+- **Drop-in**: The paywall router and tools (`x402_paywalled_request`, `x402_create_payment`) are prebuilt—no custom cryptography required.
+- **Multi-signer**: Automatically prefers local keys, with Turnkey fallback when you need hosted signing.
+- **Observable**: Standardized receipts (`X-PAYMENT-RESPONSE`) make logging and analytics straightforward.
 
 ## Mental model
 
@@ -36,30 +47,34 @@ Key points:
 ## Runtime lifecycle
 
 ```mermaid
-flowchart TD
-    A[User task -> SpoonReact agent] --> B[Step 1: http_probe tool<br/>Unauthenticated probe of paywalled URL]
-    B -->|HTTP 200| J[Step 4: Agent parses body/headers<br/>No payment required]
-    B -->|HTTP 402| C[Step 2: x402_paywalled_request tool<br/>Parse paywall requirements]
-    C --> D[Merge paywall + config overrides]
-    D --> E[Signer selection<br/>PRIVATE_KEY preferred, Turnkey fallback]
-    E --> F[Typed-data build<br/>TransferWithAuthorization payload]
-    F --> G[Signature via eth_account or Turnkey]
-    G --> H[Encode header -> X-PAYMENT]
-    H --> I[Step 3: Paid retry with X-PAYMENT header]
-    I --> P1
+sequenceDiagram
+    participant User
+    participant Agent
+    participant Paywall as Paywall Router (/x402)
+    participant Facilitator
 
-    subgraph "Paywall server (FastAPI /x402)"
-        P1[Incoming request carrying X-PAYMENT] --> P2[verify_payment -> Facilitator API]
-        P2 --> P3{Valid payment?}
-        P3 -- No --> P4[Return HTTP 402 + error]
-        P3 -- Yes --> P5[Optional settle_payment]
-        P5 --> P6[Invoke agent/tooling]
-        P6 --> P7[Return HTTP 200 + X-PAYMENT-RESPONSE]
+    User->>Agent: Task / query
+    Agent->>Paywall: http_probe (unauthenticated)
+    alt Paywall open
+        Paywall-->>Agent: HTTP 200 (no payment)
+        Agent-->>User: Return content / summary
+    else Paywalled (HTTP 402)
+        Paywall-->>Agent: 402 + requirements
+        Agent->>Agent: Merge requirements + config overrides
+        Agent->>Agent: Select signer (PRIVATE_KEY or Turnkey)
+        Agent->>Agent: Build typed-data payload
+        Agent->>Agent: Sign -> X-PAYMENT header
+        Agent->>Paywall: Retry with X-PAYMENT
+        Paywall->>Facilitator: verify_payment (optional settle)
+        Facilitator-->>Paywall: Valid? + receipt
+        alt Invalid
+            Paywall-->>Agent: 402 / error
+        else Valid
+            Paywall-->>Agent: 200 + X-PAYMENT-RESPONSE
+            Agent->>Agent: Log receipt / update memory
+            Agent-->>User: Protected content + summary
+        end
     end
-
-    P4 -.-> C
-    P7 --> J
-    J --> K[Memory/log update + ReAct summary output]
 ```
 
 If the paid retry fails (for example `verify_payment` rejects the header or the facilitator reports an error), the paywall server immediately returns another `402` or error payload and the agent decides whether to run `x402_paywalled_request` again with corrected parameters. A successful verification moves straight into settlement and target agent execution, so there is no additional retry cycle once the `X-PAYMENT` header is accepted.

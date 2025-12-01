@@ -1,6 +1,16 @@
 # Tools Overview
 
-Tools are callable capabilities that agents use to interact with external systems. In `spoon_ai` a tool is any `BaseTool` subclass, and tools are orchestrated through `ToolManager` or via the MCP (Model Context Protocol) client/server components.
+Tools are callable capabilities that agents use to interact with external systems. In `spoon_ai`, a tool is any `BaseTool` subclass, orchestrated through `ToolManager` or exposed/consumed via the MCP (Model Context Protocol) client/server components.
+
+## What do you use them for?
+- Giving agents safe, parameterized access to data sources, APIs, blockchains, and utilities.
+- Composing richer behaviors without hard-coding API calls inside prompts.
+- Sharing capabilities across agents through MCP servers.
+
+## Why use SpoonOS tools?
+- **Typed + validated**: JSON-schema parameters and runtime checks reduce LLM misuse.
+- **Pluggable**: ToolManager handles registration, lookup, and metadata for multiple providers.
+- **Extensible**: Works locally, with toolkit bundles, or over MCP for federated tool discovery.
 
 ## Tool Shapes
 
@@ -76,10 +86,10 @@ asyncio.run(mcp_tools.run(port=8765))  # SSE server by default
 This uses `fastmcp` under the hood and auto-registers each tool as an MCP `FunctionTool`.
 
 ## Configuration
-- **Core**: none required for basic tools.  
-- **Embedding index (optional)**: `OPENAI_API_KEY`, `PINECONE_API_KEY`.  
-- **Crypto/toolkit tools**: provider-specific keys (e.g., `OKX_API_KEY`, `BITQUERY_API_KEY`, `RPC_URL`, `GOPLUSLABS_API_KEY`).  
-- **MCP**: set transport target via `mcp_config` (`url` or `command` + `args`/`env`).  
+- **Core**: none required for basic tools.
+- **Embedding index (optional)**: `OPENAI_API_KEY`, `PINECONE_API_KEY`.
+- **Crypto/toolkit tools**: provider-specific keys (e.g., `OKX_API_KEY`, `BITQUERY_API_KEY`, `RPC_URL`, `GOPLUSLABS_API_KEY`).
+- **MCP**: set transport target via `mcp_config` (`url` or `command` + `args`/`env`).
 
 ## Best Practices
 - Keep tools single-purpose with clear `parameters` JSON schema.

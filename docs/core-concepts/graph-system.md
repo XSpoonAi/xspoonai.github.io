@@ -1,5 +1,21 @@
 # Graph System
 
+The Graph System in SpoonOS is a declarative engine for multi-step, stateful workflows with intelligent routing and parallel execution, built on `StateGraph`.
+
+## What do you use it for?
+- Orchestrating multi-step agent or tool pipelines (ingest → analyze → act → summarize).
+- Running parallel data collection or decision branches and merging results deterministically.
+- Adding LLM-driven routing while keeping guardrails via rules, conditions, and validators.
+- Persisting and reusing context across runs through integrated memory and reducers.
+
+## Why this approach vs other graph runtimes?
+
+- **Typed state first**: Pydantic-style schemas plus reducers keep state bounded and predictable.
+- **Declarative templates**: `GraphTemplate/NodeSpec/EdgeSpec` capture intent and reuse; less boilerplate wiring.
+- **Hybrid routing**: Priority stack (LLM router → rules → conditional edges → static edges) gives control without custom middleware.
+- **Parallel controls**: Parallel groups ship with join/error/retry/circuit-breaker policies as first-class options.
+- **Monitoring built-in**: Metrics hooks (`execution_time`, `routing_performance`, etc.) are included—no bolt-on instrumentation needed.
+
 The Graph System in SpoonOS enables complex, multi-step workflows through a modern declarative execution engine that supports intelligent routing, parallel execution, and state management. Built around `StateGraph` with powerful declarative building tools.
 
 ## What you get
