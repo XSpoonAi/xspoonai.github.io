@@ -15429,8 +15429,8 @@ Spoon-toolkit provides Mem0-powered tools that plug into spoon-core agents for l
 - `AddMemoryTool` — store text or conversation snippets.
 - `SearchMemoryTool` — semantic/natural-language search over stored memories.
 - `GetAllMemoryTool` — list memories (with paging/filters).
-- `UpdateMemoryTool` — update an existing memory by id.
-- `DeleteMemoryTool` — delete a memory by id.
+- `UpdateMemoryTool` — update an existing memory by memory_id.
+- `DeleteMemoryTool` — delete a memory by memory_id.
 
 All tools accept `mem0_config` (api_key/user_id/collection/metadata/filters/etc.) or an injected `SpoonMem0` client. If `mem0ai` or `MEM0_API_KEY` is missing, client initialization may fail; otherwise an unready client yields `ToolResult.error` rather than an exception.
 
