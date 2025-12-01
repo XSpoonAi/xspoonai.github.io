@@ -35,6 +35,7 @@ const sidebars: SidebarsConfig = {
         'core-concepts/graph-system',
         'core-concepts/Short-term memory',
         'core-concepts/x402-payments',
+        'core-concepts/long-term memory',
       ],
     },
     {
