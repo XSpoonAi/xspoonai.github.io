@@ -1,48 +1,124 @@
 # Tools
 
-Tools are callable capabilities that agents use to interact with external systems—data sources, APIs, blockchains, and utilities. In SpoonOS, a tool is any `BaseTool` subclass with JSON-schema parameters and runtime validation. Tools are orchestrated through `ToolManager` locally or exposed/consumed via MCP (Model Context Protocol) for federated discovery.
+## Introduction
 
-**Key characteristics:**
+Tools are the interface between AI agents and external systems—APIs, databases, blockchains, file systems, and other services. In SpoonOS, tools are strongly-typed callable units with JSON-schema parameter definitions, enabling LLMs to invoke them reliably with automatic input validation and structured output.
 
-- **Typed + validated** — JSON-schema parameters reduce LLM misuse
-- **Pluggable** — ToolManager handles registration, lookup, and metadata
-- **Extensible** — Works locally, with toolkit bundles, or over MCP
+### Core Capabilities
 
-## Tool Types
+- **Type Safety**: JSON-schema parameter definitions with runtime validation prevent malformed inputs from reaching execution
+- **Unified Interface**: `BaseTool` abstract class provides consistent `execute()` method across all tool types
+- **Orchestration**: `ToolManager` handles tool registration, lookup by name, parameter extraction for LLM function calling, and batch execution
+- **MCP Integration**: Tools can be exposed as MCP servers or consumed from remote MCP servers for federated tool ecosystems
+- **Semantic Search**: Optional Pinecone-based tool indexing for semantic tool discovery when tool sets are large
+- **Crypto/Web3 Native**: Pre-built toolkits for CEX trading, DEX operations, on-chain data, and blockchain interactions
 
-### Local tools (`BaseTool`)
+### Comparison with Other Tool Systems
+
+| Aspect | SpoonOS Tools | LangChain Tools | OpenAI Function Calling |
+|--------|--------------|-----------------|------------------------|
+| **Definition** | `BaseTool` class with `execute()` method | `Tool` or `@tool` decorator | JSON schema in API request |
+| **Validation** | JSON-schema + runtime type checking | Pydantic models optional | Server-side only |
+| **Discovery** | `ToolManager` + optional semantic search | `load_tools()` for known tools | N/A (manual) |
+| **Remote Tools** | MCP protocol (stdio, SSE, WebSocket) | Via API wrappers | N/A |
+| **Bundling** | Toolkit packages (`spoon-toolkits`) | Community integrations | N/A |
+| **Async Support** | Native `async execute()` | Mixed sync/async | N/A |
+
+**When to choose SpoonOS Tools:**
+
+- You need MCP protocol support for exposing or consuming remote tools
+- You're building crypto/Web3 agents that need CEX, DEX, or on-chain toolkits
+- You want semantic tool search for large tool collections
+- You need consistent async execution across all tools
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+```
 
 ```python
+import asyncio
 from spoon_ai.tools.base import BaseTool
+from spoon_ai.tools import ToolManager
 
-class HelloTool(BaseTool):
-    name = "hello"
-    description = "Return a greeting"
+# Define a tool with JSON-schema parameters
+class GreetTool(BaseTool):
+    name = "greet"
+    description = "Greet someone by name"
     parameters = {
         "type": "object",
-        "properties": {
-            "name": {"type": "string", "description": "Who to greet"}
-        },
+        "properties": {"name": {"type": "string"}},
         "required": ["name"]
     }
 
     async def execute(self, name: str) -> str:
         return f"Hello, {name}!"
-```
-`__call__` forwards to `execute`, so `await tool(name="Ricky")` works.
 
-### Tool Manager
-`ToolManager` registers tools and executes them by name.
+# Register and execute
+manager = ToolManager([GreetTool()])
+
+async def main():
+    result = await manager.execute(name="greet", tool_input={"name": "World"})
+    print(result)  # Hello, World!
+
+asyncio.run(main())
+```
+
+---
+
+## Tool Types
+
+### Local Tools (`BaseTool`)
+
+All tools inherit from `BaseTool` with three required attributes and one method:
+
+```python
+from spoon_ai.tools.base import BaseTool
+
+class MyTool(BaseTool):
+    name = "my_tool"                    # Unique identifier
+    description = "What this tool does" # LLM reads this to decide when to use it
+    parameters = {                      # JSON-schema for input validation
+        "type": "object",
+        "properties": {
+            "arg1": {"type": "string", "description": "First argument"},
+            "arg2": {"type": "integer", "default": 10}
+        },
+        "required": ["arg1"]
+    }
+
+    async def execute(self, arg1: str, arg2: int = 10) -> str:
+        return f"Result: {arg1}, {arg2}"
+```
+
+The `__call__` method forwards to `execute()`, so `await tool(arg1="value")` works.
+
+### ToolManager
+
+Orchestrates tool registration, lookup, and execution:
+
 ```python
 from spoon_ai.tools import ToolManager
-manager = ToolManager([HelloTool()])
 
-result = await manager.execute(name="hello", tool_input={"name": "Ricky"})
+manager = ToolManager([MyTool(), AnotherTool()])
+
+# Execute by name
+result = await manager.execute(name="my_tool", tool_input={"arg1": "hello"})
+
+# Get tool specs for LLM function calling
+specs = manager.to_params()  # List of OpenAI-compatible tool definitions
 ```
-Utility helpers:
-- `to_params()` → list of OpenAI/JSON‑schema tool specs
-- `add_tool(s)`, `remove_tool`, `get_tool`
-- Optional semantic indexing (`index_tools`, `query_tools`) uses Pinecone + OpenAI embeddings (needs `PINECONE_API_KEY`, `OPENAI_API_KEY`).
+
+**Key methods:**
+
+- `add_tool(tool)` / `add_tools([...])` — Register tools
+- `remove_tool(name)` — Unregister by name
+- `get_tool(name)` — Retrieve tool instance
+- `to_params()` — Export OpenAI-compatible tool definitions
+- `index_tools()` / `query_tools(query)` — Semantic search (requires Pinecone + OpenAI)
 
 ### Crypto toolkit (optional)
 If `spoon-toolkits` is installed, you can load its crypto tools:

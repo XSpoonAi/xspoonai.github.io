@@ -1,10 +1,62 @@
 # MCP Protocol
 
-The Model Context Protocol (MCP) is a standardized protocol for dynamic tool discovery and execution. It allows agents to discover available tools at runtime, execute them with proper parameter validation, and access external APIs without code changes.
+## Introduction
+
+The Model Context Protocol (MCP) is an open standard developed by Anthropic for connecting AI agents to external tools and data sources. It defines a client-server architecture where agents dynamically discover, validate, and execute tools exposed by MCP servers—enabling modular, federated tool ecosystems without hardcoded integrations.
+
+### Core Capabilities
+
+- **Dynamic Discovery**: Agents query MCP servers at runtime to discover available tools, their schemas, and capabilities
+- **Transport Agnostic**: Supports stdio (subprocess), HTTP/SSE, and WebSocket transports for different deployment scenarios
+- **Schema Validation**: Tools expose JSON-schema definitions; clients validate inputs before execution
+- **Resource Access**: Beyond tools, MCP supports resource URIs for accessing documents, databases, and other data sources
+- **Bidirectional**: Servers can request information from clients (prompts, sampling) for interactive workflows
+
+### Comparison with Other Tool Protocols
+
+| Aspect | MCP | OpenAI Plugins | LangChain Tools |
+|--------|-----|----------------|-----------------|
+| **Standard** | Open specification by Anthropic | Proprietary to OpenAI | No protocol, library-specific |
+| **Discovery** | Runtime `list_tools()` call | Manifest file at known URL | Code-time registration |
+| **Transport** | stdio, SSE, WebSocket | HTTPS only | In-process only |
+| **Bidirectional** | Yes (prompts, sampling) | No | No |
+| **Resources** | Native resource URI system | N/A | N/A |
+| **Ecosystem** | Growing (Cursor, Claude, etc.) | ChatGPT only | LangChain ecosystem |
+
+**When to use MCP in SpoonOS:**
+
+- You want to expose SpoonOS tools to other MCP-compatible clients (Cursor, Claude Desktop)
+- You need to consume tools from external MCP servers without writing custom integrations
+- You're building a multi-agent system where agents share tools via a central MCP server
+- You want hot-reloadable tool definitions without redeploying your agent
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+```
+
+```python
+import asyncio
+from spoon_ai.mcp import MCPClient
+
+async def main():
+    async with MCPClient.from_config({
+        "command": "npx",
+        "args": ["-y", "@anthropic/mcp-server-filesystem", "/tmp"]
+    }) as client:
+        tools = await client.list_tools()
+        result = await client.call_tool("read_file", {"path": "/tmp/test.txt"})
+        print(result)
+
+asyncio.run(main())
+```
+
+---
 
 ## Architecture
-
-### Architecture Overview
 
 ```mermaid
 graph TD

@@ -1,6 +1,76 @@
 # Graph System
 
-The Graph System provides a **stateful workflow execution engine** for orchestrating multi-step AI agent pipelines. Workflows are modeled as directed graphs where processing units (nodes) transform shared state, and transitions (edges) define control flow—including conditional branching, parallel fan-out, and LLM-driven routing.
+## Introduction
+
+The SpoonOS Graph System is a **stateful workflow orchestration engine** designed for building complex, multi-step AI agent pipelines. It provides a declarative approach to defining computational workflows as directed acyclic graphs (DAGs), where nodes represent discrete processing units and edges define execution flow with support for conditional branching, parallel execution, and dynamic routing.
+
+### Core Capabilities
+
+- **Stateful Execution**: Typed state management with `TypedDict` schemas, automatic state merging via reducers, and configurable validation
+- **Flexible Routing**: Static edges, conditional branching, priority-based routing rules, and LLM-powered dynamic routing
+- **Parallel Processing**: Concurrent node execution with configurable join strategies (all, any, quorum), timeout handling, and circuit breaker patterns
+- **Fault Tolerance**: Automatic checkpointing, execution recovery, retry policies with exponential backoff, and graceful error handling
+- **Human-in-the-Loop**: First-class support for execution interruption, user input collection, and workflow resumption
+- **Observability**: Built-in execution metrics, per-node performance tracking, and comprehensive execution history
+
+### Comparison with LangGraph
+
+SpoonOS Graph System draws inspiration from [LangGraph](https://github.com/langchain-ai/langgraph) while introducing several architectural improvements tailored for production AI agent workloads:
+
+| Aspect | SpoonOS Graph | LangGraph |
+|--------|---------------|-----------|
+| **State Schema** | Strict `TypedDict` with field-level reducers and validators | `TypedDict` with annotation-based reducers |
+| **Parallel Execution** | Native parallel groups with quorum-based joins, circuit breakers, and rate limiting | Requires manual `asyncio` orchestration or branching |
+| **Routing** | Priority-based routing stack: explicit edges → rules → intelligent router → LLM router → fallback | Conditional edges only, no priority system |
+| **Declarative Building** | `GraphTemplate` / `NodeSpec` / `EdgeSpec` for composable, reusable workflow definitions | Imperative builder only |
+| **Resource Control** | Built-in `max_in_flight`, rate limiting, circuit breaker at parallel group level | External implementation required |
+| **Memory Integration** | Native `Memory` class with JSON persistence, session management, and search | External memory solutions |
+| **Checkpointing** | Pluggable checkpointer interface with in-memory implementation; automatic pre-node snapshots | Similar, with SQLite/Postgres backends |
+
+**When to choose SpoonOS Graph:**
+
+- You need sophisticated parallel execution with failure handling beyond simple fan-out/fan-in
+- Your routing logic requires multiple fallback strategies or LLM-based decisions
+- You want declarative workflow definitions that can be serialized, versioned, or generated
+- You're building Web3/crypto agent pipelines that integrate with SpoonOS toolkits
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+```
+
+```python
+import asyncio
+from typing import TypedDict
+from spoon_ai.graph import StateGraph, END
+
+class MyState(TypedDict):
+    query: str
+    result: str
+
+async def process(state: MyState) -> dict:
+    return {"result": f"Processed: {state['query']}"}
+
+graph = StateGraph(MyState)
+graph.add_node("process", process)
+graph.add_edge("__start__", "process")
+graph.add_edge("process", END)
+
+app = graph.compile()
+
+async def main():
+    result = await app.invoke({"query": "Hello", "result": ""})
+    print(result["result"])  # Processed: Hello
+
+asyncio.run(main())
+```
+
+---
+
+## Architecture
 
 ```mermaid
 flowchart TB
@@ -22,8 +92,6 @@ flowchart TB
 
     Execution -.->|"reads/writes"| State
 ```
-
-## Architecture Overview
 
 The graph system consists of three main components:
 

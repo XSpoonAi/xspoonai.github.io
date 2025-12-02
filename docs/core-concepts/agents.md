@@ -1,65 +1,112 @@
 # Agents
 
-Agents are the core intelligence layer of SpoonOS—decision-makers that reason about goals, plan actions, execute tools, and adapt through learning. They combine LLM reasoning with structured execution loops (ReAct or Graph), pluggable tools and memory, and operational features like retries, monitoring, and provider fallbacks.
+## Introduction
+
+Agents are autonomous AI systems that combine large language model (LLM) reasoning with structured execution patterns to accomplish complex tasks. In SpoonOS, an agent orchestrates the interaction between language models, tools, memory, and external systems to reason about goals, plan action sequences, execute operations, and adapt based on observations.
+
+### Core Capabilities
+
+- **Structured Reasoning**: ReAct (Reasoning + Acting) loop for step-by-step problem solving with explicit thought-action-observation cycles
+- **Workflow Orchestration**: Graph-based execution for complex multi-step pipelines with conditional branching and parallel processing
+- **Tool Integration**: Pluggable tool system with JSON-schema validation, supporting local tools, toolkit bundles, and MCP-based remote tools
+- **Memory Systems**: Short-term conversation context and long-term persistent memory (Mem0) for cross-session knowledge retention
+- **Provider Abstraction**: Unified interface across OpenAI, Anthropic, Google, DeepSeek, and OpenRouter with automatic fallback
+- **Operational Features**: Automatic retries, execution monitoring, error recovery, and comprehensive logging
+
+### Comparison with Other Agent Frameworks
+
+| Aspect | SpoonOS Agents | LangChain Agents | AutoGPT |
+|--------|---------------|------------------|---------|
+| **Execution Model** | ReAct loop or Graph-based workflows | ReAct with various agent types | Autonomous goal-driven loop |
+| **Tool System** | `BaseTool` + `ToolManager` + MCP protocol | `Tool` class with various loaders | Plugin-based system |
+| **Memory** | Built-in short-term + Mem0 long-term | External memory modules | File-based workspace |
+| **State Management** | Typed `TypedDict` with reducers | Unstructured dict or Pydantic | JSON-based |
+| **Multi-Provider** | Native `LLMManager` with fallback chains | Via `ChatModel` abstraction | Single provider |
+| **Web3/Crypto** | Native toolkits (CEX, DEX, on-chain) | Via third-party integrations | Limited |
+
+**When to choose SpoonOS Agents:**
+
+- You need both simple ReAct agents and complex graph-based workflows in the same project
+- You're building crypto/Web3 applications that require CEX, DEX, or on-chain tool integration
+- You want unified provider management with automatic fallback across multiple LLM providers
+- You need MCP protocol support for federated tool discovery and execution
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+export OPENAI_API_KEY="your-key"
+```
+
+```python
+import asyncio
+from spoon_ai.agents import SpoonReactAI
+from spoon_ai.chat import ChatBot
+
+agent = SpoonReactAI(llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"))
+
+async def main():
+    response = await agent.run("What is the capital of France?")
+    print(response)
+
+asyncio.run(main())
+```
+
+---
 
 ## Agent Types
 
 ### ReAct Agents
 
-ReAct (Reasoning + Acting) agents follow a thought-action-observation loop:
+ReAct (Reasoning + Acting) agents follow a thought → action → observation loop. The agent thinks about what to do, executes a tool or generates a response, observes the result, and repeats until the task is complete.
 
 ```python
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
+from spoon_ai.tools import ToolManager
 
-# Create a ReAct agent
+# Agent with tools
 agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai")
+    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
+    tools=ToolManager([SearchTool(), CalculatorTool()]),
+    max_iterations=10  # Limit reasoning loops
 )
 
-# Run the agent
-response = await agent.run("Get the current Bitcoin price")
+response = await agent.run("Search for Bitcoin price and calculate 10% of it")
 ```
 
-**Advantages:**
-
-- Simple and intuitive reasoning process
-- Good for straightforward tasks
-- Lower computational overhead
-
-**Best for:**
-
-- Single-step tasks
-- Direct API calls
-- Simple automation
+**Best for:** Single-step tasks, API calls, Q&A, simple automation.
 
 ### Graph Agents
 
-Graph agents use structured workflows with nodes and edges:
+Graph agents execute structured workflows defined as state graphs, supporting conditional branching, parallel execution, and complex multi-step pipelines.
 
 ```python
 from spoon_ai.agents import GraphAgent
-from spoon_ai.graph import create_graph
+from spoon_ai.graph import StateGraph
 
-# Create a graph workflow
-graph = create_graph()
-agent = GraphAgent(graph=graph)
+# Build workflow (see Graph System docs for StateGraph details)
+graph = StateGraph(MyState)
+graph.add_node("analyze", analyze_fn)
+graph.add_node("execute", execute_fn)
+graph.add_edge("__start__", "analyze")
+graph.add_conditional_edge("analyze", router_fn)
 
-# Execute complex workflow
-result = await agent.execute("Analyze market trends and execute trades")
+# Agent with memory persistence
+agent = GraphAgent(
+    graph=graph.compile(),
+    memory_path="./agent_memory",
+    session_id="user_123"
+)
+
+result = await agent.run("Analyze market and execute trades")
 ```
 
-**Advantages:**
+**Best for:** Multi-step workflows, conditional logic, parallel tasks, human-in-the-loop.
 
-- Complex multi-step workflows
-- Parallel execution capabilities
-- Better error handling and recovery
-
-**Best for:**
-
-- Multi-step processes
-- Conditional logic
-- Parallel operations
+---
 
 ## Agent Architecture
 

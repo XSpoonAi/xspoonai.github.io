@@ -1,13 +1,53 @@
 # x402 Payments
 
-x402 is the payment rail for gating agent capabilities behind verifiable crypto authorizations. It uses signed typed-data and an HTTP 402 paywall pattern—agents can autonomously discover paywall requirements, sign payments, retry, and continue workflows.
+## Introduction
 
-**Key characteristics:**
+x402 is a payment protocol for gating AI agent capabilities behind verifiable cryptocurrency authorizations. It implements the HTTP 402 "Payment Required" status code with EIP-712 typed-data signatures, enabling agents to autonomously discover payment requirements, sign transactions, and continue workflows—creating a native monetization layer for agent-to-agent and human-to-agent interactions.
 
-- **Fast & verifiable** — TransferWithAuthorization-style payloads verified by facilitator before execution
-- **Drop-in** — Prebuilt paywall router and tools (`x402_paywalled_request`, `x402_create_payment`)
-- **Multi-signer** — Local keys preferred, with Turnkey fallback for hosted signing
-- **Observable** — Standardized receipts (`X-PAYMENT-RESPONSE`) for logging and analytics
+### Core Capabilities
+
+- **Autonomous Payments**: Agents detect 402 responses, extract requirements, sign payments, and retry without human intervention
+- **Cryptographic Verification**: EIP-712 typed-data signatures verified by a public facilitator before funds move
+- **Instant Settlement**: TransferWithAuthorization-style payloads enable immediate verification and settlement
+- **Flexible Signing**: Supports local private keys, hardware wallets, or hosted signing via Turnkey
+- **Standardized Receipts**: `X-PAYMENT-RESPONSE` headers provide auditable payment proofs for logging and compliance
+
+### Comparison with Other Agent Payment Systems
+
+| Aspect | x402 | Stripe/Traditional | Lightning Network | Token Gating |
+|--------|------|-------------------|-------------------|--------------|
+| **Settlement** | Instant (crypto) | 1-3 days | Instant | N/A |
+| **Agent Autonomy** | Native (auto-sign) | Requires webhooks | Manual channels | Read-only |
+| **Verification** | On-chain + facilitator | Stripe API | Node verification | Contract call |
+| **Micropayments** | Yes (low gas L2s) | High fees | Yes | Gas-dependent |
+| **Integration** | HTTP 402 standard | Custom API | Protocol-specific | Contract calls |
+
+**When to use x402:**
+
+- You're building paid agent services (API access, premium tools, compute)
+- You want agents to autonomously pay for resources they consume
+- You need instant, verifiable settlements without traditional payment processor delays
+- You're building in a Web3 context where users already have crypto wallets
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+export PRIVATE_KEY="your-wallet-private-key"
+```
+
+```python
+from spoon_ai.agents import SpoonReactAI
+from spoon_ai.payments import x402_paywalled_request
+
+# Agent auto-detects 402 and signs payments
+agent = SpoonReactAI(tools=[x402_paywalled_request])
+result = await agent.run("Fetch https://api.example.com/premium")
+```
+
+---
 
 ## Components
 

@@ -1,6 +1,59 @@
 # LLM Providers
 
-SpoonOS supports multiple language model providers through a unified interface, enabling seamless switching between different AI models.
+## Introduction
+
+SpoonOS provides a unified abstraction layer over multiple large language model (LLM) providers, enabling consistent API usage regardless of the underlying model. The `LLMManager` handles provider selection, request routing, automatic fallback on failures, and response normalization across OpenAI, Anthropic, Google, DeepSeek, and OpenRouter.
+
+### Core Capabilities
+
+- **Unified Interface**: Single `ChatBot` class works identically across all providers—switch models by changing configuration, not code
+- **Automatic Fallback**: Configure fallback chains (e.g., GPT-4 → Claude → Gemini) for high availability
+- **Streaming Support**: Native streaming for real-time response delivery across all supported providers
+- **Function Calling**: Consistent tool/function calling interface translated to each provider's native format
+- **Token Management**: Automatic token counting and context window management per model
+- **Cost Tracking**: Built-in usage tracking for monitoring API costs across providers
+
+### Provider Selection Guide
+
+| Provider | Best For | Context Window | Strengths |
+|----------|----------|----------------|-----------|
+| **OpenAI** | General-purpose, code generation | 128K (GPT-4.1) | Fastest iteration, best function calling |
+| **Anthropic** | Long documents, safety-critical | 200K (Claude 3.5) | Largest context, prompt caching |
+| **Google** | Multimodal, cost-sensitive | 1M (Gemini 1.5) | Longest context, fast inference |
+| **DeepSeek** | Complex reasoning, code | 64K | Best reasoning/code ratio |
+| **OpenRouter** | Experimentation, routing | Varies | Access to 100+ models, cost optimization |
+
+**When to configure multiple providers:**
+
+- You need automatic failover for production reliability
+- You want to route different task types to specialized models (e.g., code to DeepSeek, analysis to Claude)
+- You're comparing model performance during development
+- You need to stay within rate limits by distributing requests
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+export OPENAI_API_KEY="your-key"
+```
+
+```python
+import asyncio
+from spoon_ai.chat import ChatBot
+
+# Same interface for all providers—just change model_name and llm_provider
+llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
+
+async def main():
+    response = await llm.chat("Explain quantum computing in one sentence")
+    print(response)
+
+asyncio.run(main())
+```
+
+---
 
 ## Supported Providers
 

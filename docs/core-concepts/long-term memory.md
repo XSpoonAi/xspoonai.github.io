@@ -1,37 +1,89 @@
 # Long-Term Memory
 
-Long-term memory lets agents persist and recall user context across sessions using the Mem0 service. SpoonOS provides `SpoonMem0`, a lightweight wrapper around `mem0.MemoryClient` with safe defaults, automatic user/agent scoping, and graceful fallbacks when the service is unavailable.
+## Introduction
+
+Long-term memory enables AI agents to retain and recall information across sessions, building persistent knowledge about users, preferences, and past interactions. SpoonOS integrates with [Mem0](https://mem0.ai) through the `SpoonMem0` wrapper, providing automatic memory scoping, safe defaults, and graceful degradation when the service is unavailable.
+
+### Core Capabilities
+
+- **Cross-Session Persistence**: Memories survive agent restarts and are available across different conversation threads
+- **Automatic Scoping**: User and agent IDs are automatically injected into queries and storage operations
+- **Semantic Search**: Natural language queries retrieve relevant memories based on meaning, not just keywords
+- **Collection Namespacing**: Organize memories into logical collections for multi-tenant or multi-domain applications
+- **Graceful Fallback**: Operations return empty results rather than throwing exceptions when Mem0 is unavailable
+
+### Comparison with Other Memory Systems
+
+| Aspect | SpoonOS + Mem0 | LangChain Memory | Custom Vector DB |
+|--------|---------------|------------------|------------------|
+| **Persistence** | Cloud-hosted, managed | Requires external setup | Self-managed |
+| **Search** | Semantic (built-in) | Depends on backend | Manual embedding |
+| **Scoping** | Automatic user/agent IDs | Manual key management | Manual |
+| **Setup** | API key only | Code + infrastructure | Infrastructure heavy |
+| **Cost** | Pay-per-use | Infrastructure costs | Infrastructure costs |
+
+**When to use long-term memory:**
+
+- You're building personalized agents that should remember user preferences
+- You need to maintain context about entities (users, projects, topics) across sessions
+- You want semantic memory search without managing vector databases
+- You're building multi-user applications where each user needs isolated memory
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai mem0ai
+export MEM0_API_KEY="your-mem0-key"
+```
+
+```python
+from spoon_ai.memory.mem0_client import SpoonMem0
+
+mem0 = SpoonMem0({"user_id": "user_123"})
+
+# Store and search
+mem0.add_text("User prefers dark mode")
+results = mem0.search("UI preferences")
+print(results)
+```
+
+---
 
 **Core class:** `spoon_ai.memory.mem0_client.SpoonMem0`
 
 ### Initialization
+
 ```python
 from spoon_ai.memory.mem0_client import SpoonMem0
 
-mem0 = SpoonMem0(
-    {
-        "api_key": "YOUR_MEM0_API_KEY",        # or set MEM0_API_KEY env var
-        "user_id": "user_123",                 # or agent_id
-        "collection": "my_namespace",          # optional namespace/collection
-        "metadata": {"project": "demo"},       # merged into every write
-        "filters": {"project": "demo"},        # merged into every query
-        "async_mode": False,                   # sync writes by default
-    }
-)
+mem0 = SpoonMem0({
+    "api_key": "YOUR_MEM0_API_KEY",   # or MEM0_API_KEY env var
+    "user_id": "user_123",            # scope all operations to this user
+    "collection": "my_namespace",     # optional namespace isolation
+    "metadata": {"project": "demo"},  # auto-attached to writes
+    "filters": {"project": "demo"},   # auto-applied to queries
+    "async_mode": False,              # sync writes (default)
+})
+
 if not mem0.is_ready():
-    print("Mem0 not available")
+    print("Mem0 service unavailable")
 ```
 
-### Add memory
+### Add Memory
+
+Store conversation history or individual text:
+
 ```python
-# add a conversation (sync)
+# Add conversation messages
 mem0.add_memory([
     {"role": "user", "content": "I love Solana meme coins"},
-    {"role": "assistant", "content": "Got it, will focus on Solana"},
-], user_id="user_123")  # async_mode is taken from mem0_config (defaults to False)
+    {"role": "assistant", "content": "Got it, focusing on Solana"},
+], user_id="user_123")
 
-# add a single text helper
-mem0.add_text("Prefers low gas fees")  # same async_mode default applies
+# Add single text (shorthand)
+mem0.add_text("User prefers low gas fees")
 ```
 
 Async variant: `await mem0.aadd_memory(messages, user_id=...)`
