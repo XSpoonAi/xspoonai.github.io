@@ -7068,66 +7068,113 @@ FILE: docs/core-concepts/agents.md
 
 # Agents
 
-Agents are the core intelligence layer of SpoonOS—decision-makers that reason about goals, plan actions, execute tools, and adapt through learning. They combine LLM reasoning with structured execution loops (ReAct or Graph), pluggable tools and memory, and operational features like retries, monitoring, and provider fallbacks.
+## Introduction
+
+Agents are autonomous AI systems that combine large language model (LLM) reasoning with structured execution patterns to accomplish complex tasks. In SpoonOS, an agent orchestrates the interaction between language models, tools, memory, and external systems to reason about goals, plan action sequences, execute operations, and adapt based on observations.
+
+### Core Capabilities
+
+- **Structured Reasoning**: ReAct (Reasoning + Acting) loop for step-by-step problem solving with explicit thought-action-observation cycles
+- **Workflow Orchestration**: Graph-based execution for complex multi-step pipelines with conditional branching and parallel processing
+- **Tool Integration**: Pluggable tool system with JSON-schema validation, supporting local tools, toolkit bundles, and MCP-based remote tools
+- **Memory Systems**: Short-term conversation context and long-term persistent memory (Mem0) for cross-session knowledge retention
+- **Provider Abstraction**: Unified interface across OpenAI, Anthropic, Google, DeepSeek, and OpenRouter with automatic fallback
+- **Operational Features**: Automatic retries, execution monitoring, error recovery, and comprehensive logging
+
+### Comparison with Other Agent Frameworks
+
+| Aspect | SpoonOS Agents | LangChain Agents | AutoGPT |
+|--------|---------------|------------------|---------|
+| **Execution Model** | ReAct loop or Graph-based workflows | ReAct with various agent types | Autonomous goal-driven loop |
+| **Tool System** | `BaseTool` + `ToolManager` + MCP protocol | `Tool` class with various loaders | Plugin-based system |
+| **Memory** | Built-in short-term + Mem0 long-term | External memory modules | File-based workspace |
+| **State Management** | Typed `TypedDict` with reducers | Unstructured dict or Pydantic | JSON-based |
+| **Multi-Provider** | Native `LLMManager` with fallback chains | Via `ChatModel` abstraction | Single provider |
+| **Web3/Crypto** | Native toolkits (CEX, DEX, on-chain) | Via third-party integrations | Limited |
+
+**When to choose SpoonOS Agents:**
+
+- You need both simple ReAct agents and complex graph-based workflows in the same project
+- You're building crypto/Web3 applications that require CEX, DEX, or on-chain tool integration
+- You want unified provider management with automatic fallback across multiple LLM providers
+- You need MCP protocol support for federated tool discovery and execution
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+export OPENAI_API_KEY="your-key"
+```
+
+```python
+import asyncio
+from spoon_ai.agents import SpoonReactAI
+from spoon_ai.chat import ChatBot
+
+agent = SpoonReactAI(llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"))
+
+async def main():
+    response = await agent.run("What is the capital of France?")
+    print(response)
+
+asyncio.run(main())
+```
+
+---
 
 ## Agent Types
 
 ### ReAct Agents
 
-ReAct (Reasoning + Acting) agents follow a thought-action-observation loop:
+ReAct (Reasoning + Acting) agents follow a thought → action → observation loop. The agent thinks about what to do, executes a tool or generates a response, observes the result, and repeats until the task is complete.
 
 ```python
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
+from spoon_ai.tools import ToolManager
 
-# Create a ReAct agent
+# Agent with tools
 agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai")
+    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
+    tools=ToolManager([SearchTool(), CalculatorTool()]),
+    max_iterations=10  # Limit reasoning loops
 )
 
-# Run the agent
-response = await agent.run("Get the current Bitcoin price")
+response = await agent.run("Search for Bitcoin price and calculate 10% of it")
 ```
 
-**Advantages:**
-
-- Simple and intuitive reasoning process
-- Good for straightforward tasks
-- Lower computational overhead
-
-**Best for:**
-
-- Single-step tasks
-- Direct API calls
-- Simple automation
+**Best for:** Single-step tasks, API calls, Q&A, simple automation.
 
 ### Graph Agents
 
-Graph agents use structured workflows with nodes and edges:
+Graph agents execute structured workflows defined as state graphs, supporting conditional branching, parallel execution, and complex multi-step pipelines.
 
 ```python
 from spoon_ai.agents import GraphAgent
-from spoon_ai.graph import create_graph
+from spoon_ai.graph import StateGraph
 
-# Create a graph workflow
-graph = create_graph()
-agent = GraphAgent(graph=graph)
+# Build workflow (see Graph System docs for StateGraph details)
+graph = StateGraph(MyState)
+graph.add_node("analyze", analyze_fn)
+graph.add_node("execute", execute_fn)
+graph.add_edge("__start__", "analyze")
+graph.add_conditional_edge("analyze", router_fn)
 
-# Execute complex workflow
-result = await agent.execute("Analyze market trends and execute trades")
+# Agent with memory persistence
+agent = GraphAgent(
+    graph=graph.compile(),
+    memory_path="./agent_memory",
+    session_id="user_123"
+)
+
+result = await agent.run("Analyze market and execute trades")
 ```
 
-**Advantages:**
+**Best for:** Multi-step workflows, conditional logic, parallel tasks, human-in-the-loop.
 
-- Complex multi-step workflows
-- Parallel execution capabilities
-- Better error handling and recovery
-
-**Best for:**
-
-- Multi-step processes
-- Conditional logic
-- Parallel operations
+---
 
 ## Agent Architecture
 
@@ -7392,7 +7439,77 @@ FILE: docs/core-concepts/graph-system.md
 
 # Graph System
 
-The Graph System provides a **stateful workflow execution engine** for orchestrating multi-step AI agent pipelines. Workflows are modeled as directed graphs where processing units (nodes) transform shared state, and transitions (edges) define control flow—including conditional branching, parallel fan-out, and LLM-driven routing.
+## Introduction
+
+The SpoonOS Graph System is a **stateful workflow orchestration engine** designed for building complex, multi-step AI agent pipelines. It provides a declarative approach to defining computational workflows as directed acyclic graphs (DAGs), where nodes represent discrete processing units and edges define execution flow with support for conditional branching, parallel execution, and dynamic routing.
+
+### Core Capabilities
+
+- **Stateful Execution**: Typed state management with `TypedDict` schemas, automatic state merging via reducers, and configurable validation
+- **Flexible Routing**: Static edges, conditional branching, priority-based routing rules, and LLM-powered dynamic routing
+- **Parallel Processing**: Concurrent node execution with configurable join strategies (all, any, quorum), timeout handling, and circuit breaker patterns
+- **Fault Tolerance**: Automatic checkpointing, execution recovery, retry policies with exponential backoff, and graceful error handling
+- **Human-in-the-Loop**: First-class support for execution interruption, user input collection, and workflow resumption
+- **Observability**: Built-in execution metrics, per-node performance tracking, and comprehensive execution history
+
+### Comparison with LangGraph
+
+SpoonOS Graph System draws inspiration from [LangGraph](https://github.com/langchain-ai/langgraph) while introducing several architectural improvements tailored for production AI agent workloads:
+
+| Aspect | SpoonOS Graph | LangGraph |
+|--------|---------------|-----------|
+| **State Schema** | Strict `TypedDict` with field-level reducers and validators | `TypedDict` with annotation-based reducers |
+| **Parallel Execution** | Native parallel groups with quorum-based joins, circuit breakers, and rate limiting | Requires manual `asyncio` orchestration or branching |
+| **Routing** | Priority-based routing stack: explicit edges → rules → intelligent router → LLM router → fallback | Conditional edges only, no priority system |
+| **Declarative Building** | `GraphTemplate` / `NodeSpec` / `EdgeSpec` for composable, reusable workflow definitions | Imperative builder only |
+| **Resource Control** | Built-in `max_in_flight`, rate limiting, circuit breaker at parallel group level | External implementation required |
+| **Memory Integration** | Native `Memory` class with JSON persistence, session management, and search | External memory solutions |
+| **Checkpointing** | Pluggable checkpointer interface with in-memory implementation; automatic pre-node snapshots | Similar, with SQLite/Postgres backends |
+
+**When to choose SpoonOS Graph:**
+
+- You need sophisticated parallel execution with failure handling beyond simple fan-out/fan-in
+- Your routing logic requires multiple fallback strategies or LLM-based decisions
+- You want declarative workflow definitions that can be serialized, versioned, or generated
+- You're building Web3/crypto agent pipelines that integrate with SpoonOS toolkits
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+```
+
+```python
+import asyncio
+from typing import TypedDict
+from spoon_ai.graph import StateGraph, END
+
+class MyState(TypedDict):
+    query: str
+    result: str
+
+async def process(state: MyState) -> dict:
+    return {"result": f"Processed: {state['query']}"}
+
+graph = StateGraph(MyState)
+graph.add_node("process", process)
+graph.add_edge("__start__", "process")
+graph.add_edge("process", END)
+
+app = graph.compile()
+
+async def main():
+    result = await app.invoke({"query": "Hello", "result": ""})
+    print(result["result"])  # Processed: Hello
+
+asyncio.run(main())
+```
+
+---
+
+## Architecture
 
 ```mermaid
 flowchart TB
@@ -7414,8 +7531,6 @@ flowchart TB
 
     Execution -.->|"reads/writes"| State
 ```
-
-## Architecture Overview
 
 The graph system consists of three main components:
 
@@ -8105,7 +8220,60 @@ FILE: docs/core-concepts/llm-providers.md
 
 # LLM Providers
 
-SpoonOS supports multiple language model providers through a unified interface, enabling seamless switching between different AI models.
+## Introduction
+
+SpoonOS provides a unified abstraction layer over multiple large language model (LLM) providers, enabling consistent API usage regardless of the underlying model. The `LLMManager` handles provider selection, request routing, automatic fallback on failures, and response normalization across OpenAI, Anthropic, Google, DeepSeek, and OpenRouter.
+
+### Core Capabilities
+
+- **Unified Interface**: Single `ChatBot` class works identically across all providers—switch models by changing configuration, not code
+- **Automatic Fallback**: Configure fallback chains (e.g., GPT-4 → Claude → Gemini) for high availability
+- **Streaming Support**: Native streaming for real-time response delivery across all supported providers
+- **Function Calling**: Consistent tool/function calling interface translated to each provider's native format
+- **Token Management**: Automatic token counting and context window management per model
+- **Cost Tracking**: Built-in usage tracking for monitoring API costs across providers
+
+### Provider Selection Guide
+
+| Provider | Best For | Context Window | Strengths |
+|----------|----------|----------------|-----------|
+| **OpenAI** | General-purpose, code generation | 128K (GPT-4.1) | Fastest iteration, best function calling |
+| **Anthropic** | Long documents, safety-critical | 200K (Claude 3.5) | Largest context, prompt caching |
+| **Google** | Multimodal, cost-sensitive | 1M (Gemini 1.5) | Longest context, fast inference |
+| **DeepSeek** | Complex reasoning, code | 64K | Best reasoning/code ratio |
+| **OpenRouter** | Experimentation, routing | Varies | Access to 100+ models, cost optimization |
+
+**When to configure multiple providers:**
+
+- You need automatic failover for production reliability
+- You want to route different task types to specialized models (e.g., code to DeepSeek, analysis to Claude)
+- You're comparing model performance during development
+- You need to stay within rate limits by distributing requests
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+export OPENAI_API_KEY="your-key"
+```
+
+```python
+import asyncio
+from spoon_ai.chat import ChatBot
+
+# Same interface for all providers—just change model_name and llm_provider
+llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
+
+async def main():
+    response = await llm.chat("Explain quantum computing in one sentence")
+    print(response)
+
+asyncio.run(main())
+```
+
+---
 
 ## Supported Providers
 
@@ -8454,38 +8622,90 @@ FILE: docs/core-concepts/long-term memory.md
 
 # Long-Term Memory
 
-Long-term memory lets agents persist and recall user context across sessions using the Mem0 service. SpoonOS provides `SpoonMem0`, a lightweight wrapper around `mem0.MemoryClient` with safe defaults, automatic user/agent scoping, and graceful fallbacks when the service is unavailable.
+## Introduction
+
+Long-term memory enables AI agents to retain and recall information across sessions, building persistent knowledge about users, preferences, and past interactions. SpoonOS integrates with [Mem0](https://mem0.ai) through the `SpoonMem0` wrapper, providing automatic memory scoping, safe defaults, and graceful degradation when the service is unavailable.
+
+### Core Capabilities
+
+- **Cross-Session Persistence**: Memories survive agent restarts and are available across different conversation threads
+- **Automatic Scoping**: User and agent IDs are automatically injected into queries and storage operations
+- **Semantic Search**: Natural language queries retrieve relevant memories based on meaning, not just keywords
+- **Collection Namespacing**: Organize memories into logical collections for multi-tenant or multi-domain applications
+- **Graceful Fallback**: Operations return empty results rather than throwing exceptions when Mem0 is unavailable
+
+### Comparison with Other Memory Systems
+
+| Aspect | SpoonOS + Mem0 | LangChain Memory | Custom Vector DB |
+|--------|---------------|------------------|------------------|
+| **Persistence** | Cloud-hosted, managed | Requires external setup | Self-managed |
+| **Search** | Semantic (built-in) | Depends on backend | Manual embedding |
+| **Scoping** | Automatic user/agent IDs | Manual key management | Manual |
+| **Setup** | API key only | Code + infrastructure | Infrastructure heavy |
+| **Cost** | Pay-per-use | Infrastructure costs | Infrastructure costs |
+
+**When to use long-term memory:**
+
+- You're building personalized agents that should remember user preferences
+- You need to maintain context about entities (users, projects, topics) across sessions
+- You want semantic memory search without managing vector databases
+- You're building multi-user applications where each user needs isolated memory
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai mem0ai
+export MEM0_API_KEY="your-mem0-key"
+```
+
+```python
+from spoon_ai.memory.mem0_client import SpoonMem0
+
+mem0 = SpoonMem0({"user_id": "user_123"})
+
+# Store and search
+mem0.add_text("User prefers dark mode")
+results = mem0.search("UI preferences")
+print(results)
+```
+
+---
 
 **Core class:** `spoon_ai.memory.mem0_client.SpoonMem0`
 
 ### Initialization
+
 ```python
 from spoon_ai.memory.mem0_client import SpoonMem0
 
-mem0 = SpoonMem0(
-    {
-        "api_key": "YOUR_MEM0_API_KEY",        # or set MEM0_API_KEY env var
-        "user_id": "user_123",                 # or agent_id
-        "collection": "my_namespace",          # optional namespace/collection
-        "metadata": {"project": "demo"},       # merged into every write
-        "filters": {"project": "demo"},        # merged into every query
-        "async_mode": False,                   # sync writes by default
-    }
-)
+mem0 = SpoonMem0({
+    "api_key": "YOUR_MEM0_API_KEY",   # or MEM0_API_KEY env var
+    "user_id": "user_123",            # scope all operations to this user
+    "collection": "my_namespace",     # optional namespace isolation
+    "metadata": {"project": "demo"},  # auto-attached to writes
+    "filters": {"project": "demo"},   # auto-applied to queries
+    "async_mode": False,              # sync writes (default)
+})
+
 if not mem0.is_ready():
-    print("Mem0 not available")
+    print("Mem0 service unavailable")
 ```
 
-### Add memory
+### Add Memory
+
+Store conversation history or individual text:
+
 ```python
-# add a conversation (sync)
+# Add conversation messages
 mem0.add_memory([
     {"role": "user", "content": "I love Solana meme coins"},
-    {"role": "assistant", "content": "Got it, will focus on Solana"},
-], user_id="user_123")  # async_mode is taken from mem0_config (defaults to False)
+    {"role": "assistant", "content": "Got it, focusing on Solana"},
+], user_id="user_123")
 
-# add a single text helper
-mem0.add_text("Prefers low gas fees")  # same async_mode default applies
+# Add single text (shorthand)
+mem0.add_text("User prefers low gas fees")
 ```
 
 Async variant: `await mem0.aadd_memory(messages, user_id=...)`
@@ -8556,11 +8776,63 @@ FILE: docs/core-concepts/mcp-protocol.md
 
 # MCP Protocol
 
-The Model Context Protocol (MCP) is a standardized protocol for dynamic tool discovery and execution. It allows agents to discover available tools at runtime, execute them with proper parameter validation, and access external APIs without code changes.
+## Introduction
+
+The Model Context Protocol (MCP) is an open standard developed by Anthropic for connecting AI agents to external tools and data sources. It defines a client-server architecture where agents dynamically discover, validate, and execute tools exposed by MCP servers—enabling modular, federated tool ecosystems without hardcoded integrations.
+
+### Core Capabilities
+
+- **Dynamic Discovery**: Agents query MCP servers at runtime to discover available tools, their schemas, and capabilities
+- **Transport Agnostic**: Supports stdio (subprocess), HTTP/SSE, and WebSocket transports for different deployment scenarios
+- **Schema Validation**: Tools expose JSON-schema definitions; clients validate inputs before execution
+- **Resource Access**: Beyond tools, MCP supports resource URIs for accessing documents, databases, and other data sources
+- **Bidirectional**: Servers can request information from clients (prompts, sampling) for interactive workflows
+
+### Comparison with Other Tool Protocols
+
+| Aspect | MCP | OpenAI Plugins | LangChain Tools |
+|--------|-----|----------------|-----------------|
+| **Standard** | Open specification by Anthropic | Proprietary to OpenAI | No protocol, library-specific |
+| **Discovery** | Runtime `list_tools()` call | Manifest file at known URL | Code-time registration |
+| **Transport** | stdio, SSE, WebSocket | HTTPS only | In-process only |
+| **Bidirectional** | Yes (prompts, sampling) | No | No |
+| **Resources** | Native resource URI system | N/A | N/A |
+| **Ecosystem** | Growing (Cursor, Claude, etc.) | ChatGPT only | LangChain ecosystem |
+
+**When to use MCP in SpoonOS:**
+
+- You want to expose SpoonOS tools to other MCP-compatible clients (Cursor, Claude Desktop)
+- You need to consume tools from external MCP servers without writing custom integrations
+- You're building a multi-agent system where agents share tools via a central MCP server
+- You want hot-reloadable tool definitions without redeploying your agent
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+```
+
+```python
+import asyncio
+from spoon_ai.mcp import MCPClient
+
+async def main():
+    async with MCPClient.from_config({
+        "command": "npx",
+        "args": ["-y", "@anthropic/mcp-server-filesystem", "/tmp"]
+    }) as client:
+        tools = await client.list_tools()
+        result = await client.call_tool("read_file", {"path": "/tmp/test.txt"})
+        print(result)
+
+asyncio.run(main())
+```
+
+---
 
 ## Architecture
-
-### Architecture Overview
 
 ```mermaid
 graph TD
@@ -9003,59 +9275,64 @@ FILE: docs/core-concepts/Short-term memory.md
 
 # Short-Term Memory
 
-Short-term memory enables AI agents to retain context within a conversation session. It manages the message history passed to LLMs, handling trimming and summarization to stay within context window limits while preserving relevant information.
+## Introduction
 
-## Overview
+Short-term memory manages conversation context within a single session, ensuring LLMs receive relevant history without exceeding context window limits. SpoonOS provides `ShortTermMemoryManager` with automatic trimming, LLM-based summarization, and checkpoint integration—enabling long-running conversations without context loss or excessive token consumption.
 
-Memory is a system that enables an AI agent to retain information from past interactions.
-For intelligent agents, memory is vital because it allows them to recall previous conversations, learn from feedback, and adapt to user preferences over time. As agents engage in increasingly complex tasks involving many user exchanges, a reliable memory mechanism becomes essential for both efficiency and user experience.
+### Core Capabilities
 
-### Short-term memory
+- **Token-Aware Trimming**: Automatically trims messages to fit within configurable token budgets while preserving recent context
+- **LLM Summarization**: Condenses older messages into summaries when history grows too long, maintaining key information
+- **Configurable Strategies**: Multiple trimming strategies (from start, from end, oldest first) for different use cases
+- **Checkpoint Integration**: Integrates with graph system checkpointers for state persistence and recovery
+- **Built-in with ChatBot**: Enabled by default in `ChatBot` class—works transparently without extra configuration
 
-Short-term memory allows your application to remember recent interactions within a single thread or conversation.
-A thread groups multiple exchanges in a session, much like how an email client organizes messages into a single conversation.
+### Comparison with Context Management Approaches
 
-The conversation history is the most common form of short-term memory. However, long-running conversations pose a major challenge for modern large language models (LLMs):
-a complete history may exceed the model’s context window, leading to context loss or inconsistent responses.
+| Approach | Behavior | Pros | Cons |
+|----------|----------|------|------|
+| **No management** | Pass full history | Complete context | Exceeds limits, high cost |
+| **Truncation** | Drop old messages | Simple, fast | Loses important context |
+| **Sliding window** | Keep last N messages | Predictable | May lose critical early context |
+| **SpoonOS STM** | Trim + summarize | Preserves key info, token efficient | Summarization latency/cost |
 
-Even when a model supports large context windows, most LLMs still degrade in performance with long contexts—they tend to become distracted by irrelevant or outdated information, respond more slowly, and consume more tokens (and cost).
+**When to use short-term memory:**
 
-### Managing context effectively
-
-Chat models receive context through messages, which typically include:
-
-* System messages (instructions or role definitions)
-* User messages (human inputs)
-* Assistant messages (model responses)
-
-As conversations progress, the message list grows continuously.
-Because context windows are finite, applications benefit from strategies that trim, summarize, or forget stale information—keeping the model’s focus sharp while maintaining coherence and reducing computational cost.
+- You're building chatbots or agents with multi-turn conversations
+- Conversations may exceed your model's context window
+- You want to reduce token costs while maintaining conversation coherence
+- You need automatic handling without manual message management
 
 ---
 
-## Quick Start: ChatBot with Built-in Memory
+## Quick Start
 
-When you initialise `ChatBot` with `enable_short_term_memory=True` (the default), it creates a `ShortTermMemoryManager` internally. Before every LLM call, the chatbot feeds the running history into the manager, which handles trimming or summarising and (optionally) saving checkpoints.
- You can still access the same manager manually via `chatbot.short_term_memory_manager` if you want to tweak the behaviour or call its methods directly, as shown in the next section.
+```bash
+pip install spoon-ai
+export OPENAI_API_KEY="your-key"
+```
 
 ```python
 import asyncio
 from spoon_ai.chat import ChatBot
 
-chatbot = ChatBot(enable_short_term_memory=True)
+# ChatBot includes built-in short-term memory with auto-trimming
+llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
 
-messages = [
-    {"role": "user", "content": "Explain blockchain in one sentence."},
-    {"role": "assistant", "content": "A blockchain is an append-only, shared ledger."},
-]
+async def main():
+    await llm.chat("My name is Alice")
+    await llm.chat("What's the capital of France?")
+    response = await llm.chat("What's my name?")  # Remembers "Alice"
+    print(response)
 
-reply = asyncio.run(chatbot.ask(messages))
-print(reply)
+asyncio.run(main())
 ```
 
 ---
 
-## Manage short-term memory by using `ShortTermMemoryManager`
+## ShortTermMemoryManager
+
+For fine-grained control beyond `ChatBot`'s automatic handling, use `ShortTermMemoryManager` directly:
 
 ```python
 import asyncio
@@ -9156,49 +9433,125 @@ FILE: docs/core-concepts/tools.md
 
 # Tools
 
-Tools are callable capabilities that agents use to interact with external systems—data sources, APIs, blockchains, and utilities. In SpoonOS, a tool is any `BaseTool` subclass with JSON-schema parameters and runtime validation. Tools are orchestrated through `ToolManager` locally or exposed/consumed via MCP (Model Context Protocol) for federated discovery.
+## Introduction
 
-**Key characteristics:**
+Tools are the interface between AI agents and external systems—APIs, databases, blockchains, file systems, and other services. In SpoonOS, tools are strongly-typed callable units with JSON-schema parameter definitions, enabling LLMs to invoke them reliably with automatic input validation and structured output.
 
-- **Typed + validated** — JSON-schema parameters reduce LLM misuse
-- **Pluggable** — ToolManager handles registration, lookup, and metadata
-- **Extensible** — Works locally, with toolkit bundles, or over MCP
+### Core Capabilities
 
-## Tool Types
+- **Type Safety**: JSON-schema parameter definitions with runtime validation prevent malformed inputs from reaching execution
+- **Unified Interface**: `BaseTool` abstract class provides consistent `execute()` method across all tool types
+- **Orchestration**: `ToolManager` handles tool registration, lookup by name, parameter extraction for LLM function calling, and batch execution
+- **MCP Integration**: Tools can be exposed as MCP servers or consumed from remote MCP servers for federated tool ecosystems
+- **Semantic Search**: Optional Pinecone-based tool indexing for semantic tool discovery when tool sets are large
+- **Crypto/Web3 Native**: Pre-built toolkits for CEX trading, DEX operations, on-chain data, and blockchain interactions
 
-### Local tools (`BaseTool`)
+### Comparison with Other Tool Systems
+
+| Aspect | SpoonOS Tools | LangChain Tools | OpenAI Function Calling |
+|--------|--------------|-----------------|------------------------|
+| **Definition** | `BaseTool` class with `execute()` method | `Tool` or `@tool` decorator | JSON schema in API request |
+| **Validation** | JSON-schema + runtime type checking | Pydantic models optional | Server-side only |
+| **Discovery** | `ToolManager` + optional semantic search | `load_tools()` for known tools | N/A (manual) |
+| **Remote Tools** | MCP protocol (stdio, SSE, WebSocket) | Via API wrappers | N/A |
+| **Bundling** | Toolkit packages (`spoon-toolkits`) | Community integrations | N/A |
+| **Async Support** | Native `async execute()` | Mixed sync/async | N/A |
+
+**When to choose SpoonOS Tools:**
+
+- You need MCP protocol support for exposing or consuming remote tools
+- You're building crypto/Web3 agents that need CEX, DEX, or on-chain toolkits
+- You want semantic tool search for large tool collections
+- You need consistent async execution across all tools
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+```
 
 ```python
+import asyncio
 from spoon_ai.tools.base import BaseTool
+from spoon_ai.tools import ToolManager
 
-class HelloTool(BaseTool):
-    name = "hello"
-    description = "Return a greeting"
+# Define a tool with JSON-schema parameters
+class GreetTool(BaseTool):
+    name = "greet"
+    description = "Greet someone by name"
     parameters = {
         "type": "object",
-        "properties": {
-            "name": {"type": "string", "description": "Who to greet"}
-        },
+        "properties": {"name": {"type": "string"}},
         "required": ["name"]
     }
 
     async def execute(self, name: str) -> str:
         return f"Hello, {name}!"
-```
-`__call__` forwards to `execute`, so `await tool(name="Ricky")` works.
 
-### Tool Manager
-`ToolManager` registers tools and executes them by name.
+# Register and execute
+manager = ToolManager([GreetTool()])
+
+async def main():
+    result = await manager.execute(name="greet", tool_input={"name": "World"})
+    print(result)  # Hello, World!
+
+asyncio.run(main())
+```
+
+---
+
+## Tool Types
+
+### Local Tools (`BaseTool`)
+
+All tools inherit from `BaseTool` with three required attributes and one method:
+
+```python
+from spoon_ai.tools.base import BaseTool
+
+class MyTool(BaseTool):
+    name = "my_tool"                    # Unique identifier
+    description = "What this tool does" # LLM reads this to decide when to use it
+    parameters = {                      # JSON-schema for input validation
+        "type": "object",
+        "properties": {
+            "arg1": {"type": "string", "description": "First argument"},
+            "arg2": {"type": "integer", "default": 10}
+        },
+        "required": ["arg1"]
+    }
+
+    async def execute(self, arg1: str, arg2: int = 10) -> str:
+        return f"Result: {arg1}, {arg2}"
+```
+
+The `__call__` method forwards to `execute()`, so `await tool(arg1="value")` works.
+
+### ToolManager
+
+Orchestrates tool registration, lookup, and execution:
+
 ```python
 from spoon_ai.tools import ToolManager
-manager = ToolManager([HelloTool()])
 
-result = await manager.execute(name="hello", tool_input={"name": "Ricky"})
+manager = ToolManager([MyTool(), AnotherTool()])
+
+# Execute by name
+result = await manager.execute(name="my_tool", tool_input={"arg1": "hello"})
+
+# Get tool specs for LLM function calling
+specs = manager.to_params()  # List of OpenAI-compatible tool definitions
 ```
-Utility helpers:
-- `to_params()` → list of OpenAI/JSON‑schema tool specs
-- `add_tool(s)`, `remove_tool`, `get_tool`
-- Optional semantic indexing (`index_tools`, `query_tools`) uses Pinecone + OpenAI embeddings (needs `PINECONE_API_KEY`, `OPENAI_API_KEY`).
+
+**Key methods:**
+
+- `add_tool(tool)` / `add_tools([...])` — Register tools
+- `remove_tool(name)` — Unregister by name
+- `get_tool(name)` — Retrieve tool instance
+- `to_params()` — Export OpenAI-compatible tool definitions
+- `index_tools()` / `query_tools(query)` — Semantic search (requires Pinecone + OpenAI)
 
 ### Crypto toolkit (optional)
 If `spoon-toolkits` is installed, you can load its crypto tools:
@@ -9262,14 +9615,54 @@ FILE: docs/core-concepts/x402-payments.md
 
 # x402 Payments
 
-x402 is the payment rail for gating agent capabilities behind verifiable crypto authorizations. It uses signed typed-data and an HTTP 402 paywall pattern—agents can autonomously discover paywall requirements, sign payments, retry, and continue workflows.
+## Introduction
 
-**Key characteristics:**
+x402 is a payment protocol for gating AI agent capabilities behind verifiable cryptocurrency authorizations. It implements the HTTP 402 "Payment Required" status code with EIP-712 typed-data signatures, enabling agents to autonomously discover payment requirements, sign transactions, and continue workflows—creating a native monetization layer for agent-to-agent and human-to-agent interactions.
 
-- **Fast & verifiable** — TransferWithAuthorization-style payloads verified by facilitator before execution
-- **Drop-in** — Prebuilt paywall router and tools (`x402_paywalled_request`, `x402_create_payment`)
-- **Multi-signer** — Local keys preferred, with Turnkey fallback for hosted signing
-- **Observable** — Standardized receipts (`X-PAYMENT-RESPONSE`) for logging and analytics
+### Core Capabilities
+
+- **Autonomous Payments**: Agents detect 402 responses, extract requirements, sign payments, and retry without human intervention
+- **Cryptographic Verification**: EIP-712 typed-data signatures verified by a public facilitator before funds move
+- **Instant Settlement**: TransferWithAuthorization-style payloads enable immediate verification and settlement
+- **Flexible Signing**: Supports local private keys, hardware wallets, or hosted signing via Turnkey
+- **Standardized Receipts**: `X-PAYMENT-RESPONSE` headers provide auditable payment proofs for logging and compliance
+
+### Comparison with Other Agent Payment Systems
+
+| Aspect | x402 | Stripe/Traditional | Lightning Network | Token Gating |
+|--------|------|-------------------|-------------------|--------------|
+| **Settlement** | Instant (crypto) | 1-3 days | Instant | N/A |
+| **Agent Autonomy** | Native (auto-sign) | Requires webhooks | Manual channels | Read-only |
+| **Verification** | On-chain + facilitator | Stripe API | Node verification | Contract call |
+| **Micropayments** | Yes (low gas L2s) | High fees | Yes | Gas-dependent |
+| **Integration** | HTTP 402 standard | Custom API | Protocol-specific | Contract calls |
+
+**When to use x402:**
+
+- You're building paid agent services (API access, premium tools, compute)
+- You want agents to autonomously pay for resources they consume
+- You need instant, verifiable settlements without traditional payment processor delays
+- You're building in a Web3 context where users already have crypto wallets
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+export PRIVATE_KEY="your-wallet-private-key"
+```
+
+```python
+from spoon_ai.agents import SpoonReactAI
+from spoon_ai.payments import x402_paywalled_request
+
+# Agent auto-detects 402 and signs payments
+agent = SpoonReactAI(tools=[x402_paywalled_request])
+result = await agent.run("Fetch https://api.example.com/premium")
+```
+
+---
 
 ## Components
 
