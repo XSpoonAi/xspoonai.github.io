@@ -1,35 +1,59 @@
 # Agents
 
-## Introduction
+Agents are the core intelligence layer of SpoonOS—**autonomous AI systems that reason, plan, and act** to accomplish complex tasks. An agent combines an LLM's reasoning capabilities with tools, memory, and structured execution patterns to go beyond simple question-answering.
 
-Agents are autonomous AI systems that combine large language model (LLM) reasoning with structured execution patterns to accomplish complex tasks. In SpoonOS, an agent orchestrates the interaction between language models, tools, memory, and external systems to reason about goals, plan action sequences, execute operations, and adapt based on observations.
+## Why Agents?
 
-### Core Capabilities
+A raw LLM can answer questions, but it can't:
 
-- **Structured Reasoning**: ReAct (Reasoning + Acting) loop for step-by-step problem solving with explicit thought-action-observation cycles
-- **Workflow Orchestration**: Graph-based execution for complex multi-step pipelines with conditional branching and parallel processing
-- **Tool Integration**: Pluggable tool system with JSON-schema validation, supporting local tools, toolkit bundles, and MCP-based remote tools
-- **Memory Systems**: Short-term conversation context and long-term persistent memory (Mem0) for cross-session knowledge retention
-- **Provider Abstraction**: Unified interface across OpenAI, Anthropic, Google, DeepSeek, and OpenRouter with automatic fallback
-- **Operational Features**: Automatic retries, execution monitoring, error recovery, and comprehensive logging
+- **Take actions** — Call APIs, query databases, execute transactions
+- **Remember context** — Maintain state across conversations and sessions
+- **Reason iteratively** — Break down complex tasks into steps, observe results, and adapt
+- **Handle failures** — Retry, fallback, or ask for help when something goes wrong
 
-### Comparison with Other Agent Frameworks
+SpoonOS agents solve these problems with two execution models:
 
-| Aspect | SpoonOS Agents | LangChain Agents | AutoGPT |
-|--------|---------------|------------------|---------|
-| **Execution Model** | ReAct loop or Graph-based workflows | ReAct with various agent types | Autonomous goal-driven loop |
-| **Tool System** | `BaseTool` + `ToolManager` + MCP protocol | `Tool` class with various loaders | Plugin-based system |
-| **Memory** | Built-in short-term + Mem0 long-term | External memory modules | File-based workspace |
-| **State Management** | Typed `TypedDict` with reducers | Unstructured dict or Pydantic | JSON-based |
-| **Multi-Provider** | Native `LLMManager` with fallback chains | Via `ChatModel` abstraction | Single provider |
-| **Web3/Crypto** | Native toolkits (CEX, DEX, on-chain) | Via third-party integrations | Limited |
+```mermaid
+graph LR
+    subgraph ReAct["ReAct Agent"]
+        A[Think] --> B[Act]
+        B --> C[Observe]
+        C --> A
+    end
+    
+    subgraph Graph["Graph Agent"]
+        D[Node A] --> E{Route}
+        E --> F[Node B]
+        E --> G[Node C]
+        F --> H[Node D]
+        G --> H
+    end
+```
 
-**When to choose SpoonOS Agents:**
+| Model | Best For | How It Works |
+|-------|----------|--------------|
+| **ReAct** | Simple tasks, single-step tool calls, Q&A | Think → Act → Observe loop until done |
+| **Graph** | Complex workflows, parallel tasks, conditional logic | Stateful graph with nodes, edges, and routing |
 
-- You need both simple ReAct agents and complex graph-based workflows in the same project
-- You're building crypto/Web3 applications that require CEX, DEX, or on-chain tool integration
-- You want unified provider management with automatic fallback across multiple LLM providers
-- You need MCP protocol support for federated tool discovery and execution
+## What Can You Build?
+
+| Use Case | Agent Type | Example |
+|----------|------------|---------|
+| **Chatbot with tools** | ReAct | Answer questions by searching the web or querying APIs |
+| **Trading bot** | Graph | Analyze market → decide action → execute trade → monitor |
+| **Research assistant** | Graph | Gather sources → summarize → synthesize → format report |
+| **Customer support** | ReAct | Handle tickets by querying knowledge base and escalating |
+| **Portfolio tracker** | Graph | Fetch prices → calculate metrics → generate alerts |
+
+## SpoonOS vs Other Frameworks
+
+| Feature | SpoonOS | LangChain | AutoGPT |
+|---------|---------|-----------|---------|
+| **Execution** | ReAct + Graph workflows | ReAct variants | Autonomous loop |
+| **Tools** | `BaseTool` + MCP protocol | `Tool` class | Plugins |
+| **Memory** | Built-in short-term + Mem0 | External modules | File-based |
+| **Providers** | Unified multi-provider with fallback | Per-model adapters | Single provider |
+| **Web3/Crypto** | Native CEX, DEX, on-chain toolkits | Third-party only | Limited |
 
 ---
 

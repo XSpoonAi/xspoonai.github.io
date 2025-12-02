@@ -1,33 +1,51 @@
 # Long-Term Memory
 
-## Introduction
+Long-term memory lets your agent **remember across sessions**. Unlike short-term memory (which resets each conversation), long-term memory persists indefinitely—enabling personalized experiences, learning from past interactions, and building knowledge over time.
 
-Long-term memory enables AI agents to retain and recall information across sessions, building persistent knowledge about users, preferences, and past interactions. SpoonOS integrates with [Mem0](https://mem0.ai) through the `SpoonMem0` wrapper, providing automatic memory scoping, safe defaults, and graceful degradation when the service is unavailable.
+## Why Long-Term Memory?
 
-### Core Capabilities
+Without long-term memory, every conversation starts from zero:
 
-- **Cross-Session Persistence**: Memories survive agent restarts and are available across different conversation threads
-- **Automatic Scoping**: User and agent IDs are automatically injected into queries and storage operations
-- **Semantic Search**: Natural language queries retrieve relevant memories based on meaning, not just keywords
-- **Collection Namespacing**: Organize memories into logical collections for multi-tenant or multi-domain applications
-- **Graceful Fallback**: Operations return empty results rather than throwing exceptions when Mem0 is unavailable
+```text
+Session 1: User: "I prefer dark mode"    Agent: "Got it!"
+Session 2: User: "Change my settings"    Agent: "What settings?" ← forgot everything
+```
 
-### Comparison with Other Memory Systems
+With long-term memory:
 
-| Aspect | SpoonOS + Mem0 | LangChain Memory | Custom Vector DB |
-|--------|---------------|------------------|------------------|
-| **Persistence** | Cloud-hosted, managed | Requires external setup | Self-managed |
-| **Search** | Semantic (built-in) | Depends on backend | Manual embedding |
-| **Scoping** | Automatic user/agent IDs | Manual key management | Manual |
-| **Setup** | API key only | Code + infrastructure | Infrastructure heavy |
-| **Cost** | Pay-per-use | Infrastructure costs | Infrastructure costs |
+```text
+Session 1: User: "I prefer dark mode"    Agent: "Got it!" → saves to memory
+Session 2: User: "Change my settings"    Agent: "I'll enable dark mode for you" ← remembers
+```
 
-**When to use long-term memory:**
+## How It Works
 
-- You're building personalized agents that should remember user preferences
-- You need to maintain context about entities (users, projects, topics) across sessions
-- You want semantic memory search without managing vector databases
-- You're building multi-user applications where each user needs isolated memory
+SpoonOS integrates with [Mem0](https://mem0.ai), a managed memory service that handles storage, indexing, and semantic search:
+
+```mermaid
+graph LR
+    A[Agent] -->|"store"| B[SpoonMem0]
+    B -->|"embed & index"| C[Mem0 Cloud]
+    A -->|"search"| B
+    B -->|"semantic query"| C
+    C -->|"relevant memories"| B
+    B -->|"results"| A
+```
+
+| Feature | How It Helps |
+|---------|--------------|
+| **Semantic search** | Find memories by meaning: "user preferences" finds "I like dark mode" |
+| **Auto-scoping** | Memories are isolated per user/agent automatically |
+| **Graceful fallback** | If Mem0 is down, operations return empty (no crashes) |
+
+## What Can You Store?
+
+| Memory Type | Example |
+|-------------|---------|
+| **Preferences** | "User prefers concise responses" |
+| **Facts** | "User's portfolio includes BTC and ETH" |
+| **Context** | "User is a day trader focused on meme coins" |
+| **History** | "User asked about Solana DeFi protocols last week" |
 
 ---
 

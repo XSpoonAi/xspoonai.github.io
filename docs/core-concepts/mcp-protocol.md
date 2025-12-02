@@ -1,34 +1,58 @@
 # MCP Protocol
 
-## Introduction
+The **Model Context Protocol (MCP)** is an open standard for connecting AI agents to external tools and data sources. Instead of hardcoding tool integrations, agents discover tools dynamically at runtime—enabling modular, federated ecosystems where tools can be shared across different AI applications.
 
-The Model Context Protocol (MCP) is an open standard developed by Anthropic for connecting AI agents to external tools and data sources. It defines a client-server architecture where agents dynamically discover, validate, and execute tools exposed by MCP servers—enabling modular, federated tool ecosystems without hardcoded integrations.
+## Why MCP?
 
-### Core Capabilities
+Traditional tool integration is brittle:
 
-- **Dynamic Discovery**: Agents query MCP servers at runtime to discover available tools, their schemas, and capabilities
-- **Transport Agnostic**: Supports stdio (subprocess), HTTP/SSE, and WebSocket transports for different deployment scenarios
-- **Schema Validation**: Tools expose JSON-schema definitions; clients validate inputs before execution
-- **Resource Access**: Beyond tools, MCP supports resource URIs for accessing documents, databases, and other data sources
-- **Bidirectional**: Servers can request information from clients (prompts, sampling) for interactive workflows
+```text
+❌ Old way: Agent ↔ Hardcoded Tool A ↔ Hardcoded Tool B ↔ Hardcoded Tool C
+✅ MCP way: Agent ↔ MCP Client ↔ Any MCP Server (tools discovered at runtime)
+```
 
-### Comparison with Other Tool Protocols
+With MCP, your agent can:
 
-| Aspect | MCP | OpenAI Plugins | LangChain Tools |
+- **Discover tools dynamically** — No code changes when tools are added or updated
+- **Connect to any MCP server** — Use tools from Cursor, Claude Desktop, or custom servers
+- **Share tools across apps** — One MCP server can serve multiple agents
+- **Hot-reload** — Update tool definitions without redeploying
+
+## How It Works
+
+```mermaid
+sequenceDiagram
+    participant Agent
+    participant MCP Client
+    participant MCP Server
+    participant External API
+    
+    Agent->>MCP Client: Connect to server
+    MCP Client->>MCP Server: list_tools()
+    MCP Server-->>MCP Client: [tool schemas]
+    Agent->>MCP Client: call_tool("search", {query: "..."})
+    MCP Client->>MCP Server: Execute tool
+    MCP Server->>External API: API call
+    External API-->>MCP Server: Response
+    MCP Server-->>MCP Client: Result
+    MCP Client-->>Agent: Tool output
+```
+
+| Concept | Description |
+|---------|-------------|
+| **MCP Server** | Exposes tools via a standard protocol. Can run as subprocess (stdio), HTTP/SSE, or WebSocket. |
+| **MCP Client** | Connects to servers, discovers tools, and executes them on behalf of agents. |
+| **Tool Schema** | JSON-schema definition of tool name, description, and parameters—fetched at runtime. |
+| **Resources** | Optional: MCP also supports resource URIs for documents, databases, and other data. |
+
+## MCP vs Other Approaches
+
+| Aspect | MCP | OpenAI Plugins | Hardcoded Tools |
 |--------|-----|----------------|-----------------|
-| **Standard** | Open specification by Anthropic | Proprietary to OpenAI | No protocol, library-specific |
-| **Discovery** | Runtime `list_tools()` call | Manifest file at known URL | Code-time registration |
-| **Transport** | stdio, SSE, WebSocket | HTTPS only | In-process only |
-| **Bidirectional** | Yes (prompts, sampling) | No | No |
-| **Resources** | Native resource URI system | N/A | N/A |
-| **Ecosystem** | Growing (Cursor, Claude, etc.) | ChatGPT only | LangChain ecosystem |
-
-**When to use MCP in SpoonOS:**
-
-- You want to expose SpoonOS tools to other MCP-compatible clients (Cursor, Claude Desktop)
-- You need to consume tools from external MCP servers without writing custom integrations
-- You're building a multi-agent system where agents share tools via a central MCP server
-- You want hot-reloadable tool definitions without redeploying your agent
+| **Discovery** | Runtime `list_tools()` | Manifest file at URL | Compile-time |
+| **Transport** | stdio, SSE, WebSocket | HTTPS only | In-process |
+| **Ecosystem** | Cursor, Claude, SpoonOS, etc. | ChatGPT only | Single app |
+| **Updates** | Hot-reload, no redeploy | Redeploy plugin | Redeploy app |
 
 ---
 

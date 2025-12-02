@@ -1,38 +1,64 @@
 # Graph System
 
-## Introduction
+The SpoonOS Graph System is a library for building **stateful, multi-step AI agent workflows**. It models applications as directed graphs where **nodes** represent actions (calling an LLM, executing a tool, processing data) and **edges** define how control flows between them—including conditional branching, parallel fan-out, and cycles for iterative reasoning.
 
-The SpoonOS Graph System is a **stateful workflow orchestration engine** designed for building complex, multi-step AI agent pipelines. It provides a declarative approach to defining computational workflows as directed acyclic graphs (DAGs), where nodes represent discrete processing units and edges define execution flow with support for conditional branching, parallel execution, and dynamic routing.
+## Why Graph System?
 
-### Core Capabilities
+Traditional LLM applications are often simple chains: prompt → response → done. But real-world AI agents need more:
 
-- **Stateful Execution**: Typed state management with `TypedDict` schemas, automatic state merging via reducers, and configurable validation
-- **Flexible Routing**: Static edges, conditional branching, priority-based routing rules, and LLM-powered dynamic routing
-- **Parallel Processing**: Concurrent node execution with configurable join strategies (all, any, quorum), timeout handling, and circuit breaker patterns
-- **Fault Tolerance**: Automatic checkpointing, execution recovery, retry policies with exponential backoff, and graceful error handling
-- **Human-in-the-Loop**: First-class support for execution interruption, user input collection, and workflow resumption
-- **Observability**: Built-in execution metrics, per-node performance tracking, and comprehensive execution history
+- **State persistence** — Remember context across multiple steps and interactions
+- **Conditional logic** — Take different paths based on LLM outputs or external data
+- **Parallel execution** — Run multiple tasks simultaneously and combine results
+- **Human-in-the-loop** — Pause for user input, approval, or correction
+- **Error recovery** — Handle failures gracefully without losing progress
 
-### Comparison with LangGraph
+The Graph System makes these patterns first-class citizens, not afterthoughts.
 
-SpoonOS Graph System draws inspiration from [LangGraph](https://github.com/langchain-ai/langgraph) while introducing several architectural improvements tailored for production AI agent workloads:
+## Key Concepts
 
-| Aspect | SpoonOS Graph | LangGraph |
-|--------|---------------|-----------|
-| **State Schema** | Strict `TypedDict` with field-level reducers and validators | `TypedDict` with annotation-based reducers |
-| **Parallel Execution** | Native parallel groups with quorum-based joins, circuit breakers, and rate limiting | Requires manual `asyncio` orchestration or branching |
-| **Routing** | Priority-based routing stack: explicit edges → rules → intelligent router → LLM router → fallback | Conditional edges only, no priority system |
-| **Declarative Building** | `GraphTemplate` / `NodeSpec` / `EdgeSpec` for composable, reusable workflow definitions | Imperative builder only |
-| **Resource Control** | Built-in `max_in_flight`, rate limiting, circuit breaker at parallel group level | External implementation required |
-| **Memory Integration** | Native `Memory` class with JSON persistence, session management, and search | External memory solutions |
-| **Checkpointing** | Pluggable checkpointer interface with in-memory implementation; automatic pre-node snapshots | Similar, with SQLite/Postgres backends |
+```mermaid
+graph LR
+    A[User Input] --> B[Node: Analyze]
+    B -->|route| C{Router}
+    C -->|intent=search| D[Node: Search]
+    C -->|intent=calculate| E[Node: Calculate]
+    C -->|intent=chat| F[Node: Respond]
+    D --> G[Node: Summarize]
+    E --> G
+    F --> H[END]
+    G --> H
+```
 
-**When to choose SpoonOS Graph:**
+| Concept | Description |
+|---------|-------------|
+| **State** | A typed dictionary (`TypedDict`) shared across all nodes. Each node reads state, performs work, and returns updates to merge back. |
+| **Node** | An async function that receives state and returns a partial update. Nodes are the "actions" in your workflow. |
+| **Edge** | A connection between nodes. Can be static (always go A→B), conditional (go A→B or A→C based on state), or LLM-driven. |
+| **Checkpoint** | An automatic snapshot of state before each node. Enables recovery, debugging, and human-in-the-loop interrupts. |
 
-- You need sophisticated parallel execution with failure handling beyond simple fan-out/fan-in
-- Your routing logic requires multiple fallback strategies or LLM-based decisions
-- You want declarative workflow definitions that can be serialized, versioned, or generated
-- You're building Web3/crypto agent pipelines that integrate with SpoonOS toolkits
+## What Can You Build?
+
+| Use Case | How Graph System Helps |
+|----------|----------------------|
+| **Autonomous Agents** | Multi-step reasoning with tool calls, observation loops, and adaptive planning |
+| **RAG Pipelines** | Retrieve → Grade → Regenerate cycles with conditional routing based on relevance |
+| **Multi-Agent Systems** | Multiple specialized agents collaborating via shared state and handoffs |
+| **Approval Workflows** | Pause execution for human review, then resume from checkpoint |
+| **Parallel Analysis** | Fan-out to multiple data sources, join results with configurable strategies |
+
+## Graph System vs LangGraph
+
+SpoonOS Graph System is inspired by [LangGraph](https://github.com/langchain-ai/langgraph) and shares similar concepts. Key differences:
+
+| Feature | SpoonOS Graph | LangGraph |
+|---------|---------------|-----------|
+| **Parallel Groups** | Native `add_parallel_group()` with quorum joins, timeouts, circuit breakers | Manual asyncio or branching |
+| **Routing Stack** | Priority-based: explicit → rules → intelligent → LLM → fallback | Conditional edges only |
+| **Declarative Definition** | `GraphTemplate` / `NodeSpec` / `EdgeSpec` for serializable, composable graphs | Imperative builder only |
+| **Resource Control** | Built-in rate limiting, max concurrency, circuit breakers | External implementation |
+| **Web3/Crypto** | Native integration with SpoonOS toolkits (CEX, DEX, on-chain) | Via third-party tools |
+
+Choose SpoonOS Graph when you need production-grade parallel execution, multi-layer routing, or crypto/Web3 integrations.
 
 ---
 

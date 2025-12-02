@@ -1,35 +1,58 @@
 # Tools
 
-## Introduction
+Tools are **callable capabilities** that let agents interact with the outside world—APIs, databases, blockchains, file systems, and any other external service. Without tools, an LLM can only generate text. With tools, it can take action.
 
-Tools are the interface between AI agents and external systems—APIs, databases, blockchains, file systems, and other services. In SpoonOS, tools are strongly-typed callable units with JSON-schema parameter definitions, enabling LLMs to invoke them reliably with automatic input validation and structured output.
+## Why Tools?
 
-### Core Capabilities
+An LLM doesn't know today's Bitcoin price, can't send emails, and has no way to query your database. Tools bridge this gap:
 
-- **Type Safety**: JSON-schema parameter definitions with runtime validation prevent malformed inputs from reaching execution
-- **Unified Interface**: `BaseTool` abstract class provides consistent `execute()` method across all tool types
-- **Orchestration**: `ToolManager` handles tool registration, lookup by name, parameter extraction for LLM function calling, and batch execution
-- **MCP Integration**: Tools can be exposed as MCP servers or consumed from remote MCP servers for federated tool ecosystems
-- **Semantic Search**: Optional Pinecone-based tool indexing for semantic tool discovery when tool sets are large
-- **Crypto/Web3 Native**: Pre-built toolkits for CEX trading, DEX operations, on-chain data, and blockchain interactions
+```mermaid
+graph LR
+    A[Agent] -->|"call tool"| B[Tool: get_price]
+    B -->|"API call"| C[Binance API]
+    C -->|"$67,432"| B
+    B -->|"return"| A
+    A -->|"Bitcoin is $67,432"| D[User]
+```
 
-### Comparison with Other Tool Systems
+SpoonOS tools are:
 
-| Aspect | SpoonOS Tools | LangChain Tools | OpenAI Function Calling |
-|--------|--------------|-----------------|------------------------|
-| **Definition** | `BaseTool` class with `execute()` method | `Tool` or `@tool` decorator | JSON schema in API request |
-| **Validation** | JSON-schema + runtime type checking | Pydantic models optional | Server-side only |
-| **Discovery** | `ToolManager` + optional semantic search | `load_tools()` for known tools | N/A (manual) |
-| **Remote Tools** | MCP protocol (stdio, SSE, WebSocket) | Via API wrappers | N/A |
-| **Bundling** | Toolkit packages (`spoon-toolkits`) | Community integrations | N/A |
-| **Async Support** | Native `async execute()` | Mixed sync/async | N/A |
+- **Typed** — JSON-schema parameters prevent LLM hallucination of invalid inputs
+- **Validated** — Runtime checks ensure data integrity before execution
+- **Async** — Non-blocking I/O for high-performance agent loops
+- **Composable** — Bundle tools into toolkits, share via MCP protocol
 
-**When to choose SpoonOS Tools:**
+## Tool Anatomy
 
-- You need MCP protocol support for exposing or consuming remote tools
-- You're building crypto/Web3 agents that need CEX, DEX, or on-chain toolkits
-- You want semantic tool search for large tool collections
-- You need consistent async execution across all tools
+Every SpoonOS tool has three parts:
+
+| Part | Purpose | Example |
+|------|---------|---------|
+| **name** | Unique identifier the LLM uses to call the tool | `"get_crypto_price"` |
+| **description** | Natural language explanation of what the tool does | `"Get real-time price for a cryptocurrency"` |
+| **parameters** | JSON-schema defining expected inputs | `{"symbol": {"type": "string"}}` |
+
+The LLM reads the description to decide *when* to use a tool and the parameters to know *how* to call it.
+
+## What Can You Build?
+
+| Tool Type | Examples |
+|-----------|----------|
+| **Data retrieval** | Web search, database queries, API calls |
+| **Crypto/Web3** | CEX trading, DEX swaps, on-chain reads, wallet operations |
+| **File operations** | Read/write files, parse documents, generate reports |
+| **Communication** | Send emails, post to Slack, create tickets |
+| **Computation** | Run code, execute SQL, perform calculations |
+
+## SpoonOS vs Other Tool Systems
+
+| Feature | SpoonOS | LangChain | OpenAI Functions |
+|---------|---------|-----------|------------------|
+| **Definition** | `BaseTool` class | `@tool` decorator | JSON in API call |
+| **Validation** | JSON-schema + runtime | Optional Pydantic | Server-side only |
+| **Remote tools** | MCP protocol (stdio/SSE/WS) | API wrappers | N/A |
+| **Discovery** | `ToolManager` + semantic search | `load_tools()` | Manual |
+| **Crypto native** | Built-in CEX/DEX/on-chain | Third-party | N/A |
 
 ---
 

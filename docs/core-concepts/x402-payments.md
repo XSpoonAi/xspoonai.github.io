@@ -1,33 +1,55 @@
 # x402 Payments
 
-## Introduction
+x402 enables **agents to pay for things autonomously**. When an agent hits a paywall (HTTP 402), it automatically signs a crypto payment, retries the request, and continues—no human intervention required. This creates a native monetization layer for AI services.
 
-x402 is a payment protocol for gating AI agent capabilities behind verifiable cryptocurrency authorizations. It implements the HTTP 402 "Payment Required" status code with EIP-712 typed-data signatures, enabling agents to autonomously discover payment requirements, sign transactions, and continue workflows—creating a native monetization layer for agent-to-agent and human-to-agent interactions.
+## Why x402?
 
-### Core Capabilities
+Traditional payments don't work for autonomous agents:
 
-- **Autonomous Payments**: Agents detect 402 responses, extract requirements, sign payments, and retry without human intervention
-- **Cryptographic Verification**: EIP-712 typed-data signatures verified by a public facilitator before funds move
-- **Instant Settlement**: TransferWithAuthorization-style payloads enable immediate verification and settlement
-- **Flexible Signing**: Supports local private keys, hardware wallets, or hosted signing via Turnkey
-- **Standardized Receipts**: `X-PAYMENT-RESPONSE` headers provide auditable payment proofs for logging and compliance
+| Problem | With Traditional Payments | With x402 |
+|---------|---------------------------|-----------|
+| Agent hits paywall | ❌ Wait for human to enter credit card | ✅ Auto-sign and retry |
+| Micropayments ($0.001) | ❌ Fees exceed payment | ✅ Low-cost on L2s |
+| Settlement | ❌ 1-3 days | ✅ Instant |
+| Verification | ❌ Trust Stripe API | ✅ Cryptographic proof |
 
-### Comparison with Other Agent Payment Systems
+## How It Works
 
-| Aspect | x402 | Stripe/Traditional | Lightning Network | Token Gating |
-|--------|------|-------------------|-------------------|--------------|
-| **Settlement** | Instant (crypto) | 1-3 days | Instant | N/A |
-| **Agent Autonomy** | Native (auto-sign) | Requires webhooks | Manual channels | Read-only |
-| **Verification** | On-chain + facilitator | Stripe API | Node verification | Contract call |
-| **Micropayments** | Yes (low gas L2s) | High fees | Yes | Gas-dependent |
-| **Integration** | HTTP 402 standard | Custom API | Protocol-specific | Contract calls |
+```mermaid
+sequenceDiagram
+    participant Agent
+    participant API Server
+    participant x402 Facilitator
+    participant Blockchain
+    
+    Agent->>API Server: GET /premium-data
+    API Server-->>Agent: 402 Payment Required (price, recipient)
+    Agent->>Agent: Sign EIP-712 payment
+    Agent->>API Server: GET /premium-data + X-PAYMENT header
+    API Server->>x402 Facilitator: Verify signature
+    x402 Facilitator->>Blockchain: Execute transfer
+    Blockchain-->>x402 Facilitator: Confirmed
+    x402 Facilitator-->>API Server: Valid
+    API Server-->>Agent: 200 OK + data
+```
 
-**When to use x402:**
+| Step | What Happens |
+|------|--------------|
+| **1. Request** | Agent calls a paid API endpoint |
+| **2. 402 Response** | Server returns payment requirements (amount, token, recipient) |
+| **3. Sign** | Agent signs an EIP-712 typed-data payload (no gas yet) |
+| **4. Retry** | Agent sends request again with signed payment header |
+| **5. Verify & Execute** | Facilitator verifies signature and executes transfer on-chain |
+| **6. Success** | Server returns the requested data |
 
-- You're building paid agent services (API access, premium tools, compute)
-- You want agents to autonomously pay for resources they consume
-- You need instant, verifiable settlements without traditional payment processor delays
-- You're building in a Web3 context where users already have crypto wallets
+## x402 vs Alternatives
+
+| Aspect | x402 | Stripe | Lightning |
+|--------|------|--------|-----------|
+| **Settlement** | Instant | 1-3 days | Instant |
+| **Agent autonomy** | Auto-sign | Needs webhook | Manual channel |
+| **Micropayments** | ✅ L2 fees | ❌ High fees | ✅ |
+| **Verification** | Cryptographic | API call | Node verification |
 
 ---
 

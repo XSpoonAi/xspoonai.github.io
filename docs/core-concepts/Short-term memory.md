@@ -1,32 +1,52 @@
 # Short-Term Memory
 
-## Introduction
+Short-term memory keeps track of the **current conversation**. It's what lets your agent remember "My name is Alice" three messages ago, and what prevents context windows from overflowing in long conversations.
 
-Short-term memory manages conversation context within a single session, ensuring LLMs receive relevant history without exceeding context window limits. SpoonOS provides `ShortTermMemoryManager` with automatic trimming, LLM-based summarization, and checkpoint integration—enabling long-running conversations without context loss or excessive token consumption.
+## The Problem
 
-### Core Capabilities
+LLMs have limited context windows. As conversations grow:
 
-- **Token-Aware Trimming**: Automatically trims messages to fit within configurable token budgets while preserving recent context
-- **LLM Summarization**: Condenses older messages into summaries when history grows too long, maintaining key information
-- **Configurable Strategies**: Multiple trimming strategies (from start, from end, oldest first) for different use cases
-- **Checkpoint Integration**: Integrates with graph system checkpointers for state persistence and recovery
-- **Built-in with ChatBot**: Enabled by default in `ChatBot` class—works transparently without extra configuration
+```text
+Turn 1:  User: "My name is Alice"          ← 10 tokens
+Turn 50: User: "What's my name again?"     ← 50,000 tokens total
+         Agent: "I don't know" ← context overflow, lost earlier messages
+```
 
-### Comparison with Context Management Approaches
+Naive solutions have tradeoffs:
 
-| Approach | Behavior | Pros | Cons |
-|----------|----------|------|------|
-| **No management** | Pass full history | Complete context | Exceeds limits, high cost |
-| **Truncation** | Drop old messages | Simple, fast | Loses important context |
-| **Sliding window** | Keep last N messages | Predictable | May lose critical early context |
-| **SpoonOS STM** | Trim + summarize | Preserves key info, token efficient | Summarization latency/cost |
+| Approach | Problem |
+|----------|---------|
+| **Keep everything** | Exceeds context window, costs explode |
+| **Drop old messages** | Loses important context ("My name is Alice") |
+| **Fixed sliding window** | Arbitrary cutoff, may drop critical info |
 
-**When to use short-term memory:**
+## SpoonOS Solution
 
-- You're building chatbots or agents with multi-turn conversations
-- Conversations may exceed your model's context window
-- You want to reduce token costs while maintaining conversation coherence
-- You need automatic handling without manual message management
+`ShortTermMemoryManager` intelligently manages context:
+
+```mermaid
+graph LR
+    A[New Message] --> B{Token Budget?}
+    B -->|Under limit| C[Add to history]
+    B -->|Over limit| D[Trim Strategy]
+    D --> E[Summarize old messages]
+    E --> F[Keep summary + recent]
+    F --> C
+```
+
+| Feature | What It Does |
+|---------|--------------|
+| **Token-aware** | Tracks actual token count, not message count |
+| **Smart trimming** | Multiple strategies: oldest first, from start, from end |
+| **Summarization** | Condenses old messages into a summary when needed |
+| **Built-in** | `ChatBot` handles this automatically—no extra code |
+
+## When To Use
+
+- **Chatbots** with multi-turn conversations
+- **Agents** that need to remember earlier context
+- **Long sessions** that would exceed context limits
+- **Cost optimization** to reduce token usage
 
 ---
 
