@@ -43,7 +43,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add docs/api-reference/auto
+          git add docs/api-reference
           if git diff --cached --quiet; then
             echo "No API doc changes to publish."
           else
