@@ -527,11 +527,11 @@ class MyTool(BaseTool):
 
 - **[Core Concepts: Tools](../core-concepts/tools.md)** - Complete tool system understanding
 - **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Advanced integration patterns
-- **[Tool API Reference](../api-reference/tools/base-tool.md)** - Complete development documentation
+- **[Tool API Reference](../api-reference/spoon_ai/tools/)** - Complete development documentation
 
 ### 📖 **Additional Resources**
 
-- **[Built-in Tools Reference](../api-reference/tools/builtin-tools.md)** - Explore existing tool implementations
+- **[Built-in Tools Reference](../api-reference/spoon_ai/tools/)** - Explore existing tool implementations
 - **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Tool-agent integration patterns
 
@@ -581,11 +581,11 @@ class MyTool(BaseTool):
 
 - **[Core Concepts: Tools](../core-concepts/tools.md)** - Complete tool system understanding
 - **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Advanced integration patterns
-- **[Tool API Reference](../api-reference/tools/base-tool.md)** - Complete development documentation
+- **[Tool API Reference](../api-reference/spoon_ai/tools/)** - Complete development documentation
 
 ### 📖 **Additional Resources**
 
-- **[Built-in Tools Reference](../api-reference/tools/builtin-tools.md)** - Explore existing tool implementations
+- **[Built-in Tools Reference](../api-reference/spoon_ai/tools/)** - Explore existing tool implementations
 - **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Tool-agent integration patterns
 

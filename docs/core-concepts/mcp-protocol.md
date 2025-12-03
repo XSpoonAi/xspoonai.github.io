@@ -26,7 +26,7 @@ sequenceDiagram
     participant MCP Client
     participant MCP Server
     participant External API
-    
+
     Agent->>MCP Client: Connect to server
     MCP Client->>MCP Server: list_tools()
     MCP Server-->>MCP Client: [tool schemas]
@@ -478,13 +478,13 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 
 - **[Tools System](./tools.md)** - Learn about the complete tool ecosystem
 - **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build MCP-compatible tools
-- **[MCP Tool Reference](../api-reference/tools/builtin-tools.md)** - MCP-specific tool documentation
+- **[MCP Tool Reference](../api-reference/spoon_ai/tools/)** - MCP-specific tool documentation
 
 ### 📖 **Additional Resources**
 
 - **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Agent-MCP integration patterns
-- **[API Reference](../api-reference/)** - Complete SpoonOS API documentation
+- **[API Reference](../api-reference/index)** - Complete SpoonOS API documentation
 **GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
 
 **What it demonstrates:**
@@ -509,10 +509,10 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 
 - **[Tools System](./tools.md)** - Learn about the complete tool ecosystem
 - **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build MCP-compatible tools
-- **[MCP Tool Reference](../api-reference/tools/builtin-tools.md)** - MCP-specific tool documentation
+- **[MCP Tool Reference](../api-reference/spoon_ai/tools/)** - MCP-specific tool documentation
 
 ### 📖 **Additional Resources**
 
 - **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Agent-MCP integration patterns
-- **[API Reference](../api-reference/)** - Complete SpoonOS API documentation
+- **[API Reference](../api-reference/index)** - Complete SpoonOS API documentation

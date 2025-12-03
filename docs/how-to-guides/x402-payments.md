@@ -12,7 +12,7 @@ Read [Core Concepts: x402 payments](../core-concepts/x402-payments.md) to unders
 
 ## 2. API reference
 
-Consult [API Reference: x402](../api-reference/payments/x402.md) for:
+Consult [API Reference: x402](../api-reference/spoon_ai/payments/) for:
 
 - Python services (`X402PaymentService`, request/response models, helper methods).
 - Built-in tools (`x402_create_payment`, `x402_paywalled_request`) with parameter tables.

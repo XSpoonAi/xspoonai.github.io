@@ -1037,4 +1037,4 @@ class DebugCLI(BaseCLI):
 - [Common Issues](./common-issues.md)
 - [Performance Optimization](./performance.md)
 - [Logging Configuration](../getting-started/configuration.md)
-- [System Monitoring](../api-reference/cli/commands.md)"}
+- [System Monitoring](../api-reference/index)"}

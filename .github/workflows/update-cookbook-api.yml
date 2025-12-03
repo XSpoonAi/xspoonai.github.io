@@ -1,0 +1,52 @@
+name: Update Cookbook API Docs
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "scripts/generate_api_docs.py"
+      - ".github/workflows/update-cookbook-api.yml"
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout cookbook
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps (pydoc-markdown + spoon-ai-sdk)
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pydoc-markdown
+          python -m pip install --upgrade spoon-ai-sdk
+
+      - name: Generate API docs
+        run: npm run generate-api-docs
+
+      - name: Commit & push if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add docs/api-reference/auto
+          if git diff --cached --quiet; then
+            echo "No API doc changes to publish."
+          else
+            git commit -m "chore: update API docs from spoon-ai-sdk"
+            git push
+          fi

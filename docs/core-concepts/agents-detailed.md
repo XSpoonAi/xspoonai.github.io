@@ -1025,7 +1025,7 @@ class DynamicConfigAgent(SpoonReactMCP):
 
 ### 📖 **Additional Documentation**
 
-- **[API Reference](../api-reference/agents/base-agent.md)** - Complete agent API documentation
+- **[API Reference](../api-reference/spoon_ai/agents/base/)** - Complete agent API documentation
 - **[Performance Optimization](../troubleshooting/performance.md)** - Agent performance tuning
 - **[Troubleshooting](../troubleshooting/common-issues.md)** - Common issues and solutions
 

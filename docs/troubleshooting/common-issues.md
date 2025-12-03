@@ -469,7 +469,7 @@ result = await tool.execute(symbol="BTC")
 ### Documentation Resources
 - [Installation Guide](../getting-started/installation.md)
 - [Configuration Guide](../getting-started/configuration.md)
-- [API Reference](../api-reference/)
+- [API Reference](../api-reference/index)
 - [How-To Guides](../how-to-guides/)
 
 ### 📚 **Working Examples**

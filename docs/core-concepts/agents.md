@@ -20,7 +20,7 @@ graph LR
         B --> C[Observe]
         C --> A
     end
-    
+
     subgraph Graph["Graph Agent"]
         D[Node A] --> E{Route}
         E --> F[Node B]
@@ -314,7 +314,7 @@ response = await agent.run("Get Bitcoin price and analyze trends")
 
 - **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
 - **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Dynamic tool discovery and execution
-- **[API Reference](../api-reference/agents/base-agent.md)** - Complete agent API documentation
+- **[API Reference](../api-reference/spoon_ai/agents/base/)** - Complete agent API documentation
 **GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
 
 **What it demonstrates:**
@@ -387,4 +387,4 @@ response = await agent.run("Get Bitcoin price and analyze trends")
 
 - **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
 - **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Dynamic tool discovery and execution
-- **[API Reference](../api-reference/agents/base-agent.md)** - Complete agent API documentation
+- **[API Reference](../api-reference/spoon_ai/agents/base/)** - Complete agent API documentation

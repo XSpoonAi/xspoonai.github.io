@@ -21,7 +21,7 @@ sequenceDiagram
     participant API Server
     participant x402 Facilitator
     participant Blockchain
-    
+
     Agent->>API Server: GET /premium-data
     API Server-->>Agent: 402 Payment Required (price, recipient)
     Agent->>Agent: Sign EIP-712 payment
