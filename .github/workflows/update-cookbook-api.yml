@@ -4,11 +4,14 @@ on:
   push:
     branches: [main, master]
     paths:
-      - "scripts/generate_api_docs.py"
+      - "scripts/generate-api-docs.js"
       - ".github/workflows/update-cookbook-api.yml"
   schedule:
     - cron: "0 3 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   generate:
@@ -48,5 +51,5 @@ jobs:
             echo "No API doc changes to publish."
           else
             git commit -m "chore: update API docs from spoon-ai-sdk"
-            git push
+            git push origin HEAD:${GITHUB_REF_NAME}
           fi
