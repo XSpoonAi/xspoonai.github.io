@@ -87,18 +87,47 @@ asyncio.run(main())
 ReAct (Reasoning + Acting) agents follow a thought → action → observation loop. The agent thinks about what to do, executes a tool or generates a response, observes the result, and repeats until the task is complete.
 
 ```python
+import os
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
 from spoon_ai.tools import ToolManager
+from spoon_ai.tools.base import BaseTool
+from spoon_ai.tools.mcp_tool import MCPTool
 
-# Agent with tools
+class PercentageTool(BaseTool):
+    name: str = "calculate_percentage"
+    description: str = "Calculate a percentage of a numeric value"
+    parameters: dict = {
+        "type": "object",
+        "properties": {
+            "value": {"type": "number", "description": "Base value"},
+            "percent": {"type": "number", "description": "Percentage to apply (e.g., 10 for 10%)"},
+        },
+        "required": ["value", "percent"],
+    }
+
+    async def execute(self, value: float, percent: float) -> str:
+        return str(value * percent / 100)
+
+# MCP web search tool (requires TAVILY_API_KEY)
+tavily_search = MCPTool(
+    name="tavily-search",
+    description="Search the web for current information",
+    mcp_config={
+        "command": "npx",
+        "args": ["-y", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY")},
+    },
+)
+
+# Agent with real tools
 agent = SpoonReactAI(
     llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
-    tools=ToolManager([SearchTool(), CalculatorTool()]),
+    tools=ToolManager([tavily_search, PercentageTool()]),
     max_iterations=10  # Limit reasoning loops
 )
 
-response = await agent.run("Search for Bitcoin price and calculate 10% of it")
+response = await agent.run("Search Bitcoin price and calculate 10% of it")
 ```
 
 **Best for:** Single-step tasks, API calls, Q&A, simple automation.
@@ -177,14 +206,45 @@ class CustomAgent(BaseAgent):
 ### Agent Configuration
 
 ```python
-# Configure agent with specific tools
-from spoon_ai.tools.crypto_tools import CryptoTools
-from spoon_ai.tools.web3_tools import Web3Tools
+import os
+from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
+from spoon_ai.tools import ToolManager
+from spoon_ai.tools.mcp_tool import MCPTool
+from spoon_ai.chat import ChatBot
+from spoon_toolkits.crypto.crypto_powerdata.tools import CryptoPowerDataCEXTool
 
-agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
-    tools=[CryptoTools(), Web3Tools()]
-)
+# Install extra dependency: pip install spoon-toolkits
+
+class SpoonMacroAnalysisAgent(SpoonReactMCP):
+    name: str = "SpoonMacroAnalysisAgent"
+    system_prompt: str = (
+        "You are a crypto market analyst. Use tavily-search for news and "
+        "crypto_power_data_cex for market data, then deliver a concise macro view."
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.available_tools = ToolManager([])
+
+    async def initialize(self):
+        tavily_key = os.getenv("TAVILY_API_KEY")
+        if not tavily_key:
+            raise ValueError("Set TAVILY_API_KEY before running the agent.")
+
+        tavily_tool = MCPTool(
+            name="tavily-search",
+            description="Web search via Tavily",
+            mcp_config={
+                "command": "npx",
+                "args": ["--yes", "tavily-mcp"],
+                "env": {"TAVILY_API_KEY": tavily_key},
+            },
+        )
+
+        crypto_tool = CryptoPowerDataCEXTool()
+        self.available_tools = ToolManager([tavily_tool, crypto_tool])
+
+agent = SpoonMacroAnalysisAgent(llm=ChatBot(llm_provider="openai"))
 ```
 
 ## Best Practices
@@ -211,9 +271,13 @@ SpoonOS agents benefit from built-in error resilience:
 
 ```python
 # Framework handles errors automatically
+# Requires: pip install spoon-toolkits
+from spoon_ai.tools import ToolManager
+from spoon_toolkits.crypto.crypto_powerdata.tools import CryptoPowerDataCEXTool
+
 agent = SpoonReactAI(
     llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
-    tools=[CryptoTools(), Web3Tools()]
+    tools=ToolManager([CryptoPowerDataCEXTool()])  # real tool with retries/failures
 )
 
 # Automatic handling includes:
@@ -242,79 +306,6 @@ response = await agent.run("Get Bitcoin price and analyze trends")
 ### 📚 **Agent Implementation Examples**
 
 #### 🎯 [Intent Graph Demo](../examples/intent-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
-
-**What it demonstrates:**
-- Complete Graph agent implementation with intelligent routing
-- Long-lived agent architecture with persistent memory
-- Advanced state management and context preservation
-- Production-ready error handling and recovery
-
-**Key features:**
-- Dynamic query routing based on user intent (general_qa → short_term_trend → macro_trend → deep_research)
-- True parallel execution across multiple data sources
-- Memory persistence and conversation context
-- Real-time performance monitoring and metrics
-
-**Best for learning:**
-- Graph agent architecture patterns
-- Long-running process management
-- Advanced memory and state handling
-- Production deployment considerations
-
-#### 🔍 [MCP Spoon Search Agent](../examples/mcp-spoon-search-agent.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
-
-**What it demonstrates:**
-- MCP-enabled agent with dynamic tool discovery
-- Web search integration with cryptocurrency analysis
-- Multi-tool orchestration and data synthesis
-- Real-world agent deployment patterns
-
-**Key features:**
-- Tavily MCP server integration for web search
-- Crypto PowerData tools for market analysis
-- Unified analysis combining multiple data sources
-- Dynamic tool loading and validation
-
-**Best for learning:**
-- MCP protocol implementation
-- Multi-tool agent architecture
-- Real-time data integration patterns
-- Error handling in distributed systems
-
-#### 📊 [Graph Crypto Analysis](../examples/graph-crypto-analysis.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
-
-**What it demonstrates:**
-- Specialized cryptocurrency analysis agent
-- LLM-driven decision making throughout the workflow
-- Real-time market data processing and analysis
-- Investment recommendation generation
-
-**Key features:**
-- Real Binance API integration (no simulated data)
-- Technical indicator calculation (RSI, MACD, EMA, Bollinger Bands)
-- Multi-timeframe analysis and correlation
-- Risk assessment and market sentiment analysis
-
-**Best for learning:**
-- Domain-specific agent development
-- Financial data processing patterns
-- LLM-driven workflow automation
-- Real API integration in agents
-
-### 🛠️ **Development Guides**
-
-- **[Tools System](./tools.md)** - Complete guide to available tools and integrations
-- **[LLM Providers](./llm-providers.md)** - Configure and optimize language models
-- **[Build Your First Agent](../how-to-guides/build-first-agent.md)** - Step-by-step agent development tutorial
-
-### 📖 **Advanced Topics**
-
-- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
-- **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Dynamic tool discovery and execution
-- **[API Reference](../api-reference/spoon_ai/agents/base/)** - Complete agent API documentation
 **GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
 
 **What it demonstrates:**
