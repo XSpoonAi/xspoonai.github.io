@@ -8,6 +8,22 @@
 
 ## Quick Installation
 
+### Fast path (uv — recommended)
+
+`uv` gives faster, reproducible installs and works as a drop-in replacement for `pip`:
+
+```bash
+uv venv .venv
+source .venv/bin/activate            # macOS/Linux
+# .\\.venv\\Scripts\\Activate.ps1    # Windows (PowerShell)
+
+# Install published packages
+uv pip install spoon-ai-sdk          # core framework
+uv pip install spoon-toolkits        # optional: extended blockchain & data toolkits
+```
+
+You can substitute `uv pip` with `pip` if you prefer the standard installer.
+
 ### Option A: Install from PyPI (recommended)
 
 You can use the published PyPI packages without cloning the repository:
@@ -56,7 +72,7 @@ python -m venv spoon-env
 ```bash
 git clone https://github.com/XSpoonAi/spoon-core.git
 cd spoon-core
-pip install -e .
+uv pip install -e .    # or `pip install -e .` if you don't use uv
 ```
 
 3. (Optional) Install Toolkits Package from local repo

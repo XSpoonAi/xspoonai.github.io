@@ -8,6 +8,18 @@ Learn how to create a custom AI agent from scratch using SpoonOS.
 - API keys set up for your chosen LLM provider
 - Basic Python knowledge
 
+### Fast environment setup (uv)
+
+If you haven’t installed the SDK yet, `uv` is the quickest way:
+
+```bash
+uv venv .venv
+source .venv/bin/activate            # macOS/Linux
+# .\\.venv\\Scripts\\Activate.ps1    # Windows (PowerShell)
+uv pip install spoon-ai-sdk          # core SDK
+uv pip install spoon-toolkits        # optional Web3/crypto tools
+```
+
 ## Step 1: Basic Agent Setup
 
 ### Create Agent File
