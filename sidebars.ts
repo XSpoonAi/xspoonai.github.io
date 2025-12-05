@@ -49,18 +49,18 @@ const sidebars: SidebarsConfig = {
         'how-to-guides/x402-payments',
       ],
     },
-    {
-      type: 'category',
-      label: '💻 CLI Usage',
-      collapsed: false,
-      items: [
-        'cli/installation',
-        'cli/configuration',
-        'cli/basic-usage',
-        'cli/advanced-features',
-        'cli/troubleshooting',
-      ],
-    },
+    // {
+    //   type: 'category',
+    //   label: '💻 CLI Usage',
+    //   collapsed: false,
+    //   items: [
+    //     'cli/installation',
+    //     'cli/configuration',
+    //     'cli/basic-usage',
+    //     'cli/advanced-features',
+    //     'cli/troubleshooting',
+    //   ],
+    // },
     {
       type: 'category',
       label: '📚 SpoonOS API Reference',
