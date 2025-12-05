@@ -173,7 +173,7 @@ async def fetch_price_node(state: AnalysisState) -> dict:
     symbol = state.get("symbol", "BTC")
 
     # Actual API call to data source
-    from toolkit.crypto_power_data import CryptoPowerData
+    from spoon_toolkits.crypto.crypto_powerdata import CryptoPowerData
     client = CryptoPowerData()
     ohlcv = await client.get_ohlcv(symbol=f"{symbol}USDT", interval="1h", limit=24)
 
