@@ -75,7 +75,7 @@ async def main():
         resource="/premium-data",
         description="Access to premium data"
     )
-    
+
     # Sign and create payment receipt
     receipt = await service.sign_and_pay(request)
     print(f"Payment signed: {receipt}")

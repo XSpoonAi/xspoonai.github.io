@@ -77,11 +77,11 @@ class DeepWikiAgent(SpoonReactMCP):
     """Agent that can analyze GitHub repositories via DeepWiki MCP"""
     name: str = "DeepWikiAgent"
     system_prompt: str = "You can analyze GitHub repositories using DeepWiki."
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.available_tools = ToolManager([])
-    
+
     async def initialize(self):
         # Create MCP tool for DeepWiki (no API key needed!)
         deepwiki_tool = MCPTool(
@@ -100,7 +100,7 @@ async def main():
     # Create and initialize agent
     agent = DeepWikiAgent(llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"))
     await agent.initialize()
-    
+
     # Query the agent
     response = await agent.run("What is XSpoonAi/spoon-core about?")
     print(response)
@@ -131,10 +131,10 @@ mcp_tool = MCPTool(
 async def main():
     # Tool parameters are loaded lazily when first used
     await mcp_tool.ensure_parameters_loaded()
-    
+
     # Call the tool
     result = await mcp_tool.execute(repo="XSpoonAi/spoon-core")
-    print(result)
+        print(result)
 
 asyncio.run(main())
 ```
@@ -163,41 +163,9 @@ graph TD
 3. **Tools** - Executable functions with defined schemas
 4. **Resources** - Data sources and content
 
-## Setting Up MCP
+## Connecting to MCP Servers (client-only)
 
-### Basic MCP Server (via spoon-cli)
-
-SpoonOS provides MCP server functionality through the `spoon-cli` package:
-
-```bash
-pip install spoon-cli spoon-toolkits
-```
-
-```python
-import asyncio
-from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
-
-# Creates an MCP server with pre-built crypto/defi tools
-mcp_tools = MCPToolsCollection()
-
-async def main():
-    # Runs a FastMCP SSE server on port 8765
-    await mcp_tools.run(port=8765)
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
-
-### Toolkit MCP Servers
-
-The `spoon-toolkits` package also provides dedicated MCP servers:
-
-```python
-from spoon_toolkits import start_crypto_powerdata_mcp_sse
-
-# Start the crypto data MCP server
-start_crypto_powerdata_mcp_sse(port=8766)
-```
+The cookbook focuses on MCP **clients**. Use `MCPTool` to connect to any MCP server (stdio/HTTP/SSE/WS). Hosting servers is out of scope here—follow your chosen server’s docs.
 
 ### MCP Client Configuration
 
@@ -292,29 +260,7 @@ for tool in tools:
 
 ### Tool Registration
 
-```python
-from spoon_ai.tools.base import BaseTool
-from spoon_cli.mcp.mcp_tools_collection import mcp_tools
-
-class WeatherTool(BaseTool):
-    name: str = "get_weather"
-    description: str = "Get current weather for a location"
-    parameters: dict = {
-        "type": "object",
-        "properties": {
-            "location": {"type": "string", "description": "City name"}
-        },
-        "required": ["location"]
-    }
-
-    async def execute(self, location: str) -> dict:
-        # Weather API call implementation
-        return {"location": location, "temperature": 22, "condition": "sunny"}
-
-# Register tool with the MCP server
-import asyncio
-asyncio.run(mcp_tools.add_tool(WeatherTool()))
-```
+Use `MCPTool` to connect to any MCP server (stdio/HTTP/SSE/WS). No `spoon_cli` imports are needed in cookbook examples.
 
 ## Tool Execution
 
@@ -340,11 +286,11 @@ class MyMCPAgent(SpoonReactMCP):
     """Custom agent with MCP tools"""
     name: str = "MyMCPAgent"
     system_prompt: str = "You are a helpful assistant with web search capabilities."
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.available_tools = ToolManager([])
-    
+
     async def initialize(self):
         """Initialize MCP tools"""
         tavily_tool = MCPTool(
@@ -361,9 +307,9 @@ class MyMCPAgent(SpoonReactMCP):
 async def main():
     agent = MyMCPAgent(llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"))
     await agent.initialize()
-    
+
     response = await agent.run("Search for the latest cryptocurrency news")
-    print(response)
+print(response)
 
 asyncio.run(main())
 ```

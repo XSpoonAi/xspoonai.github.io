@@ -59,7 +59,7 @@ The LLM reads the description to decide *when* to use a tool and the parameters 
 ## Quick Start
 
 ```bash
-pip install spoon-ai
+pip install spoon-ai-sdk
 ```
 
 ```python
@@ -144,7 +144,9 @@ specs = manager.to_params()  # List of OpenAI-compatible tool definitions
 - `index_tools()` / `query_tools(query)` — Semantic search (requires Pinecone + OpenAI)
 
 ### Crypto toolkit (optional)
+
 If you install `spoon-toolkits`, import the concrete tools you need:
+
 ```python
 from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
 from spoon_ai.tools import ToolManager
@@ -155,10 +157,13 @@ crypto_tools = [
 ]
 manager = ToolManager(crypto_tools)
 ```
+
 Environment variables for these tools depend on the specific provider (e.g., `OKX_API_KEY`, `BITQUERY_API_KEY`, `RPC_URL`, etc.).
 
 ### MCP client tools (`MCPTool`)
+
 `MCPTool` lets an agent call tools hosted on an MCP server.
+
 ```python
 from spoon_ai.tools.mcp_tool import MCPTool
 
@@ -172,55 +177,39 @@ mcp_tool = MCPTool(
 )
 # The tool’s schema/description is fetched dynamically from the MCP server.
 ```
+
 `MCPTool.execute(...)` will fetch the server’s tool list, align the name/parameters, and perform retries and health checks.
 
-### Creating MCP servers
+### MCP clients
 
-SpoonOS provides two ways to expose tools as MCP servers:
-
-**Option 1: Using spoon_toolkits' built-in MCP servers**
+SpoonOS agents primarily use `MCPTool` (MCP client) to talk to remote MCP servers:
 
 ```python
-# Using spoon_toolkits' pre-built MCP servers
-from spoon_toolkits import CryptoPowerDataMCPServer, start_crypto_powerdata_mcp_sse
+from spoon_ai.tools.mcp_tool import MCPTool
 
-# Start an MCP server with crypto data tools
-start_crypto_powerdata_mcp_sse(port=8765)
+# Example: connect to DeepWiki SSE MCP server
+deepwiki = MCPTool(
+    name="deepwiki",
+    description="DeepWiki MCP tool for repository analysis",
+    mcp_config={
+        "url": "https://mcp.deepwiki.com/sse",
+        "transport": "sse",
+        "timeout": 30,
+    },
+)
 ```
 
-**Option 2: Using spoon-cli's MCPToolsCollection (recommended)**
-
-For custom tools, use `spoon-cli` to expose them via MCP:
-
-```bash
-pip install spoon-cli
-```
-
-```python
-import asyncio
-from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
-
-async def main():
-    # MCPToolsCollection wraps existing tools and exposes them via MCP
-    mcp_tools_server = MCPToolsCollection()
-    
-    # Start the MCP server (SSE transport by default)
-    print("Starting MCP server on port 8765...")
-    await mcp_tools_server.run(port=8765)
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
-
-> **Note**: SpoonOS uses `fastmcp` as the underlying MCP implementation. For client-side MCP operations, use `spoon_ai.tools.mcp_tool.MCPTool`. For server-side, prefer `spoon_cli.mcp.mcp_tools_collection.MCPToolsCollection`.
+If you need to self-host an MCP server, follow that server’s own documentation; the cookbook focuses on the `spoon_ai` MCP client (`MCPTool`) rather than FastMCP server setup.
 
 ## Configuration
+
 - **Core**: none required for basic tools.
 - **Embedding index (optional)**: `OPENAI_API_KEY`, `PINECONE_API_KEY`.
 - **Crypto/toolkit tools**: provider-specific keys (e.g., `OKX_API_KEY`, `BITQUERY_API_KEY`, `RPC_URL`, `GOPLUSLABS_API_KEY`).
 - **MCP**: set transport target via `mcp_config` (`url` or `command` + `args`/`env`).
 
 ## Best Practices
+
 - Keep tools single-purpose with clear `parameters` JSON schema.
 - Validate inputs inside `execute`; raise rich errors for better agent feedback.
 - Prefer async I/O in `execute` to avoid blocking the event loop.
@@ -228,6 +217,7 @@ if __name__ == "__main__":
 - When using toolkit or MCP tools, fail gracefully if optional dependencies or servers are missing.
 
 ## See Also
+
 - API reference: `../api-reference/tools/base-tool.md`
 - MCP protocol details: `./mcp-protocol.md`
 - Custom tool guide: `../how-to-guides/add-custom-tools.md`

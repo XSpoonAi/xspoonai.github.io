@@ -215,24 +215,36 @@ def create_my_tool_manager() -> ToolManager:
 
 ### Method 3: MCP Integration
 
-Expose your custom tools as an MCP server using `spoon-cli`:
-
-```bash
-pip install spoon-cli
-```
+Expose your custom tools as an MCP server using core + `fastmcp` (no spoon-cli):
 
 ```python
 # mcp_server.py
 import asyncio
-from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
+from fastmcp import FastMCP
+from fastmcp.tools.tool import FunctionTool
+from spoon_ai.tools.base import BaseTool
+
+class MyTool(BaseTool):
+    name = "my_custom_tool"
+    description = "Echo input text"
+    parameters = {
+        "type": "object",
+        "properties": {"text": {"type": "string"}},
+        "required": ["text"],
+    }
+    async def execute(self, text: str):
+        return {"echo": text}
 
 async def main():
-    # MCPToolsCollection wraps existing tools and exposes them via MCP
-    mcp_tools_server = MCPToolsCollection()
-
-    # Start the MCP server (SSE transport by default)
+    mcp = FastMCP("My MCP Server")
+    mcp.add_tool(FunctionTool(
+        name=MyTool.name,
+        description=MyTool.description,
+        fn=MyTool().execute,
+        parameters=MyTool.parameters,
+    ))
     print("Starting MCP server on port 8766...")
-    await mcp_tools_server.run(port=8766)
+    await mcp.run_async(transport="sse", port=8766)
 
 if __name__ == "__main__":
     asyncio.run(main())
