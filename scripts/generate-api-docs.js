@@ -35,6 +35,29 @@ function discoverModules(packageRoot, packageName) {
   return Array.from(modules).sort();
 }
 
+function discoverModulesFromInstalled(pythonBin, env) {
+  const script = `
+import json, pkgutil
+try:
+    import spoon_ai
+except Exception:
+    print("[]")
+    raise SystemExit(0)
+mods = {"spoon_ai"}
+for m in pkgutil.walk_packages(spoon_ai.__path__, spoon_ai.__name__ + "."):
+    mods.add(m.name)
+print(json.dumps(sorted(mods)))
+`;
+  const res = spawnSync(pythonBin, ['-c', script], { env, encoding: 'utf8' });
+  if (res.status !== 0) return ['spoon_ai'];
+  try {
+    const parsed = JSON.parse(res.stdout.trim() || '[]');
+    return Array.isArray(parsed) && parsed.length ? parsed : ['spoon_ai'];
+  } catch (err) {
+    return ['spoon_ai'];
+  }
+}
+
 function renderModule({ pythonBin, env, cookbookRoot, searchPath, moduleName, outputDir }) {
   const moduleParts = moduleName.split('.');
   const isPackage = modulesGlobal.some((m) => m.startsWith(moduleName + '.'));
@@ -80,7 +103,7 @@ renderer:
   const relPath = outputFile
     .replace(path.join(cookbookRoot, 'docs', 'api-reference') + path.sep, '')
     .replace(/\\/g, '/');
-  const slugBase = `/api-reference/${relPath.replace(/index\\.md$/, '').replace(/\\.md$/, '')}`;
+  const slugBase = `/api-reference/${relPath.replace(/index\.md$/, '').replace(/\.md$/, '')}`;
 
   const content = readFileSync(outputFile, 'utf8').split('\n');
   let inCode = false;
@@ -141,6 +164,8 @@ function run() {
   if (existsSync(packageRoot)) {
     searchPath.unshift(coreDir);
     modules = discoverModules(packageRoot, 'spoon_ai');
+  } else {
+    modules = discoverModulesFromInstalled(pythonBin, env);
   }
   modulesGlobal = modules; // for render helper
 
