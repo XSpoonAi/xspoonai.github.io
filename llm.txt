@@ -2638,7 +2638,7 @@ from unittest.mock import AsyncMock
 async def test_weather_agent():
     # Mock the LLM
     mock_llm = AsyncMock()
-    mock_llm.chat.return_value = "The weather in Paris is sunny."
+    mock_llm.ask.return_value = "The weather in Paris is sunny."
 
     # Create agent with mock
     agent = WeatherAgent(llm=mock_llm)
@@ -3379,7 +3379,7 @@ from spoon_ai.graph import StateGraph
 graph = StateGraph(MyState)
 graph.add_node("analyze", analyze_fn)
 graph.add_node("execute", execute_fn)
-graph.add_edge("__start__", "analyze")
+graph.set_entry_point("analyze")
 graph.add_conditional_edge("analyze", router_fn)
 
 # Agent with memory persistence
@@ -3692,7 +3692,7 @@ pip install spoon-ai
 ```python
 import asyncio
 from typing import TypedDict
-from spoon_ai.graph import StateGraph, END
+from spoon_ai.graph import StateGraph  # note: no START/END sentinels needed
 
 class MyState(TypedDict):
     query: str
@@ -3703,16 +3703,18 @@ async def process(state: MyState) -> dict:
 
 graph = StateGraph(MyState)
 graph.add_node("process", process)
-graph.add_edge("__start__", "process")
-graph.add_edge("process", END)
+
+# ⭐️ Tell SpoonOS where to start
+graph.set_entry_point("process")
 
 app = graph.compile()
 
 async def main():
     result = await app.invoke({"query": "Hello", "result": ""})
-    print(result["result"])  # Processed: Hello
+    print(result["result"])  # should print: Processed: Hello
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ---
@@ -4489,7 +4491,7 @@ from spoon_ai.chat import ChatBot
 llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
 
 async def main():
-    response = await llm.chat("Explain quantum computing in one sentence")
+    response = await llm.ask([{"role": "user", "content": "Explain quantum computing in one sentence"}])
     print(response)
 
 asyncio.run(main())
@@ -5122,9 +5124,15 @@ graph TD
 
 ### Basic MCP Server
 
+Requires the `spoon-cli` package (which ships the FastMCP-based server wrapper and built-in crypto tools).
+
+```bash
+pip install spoon-cli spoon-toolkits fastmcp
+```
+
 ```python
 import asyncio
-from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
+from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
 
 mcp_tools = MCPToolsCollection()
 
@@ -5132,7 +5140,8 @@ async def main():
     # Runs a FastMCP SSE server. Change the port as needed.
     await mcp_tools.run(port=8765)
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### MCP Client Configuration
@@ -5604,9 +5613,9 @@ from spoon_ai.chat import ChatBot
 llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
 
 async def main():
-    await llm.chat("My name is Alice")
-    await llm.chat("What's the capital of France?")
-    response = await llm.chat("What's my name?")  # Remembers "Alice"
+    await llm.ask([{"role": "user", "content": "My name is Alice"}])
+    await llm.ask([{"role": "user", "content": "What's the capital of France?"}])
+    response = await llm.ask([{"role": "user", "content": "What's my name?"}])  # Remembers "Alice"
     print(response)
 
 asyncio.run(main())
@@ -7773,8 +7782,8 @@ async def test_memory_agent():
     agent = MemoryAgent()
 
     # Framework maintains conversation context automatically
-    response1 = await agent.chat("My name is Sarah")
-    response2 = await agent.chat("What's my name?")  # Agent remembers Sarah
+    response1 = await agent.run("My name is Sarah")
+    response2 = await agent.run("What's my name?")  # Agent remembers Sarah
 
     return response1, response2
 ```
@@ -8075,7 +8084,7 @@ async def main():
         if user_input.lower() in ['quit', 'exit', 'bye']:
             break
 
-        response = await agent.chat(user_input)
+        response = await agent.run(user_input)
         # Response is automatically formatted and error-free
 
 if __name__ == "__main__":
@@ -9039,10 +9048,6 @@ class TracedAgent(BaseAgent):
     @trace_execution
     async def run(self, message: str, **kwargs):
         return await super().run(message, **kwargs)
-    
-    @trace_execution
-    async def chat(self, messages, **kwargs):
-        return await super().chat(messages, **kwargs)
 ```
 
 ## Tool Debugging
@@ -10818,6 +10823,16 @@ Welcome to the **SpoonOS Developer Documentation** - the comprehensive guide for
 
 This documentation site provides everything you need to get started with SpoonOS, the **Agentic OS for a Sentient Economy**.
 
+If you plan to build or refresh the Python-generated API docs that power this cookbook, use `uv` (Python 3.12+) for a fast, reproducible setup:
+
+```bash
+cd cookbook
+uv venv .venv
+./.venv/Scripts/activate   # Windows
+# source .venv/bin/activate # macOS/Linux
+uv pip install spoon-ai-sdk
+```
+
 ## 🚀 What is SpoonOS?
 
 SpoonOS is an **Agentic Operating System that enables AI agents to perceive, reason, plan, and execute**. It provides a robust framework for creating, deploying, and managing Web3 AI agents. SpoonOS fosters interoperability, data scalability, and privacy—empowering AI agents to engage in collaborative learning while ensuring secure and efficient data processing.
@@ -10844,6 +10859,17 @@ SpoonOS is an **Agentic Operating System that enables AI agents to perceive, rea
 ## 🛠️ Development
 
 ### Installation
+
+For Python-based API doc generation (recommended when updating the docs), set up `uv` first:
+
+```bash
+uv venv .venv
+./.venv/Scripts/activate   # Windows
+# source .venv/bin/activate # macOS/Linux
+uv pip install pydoc-markdown spoon-ai-sdk
+```
+
+Then install the site dependencies:
 
 ```bash
 npm install
