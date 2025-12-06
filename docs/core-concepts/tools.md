@@ -174,16 +174,45 @@ mcp_tool = MCPTool(
 ```
 `MCPTool.execute(...)` will fetch the server’s tool list, align the name/parameters, and perform retries and health checks.
 
-### MCP server (`MCPToolsCollection`)
-You can expose local or toolkit tools as an MCP server:
-```python
-from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
-import asyncio
+### Creating MCP servers
 
-mcp_tools = MCPToolsCollection()  # wraps spoon-toolkits tools if installed
-asyncio.run(mcp_tools.run(port=8765))  # SSE server by default
+SpoonOS provides two ways to expose tools as MCP servers:
+
+**Option 1: Using spoon_toolkits' built-in MCP servers**
+
+```python
+# Using spoon_toolkits' pre-built MCP servers
+from spoon_toolkits import CryptoPowerDataMCPServer, start_crypto_powerdata_mcp_sse
+
+# Start an MCP server with crypto data tools
+start_crypto_powerdata_mcp_sse(port=8765)
 ```
-This uses `fastmcp` under the hood and auto-registers each tool as an MCP `FunctionTool`.
+
+**Option 2: Using spoon-cli's MCPToolsCollection (recommended)**
+
+For custom tools, use `spoon-cli` to expose them via MCP:
+
+```bash
+pip install spoon-cli
+```
+
+```python
+import asyncio
+from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
+
+async def main():
+    # MCPToolsCollection wraps existing tools and exposes them via MCP
+    mcp_tools_server = MCPToolsCollection()
+    
+    # Start the MCP server (SSE transport by default)
+    print("Starting MCP server on port 8765...")
+    await mcp_tools_server.run(port=8765)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+> **Note**: SpoonOS uses `fastmcp` as the underlying MCP implementation. For client-side MCP operations, use `spoon_ai.tools.mcp_tool.MCPTool`. For server-side, prefer `spoon_cli.mcp.mcp_tools_collection.MCPToolsCollection`.
 
 ## Configuration
 - **Core**: none required for basic tools.

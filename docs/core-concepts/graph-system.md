@@ -174,18 +174,28 @@ async def fetch_price_node(state: AnalysisState) -> dict:
     """
     symbol = state.get("symbol", "BTC")
 
-    # Actual API call to data source
-    from spoon_toolkits.crypto.crypto_powerdata import CryptoPowerData
-    client = CryptoPowerData()
-    ohlcv = await client.get_ohlcv(symbol=f"{symbol}USDT", interval="1h", limit=24)
+    # Use the CryptoPowerData tool for CEX data
+    from spoon_toolkits.crypto.crypto_powerdata.tools import get_cex_data_with_indicators
+    result = get_cex_data_with_indicators(
+        exchange="binance",
+        symbol=f"{symbol}/USDT",
+        timeframe="1h",
+        limit=24,
+        indicators_config='{"sma": [{"timeperiod": 20}], "rsi": [{"timeperiod": 14}]}'
+    )
+
+    # Extract data from result
+    data = result.get("data", [])
+    if not data:
+        return {"price_data": {"symbol": symbol, "error": "No data available"}}
 
     return {
         "price_data": {
             "symbol": symbol,
-            "current_price": ohlcv[-1]["close"],
-            "high_24h": max(c["high"] for c in ohlcv),
-            "low_24h": min(c["low"] for c in ohlcv),
-            "volume_24h": sum(c["volume"] for c in ohlcv),
+            "current_price": data[-1]["close"] if data else 0,
+            "high_24h": max(c["high"] for c in data) if data else 0,
+            "low_24h": min(c["low"] for c in data) if data else 0,
+            "volume_24h": sum(c["volume"] for c in data) if data else 0,
         }
     }
 ```

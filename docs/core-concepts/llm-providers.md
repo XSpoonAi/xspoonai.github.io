@@ -73,7 +73,7 @@ asyncio.run(main())
 
 ### OpenAI
 
-- **Models**: gpt-5.1-chat-latest (default), GPT-4o, GPT-4o-mini, o1-preview, o1-mini
+- **Models**: GPT-5.1, GPT-4o, o1, o3, etc. ([See latest models](https://platform.openai.com/docs/models))
 - **Features**: Function calling, streaming, embeddings, reasoning models
 - **Best for**: General-purpose tasks, reasoning, code generation
 
@@ -82,7 +82,7 @@ from spoon_ai.chat import ChatBot
 
 # OpenAI configuration with default model
 llm = ChatBot(
-    model_name="gpt-5.1-chat-latest",  # Framework default
+    model_name="gpt-5.1-chat-latest",  # Check docs for latest model names
     llm_provider="openai",
     temperature=0.7
 )
@@ -90,14 +90,14 @@ llm = ChatBot(
 
 ### Anthropic (Claude)
 
-- **Models**: Claude-Sonnet-4-20250514 (default), Claude-3.5 Sonnet, Claude-3.5 Haiku
+- **Models**: Claude 4.5 Opus, Claude 4.5 Sonnet, etc. ([See latest models](https://docs.anthropic.com/en/docs/about-claude/models))
 - **Features**: Large context windows, prompt caching, safety features
 - **Best for**: Long documents, analysis, safety-critical applications
 
 ```python
 # Anthropic configuration with default model
 llm = ChatBot(
-    model_name="claude-sonnet-4-20250514",  # Framework default
+    model_name="claude-sonnet-4-20250514",  # Check docs for latest model names
     llm_provider="anthropic",
     temperature=0.1
 )
@@ -105,14 +105,14 @@ llm = ChatBot(
 
 ### Google (Gemini)
 
-- **Models**: Gemini-2.5-Pro (default), Gemini-2.0-Flash, Gemini-1.5-Pro
+- **Models**: Gemini 3 Pro, Gemini 2.5 Flash, etc. ([See latest models](https://ai.google.dev/gemini-api/docs/models))
 - **Features**: Multimodal capabilities, fast inference, large context
 - **Best for**: Multimodal tasks, cost-effective solutions, long context
 
 ```python
 # Google configuration with default model
 llm = ChatBot(
-    model_name="gemini-2.5-pro",  # Framework default
+    model_name="gemini-3-pro",  # Check docs for latest model names
     llm_provider="gemini",
     temperature=0.1
 )
@@ -120,14 +120,14 @@ llm = ChatBot(
 
 ### DeepSeek
 
-- **Models**: DeepSeek-Reasoner (default), DeepSeek-V3, DeepSeek-Chat
+- **Models**: DeepSeek-V3, DeepSeek-Reasoner, etc. ([See latest models](https://platform.deepseek.com/api-docs/))
 - **Features**: Advanced reasoning, code-specialized models, cost-effective
 - **Best for**: Complex reasoning, code generation, technical tasks
 
 ```python
 # DeepSeek configuration with default model
 llm = ChatBot(
-    model_name="deepseek-reasoner",  # Framework default
+    model_name="deepseek-reasoner",  # Check docs for latest model names
     llm_provider="deepseek",
     temperature=0.2
 )
@@ -156,13 +156,14 @@ The LLM Manager provides provider-agnostic access with automatic fallback:
 from spoon_ai.llm.manager import LLMManager
 
 # Initialize with multiple providers
+# Note: Check each provider's docs for latest model names
 llm_manager = LLMManager(
     primary_provider="openai",
     fallback_providers=["anthropic", "gemini"],
     model_preferences={
         "openai": "gpt-5.1-chat-latest",
         "anthropic": "claude-sonnet-4-20250514",
-        "gemini": "gemini-2.5-pro",
+        "gemini": "gemini-3-pro",
         "deepseek": "deepseek-reasoner"
     }
 )
@@ -205,17 +206,18 @@ DEFAULT_TEMPERATURE=0.3
 
 ## Advanced Features
 
-### Prompt Caching (Anthropic)
+### Response Caching
 
 ```python
-from spoon_ai.llm.cache import PromptCache
+from spoon_ai.llm.cache import LLMResponseCache
 
-# Enable prompt caching for repeated system prompts
+# Enable response caching to avoid redundant API calls
+cache = LLMResponseCache()
 llm = ChatBot(
     model_name="claude-sonnet-4-20250514",
     llm_provider="anthropic",
-    enable_caching=True
 )
+# Cache is automatically managed by the framework
 ```
 
 ### Streaming Responses
@@ -253,35 +255,39 @@ response = await llm.generate(
 
 ### Task-Based Recommendations
 
-#### Code Generation
+> Choose the right model for your use case. Check official documentation for the latest model capabilities.
 
-- Primary: DeepSeek-Reasoner, gpt-5.1-chat-latest
-- Alternative: Claude-Sonnet-4
+#### Code Generation
+- **Recommended**: DeepSeek (cost-effective), OpenAI GPT models (fast iteration)
+- **Alternative**: Anthropic Claude (strong reasoning)
 
 #### Analysis & Reasoning
-
-- Primary: DeepSeek-Reasoner, gpt-5.1-chat-latest, Claude-Sonnet-4
-- Alternative: Gemini-2.5-Pro
+- **Recommended**: OpenAI o-series models, DeepSeek Reasoner, Claude
+- **Alternative**: Gemini Pro
 
 #### Cost-Sensitive Tasks
-
-- Primary: DeepSeek-Reasoner, Gemini-2.5-Pro
-- Alternative: gpt-5.1-chat-latest
+- **Recommended**: DeepSeek models, Gemini models
+- **Alternative**: OpenRouter for provider comparison
 
 #### Long Context Tasks
-
-- Primary: Gemini-2.5-Pro (250K tokens), Claude-Sonnet-4 (200K tokens)
-- Alternative: DeepSeek-Reasoner (65K tokens)
+- **Recommended**: Gemini (largest context), Claude (large context)
+- **Alternative**: Check each provider's latest context window limits
 
 ### Performance Comparison
 
-| Provider                  | Speed     | Cost     | Context | Quality              |
-| ------------------------- | --------- | -------- | ------- | -------------------- |
-| OpenAI gpt-5.1-chat-latest            | Fast      | Medium   | 128K    | Excellent            |
-| Anthropic Claude-Sonnet-4 | Medium    | Medium   | 200K    | Excellent            |
-| Google Gemini-2.5-Pro     | Very Fast | Low      | 250K    | Very Good            |
-| DeepSeek-Reasoner         | Fast      | Very Low | 65K     | Superior (Reasoning) |
-| OpenAI o1-preview         | Slow      | High     | 128K    | Superior (Reasoning) |
+> **Note**: Model capabilities and pricing change frequently. Always check the official documentation for the latest information:
+> - [OpenAI Models](https://platform.openai.com/docs/models)
+> - [Anthropic Models](https://docs.anthropic.com/en/docs/about-claude/models)
+> - [Google Gemini Models](https://ai.google.dev/gemini-api/docs/models)
+> - [DeepSeek Models](https://platform.deepseek.com/api-docs/)
+
+| Provider | Model Example | Context Window | Best For |
+|----------|---------------|----------------|----------|
+| **OpenAI** | gpt-5.1-chat-latest | Check docs | General purpose, tool calling |
+| **Anthropic** | claude-sonnet-4-20250514 | Check docs | Analysis, long documents |
+| **Google** | gemini-2.5-pro | Check docs | Multimodal, cost-effective |
+| **DeepSeek** | deepseek-reasoner | Check docs | Reasoning, code generation |
+| **OpenRouter** | Various | Varies | Access multiple providers |
 
 ## Error Handling & Fallbacks
 
@@ -341,29 +347,34 @@ response = await llm_manager.generate("Complex reasoning task")
 ### Usage Tracking
 
 ```python
-from spoon_ai.llm.monitoring import LLMMonitor
+from spoon_ai.llm.monitoring import MetricsCollector, get_metrics_collector
 
-# Track usage and costs automatically
-monitor = LLMMonitor()
-response = await llm.generate("Hello", monitor=monitor)
+# Get the global metrics collector
+collector = get_metrics_collector()
 
-# Get metrics
-metrics = monitor.get_metrics()
-print(f"Tokens used: {metrics.total_tokens}")
-print(f"Cost: ${metrics.total_cost}")
+# Metrics are automatically tracked during LLM calls
+response = await llm.ask([{"role": "user", "content": "Hello"}])
+
+# Get collected stats per provider
+stats = collector.get_stats("openai")
+print(f"Total requests: {stats.total_requests}")
+print(f"Average latency: {stats.average_latency:.2f}s")
 ```
 
 ### Performance Monitoring
 
 ```python
-# Monitor response times and success rates
-monitor.log_request(
-    provider="openai",
-    model="gpt-4",
-    tokens=150,
-    latency=1.2,
-    success=True
-)
+# The MetricsCollector automatically tracks:
+# - Request counts and success/failure rates
+# - Token usage (input/output)
+# - Latency statistics (average, min, max)
+# - Error tracking per provider
+
+# Access provider-specific stats
+for provider in ["openai", "anthropic", "gemini"]:
+    stats = collector.get_stats(provider)
+    if stats.total_requests > 0:
+        print(f"{provider}: {stats.total_requests} requests, {stats.error_count} errors")
 ```
 
 ## Best Practices

@@ -52,7 +52,7 @@ async def main():
     agent = MyFirstAgent(
         llm=ChatBot(
             llm_provider="openai",         # or "anthropic", "gemini", "deepseek", "openrouter"
-            model_name="gpt-5.1"   # Framework default for OpenAI
+            model_name="gpt-5.1-chat-latest"   # Framework default for OpenAI
         )
     )
 
@@ -73,43 +73,40 @@ python my_first_agent.py
 
 The agent will respond with a personalized greeting and offer to help with various tasks.
 
-### 3. Add Web3 Capabilities
+### 3. Add Real Data Capabilities
 
-Enhance your agent with blockchain tools:
+Enhance your agent with search and web scraping tools:
 
 ```python
-from spoon_toolkits import (
-    CryptoPowerDataPriceTool,
-    CryptoPowerDataCEXTool,
-)
+from spoon_toolkits import DesearchWebSearchTool, WebScraperTool
 
-class Web3Agent(ToolCallAgent):
-    name: str = "web3_agent"
-    description: str = "AI agent with Web3 and crypto capabilities"
+class ResearchAgent(ToolCallAgent):
+    name: str = "research_agent"
+    description: str = "AI agent with web research capabilities"
 
     system_prompt: str = """
-    You are a Web3-native AI assistant with access to blockchain data.
-    You can help with crypto prices, DeFi operations, and blockchain analysis.
+    You are a research assistant with access to web search and content scraping.
+    You can help find information, read articles, and analyze web content.
     """
 
     available_tools: ToolManager = ToolManager([
         GreetingTool(),
-        # Crypto/Web3 tools (requires `pip install -e toolkit` in the repo root)
-        CryptoPowerDataPriceTool(),
-        CryptoPowerDataCEXTool(),
+        # Research tools (requires `pip install spoon-toolkits`)
+        DesearchWebSearchTool(),
+        WebScraperTool(),
     ])
 
 # Usage
-async def web3_demo():
-    agent = Web3Agent(
+async def research_demo():
+    agent = ResearchAgent(
         llm=ChatBot(
             llm_provider="anthropic",
             model_name="claude-sonnet-4-20250514"  # Framework default
         )
     )
 
-    # Framework automatically handles crypto data fetching and error cases
-    response = await agent.run("What's the current price of Bitcoin?")
+    # Framework automatically handles search and error cases
+    response = await agent.run("Search for the latest AI news and summarize it")
     return response
 ```
 
@@ -118,7 +115,7 @@ async def web3_demo():
 The SpoonOS framework provides:
 
 - **Multiple LLM Providers**: OpenAI (`openai`), Anthropic (`anthropic`), Google Gemini (`gemini`), DeepSeek (`deepseek`), OpenRouter (`openrouter`)
-- **Built-in Tools**: Crypto, DeFi, social media, data analysis
+- **Built-in Tools**: Web search, content scraping, data analysis, and more via `spoon-toolkits`
 - **Agent Types**: ReAct, ToolCall, Graph-based agents
 - **MCP Integration**: Dynamic tool discovery and execution
 
@@ -170,13 +167,23 @@ class BlockchainAnalysisTool(BaseTool):
 
 ```python
 # Use Model Context Protocol for dynamic tools
-from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
+from spoon_ai.tools.mcp_tool import MCPTool
+import os
+
+# Create an MCP tool for web search
+tavily_tool = MCPTool(
+    name="tavily-search",
+    description="Search the web using Tavily API",
+    mcp_config={
+        "command": "npx",
+        "args": ["-y", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY")},
+    },
+)
 
 agent = ToolCallAgent(
     llm=ChatBot(llm_provider="anthropic", model_name="claude-sonnet-4-20250514"),
-    available_tools=ToolManager([
-        MCPToolsCollection()  # Automatically discovers MCP tools
-    ])
+    available_tools=ToolManager([tavily_tool])
 )
 ```
 

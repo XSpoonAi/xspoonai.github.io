@@ -215,28 +215,46 @@ def create_my_tool_manager() -> ToolManager:
 
 ### Method 3: MCP Integration
 
+Expose your custom tools as an MCP server using `spoon-cli`:
+
+```bash
+pip install spoon-cli
+```
+
 ```python
 # mcp_server.py
-from fastmcp import FastMCP
-from spoon_ai.tools.tool_manager import ToolManager
-from your_tools import get_my_tools
+import asyncio
+from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
 
-mcp = FastMCP("My Custom Tools")
-
-# Add tools to MCP server
-tools = get_my_tools()
-tool_manager = ToolManager(tools)
-
-for tool in tools:
-    mcp.add_tool(
-        tool.execute,
-        name=tool.name,
-        description=tool.description
-    )
+async def main():
+    # MCPToolsCollection wraps existing tools and exposes them via MCP
+    mcp_tools_server = MCPToolsCollection()
+    
+    # Start the MCP server (SSE transport by default)
+    print("Starting MCP server on port 8766...")
+    await mcp_tools_server.run(port=8766)
 
 if __name__ == "__main__":
-    import asyncio
-    asyncio.run(mcp.run_async(transport="sse", port=8766))
+    asyncio.run(main())
+```
+
+To connect to an MCP server from an agent, use `MCPTool`:
+
+```python
+from spoon_ai.tools.mcp_tool import MCPTool
+
+# Connect to your custom MCP server
+custom_mcp = MCPTool(
+    name="my_custom_tools",
+    description="My custom tools exposed via MCP",
+    mcp_config={
+        "url": "http://localhost:8766/sse",
+        "transport": "sse"
+    }
+)
+
+# Load available tools
+await custom_mcp.ensure_parameters_loaded()
 ```
 
 ## Tool Configuration
@@ -502,60 +520,6 @@ class MyTool(BaseTool):
 - Multi-source data aggregation and validation
 - Financial data error handling and recovery
 
-**Key learning points:**
-- Domain-specific tool development patterns
-- Financial data validation techniques
-- Multi-API integration strategies
-- Performance optimization for data-intensive tools
-
-#### 🎯 [Intent Graph Demo](../examples/intent-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
-
-**Advanced tool orchestration:**
-- Custom routing and decision-making tools
-- Memory management and context preservation tools
-- Parallel processing coordination tools
-- Performance monitoring and metrics tools
-
-**Key learning points:**
-- Complex tool interaction patterns
-- State management in custom tools
-- Performance optimization techniques
-- Error recovery in multi-tool workflows
-
-### 🛠️ **Development Resources**
-
-- **[Core Concepts: Tools](../core-concepts/tools.md)** - Complete tool system understanding
-- **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Advanced integration patterns
-- **[Tool API Reference](../api-reference/spoon_ai/tools/)** - Complete development documentation
-
-### 📖 **Additional Resources**
-
-- **[Built-in Tools Reference](../api-reference/spoon_ai/tools/)** - Explore existing tool implementations
-- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
-- **[Agent Architecture](../core-concepts/agents.md)** - Tool-agent integration patterns
-
-## Troubleshooting
-
-### Common Issues
-
-**Tool not found in manager:**
-
-- Ensure tool is properly added to ToolManager
-- Check tool name matches exactly
-- Verify tool class inherits from BaseTool
-
-**Parameter validation errors:**
-
-- Check JSON schema syntax in parameters
-- Ensure required parameters are marked correctly
-- Validate parameter types match schema
-
-**Execution failures:**
-
-- Leverage framework's automatic error handling
-- Check for missing dependencies or API keys
-- Use framework's built-in debugging features
 **Key learning points:**
 - Domain-specific tool development patterns
 - Financial data validation techniques

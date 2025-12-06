@@ -62,30 +62,78 @@ sequenceDiagram
 pip install spoon-ai
 ```
 
+### Using MCP Tools with an Agent
+
+The recommended way to use MCP tools is through `SpoonReactMCP`:
+
+```python
+import asyncio
+from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
+from spoon_ai.tools.mcp_tool import MCPTool
+from spoon_ai.tools.tool_manager import ToolManager
+from spoon_ai.chat import ChatBot
+
+class DeepWikiAgent(SpoonReactMCP):
+    """Agent that can analyze GitHub repositories via DeepWiki MCP"""
+    name: str = "DeepWikiAgent"
+    system_prompt: str = "You can analyze GitHub repositories using DeepWiki."
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.available_tools = ToolManager([])
+    
+    async def initialize(self):
+        # Create MCP tool for DeepWiki (no API key needed!)
+        deepwiki_tool = MCPTool(
+            name="deepwiki",
+            description="DeepWiki MCP for repository analysis",
+            mcp_config={
+                "url": "https://mcp.deepwiki.com/sse",
+                "transport": "sse",
+                "timeout": 30,
+            }
+        )
+        await deepwiki_tool.ensure_parameters_loaded()
+        self.available_tools = ToolManager([deepwiki_tool])
+
+async def main():
+    # Create and initialize agent
+    agent = DeepWikiAgent(llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"))
+    await agent.initialize()
+    
+    # Query the agent
+    response = await agent.run("What is XSpoonAi/spoon-core about?")
+    print(response)
+
+asyncio.run(main())
+```
+
+### Direct MCP Tool Usage
+
+For direct MCP tool calls without an agent:
+
 ```python
 import asyncio
 from spoon_ai.tools.mcp_tool import MCPTool
 
-# Create an MCP tool that connects to an external MCP server
+# Connect to an SSE/HTTP MCP server
 mcp_tool = MCPTool(
-    name="filesystem",
-    description="Access filesystem via MCP",
+    name="deepwiki",
+    description="DeepWiki MCP tool for repository analysis",
     mcp_config={
-        "command": "npx",
-        "args": ["-y", "@anthropic/mcp-server-filesystem", "/tmp"]
+        "url": "https://mcp.deepwiki.com/sse",
+        "transport": "sse",
+        "timeout": 30,
+        "headers": {"User-Agent": "SpoonOS-MCP/1.0"}
     }
 )
 
 async def main():
-    # Load tool parameters from the MCP server
+    # Tool parameters are loaded lazily when first used
     await mcp_tool.ensure_parameters_loaded()
     
-    # List available tools
-    tools = await mcp_tool.list_mcp_tools()
-    print("Available tools:", [t.name for t in tools])
-    
-    # Call a tool
-    result = await mcp_tool.call_mcp_tool("read_file", path="/tmp/test.txt")
+    # Call the tool
+    result = await mcp_tool.execute(repo="XSpoonAi/spoon-core")
     print(result)
 
 asyncio.run(main())
@@ -117,47 +165,115 @@ graph TD
 
 ## Setting Up MCP
 
-### Basic MCP Server
+### Basic MCP Server (via spoon-cli)
 
-Requires the `spoon-cli` package (which ships the FastMCP-based server wrapper and built-in crypto tools).
+SpoonOS provides MCP server functionality through the `spoon-cli` package:
 
 ```bash
-pip install spoon-cli spoon-toolkits fastmcp
+pip install spoon-cli spoon-toolkits
 ```
 
 ```python
 import asyncio
 from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
 
+# Creates an MCP server with pre-built crypto/defi tools
 mcp_tools = MCPToolsCollection()
 
 async def main():
-    # Runs a FastMCP SSE server. Change the port as needed.
+    # Runs a FastMCP SSE server on port 8765
     await mcp_tools.run(port=8765)
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### MCP Client Configuration
+### Toolkit MCP Servers
+
+The `spoon-toolkits` package also provides dedicated MCP servers:
 
 ```python
-import asyncio
-from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
+from spoon_toolkits import start_crypto_powerdata_mcp_sse
 
-class MCPEnabledClient(MCPClientMixin):
-    def __init__(self, transport: str):
-        super().__init__(transport)
+# Start the crypto data MCP server
+start_crypto_powerdata_mcp_sse(port=8766)
+```
 
-client = MCPEnabledClient("ws://localhost:8765")
+### MCP Client Configuration
 
-async def list_tools():
-    async with client.get_session() as session:
-        return await session.list_tools()
+SpoonOS supports multiple MCP transport types:
 
-tools = asyncio.run(list_tools())
-for tool in tools:
-    print(f"{tool.name}: {tool.description}")
+#### SSE/HTTP Transport (Remote Servers)
+
+```python
+from spoon_ai.tools.mcp_tool import MCPTool
+
+# SSE transport (Server-Sent Events)
+sse_tool = MCPTool(
+    name="deepwiki_sse",
+    description="DeepWiki SSE MCP tool",
+    mcp_config={
+        "url": "https://mcp.deepwiki.com/sse",
+        "transport": "sse",
+        "timeout": 30,
+        "headers": {"User-Agent": "SpoonOS-MCP/1.0"}
+    }
+)
+
+# HTTP transport (Streamable HTTP)
+http_tool = MCPTool(
+    name="deepwiki_http",
+    description="DeepWiki HTTP MCP tool",
+    mcp_config={
+        "url": "https://mcp.deepwiki.com/mcp",
+        "transport": "http",
+        "timeout": 30,
+        "headers": {"Accept": "application/json"}
+    }
+)
+```
+
+#### Stdio Transport (CLI Tools via npx/uvx)
+
+```python
+import os
+from spoon_ai.tools.mcp_tool import MCPTool
+
+# NPX transport (Node.js MCP servers)
+tavily_tool = MCPTool(
+    name="tavily-search",
+    description="Web search via Tavily",
+    mcp_config={
+        "command": "npx",
+        "args": ["--yes", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY")}
+    }
+)
+
+# UVX transport (Python MCP servers)
+python_tool = MCPTool(
+    name="python-mcp",
+    description="Python MCP server",
+    mcp_config={
+        "command": "uvx",
+        "args": ["my-python-mcp-server"],
+        "env": {}
+    }
+)
+```
+
+#### WebSocket Transport
+
+```python
+from spoon_ai.tools.mcp_tool import MCPTool
+
+ws_tool = MCPTool(
+    name="ws-mcp",
+    description="WebSocket MCP server",
+    mcp_config={
+        "url": "ws://localhost:8765",  # or wss:// for secure
+    }
+)
 ```
 
 ## Tool Discovery
@@ -178,7 +294,7 @@ for tool in tools:
 
 ```python
 from spoon_ai.tools.base import BaseTool
-from spoon_ai.tools.mcp_tools_collection import mcp_tools
+from spoon_cli.mcp.mcp_tools_collection import mcp_tools
 
 class WeatherTool(BaseTool):
     name: str = "get_weather"
@@ -195,7 +311,8 @@ class WeatherTool(BaseTool):
         # Weather API call implementation
         return {"location": location, "temperature": 22, "condition": "sunny"}
 
-# Register tool with the running MCP server
+# Register tool with the MCP server
+import asyncio
 asyncio.run(mcp_tools.add_tool(WeatherTool()))
 ```
 
@@ -212,12 +329,43 @@ print(result)
 ### Agent-Driven Execution
 
 ```python
+import asyncio
+import os
 from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
+from spoon_ai.tools.mcp_tool import MCPTool
+from spoon_ai.tools.tool_manager import ToolManager
+from spoon_ai.chat import ChatBot
 
-# Agent that can consume MCP tools discovered via its transport
-agent = SpoonReactMCP()
-response = await agent.run("What's the weather like in San Francisco?")
-print(response)
+class MyMCPAgent(SpoonReactMCP):
+    """Custom agent with MCP tools"""
+    name: str = "MyMCPAgent"
+    system_prompt: str = "You are a helpful assistant with web search capabilities."
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.available_tools = ToolManager([])
+    
+    async def initialize(self):
+        """Initialize MCP tools"""
+        tavily_tool = MCPTool(
+            name="tavily-search",
+            description="Web search via Tavily",
+            mcp_config={
+                "command": "npx",
+                "args": ["--yes", "tavily-mcp"],
+                "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY")}
+            }
+        )
+        self.available_tools = ToolManager([tavily_tool])
+
+async def main():
+    agent = MyMCPAgent(llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"))
+    await agent.initialize()
+    
+    response = await agent.run("Search for the latest cryptocurrency news")
+    print(response)
+
+asyncio.run(main())
 ```
 
 ## MCP Configuration
