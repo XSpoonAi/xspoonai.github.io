@@ -3371,25 +3371,33 @@ response = await agent.run("Search Bitcoin price and calculate 10% of it")
 
 Graph agents execute structured workflows defined as state graphs, supporting conditional branching, parallel execution, and complex multi-step pipelines.
 
-```python
-from spoon_ai.agents import GraphAgent
-from spoon_ai.graph import StateGraph
+**Basic Usage:**
 
-# Build workflow (see Graph System docs for StateGraph details)
+from spoon_ai.graph import StateGraph, START, END, GraphAgent
+
+# Build workflow
 graph = StateGraph(MyState)
-graph.add_node("analyze", analyze_fn)
-graph.add_node("execute", execute_fn)
+graph.add_node("analyze", analyze_fn)  # Node function
+graph.add_node("execute", execute_fn)  # Node function
 graph.set_entry_point("analyze")
-graph.add_conditional_edge("analyze", router_fn)
+graph.add_conditional_edges("analyze", router_fn, {
+    "execute": "execute",
+    "skip": "skip_execution"
+})
 
-# Agent with memory persistence
+# Create agent
 agent = GraphAgent(
-    graph=graph.compile(),
-    memory_path="./agent_memory",
-    session_id="user_123"
+    name="market_agent",
+    graph=graph
 )
 
 result = await agent.run("Analyze market and execute trades")
+**Node Functions:**
+- `analyze_fn(state)`: Receives current state, returns updated state dict
+- `execute_fn(state)`: Receives state with analysis results, returns execution results
+- `router_fn(state)`: Returns next node name as string for conditional routing
+
+> 📖 **See complete example:** [`examples/intent_graph_demo.py`](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py) for full implementation including state schema, node functions, and error handling.
 ```
 
 **Best for:** Multi-step workflows, conditional logic, parallel tasks, human-in-the-loop.
@@ -3442,6 +3450,8 @@ class CustomAgent(BaseAgent):
 
 ```python
 import os
+import asyncio
+from dotenv import load_dotenv
 from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
 from spoon_ai.tools import ToolManager
 from spoon_ai.tools.mcp_tool import MCPTool
@@ -3449,6 +3459,7 @@ from spoon_ai.chat import ChatBot
 from spoon_toolkits.crypto.crypto_powerdata.tools import CryptoPowerDataCEXTool
 
 # Install extra dependency: pip install spoon-toolkits
+load_dotenv()
 
 class SpoonMacroAnalysisAgent(SpoonReactMCP):
     name: str = "SpoonMacroAnalysisAgent"
@@ -3475,11 +3486,32 @@ class SpoonMacroAnalysisAgent(SpoonReactMCP):
                 "env": {"TAVILY_API_KEY": tavily_key},
             },
         )
+        
+        # Pre-load MCP tool parameters
+        await tavily_tool.ensure_parameters_loaded()
 
         crypto_tool = CryptoPowerDataCEXTool()
         self.available_tools = ToolManager([tavily_tool, crypto_tool])
 
-agent = SpoonMacroAnalysisAgent(llm=ChatBot(llm_provider="openai"))
+
+async def main():
+    print("--- SpoonOS Macro Analysis Agent Demo ---")
+    agent = SpoonMacroAnalysisAgent(
+        llm=ChatBot(llm_provider="gemini", model_name="gemini-2.5-flash")
+    )
+    await agent.initialize()
+    
+    query = (
+        "Perform a macro analysis of Bitcoin (BTC). "
+        "Search for recent news and get current market data from Binance using BTC/USDT pair."
+    )
+    print(f"\nRunning query: {query}")
+    response = await agent.run(query)
+    print(f"\n--- Analysis Complete ---\n{response}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ## Best Practices
