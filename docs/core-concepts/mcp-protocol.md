@@ -64,16 +64,29 @@ pip install spoon-ai
 
 ```python
 import asyncio
-from spoon_ai.mcp import MCPClient
+from spoon_ai.tools.mcp_tool import MCPTool
 
-async def main():
-    async with MCPClient.from_config({
+# Create an MCP tool that connects to an external MCP server
+mcp_tool = MCPTool(
+    name="filesystem",
+    description="Access filesystem via MCP",
+    mcp_config={
         "command": "npx",
         "args": ["-y", "@anthropic/mcp-server-filesystem", "/tmp"]
-    }) as client:
-        tools = await client.list_tools()
-        result = await client.call_tool("read_file", {"path": "/tmp/test.txt"})
-        print(result)
+    }
+)
+
+async def main():
+    # Load tool parameters from the MCP server
+    await mcp_tool.ensure_parameters_loaded()
+    
+    # List available tools
+    tools = await mcp_tool.list_mcp_tools()
+    print("Available tools:", [t.name for t in tools])
+    
+    # Call a tool
+    result = await mcp_tool.call_mcp_tool("read_file", path="/tmp/test.txt")
+    print(result)
 
 asyncio.run(main())
 ```

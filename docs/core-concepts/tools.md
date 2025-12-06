@@ -69,9 +69,9 @@ from spoon_ai.tools import ToolManager
 
 # Define a tool with JSON-schema parameters
 class GreetTool(BaseTool):
-    name = "greet"
-    description = "Greet someone by name"
-    parameters = {
+    name: str = "greet"
+    description: str = "Greet someone by name"
+    parameters: dict = {
         "type": "object",
         "properties": {"name": {"type": "string"}},
         "required": ["name"]
@@ -102,9 +102,9 @@ All tools inherit from `BaseTool` with three required attributes and one method:
 from spoon_ai.tools.base import BaseTool
 
 class MyTool(BaseTool):
-    name = "my_tool"                    # Unique identifier
-    description = "What this tool does" # LLM reads this to decide when to use it
-    parameters = {                      # JSON-schema for input validation
+    name: str = "my_tool"                    # Unique identifier
+    description: str = "What this tool does" # LLM reads this to decide when to use it
+    parameters: dict = {                      # JSON-schema for input validation
         "type": "object",
         "properties": {
             "arg1": {"type": "string", "description": "First argument"},

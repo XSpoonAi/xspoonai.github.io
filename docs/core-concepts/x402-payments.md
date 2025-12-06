@@ -56,18 +56,34 @@ sequenceDiagram
 ## Quick Start
 
 ```bash
-pip install spoon-ai
+pip install spoon-ai x402
 export PRIVATE_KEY="your-wallet-private-key"
+export X402_RECEIVER_ADDRESS="0xYourReceiverWallet"
 ```
 
 ```python
-from spoon_ai.agents import SpoonReactAI
-from spoon_ai.payments import x402_paywalled_request
+import asyncio
+from spoon_ai.payments import X402PaymentService, X402PaymentRequest
 
-# Agent auto-detects 402 and signs payments
-agent = SpoonReactAI(tools=[x402_paywalled_request])
-result = await agent.run("Fetch https://api.example.com/premium")
+# Initialize the payment service
+service = X402PaymentService()
+
+async def main():
+    # Create a payment request
+    request = X402PaymentRequest(
+        amount_usdc="0.01",  # Amount in USDC
+        resource="/premium-data",
+        description="Access to premium data"
+    )
+    
+    # Sign and create payment receipt
+    receipt = await service.sign_and_pay(request)
+    print(f"Payment signed: {receipt}")
+
+asyncio.run(main())
 ```
+
+> **Note:** For agent-based x402 payments, the agent handles 402 responses automatically when configured with payment capabilities. See the full examples in the x402 package for complete integration patterns.
 
 ---
 

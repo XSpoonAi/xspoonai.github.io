@@ -61,7 +61,7 @@ class SpoonMacroAnalysisAgent(SpoonReactMCP):
 
 **Stdio-based Transport:**
 ```python
-from spoon_ai.tools import MCPTool
+from spoon_ai.tools.mcp_tool import MCPTool
 
 tavily_tool = MCPTool(
     name="tavily-search",
