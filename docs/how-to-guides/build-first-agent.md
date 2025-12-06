@@ -78,6 +78,7 @@ Your agent will respond with helpful information and current Bitcoin price data.
 
 ```python
 from spoon_ai.tools.base import BaseTool
+from spoon_toolkits import CryptoPowerDataPriceTool
 from typing import Dict, Any
 
 class GreetingTool(BaseTool):
@@ -105,8 +106,8 @@ class GreetingTool(BaseTool):
 def create_enhanced_agent():
     import os
     llm = ChatBot(
-        llm_provider=os.getenv("LLM_PROVIDER") or os.getenv("DEFAULT_LLM_PROVIDER") or "gemini",
-        model_name=os.getenv("LLM_MODEL") or "gemini-2.5-pro",
+        llm_provider="openai",
+        model_name="gpt-5.1-chat-latest",
         temperature=0.3,
         enable_short_term_memory=True,
         short_term_memory_config={
@@ -120,8 +121,8 @@ def create_enhanced_agent():
     agent = SpoonReactAI(
         llm=llm,
         tools=[
-            *get_crypto_tools(),
-            GreetingTool()
+            GreetingTool(),
+            CryptoPowerDataPriceTool(),
         ]
     )
 
