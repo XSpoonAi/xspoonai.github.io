@@ -229,7 +229,7 @@ from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
 async def main():
     # MCPToolsCollection wraps existing tools and exposes them via MCP
     mcp_tools_server = MCPToolsCollection()
-    
+
     # Start the MCP server (SSE transport by default)
     print("Starting MCP server on port 8766...")
     await mcp_tools_server.run(port=8766)
@@ -400,28 +400,19 @@ async def test_tool_manager_integration():
 ```python
 def generate_tool_docs(tools: List[BaseTool]) -> str:
     """Generate markdown documentation for tools"""
-    docs = "# Available Tools
-
-"
+    docs = "# Available Tools"
 
     for tool in tools:
-        docs += f"## {tool.name}
+        docs += f"## {tool.name}"
+        docs += f"{tool.description}"
+        docs += "### Parameters"
 
-"
-        docs += f"{tool.description}
-
-"
-        docs += "### Parameters
-
-"
 
         for param, config in tool.parameters.get("properties", {}).items():
             required = param in tool.parameters.get("required", [])
-            docs += f"- **{param}** ({'required' if required else 'optional'}): {config.get('description', '')}
-"
+            docs += f"- **{param}** ({'required' if required else 'optional'}): {config.get('description', '')}"
 
-        docs += "
-"
+        docs += "\n"
 
     return docs
 ```
