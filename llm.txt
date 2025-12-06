@@ -9,16 +9,1199 @@ FILE: docs/api-reference/index.md
 
 Generated from spoon_ai sources. Each module below has its own page.
 
-- [spoon_ai](./spoon_ai.md)
+- [spoon_ai](./spoon_ai/)
+- [spoon_ai.agents](./spoon_ai/agents/)
+- [spoon_ai.agents.base](./spoon_ai/agents/base.md)
+- [spoon_ai.agents.custom_agent](./spoon_ai/agents/custom_agent.md)
+- [spoon_ai.agents.graph_agent](./spoon_ai/agents/graph_agent.md)
+- [spoon_ai.agents.mcp_client_mixin](./spoon_ai/agents/mcp_client_mixin.md)
+- [spoon_ai.agents.monitor](./spoon_ai/agents/monitor.md)
+- [spoon_ai.agents.rag](./spoon_ai/agents/rag.md)
+- [spoon_ai.agents.react](./spoon_ai/agents/react.md)
+- [spoon_ai.agents.spoon_react](./spoon_ai/agents/spoon_react.md)
+- [spoon_ai.agents.spoon_react_mcp](./spoon_ai/agents/spoon_react_mcp.md)
+- [spoon_ai.agents.toolcall](./spoon_ai/agents/toolcall.md)
+- [spoon_ai.callbacks](./spoon_ai/callbacks/)
+- [spoon_ai.callbacks.base](./spoon_ai/callbacks/base.md)
+- [spoon_ai.callbacks.manager](./spoon_ai/callbacks/manager.md)
+- [spoon_ai.callbacks.statistics](./spoon_ai/callbacks/statistics.md)
+- [spoon_ai.callbacks.stream_event](./spoon_ai/callbacks/stream_event.md)
+- [spoon_ai.callbacks.streaming_stdout](./spoon_ai/callbacks/streaming_stdout.md)
+- [spoon_ai.chat](./spoon_ai/chat.md)
+- [spoon_ai.graph](./spoon_ai/graph/)
+- [spoon_ai.graph.agent](./spoon_ai/graph/agent.md)
+- [spoon_ai.graph.builder](./spoon_ai/graph/builder.md)
+- [spoon_ai.graph.checkpointer](./spoon_ai/graph/checkpointer.md)
+- [spoon_ai.graph.config](./spoon_ai/graph/config.md)
+- [spoon_ai.graph.decorators](./spoon_ai/graph/decorators.md)
+- [spoon_ai.graph.engine](./spoon_ai/graph/engine.md)
+- [spoon_ai.graph.exceptions](./spoon_ai/graph/exceptions.md)
+- [spoon_ai.graph.mcp_integration](./spoon_ai/graph/mcp_integration.md)
+- [spoon_ai.graph.reducers](./spoon_ai/graph/reducers.md)
+- [spoon_ai.graph.types](./spoon_ai/graph/types.md)
+- [spoon_ai.llm](./spoon_ai/llm/)
+- [spoon_ai.llm.base](./spoon_ai/llm/base.md)
+- [spoon_ai.llm.cache](./spoon_ai/llm/cache.md)
+- [spoon_ai.llm.config](./spoon_ai/llm/config.md)
+- [spoon_ai.llm.errors](./spoon_ai/llm/errors.md)
+- [spoon_ai.llm.factory](./spoon_ai/llm/factory.md)
+- [spoon_ai.llm.interface](./spoon_ai/llm/interface.md)
+- [spoon_ai.llm.manager](./spoon_ai/llm/manager.md)
+- [spoon_ai.llm.monitoring](./spoon_ai/llm/monitoring.md)
+- [spoon_ai.llm.providers](./spoon_ai/llm/providers/)
+- [spoon_ai.llm.providers.anthropic_provider](./spoon_ai/llm/providers/anthropic_provider.md)
+- [spoon_ai.llm.providers.deepseek_provider](./spoon_ai/llm/providers/deepseek_provider.md)
+- [spoon_ai.llm.providers.gemini_provider](./spoon_ai/llm/providers/gemini_provider.md)
+- [spoon_ai.llm.providers.openai_compatible_provider](./spoon_ai/llm/providers/openai_compatible_provider.md)
+- [spoon_ai.llm.providers.openai_provider](./spoon_ai/llm/providers/openai_provider.md)
+- [spoon_ai.llm.providers.openrouter_provider](./spoon_ai/llm/providers/openrouter_provider.md)
+- [spoon_ai.llm.registry](./spoon_ai/llm/registry.md)
+- [spoon_ai.llm.response_normalizer](./spoon_ai/llm/response_normalizer.md)
+- [spoon_ai.memory](./spoon_ai/memory/)
+- [spoon_ai.memory.mem0_client](./spoon_ai/memory/mem0_client.md)
+- [spoon_ai.memory.remove_message](./spoon_ai/memory/remove_message.md)
+- [spoon_ai.memory.short_term_manager](./spoon_ai/memory/short_term_manager.md)
+- [spoon_ai.memory.utils](./spoon_ai/memory/utils.md)
+- [spoon_ai.neofs](./spoon_ai/neofs/)
+- [spoon_ai.neofs.client](./spoon_ai/neofs/client.md)
+- [spoon_ai.neofs.models](./spoon_ai/neofs/models.md)
+- [spoon_ai.neofs.utils](./spoon_ai/neofs/utils.md)
+- [spoon_ai.payments](./spoon_ai/payments/)
+- [spoon_ai.payments.app](./spoon_ai/payments/app.md)
+- [spoon_ai.payments.cli](./spoon_ai/payments/cli.md)
+- [spoon_ai.payments.config](./spoon_ai/payments/config.md)
+- [spoon_ai.payments.exceptions](./spoon_ai/payments/exceptions.md)
+- [spoon_ai.payments.facilitator_client](./spoon_ai/payments/facilitator_client.md)
+- [spoon_ai.payments.models](./spoon_ai/payments/models.md)
+- [spoon_ai.payments.server](./spoon_ai/payments/server.md)
+- [spoon_ai.payments.x402_service](./spoon_ai/payments/x402_service.md)
+- [spoon_ai.prompts](./spoon_ai/prompts/)
+- [spoon_ai.prompts.spoon_react](./spoon_ai/prompts/spoon_react.md)
+- [spoon_ai.prompts.toolcall](./spoon_ai/prompts/toolcall.md)
+- [spoon_ai.retrieval](./spoon_ai/retrieval/)
+- [spoon_ai.retrieval.base](./spoon_ai/retrieval/base.md)
+- [spoon_ai.retrieval.chroma](./spoon_ai/retrieval/chroma.md)
+- [spoon_ai.retrieval.document_loader](./spoon_ai/retrieval/document_loader.md)
+- [spoon_ai.retrieval.qdrant](./spoon_ai/retrieval/qdrant.md)
+- [spoon_ai.runnables](./spoon_ai/runnables/)
+- [spoon_ai.runnables.base](./spoon_ai/runnables/base.md)
+- [spoon_ai.runnables.events](./spoon_ai/runnables/events.md)
+- [spoon_ai.schema](./spoon_ai/schema.md)
+- [spoon_ai.tools](./spoon_ai/tools/)
+- [spoon_ai.tools.base](./spoon_ai/tools/base.md)
+- [spoon_ai.tools.mcp_tool](./spoon_ai/tools/mcp_tool.md)
+- [spoon_ai.tools.neofs_tools](./spoon_ai/tools/neofs_tools.md)
+- [spoon_ai.tools.tool_manager](./spoon_ai/tools/tool_manager.md)
+- [spoon_ai.tools.turnkey_tools](./spoon_ai/tools/turnkey_tools.md)
+- [spoon_ai.tools.x402_payment](./spoon_ai/tools/x402_payment.md)
+- [spoon_ai.turnkey](./spoon_ai/turnkey/)
+- [spoon_ai.turnkey.client](./spoon_ai/turnkey/client.md)
+- [spoon_ai.utils](./spoon_ai/utils/)
+- [spoon_ai.utils.config](./spoon_ai/utils/config.md)
+- [spoon_ai.utils.config_manager](./spoon_ai/utils/config_manager.md)
+- [spoon_ai.utils.streaming](./spoon_ai/utils/streaming.md)
+- [spoon_ai.utils.utils](./spoon_ai/utils/utils.md)
 
 ---
 
-FILE: docs/api-reference/spoon_ai.md
+FILE: docs/api-reference/spoon_ai/agents/base.md
+
+---
+id: spoon_ai.agents.base
+slug: /api-reference/spoon_ai/agents/base
+title: spoon_ai.agents.base
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/agents/custom_agent.md
+
+---
+id: spoon_ai.agents.custom_agent
+slug: /api-reference/spoon_ai/agents/custom_agent
+title: spoon_ai.agents.custom_agent
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/agents/graph_agent.md
+
+---
+id: spoon_ai.agents.graph_agent
+slug: /api-reference/spoon_ai/agents/graph_agent
+title: spoon_ai.agents.graph_agent
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/agents/index.md
+
+---
+id: spoon_ai.agents
+slug: /api-reference/spoon_ai/agents//index
+title: spoon_ai.agents
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/agents/mcp_client_mixin.md
+
+---
+id: spoon_ai.agents.mcp_client_mixin
+slug: /api-reference/spoon_ai/agents/mcp_client_mixin
+title: spoon_ai.agents.mcp_client_mixin
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/agents/monitor.md
+
+---
+id: spoon_ai.agents.monitor
+slug: /api-reference/spoon_ai/agents/monitor
+title: spoon_ai.agents.monitor
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/agents/rag.md
+
+---
+id: spoon_ai.agents.rag
+slug: /api-reference/spoon_ai/agents/rag
+title: spoon_ai.agents.rag
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/agents/react.md
+
+---
+id: spoon_ai.agents.react
+slug: /api-reference/spoon_ai/agents/react
+title: spoon_ai.agents.react
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/agents/spoon_react_mcp.md
+
+---
+id: spoon_ai.agents.spoon_react_mcp
+slug: /api-reference/spoon_ai/agents/spoon_react_mcp
+title: spoon_ai.agents.spoon_react_mcp
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/agents/spoon_react.md
+
+---
+id: spoon_ai.agents.spoon_react
+slug: /api-reference/spoon_ai/agents/spoon_react
+title: spoon_ai.agents.spoon_react
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/agents/toolcall.md
+
+---
+id: spoon_ai.agents.toolcall
+slug: /api-reference/spoon_ai/agents/toolcall
+title: spoon_ai.agents.toolcall
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/callbacks/base.md
+
+---
+id: spoon_ai.callbacks.base
+slug: /api-reference/spoon_ai/callbacks/base
+title: spoon_ai.callbacks.base
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/callbacks/index.md
+
+---
+id: spoon_ai.callbacks
+slug: /api-reference/spoon_ai/callbacks//index
+title: spoon_ai.callbacks
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/callbacks/manager.md
+
+---
+id: spoon_ai.callbacks.manager
+slug: /api-reference/spoon_ai/callbacks/manager
+title: spoon_ai.callbacks.manager
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/callbacks/statistics.md
+
+---
+id: spoon_ai.callbacks.statistics
+slug: /api-reference/spoon_ai/callbacks/statistics
+title: spoon_ai.callbacks.statistics
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/callbacks/stream_event.md
+
+---
+id: spoon_ai.callbacks.stream_event
+slug: /api-reference/spoon_ai/callbacks/stream_event
+title: spoon_ai.callbacks.stream_event
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/callbacks/streaming_stdout.md
+
+---
+id: spoon_ai.callbacks.streaming_stdout
+slug: /api-reference/spoon_ai/callbacks/streaming_stdout
+title: spoon_ai.callbacks.streaming_stdout
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/chat.md
+
+---
+id: spoon_ai.chat
+slug: /api-reference/spoon_ai/chat
+title: spoon_ai.chat
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/agent.md
+
+---
+id: spoon_ai.graph.agent
+slug: /api-reference/spoon_ai/graph/agent
+title: spoon_ai.graph.agent
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/builder.md
+
+---
+id: spoon_ai.graph.builder
+slug: /api-reference/spoon_ai/graph/builder
+title: spoon_ai.graph.builder
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/checkpointer.md
+
+---
+id: spoon_ai.graph.checkpointer
+slug: /api-reference/spoon_ai/graph/checkpointer
+title: spoon_ai.graph.checkpointer
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/config.md
+
+---
+id: spoon_ai.graph.config
+slug: /api-reference/spoon_ai/graph/config
+title: spoon_ai.graph.config
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/decorators.md
+
+---
+id: spoon_ai.graph.decorators
+slug: /api-reference/spoon_ai/graph/decorators
+title: spoon_ai.graph.decorators
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/engine.md
+
+---
+id: spoon_ai.graph.engine
+slug: /api-reference/spoon_ai/graph/engine
+title: spoon_ai.graph.engine
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/exceptions.md
+
+---
+id: spoon_ai.graph.exceptions
+slug: /api-reference/spoon_ai/graph/exceptions
+title: spoon_ai.graph.exceptions
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/index.md
+
+---
+id: spoon_ai.graph
+slug: /api-reference/spoon_ai/graph//index
+title: spoon_ai.graph
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/mcp_integration.md
+
+---
+id: spoon_ai.graph.mcp_integration
+slug: /api-reference/spoon_ai/graph/mcp_integration
+title: spoon_ai.graph.mcp_integration
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/reducers.md
+
+---
+id: spoon_ai.graph.reducers
+slug: /api-reference/spoon_ai/graph/reducers
+title: spoon_ai.graph.reducers
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/graph/types.md
+
+---
+id: spoon_ai.graph.types
+slug: /api-reference/spoon_ai/graph/types
+title: spoon_ai.graph.types
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/index.md
 
 ---
 id: spoon_ai
-slug: /api-reference/spoon_ai.md
+slug: /api-reference/spoon_ai//index
 title: spoon_ai
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/base.md
+
+---
+id: spoon_ai.llm.base
+slug: /api-reference/spoon_ai/llm/base
+title: spoon_ai.llm.base
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/cache.md
+
+---
+id: spoon_ai.llm.cache
+slug: /api-reference/spoon_ai/llm/cache
+title: spoon_ai.llm.cache
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/config.md
+
+---
+id: spoon_ai.llm.config
+slug: /api-reference/spoon_ai/llm/config
+title: spoon_ai.llm.config
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/errors.md
+
+---
+id: spoon_ai.llm.errors
+slug: /api-reference/spoon_ai/llm/errors
+title: spoon_ai.llm.errors
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/factory.md
+
+---
+id: spoon_ai.llm.factory
+slug: /api-reference/spoon_ai/llm/factory
+title: spoon_ai.llm.factory
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/index.md
+
+---
+id: spoon_ai.llm
+slug: /api-reference/spoon_ai/llm//index
+title: spoon_ai.llm
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/interface.md
+
+---
+id: spoon_ai.llm.interface
+slug: /api-reference/spoon_ai/llm/interface
+title: spoon_ai.llm.interface
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/manager.md
+
+---
+id: spoon_ai.llm.manager
+slug: /api-reference/spoon_ai/llm/manager
+title: spoon_ai.llm.manager
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/monitoring.md
+
+---
+id: spoon_ai.llm.monitoring
+slug: /api-reference/spoon_ai/llm/monitoring
+title: spoon_ai.llm.monitoring
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/providers/anthropic_provider.md
+
+---
+id: spoon_ai.llm.providers.anthropic_provider
+slug: /api-reference/spoon_ai/llm/providers/anthropic_provider
+title: spoon_ai.llm.providers.anthropic_provider
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/providers/deepseek_provider.md
+
+---
+id: spoon_ai.llm.providers.deepseek_provider
+slug: /api-reference/spoon_ai/llm/providers/deepseek_provider
+title: spoon_ai.llm.providers.deepseek_provider
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/providers/gemini_provider.md
+
+---
+id: spoon_ai.llm.providers.gemini_provider
+slug: /api-reference/spoon_ai/llm/providers/gemini_provider
+title: spoon_ai.llm.providers.gemini_provider
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/providers/index.md
+
+---
+id: spoon_ai.llm.providers
+slug: /api-reference/spoon_ai/llm/providers//index
+title: spoon_ai.llm.providers
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/providers/openai_compatible_provider.md
+
+---
+id: spoon_ai.llm.providers.openai_compatible_provider
+slug: /api-reference/spoon_ai/llm/providers/openai_compatible_provider
+title: spoon_ai.llm.providers.openai_compatible_provider
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/providers/openai_provider.md
+
+---
+id: spoon_ai.llm.providers.openai_provider
+slug: /api-reference/spoon_ai/llm/providers/openai_provider
+title: spoon_ai.llm.providers.openai_provider
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/providers/openrouter_provider.md
+
+---
+id: spoon_ai.llm.providers.openrouter_provider
+slug: /api-reference/spoon_ai/llm/providers/openrouter_provider
+title: spoon_ai.llm.providers.openrouter_provider
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/registry.md
+
+---
+id: spoon_ai.llm.registry
+slug: /api-reference/spoon_ai/llm/registry
+title: spoon_ai.llm.registry
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/llm/response_normalizer.md
+
+---
+id: spoon_ai.llm.response_normalizer
+slug: /api-reference/spoon_ai/llm/response_normalizer
+title: spoon_ai.llm.response_normalizer
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/memory/index.md
+
+---
+id: spoon_ai.memory
+slug: /api-reference/spoon_ai/memory//index
+title: spoon_ai.memory
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/memory/mem0_client.md
+
+---
+id: spoon_ai.memory.mem0_client
+slug: /api-reference/spoon_ai/memory/mem0_client
+title: spoon_ai.memory.mem0_client
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/memory/remove_message.md
+
+---
+id: spoon_ai.memory.remove_message
+slug: /api-reference/spoon_ai/memory/remove_message
+title: spoon_ai.memory.remove_message
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/memory/short_term_manager.md
+
+---
+id: spoon_ai.memory.short_term_manager
+slug: /api-reference/spoon_ai/memory/short_term_manager
+title: spoon_ai.memory.short_term_manager
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/memory/utils.md
+
+---
+id: spoon_ai.memory.utils
+slug: /api-reference/spoon_ai/memory/utils
+title: spoon_ai.memory.utils
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/neofs/client.md
+
+---
+id: spoon_ai.neofs.client
+slug: /api-reference/spoon_ai/neofs/client
+title: spoon_ai.neofs.client
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/neofs/index.md
+
+---
+id: spoon_ai.neofs
+slug: /api-reference/spoon_ai/neofs//index
+title: spoon_ai.neofs
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/neofs/models.md
+
+---
+id: spoon_ai.neofs.models
+slug: /api-reference/spoon_ai/neofs/models
+title: spoon_ai.neofs.models
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/neofs/utils.md
+
+---
+id: spoon_ai.neofs.utils
+slug: /api-reference/spoon_ai/neofs/utils
+title: spoon_ai.neofs.utils
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/payments/app.md
+
+---
+id: spoon_ai.payments.app
+slug: /api-reference/spoon_ai/payments/app
+title: spoon_ai.payments.app
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/payments/cli.md
+
+---
+id: spoon_ai.payments.cli
+slug: /api-reference/spoon_ai/payments/cli
+title: spoon_ai.payments.cli
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/payments/config.md
+
+---
+id: spoon_ai.payments.config
+slug: /api-reference/spoon_ai/payments/config
+title: spoon_ai.payments.config
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/payments/exceptions.md
+
+---
+id: spoon_ai.payments.exceptions
+slug: /api-reference/spoon_ai/payments/exceptions
+title: spoon_ai.payments.exceptions
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/payments/facilitator_client.md
+
+---
+id: spoon_ai.payments.facilitator_client
+slug: /api-reference/spoon_ai/payments/facilitator_client
+title: spoon_ai.payments.facilitator_client
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/payments/index.md
+
+---
+id: spoon_ai.payments
+slug: /api-reference/spoon_ai/payments//index
+title: spoon_ai.payments
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/payments/models.md
+
+---
+id: spoon_ai.payments.models
+slug: /api-reference/spoon_ai/payments/models
+title: spoon_ai.payments.models
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/payments/server.md
+
+---
+id: spoon_ai.payments.server
+slug: /api-reference/spoon_ai/payments/server
+title: spoon_ai.payments.server
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/payments/x402_service.md
+
+---
+id: spoon_ai.payments.x402_service
+slug: /api-reference/spoon_ai/payments/x402_service
+title: spoon_ai.payments.x402_service
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/prompts/index.md
+
+---
+id: spoon_ai.prompts
+slug: /api-reference/spoon_ai/prompts//index
+title: spoon_ai.prompts
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/prompts/spoon_react.md
+
+---
+id: spoon_ai.prompts.spoon_react
+slug: /api-reference/spoon_ai/prompts/spoon_react
+title: spoon_ai.prompts.spoon_react
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/prompts/toolcall.md
+
+---
+id: spoon_ai.prompts.toolcall
+slug: /api-reference/spoon_ai/prompts/toolcall
+title: spoon_ai.prompts.toolcall
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/retrieval/base.md
+
+---
+id: spoon_ai.retrieval.base
+slug: /api-reference/spoon_ai/retrieval/base
+title: spoon_ai.retrieval.base
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/retrieval/chroma.md
+
+---
+id: spoon_ai.retrieval.chroma
+slug: /api-reference/spoon_ai/retrieval/chroma
+title: spoon_ai.retrieval.chroma
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/retrieval/document_loader.md
+
+---
+id: spoon_ai.retrieval.document_loader
+slug: /api-reference/spoon_ai/retrieval/document_loader
+title: spoon_ai.retrieval.document_loader
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/retrieval/index.md
+
+---
+id: spoon_ai.retrieval
+slug: /api-reference/spoon_ai/retrieval//index
+title: spoon_ai.retrieval
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/retrieval/qdrant.md
+
+---
+id: spoon_ai.retrieval.qdrant
+slug: /api-reference/spoon_ai/retrieval/qdrant
+title: spoon_ai.retrieval.qdrant
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/runnables/base.md
+
+---
+id: spoon_ai.runnables.base
+slug: /api-reference/spoon_ai/runnables/base
+title: spoon_ai.runnables.base
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/runnables/events.md
+
+---
+id: spoon_ai.runnables.events
+slug: /api-reference/spoon_ai/runnables/events
+title: spoon_ai.runnables.events
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/runnables/index.md
+
+---
+id: spoon_ai.runnables
+slug: /api-reference/spoon_ai/runnables//index
+title: spoon_ai.runnables
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/schema.md
+
+---
+id: spoon_ai.schema
+slug: /api-reference/spoon_ai/schema
+title: spoon_ai.schema
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/tools/base.md
+
+---
+id: spoon_ai.tools.base
+slug: /api-reference/spoon_ai/tools/base
+title: spoon_ai.tools.base
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/tools/index.md
+
+---
+id: spoon_ai.tools
+slug: /api-reference/spoon_ai/tools//index
+title: spoon_ai.tools
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/tools/mcp_tool.md
+
+---
+id: spoon_ai.tools.mcp_tool
+slug: /api-reference/spoon_ai/tools/mcp_tool
+title: spoon_ai.tools.mcp_tool
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/tools/neofs_tools.md
+
+---
+id: spoon_ai.tools.neofs_tools
+slug: /api-reference/spoon_ai/tools/neofs_tools
+title: spoon_ai.tools.neofs_tools
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/tools/tool_manager.md
+
+---
+id: spoon_ai.tools.tool_manager
+slug: /api-reference/spoon_ai/tools/tool_manager
+title: spoon_ai.tools.tool_manager
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/tools/turnkey_tools.md
+
+---
+id: spoon_ai.tools.turnkey_tools
+slug: /api-reference/spoon_ai/tools/turnkey_tools
+title: spoon_ai.tools.turnkey_tools
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/tools/x402_payment.md
+
+---
+id: spoon_ai.tools.x402_payment
+slug: /api-reference/spoon_ai/tools/x402_payment
+title: spoon_ai.tools.x402_payment
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/turnkey/client.md
+
+---
+id: spoon_ai.turnkey.client
+slug: /api-reference/spoon_ai/turnkey/client
+title: spoon_ai.turnkey.client
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/turnkey/index.md
+
+---
+id: spoon_ai.turnkey
+slug: /api-reference/spoon_ai/turnkey//index
+title: spoon_ai.turnkey
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/utils/config_manager.md
+
+---
+id: spoon_ai.utils.config_manager
+slug: /api-reference/spoon_ai/utils/config_manager
+title: spoon_ai.utils.config_manager
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/utils/config.md
+
+---
+id: spoon_ai.utils.config
+slug: /api-reference/spoon_ai/utils/config
+title: spoon_ai.utils.config
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/utils/index.md
+
+---
+id: spoon_ai.utils
+slug: /api-reference/spoon_ai/utils//index
+title: spoon_ai.utils
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/utils/streaming.md
+
+---
+id: spoon_ai.utils.streaming
+slug: /api-reference/spoon_ai/utils/streaming
+title: spoon_ai.utils.streaming
+---
+
+# Table of Contents
+
+---
+
+FILE: docs/api-reference/spoon_ai/utils/utils.md
+
+---
+id: spoon_ai.utils.utils
+slug: /api-reference/spoon_ai/utils/utils
+title: spoon_ai.utils.utils
 ---
 
 # Table of Contents
@@ -3373,6 +4556,7 @@ Graph agents execute structured workflows defined as state graphs, supporting co
 
 **Basic Usage:**
 
+```python
 from spoon_ai.graph import StateGraph, START, END, GraphAgent
 
 # Build workflow
@@ -3392,6 +4576,8 @@ agent = GraphAgent(
 )
 
 result = await agent.run("Analyze market and execute trades")
+```
+
 **Node Functions:**
 - `analyze_fn(state)`: Receives current state, returns updated state dict
 - `execute_fn(state)`: Receives state with analysis results, returns execution results
