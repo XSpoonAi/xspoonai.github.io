@@ -60,7 +60,8 @@ print(json.dumps(sorted(mods)))
 
 function renderModule({ pythonBin, env, cookbookRoot, searchPath, moduleName, outputDir }) {
   const moduleParts = moduleName.split('.');
-  const isPackage = modulesGlobal.some((m) => m.startsWith(moduleName + '.'));
+  const isPackage =
+    moduleName === 'spoon_ai' || modulesGlobal.some((m) => m.startsWith(moduleName + '.'));
   const outputFile = isPackage
     ? path.join(outputDir, ...moduleParts, 'index.md')
     : path.join(outputDir, ...moduleParts) + '.md';
