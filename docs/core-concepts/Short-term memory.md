@@ -62,7 +62,7 @@ import asyncio
 from spoon_ai.chat import ChatBot
 
 # ChatBot includes built-in short-term memory with auto-trimming
-llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
+llm = ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai")
 
 async def main():
     await llm.ask([{"role": "user", "content": "My name is Alice"}])

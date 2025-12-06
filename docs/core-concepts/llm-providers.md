@@ -58,7 +58,7 @@ import asyncio
 from spoon_ai.chat import ChatBot
 
 # Same interface for all providers—just change model_name and llm_provider
-llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
+llm = ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai")
 
 async def main():
     response = await llm.ask([{"role": "user", "content": "Explain quantum computing in one sentence"}])
@@ -73,7 +73,7 @@ asyncio.run(main())
 
 ### OpenAI
 
-- **Models**: GPT-4.1 (default), GPT-4o, GPT-4o-mini, o1-preview, o1-mini
+- **Models**: gpt-5.1-chat-latest (default), GPT-4o, GPT-4o-mini, o1-preview, o1-mini
 - **Features**: Function calling, streaming, embeddings, reasoning models
 - **Best for**: General-purpose tasks, reasoning, code generation
 
@@ -82,7 +82,7 @@ from spoon_ai.chat import ChatBot
 
 # OpenAI configuration with default model
 llm = ChatBot(
-    model_name="gpt-4.1",  # Framework default
+    model_name="gpt-5.1-chat-latest",  # Framework default
     llm_provider="openai",
     temperature=0.7
 )
@@ -160,7 +160,7 @@ llm_manager = LLMManager(
     primary_provider="openai",
     fallback_providers=["anthropic", "gemini"],
     model_preferences={
-        "openai": "gpt-4.1",
+        "openai": "gpt-5.1-chat-latest",
         "anthropic": "claude-sonnet-4-20250514",
         "gemini": "gemini-2.5-pro",
         "deepseek": "deepseek-reasoner"
@@ -185,7 +185,7 @@ OPENROUTER_API_KEY=sk-or-your_openrouter_key_here
 
 # Default Settings
 DEFAULT_LLM_PROVIDER=openai
-DEFAULT_MODEL=gpt-4.1
+DEFAULT_MODEL=gpt-5.1-chat-latest
 DEFAULT_TEMPERATURE=0.3
 ```
 
@@ -195,7 +195,7 @@ DEFAULT_TEMPERATURE=0.3
 {
   "llm": {
     "provider": "openai",
-    "model": "gpt-4.1",
+    "model": "gpt-5.1-chat-latest",
     "temperature": 0.3,
     "max_tokens": 32768,
     "fallback_providers": ["anthropic", "deepseek", "gemini"]
@@ -255,18 +255,18 @@ response = await llm.generate(
 
 #### Code Generation
 
-- Primary: DeepSeek-Reasoner, GPT-4.1
+- Primary: DeepSeek-Reasoner, gpt-5.1-chat-latest
 - Alternative: Claude-Sonnet-4
 
 #### Analysis & Reasoning
 
-- Primary: DeepSeek-Reasoner, GPT-4.1, Claude-Sonnet-4
+- Primary: DeepSeek-Reasoner, gpt-5.1-chat-latest, Claude-Sonnet-4
 - Alternative: Gemini-2.5-Pro
 
 #### Cost-Sensitive Tasks
 
 - Primary: DeepSeek-Reasoner, Gemini-2.5-Pro
-- Alternative: GPT-4.1
+- Alternative: gpt-5.1-chat-latest
 
 #### Long Context Tasks
 
@@ -277,7 +277,7 @@ response = await llm.generate(
 
 | Provider                  | Speed     | Cost     | Context | Quality              |
 | ------------------------- | --------- | -------- | ------- | -------------------- |
-| OpenAI GPT-4.1            | Fast      | Medium   | 128K    | Excellent            |
+| OpenAI gpt-5.1-chat-latest            | Fast      | Medium   | 128K    | Excellent            |
 | Anthropic Claude-Sonnet-4 | Medium    | Medium   | 200K    | Excellent            |
 | Google Gemini-2.5-Pro     | Very Fast | Low      | 250K    | Very Good            |
 | DeepSeek-Reasoner         | Fast      | Very Low | 65K     | Superior (Reasoning) |

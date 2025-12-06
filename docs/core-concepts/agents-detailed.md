@@ -133,7 +133,7 @@ class MyAgent(SpoonReactAI):
         super().__init__(**kwargs)
 
         # Configure LLM
-        self.llm = ChatBot(model_name="gpt-4.1")
+        self.llm = ChatBot(model_name="gpt-5.1-chat-latest")
 
         # Set system prompt
         self.system_prompt = "You are a helpful AI assistant."
@@ -221,7 +221,7 @@ class ResearchAgent(SpoonReactAI):
         super().__init__(**kwargs)
 
         # Configure LLM
-        self.llm = ChatBot(model_name="gpt-4.1")
+        self.llm = ChatBot(model_name="gpt-5.1-chat-latest")
 
         # Set up MCP tools
         tools = []
@@ -292,7 +292,7 @@ class ConfigurableAgent(SpoonReactAI):
 
         # Configure LLM with specific parameters
         self.llm = ChatBot(
-            model_name="gpt-4.1",
+            model_name="gpt-5.1-chat-latest",
             temperature=0.7,        # Creativity level
             max_tokens=4096,        # Response length limit
             timeout=60              # Request timeout
@@ -316,7 +316,7 @@ from spoon_ai.chat import ChatBot
 
 # Create agent instance
 agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1"),
+    llm=ChatBot(model_name="gpt-5.1-chat-latest"),
     system_prompt="You are a helpful assistant.",
     max_steps=15
 )
@@ -420,7 +420,7 @@ simple_agent = ToolCallAgent(
 )
 
 complex_agent = ToolCallAgent(
-    llm=ChatBot(model_name="gpt-4.1")        # More capable
+    llm=ChatBot(model_name="gpt-5.1-chat-latest")        # More capable
 )
 
 # Set reasonable limits
@@ -508,7 +508,7 @@ class MCPEnabledAgent(SpoonReactMCP):
         super().__init__(**kwargs)
 
         # Configure LLM
-        self.llm = ChatBot(model_name="gpt-4.1")
+        self.llm = ChatBot(model_name="gpt-5.1-chat-latest")
 
         # Configure stdio MCP tool
         search_tool = MCPTool(
@@ -703,7 +703,7 @@ class AdvancedConfigAgent(SpoonReactMCP):
     def __init__(self, **kwargs):
         # Advanced LLM configuration
         llm_config = {
-            "model_name": "gpt-4.1",
+            "model_name": "gpt-5.1-chat-latest",
             "temperature": 0.3,          # Creativity control
             "max_tokens": 4096,          # Maximum response length
             "top_p": 0.9,               # Nucleus sampling parameter
@@ -847,7 +847,7 @@ class DynamicConfigAgent(SpoonReactMCP):
         "system_prompt": "You are an advanced AI agent..."
       },
       "llm_config": {
-        "model_name": "gpt-4.1",
+        "model_name": "gpt-5.1-chat-latest",
         "temperature": 0.3,
         "max_tokens": 4096,
         "top_p": 0.9,

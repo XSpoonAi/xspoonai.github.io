@@ -69,7 +69,7 @@ import asyncio
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
 
-agent = SpoonReactAI(llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"))
+agent = SpoonReactAI(llm=ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai"))
 
 async def main():
     response = await agent.run("What is the capital of France?")
@@ -122,7 +122,7 @@ tavily_search = MCPTool(
 
 # Agent with real tools
 agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
+    llm=ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai"),
     tools=ToolManager([tavily_search, PercentageTool()]),
     max_iterations=10  # Limit reasoning loops
 )
@@ -254,7 +254,7 @@ class SpoonMacroAnalysisAgent(SpoonReactMCP):
                 "env": {"TAVILY_API_KEY": tavily_key},
             },
         )
-        
+
         # Pre-load MCP tool parameters
         await tavily_tool.ensure_parameters_loaded()
 
@@ -268,7 +268,7 @@ async def main():
         llm=ChatBot(llm_provider="gemini", model_name="gemini-2.5-flash")
     )
     await agent.initialize()
-    
+
     query = (
         "Perform a macro analysis of Bitcoin (BTC). "
         "Search for recent news and get current market data from Binance using BTC/USDT pair."
@@ -311,7 +311,7 @@ from spoon_ai.tools import ToolManager
 from spoon_toolkits.crypto.crypto_powerdata.tools import CryptoPowerDataCEXTool
 
 agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
+    llm=ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai"),
     tools=ToolManager([CryptoPowerDataCEXTool()])  # real tool with retries/failures
 )
 

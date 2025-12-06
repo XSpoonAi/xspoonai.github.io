@@ -129,7 +129,7 @@ SpoonOS eliminates common development complexity:
 ```python
 # Simple agent creation - no error handling needed
 agent = ToolCallAgent(
-    llm=ChatBot(llm_provider="openai", model_name="gpt-4.1"),
+    llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"),
     available_tools=ToolManager([CryptoTool(), Web3Tool()])
 )
 

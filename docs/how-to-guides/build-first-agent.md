@@ -32,28 +32,19 @@ from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
 from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
 
-def get_crypto_tools():
-    """Helper for docs: instantiate available crypto/Web3 tools."""
-    return [
-        CryptoPowerDataPriceTool(),
-        CryptoPowerDataCEXTool(),
-    ]
-
 # Create your first agent
 def create_agent():
     # Configure LLM
     llm = ChatBot(
-        # Pick up provider/model from env to support Gemini out of the box.
-        # Example: set DEFAULT_LLM_PROVIDER=gemini and GEMINI_API_KEY=***
-        llm_provider=os.getenv("LLM_PROVIDER") or os.getenv("DEFAULT_LLM_PROVIDER") or "gemini",
-        model_name=os.getenv("LLM_MODEL") or "gemini-2.5-pro",
+        llm_provider="openai",
+        model_name="gpt-5.1-chat-latest",
         temperature=0.3
     )
 
     # Create agent with tools
     agent = SpoonReactAI(
         llm=llm,
-        tools=[*get_crypto_tools()]  # requires `pip install -e toolkit`
+        tools=[CryptoPowerDataPriceTool(), CryptoPowerDataCEXTool()]
     )
 
     return agent
@@ -156,7 +147,7 @@ If you want token-by-token output (works with any supported provider):
 
 ```python
 async def stream_demo():
-    llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
+    llm = ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai")
     messages = [{"role": "user", "content": "Stream a 3-step plan to learn SpoonOS"}]
     async for chunk in llm.astream(messages=messages):
         print(chunk.delta or "", end="", flush=True)
@@ -436,7 +427,7 @@ class ProductionAgent:
         default_config = {
             "llm": {
                 "provider": "openai",
-                "model": "gpt-4.1",
+                "model": "gpt-5.1-chat-latest",
                 "temperature": 0.3
             },
             "tools": ["crypto_tools", "greeting_tool"],
