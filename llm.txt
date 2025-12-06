@@ -5870,12 +5870,16 @@ specs = manager.to_params()  # List of OpenAI-compatible tool definitions
 - `index_tools()` / `query_tools(query)` — Semantic search (requires Pinecone + OpenAI)
 
 ### Crypto toolkit (optional)
-If `spoon-toolkits` is installed, you can load its crypto tools:
+If you install `spoon-toolkits`, import the concrete tools you need:
 ```python
-from spoon_ai.tools.crypto_tools import get_crypto_tools, create_crypto_tool_manager
+from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
+from spoon_ai.tools import ToolManager
 
-tools = get_crypto_tools()              # returns instantiated toolkit tools
-manager = create_crypto_tool_manager()  # ToolManager with all crypto tools
+crypto_tools = [
+    CryptoPowerDataPriceTool(),
+    CryptoPowerDataCEXTool(),
+]
+manager = ToolManager(crypto_tools)
 ```
 Environment variables for these tools depend on the specific provider (e.g., `OKX_API_KEY`, `BITQUERY_API_KEY`, `RPC_URL`, etc.).
 
@@ -6240,7 +6244,7 @@ The current market shows strong bullish momentum with BTC leading...
 - **Main Example**: [graph_crypto_analysis.py](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
 - **Supporting Modules**:
   - `spoon_ai/graph/builder.py` - Declarative templates and high-level API
-  - `spoon_ai/tools/crypto_tools.py` - PowerData integration helpers
+  - `toolkit/spoon_toolkits/crypto/crypto_powerdata/tools.py` - PowerData integration helpers
   - `spoon_ai/graph/` - Core engine and monitoring utilities
   - [Tool System Docs](../core-concepts/tools.md)
 
@@ -6848,7 +6852,10 @@ The agent will respond with a personalized greeting and offer to help with vario
 Enhance your agent with blockchain tools:
 
 ```python
-from spoon_ai.tools.crypto_tools import get_crypto_tools
+from spoon_toolkits import (
+    CryptoPowerDataPriceTool,
+    CryptoPowerDataCEXTool,
+)
 
 class Web3Agent(ToolCallAgent):
     name: str = "web3_agent"
@@ -6861,8 +6868,9 @@ class Web3Agent(ToolCallAgent):
 
     available_tools: ToolManager = ToolManager([
         GreetingTool(),
-        # Loads all crypto/Web3 tools from spoon-toolkits (requires `pip install -e spoon-toolkits`)
-        *get_crypto_tools()
+        # Crypto/Web3 tools (requires `pip install -e toolkit` in the repo root)
+        CryptoPowerDataPriceTool(),
+        CryptoPowerDataCEXTool(),
     ])
 
 # Usage
@@ -7607,7 +7615,14 @@ Create a new file `my_first_agent.py` (works with Gemini, OpenAI, or any configu
 import os
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
-from spoon_ai.tools.crypto_tools import get_crypto_tools
+from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
+
+def get_crypto_tools():
+    """Helper for docs: instantiate available crypto/Web3 tools."""
+    return [
+        CryptoPowerDataPriceTool(),
+        CryptoPowerDataCEXTool(),
+    ]
 
 # Create your first agent
 def create_agent():
@@ -7958,8 +7973,14 @@ from typing import List, Dict, Any
 
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
-from spoon_ai.tools.crypto_tools import get_crypto_tools
 from spoon_ai.tools.base import BaseTool
+from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
+
+def get_crypto_tools():
+    return [
+        CryptoPowerDataPriceTool(),
+        CryptoPowerDataCEXTool(),
+    ]
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
