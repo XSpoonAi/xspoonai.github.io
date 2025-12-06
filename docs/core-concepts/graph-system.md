@@ -71,7 +71,7 @@ pip install spoon-ai
 ```python
 import asyncio
 from typing import TypedDict
-from spoon_ai.graph import StateGraph, END
+from spoon_ai.graph import StateGraph  # note: no START/END sentinels needed
 
 class MyState(TypedDict):
     query: str
@@ -82,16 +82,18 @@ async def process(state: MyState) -> dict:
 
 graph = StateGraph(MyState)
 graph.add_node("process", process)
-graph.add_edge("__start__", "process")
-graph.add_edge("process", END)
+
+# ⭐️ Tell SpoonOS where to start
+graph.set_entry_point("process")
 
 app = graph.compile()
 
 async def main():
     result = await app.invoke({"query": "Hello", "result": ""})
-    print(result["result"])  # Processed: Hello
+    print(result["result"])  # should print: Processed: Hello
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ---

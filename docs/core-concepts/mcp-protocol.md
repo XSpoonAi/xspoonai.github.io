@@ -106,9 +106,15 @@ graph TD
 
 ### Basic MCP Server
 
+Requires the `spoon-cli` package (which ships the FastMCP-based server wrapper and built-in crypto tools).
+
+```bash
+pip install spoon-cli spoon-toolkits fastmcp
+```
+
 ```python
 import asyncio
-from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
+from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
 
 mcp_tools = MCPToolsCollection()
 
@@ -116,7 +122,8 @@ async def main():
     # Runs a FastMCP SSE server. Change the port as needed.
     await mcp_tools.run(port=8765)
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### MCP Client Configuration

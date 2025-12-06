@@ -205,8 +205,8 @@ async def test_memory_agent():
     agent = MemoryAgent()
 
     # Framework maintains conversation context automatically
-    response1 = await agent.chat("My name is Sarah")
-    response2 = await agent.chat("What's my name?")  # Agent remembers Sarah
+    response1 = await agent.run("My name is Sarah")
+    response2 = await agent.run("What's my name?")  # Agent remembers Sarah
 
     return response1, response2
 ```
@@ -507,7 +507,7 @@ async def main():
         if user_input.lower() in ['quit', 'exit', 'bye']:
             break
 
-        response = await agent.chat(user_input)
+        response = await agent.run(user_input)
         # Response is automatically formatted and error-free
 
 if __name__ == "__main__":

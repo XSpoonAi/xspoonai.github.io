@@ -61,7 +61,7 @@ from spoon_ai.chat import ChatBot
 llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
 
 async def main():
-    response = await llm.chat("Explain quantum computing in one sentence")
+    response = await llm.ask([{"role": "user", "content": "Explain quantum computing in one sentence"}])
     print(response)
 
 asyncio.run(main())

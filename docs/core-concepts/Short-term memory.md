@@ -65,9 +65,9 @@ from spoon_ai.chat import ChatBot
 llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
 
 async def main():
-    await llm.chat("My name is Alice")
-    await llm.chat("What's the capital of France?")
-    response = await llm.chat("What's my name?")  # Remembers "Alice"
+    await llm.ask([{"role": "user", "content": "My name is Alice"}])
+    await llm.ask([{"role": "user", "content": "What's the capital of France?"}])
+    response = await llm.ask([{"role": "user", "content": "What's my name?"}])  # Remembers "Alice"
     print(response)
 
 asyncio.run(main())

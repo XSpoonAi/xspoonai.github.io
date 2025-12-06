@@ -144,7 +144,7 @@ from spoon_ai.graph import StateGraph
 graph = StateGraph(MyState)
 graph.add_node("analyze", analyze_fn)
 graph.add_node("execute", execute_fn)
-graph.add_edge("__start__", "analyze")
+graph.set_entry_point("analyze")
 graph.add_conditional_edge("analyze", router_fn)
 
 # Agent with memory persistence

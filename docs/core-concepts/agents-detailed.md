@@ -440,7 +440,7 @@ from unittest.mock import AsyncMock
 async def test_weather_agent():
     # Mock the LLM
     mock_llm = AsyncMock()
-    mock_llm.chat.return_value = "The weather in Paris is sunny."
+    mock_llm.ask.return_value = "The weather in Paris is sunny."
 
     # Create agent with mock
     agent = WeatherAgent(llm=mock_llm)
