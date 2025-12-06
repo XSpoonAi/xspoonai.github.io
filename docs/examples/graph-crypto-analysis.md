@@ -159,7 +159,7 @@ The current market shows strong bullish momentum with BTC leading...
 - **Main Example**: [graph_crypto_analysis.py](https://github.com/XSpoonAi/spoon-core/blob/main/examples/graph_crypto_analysis.py)
 - **Supporting Modules**:
   - `spoon_ai/graph/builder.py` - Declarative templates and high-level API
-  - `spoon_ai/tools/crypto_tools.py` - PowerData integration helpers
+  - `toolkit/spoon_toolkits/crypto/crypto_powerdata/tools.py` - PowerData integration helpers
   - `spoon_ai/graph/` - Core engine and monitoring utilities
   - [Tool System Docs](../core-concepts/tools.md)
 

@@ -30,7 +30,14 @@ Create a new file `my_first_agent.py` (works with Gemini, OpenAI, or any configu
 import os
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
-from spoon_ai.tools.crypto_tools import get_crypto_tools
+from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
+
+def get_crypto_tools():
+    """Helper for docs: instantiate available crypto/Web3 tools."""
+    return [
+        CryptoPowerDataPriceTool(),
+        CryptoPowerDataCEXTool(),
+    ]
 
 # Create your first agent
 def create_agent():
@@ -381,8 +388,14 @@ from typing import List, Dict, Any
 
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
-from spoon_ai.tools.crypto_tools import get_crypto_tools
 from spoon_ai.tools.base import BaseTool
+from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
+
+def get_crypto_tools():
+    return [
+        CryptoPowerDataPriceTool(),
+        CryptoPowerDataCEXTool(),
+    ]
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

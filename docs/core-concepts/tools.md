@@ -144,12 +144,16 @@ specs = manager.to_params()  # List of OpenAI-compatible tool definitions
 - `index_tools()` / `query_tools(query)` — Semantic search (requires Pinecone + OpenAI)
 
 ### Crypto toolkit (optional)
-If `spoon-toolkits` is installed, you can load its crypto tools:
+If you install `spoon-toolkits`, import the concrete tools you need:
 ```python
-from spoon_ai.tools.crypto_tools import get_crypto_tools, create_crypto_tool_manager
+from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
+from spoon_ai.tools import ToolManager
 
-tools = get_crypto_tools()              # returns instantiated toolkit tools
-manager = create_crypto_tool_manager()  # ToolManager with all crypto tools
+crypto_tools = [
+    CryptoPowerDataPriceTool(),
+    CryptoPowerDataCEXTool(),
+]
+manager = ToolManager(crypto_tools)
 ```
 Environment variables for these tools depend on the specific provider (e.g., `OKX_API_KEY`, `BITQUERY_API_KEY`, `RPC_URL`, etc.).
 
