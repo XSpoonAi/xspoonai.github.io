@@ -35,6 +35,20 @@ function discoverModules(packageRoot, packageName) {
   return Array.from(modules).sort();
 }
 
+function getSysPath(pythonBin, env) {
+  const res = spawnSync(pythonBin, ['-c', 'import json, sys; print(json.dumps(sys.path))'], {
+    env,
+    encoding: 'utf8',
+  });
+  if (res.status !== 0) return [];
+  try {
+    const parsed = JSON.parse(res.stdout.trim() || '[]');
+    return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+  } catch {
+    return [];
+  }
+}
+
 function discoverModulesFromInstalled(pythonBin, env) {
   const script = `
 import json, pkgutil
@@ -160,7 +174,11 @@ function run() {
     env.PYTHONPATH = env.PYTHONPATH ? `${coreDir}${sep}${env.PYTHONPATH}` : coreDir;
   }
 
-  const searchPath = [cookbookRoot];
+  const sysPaths = getSysPath(pythonBin, env);
+  const searchPath = [];
+  if (existsSync(coreDir)) searchPath.push(coreDir);
+  searchPath.push(...sysPaths);
+  if (!searchPath.length) searchPath.push(cookbookRoot);
   let modules = ['spoon_ai'];
   if (existsSync(packageRoot)) {
     searchPath.unshift(coreDir);

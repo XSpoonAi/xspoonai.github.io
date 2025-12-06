@@ -138,6 +138,7 @@ Graph agents execute structured workflows defined as state graphs, supporting co
 
 **Basic Usage:**
 
+```python
 from spoon_ai.graph import StateGraph, START, END, GraphAgent
 
 # Build workflow
@@ -157,6 +158,8 @@ agent = GraphAgent(
 )
 
 result = await agent.run("Analyze market and execute trades")
+```
+
 **Node Functions:**
 - `analyze_fn(state)`: Receives current state, returns updated state dict
 - `execute_fn(state)`: Receives state with analysis results, returns execution results
