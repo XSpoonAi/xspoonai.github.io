@@ -32444,9 +32444,9 @@ If you need to self-host an MCP server, follow that server’s own documentation
 
 ## See Also
 
-- API reference: `../api-reference/tools/base-tool.md`
-- MCP protocol details: `./mcp-protocol.md`
-- Custom tool guide: `../how-to-guides/add-custom-tools.md`
+- [API reference: Base Tool](../api-reference/spoon_ai/tools/base.md)
+- [MCP protocol details](./mcp-protocol.md)
+- [Custom tool guide](../how-to-guides/add-custom-tools.md)
 
 ---
 
