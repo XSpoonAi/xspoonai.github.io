@@ -30167,18 +30167,28 @@ async def fetch_price_node(state: AnalysisState) -> dict:
     """
     symbol = state.get("symbol", "BTC")
 
-    # Actual API call to data source
-    from spoon_toolkits.crypto.crypto_powerdata import CryptoPowerData
-    client = CryptoPowerData()
-    ohlcv = await client.get_ohlcv(symbol=f"{symbol}USDT", interval="1h", limit=24)
+    # Use the CryptoPowerData tool for CEX data
+    from spoon_toolkits.crypto.crypto_powerdata.tools import get_cex_data_with_indicators
+    result = get_cex_data_with_indicators(
+        exchange="binance",
+        symbol=f"{symbol}/USDT",
+        timeframe="1h",
+        limit=24,
+        indicators_config='{"sma": [{"timeperiod": 20}], "rsi": [{"timeperiod": 14}]}'
+    )
+
+    # Extract data from result
+    data = result.get("data", [])
+    if not data:
+        return {"price_data": {"symbol": symbol, "error": "No data available"}}
 
     return {
         "price_data": {
             "symbol": symbol,
-            "current_price": ohlcv[-1]["close"],
-            "high_24h": max(c["high"] for c in ohlcv),
-            "low_24h": min(c["low"] for c in ohlcv),
-            "volume_24h": sum(c["volume"] for c in ohlcv),
+            "current_price": data[-1]["close"] if data else 0,
+            "high_24h": max(c["high"] for c in data) if data else 0,
+            "low_24h": min(c["low"] for c in data) if data else 0,
+            "volume_24h": sum(c["volume"] for c in data) if data else 0,
         }
     }
 ```
@@ -30875,7 +30885,7 @@ asyncio.run(main())
 
 ### OpenAI
 
-- **Models**: gpt-5.1-chat-latest (default), GPT-4o, GPT-4o-mini, o1-preview, o1-mini
+- **Models**: GPT-5.1, GPT-4o, o1, o3, etc. ([See latest models](https://platform.openai.com/docs/models))
 - **Features**: Function calling, streaming, embeddings, reasoning models
 - **Best for**: General-purpose tasks, reasoning, code generation
 
@@ -30884,7 +30894,7 @@ from spoon_ai.chat import ChatBot
 
 # OpenAI configuration with default model
 llm = ChatBot(
-    model_name="gpt-5.1-chat-latest",  # Framework default
+    model_name="gpt-5.1-chat-latest",  # Check docs for latest model names
     llm_provider="openai",
     temperature=0.7
 )
@@ -30892,14 +30902,14 @@ llm = ChatBot(
 
 ### Anthropic (Claude)
 
-- **Models**: Claude-Sonnet-4-20250514 (default), Claude-3.5 Sonnet, Claude-3.5 Haiku
+- **Models**: Claude 4.5 Opus, Claude 4.5 Sonnet, etc. ([See latest models](https://docs.anthropic.com/en/docs/about-claude/models))
 - **Features**: Large context windows, prompt caching, safety features
 - **Best for**: Long documents, analysis, safety-critical applications
 
 ```python
 # Anthropic configuration with default model
 llm = ChatBot(
-    model_name="claude-sonnet-4-20250514",  # Framework default
+    model_name="claude-sonnet-4-20250514",  # Check docs for latest model names
     llm_provider="anthropic",
     temperature=0.1
 )
@@ -30907,14 +30917,14 @@ llm = ChatBot(
 
 ### Google (Gemini)
 
-- **Models**: Gemini-2.5-Pro (default), Gemini-2.0-Flash, Gemini-1.5-Pro
+- **Models**: Gemini 3 Pro, Gemini 2.5 Flash, etc. ([See latest models](https://ai.google.dev/gemini-api/docs/models))
 - **Features**: Multimodal capabilities, fast inference, large context
 - **Best for**: Multimodal tasks, cost-effective solutions, long context
 
 ```python
 # Google configuration with default model
 llm = ChatBot(
-    model_name="gemini-2.5-pro",  # Framework default
+    model_name="gemini-3-pro",  # Check docs for latest model names
     llm_provider="gemini",
     temperature=0.1
 )
@@ -30922,14 +30932,14 @@ llm = ChatBot(
 
 ### DeepSeek
 
-- **Models**: DeepSeek-Reasoner (default), DeepSeek-V3, DeepSeek-Chat
+- **Models**: DeepSeek-V3, DeepSeek-Reasoner, etc. ([See latest models](https://platform.deepseek.com/api-docs/))
 - **Features**: Advanced reasoning, code-specialized models, cost-effective
 - **Best for**: Complex reasoning, code generation, technical tasks
 
 ```python
 # DeepSeek configuration with default model
 llm = ChatBot(
-    model_name="deepseek-reasoner",  # Framework default
+    model_name="deepseek-reasoner",  # Check docs for latest model names
     llm_provider="deepseek",
     temperature=0.2
 )
@@ -30958,13 +30968,14 @@ The LLM Manager provides provider-agnostic access with automatic fallback:
 from spoon_ai.llm.manager import LLMManager
 
 # Initialize with multiple providers
+# Note: Check each provider's docs for latest model names
 llm_manager = LLMManager(
     primary_provider="openai",
     fallback_providers=["anthropic", "gemini"],
     model_preferences={
         "openai": "gpt-5.1-chat-latest",
         "anthropic": "claude-sonnet-4-20250514",
-        "gemini": "gemini-2.5-pro",
+        "gemini": "gemini-3-pro",
         "deepseek": "deepseek-reasoner"
     }
 )
@@ -31007,17 +31018,18 @@ DEFAULT_TEMPERATURE=0.3
 
 ## Advanced Features
 
-### Prompt Caching (Anthropic)
+### Response Caching
 
 ```python
-from spoon_ai.llm.cache import PromptCache
+from spoon_ai.llm.cache import LLMResponseCache
 
-# Enable prompt caching for repeated system prompts
+# Enable response caching to avoid redundant API calls
+cache = LLMResponseCache()
 llm = ChatBot(
     model_name="claude-sonnet-4-20250514",
     llm_provider="anthropic",
-    enable_caching=True
 )
+# Cache is automatically managed by the framework
 ```
 
 ### Streaming Responses
@@ -31055,35 +31067,39 @@ response = await llm.generate(
 
 ### Task-Based Recommendations
 
-#### Code Generation
+> Choose the right model for your use case. Check official documentation for the latest model capabilities.
 
-- Primary: DeepSeek-Reasoner, gpt-5.1-chat-latest
-- Alternative: Claude-Sonnet-4
+#### Code Generation
+- **Recommended**: DeepSeek (cost-effective), OpenAI GPT models (fast iteration)
+- **Alternative**: Anthropic Claude (strong reasoning)
 
 #### Analysis & Reasoning
-
-- Primary: DeepSeek-Reasoner, gpt-5.1-chat-latest, Claude-Sonnet-4
-- Alternative: Gemini-2.5-Pro
+- **Recommended**: OpenAI o-series models, DeepSeek Reasoner, Claude
+- **Alternative**: Gemini Pro
 
 #### Cost-Sensitive Tasks
-
-- Primary: DeepSeek-Reasoner, Gemini-2.5-Pro
-- Alternative: gpt-5.1-chat-latest
+- **Recommended**: DeepSeek models, Gemini models
+- **Alternative**: OpenRouter for provider comparison
 
 #### Long Context Tasks
-
-- Primary: Gemini-2.5-Pro (250K tokens), Claude-Sonnet-4 (200K tokens)
-- Alternative: DeepSeek-Reasoner (65K tokens)
+- **Recommended**: Gemini (largest context), Claude (large context)
+- **Alternative**: Check each provider's latest context window limits
 
 ### Performance Comparison
 
-| Provider                  | Speed     | Cost     | Context | Quality              |
-| ------------------------- | --------- | -------- | ------- | -------------------- |
-| OpenAI gpt-5.1-chat-latest            | Fast      | Medium   | 128K    | Excellent            |
-| Anthropic Claude-Sonnet-4 | Medium    | Medium   | 200K    | Excellent            |
-| Google Gemini-2.5-Pro     | Very Fast | Low      | 250K    | Very Good            |
-| DeepSeek-Reasoner         | Fast      | Very Low | 65K     | Superior (Reasoning) |
-| OpenAI o1-preview         | Slow      | High     | 128K    | Superior (Reasoning) |
+> **Note**: Model capabilities and pricing change frequently. Always check the official documentation for the latest information:
+> - [OpenAI Models](https://platform.openai.com/docs/models)
+> - [Anthropic Models](https://docs.anthropic.com/en/docs/about-claude/models)
+> - [Google Gemini Models](https://ai.google.dev/gemini-api/docs/models)
+> - [DeepSeek Models](https://platform.deepseek.com/api-docs/)
+
+| Provider | Model Example | Context Window | Best For |
+|----------|---------------|----------------|----------|
+| **OpenAI** | gpt-5.1-chat-latest | Check docs | General purpose, tool calling |
+| **Anthropic** | claude-sonnet-4-20250514 | Check docs | Analysis, long documents |
+| **Google** | gemini-2.5-pro | Check docs | Multimodal, cost-effective |
+| **DeepSeek** | deepseek-reasoner | Check docs | Reasoning, code generation |
+| **OpenRouter** | Various | Varies | Access multiple providers |
 
 ## Error Handling & Fallbacks
 
@@ -31143,29 +31159,34 @@ response = await llm_manager.generate("Complex reasoning task")
 ### Usage Tracking
 
 ```python
-from spoon_ai.llm.monitoring import LLMMonitor
+from spoon_ai.llm.monitoring import MetricsCollector, get_metrics_collector
 
-# Track usage and costs automatically
-monitor = LLMMonitor()
-response = await llm.generate("Hello", monitor=monitor)
+# Get the global metrics collector
+collector = get_metrics_collector()
 
-# Get metrics
-metrics = monitor.get_metrics()
-print(f"Tokens used: {metrics.total_tokens}")
-print(f"Cost: ${metrics.total_cost}")
+# Metrics are automatically tracked during LLM calls
+response = await llm.ask([{"role": "user", "content": "Hello"}])
+
+# Get collected stats per provider
+stats = collector.get_stats("openai")
+print(f"Total requests: {stats.total_requests}")
+print(f"Average latency: {stats.average_latency:.2f}s")
 ```
 
 ### Performance Monitoring
 
 ```python
-# Monitor response times and success rates
-monitor.log_request(
-    provider="openai",
-    model="gpt-4",
-    tokens=150,
-    latency=1.2,
-    success=True
-)
+# The MetricsCollector automatically tracks:
+# - Request counts and success/failure rates
+# - Token usage (input/output)
+# - Latency statistics (average, min, max)
+# - Error tracking per provider
+
+# Access provider-specific stats
+for provider in ["openai", "anthropic", "gemini"]:
+    stats = collector.get_stats(provider)
+    if stats.total_requests > 0:
+        print(f"{provider}: {stats.total_requests} requests, {stats.error_count} errors")
 ```
 
 ## Best Practices
@@ -31452,30 +31473,78 @@ sequenceDiagram
 pip install spoon-ai
 ```
 
+### Using MCP Tools with an Agent
+
+The recommended way to use MCP tools is through `SpoonReactMCP`:
+
+```python
+import asyncio
+from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
+from spoon_ai.tools.mcp_tool import MCPTool
+from spoon_ai.tools.tool_manager import ToolManager
+from spoon_ai.chat import ChatBot
+
+class DeepWikiAgent(SpoonReactMCP):
+    """Agent that can analyze GitHub repositories via DeepWiki MCP"""
+    name: str = "DeepWikiAgent"
+    system_prompt: str = "You can analyze GitHub repositories using DeepWiki."
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.available_tools = ToolManager([])
+    
+    async def initialize(self):
+        # Create MCP tool for DeepWiki (no API key needed!)
+        deepwiki_tool = MCPTool(
+            name="deepwiki",
+            description="DeepWiki MCP for repository analysis",
+            mcp_config={
+                "url": "https://mcp.deepwiki.com/sse",
+                "transport": "sse",
+                "timeout": 30,
+            }
+        )
+        await deepwiki_tool.ensure_parameters_loaded()
+        self.available_tools = ToolManager([deepwiki_tool])
+
+async def main():
+    # Create and initialize agent
+    agent = DeepWikiAgent(llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"))
+    await agent.initialize()
+    
+    # Query the agent
+    response = await agent.run("What is XSpoonAi/spoon-core about?")
+    print(response)
+
+asyncio.run(main())
+```
+
+### Direct MCP Tool Usage
+
+For direct MCP tool calls without an agent:
+
 ```python
 import asyncio
 from spoon_ai.tools.mcp_tool import MCPTool
 
-# Create an MCP tool that connects to an external MCP server
+# Connect to an SSE/HTTP MCP server
 mcp_tool = MCPTool(
-    name="filesystem",
-    description="Access filesystem via MCP",
+    name="deepwiki",
+    description="DeepWiki MCP tool for repository analysis",
     mcp_config={
-        "command": "npx",
-        "args": ["-y", "@anthropic/mcp-server-filesystem", "/tmp"]
+        "url": "https://mcp.deepwiki.com/sse",
+        "transport": "sse",
+        "timeout": 30,
+        "headers": {"User-Agent": "SpoonOS-MCP/1.0"}
     }
 )
 
 async def main():
-    # Load tool parameters from the MCP server
+    # Tool parameters are loaded lazily when first used
     await mcp_tool.ensure_parameters_loaded()
     
-    # List available tools
-    tools = await mcp_tool.list_mcp_tools()
-    print("Available tools:", [t.name for t in tools])
-    
-    # Call a tool
-    result = await mcp_tool.call_mcp_tool("read_file", path="/tmp/test.txt")
+    # Call the tool
+    result = await mcp_tool.execute(repo="XSpoonAi/spoon-core")
     print(result)
 
 asyncio.run(main())
@@ -31507,47 +31576,115 @@ graph TD
 
 ## Setting Up MCP
 
-### Basic MCP Server
+### Basic MCP Server (via spoon-cli)
 
-Requires the `spoon-cli` package (which ships the FastMCP-based server wrapper and built-in crypto tools).
+SpoonOS provides MCP server functionality through the `spoon-cli` package:
 
 ```bash
-pip install spoon-cli spoon-toolkits fastmcp
+pip install spoon-cli spoon-toolkits
 ```
 
 ```python
 import asyncio
 from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
 
+# Creates an MCP server with pre-built crypto/defi tools
 mcp_tools = MCPToolsCollection()
 
 async def main():
-    # Runs a FastMCP SSE server. Change the port as needed.
+    # Runs a FastMCP SSE server on port 8765
     await mcp_tools.run(port=8765)
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### MCP Client Configuration
+### Toolkit MCP Servers
+
+The `spoon-toolkits` package also provides dedicated MCP servers:
 
 ```python
-import asyncio
-from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
+from spoon_toolkits import start_crypto_powerdata_mcp_sse
 
-class MCPEnabledClient(MCPClientMixin):
-    def __init__(self, transport: str):
-        super().__init__(transport)
+# Start the crypto data MCP server
+start_crypto_powerdata_mcp_sse(port=8766)
+```
 
-client = MCPEnabledClient("ws://localhost:8765")
+### MCP Client Configuration
 
-async def list_tools():
-    async with client.get_session() as session:
-        return await session.list_tools()
+SpoonOS supports multiple MCP transport types:
 
-tools = asyncio.run(list_tools())
-for tool in tools:
-    print(f"{tool.name}: {tool.description}")
+#### SSE/HTTP Transport (Remote Servers)
+
+```python
+from spoon_ai.tools.mcp_tool import MCPTool
+
+# SSE transport (Server-Sent Events)
+sse_tool = MCPTool(
+    name="deepwiki_sse",
+    description="DeepWiki SSE MCP tool",
+    mcp_config={
+        "url": "https://mcp.deepwiki.com/sse",
+        "transport": "sse",
+        "timeout": 30,
+        "headers": {"User-Agent": "SpoonOS-MCP/1.0"}
+    }
+)
+
+# HTTP transport (Streamable HTTP)
+http_tool = MCPTool(
+    name="deepwiki_http",
+    description="DeepWiki HTTP MCP tool",
+    mcp_config={
+        "url": "https://mcp.deepwiki.com/mcp",
+        "transport": "http",
+        "timeout": 30,
+        "headers": {"Accept": "application/json"}
+    }
+)
+```
+
+#### Stdio Transport (CLI Tools via npx/uvx)
+
+```python
+import os
+from spoon_ai.tools.mcp_tool import MCPTool
+
+# NPX transport (Node.js MCP servers)
+tavily_tool = MCPTool(
+    name="tavily-search",
+    description="Web search via Tavily",
+    mcp_config={
+        "command": "npx",
+        "args": ["--yes", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY")}
+    }
+)
+
+# UVX transport (Python MCP servers)
+python_tool = MCPTool(
+    name="python-mcp",
+    description="Python MCP server",
+    mcp_config={
+        "command": "uvx",
+        "args": ["my-python-mcp-server"],
+        "env": {}
+    }
+)
+```
+
+#### WebSocket Transport
+
+```python
+from spoon_ai.tools.mcp_tool import MCPTool
+
+ws_tool = MCPTool(
+    name="ws-mcp",
+    description="WebSocket MCP server",
+    mcp_config={
+        "url": "ws://localhost:8765",  # or wss:// for secure
+    }
+)
 ```
 
 ## Tool Discovery
@@ -31568,7 +31705,7 @@ for tool in tools:
 
 ```python
 from spoon_ai.tools.base import BaseTool
-from spoon_ai.tools.mcp_tools_collection import mcp_tools
+from spoon_cli.mcp.mcp_tools_collection import mcp_tools
 
 class WeatherTool(BaseTool):
     name: str = "get_weather"
@@ -31585,7 +31722,8 @@ class WeatherTool(BaseTool):
         # Weather API call implementation
         return {"location": location, "temperature": 22, "condition": "sunny"}
 
-# Register tool with the running MCP server
+# Register tool with the MCP server
+import asyncio
 asyncio.run(mcp_tools.add_tool(WeatherTool()))
 ```
 
@@ -31602,12 +31740,43 @@ print(result)
 ### Agent-Driven Execution
 
 ```python
+import asyncio
+import os
 from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
+from spoon_ai.tools.mcp_tool import MCPTool
+from spoon_ai.tools.tool_manager import ToolManager
+from spoon_ai.chat import ChatBot
 
-# Agent that can consume MCP tools discovered via its transport
-agent = SpoonReactMCP()
-response = await agent.run("What's the weather like in San Francisco?")
-print(response)
+class MyMCPAgent(SpoonReactMCP):
+    """Custom agent with MCP tools"""
+    name: str = "MyMCPAgent"
+    system_prompt: str = "You are a helpful assistant with web search capabilities."
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.available_tools = ToolManager([])
+    
+    async def initialize(self):
+        """Initialize MCP tools"""
+        tavily_tool = MCPTool(
+            name="tavily-search",
+            description="Web search via Tavily",
+            mcp_config={
+                "command": "npx",
+                "args": ["--yes", "tavily-mcp"],
+                "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY")}
+            }
+        )
+        self.available_tools = ToolManager([tavily_tool])
+
+async def main():
+    agent = MyMCPAgent(llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"))
+    await agent.initialize()
+    
+    response = await agent.run("Search for the latest cryptocurrency news")
+    print(response)
+
+asyncio.run(main())
 ```
 
 ## MCP Configuration
@@ -32285,16 +32454,45 @@ mcp_tool = MCPTool(
 ```
 `MCPTool.execute(...)` will fetch the server’s tool list, align the name/parameters, and perform retries and health checks.
 
-### MCP server (`MCPToolsCollection`)
-You can expose local or toolkit tools as an MCP server:
-```python
-from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
-import asyncio
+### Creating MCP servers
 
-mcp_tools = MCPToolsCollection()  # wraps spoon-toolkits tools if installed
-asyncio.run(mcp_tools.run(port=8765))  # SSE server by default
+SpoonOS provides two ways to expose tools as MCP servers:
+
+**Option 1: Using spoon_toolkits' built-in MCP servers**
+
+```python
+# Using spoon_toolkits' pre-built MCP servers
+from spoon_toolkits import CryptoPowerDataMCPServer, start_crypto_powerdata_mcp_sse
+
+# Start an MCP server with crypto data tools
+start_crypto_powerdata_mcp_sse(port=8765)
 ```
-This uses `fastmcp` under the hood and auto-registers each tool as an MCP `FunctionTool`.
+
+**Option 2: Using spoon-cli's MCPToolsCollection (recommended)**
+
+For custom tools, use `spoon-cli` to expose them via MCP:
+
+```bash
+pip install spoon-cli
+```
+
+```python
+import asyncio
+from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
+
+async def main():
+    # MCPToolsCollection wraps existing tools and exposes them via MCP
+    mcp_tools_server = MCPToolsCollection()
+    
+    # Start the MCP server (SSE transport by default)
+    print("Starting MCP server on port 8765...")
+    await mcp_tools_server.run(port=8765)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+> **Note**: SpoonOS uses `fastmcp` as the underlying MCP implementation. For client-side MCP operations, use `spoon_ai.tools.mcp_tool.MCPTool`. For server-side, prefer `spoon_cli.mcp.mcp_tools_collection.MCPToolsCollection`.
 
 ## Configuration
 - **Core**: none required for basic tools.
@@ -33227,7 +33425,7 @@ async def main():
     agent = MyFirstAgent(
         llm=ChatBot(
             llm_provider="openai",         # or "anthropic", "gemini", "deepseek", "openrouter"
-            model_name="gpt-5.1"   # Framework default for OpenAI
+            model_name="gpt-5.1-chat-latest"   # Framework default for OpenAI
         )
     )
 
@@ -33248,43 +33446,40 @@ python my_first_agent.py
 
 The agent will respond with a personalized greeting and offer to help with various tasks.
 
-### 3. Add Web3 Capabilities
+### 3. Add Real Data Capabilities
 
-Enhance your agent with blockchain tools:
+Enhance your agent with search and web scraping tools:
 
 ```python
-from spoon_toolkits import (
-    CryptoPowerDataPriceTool,
-    CryptoPowerDataCEXTool,
-)
+from spoon_toolkits import DesearchWebSearchTool, WebScraperTool
 
-class Web3Agent(ToolCallAgent):
-    name: str = "web3_agent"
-    description: str = "AI agent with Web3 and crypto capabilities"
+class ResearchAgent(ToolCallAgent):
+    name: str = "research_agent"
+    description: str = "AI agent with web research capabilities"
 
     system_prompt: str = """
-    You are a Web3-native AI assistant with access to blockchain data.
-    You can help with crypto prices, DeFi operations, and blockchain analysis.
+    You are a research assistant with access to web search and content scraping.
+    You can help find information, read articles, and analyze web content.
     """
 
     available_tools: ToolManager = ToolManager([
         GreetingTool(),
-        # Crypto/Web3 tools (requires `pip install -e toolkit` in the repo root)
-        CryptoPowerDataPriceTool(),
-        CryptoPowerDataCEXTool(),
+        # Research tools (requires `pip install spoon-toolkits`)
+        DesearchWebSearchTool(),
+        WebScraperTool(),
     ])
 
 # Usage
-async def web3_demo():
-    agent = Web3Agent(
+async def research_demo():
+    agent = ResearchAgent(
         llm=ChatBot(
             llm_provider="anthropic",
             model_name="claude-sonnet-4-20250514"  # Framework default
         )
     )
 
-    # Framework automatically handles crypto data fetching and error cases
-    response = await agent.run("What's the current price of Bitcoin?")
+    # Framework automatically handles search and error cases
+    response = await agent.run("Search for the latest AI news and summarize it")
     return response
 ```
 
@@ -33293,7 +33488,7 @@ async def web3_demo():
 The SpoonOS framework provides:
 
 - **Multiple LLM Providers**: OpenAI (`openai`), Anthropic (`anthropic`), Google Gemini (`gemini`), DeepSeek (`deepseek`), OpenRouter (`openrouter`)
-- **Built-in Tools**: Crypto, DeFi, social media, data analysis
+- **Built-in Tools**: Web search, content scraping, data analysis, and more via `spoon-toolkits`
 - **Agent Types**: ReAct, ToolCall, Graph-based agents
 - **MCP Integration**: Dynamic tool discovery and execution
 
@@ -33345,13 +33540,23 @@ class BlockchainAnalysisTool(BaseTool):
 
 ```python
 # Use Model Context Protocol for dynamic tools
-from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
+from spoon_ai.tools.mcp_tool import MCPTool
+import os
+
+# Create an MCP tool for web search
+tavily_tool = MCPTool(
+    name="tavily-search",
+    description="Search the web using Tavily API",
+    mcp_config={
+        "command": "npx",
+        "args": ["-y", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY")},
+    },
+)
 
 agent = ToolCallAgent(
     llm=ChatBot(llm_provider="anthropic", model_name="claude-sonnet-4-20250514"),
-    available_tools=ToolManager([
-        MCPToolsCollection()  # Automatically discovers MCP tools
-    ])
+    available_tools=ToolManager([tavily_tool])
 )
 ```
 
@@ -33584,28 +33789,46 @@ def create_my_tool_manager() -> ToolManager:
 
 ### Method 3: MCP Integration
 
+Expose your custom tools as an MCP server using `spoon-cli`:
+
+```bash
+pip install spoon-cli
+```
+
 ```python
 # mcp_server.py
-from fastmcp import FastMCP
-from spoon_ai.tools.tool_manager import ToolManager
-from your_tools import get_my_tools
+import asyncio
+from spoon_cli.mcp.mcp_tools_collection import MCPToolsCollection
 
-mcp = FastMCP("My Custom Tools")
-
-# Add tools to MCP server
-tools = get_my_tools()
-tool_manager = ToolManager(tools)
-
-for tool in tools:
-    mcp.add_tool(
-        tool.execute,
-        name=tool.name,
-        description=tool.description
-    )
+async def main():
+    # MCPToolsCollection wraps existing tools and exposes them via MCP
+    mcp_tools_server = MCPToolsCollection()
+    
+    # Start the MCP server (SSE transport by default)
+    print("Starting MCP server on port 8766...")
+    await mcp_tools_server.run(port=8766)
 
 if __name__ == "__main__":
-    import asyncio
-    asyncio.run(mcp.run_async(transport="sse", port=8766))
+    asyncio.run(main())
+```
+
+To connect to an MCP server from an agent, use `MCPTool`:
+
+```python
+from spoon_ai.tools.mcp_tool import MCPTool
+
+# Connect to your custom MCP server
+custom_mcp = MCPTool(
+    name="my_custom_tools",
+    description="My custom tools exposed via MCP",
+    mcp_config={
+        "url": "http://localhost:8766/sse",
+        "transport": "sse"
+    }
+)
+
+# Load available tools
+await custom_mcp.ensure_parameters_loaded()
 ```
 
 ## Tool Configuration
@@ -33871,60 +34094,6 @@ class MyTool(BaseTool):
 - Multi-source data aggregation and validation
 - Financial data error handling and recovery
 
-**Key learning points:**
-- Domain-specific tool development patterns
-- Financial data validation techniques
-- Multi-API integration strategies
-- Performance optimization for data-intensive tools
-
-#### 🎯 [Intent Graph Demo](../examples/intent-graph-demo.md)
-**GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/intent_graph_demo.py)
-
-**Advanced tool orchestration:**
-- Custom routing and decision-making tools
-- Memory management and context preservation tools
-- Parallel processing coordination tools
-- Performance monitoring and metrics tools
-
-**Key learning points:**
-- Complex tool interaction patterns
-- State management in custom tools
-- Performance optimization techniques
-- Error recovery in multi-tool workflows
-
-### 🛠️ **Development Resources**
-
-- **[Core Concepts: Tools](../core-concepts/tools.md)** - Complete tool system understanding
-- **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Advanced integration patterns
-- **[Tool API Reference](../api-reference/spoon_ai/tools/)** - Complete development documentation
-
-### 📖 **Additional Resources**
-
-- **[Built-in Tools Reference](../api-reference/spoon_ai/tools/)** - Explore existing tool implementations
-- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
-- **[Agent Architecture](../core-concepts/agents.md)** - Tool-agent integration patterns
-
-## Troubleshooting
-
-### Common Issues
-
-**Tool not found in manager:**
-
-- Ensure tool is properly added to ToolManager
-- Check tool name matches exactly
-- Verify tool class inherits from BaseTool
-
-**Parameter validation errors:**
-
-- Check JSON schema syntax in parameters
-- Ensure required parameters are marked correctly
-- Validate parameter types match schema
-
-**Execution failures:**
-
-- Leverage framework's automatic error handling
-- Check for missing dependencies or API keys
-- Use framework's built-in debugging features
 **Key learning points:**
 - Domain-specific tool development patterns
 - Financial data validation techniques
