@@ -3514,7 +3514,7 @@ class MyAgent(SpoonReactAI):
         super().__init__(**kwargs)
 
         # Configure LLM
-        self.llm = ChatBot(model_name="gpt-4.1")
+        self.llm = ChatBot(model_name="gpt-5.1-chat-latest")
 
         # Set system prompt
         self.system_prompt = "You are a helpful AI assistant."
@@ -3602,7 +3602,7 @@ class ResearchAgent(SpoonReactAI):
         super().__init__(**kwargs)
 
         # Configure LLM
-        self.llm = ChatBot(model_name="gpt-4.1")
+        self.llm = ChatBot(model_name="gpt-5.1-chat-latest")
 
         # Set up MCP tools
         tools = []
@@ -3673,7 +3673,7 @@ class ConfigurableAgent(SpoonReactAI):
 
         # Configure LLM with specific parameters
         self.llm = ChatBot(
-            model_name="gpt-4.1",
+            model_name="gpt-5.1-chat-latest",
             temperature=0.7,        # Creativity level
             max_tokens=4096,        # Response length limit
             timeout=60              # Request timeout
@@ -3697,7 +3697,7 @@ from spoon_ai.chat import ChatBot
 
 # Create agent instance
 agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1"),
+    llm=ChatBot(model_name="gpt-5.1-chat-latest"),
     system_prompt="You are a helpful assistant.",
     max_steps=15
 )
@@ -3801,7 +3801,7 @@ simple_agent = ToolCallAgent(
 )
 
 complex_agent = ToolCallAgent(
-    llm=ChatBot(model_name="gpt-4.1")        # More capable
+    llm=ChatBot(model_name="gpt-5.1-chat-latest")        # More capable
 )
 
 # Set reasonable limits
@@ -3889,7 +3889,7 @@ class MCPEnabledAgent(SpoonReactMCP):
         super().__init__(**kwargs)
 
         # Configure LLM
-        self.llm = ChatBot(model_name="gpt-4.1")
+        self.llm = ChatBot(model_name="gpt-5.1-chat-latest")
 
         # Configure stdio MCP tool
         search_tool = MCPTool(
@@ -4084,7 +4084,7 @@ class AdvancedConfigAgent(SpoonReactMCP):
     def __init__(self, **kwargs):
         # Advanced LLM configuration
         llm_config = {
-            "model_name": "gpt-4.1",
+            "model_name": "gpt-5.1-chat-latest",
             "temperature": 0.3,          # Creativity control
             "max_tokens": 4096,          # Maximum response length
             "top_p": 0.9,               # Nucleus sampling parameter
@@ -4228,7 +4228,7 @@ class DynamicConfigAgent(SpoonReactMCP):
         "system_prompt": "You are an advanced AI agent..."
       },
       "llm_config": {
-        "model_name": "gpt-4.1",
+        "model_name": "gpt-5.1-chat-latest",
         "temperature": 0.3,
         "max_tokens": 4096,
         "top_p": 0.9,
@@ -4487,7 +4487,7 @@ import asyncio
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
 
-agent = SpoonReactAI(llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"))
+agent = SpoonReactAI(llm=ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai"))
 
 async def main():
     response = await agent.run("What is the capital of France?")
@@ -4540,7 +4540,7 @@ tavily_search = MCPTool(
 
 # Agent with real tools
 agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
+    llm=ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai"),
     tools=ToolManager([tavily_search, PercentageTool()]),
     max_iterations=10  # Limit reasoning loops
 )
@@ -4672,7 +4672,7 @@ class SpoonMacroAnalysisAgent(SpoonReactMCP):
                 "env": {"TAVILY_API_KEY": tavily_key},
             },
         )
-        
+
         # Pre-load MCP tool parameters
         await tavily_tool.ensure_parameters_loaded()
 
@@ -4686,7 +4686,7 @@ async def main():
         llm=ChatBot(llm_provider="gemini", model_name="gemini-2.5-flash")
     )
     await agent.initialize()
-    
+
     query = (
         "Perform a macro analysis of Bitcoin (BTC). "
         "Search for recent news and get current market data from Binance using BTC/USDT pair."
@@ -4729,7 +4729,7 @@ from spoon_ai.tools import ToolManager
 from spoon_toolkits.crypto.crypto_powerdata.tools import CryptoPowerDataCEXTool
 
 agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1", llm_provider="openai"),
+    llm=ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai"),
     tools=ToolManager([CryptoPowerDataCEXTool()])  # real tool with retries/failures
 )
 
@@ -5706,7 +5706,7 @@ import asyncio
 from spoon_ai.chat import ChatBot
 
 # Same interface for all providers—just change model_name and llm_provider
-llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
+llm = ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai")
 
 async def main():
     response = await llm.ask([{"role": "user", "content": "Explain quantum computing in one sentence"}])
@@ -5721,7 +5721,7 @@ asyncio.run(main())
 
 ### OpenAI
 
-- **Models**: GPT-4.1 (default), GPT-4o, GPT-4o-mini, o1-preview, o1-mini
+- **Models**: gpt-5.1-chat-latest (default), GPT-4o, GPT-4o-mini, o1-preview, o1-mini
 - **Features**: Function calling, streaming, embeddings, reasoning models
 - **Best for**: General-purpose tasks, reasoning, code generation
 
@@ -5730,7 +5730,7 @@ from spoon_ai.chat import ChatBot
 
 # OpenAI configuration with default model
 llm = ChatBot(
-    model_name="gpt-4.1",  # Framework default
+    model_name="gpt-5.1-chat-latest",  # Framework default
     llm_provider="openai",
     temperature=0.7
 )
@@ -5808,7 +5808,7 @@ llm_manager = LLMManager(
     primary_provider="openai",
     fallback_providers=["anthropic", "gemini"],
     model_preferences={
-        "openai": "gpt-4.1",
+        "openai": "gpt-5.1-chat-latest",
         "anthropic": "claude-sonnet-4-20250514",
         "gemini": "gemini-2.5-pro",
         "deepseek": "deepseek-reasoner"
@@ -5833,7 +5833,7 @@ OPENROUTER_API_KEY=sk-or-your_openrouter_key_here
 
 # Default Settings
 DEFAULT_LLM_PROVIDER=openai
-DEFAULT_MODEL=gpt-4.1
+DEFAULT_MODEL=gpt-5.1-chat-latest
 DEFAULT_TEMPERATURE=0.3
 ```
 
@@ -5843,7 +5843,7 @@ DEFAULT_TEMPERATURE=0.3
 {
   "llm": {
     "provider": "openai",
-    "model": "gpt-4.1",
+    "model": "gpt-5.1-chat-latest",
     "temperature": 0.3,
     "max_tokens": 32768,
     "fallback_providers": ["anthropic", "deepseek", "gemini"]
@@ -5903,18 +5903,18 @@ response = await llm.generate(
 
 #### Code Generation
 
-- Primary: DeepSeek-Reasoner, GPT-4.1
+- Primary: DeepSeek-Reasoner, gpt-5.1-chat-latest
 - Alternative: Claude-Sonnet-4
 
 #### Analysis & Reasoning
 
-- Primary: DeepSeek-Reasoner, GPT-4.1, Claude-Sonnet-4
+- Primary: DeepSeek-Reasoner, gpt-5.1-chat-latest, Claude-Sonnet-4
 - Alternative: Gemini-2.5-Pro
 
 #### Cost-Sensitive Tasks
 
 - Primary: DeepSeek-Reasoner, Gemini-2.5-Pro
-- Alternative: GPT-4.1
+- Alternative: gpt-5.1-chat-latest
 
 #### Long Context Tasks
 
@@ -5925,7 +5925,7 @@ response = await llm.generate(
 
 | Provider                  | Speed     | Cost     | Context | Quality              |
 | ------------------------- | --------- | -------- | ------- | -------------------- |
-| OpenAI GPT-4.1            | Fast      | Medium   | 128K    | Excellent            |
+| OpenAI gpt-5.1-chat-latest            | Fast      | Medium   | 128K    | Excellent            |
 | Anthropic Claude-Sonnet-4 | Medium    | Medium   | 200K    | Excellent            |
 | Google Gemini-2.5-Pro     | Very Fast | Low      | 250K    | Very Good            |
 | DeepSeek-Reasoner         | Fast      | Very Low | 65K     | Superior (Reasoning) |
@@ -6828,7 +6828,7 @@ import asyncio
 from spoon_ai.chat import ChatBot
 
 # ChatBot includes built-in short-term memory with auto-trimming
-llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
+llm = ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai")
 
 async def main():
     await llm.ask([{"role": "user", "content": "My name is Alice"}])
@@ -8121,7 +8121,7 @@ SpoonOS eliminates common development complexity:
 ```python
 # Simple agent creation - no error handling needed
 agent = ToolCallAgent(
-    llm=ChatBot(llm_provider="openai", model_name="gpt-4.1"),
+    llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"),
     available_tools=ToolManager([CryptoTool(), Web3Tool()])
 )
 
@@ -8835,28 +8835,19 @@ from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
 from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
 
-def get_crypto_tools():
-    """Helper for docs: instantiate available crypto/Web3 tools."""
-    return [
-        CryptoPowerDataPriceTool(),
-        CryptoPowerDataCEXTool(),
-    ]
-
 # Create your first agent
 def create_agent():
     # Configure LLM
     llm = ChatBot(
-        # Pick up provider/model from env to support Gemini out of the box.
-        # Example: set DEFAULT_LLM_PROVIDER=gemini and GEMINI_API_KEY=***
-        llm_provider=os.getenv("LLM_PROVIDER") or os.getenv("DEFAULT_LLM_PROVIDER") or "gemini",
-        model_name=os.getenv("LLM_MODEL") or "gemini-2.5-pro",
+        llm_provider="openai",
+        model_name="gpt-5.1-chat-latest",
         temperature=0.3
     )
 
     # Create agent with tools
     agent = SpoonReactAI(
         llm=llm,
-        tools=[*get_crypto_tools()]  # requires `pip install -e toolkit`
+        tools=[CryptoPowerDataPriceTool(), CryptoPowerDataCEXTool()]
     )
 
     return agent
@@ -8959,7 +8950,7 @@ If you want token-by-token output (works with any supported provider):
 
 ```python
 async def stream_demo():
-    llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
+    llm = ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai")
     messages = [{"role": "user", "content": "Stream a 3-step plan to learn SpoonOS"}]
     async for chunk in llm.astream(messages=messages):
         print(chunk.delta or "", end="", flush=True)
@@ -9239,7 +9230,7 @@ class ProductionAgent:
         default_config = {
             "llm": {
                 "provider": "openai",
-                "model": "gpt-4.1",
+                "model": "gpt-5.1-chat-latest",
                 "temperature": 0.3
             },
             "tools": ["crypto_tools", "greeting_tool"],
