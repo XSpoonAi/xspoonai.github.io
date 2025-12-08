@@ -93,7 +93,7 @@ from spoon_ai.chat import ChatBot
 from spoon_ai.tools import ToolManager
 from spoon_ai.tools.base import BaseTool
 from spoon_ai.tools.mcp_tool import MCPTool
-
+import asyncio
 class PercentageTool(BaseTool):
     name: str = "calculate_percentage"
     description: str = "Calculate a percentage of a numeric value"
@@ -127,7 +127,14 @@ agent = SpoonReactAI(
     max_iterations=10  # Limit reasoning loops
 )
 
-response = await agent.run("Search Bitcoin price and calculate 10% of it")
+async def main():
+    # Pre-load MCP tool parameters so LLM can see the correct schema
+    await tavily_search.ensure_parameters_loaded()
+    print("MCP tool parameters loaded")
+    response = await agent.run("Search Bitcoin price and calculate 10% of it")
+    print(response)
+
+asyncio.run(main())
 ```
 
 **Best for:** Single-step tasks, API calls, Q&A, simple automation.
@@ -243,7 +250,7 @@ class SpoonMacroAnalysisAgent(SpoonReactMCP):
     async def initialize(self):
         tavily_key = os.getenv("TAVILY_API_KEY")
         if not tavily_key:
-            raise ValueError("Set TAVILY_API_KEY before running the agent.")
+            raise Val ueError("Set TAVILY_API_KEYbefore running the agent.")
 
         tavily_tool = MCPTool(
             name="tavily-search",
