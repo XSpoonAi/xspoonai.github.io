@@ -32,7 +32,7 @@ class BaseAgent(BaseModel, ABC):
 ### Construction
 - Instantiate with the fields above (Pydantic will validate types).  
 - `__init__(**kwargs)` also sets up async locks, timeout defaults, and a `CallbackManager`.  
-- Python 3.12+ and an event loop are required for all async methods.
+- Python 3.12(or Python 3.13) and an event loop are required for all async methods.
 
 ## Core Methods
 
@@ -9787,7 +9787,7 @@ FILE: docs/getting-started/installation.md
 
 ## Prerequisites
 
-- Python 3.12 or higher
+- Python 3.12 or Python 3.13
 - Git
 - Virtual environment (recommended)
 
@@ -9834,7 +9834,7 @@ python -m venv spoon-env
 
 > 💡 On newer Apple Silicon Macs the `python` shim may not point to Python 3.
 > Use `python3` for all commands unless you have explicitly configured `python`
-> to target Python 3.12 or later.
+> to target Python 3.12 (or Python 3.13).
 
 2. Install core package in editable mode
 
@@ -11297,10 +11297,9 @@ ModuleNotFoundError: No module named 'asyncio'
 ```
 
 **Solution:**
-1. Ensure Python 3.12+ is installed:
+1. Ensure Python 3.12(or Python 3.13) is installed:
    ```bash
    python --version
-   # Should show Python 3.12.0 or higher
    ```
 
 2. Create a new virtual environment:
