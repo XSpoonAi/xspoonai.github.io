@@ -15,10 +15,9 @@ ModuleNotFoundError: No module named 'asyncio'
 ```
 
 **Solution:**
-1. Ensure Python 3.12+ is installed:
+1. Ensure Python 3.12 or Python 3.13 is installed:
    ```bash
    python --version
-   # Should show Python 3.12.0 or higher
    ```
 
 2. Create a new virtual environment:

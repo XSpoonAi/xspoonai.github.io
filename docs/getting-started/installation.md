@@ -65,7 +65,7 @@ python -m venv spoon-env
 
 > 💡 On newer Apple Silicon Macs the `python` shim may not point to Python 3.
 > Use `python3` for all commands unless you have explicitly configured `python`
-> to target Python 3.12 or later.
+> to target Python 3.12 or 3.13.
 
 2. Install core package in editable mode
 
@@ -77,11 +77,11 @@ uv pip install -e .    # or `pip install -e .` if you don't use uv
 
 3. (Optional) Install Toolkits Package from local repo
 
-If you want to use the extended blockchain and data tools from `spoon_toolkits`, install the **spoon-toolkits** package from the `spoon-toolkits` folder:
+If you want to use the extended blockchain and data tools from `spoon_toolkits`, install the **spoon-toolkits** package from the `spoon-toolkit` folder:
 
 ```bash
-git clone https://github.com/XSpoonAi/spoon-toolkits.git
-cd spoon-toolkits
+git clone https://github.com/XSpoonAi/spoon-toolkit.git
+cd spoon-toolkit
 pip install -e .
 ```
 
