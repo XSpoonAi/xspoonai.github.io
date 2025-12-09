@@ -4,6 +4,16 @@ Welcome to the **SpoonOS Developer Documentation** - the comprehensive guide for
 
 This documentation site provides everything you need to get started with SpoonOS, the **Agentic OS for a Sentient Economy**.
 
+If you plan to build or refresh the Python-generated API docs that power this cookbook, use `uv` (Python 3.12+) for a fast, reproducible setup:
+
+```bash
+cd cookbook
+uv venv .venv
+./.venv/Scripts/activate   # Windows
+# source .venv/bin/activate # macOS/Linux
+uv pip install spoon-ai-sdk
+```
+
 ## 🚀 What is SpoonOS?
 
 SpoonOS is an **Agentic Operating System that enables AI agents to perceive, reason, plan, and execute**. It provides a robust framework for creating, deploying, and managing Web3 AI agents. SpoonOS fosters interoperability, data scalability, and privacy—empowering AI agents to engage in collaborative learning while ensuring secure and efficient data processing.
@@ -30,6 +40,17 @@ SpoonOS is an **Agentic Operating System that enables AI agents to perceive, rea
 ## 🛠️ Development
 
 ### Installation
+
+For Python-based API doc generation (recommended when updating the docs), set up `uv` first:
+
+```bash
+uv venv .venv
+./.venv/Scripts/activate   # Windows
+# source .venv/bin/activate # macOS/Linux
+uv pip install pydoc-markdown spoon-ai-sdk
+```
+
+Then install the site dependencies:
 
 ```bash
 npm install

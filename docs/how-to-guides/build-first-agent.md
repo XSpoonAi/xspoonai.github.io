@@ -1,509 +1,402 @@
 # Build Your First Agent
 
-Learn how to create a custom AI agent from scratch using SpoonOS.
+This quickstart takes you from a simple setup to a fully functional AI agent in just a few minutes.
 
-## Prerequisites
+> **💡 New to AI-assisted development?**
+>
+> Check out the [Vibe Coding Guide](./vibe-coding.md) to learn how to use AI coding tools like Cursor or Windsurf to build SpoonOS agents more efficiently.
 
-- SpoonOS installed and configured
-- API keys set up for your chosen LLM provider
-- Basic Python knowledge
+## Requirements
 
-## Step 1: Basic Agent Setup
+For these examples, you will need to:
 
-### Create Agent File
-
-Create a new file `my_first_agent.py` (works with Gemini, OpenAI, or any configured provider):
-
-```python
-import os
-from spoon_ai.agents import SpoonReactAI
-from spoon_ai.chat import ChatBot
-from spoon_ai.tools.crypto_tools import get_crypto_tools
-
-# Create your first agent
-def create_agent():
-    # Configure LLM
-    llm = ChatBot(
-        # Pick up provider/model from env to support Gemini out of the box.
-        # Example: set DEFAULT_LLM_PROVIDER=gemini and GEMINI_API_KEY=***
-        llm_provider=os.getenv("LLM_PROVIDER") or os.getenv("DEFAULT_LLM_PROVIDER") or "gemini",
-        model_name=os.getenv("LLM_MODEL") or "gemini-2.5-pro",
-        temperature=0.3
-    )
-
-    # Create agent with tools
-    agent = SpoonReactAI(
-        llm=llm,
-        tools=[*get_crypto_tools()]  # requires `pip install -e toolkit`
-    )
-
-    return agent
-
-# Test the agent
-async def main():
-    agent = create_agent()
-
-    # Framework handles all errors automatically
-    response = await agent.run("Hello! What can you help me with?")
-    response = await agent.run("What's the current price of Bitcoin?")
-
-    return response
-
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
-```
-
-### Run Your Agent
+- Install the SpoonOS SDK packages
+- Set up an API key for your chosen LLM provider (OpenAI, Anthropic, Google, etc.)
+- Set the appropriate environment variables:
 
 ```bash
-python my_first_agent.py
+# LLM Provider (choose one)
+export OPENAI_API_KEY="your-openai-key"
+# or export ANTHROPIC_API_KEY="your-anthropic-key"
+
+# For Desearch tools (required for search examples)
+export DESEARCH_API_KEY="your-desearch-key"
 ```
 
-Your agent will respond with helpful information and current Bitcoin price data.
+Although these examples use OpenAI by default, you can use any supported provider by changing the `llm_provider` parameter and setting up the appropriate API key.
 
-## Step 2: Add Custom Functionality
+### Installation
 
-### Create Custom Tool
+```bash
+# Using uv (recommended)
+uv venv .venv
+source .venv/bin/activate            # macOS/Linux
+# .\.venv\Scripts\Activate.ps1       # Windows (PowerShell)
 
-```python
-from spoon_ai.tools.base import BaseTool
-from typing import Dict, Any
+uv pip install spoon-ai-sdk          # Core SDK
+uv pip install spoon-toolkits        # Tools (web search, blockchain, etc.)
 
-class GreetingTool(BaseTool):
-    name: str = "greeting_tool"
-    description: str = "Generate personalized greetings"
-    parameters: dict = {
-        "type": "object",
-        "properties": {
-            "name": {"type": "string", "description": "Person's name"},
-            "style": {"type": "string", "description": "Greeting style (formal/casual)"}
-        },
-        "required": ["name"]
-    }
-
-    async def execute(self, name: str, style: str = "casual") -> str:
-        if style == "formal":
-            return f"Good day, {name}. It's a pleasure to meet you."
-        else:
-            return f"Hey {name}! Nice to meet you! 👋"
+# Or using pip
+pip install spoon-ai-sdk spoon-toolkits
 ```
 
-### Enhanced Agent with Custom Tool
+## Build a Basic Agent
 
-```python
-def create_enhanced_agent():
-    import os
-    llm = ChatBot(
-        llm_provider=os.getenv("LLM_PROVIDER") or os.getenv("DEFAULT_LLM_PROVIDER") or "gemini",
-        model_name=os.getenv("LLM_MODEL") or "gemini-2.5-pro",
-        temperature=0.3,
-        enable_short_term_memory=True,
-        short_term_memory_config={
-            "max_tokens": 8000,
-            "strategy": "summarize",
-            "messages_to_keep": 6,
-        },
-    )
+Start by creating a simple agent that can scrape web pages and answer questions. The agent uses the `WebScraperTool` to fetch real content from any URL.
 
-    # Add multiple tools
-    agent = SpoonReactAI(
-        llm=llm,
-        tools=[
-            *get_crypto_tools(),
-            GreetingTool()
-        ]
-    )
-
-    return agent
-
-# Run enhanced agent (same entry style as Step 1)
-async def main_enhanced():
-    agent = create_enhanced_agent()
-
-    # Framework automatically handles tool selection and execution
-    response = await agent.run("Give me a formal greeting for John")
-    response = await agent.run("Greet Alice casually and then tell her the Bitcoin price")
-
-    return response
-
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main_enhanced())
-
-### Optional: Stream responses
-
-If you want token-by-token output (works with any supported provider):
-
-```python
-async def stream_demo():
-    llm = ChatBot(model_name="gpt-4.1", llm_provider="openai")
-    messages = [{"role": "user", "content": "Stream a 3-step plan to learn SpoonOS"}]
-    async for chunk in llm.astream(messages=messages):
-        print(chunk.delta or "", end="", flush=True)
-```
-
-## Step 3: Add Memory and Context
-
-> Tip: Short-term memory trimming/summarization is already enabled in `create_enhanced_agent` via `enable_short_term_memory=True`. Use a higher `max_tokens` or switch `strategy` to `"trim"` if you prefer dropping history instead of summarizing.
-
-### Agent with Memory
-
-```python
-class MemoryAgent:
-    def __init__(self):
-        self.agent = create_enhanced_agent()
-        self.conversation_history = []
-
-    async def chat(self, message: str) -> str:
-        # Add context from previous conversations
-        context = self.build_context()
-        full_message = f"{context}
-
-User: {message}"
-
-        # Get response
-        response = await self.agent.run(full_message)
-
-        # Store in memory
-        self.conversation_history.append({
-            "user": message,
-            "agent": response,
-            "timestamp": time.time()
-        })
-
-        return response
-
-    def build_context(self) -> str:
-        if not self.conversation_history:
-            return "This is the start of our conversation."
-
-        # Include last 3 exchanges for context
-        recent = self.conversation_history[-3:]
-        context_parts = []
-
-        for exchange in recent:
-            context_parts.append(f"User: {exchange['user']}")
-            context_parts.append(f"Agent: {exchange['agent']}")
-
-        return "Previous conversation:" + "".join(context_parts)
-
-# Test memory functionality
-async def test_memory_agent():
-    agent = MemoryAgent()
-
-    # Framework maintains conversation context automatically
-    response1 = await agent.chat("My name is Sarah")
-    response2 = await agent.chat("What's my name?")  # Agent remembers Sarah
-
-    return response1, response2
-```
-
-## Step 4: Framework Error Handling
-
-### Built-in Robustness
-
-SpoonOS provides automatic error handling and robustness features:
-
-```python
-class SimpleAgent:
-    def __init__(self):
-        # Framework handles all error cases automatically
-        self.agent = create_enhanced_agent()
-
-    async def run(self, message: str) -> str:
-        # Framework provides:
-        # - Automatic retry with exponential backoff
-        # - Provider fallback (OpenAI -> Anthropic -> Google)
-        # - Tool error recovery with graceful degradation
-        # - Timeout handling with configurable limits
-        return await self.agent.run(message)
-
-# Simple usage - no error handling needed
-async def test_agent():
-    agent = SimpleAgent()
-
-    # Framework handles all error scenarios automatically
-    response = await agent.run("Hello!")
-    response = await agent.run("Perform a complex analysis")
-
-    return response
-```
-
-## Step 5: Configuration and Deployment
-
-### Configurable Agent
-
-```python
-import json
-from pathlib import Path
-
-class ConfigurableAgent:
-    def __init__(self, config_path: str = "agent_config.json"):
-        self.config = self.load_config(config_path)
-        self.agent = self.create_agent_from_config()
-
-    def load_config(self, config_path: str) -> dict:
-        config_file = Path(config_path)
-        if config_file.exists():
-            with open(config_file, 'r') as f:
-                return json.load(f)
-        else:
-            # Default configuration
-            default_config = {
-                "llm": {
-                    "provider": "gemini",
-                    "model": "gemini-2.5-pro",
-                    "temperature": 0.3
-                },
-                "tools": ["crypto_tools", "greeting_tool"],
-                "memory": {
-                    "enabled": True,
-                    "max_history": 10
-                }
-            }
-            # Save default config
-            with open(config_file, 'w') as f:
-                json.dump(default_config, f, indent=2)
-            return default_config
-
-    def create_agent_from_config(self):
-        # Create LLM from config
-        llm_config = self.config["llm"]
-        llm = ChatBot(
-            model_name=llm_config["model"],
-            llm_provider=llm_config["provider"],
-            temperature=llm_config["temperature"]
-        )
-
-        # Create tools from config
-        tools = []
-        if "crypto_tools" in self.config["tools"]:
-            tools.extend(get_crypto_tools())
-        if "greeting_tool" in self.config["tools"]:
-            tools.append(GreetingTool())
-
-        return SpoonReactAI(llm=llm, tools=tools)
-
-    async def run(self, message: str) -> str:
-        return await self.agent.run(message)
-
-# Example configuration file (agent_config.json)
-example_config = {
-    "llm": {
-        "provider": "anthropic",
-        "model": "claude-sonnet-4-20250514",
-        "temperature": 0.1
-    },
-    "tools": ["crypto_tools", "greeting_tool"],
-    "memory": {
-        "enabled": True,
-        "max_history": 5
-    }
-}
-```
-
-## Step 6: Testing Your Agent
-
-### Unit Tests
-
-```python
-import pytest
-from unittest.mock import AsyncMock, patch
-
-class TestMyAgent:
-    @pytest.fixture
-    async def agent(self):
-        return create_enhanced_agent()
-
-    @pytest.mark.asyncio
-    async def test_basic_greeting(self, agent):
-        with patch.object(agent, 'run', new_callable=AsyncMock) as mock_run:
-            mock_run.return_value = "Hello! How can I help you?"
-
-            response = await agent.run("Hello")
-            assert "Hello" in response
-            mock_run.assert_called_once_with("Hello")
-
-    @pytest.mark.asyncio
-    async def test_crypto_tool_integration(self, agent):
-        # Test that crypto tools are available
-        tool_names = [tool.name for tool in agent.tools]
-        assert "get_price" in tool_names or any("crypto" in name.lower() for name in tool_names)
-
-# Run tests
-# pytest test_my_agent.py -v
-```
-
-### Integration Tests
-
-```python
-async def integration_test():
-    """Test complete agent workflow"""
-    agent = create_enhanced_agent()
-
-    # Framework provides built-in validation and testing
-    response1 = await agent.run("Hello")
-    response2 = await agent.run("What's the Bitcoin price?")
-    response3 = await agent.run("Give me a casual greeting for Alice")
-
-    # Framework automatically validates responses and tool execution
-    return all([response1, response2, response3])
-
-# Run integration tests
-if __name__ == "__main__":
-    result = asyncio.run(integration_test())
-```
-
-## Complete Example
-
-Here's the complete, production-ready agent:
+> **Note:** This basic example only requires `OPENAI_API_KEY` - no additional API keys needed.
 
 ```python
 import asyncio
-import json
+from spoon_ai.agents import SpoonReactAI
+from spoon_ai.chat import ChatBot
+from spoon_toolkits import WebScraperTool
+
+# Create your agent with web scraping capability
+agent = SpoonReactAI(
+    llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"),
+    tools=[WebScraperTool()],
+    system_prompt="You are a helpful assistant that can read web pages."
+)
+
+# Run the agent
+async def main():
+    response = await agent.run(
+        "Scrape https://news.ycombinator.com and tell me the top 3 stories"
+    )
+    print(response)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## Build a Real-World Agent
+
+Next, build a practical research assistant agent that demonstrates key production concepts:
+
+1. **Detailed system prompts** for better agent behavior
+2. **Multiple tools** that fetch real data from the web
+3. **Model configuration** with built-in conversational memory
+4. **Create and run the agent** as a fully functional assistant
+
+Let's walk through each step:
+
+### Step 1: Define the System Prompt
+
+The system prompt defines your agent's role and behavior. Keep it specific and actionable:
+
+```python
+SYSTEM_PROMPT = """You are an expert research assistant who helps users find and analyze information.
+
+You have access to these tools:
+- desearch_web_search: Search the web for general information
+- desearch_ai_search: Search across web, Reddit, Wikipedia, YouTube, and arXiv
+- web_scraper: Fetch and read full content from any URL
+
+When a user asks for information:
+1. Use the appropriate search tool to find relevant sources
+2. If needed, use web_scraper to read full articles
+3. Synthesize the information and provide clear, cited answers
+
+Always cite your sources with URLs when providing information."""
+```
+
+### Step 2: Create Tools
+
+[Tools](/how-to-guides/add-custom-tools) let a model interact with external systems by calling functions you define.
+
+SpoonOS provides pre-built tools that fetch real data:
+
+```python
+from spoon_toolkits import DesearchWebSearchTool, DesearchAISearchTool, WebScraperTool
+
+# Web search - searches the web and returns real results
+web_search = DesearchWebSearchTool()
+
+# AI search - searches across multiple platforms (web, Reddit, Wikipedia, YouTube, arXiv)
+ai_search = DesearchAISearchTool()
+
+# Web scraper - fetches and cleans content from any URL
+scraper = WebScraperTool()
+```
+
+> **💡 Tip**
+>
+> Tools should be well-documented: their name, description, and argument names become part of the model's prompt. Use clear, descriptive names and comprehensive parameter descriptions.
+
+### Step 3: Configure Your Model
+
+Set up your language model with built-in memory management:
+
+```python
+from spoon_ai.chat import ChatBot
+
+llm = ChatBot(
+    llm_provider="openai",
+    model_name="gpt-5.1-chat-latest",
+    enable_short_term_memory=True,
+    short_term_memory_config={
+        "max_tokens": 8000,
+        "strategy": "summarize",  # or "trim"
+        "messages_to_keep": 6,
+    }
+)
+```
+
+The `enable_short_term_memory=True` option automatically manages conversation history:
+
+- **summarize**: Summarizes older messages when token limit is reached
+- **trim**: Removes older messages to stay within token limits
+
+SpoonOS supports multiple providers out of the box:
+
+| Provider | Example Models | Documentation |
+|----------|---------------|---------------|
+| `openai` | gpt-5.1-chat-latest, gpt-5-mini, gpt-4.1, o3, o4-mini | [OpenAI Models](https://platform.openai.com/docs/models) |
+| `anthropic` | claude-opus-4-5, claude-sonnet-4-5, claude-haiku-4-5 | [Anthropic Models](https://docs.anthropic.com/en/docs/about-claude/models) |
+| `gemini` | gemini-3-pro-preview, gemini-2.5-flash | [Gemini Models](https://ai.google.dev/gemini-api/docs/models/gemini) |
+| `deepseek` | deepseek-chat, deepseek-reasoner | [DeepSeek Models](https://api-docs.deepseek.com/quick_start/pricing) |
+| `openrouter` | 100+ models | [OpenRouter Models](https://openrouter.ai/models) |
+
+### Step 4: Create and Run the Agent
+
+Now assemble your agent with all the components and run it!
+
+```python
+import asyncio
+from spoon_ai.agents import SpoonReactAI
+from spoon_ai.chat import ChatBot
+from spoon_toolkits import DesearchWebSearchTool, DesearchAISearchTool, WebScraperTool
+
+# System prompt
+SYSTEM_PROMPT = """You are an expert research assistant who helps users find and analyze information.
+
+You have access to these tools:
+- desearch_web_search: Search the web for general information
+- desearch_ai_search: Search across web, Reddit, Wikipedia, YouTube, and arXiv
+- web_scraper: Fetch and read full content from any URL
+
+Always cite your sources with URLs when providing information."""
+
+# Configure model with memory
+llm = ChatBot(
+    llm_provider="openai",
+    model_name="gpt-5.1-chat-latest",
+    enable_short_term_memory=True,
+    short_term_memory_config={
+        "max_tokens": 8000,
+        "strategy": "summarize",
+        "messages_to_keep": 6,
+    }
+)
+
+# Create agent with real data tools
+agent = SpoonReactAI(
+    llm=llm,
+    system_prompt=SYSTEM_PROMPT,
+    tools=[
+        DesearchWebSearchTool(),
+        DesearchAISearchTool(),
+        WebScraperTool(),
+    ],
+    max_steps=10,
+)
+
+# Run agent with conversation
+async def main():
+    # First query - searches the web for real data
+    response = await agent.run(
+        "What are the latest developments in AI agents?"
+    )
+    print("Agent:", response)
+
+    # Follow-up query - agent remembers context
+    response = await agent.run(
+        "Can you find academic papers about that topic on arXiv?"
+    )
+    print("Agent:", response)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Optional: Stream Responses
+
+If you want token-by-token output for a more interactive experience:
+
+```python
+async def stream_demo():
+    llm = ChatBot(
+        llm_provider="openai",
+        model_name="gpt-5.1-chat-latest"
+    )
+
+    messages = [
+        {"role": "user", "content": "Explain machine learning in 3 sentences"}
+    ]
+
+    async for chunk in llm.astream(messages=messages):
+        print(chunk.delta or "", end="", flush=True)
+    print()  # New line at end
+```
+
+## Full Example Code
+
+<details>
+<summary>Click to expand complete production-ready example</summary>
+
+```python
+"""
+Production-ready SpoonOS research assistant agent.
+
+This example demonstrates:
+- Real-time web search via Desearch tools
+- Web page scraping for full content
+- Conversation memory with automatic summarization
+"""
+import asyncio
 import logging
-import time
-from pathlib import Path
-from typing import List, Dict, Any
 
 from spoon_ai.agents import SpoonReactAI
 from spoon_ai.chat import ChatBot
-from spoon_ai.tools.crypto_tools import get_crypto_tools
-from spoon_ai.tools.base import BaseTool
+from spoon_toolkits import DesearchWebSearchTool, DesearchAISearchTool, WebScraperTool
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class GreetingTool(BaseTool):
-    name: str = "greeting_tool"
-    description: str = "Generate personalized greetings"
-    parameters: dict = {
-        "type": "object",
-        "properties": {
-            "name": {"type": "string", "description": "Person's name"},
-            "style": {"type": "string", "description": "Greeting style (formal/casual)"}
-        },
-        "required": ["name"]
-    }
+# Define system prompt
+SYSTEM_PROMPT = """You are an expert research assistant who helps users find and analyze information.
 
-    async def execute(self, name: str, style: str = "casual") -> str:
-        if style == "formal":
-            return f"Good day, {name}. It's a pleasure to meet you."
-        else:
-            return f"Hey {name}! Nice to meet you! 👋"
+You have access to these tools:
+- desearch_web_search: Search the web for general information
+- desearch_ai_search: Search across web, Reddit, Wikipedia, YouTube, and arXiv platforms
+- web_scraper: Fetch and read full content from any URL
 
-class ProductionAgent:
-    def __init__(self, config_path: str = "agent_config.json"):
-        self.config = self.load_config(config_path)
-        self.agent = self.create_agent()
-        self.conversation_history = []
-        self.logger = logging.getLogger(self.__class__.__name__)
+When a user asks for information:
+1. Use the appropriate search tool to find relevant sources
+2. If needed, use web_scraper to read full articles for deeper analysis
+3. Synthesize the information and provide clear, cited answers
 
-    def load_config(self, config_path: str) -> dict:
-        config_file = Path(config_path)
-        if config_file.exists():
-            with open(config_file, 'r') as f:
-                return json.load(f)
+Always cite your sources with URLs when providing information.
+Be thorough but concise in your analysis."""
 
-        # Default configuration
-        default_config = {
-            "llm": {
-                "provider": "openai",
-                "model": "gpt-4.1",
-                "temperature": 0.3
-            },
-            "tools": ["crypto_tools", "greeting_tool"],
-            "memory": {"enabled": True, "max_history": 10},
-            "retry_attempts": 3,
-            "timeout": 30
+
+def create_agent() -> SpoonReactAI:
+    """Create and configure the research assistant agent."""
+
+    # Configure model with memory management
+    llm = ChatBot(
+        llm_provider="openai",
+        model_name="gpt-5.1-chat-latest",
+        enable_short_term_memory=True,
+        short_term_memory_config={
+            "max_tokens": 8000,
+            "strategy": "summarize",
+            "messages_to_keep": 6,
         }
+    )
 
-        with open(config_file, 'w') as f:
-            json.dump(default_config, f, indent=2)
+    # Assemble real data tools
+    tools = [
+        DesearchWebSearchTool(),
+        DesearchAISearchTool(),
+        WebScraperTool(),
+    ]
 
-        return default_config
+    # Create agent
+    agent = SpoonReactAI(
+        llm=llm,
+        system_prompt=SYSTEM_PROMPT,
+        tools=tools,
+        max_steps=10,
+    )
 
-    def create_agent(self):
-        llm_config = self.config["llm"]
-        llm = ChatBot(
-            model_name=llm_config["model"],
-            llm_provider=llm_config["provider"],
-            temperature=llm_config["temperature"]
-        )
+    logger.info("Agent created with %d tools", len(tools))
+    return agent
 
-        tools = []
-        if "crypto_tools" in self.config["tools"]:
-            tools.extend(get_crypto_tools())
-        if "greeting_tool" in self.config["tools"]:
-            tools.append(GreetingTool())
 
-        return SpoonReactAI(llm=llm, tools=tools)
+async def interactive_session():
+    """Run an interactive chat session with the agent."""
+    agent = create_agent()
 
-    async def chat(self, message: str) -> str:
-        # Framework handles timeouts and errors automatically
-        if self.config["memory"]["enabled"]:
-            context = self.build_context()
-            full_message = f"{context}\n\nUser: {message}"
-        else:
-            full_message = message
+    print("\nResearch Assistant Agent Ready!")
+    print("Type 'quit' or 'exit' to end the session.\n")
 
-        # Framework provides automatic timeout and error handling
-        response = await self.agent.run(full_message)
-
-        # Store in memory
-        if self.config["memory"]["enabled"]:
-            self.store_conversation(message, response)
-
-        return response
-
-    def build_context(self) -> str:
-        if not self.conversation_history:
-            return "This is the start of our conversation."
-
-        max_history = self.config["memory"]["max_history"]
-        recent = self.conversation_history[-max_history:]
-
-        context_parts = ["Previous conversation:"]
-        for exchange in recent:
-            context_parts.append(f"User: {exchange['user']}")
-            context_parts.append(f"Agent: {exchange['agent']}")
-
-        return "
-".join(context_parts)
-
-    def store_conversation(self, user_message: str, agent_response: str):
-        self.conversation_history.append({
-            "user": user_message,
-            "agent": agent_response,
-            "timestamp": time.time()
-        })
-
-        # Limit history size
-        max_history = self.config["memory"]["max_history"]
-        if len(self.conversation_history) > max_history:
-            self.conversation_history = self.conversation_history[-max_history:]
-
-# Usage example
-async def main():
-    agent = ProductionAgent()
-
-    # Simple chat interface - framework handles all complexity
     while True:
-        user_input = input("You: ")
-        if user_input.lower() in ['quit', 'exit', 'bye']:
-            break
+        try:
+            user_input = input("You: ").strip()
 
-        response = await agent.chat(user_input)
-        # Response is automatically formatted and error-free
+            if not user_input:
+                continue
+
+            if user_input.lower() in ['quit', 'exit', 'bye']:
+                print("Goodbye!")
+                break
+
+            # Run agent and get response
+            response = await agent.run(user_input)
+            print(f"\nAgent: {response}\n")
+
+        except KeyboardInterrupt:
+            print("\nSession ended.")
+            break
+        except Exception as e:
+            logger.error("Error: %s", e)
+            print(f"Error occurred: {e}")
+
+
+async def demo_queries():
+    """Demonstrate agent capabilities with sample queries."""
+    agent = create_agent()
+
+    queries = [
+        "Search for the latest news about large language models",
+        "Find academic papers about transformer architectures on arXiv",
+        "Scrape https://news.ycombinator.com and summarize the top stories",
+    ]
+
+    print("\nRunning Demo Queries\n" + "=" * 50)
+
+    for query in queries:
+        print(f"\nUser: {query}")
+        response = await agent.run(query)
+        print(f"Agent: {response}")
+
+    print("\n" + "=" * 50 + "\nDemo Complete!")
+
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import sys
+
+    if "--demo" in sys.argv:
+        asyncio.run(demo_queries())
+    else:
+        asyncio.run(interactive_session())
 ```
+
+</details>
+
+## What You've Built
+
+Congratulations! You now have an AI agent that can:
+
+- **Search the web** in real-time using Desearch tools
+- **Read full web pages** with the WebScraper tool
+- **Find academic papers** across platforms like arXiv
+- **Remember conversations** via short-term memory
+- **Use multiple tools** intelligently based on user queries
+- **Stream responses** for real-time output
 
 ## Next Steps
 
 Now that you've built your first agent, explore these advanced topics:
 
-- [Add Custom Tools](./add-custom-tools.md) - Create specialized tools
+- [Add Custom Tools](./add-custom-tools.md) - Create specialized tools for your domain
+- [Graph-Based Workflows](./graph-based-workflows.md) - Build complex multi-agent systems
+- [MCP Integration](./mcp-integration.md) - Connect to external tool servers
+- [Long-Term Memory](./long-term-memory.md) - Integrate Mem0 for persistent knowledge
+
+---
+
+**📝 Edit this page** — Found an issue? [Edit the source on GitHub](https://github.com/XSpoonAi/spoon-ai/edit/main/cookbook/docs/how-to-guides/build-first-agent.md).

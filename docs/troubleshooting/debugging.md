@@ -268,10 +268,6 @@ class TracedAgent(BaseAgent):
     @trace_execution
     async def run(self, message: str, **kwargs):
         return await super().run(message, **kwargs)
-    
-    @trace_execution
-    async def chat(self, messages, **kwargs):
-        return await super().chat(messages, **kwargs)
 ```
 
 ## Tool Debugging
@@ -1037,4 +1033,4 @@ class DebugCLI(BaseCLI):
 - [Common Issues](./common-issues.md)
 - [Performance Optimization](./performance.md)
 - [Logging Configuration](../getting-started/configuration.md)
-- [System Monitoring](../api-reference/cli/commands.md)"}
+- [System Monitoring](../api-reference/index)"}

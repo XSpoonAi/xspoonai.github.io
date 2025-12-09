@@ -567,5 +567,4 @@ export-metrics --format json --output metrics.json
 
 - [Troubleshooting](./troubleshooting.md) - Solve advanced issues
 - [Configuration Guide](./configuration.md) - Master configuration options
-- [API Reference](../api-reference/cli/commands.md) - Complete command reference
-
+- [API Reference](../api-reference/index) - Complete command reference

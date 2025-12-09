@@ -2,27 +2,15 @@
 sidebar_position: 5
 ---
 
-# Agents
+# Agents (Detailed Guide)
 
-This guide provides a comprehensive walkthrough for developing and configuring agents in the SpoonOS Core Developer Framework (SCDF). We will use practical examples to illustrate key concepts, including agent definition, tool integration, and execution.
-
-Agents are the core building blocks of SpoonOS. They combine language models with tools to create intelligent, autonomous systems that can reason, plan, and take actions.
-
-## What is an Agent?
-
-An agent in SpoonOS is an intelligent entity that:
-
-- **Reasons** about problems and situations
-- **Plans** sequences of actions to achieve goals
-- **Executes** actions using available tools
-- **Learns** from interactions and feedback
-- **Adapts** to new situations and requirements
+This guide provides a comprehensive walkthrough for developing and configuring agents in SpoonOS. Agents combine language models with tools to create intelligent, autonomous systems that reason about problems, plan action sequences, execute tools, and adapt based on feedback.
 
 ## Agent Architecture
 
 SpoonOS agents follow the **ReAct (Reasoning + Acting)** pattern:
 
-```
+```text
 Thought → Action → Observation → Thought → Action → ...
 ```
 
@@ -73,7 +61,7 @@ class SpoonMacroAnalysisAgent(SpoonReactMCP):
 
 **Stdio-based Transport:**
 ```python
-from spoon_ai.tools import MCPTool
+from spoon_ai.tools.mcp_tool import MCPTool
 
 tavily_tool = MCPTool(
     name="tavily-search",
@@ -145,7 +133,7 @@ class MyAgent(SpoonReactAI):
         super().__init__(**kwargs)
 
         # Configure LLM
-        self.llm = ChatBot(model_name="gpt-4.1")
+        self.llm = ChatBot(model_name="gpt-5.1-chat-latest")
 
         # Set system prompt
         self.system_prompt = "You are a helpful AI assistant."
@@ -233,7 +221,7 @@ class ResearchAgent(SpoonReactAI):
         super().__init__(**kwargs)
 
         # Configure LLM
-        self.llm = ChatBot(model_name="gpt-4.1")
+        self.llm = ChatBot(model_name="gpt-5.1-chat-latest")
 
         # Set up MCP tools
         tools = []
@@ -304,7 +292,7 @@ class ConfigurableAgent(SpoonReactAI):
 
         # Configure LLM with specific parameters
         self.llm = ChatBot(
-            model_name="gpt-4.1",
+            model_name="gpt-5.1-chat-latest",
             temperature=0.7,        # Creativity level
             max_tokens=4096,        # Response length limit
             timeout=60              # Request timeout
@@ -328,7 +316,7 @@ from spoon_ai.chat import ChatBot
 
 # Create agent instance
 agent = SpoonReactAI(
-    llm=ChatBot(model_name="gpt-4.1"),
+    llm=ChatBot(model_name="gpt-5.1-chat-latest"),
     system_prompt="You are a helpful assistant.",
     max_steps=15
 )
@@ -432,7 +420,7 @@ simple_agent = ToolCallAgent(
 )
 
 complex_agent = ToolCallAgent(
-    llm=ChatBot(model_name="gpt-4.1")        # More capable
+    llm=ChatBot(model_name="gpt-5.1-chat-latest")        # More capable
 )
 
 # Set reasonable limits
@@ -452,7 +440,7 @@ from unittest.mock import AsyncMock
 async def test_weather_agent():
     # Mock the LLM
     mock_llm = AsyncMock()
-    mock_llm.chat.return_value = "The weather in Paris is sunny."
+    mock_llm.ask.return_value = "The weather in Paris is sunny."
 
     # Create agent with mock
     agent = WeatherAgent(llm=mock_llm)
@@ -520,7 +508,7 @@ class MCPEnabledAgent(SpoonReactMCP):
         super().__init__(**kwargs)
 
         # Configure LLM
-        self.llm = ChatBot(model_name="gpt-4.1")
+        self.llm = ChatBot(model_name="gpt-5.1-chat-latest")
 
         # Configure stdio MCP tool
         search_tool = MCPTool(
@@ -715,7 +703,7 @@ class AdvancedConfigAgent(SpoonReactMCP):
     def __init__(self, **kwargs):
         # Advanced LLM configuration
         llm_config = {
-            "model_name": "gpt-4.1",
+            "model_name": "gpt-5.1-chat-latest",
             "temperature": 0.3,          # Creativity control
             "max_tokens": 4096,          # Maximum response length
             "top_p": 0.9,               # Nucleus sampling parameter
@@ -859,7 +847,7 @@ class DynamicConfigAgent(SpoonReactMCP):
         "system_prompt": "You are an advanced AI agent..."
       },
       "llm_config": {
-        "model_name": "gpt-4.1",
+        "model_name": "gpt-5.1-chat-latest",
         "temperature": 0.3,
         "max_tokens": 4096,
         "top_p": 0.9,
@@ -1037,7 +1025,7 @@ class DynamicConfigAgent(SpoonReactMCP):
 
 ### 📖 **Additional Documentation**
 
-- **[API Reference](../api-reference/agents/base-agent.md)** - Complete agent API documentation
+- **[API Reference](../api-reference/spoon_ai/agents/base/)** - Complete agent API documentation
 - **[Performance Optimization](../troubleshooting/performance.md)** - Agent performance tuning
 - **[Troubleshooting](../troubleshooting/common-issues.md)** - Common issues and solutions
 

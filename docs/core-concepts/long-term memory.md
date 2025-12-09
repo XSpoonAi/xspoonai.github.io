@@ -1,43 +1,107 @@
-# Long-Term Memory with Mem0
+# Long-Term Memory
 
-Spoon-core ships a lightweight Mem0 wrapper (`SpoonMem0`) that lets agents persist and recall user context across sessions. This page shows the key API and a minimal end-to-end demo.
+Long-term memory lets your agent **remember across sessions**. Unlike short-term memory (which resets each conversation), long-term memory persists indefinitely—enabling personalized experiences, learning from past interactions, and building knowledge over time.
 
-## What SpoonMem0 does
-- Wraps `mem0.MemoryClient` with safe defaults and fallbacks.
-- Builds metadata/filters with `user_id`/`agent_id` so memories stay scoped per user (injects `user_id` into filters/metadata if absent, and passes collection when set).
-- Provides sync/async helpers to add, search, and list memories.
-- Gracefully disables itself if `mem0ai` or `MEM0_API_KEY` is missing; when the client isn’t ready or a call fails, helpers return empty results rather than raising.
+## Why Long-Term Memory?
 
-Core class: `spoon_ai.memory.mem0_client.SpoonMem0`
+Without long-term memory, every conversation starts from zero:
 
-### Initialization
+```text
+Session 1: User: "I prefer dark mode"    Agent: "Got it!"
+Session 2: User: "Change my settings"    Agent: "What settings?" ← forgot everything
+```
+
+With long-term memory:
+
+```text
+Session 1: User: "I prefer dark mode"    Agent: "Got it!" → saves to memory
+Session 2: User: "Change my settings"    Agent: "I'll enable dark mode for you" ← remembers
+```
+
+## How It Works
+
+SpoonOS integrates with [Mem0](https://mem0.ai), a managed memory service that handles storage, indexing, and semantic search:
+
+```mermaid
+graph LR
+    A[Agent] -->|"store"| B[SpoonMem0]
+    B -->|"embed & index"| C[Mem0 Cloud]
+    A -->|"search"| B
+    B -->|"semantic query"| C
+    C -->|"relevant memories"| B
+    B -->|"results"| A
+```
+
+| Feature | How It Helps |
+|---------|--------------|
+| **Semantic search** | Find memories by meaning: "user preferences" finds "I like dark mode" |
+| **Auto-scoping** | Memories are isolated per user/agent automatically |
+| **Graceful fallback** | If Mem0 is down, operations return empty (no crashes) |
+
+## What Can You Store?
+
+| Memory Type | Example |
+|-------------|---------|
+| **Preferences** | "User prefers concise responses" |
+| **Facts** | "User's portfolio includes BTC and ETH" |
+| **Context** | "User is a day trader focused on meme coins" |
+| **History** | "User asked about Solana DeFi protocols last week" |
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai mem0ai
+export MEM0_API_KEY="your-mem0-key"
+```
+
 ```python
 from spoon_ai.memory.mem0_client import SpoonMem0
 
-mem0 = SpoonMem0(
-    {
-        "api_key": "YOUR_MEM0_API_KEY",        # or set MEM0_API_KEY env var
-        "user_id": "user_123",                 # or agent_id
-        "collection": "my_namespace",          # optional namespace/collection
-        "metadata": {"project": "demo"},       # merged into every write
-        "filters": {"project": "demo"},        # merged into every query
-        "async_mode": False,                   # sync writes by default
-    }
-)
-if not mem0.is_ready():
-    print("Mem0 not available")
+mem0 = SpoonMem0({"user_id": "user_123"})
+
+# Store and search
+mem0.add_text("User prefers dark mode")
+results = mem0.search("UI preferences")
+print(results)
 ```
 
-### Add memory
+---
+
+**Core class:** `spoon_ai.memory.mem0_client.SpoonMem0`
+
+### Initialization
+
 ```python
-# add a conversation (sync)
+from spoon_ai.memory.mem0_client import SpoonMem0
+
+mem0 = SpoonMem0({
+    "api_key": "YOUR_MEM0_API_KEY",   # or MEM0_API_KEY env var
+    "user_id": "user_123",            # scope all operations to this user
+    "collection": "my_namespace",     # optional namespace isolation
+    "metadata": {"project": "demo"},  # auto-attached to writes
+    "filters": {"project": "demo"},   # auto-applied to queries
+    "async_mode": False,              # sync writes (default)
+})
+
+if not mem0.is_ready():
+    print("Mem0 service unavailable")
+```
+
+### Add Memory
+
+Store conversation history or individual text:
+
+```python
+# Add conversation messages
 mem0.add_memory([
     {"role": "user", "content": "I love Solana meme coins"},
-    {"role": "assistant", "content": "Got it, will focus on Solana"},
-], user_id="user_123")  # async_mode is taken from mem0_config (defaults to False)
+    {"role": "assistant", "content": "Got it, focusing on Solana"},
+], user_id="user_123")
 
-# add a single text helper
-mem0.add_text("Prefers low gas fees")  # same async_mode default applies
+# Add single text (shorthand)
+mem0.add_text("User prefers low gas fees")
 ```
 
 Async variant: `await mem0.aadd_memory(messages, user_id=...)`

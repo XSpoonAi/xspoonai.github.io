@@ -57,6 +57,8 @@ pip install -r requirements.txt
 python spoon_search_agent.py
 ```
 
+> ℹ️ This example **only uses the MCP client in `spoon_ai`** (`MCPTool` and the `SpoonReactMCP` agent). You do **not** need `spoon-cli`. If you want to self-host a server, run a minimal FastMCP server with `FunctionTool` and connect via `MCPTool`.
+
 #### 🔍 **What to Observe**
 
 **MCP Tool Discovery:**
@@ -103,10 +105,6 @@ Overall market sentiment is cautiously optimistic with strong institutional...
 #### 📁 **Source Code & Documentation**
 
 - **GitHub Link**: [MCP Spoon Search Agent](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
-- **Related Files**:
-  - `spoon-core/examples/mcp/spoon_search_agent.py` - Core MCP implementation
-  - `spoon-core/spoon_ai/tools/mcp_tools.py` - MCP tool integration
-  - `docs/core-concepts/mcp-protocol.md` - MCP protocol documentation
 
 #### 🎓 **Learning Objectives**
 
@@ -124,6 +122,3 @@ This example teaches you:
 - **Data Correlation** - Effective synthesis of diverse information sources
 - **API Rate Limiting** - Intelligent handling of API limitations and quotas
 - **Fallback Mechanisms** - Robust error recovery when tools or APIs are unavailable
-
-
-

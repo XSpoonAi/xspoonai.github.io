@@ -1,8 +1,93 @@
-# x402 Payments in SpoonOS
+# x402 Payments
 
-x402 is the payment rail SpoonOS uses to gate agent capabilities behind verifiable, instant crypto authorizations. This page explains the concepts you need before wiring the APIs or running demos.
+x402 enables **agents to pay for things autonomously**. When an agent hits a paywall (HTTP 402), it automatically signs a crypto payment, retries the request, and continues—no human intervention required. This creates a native monetization layer for AI services.
 
-## Mental model
+## Why x402?
+
+Traditional payments don't work for autonomous agents:
+
+| Problem | With Traditional Payments | With x402 |
+|---------|---------------------------|-----------|
+| Agent hits paywall | ❌ Wait for human to enter credit card | ✅ Auto-sign and retry |
+| Micropayments ($0.001) | ❌ Fees exceed payment | ✅ Low-cost on L2s |
+| Settlement | ❌ 1-3 days | ✅ Instant |
+| Verification | ❌ Trust Stripe API | ✅ Cryptographic proof |
+
+## How It Works
+
+```mermaid
+sequenceDiagram
+    participant Agent
+    participant API Server
+    participant x402 Facilitator
+    participant Blockchain
+
+    Agent->>API Server: GET /premium-data
+    API Server-->>Agent: 402 Payment Required (price, recipient)
+    Agent->>Agent: Sign EIP-712 payment
+    Agent->>API Server: GET /premium-data + X-PAYMENT header
+    API Server->>x402 Facilitator: Verify signature
+    x402 Facilitator->>Blockchain: Execute transfer
+    Blockchain-->>x402 Facilitator: Confirmed
+    x402 Facilitator-->>API Server: Valid
+    API Server-->>Agent: 200 OK + data
+```
+
+| Step | What Happens |
+|------|--------------|
+| **1. Request** | Agent calls a paid API endpoint |
+| **2. 402 Response** | Server returns payment requirements (amount, token, recipient) |
+| **3. Sign** | Agent signs an EIP-712 typed-data payload (no gas yet) |
+| **4. Retry** | Agent sends request again with signed payment header |
+| **5. Verify & Execute** | Facilitator verifies signature and executes transfer on-chain |
+| **6. Success** | Server returns the requested data |
+
+## x402 vs Alternatives
+
+| Aspect | x402 | Stripe | Lightning |
+|--------|------|--------|-----------|
+| **Settlement** | Instant | 1-3 days | Instant |
+| **Agent autonomy** | Auto-sign | Needs webhook | Manual channel |
+| **Micropayments** | ✅ L2 fees | ❌ High fees | ✅ |
+| **Verification** | Cryptographic | API call | Node verification |
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai x402
+export PRIVATE_KEY="your-wallet-private-key"
+export X402_RECEIVER_ADDRESS="0xYourReceiverWallet"
+```
+
+```python
+import asyncio
+from spoon_ai.payments import X402PaymentService, X402PaymentRequest
+
+# Initialize the payment service
+service = X402PaymentService()
+
+async def main():
+    # Create a payment request
+    request = X402PaymentRequest(
+        amount_usdc="0.01",  # Amount in USDC
+        resource="/premium-data",
+        description="Access to premium data"
+    )
+
+    # Sign and create payment receipt
+    receipt = await service.sign_and_pay(request)
+    print(f"Payment signed: {receipt}")
+
+asyncio.run(main())
+```
+
+> **Note:** For agent-based x402 payments, the agent handles 402 responses automatically when configured with payment capabilities. See the full examples in the x402 package for complete integration patterns.
+
+---
+
+## Components
 
 | Piece | Role inside SpoonOS |
 | --- | --- |
@@ -36,30 +121,34 @@ Key points:
 ## Runtime lifecycle
 
 ```mermaid
-flowchart TD
-    A[User task -> SpoonReact agent] --> B[Step 1: http_probe tool<br/>Unauthenticated probe of paywalled URL]
-    B -->|HTTP 200| J[Step 4: Agent parses body/headers<br/>No payment required]
-    B -->|HTTP 402| C[Step 2: x402_paywalled_request tool<br/>Parse paywall requirements]
-    C --> D[Merge paywall + config overrides]
-    D --> E[Signer selection<br/>PRIVATE_KEY preferred, Turnkey fallback]
-    E --> F[Typed-data build<br/>TransferWithAuthorization payload]
-    F --> G[Signature via eth_account or Turnkey]
-    G --> H[Encode header -> X-PAYMENT]
-    H --> I[Step 3: Paid retry with X-PAYMENT header]
-    I --> P1
+sequenceDiagram
+    participant User
+    participant Agent
+    participant Paywall as Paywall Router (/x402)
+    participant Facilitator
 
-    subgraph "Paywall server (FastAPI /x402)"
-        P1[Incoming request carrying X-PAYMENT] --> P2[verify_payment -> Facilitator API]
-        P2 --> P3{Valid payment?}
-        P3 -- No --> P4[Return HTTP 402 + error]
-        P3 -- Yes --> P5[Optional settle_payment]
-        P5 --> P6[Invoke agent/tooling]
-        P6 --> P7[Return HTTP 200 + X-PAYMENT-RESPONSE]
+    User->>Agent: Task / query
+    Agent->>Paywall: http_probe (unauthenticated)
+    alt Paywall open
+        Paywall-->>Agent: HTTP 200 (no payment)
+        Agent-->>User: Return content / summary
+    else Paywalled (HTTP 402)
+        Paywall-->>Agent: 402 + requirements
+        Agent->>Agent: Merge requirements + config overrides
+        Agent->>Agent: Select signer (PRIVATE_KEY or Turnkey)
+        Agent->>Agent: Build typed-data payload
+        Agent->>Agent: Sign -> X-PAYMENT header
+        Agent->>Paywall: Retry with X-PAYMENT
+        Paywall->>Facilitator: verify_payment (optional settle)
+        Facilitator-->>Paywall: Valid? + receipt
+        alt Invalid
+            Paywall-->>Agent: 402 / error
+        else Valid
+            Paywall-->>Agent: 200 + X-PAYMENT-RESPONSE
+            Agent->>Agent: Log receipt / update memory
+            Agent-->>User: Protected content + summary
+        end
     end
-
-    P4 -.-> C
-    P7 --> J
-    J --> K[Memory/log update + ReAct summary output]
 ```
 
 If the paid retry fails (for example `verify_payment` rejects the header or the facilitator reports an error), the paywall server immediately returns another `402` or error payload and the agent decides whether to run `x402_paywalled_request` again with corrected parameters. A successful verification moves straight into settlement and target agent execution, so there is no additional retry cycle once the `X-PAYMENT` header is accepted.

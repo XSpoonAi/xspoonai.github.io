@@ -1,57 +1,83 @@
+# Short-Term Memory
+
+Short-term memory keeps track of the **current conversation**. It's what lets your agent remember "My name is Alice" three messages ago, and what prevents context windows from overflowing in long conversations.
+
+## The Problem
+
+LLMs have limited context windows. As conversations grow:
+
+```text
+Turn 1:  User: "My name is Alice"          ← 10 tokens
+Turn 50: User: "What's my name again?"     ← 50,000 tokens total
+         Agent: "I don't know" ← context overflow, lost earlier messages
+```
+
+Naive solutions have tradeoffs:
+
+| Approach | Problem |
+|----------|---------|
+| **Keep everything** | Exceeds context window, costs explode |
+| **Drop old messages** | Loses important context ("My name is Alice") |
+| **Fixed sliding window** | Arbitrary cutoff, may drop critical info |
+
+## SpoonOS Solution
+
+`ShortTermMemoryManager` intelligently manages context:
+
+```mermaid
+graph LR
+    A[New Message] --> B{Token Budget?}
+    B -->|Under limit| C[Add to history]
+    B -->|Over limit| D[Trim Strategy]
+    D --> E[Summarize old messages]
+    E --> F[Keep summary + recent]
+    F --> C
+```
+
+| Feature | What It Does |
+|---------|--------------|
+| **Token-aware** | Tracks actual token count, not message count |
+| **Smart trimming** | Multiple strategies: oldest first, from start, from end |
+| **Summarization** | Condenses old messages into a summary when needed |
+| **Built-in** | `ChatBot` handles this automatically—no extra code |
+
+## When To Use
+
+- **Chatbots** with multi-turn conversations
+- **Agents** that need to remember earlier context
+- **Long sessions** that would exceed context limits
+- **Cost optimization** to reduce token usage
 
 ---
 
-## Overview
+## Quick Start
 
-Memory is a system that enables an AI agent to retain information from past interactions.
-For intelligent agents, memory is vital because it allows them to recall previous conversations, learn from feedback, and adapt to user preferences over time. As agents engage in increasingly complex tasks involving many user exchanges, a reliable memory mechanism becomes essential for both efficiency and user experience.
-
-### Short-term memory
-
-Short-term memory allows your application to remember recent interactions within a single thread or conversation.
-A thread groups multiple exchanges in a session, much like how an email client organizes messages into a single conversation.
-
-The conversation history is the most common form of short-term memory. However, long-running conversations pose a major challenge for modern large language models (LLMs):
-a complete history may exceed the model’s context window, leading to context loss or inconsistent responses.
-
-Even when a model supports large context windows, most LLMs still degrade in performance with long contexts—they tend to become distracted by irrelevant or outdated information, respond more slowly, and consume more tokens (and cost).
-
-### Managing context effectively
-
-Chat models receive context through messages, which typically include:
-
-* System messages (instructions or role definitions)
-* User messages (human inputs)
-* Assistant messages (model responses)
-
-As conversations progress, the message list grows continuously.
-Because context windows are finite, applications benefit from strategies that trim, summarize, or forget stale information—keeping the model’s focus sharp while maintaining coherence and reducing computational cost.
-
----
-
-
-##  Quick Start: ChatBot with Built-in Memory
- When you initialise `ChatBot` with `enable_short_term_memory=True` (the default), it creates a `ShortTermMemoryManager` internally. Before every LLM call, the chatbot feeds the running history into the manager, which handles trimming or summarising and (optionally) saving checkpoints.
- You can still access the same manager manually via `chatbot.short_term_memory_manager` if you want to tweak the behaviour or call its methods directly, as shown in the next section.
+```bash
+pip install spoon-ai
+export OPENAI_API_KEY="your-key"
+```
 
 ```python
 import asyncio
 from spoon_ai.chat import ChatBot
 
-chatbot = ChatBot(enable_short_term_memory=True)
+# ChatBot includes built-in short-term memory with auto-trimming
+llm = ChatBot(model_name="gpt-5.1-chat-latest", llm_provider="openai")
 
-messages = [
-    {"role": "user", "content": "Explain blockchain in one sentence."},
-    {"role": "assistant", "content": "A blockchain is an append-only, shared ledger."},
-]
+async def main():
+    await llm.ask([{"role": "user", "content": "My name is Alice"}])
+    await llm.ask([{"role": "user", "content": "What's the capital of France?"}])
+    response = await llm.ask([{"role": "user", "content": "What's my name?"}])  # Remembers "Alice"
+    print(response)
 
-reply = asyncio.run(chatbot.ask(messages))
-print(reply)
+asyncio.run(main())
 ```
 
 ---
 
-##  Manage short-term memory by using `ShortTermMemoryManager`
+## ShortTermMemoryManager
+
+For fine-grained control beyond `ChatBot`'s automatic handling, use `ShortTermMemoryManager` directly:
 
 ```python
 import asyncio
@@ -95,7 +121,6 @@ llm_ready, removals, summary = asyncio.run(
 
 Note: both `summarize_messages()` and `ChatBot.ask()` invoke your configured LLM. Ensure `chatbot.llm_manager`/`chatbot.llm_provider` (and any required API keys or env vars) are set so these examples can run end‑to‑end.
 
-
 ```python
 from spoon_ai.chat import ChatBot
 from spoon_ai.graph.reducers import add_messages
@@ -125,7 +150,7 @@ when summarization trims older turns.
 
 ---
 
-##  Inspecting Thread State and Checkpoints
+## Inspecting Thread State and Checkpoints
 
 every time the graph runs, you can retrieve the latest snapshot (messages plus metadata), iterate the full checkpoint history, or read a `CheckpointTuple` for an external consumer. This makes it easy to debug memory behaviour, replay from any checkpoint, or sync state to persistent storage. The example below shows how to fetch the most recent summary, list all checkpoints, and view the tuple-style payload.
 

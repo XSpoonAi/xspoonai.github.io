@@ -1,19 +1,147 @@
 # MCP Protocol
 
-The Model Context Protocol (MCP) enables dynamic tool discovery and execution, allowing agents to access external capabilities at runtime.
+The **Model Context Protocol (MCP)** is an open standard for connecting AI agents to external tools and data sources. Instead of hardcoding tool integrations, agents discover tools dynamically at runtime—enabling modular, federated ecosystems where tools can be shared across different AI applications.
 
-## What is MCP?
+## Why MCP?
 
-MCP is a standardized protocol that allows AI agents to:
+Traditional tool integration is brittle:
 
-- **Discover** available tools and resources dynamically
-- **Execute** tools with proper parameter validation
-- **Access** external APIs and services seamlessly
-- **Extend** capabilities without code changes
+```text
+❌ Old way: Agent ↔ Hardcoded Tool A ↔ Hardcoded Tool B ↔ Hardcoded Tool C
+✅ MCP way: Agent ↔ MCP Client ↔ Any MCP Server (tools discovered at runtime)
+```
 
-## How MCP Works
+With MCP, your agent can:
 
-### Architecture Overview
+- **Discover tools dynamically** — No code changes when tools are added or updated
+- **Connect to any MCP server** — Use tools from Cursor, Claude Desktop, or custom servers
+- **Share tools across apps** — One MCP server can serve multiple agents
+- **Hot-reload** — Update tool definitions without redeploying
+
+## How It Works
+
+```mermaid
+sequenceDiagram
+    participant Agent
+    participant MCP Client
+    participant MCP Server
+    participant External API
+
+    Agent->>MCP Client: Connect to server
+    MCP Client->>MCP Server: list_tools()
+    MCP Server-->>MCP Client: [tool schemas]
+    Agent->>MCP Client: call_tool("search", {query: "..."})
+    MCP Client->>MCP Server: Execute tool
+    MCP Server->>External API: API call
+    External API-->>MCP Server: Response
+    MCP Server-->>MCP Client: Result
+    MCP Client-->>Agent: Tool output
+```
+
+| Concept | Description |
+|---------|-------------|
+| **MCP Server** | Exposes tools via a standard protocol. Can run as subprocess (stdio), HTTP/SSE, or WebSocket. |
+| **MCP Client** | Connects to servers, discovers tools, and executes them on behalf of agents. |
+| **Tool Schema** | JSON-schema definition of tool name, description, and parameters—fetched at runtime. |
+| **Resources** | Optional: MCP also supports resource URIs for documents, databases, and other data. |
+
+## MCP vs Other Approaches
+
+| Aspect | MCP | OpenAI Plugins | Hardcoded Tools |
+|--------|-----|----------------|-----------------|
+| **Discovery** | Runtime `list_tools()` | Manifest file at URL | Compile-time |
+| **Transport** | stdio, SSE, WebSocket | HTTPS only | In-process |
+| **Ecosystem** | Cursor, Claude, SpoonOS, etc. | ChatGPT only | Single app |
+| **Updates** | Hot-reload, no redeploy | Redeploy plugin | Redeploy app |
+
+---
+
+## Quick Start
+
+```bash
+pip install spoon-ai
+```
+
+### Using MCP Tools with an Agent
+
+The recommended way to use MCP tools is through `SpoonReactMCP`:
+
+```python
+import asyncio
+from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
+from spoon_ai.tools.mcp_tool import MCPTool
+from spoon_ai.tools.tool_manager import ToolManager
+from spoon_ai.chat import ChatBot
+
+class DeepWikiAgent(SpoonReactMCP):
+    """Agent that can analyze GitHub repositories via DeepWiki MCP"""
+    name: str = "DeepWikiAgent"
+    system_prompt: str = "You can analyze GitHub repositories using DeepWiki."
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.available_tools = ToolManager([])
+
+    async def initialize(self):
+        # Create MCP tool for DeepWiki (no API key needed!)
+        deepwiki_tool = MCPTool(
+            name="deepwiki",
+            description="DeepWiki MCP for repository analysis",
+            mcp_config={
+                "url": "https://mcp.deepwiki.com/sse",
+                "transport": "sse",
+                "timeout": 30,
+            }
+        )
+        await deepwiki_tool.ensure_parameters_loaded()
+        self.available_tools = ToolManager([deepwiki_tool])
+
+async def main():
+    # Create and initialize agent
+    agent = DeepWikiAgent(llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"))
+    await agent.initialize()
+
+    # Query the agent
+    response = await agent.run("What is XSpoonAi/spoon-core about?")
+    print(response)
+
+asyncio.run(main())
+```
+
+### Direct MCP Tool Usage
+
+For direct MCP tool calls without an agent:
+
+```python
+import asyncio
+from spoon_ai.tools.mcp_tool import MCPTool
+
+# Connect to an SSE/HTTP MCP server
+mcp_tool = MCPTool(
+    name="deepwiki",
+    description="DeepWiki MCP tool for repository analysis",
+    mcp_config={
+        "url": "https://mcp.deepwiki.com/sse",
+        "transport": "sse",
+        "timeout": 30,
+        "headers": {"User-Agent": "SpoonOS-MCP/1.0"}
+    }
+)
+
+async def main():
+    # Tool parameters are loaded lazily when first used
+    await mcp_tool.ensure_parameters_loaded()
+
+    # Call the tool
+    result = await mcp_tool.execute(repo="XSpoonAi/spoon-core")
+        print(result)
+
+asyncio.run(main())
+```
+
+---
+
+## Architecture
 
 ```mermaid
 graph TD
@@ -35,42 +163,85 @@ graph TD
 3. **Tools** - Executable functions with defined schemas
 4. **Resources** - Data sources and content
 
-## Setting Up MCP
+## Connecting to MCP Servers (client-only)
 
-### Basic MCP Server
-
-```python
-import asyncio
-from spoon_ai.tools.mcp_tools_collection import MCPToolsCollection
-
-mcp_tools = MCPToolsCollection()
-
-async def main():
-    # Runs a FastMCP SSE server. Change the port as needed.
-    await mcp_tools.run(port=8765)
-
-asyncio.run(main())
-```
+The cookbook focuses on MCP **clients**. Use `MCPTool` to connect to any MCP server (stdio/HTTP/SSE/WS). Hosting servers is out of scope here—follow your chosen server’s docs.
 
 ### MCP Client Configuration
 
+SpoonOS supports multiple MCP transport types:
+
+#### SSE/HTTP Transport (Remote Servers)
+
 ```python
-import asyncio
-from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
+from spoon_ai.tools.mcp_tool import MCPTool
 
-class MCPEnabledClient(MCPClientMixin):
-    def __init__(self, transport: str):
-        super().__init__(transport)
+# SSE transport (Server-Sent Events)
+sse_tool = MCPTool(
+    name="deepwiki_sse",
+    description="DeepWiki SSE MCP tool",
+    mcp_config={
+        "url": "https://mcp.deepwiki.com/sse",
+        "transport": "sse",
+        "timeout": 30,
+        "headers": {"User-Agent": "SpoonOS-MCP/1.0"}
+    }
+)
 
-client = MCPEnabledClient("ws://localhost:8765")
+# HTTP transport (Streamable HTTP)
+http_tool = MCPTool(
+    name="deepwiki_http",
+    description="DeepWiki HTTP MCP tool",
+    mcp_config={
+        "url": "https://mcp.deepwiki.com/mcp",
+        "transport": "http",
+        "timeout": 30,
+        "headers": {"Accept": "application/json"}
+    }
+)
+```
 
-async def list_tools():
-    async with client.get_session() as session:
-        return await session.list_tools()
+#### Stdio Transport (CLI Tools via npx/uvx)
 
-tools = asyncio.run(list_tools())
-for tool in tools:
-    print(f"{tool.name}: {tool.description}")
+```python
+import os
+from spoon_ai.tools.mcp_tool import MCPTool
+
+# NPX transport (Node.js MCP servers)
+tavily_tool = MCPTool(
+    name="tavily-search",
+    description="Web search via Tavily",
+    mcp_config={
+        "command": "npx",
+        "args": ["--yes", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY")}
+    }
+)
+
+# UVX transport (Python MCP servers)
+python_tool = MCPTool(
+    name="python-mcp",
+    description="Python MCP server",
+    mcp_config={
+        "command": "uvx",
+        "args": ["my-python-mcp-server"],
+        "env": {}
+    }
+)
+```
+
+#### WebSocket Transport
+
+```python
+from spoon_ai.tools.mcp_tool import MCPTool
+
+ws_tool = MCPTool(
+    name="ws-mcp",
+    description="WebSocket MCP server",
+    mcp_config={
+        "url": "ws://localhost:8765",  # or wss:// for secure
+    }
+)
 ```
 
 ## Tool Discovery
@@ -89,28 +260,7 @@ for tool in tools:
 
 ### Tool Registration
 
-```python
-from spoon_ai.tools.base import BaseTool
-from spoon_ai.tools.mcp_tools_collection import mcp_tools
-
-class WeatherTool(BaseTool):
-    name: str = "get_weather"
-    description: str = "Get current weather for a location"
-    parameters: dict = {
-        "type": "object",
-        "properties": {
-            "location": {"type": "string", "description": "City name"}
-        },
-        "required": ["location"]
-    }
-
-    async def execute(self, location: str) -> dict:
-        # Weather API call implementation
-        return {"location": location, "temperature": 22, "condition": "sunny"}
-
-# Register tool with the running MCP server
-asyncio.run(mcp_tools.add_tool(WeatherTool()))
-```
+Use `MCPTool` to connect to any MCP server (stdio/HTTP/SSE/WS). No `spoon_cli` imports are needed in cookbook examples.
 
 ## Tool Execution
 
@@ -125,12 +275,43 @@ print(result)
 ### Agent-Driven Execution
 
 ```python
+import asyncio
+import os
 from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
+from spoon_ai.tools.mcp_tool import MCPTool
+from spoon_ai.tools.tool_manager import ToolManager
+from spoon_ai.chat import ChatBot
 
-# Agent that can consume MCP tools discovered via its transport
-agent = SpoonReactMCP()
-response = await agent.run("What's the weather like in San Francisco?")
+class MyMCPAgent(SpoonReactMCP):
+    """Custom agent with MCP tools"""
+    name: str = "MyMCPAgent"
+    system_prompt: str = "You are a helpful assistant with web search capabilities."
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.available_tools = ToolManager([])
+
+    async def initialize(self):
+        """Initialize MCP tools"""
+        tavily_tool = MCPTool(
+            name="tavily-search",
+            description="Web search via Tavily",
+            mcp_config={
+                "command": "npx",
+                "args": ["--yes", "tavily-mcp"],
+                "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY")}
+            }
+        )
+        self.available_tools = ToolManager([tavily_tool])
+
+async def main():
+    agent = MyMCPAgent(llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"))
+    await agent.initialize()
+
+    response = await agent.run("Search for the latest cryptocurrency news")
 print(response)
+
+asyncio.run(main())
 ```
 
 ## MCP Configuration
@@ -411,13 +592,13 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 
 - **[Tools System](./tools.md)** - Learn about the complete tool ecosystem
 - **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build MCP-compatible tools
-- **[MCP Tool Reference](../api-reference/tools/builtin-tools.md)** - MCP-specific tool documentation
+- **[MCP Tool Reference](../api-reference/spoon_ai/tools/)** - MCP-specific tool documentation
 
 ### 📖 **Additional Resources**
 
 - **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Agent-MCP integration patterns
-- **[API Reference](../api-reference/)** - Complete SpoonOS API documentation
+- **[API Reference](../api-reference/index)** - Complete SpoonOS API documentation
 **GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
 
 **What it demonstrates:**
@@ -442,10 +623,10 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 
 - **[Tools System](./tools.md)** - Learn about the complete tool ecosystem
 - **[Custom Tool Development](../how-to-guides/add-custom-tools.md)** - Build MCP-compatible tools
-- **[MCP Tool Reference](../api-reference/tools/builtin-tools.md)** - MCP-specific tool documentation
+- **[MCP Tool Reference](../api-reference/spoon_ai/tools/)** - MCP-specific tool documentation
 
 ### 📖 **Additional Resources**
 
 - **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Agent-MCP integration patterns
-- **[API Reference](../api-reference/)** - Complete SpoonOS API documentation
+- **[API Reference](../api-reference/index)** - Complete SpoonOS API documentation
