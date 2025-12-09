@@ -32,7 +32,7 @@ class BaseAgent(BaseModel, ABC):
 ### Construction
 - Instantiate with the fields above (Pydantic will validate types).  
 - `__init__(**kwargs)` also sets up async locks, timeout defaults, and a `CallbackManager`.  
-- Python 3.12(or Python 3.13) and an event loop are required for all async methods.
+- Python 3.12+ and an event loop are required for all async methods.
 
 ## Core Methods
 
@@ -9787,7 +9787,7 @@ FILE: docs/getting-started/installation.md
 
 ## Prerequisites
 
-- Python 3.12 or Python 3.13
+- Python 3.12 or higher
 - Git
 - Virtual environment (recommended)
 
@@ -9834,7 +9834,7 @@ python -m venv spoon-env
 
 > 💡 On newer Apple Silicon Macs the `python` shim may not point to Python 3.
 > Use `python3` for all commands unless you have explicitly configured `python`
-> to target Python 3.12 (or Python 3.13).
+> to target Python 3.12 or 3.13.
 
 2. Install core package in editable mode
 
@@ -9846,11 +9846,11 @@ pip install -e .
 
 3. (Optional) Install Toolkits Package from local repo
 
-If you want to use the extended blockchain and data tools from `spoon_toolkits`, install the **spoon-toolkits** package from the `spoon-toolkits` folder:
+If you want to use the extended blockchain and data tools from `spoon_toolkits`, install the **spoon-toolkits** package from the `spoon-toolkit` folder:
 
 ```bash
-git clone https://github.com/XSpoonAi/spoon-toolkits.git
-cd spoon-toolkits
+git clone https://github.com/XSpoonAi/spoon-toolkit.git
+cd spoon-toolkit
 pip install -e .
 ```
 
@@ -11297,7 +11297,7 @@ ModuleNotFoundError: No module named 'asyncio'
 ```
 
 **Solution:**
-1. Ensure Python 3.12(or Python 3.13) is installed:
+1. Ensure Python 3.12 or Python 3.13 is installed:
    ```bash
    python --version
    ```
