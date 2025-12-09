@@ -243,7 +243,7 @@ from spoon_ai.chat import ChatBot
 async def main():
     # Create a ChatBot instance
     llm = ChatBot(
-        model_name="gpt-4o",
+        model_name="gpt-5.1-chat-latest",
         llm_provider="openai",
         temperature=0.7
     )

@@ -109,7 +109,7 @@ async def main():
     agent = DeepWikiAgent(
         llm=ChatBot(
             llm_provider="openai", 
-            model_name="gpt-4o"  
+            model_name="gpt-5.1-chat-latest"  
         )
     )
     
