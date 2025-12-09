@@ -29665,7 +29665,7 @@ from spoon_ai.chat import ChatBot
 from spoon_ai.tools import ToolManager
 from spoon_ai.tools.base import BaseTool
 from spoon_ai.tools.mcp_tool import MCPTool
-
+import asyncio
 class PercentageTool(BaseTool):
     name: str = "calculate_percentage"
     description: str = "Calculate a percentage of a numeric value"
@@ -29699,7 +29699,14 @@ agent = SpoonReactAI(
     max_iterations=10  # Limit reasoning loops
 )
 
-response = await agent.run("Search Bitcoin price and calculate 10% of it")
+async def main():
+    # Pre-load MCP tool parameters so LLM can see the correct schema
+    await tavily_search.ensure_parameters_loaded()
+    print("MCP tool parameters loaded")
+    response = await agent.run("Search Bitcoin price and calculate 10% of it")
+    print(response)
+
+asyncio.run(main())
 ```
 
 **Best for:** Single-step tasks, API calls, Q&A, simple automation.
@@ -29815,7 +29822,7 @@ class SpoonMacroAnalysisAgent(SpoonReactMCP):
     async def initialize(self):
         tavily_key = os.getenv("TAVILY_API_KEY")
         if not tavily_key:
-            raise ValueError("Set TAVILY_API_KEY before running the agent.")
+            raise Val ueError("Set TAVILY_API_KEYbefore running the agent.")
 
         tavily_tool = MCPTool(
             name="tavily-search",
@@ -30966,22 +30973,27 @@ The LLM Manager provides provider-agnostic access with automatic fallback:
 
 ```python
 from spoon_ai.llm.manager import LLMManager
+from spoon_ai.schema import Message
+import asyncio
 
-# Initialize with multiple providers
-# Note: Check each provider's docs for latest model names
-llm_manager = LLMManager(
-    primary_provider="openai",
-    fallback_providers=["anthropic", "gemini"],
-    model_preferences={
-        "openai": "gpt-5.1-chat-latest",
-        "anthropic": "claude-sonnet-4-20250514",
-        "gemini": "gemini-3-pro",
-        "deepseek": "deepseek-reasoner"
-    }
-)
+# Initialize LLM Manager
+llm_manager = LLMManager()
 
-# Use with automatic fallback
-response = await llm_manager.generate("Explain quantum computing")
+# Clear default_provider so fallback_chain takes precedence
+llm_manager.default_provider = None
+
+# Set fallback chain (primary provider first, then fallbacks)
+llm_manager.set_fallback_chain(["gemini", "openai"])
+
+async def main():
+    # Create messages
+    messages = [Message(role="user", content="Explain quantum computing in one sentence")]
+    response = await llm_manager.chat(messages)
+    print(f"Response: {response.content}")
+    print(f"Provider used: {response.provider}")
+    
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ## Configuration
@@ -31021,46 +31033,80 @@ DEFAULT_TEMPERATURE=0.3
 ### Response Caching
 
 ```python
-from spoon_ai.llm.cache import LLMResponseCache
+from spoon_ai.llm.cache import LLMResponseCache, CachedLLMManager
+from spoon_ai.llm.manager import LLMManager
+from spoon_ai.schema import Message
+import asyncio
+
 
 # Enable response caching to avoid redundant API calls
 cache = LLMResponseCache()
-llm = ChatBot(
-    model_name="claude-sonnet-4-20250514",
-    llm_provider="anthropic",
-)
-# Cache is automatically managed by the framework
-```
+llm_manager = LLMManager()
+cached_manager = CachedLLMManager(llm_manager, cache=cache)
+
+async def main():
+    messages = [Message(role="user", content="Explain quantum computing in one sentence")]
+    response1 = await cached_manager.chat(messages)
+    print(response1)
+    
+if __name__ == "__main__":
+    asyncio.run(main())
 
 ### Streaming Responses
 
 ```python
 # Stream responses for real-time interaction
-async for chunk in llm.stream("Write a long story about AI"):
-    print(chunk, end="", flush=True)
+import asyncio
+from spoon_ai.chat import ChatBot
+
+async def main():
+    # Create a ChatBot instance
+    llm = ChatBot(
+        model_name="gpt-5.1-chat-latest",
+        llm_provider="openai",
+        temperature=0.7
+    )
+    
+    # Prepare messages
+    messages = [{"role": "user", "content": "Write a long story about AI"}]
+
+    # Stream the response chunk by chunk
+    async for chunk in llm.astream(messages):
+        # chunk.delta contains the text content of this chunk
+        print(chunk.delta, end="", flush=True)
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Function Calling
 
 ```python
 # Define functions for the model to call
-functions = [
+tools = [
     {
-        "name": "get_weather",
-        "description": "Get current weather",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "location": {"type": "string"}
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA"
+                    }
+                },
+                "required": ["location"]
             }
         }
     }
 ]
 
-response = await llm.generate(
-    "What's the weather in New York?",
-    functions=functions
-)
+response = await llm.ask_tool(
+        messages=messages,
+        tools=tools
+    )
 ```
 
 ## Model Selection Guide
@@ -31108,18 +31154,28 @@ response = await llm.generate(
 The framework provides built-in error handling with automatic fallback between providers:
 
 ```python
+"""
+LLMManager with fallback chain demo - demonstrates automatic provider fallback.
+"""
 from spoon_ai.llm.manager import LLMManager
+from spoon_ai.schema import Message
+import asyncio
 
-# Configure fallback chain - errors are handled automatically
-llm_manager = LLMManager(
-    primary_provider="openai",
-    fallback_providers=["anthropic", "google"],
-    retry_attempts=3,
-    timeout=30
-)
+# Initialize LLM Manager
+llm_manager = LLMManager()
+# Clear default_provider so fallback_chain takes precedence
+llm_manager.default_provider = None
+# The manager will try providers in order: gemini -> openai -> anthropic
+llm_manager.set_fallback_chain(["gemini", "openai", "anthropic"])
 
-# Automatic fallback on provider failures
-response = await llm_manager.generate("Hello world")
+async def main():
+    # Create messages
+    messages = [Message(role="user", content="Hello world")]
+    response = await llm_manager.chat(messages)
+    print(response.content)
+ 
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Error Types & Recovery
@@ -31130,7 +31186,7 @@ The framework uses structured error types for clean error handling:
 from spoon_ai.llm.errors import RateLimitError, AuthenticationError, ModelNotFoundError
 
 # Simple error handling with specific error types
-response = await llm.generate("Hello world")
+response = await llm.ask([{"role": "user", "content": "Hello world"}])
 
 # Framework handles common errors automatically:
 # - Rate limits: automatic retry with backoff
@@ -31143,15 +31199,14 @@ response = await llm.generate("Hello world")
 
 ```python
 # Framework provides graceful degradation patterns
-llm_manager = LLMManager(
-    primary_provider="openai",
-    fallback_providers=["deepseek", "gemini"],  # Cost-effective fallbacks
-    enable_graceful_degradation=True
-)
+llm_manager = LLMManager()
+llm_manager.default_provider = "openai"
+llm_manager.set_fallback_chain(["openai", "deepseek", "gemini"]) # Cost-effective fallbacks
 
 # If primary fails, automatically uses fallback
 # No manual error handling required
-response = await llm_manager.generate("Complex reasoning task")
+messages = [Message(role="user", content="Complex reasoning task: Explain quantum computing and its applications")]
+await llm_manager.chat(messages)
 ```
 
 ## Monitoring & Metrics
@@ -31168,9 +31223,14 @@ collector = get_metrics_collector()
 response = await llm.ask([{"role": "user", "content": "Hello"}])
 
 # Get collected stats per provider
-stats = collector.get_stats("openai")
-print(f"Total requests: {stats.total_requests}")
-print(f"Average latency: {stats.average_latency:.2f}s")
+ stats = collector.get_provider_stats("openai")
+print(f" Total requests: {stats.total_requests}")
+print(f" Successful requests: {stats.successful_requests}")
+print(f" Failed requests: {stats.failed_requests}")
+print(f" Success rate: {stats.success_rate:.2f}%")
+print(f" Average duration: {stats.average_duration:.3f}s")
+print(f" Total tokens: {stats.total_tokens}")
+print(f" Total cost: ${stats.total_cost:.6f}")
 ```
 
 ### Performance Monitoring
@@ -31184,9 +31244,17 @@ print(f"Average latency: {stats.average_latency:.2f}s")
 
 # Access provider-specific stats
 for provider in ["openai", "anthropic", "gemini"]:
-    stats = collector.get_stats(provider)
-    if stats.total_requests > 0:
-        print(f"{provider}: {stats.total_requests} requests, {stats.error_count} errors")
+    stats = collector.get_provider_stats(provider)
+    if stats and stats.total_requests > 0:
+        print(f"{provider}: {stats.total_requests} requests, {stats.failed_requests} errors")
+
+# Access provider-specific stats
+all_stats = collector.get_all_stats()
+if all_stats:
+    print(f"\n📈 All Providers Summary:")
+    for provider_name, provider_stats in all_stats.items():
+        print(f"{provider_name}: {provider_stats.total_requests} requests, "
+                f"{provider_stats.success_rate:.1f}% success rate")
 ```
 
 ## Best Practices
@@ -31220,7 +31288,8 @@ The SpoonOS framework follows a "fail-fast, recover-gracefully" approach:
 
 ```python
 # Preferred: Let framework handle errors
-response = await llm_manager.generate("Hello world")
+messages = [Message(role="user", content="Hello world")]
+response = await llm_manager.chat("Hello world")
 
 # Only use explicit error handling for custom business logic
 if response.provider != "openai":
@@ -31478,6 +31547,9 @@ pip install spoon-ai
 The recommended way to use MCP tools is through `SpoonReactMCP`:
 
 ```python
+"""
+DeepWiki MCP Agent Demo - demonstrates how to use MCP tools with SpoonReactMCP agent.
+"""
 import asyncio
 from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
 from spoon_ai.tools.mcp_tool import MCPTool
@@ -31487,7 +31559,10 @@ from spoon_ai.chat import ChatBot
 class DeepWikiAgent(SpoonReactMCP):
     """Agent that can analyze GitHub repositories via DeepWiki MCP"""
     name: str = "DeepWikiAgent"
-    system_prompt: str = "You can analyze GitHub repositories using DeepWiki."
+    system_prompt: str = """You are a helpful assistant that can analyze GitHub repositories using DeepWiki.
+When asked about a repository, use the read_wiki_structure tool with the repoName parameter.
+For example, if asked about "XSpoonAi/spoon-core", call read_wiki_structure with repoName="XSpoonAi/spoon-core".
+Always use the tool to get information about repositories before answering questions."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -31495,28 +31570,39 @@ class DeepWikiAgent(SpoonReactMCP):
 
     async def initialize(self):
         # Create MCP tool for DeepWiki (no API key needed!)
+        # Important: Use the actual tool name from the server: "read_wiki_structure"
         deepwiki_tool = MCPTool(
-            name="deepwiki",
-            description="DeepWiki MCP for repository analysis",
+            name="read_wiki_structure",  # Use actual tool name, not "deepwiki"
+            description="Analyze GitHub repositories and get their structure and documentation",
             mcp_config={
                 "url": "https://mcp.deepwiki.com/sse",
                 "transport": "sse",
                 "timeout": 30,
             }
         )
+        # Pre-load parameters so LLM can see the correct schema
         await deepwiki_tool.ensure_parameters_loaded()
         self.available_tools = ToolManager([deepwiki_tool])
 
 async def main():
     # Create and initialize agent
-    agent = DeepWikiAgent(llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"))
+    agent = DeepWikiAgent(
+        llm=ChatBot(
+            llm_provider="openai", 
+            model_name="gpt-5.1-chat-latest"  
+        )
+    )
+    
+    print("Initializing agent and loading MCP tool...")
     await agent.initialize()
-
-    # Query the agent
-    response = await agent.run("What is XSpoonAi/spoon-core about?")
+    # Query the agent with a clear request
+    query = "What is XSpoonAi/spoon-core about? Please analyze the repository and summarize its purpose."
+    response = await agent.run(query)
+    print("\n Response:")
     print(response)
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Direct MCP Tool Usage
@@ -31529,7 +31615,7 @@ from spoon_ai.tools.mcp_tool import MCPTool
 
 # Connect to an SSE/HTTP MCP server
 mcp_tool = MCPTool(
-    name="deepwiki",
+    name="read_wiki_structure",
     description="DeepWiki MCP tool for repository analysis",
     mcp_config={
         "url": "https://mcp.deepwiki.com/sse",
@@ -31545,7 +31631,7 @@ async def main():
 
     # Call the tool
     result = await mcp_tool.execute(repo="XSpoonAi/spoon-core")
-        print(result)
+    print(result)
 
 asyncio.run(main())
 ```
@@ -31589,8 +31675,8 @@ from spoon_ai.tools.mcp_tool import MCPTool
 
 # SSE transport (Server-Sent Events)
 sse_tool = MCPTool(
-    name="deepwiki_sse",
-    description="DeepWiki SSE MCP tool",
+    name="read_wiki_structure",
+    description="DeepWiki MCP tool for repository analysis",
     mcp_config={
         "url": "https://mcp.deepwiki.com/sse",
         "transport": "sse",
@@ -31601,7 +31687,7 @@ sse_tool = MCPTool(
 
 # HTTP transport (Streamable HTTP)
 http_tool = MCPTool(
-    name="deepwiki_http",
+    name="read_wiki_structure",
     description="DeepWiki HTTP MCP tool",
     mcp_config={
         "url": "https://mcp.deepwiki.com/mcp",
@@ -31639,6 +31725,17 @@ python_tool = MCPTool(
         "env": {}
     }
 )
+
+# python transport (Python MCP servers)
+python_tool = MCPTool(
+    name="python-mcp",
+    description="Python MCP server",
+    mcp_config={
+        "command": "python",
+        "args": ["my-python-mcp-server"],
+        "env": {}
+    }
+)
 ```
 
 #### WebSocket Transport
@@ -31660,13 +31757,21 @@ ws_tool = MCPTool(
 ### Automatic Discovery
 
 ```python
-async def discover_tools():
-    async with client.get_session() as session:
-        return await session.list_tools()
+mcp_tool = MCPTool(
+    name="discover_tools",  # Temporary name, will be replaced when we discover actual tools
+    description="Tool to discover available MCP tools",
+    mcp_config={
+        "url": "https://mcp.deepwiki.com/sse",
+        "transport": "sse",
+        "timeout": 30,
+    }
+)
 
-tools = asyncio.run(discover_tools())
+tools = await mcp_tool.list_available_tools()
 for tool in tools:
-    print(tool.name)
+    tool_name = tool.get('name')
+    tool_desc = tool.get('description')
+          
 ```
 
 ### Tool Registration
@@ -31678,8 +31783,10 @@ Use `MCPTool` to connect to any MCP server (stdio/HTTP/SSE/WS). No `spoon_cli` i
 ### Direct Execution
 
 ```python
-# Execute tool via MCP client
-result = asyncio.run(client.call_mcp_tool("get_weather", location="New York"))
+# Execute tool 
+result = await mcp_tool.call_mcp_tool("get_weather", location="New York"))
+result2 = await mcp_tool.execute("get_weather", location="New York"))
+
 print(result)
 ```
 
@@ -31720,67 +31827,30 @@ async def main():
     await agent.initialize()
 
     response = await agent.run("Search for the latest cryptocurrency news")
-print(response)
+    print(response)
 
 asyncio.run(main())
-```
-
-## MCP Configuration
-
-### Server Configuration
-
-```json
-{
-  "mcp": {
-    "servers": [
-      {
-        "name": "local_tools",
-        "url": "http://localhost:8000",
-        "timeout": 30
-      },
-      {
-        "name": "external_api",
-        "url": "https://api.example.com/mcp",
-        "auth": {
-          "type": "bearer",
-          "token": "your_token_here"
-        }
-      }
-    ]
-  }
-}
-```
-
-### Client Configuration
-
-```python
-from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
-
-
-class ConfiguredMCPClient(MCPClientMixin):
-    def __init__(self, transport: str, *, timeout: int = 30):
-        super().__init__(transport)
-        self.timeout = timeout
-
-
-# Configure MCP client using FastMCP transport (SSE/WS)
-client = ConfiguredMCPClient("ws://localhost:8765", timeout=30)
 ```
 
 ## Security Considerations
 
 ### Authentication
 
-> **Note:** `AuthenticatedMCPServer` is a conceptual example and not shipped in `spoon_ai`. Implement authentication using your FastMCP server framework (e.g., middleware or request hooks).
-
 ```python
-# Server-side authentication
-class AuthenticatedMCPServer:
-    def __init__(self, api_key: str):
-        self.api_key = api_key
-
-    def authenticate(self, request_key: str) -> bool:
-        return request_key == self.api_key
+# Use headers for authentication
+external_api = MCPTool(
+    name="external_api_tool",  # Tool name from the server
+    description="External API with Bearer token",
+    mcp_config={
+        "url": "https://api.example.com/mcp",
+        "transport": "http",
+        "timeout": 30,
+        # Bearer token via headers (not auth config)
+        "headers": {
+            "Authorization": f"Bearer {os.getenv('MCP_API_TOKEN', 'your_token_here')}",
+        }
+    }
+)
 ```
 
 ### Tool Permissions
@@ -31821,18 +31891,24 @@ class SecureTool(BaseTool):
 > **Note:** `MCPConnectionPool` is not provided by `spoon_ai`. The `MCPClientMixin` already reuses sessions per task; wrap it or your FastMCP client in your own pooling logic if you need cross-server pooling.
 
 ```python
-# Reuse sessions via MCPClientMixin (simplest pooling strategy)
+If you really need direct control (usually not necessary):
+
+```python
 from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
+from fastmcp.client.transports import SSETransport
 
-class PooledMCPClient(MCPClientMixin):
-    def __init__(self, transport: str):
-        super().__init__(transport)
+# Create transport object (not string!)
+transport = SSETransport(url="https://mcp.example.com/sse")
+client = MCPClientMixin(transport)
 
-client = PooledMCPClient("ws://localhost:8765")
+# MCPClientMixin already pools sessions per task
+async with client.get_session() as session:
+    tools = await session.list_tools()
+    result = await session.call_tool("tool_name", arguments={"param": "value"})
 
-async def use_pool():
-    async with client.get_session() as session:
-        return await session.list_tools()
+# Sessions are automatically reused within the same task
+async with client.get_session() as session:  # Reuses existing session
+    tools2 = await session.list_tools()
 ```
 
 ### Caching
@@ -31845,7 +31921,7 @@ tool_cache: dict[str, list] = {}
 
 async def get_tools_cached():
     if "tools" not in tool_cache:
-        tool_cache["tools"] = await mcp_tools.discover_tools()
+        tool_cache["tools"] = await mcp_tool.list_available_tools()
     return tool_cache["tools"]
 ```
 
@@ -32415,7 +32491,7 @@ from spoon_ai.tools.mcp_tool import MCPTool
 
 # Example: connect to DeepWiki SSE MCP server
 deepwiki = MCPTool(
-    name="deepwiki",
+    name="read_wiki_structure",  # Use the actual tool name from the server
     description="DeepWiki MCP tool for repository analysis",
     mcp_config={
         "url": "https://mcp.deepwiki.com/sse",
@@ -32423,6 +32499,17 @@ deepwiki = MCPTool(
         "timeout": 30,
     },
 )
+
+async def main():
+    # Pre-load parameters to get the correct schema
+    print("Loading MCP tool parameters...")
+    await deepwiki.ensure_parameters_loaded()
+    
+    # Use the correct parameter name: repoName (not repo)
+    result = await deepwiki.execute(repoName="XSpoonAi/spoon-core")
+    print(f"\nResult:\n{result}")
+
+asyncio.run(main())
 ```
 
 If you need to self-host an MCP server, follow that server’s own documentation; the cookbook focuses on the `spoon_ai` MCP client (`MCPTool`) rather than FastMCP server setup.
