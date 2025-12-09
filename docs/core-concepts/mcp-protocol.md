@@ -67,6 +67,9 @@ pip install spoon-ai
 The recommended way to use MCP tools is through `SpoonReactMCP`:
 
 ```python
+"""
+DeepWiki MCP Agent Demo - demonstrates how to use MCP tools with SpoonReactMCP agent.
+"""
 import asyncio
 from spoon_ai.agents.spoon_react_mcp import SpoonReactMCP
 from spoon_ai.tools.mcp_tool import MCPTool
@@ -76,7 +79,10 @@ from spoon_ai.chat import ChatBot
 class DeepWikiAgent(SpoonReactMCP):
     """Agent that can analyze GitHub repositories via DeepWiki MCP"""
     name: str = "DeepWikiAgent"
-    system_prompt: str = "You can analyze GitHub repositories using DeepWiki."
+    system_prompt: str = """You are a helpful assistant that can analyze GitHub repositories using DeepWiki.
+When asked about a repository, use the read_wiki_structure tool with the repoName parameter.
+For example, if asked about "XSpoonAi/spoon-core", call read_wiki_structure with repoName="XSpoonAi/spoon-core".
+Always use the tool to get information about repositories before answering questions."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -84,28 +90,39 @@ class DeepWikiAgent(SpoonReactMCP):
 
     async def initialize(self):
         # Create MCP tool for DeepWiki (no API key needed!)
+        # Important: Use the actual tool name from the server: "read_wiki_structure"
         deepwiki_tool = MCPTool(
-            name="deepwiki",
-            description="DeepWiki MCP for repository analysis",
+            name="read_wiki_structure",  # Use actual tool name, not "deepwiki"
+            description="Analyze GitHub repositories and get their structure and documentation",
             mcp_config={
                 "url": "https://mcp.deepwiki.com/sse",
                 "transport": "sse",
                 "timeout": 30,
             }
         )
+        # Pre-load parameters so LLM can see the correct schema
         await deepwiki_tool.ensure_parameters_loaded()
         self.available_tools = ToolManager([deepwiki_tool])
 
 async def main():
     # Create and initialize agent
-    agent = DeepWikiAgent(llm=ChatBot(llm_provider="openai", model_name="gpt-5.1-chat-latest"))
+    agent = DeepWikiAgent(
+        llm=ChatBot(
+            llm_provider="openai", 
+            model_name="gpt-5.1-chat-latest"  
+        )
+    )
+    
+    print("Initializing agent and loading MCP tool...")
     await agent.initialize()
-
-    # Query the agent
-    response = await agent.run("What is XSpoonAi/spoon-core about?")
+    # Query the agent with a clear request
+    query = "What is XSpoonAi/spoon-core about? Please analyze the repository and summarize its purpose."
+    response = await agent.run(query)
+    print("\n Response:")
     print(response)
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Direct MCP Tool Usage
@@ -118,7 +135,7 @@ from spoon_ai.tools.mcp_tool import MCPTool
 
 # Connect to an SSE/HTTP MCP server
 mcp_tool = MCPTool(
-    name="deepwiki",
+    name="read_wiki_structure",
     description="DeepWiki MCP tool for repository analysis",
     mcp_config={
         "url": "https://mcp.deepwiki.com/sse",
@@ -134,7 +151,7 @@ async def main():
 
     # Call the tool
     result = await mcp_tool.execute(repo="XSpoonAi/spoon-core")
-        print(result)
+    print(result)
 
 asyncio.run(main())
 ```
@@ -178,8 +195,8 @@ from spoon_ai.tools.mcp_tool import MCPTool
 
 # SSE transport (Server-Sent Events)
 sse_tool = MCPTool(
-    name="deepwiki_sse",
-    description="DeepWiki SSE MCP tool",
+    name="read_wiki_structure",
+    description="DeepWiki MCP tool for repository analysis",
     mcp_config={
         "url": "https://mcp.deepwiki.com/sse",
         "transport": "sse",
@@ -190,7 +207,7 @@ sse_tool = MCPTool(
 
 # HTTP transport (Streamable HTTP)
 http_tool = MCPTool(
-    name="deepwiki_http",
+    name="read_wiki_structure",
     description="DeepWiki HTTP MCP tool",
     mcp_config={
         "url": "https://mcp.deepwiki.com/mcp",
@@ -228,6 +245,17 @@ python_tool = MCPTool(
         "env": {}
     }
 )
+
+# python transport (Python MCP servers)
+python_tool = MCPTool(
+    name="python-mcp",
+    description="Python MCP server",
+    mcp_config={
+        "command": "python",
+        "args": ["my-python-mcp-server"],
+        "env": {}
+    }
+)
 ```
 
 #### WebSocket Transport
@@ -249,13 +277,21 @@ ws_tool = MCPTool(
 ### Automatic Discovery
 
 ```python
-async def discover_tools():
-    async with client.get_session() as session:
-        return await session.list_tools()
+mcp_tool = MCPTool(
+    name="discover_tools",  # Temporary name, will be replaced when we discover actual tools
+    description="Tool to discover available MCP tools",
+    mcp_config={
+        "url": "https://mcp.deepwiki.com/sse",
+        "transport": "sse",
+        "timeout": 30,
+    }
+)
 
-tools = asyncio.run(discover_tools())
+tools = await mcp_tool.list_available_tools()
 for tool in tools:
-    print(tool.name)
+    tool_name = tool.get('name')
+    tool_desc = tool.get('description')
+          
 ```
 
 ### Tool Registration
@@ -267,8 +303,10 @@ Use `MCPTool` to connect to any MCP server (stdio/HTTP/SSE/WS). No `spoon_cli` i
 ### Direct Execution
 
 ```python
-# Execute tool via MCP client
-result = asyncio.run(client.call_mcp_tool("get_weather", location="New York"))
+# Execute tool 
+result = await mcp_tool.call_mcp_tool("get_weather", location="New York"))
+result2 = await mcp_tool.execute("get_weather", location="New York"))
+
 print(result)
 ```
 
@@ -309,67 +347,30 @@ async def main():
     await agent.initialize()
 
     response = await agent.run("Search for the latest cryptocurrency news")
-print(response)
+    print(response)
 
 asyncio.run(main())
-```
-
-## MCP Configuration
-
-### Server Configuration
-
-```json
-{
-  "mcp": {
-    "servers": [
-      {
-        "name": "local_tools",
-        "url": "http://localhost:8000",
-        "timeout": 30
-      },
-      {
-        "name": "external_api",
-        "url": "https://api.example.com/mcp",
-        "auth": {
-          "type": "bearer",
-          "token": "your_token_here"
-        }
-      }
-    ]
-  }
-}
-```
-
-### Client Configuration
-
-```python
-from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
-
-
-class ConfiguredMCPClient(MCPClientMixin):
-    def __init__(self, transport: str, *, timeout: int = 30):
-        super().__init__(transport)
-        self.timeout = timeout
-
-
-# Configure MCP client using FastMCP transport (SSE/WS)
-client = ConfiguredMCPClient("ws://localhost:8765", timeout=30)
 ```
 
 ## Security Considerations
 
 ### Authentication
 
-> **Note:** `AuthenticatedMCPServer` is a conceptual example and not shipped in `spoon_ai`. Implement authentication using your FastMCP server framework (e.g., middleware or request hooks).
-
 ```python
-# Server-side authentication
-class AuthenticatedMCPServer:
-    def __init__(self, api_key: str):
-        self.api_key = api_key
-
-    def authenticate(self, request_key: str) -> bool:
-        return request_key == self.api_key
+# Use headers for authentication
+external_api = MCPTool(
+    name="external_api_tool",  # Tool name from the server
+    description="External API with Bearer token",
+    mcp_config={
+        "url": "https://api.example.com/mcp",
+        "transport": "http",
+        "timeout": 30,
+        # Bearer token via headers (not auth config)
+        "headers": {
+            "Authorization": f"Bearer {os.getenv('MCP_API_TOKEN', 'your_token_here')}",
+        }
+    }
+)
 ```
 
 ### Tool Permissions
@@ -410,18 +411,24 @@ class SecureTool(BaseTool):
 > **Note:** `MCPConnectionPool` is not provided by `spoon_ai`. The `MCPClientMixin` already reuses sessions per task; wrap it or your FastMCP client in your own pooling logic if you need cross-server pooling.
 
 ```python
-# Reuse sessions via MCPClientMixin (simplest pooling strategy)
+If you really need direct control (usually not necessary):
+
+```python
 from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
+from fastmcp.client.transports import SSETransport
 
-class PooledMCPClient(MCPClientMixin):
-    def __init__(self, transport: str):
-        super().__init__(transport)
+# Create transport object (not string!)
+transport = SSETransport(url="https://mcp.example.com/sse")
+client = MCPClientMixin(transport)
 
-client = PooledMCPClient("ws://localhost:8765")
+# MCPClientMixin already pools sessions per task
+async with client.get_session() as session:
+    tools = await session.list_tools()
+    result = await session.call_tool("tool_name", arguments={"param": "value"})
 
-async def use_pool():
-    async with client.get_session() as session:
-        return await session.list_tools()
+# Sessions are automatically reused within the same task
+async with client.get_session() as session:  # Reuses existing session
+    tools2 = await session.list_tools()
 ```
 
 ### Caching
@@ -434,7 +441,7 @@ tool_cache: dict[str, list] = {}
 
 async def get_tools_cached():
     if "tools" not in tool_cache:
-        tool_cache["tools"] = await mcp_tools.discover_tools()
+        tool_cache["tools"] = await mcp_tool.list_available_tools()
     return tool_cache["tools"]
 ```
 

@@ -154,22 +154,27 @@ The LLM Manager provides provider-agnostic access with automatic fallback:
 
 ```python
 from spoon_ai.llm.manager import LLMManager
+from spoon_ai.schema import Message
+import asyncio
 
-# Initialize with multiple providers
-# Note: Check each provider's docs for latest model names
-llm_manager = LLMManager(
-    primary_provider="openai",
-    fallback_providers=["anthropic", "gemini"],
-    model_preferences={
-        "openai": "gpt-5.1-chat-latest",
-        "anthropic": "claude-sonnet-4-20250514",
-        "gemini": "gemini-3-pro",
-        "deepseek": "deepseek-reasoner"
-    }
-)
+# Initialize LLM Manager
+llm_manager = LLMManager()
 
-# Use with automatic fallback
-response = await llm_manager.generate("Explain quantum computing")
+# Clear default_provider so fallback_chain takes precedence
+llm_manager.default_provider = None
+
+# Set fallback chain (primary provider first, then fallbacks)
+llm_manager.set_fallback_chain(["gemini", "openai"])
+
+async def main():
+    # Create messages
+    messages = [Message(role="user", content="Explain quantum computing in one sentence")]
+    response = await llm_manager.chat(messages)
+    print(f"Response: {response.content}")
+    print(f"Provider used: {response.provider}")
+    
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ## Configuration
@@ -209,46 +214,80 @@ DEFAULT_TEMPERATURE=0.3
 ### Response Caching
 
 ```python
-from spoon_ai.llm.cache import LLMResponseCache
+from spoon_ai.llm.cache import LLMResponseCache, CachedLLMManager
+from spoon_ai.llm.manager import LLMManager
+from spoon_ai.schema import Message
+import asyncio
+
 
 # Enable response caching to avoid redundant API calls
 cache = LLMResponseCache()
-llm = ChatBot(
-    model_name="claude-sonnet-4-20250514",
-    llm_provider="anthropic",
-)
-# Cache is automatically managed by the framework
-```
+llm_manager = LLMManager()
+cached_manager = CachedLLMManager(llm_manager, cache=cache)
+
+async def main():
+    messages = [Message(role="user", content="Explain quantum computing in one sentence")]
+    response1 = await cached_manager.chat(messages)
+    print(response1)
+    
+if __name__ == "__main__":
+    asyncio.run(main())
 
 ### Streaming Responses
 
 ```python
 # Stream responses for real-time interaction
-async for chunk in llm.stream("Write a long story about AI"):
-    print(chunk, end="", flush=True)
+import asyncio
+from spoon_ai.chat import ChatBot
+
+async def main():
+    # Create a ChatBot instance
+    llm = ChatBot(
+        model_name="gpt-5.1-chat-latest",
+        llm_provider="openai",
+        temperature=0.7
+    )
+    
+    # Prepare messages
+    messages = [{"role": "user", "content": "Write a long story about AI"}]
+
+    # Stream the response chunk by chunk
+    async for chunk in llm.astream(messages):
+        # chunk.delta contains the text content of this chunk
+        print(chunk.delta, end="", flush=True)
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Function Calling
 
 ```python
 # Define functions for the model to call
-functions = [
+tools = [
     {
-        "name": "get_weather",
-        "description": "Get current weather",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "location": {"type": "string"}
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA"
+                    }
+                },
+                "required": ["location"]
             }
         }
     }
 ]
 
-response = await llm.generate(
-    "What's the weather in New York?",
-    functions=functions
-)
+response = await llm.ask_tool(
+        messages=messages,
+        tools=tools
+    )
 ```
 
 ## Model Selection Guide
@@ -296,18 +335,28 @@ response = await llm.generate(
 The framework provides built-in error handling with automatic fallback between providers:
 
 ```python
+"""
+LLMManager with fallback chain demo - demonstrates automatic provider fallback.
+"""
 from spoon_ai.llm.manager import LLMManager
+from spoon_ai.schema import Message
+import asyncio
 
-# Configure fallback chain - errors are handled automatically
-llm_manager = LLMManager(
-    primary_provider="openai",
-    fallback_providers=["anthropic", "google"],
-    retry_attempts=3,
-    timeout=30
-)
+# Initialize LLM Manager
+llm_manager = LLMManager()
+# Clear default_provider so fallback_chain takes precedence
+llm_manager.default_provider = None
+# The manager will try providers in order: gemini -> openai -> anthropic
+llm_manager.set_fallback_chain(["gemini", "openai", "anthropic"])
 
-# Automatic fallback on provider failures
-response = await llm_manager.generate("Hello world")
+async def main():
+    # Create messages
+    messages = [Message(role="user", content="Hello world")]
+    response = await llm_manager.chat(messages)
+    print(response.content)
+ 
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Error Types & Recovery
@@ -318,7 +367,7 @@ The framework uses structured error types for clean error handling:
 from spoon_ai.llm.errors import RateLimitError, AuthenticationError, ModelNotFoundError
 
 # Simple error handling with specific error types
-response = await llm.generate("Hello world")
+response = await llm.ask([{"role": "user", "content": "Hello world"}])
 
 # Framework handles common errors automatically:
 # - Rate limits: automatic retry with backoff
@@ -331,15 +380,14 @@ response = await llm.generate("Hello world")
 
 ```python
 # Framework provides graceful degradation patterns
-llm_manager = LLMManager(
-    primary_provider="openai",
-    fallback_providers=["deepseek", "gemini"],  # Cost-effective fallbacks
-    enable_graceful_degradation=True
-)
+llm_manager = LLMManager()
+llm_manager.default_provider = "openai"
+llm_manager.set_fallback_chain(["openai", "deepseek", "gemini"]) # Cost-effective fallbacks
 
 # If primary fails, automatically uses fallback
 # No manual error handling required
-response = await llm_manager.generate("Complex reasoning task")
+messages = [Message(role="user", content="Complex reasoning task: Explain quantum computing and its applications")]
+await llm_manager.chat(messages)
 ```
 
 ## Monitoring & Metrics
@@ -356,9 +404,14 @@ collector = get_metrics_collector()
 response = await llm.ask([{"role": "user", "content": "Hello"}])
 
 # Get collected stats per provider
-stats = collector.get_stats("openai")
-print(f"Total requests: {stats.total_requests}")
-print(f"Average latency: {stats.average_latency:.2f}s")
+ stats = collector.get_provider_stats("openai")
+print(f" Total requests: {stats.total_requests}")
+print(f" Successful requests: {stats.successful_requests}")
+print(f" Failed requests: {stats.failed_requests}")
+print(f" Success rate: {stats.success_rate:.2f}%")
+print(f" Average duration: {stats.average_duration:.3f}s")
+print(f" Total tokens: {stats.total_tokens}")
+print(f" Total cost: ${stats.total_cost:.6f}")
 ```
 
 ### Performance Monitoring
@@ -372,9 +425,17 @@ print(f"Average latency: {stats.average_latency:.2f}s")
 
 # Access provider-specific stats
 for provider in ["openai", "anthropic", "gemini"]:
-    stats = collector.get_stats(provider)
-    if stats.total_requests > 0:
-        print(f"{provider}: {stats.total_requests} requests, {stats.error_count} errors")
+    stats = collector.get_provider_stats(provider)
+    if stats and stats.total_requests > 0:
+        print(f"{provider}: {stats.total_requests} requests, {stats.failed_requests} errors")
+
+# Access provider-specific stats
+all_stats = collector.get_all_stats()
+if all_stats:
+    print(f"\n📈 All Providers Summary:")
+    for provider_name, provider_stats in all_stats.items():
+        print(f"{provider_name}: {provider_stats.total_requests} requests, "
+                f"{provider_stats.success_rate:.1f}% success rate")
 ```
 
 ## Best Practices
@@ -408,7 +469,8 @@ The SpoonOS framework follows a "fail-fast, recover-gracefully" approach:
 
 ```python
 # Preferred: Let framework handle errors
-response = await llm_manager.generate("Hello world")
+messages = [Message(role="user", content="Hello world")]
+response = await llm_manager.chat("Hello world")
 
 # Only use explicit error handling for custom business logic
 if response.provider != "openai":

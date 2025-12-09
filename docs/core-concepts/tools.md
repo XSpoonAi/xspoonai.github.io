@@ -189,7 +189,7 @@ from spoon_ai.tools.mcp_tool import MCPTool
 
 # Example: connect to DeepWiki SSE MCP server
 deepwiki = MCPTool(
-    name="deepwiki",
+    name="read_wiki_structure",  # Use the actual tool name from the server
     description="DeepWiki MCP tool for repository analysis",
     mcp_config={
         "url": "https://mcp.deepwiki.com/sse",
@@ -197,6 +197,17 @@ deepwiki = MCPTool(
         "timeout": 30,
     },
 )
+
+async def main():
+    # Pre-load parameters to get the correct schema
+    print("Loading MCP tool parameters...")
+    await deepwiki.ensure_parameters_loaded()
+    
+    # Use the correct parameter name: repoName (not repo)
+    result = await deepwiki.execute(repoName="XSpoonAi/spoon-core")
+    print(f"\nResult:\n{result}")
+
+asyncio.run(main())
 ```
 
 If you need to self-host an MCP server, follow that server’s own documentation; the cookbook focuses on the `spoon_ai` MCP client (`MCPTool`) rather than FastMCP server setup.
