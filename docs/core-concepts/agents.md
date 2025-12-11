@@ -418,6 +418,6 @@ response = await agent.run("Get Bitcoin price and analyze trends")
 
 ### 📖 **Advanced Topics**
 
-- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[Graph System](../graph-system/index.md)** - Advanced workflow orchestration
 - **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Dynamic tool discovery and execution
 - **[API Reference](../api-reference/spoon_ai/agents/base/)** - Complete agent API documentation

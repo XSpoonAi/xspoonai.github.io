@@ -38,6 +38,8 @@ flowchart TD
     style I fill:#fce4ec
 ```
 
+**Pitfall:** Explicit edges are evaluated before routing rules. If you add `add_edge("entry", "fallback")`, routing rules for `entry` will never fire. For a fallback, prefer `graph.config.router.default_target = "fallback"` instead of a static edge from the source node.
+
 ### 1. Conditional Edges (Most Common)
 
 Route based on state inspection:

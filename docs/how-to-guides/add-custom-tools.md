@@ -553,7 +553,7 @@ class MyTool(BaseTool):
 ### 📖 **Additional Resources**
 
 - **[Built-in Tools Reference](../api-reference/spoon_ai/tools/)** - Explore existing tool implementations
-- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[Graph System](../graph-system/index.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Tool-agent integration patterns
 
 ## Troubleshooting
