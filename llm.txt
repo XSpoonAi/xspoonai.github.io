@@ -12530,7 +12530,7 @@ response = await agent.run("Get Bitcoin price and analyze trends")
 
 ### 📖 **Advanced Topics**
 
-- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[Graph System](../graph-system/index.md)** - Advanced workflow orchestration
 - **[MCP Protocol](../core-concepts/mcp-protocol.md)** - Dynamic tool discovery and execution
 - **[API Reference](../api-reference/spoon_ai/agents/base/)** - Complete agent API documentation
 
@@ -14623,7 +14623,7 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 
 ### 📖 **Additional Resources**
 
-- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[Graph System](../graph-system/index.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Agent-MCP integration patterns
 - **[API Reference](../api-reference/index)** - Complete SpoonOS API documentation
 **GitHub**: [View Source](https://github.com/XSpoonAi/spoon-core/blob/main/examples/mcp/spoon_search_agent.py)
@@ -14654,7 +14654,7 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 
 ### 📖 **Additional Resources**
 
-- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[Graph System](../graph-system/index.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Agent-MCP integration patterns
 - **[API Reference](../api-reference/index)** - Complete SpoonOS API documentation
 
@@ -16172,6 +16172,8 @@ flowchart TD
     style G fill:#e3f2fd
     style I fill:#fce4ec
 ```
+
+**Pitfall:** Explicit edges are evaluated before routing rules. If you add `add_edge("entry", "fallback")`, routing rules for `entry` will never fire. For a fallback, prefer `graph.config.router.default_target = "fallback"` instead of a static edge from the source node.
 
 ### 1. Conditional Edges (Most Common)
 
@@ -20413,7 +20415,7 @@ class MyTool(BaseTool):
 ### 📖 **Additional Resources**
 
 - **[Built-in Tools Reference](../api-reference/spoon_ai/tools/)** - Explore existing tool implementations
-- **[Graph System](../core-concepts/graph-system.md)** - Advanced workflow orchestration
+- **[Graph System](../graph-system/index.md)** - Advanced workflow orchestration
 - **[Agent Architecture](../core-concepts/agents.md)** - Tool-agent integration patterns
 
 ## Troubleshooting
