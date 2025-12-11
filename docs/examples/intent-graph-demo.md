@@ -118,7 +118,7 @@ python intent_graph_demo.py
 - **Supporting Modules**:
   - `spoon_ai/graph/` - Core graph system and declarative builders
   - `spoon_ai/graph/builder.py` - High-level API and parameter inference
-  - [Graph System Docs](../core-concepts/graph-system.md)
+  - [Graph System Docs](../graph-system/index.md)
 
 #### 🎓 **Learning Outcomes**
 

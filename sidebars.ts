@@ -32,10 +32,26 @@ const sidebars: SidebarsConfig = {
         'core-concepts/tools',
         'core-concepts/llm-providers',
         'core-concepts/mcp-protocol',
-        'core-concepts/graph-system',
         'core-concepts/Short-term memory',
         'core-concepts/x402-payments',
         'core-concepts/long-term memory',
+      ],
+    },
+    {
+      type: 'category',
+      label: '📊 Graph System',
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'graph-system/index',
+      },
+      items: [
+        'graph-system/quick-start',
+        'graph-system/core-concepts',
+        'graph-system/building-graphs',
+        'graph-system/advanced-features',
+        'graph-system/integration',
+        'graph-system/examples',
       ],
     },
     {
