@@ -22,10 +22,10 @@ What happens:
 
 1. The script prints signer details and the target resource (`https://www.x402.org/protected` by default).
 2. A `SpoonReactAI` instance performs a ReAct loop:
-   - Calls `http_probe` (no payment) to capture the 402 challenge.
+   - Calls `web_scraper` (no payment) to capture the 402 challenge.
    - Calls `x402_paywalled_request` to sign and submit a 0.01 USDC payment.
    - Retrieves the protected payload (a SoundCloud embed) after settlement.
-3. The console logs tool traces, the signed `X-PAYMENT` header, and the decoded settlement receipt (transaction hash, payer, network).
+3. The console logs tool traces, the signed `PAYMENT-SIGNATURE` (x402 v2) header, and the decoded settlement receipt from `PAYMENT-RESPONSE` (transaction hash, payer, network).
 
 ## Troubleshooting
 

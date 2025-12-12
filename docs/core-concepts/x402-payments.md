@@ -25,7 +25,7 @@ sequenceDiagram
     Agent->>API Server: GET /premium-data
     API Server-->>Agent: 402 Payment Required (price, recipient)
     Agent->>Agent: Sign EIP-712 payment
-    Agent->>API Server: GET /premium-data + X-PAYMENT header
+    Agent->>API Server: GET /premium-data + PAYMENT-SIGNATURE (v2) / X-PAYMENT (v1)
     API Server->>x402 Facilitator: Verify signature
     x402 Facilitator->>Blockchain: Execute transfer
     Blockchain-->>x402 Facilitator: Confirmed
@@ -36,9 +36,9 @@ sequenceDiagram
 | Step | What Happens |
 |------|--------------|
 | **1. Request** | Agent calls a paid API endpoint |
-| **2. 402 Response** | Server returns payment requirements (amount, token, recipient) |
+| **2. 402 Response** | Server returns payment requirements (v2 via `PAYMENT-REQUIRED`, legacy v1 via JSON body) |
 | **3. Sign** | Agent signs an EIP-712 typed-data payload (no gas yet) |
-| **4. Retry** | Agent sends request again with signed payment header |
+| **4. Retry** | Agent sends request again with the signed payment header (`PAYMENT-SIGNATURE` for v2, `X-PAYMENT` for v1) |
 | **5. Verify & Execute** | Facilitator verifies signature and executes transfer on-chain |
 | **6. Success** | Server returns the requested data |
 
@@ -137,21 +137,21 @@ sequenceDiagram
         Agent->>Agent: Merge requirements + config overrides
         Agent->>Agent: Select signer (PRIVATE_KEY or Turnkey)
         Agent->>Agent: Build typed-data payload
-        Agent->>Agent: Sign -> X-PAYMENT header
-        Agent->>Paywall: Retry with X-PAYMENT
+        Agent->>Agent: Sign -> PAYMENT-SIGNATURE (v2) / X-PAYMENT (v1)
+        Agent->>Paywall: Retry with signed payment header
         Paywall->>Facilitator: verify_payment (optional settle)
         Facilitator-->>Paywall: Valid? + receipt
         alt Invalid
             Paywall-->>Agent: 402 / error
         else Valid
-            Paywall-->>Agent: 200 + X-PAYMENT-RESPONSE
+            Paywall-->>Agent: 200 + PAYMENT-RESPONSE (v2) / X-PAYMENT-RESPONSE (v1)
             Agent->>Agent: Log receipt / update memory
             Agent-->>User: Protected content + summary
         end
     end
 ```
 
-If the paid retry fails (for example `verify_payment` rejects the header or the facilitator reports an error), the paywall server immediately returns another `402` or error payload and the agent decides whether to run `x402_paywalled_request` again with corrected parameters. A successful verification moves straight into settlement and target agent execution, so there is no additional retry cycle once the `X-PAYMENT` header is accepted.
+If the paid retry fails (for example `verify_payment` rejects the header or the facilitator reports an error), the paywall server immediately returns another `402` or error payload and the agent decides whether to run `x402_paywalled_request` again with corrected parameters. A successful verification moves straight into settlement and target agent execution, so there is no additional retry cycle once the payment header is accepted (`PAYMENT-SIGNATURE` in v2, `X-PAYMENT` in legacy v1).
 
 ## Operational checklist
 

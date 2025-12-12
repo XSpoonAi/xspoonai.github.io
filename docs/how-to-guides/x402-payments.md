@@ -24,8 +24,10 @@ Consult [API Reference: x402](../api-reference/spoon_ai/payments/) for:
 Follow [Example: x402 ReAct agent](../examples/x402-react-agent.md) to run the ReAct demo (`uv run python examples/x402_agent_demo.py`). It walks through:
 
 - Preparing `.env` and funding the signer.
-- Observing the agent call `http_probe`, then `x402_paywalled_request`, retrieve the protected page, and print the signed `X-PAYMENT` + settlement receipt.
+- Observing the agent call `web_scraper`, then `x402_paywalled_request`, retrieve the protected page, and print the signed `PAYMENT-SIGNATURE` + settlement receipt.
 - Troubleshooting common facilitator or configuration errors.
+
+> Note: x402 v2 uses `PAYMENT-REQUIRED` / `PAYMENT-SIGNATURE` / `PAYMENT-RESPONSE` headers. SpoonOS tools still support the legacy `X-PAYMENT` / `X-PAYMENT-RESPONSE` headers for older v1 paywalls.
 
 ## Quick checklist
 
