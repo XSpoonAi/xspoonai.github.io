@@ -16180,25 +16180,76 @@ flowchart TD
 Route based on state inspection:
 
 ```python
+import asyncio
+from typing import TypedDict
+
+from spoon_ai.graph import END, StateGraph
+
+
+class AnalysisState(TypedDict, total=False):
+    confidence: float
+    output: str
+
+
+async def analyze(state: AnalysisState) -> dict:
+    # Pretend we ran an analysis that produced a confidence score.
+    return {"confidence": float(state.get("confidence", 0.0) or 0.0)}
+
+
+async def generate_recommendation(state: AnalysisState) -> dict:
+    return {"output": "generated recommendation"}
+
+
+async def request_clarification(state: AnalysisState) -> dict:
+    return {"output": "requested clarification"}
+
+
+async def escalate_to_human(state: AnalysisState) -> dict:
+    return {"output": "escalated to human"}
+
+
 def route_by_confidence(state: AnalysisState) -> str:
     """Route based on analysis confidence level."""
-    confidence = state.get("confidence", 0.0)
-
+    confidence = state.get("confidence", 0.0) or 0.0
     if confidence >= 0.8:
         return "high_confidence"
-    elif confidence >= 0.5:
+    if confidence >= 0.5:
         return "medium_confidence"
     return "low_confidence"
 
+
+graph = StateGraph(AnalysisState)
+graph.add_node("analyze", analyze)
+graph.add_node("generate_recommendation", generate_recommendation)
+graph.add_node("request_clarification", request_clarification)
+graph.add_node("escalate_to_human", escalate_to_human)
+graph.set_entry_point("analyze")
+
 graph.add_conditional_edges(
-    source="analyze",
-    condition=route_by_confidence,
-    path_map={
+    "analyze",
+    route_by_confidence,
+    {
         "high_confidence": "generate_recommendation",
         "medium_confidence": "request_clarification",
         "low_confidence": "escalate_to_human",
-    }
+    },
 )
+
+graph.add_edge("generate_recommendation", END)
+graph.add_edge("request_clarification", END)
+graph.add_edge("escalate_to_human", END)
+
+app = graph.compile()
+
+
+async def main() -> None:
+    for confidence in [0.9, 0.6, 0.2]:
+        result = await app.invoke({"confidence": confidence})
+        print(confidence, "->", result["output"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### 2. Routing Rules (Pattern-Based)
@@ -16206,12 +16257,48 @@ graph.add_conditional_edges(
 For pattern matching with priorities:
 
 ```python
+import asyncio
+from typing import TypedDict
+
+from spoon_ai.graph import END, StateGraph
+
+
+class RoutingState(TypedDict, total=False):
+    user_query: str
+    category: str
+    output: str
+
+
+async def entry(state: RoutingState) -> dict:
+    # No explicit edge from this node; routing rules decide the next node.
+    return {}
+
+
+async def priority_handler(state: RoutingState) -> dict:
+    return {"output": f"Priority: {state.get('user_query', '')}"}
+
+
+async def trading_handler(state: RoutingState) -> dict:
+    return {"output": f"Trading: {state.get('user_query', '')}"}
+
+
+async def general_handler(state: RoutingState) -> dict:
+    return {"output": f"Fallback: {state.get('user_query', '')}"}
+
+
+graph = StateGraph(RoutingState)
+graph.add_node("entry", entry)
+graph.add_node("priority_handler", priority_handler)
+graph.add_node("trading_handler", trading_handler)
+graph.add_node("general_handler", general_handler)
+graph.set_entry_point("entry")
+
 # Priority 10 - Specific patterns first
 graph.add_routing_rule(
     source_node="entry",
-    condition=lambda state, query: "urgent" in query.lower(),
+    condition=lambda state, query: "urgent" in query,
     target_node="priority_handler",
-    priority=10
+    priority=10,
 )
 
 # Priority 5 - Category-based
@@ -16219,7 +16306,7 @@ graph.add_routing_rule(
     source_node="entry",
     condition=lambda state, query: state.get("category") == "trading",
     target_node="trading_handler",
-    priority=5
+    priority=5,
 )
 
 # Priority 1 - Default fallback
@@ -16227,8 +16314,28 @@ graph.add_routing_rule(
     source_node="entry",
     condition=lambda state, query: True,  # Always matches
     target_node="general_handler",
-    priority=1
+    priority=1,
 )
+
+graph.add_edge("priority_handler", END)
+graph.add_edge("trading_handler", END)
+graph.add_edge("general_handler", END)
+
+app = graph.compile()
+
+
+async def main() -> None:
+    for state in [
+        {"user_query": "urgent: price drop", "category": ""},
+        {"user_query": "btc outlook", "category": "trading"},
+        {"user_query": "hello", "category": ""},
+    ]:
+        result = await app.invoke(state)
+        print(result["output"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### 3. Intelligent Router (Custom Logic)
@@ -16236,25 +16343,76 @@ graph.add_routing_rule(
 For complex routing logic:
 
 ```python
-async def intelligent_router(state: AnalysisState, available_nodes: List[str]) -> str:
-    """
-    Custom routing logic with access to all available nodes.
-    """
+import asyncio
+from typing import List, TypedDict
+
+from spoon_ai.graph import END, StateGraph
+
+
+class AnalysisState(TypedDict, total=False):
+    user_query: str
+    intent: str
+    confidence: float
+    routing_history: List[str]
+    output: str
+
+
+async def analyze(state: AnalysisState) -> dict:
+    history = list(state.get("routing_history") or [])
+    history.append("analyze")
+    return {"routing_history": history}
+
+
+async def human_review(state: AnalysisState) -> dict:
+    return {"output": "needs human review"}
+
+
+async def execute_trade(state: AnalysisState) -> dict:
+    return {"output": "executed trade (stub)"}
+
+
+async def general_handler(state: AnalysisState) -> dict:
+    return {"output": "general handler"}
+
+
+async def intelligent_router(state: AnalysisState, query: str) -> str:
+    """Custom routing logic."""
     intent = state.get("intent", "")
-    confidence = state.get("confidence", 0)
-    history = state.get("routing_history", [])
+    confidence = state.get("confidence", 0.0) or 0.0
+    history = state.get("routing_history", []) or []
 
     # Avoid loops
     if "analyze" in history and intent == "retry":
         return "human_review"
 
-    # Route based on complex conditions
     if intent == "trading" and confidence > 0.9:
-        return "execute_trade" if "execute_trade" in available_nodes else "review_trade"
+        return "execute_trade"
 
     return "general_handler"
 
+
+graph = StateGraph(AnalysisState)
+graph.add_node("analyze", analyze)
+graph.add_node("human_review", human_review)
+graph.add_node("execute_trade", execute_trade)
+graph.add_node("general_handler", general_handler)
+graph.set_entry_point("analyze")
 graph.set_intelligent_router(intelligent_router)
+
+graph.add_edge("human_review", END)
+graph.add_edge("execute_trade", END)
+graph.add_edge("general_handler", END)
+
+app = graph.compile()
+
+
+async def main() -> None:
+    result = await app.invoke({"user_query": "trade", "intent": "trading", "confidence": 0.95, "routing_history": []})
+    print(result["output"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### 4. LLM-Powered Routing (Most Flexible)
@@ -16263,15 +16421,22 @@ Let an LLM decide the next step:
 
 ```python
 from spoon_ai.graph.config import GraphConfig, RouterConfig
+from typing import TypedDict
+
+from spoon_ai.graph import StateGraph
 
 config = GraphConfig(
     router=RouterConfig(
         allow_llm=True,
         llm_timeout=8.0,
         default_target="fallback_handler",
-        allowed_targets=["price_handler", "trade_handler", "analysis_handler"],
+        allowed_targets=["price_handler", "trade_handler", "analysis_handler", "fallback_handler"],
     )
 )
+
+class AnalysisState(TypedDict, total=False):
+    user_query: str
+    output: str
 
 graph = StateGraph(AnalysisState)
 graph.config = config
@@ -16304,15 +16469,56 @@ Execute multiple nodes concurrently for better performance.
 
 ```python
 from spoon_ai.graph.config import ParallelGroupConfig
+from typing import Any, Dict, TypedDict
+
+from spoon_ai.graph import END, StateGraph
+
+class MarketState(TypedDict, total=False):
+    symbol: str
+    binance: Dict[str, Any]
+    coinbase: Dict[str, Any]
+    kraken: Dict[str, Any]
+    output: str
+
+
+async def fetch_binance(state: MarketState) -> dict:
+    return {"binance": {"price": 45000}}
+
+
+async def fetch_coinbase(state: MarketState) -> dict:
+    return {"coinbase": {"price": 45050}}
+
+
+async def fetch_kraken(state: MarketState) -> dict:
+    return {"kraken": {"price": 44980}}
+
+
+async def aggregate(state: MarketState) -> dict:
+    prices = [state.get("binance", {}).get("price"), state.get("coinbase", {}).get("price"), state.get("kraken", {}).get("price")]
+    prices = [p for p in prices if isinstance(p, (int, float))]
+    avg = sum(prices) / len(prices) if prices else 0.0
+    return {"output": f"avg price: {avg:.2f}"}
+
+
+graph = StateGraph(MarketState)
+graph.add_node("fetch_binance", fetch_binance)
+graph.add_node("fetch_coinbase", fetch_coinbase)
+graph.add_node("fetch_kraken", fetch_kraken)
+graph.add_node("aggregate", aggregate)
 
 graph.add_parallel_group(
     "market_data_fetch",
     nodes=["fetch_binance", "fetch_coinbase", "fetch_kraken"],
-    config=ParallelGroupConfig(
-        join_strategy="all",
-        timeout=15.0,
-    )
+    config=ParallelGroupConfig(join_strategy="all", timeout=15.0),
 )
+
+graph.set_entry_point("fetch_binance")
+graph.add_edge("fetch_binance", "aggregate")
+graph.add_edge("fetch_coinbase", "aggregate")
+graph.add_edge("fetch_kraken", "aggregate")
+graph.add_edge("aggregate", END)
+
+app = graph.compile()
 ```
 
 ### Join Strategies
@@ -16324,6 +16530,9 @@ graph.add_parallel_group(
 | `"quorum"` | Wait for majority (configurable) | Fault-tolerant consensus |
 
 ```python
+# These are standalone config examples.
+from spoon_ai.graph.config import ParallelGroupConfig
+
 # Quorum: Wait for 2 out of 3 (66%)
 config = ParallelGroupConfig(
     join_strategy="quorum",
@@ -16455,7 +16664,17 @@ Interrupt execution to collect user input, then resume.
 ### Basic Interrupt Pattern
 
 ```python
-from spoon_ai.graph import interrupt, Command
+from typing import Any, Dict, TypedDict
+
+from spoon_ai.graph import interrupt
+
+
+class TradeState(TypedDict, total=False):
+    trade_details: Dict[str, Any]
+    user_confirmed: bool
+    trade_executed: bool
+    execution_time: str
+
 
 async def confirm_trade_node(state: TradeState) -> dict:
     """Node that requires user confirmation."""
@@ -16480,62 +16699,136 @@ async def confirm_trade_node(state: TradeState) -> dict:
 ### Handling Interrupts
 
 ```python
-# Initial execution - will interrupt
-result = await app.invoke(
-    {"user_query": "Buy 0.1 BTC", "user_confirmed": False},
-    config={"configurable": {"thread_id": "trade_session"}}
-)
+import asyncio
 
-# Check for interrupt
-if "__interrupt__" in result:
-    interrupt_info = result["__interrupt__"][0]
-    print(f"Question: {interrupt_info['value']['question']}")
+from typing import Any, Dict, TypedDict
 
-    # Get user confirmation (from UI, CLI, API, etc.)
-    user_confirmed = input("Confirm? (y/n): ").lower() == "y"
+from spoon_ai.graph import END, StateGraph, interrupt
 
-    # Resume execution with user response
-    result = await app.invoke(
-        Command(resume={"user_confirmed": user_confirmed}),
-        config={"configurable": {"thread_id": "trade_session"}}
-    )
 
-print(f"Final result: {result}")
+async def main() -> None:
+    class TradeState(TypedDict, total=False):
+        trade_details: Dict[str, Any]
+        user_confirmed: bool
+        trade_executed: bool
+
+    async def confirm_trade(state: TradeState) -> dict:
+        details = state.get("trade_details", {})
+        if not state.get("user_confirmed"):
+            interrupt(
+                {
+                    "type": "confirmation_required",
+                    "question": f"Execute {details.get('action')} {details.get('amount')} {details.get('symbol')}?",
+                    "trade_details": details,
+                }
+            )
+        return {}
+
+    async def execute_trade(state: TradeState) -> dict:
+        return {"trade_executed": True}
+
+    graph = StateGraph(TradeState)
+    graph.add_node("confirm_trade", confirm_trade)
+    graph.add_node("execute_trade", execute_trade)
+    graph.set_entry_point("confirm_trade")
+    graph.add_edge("confirm_trade", "execute_trade")
+    graph.add_edge("execute_trade", END)
+    app = graph.compile()
+
+    config = {"configurable": {"thread_id": "trade_session"}}
+    initial_state = {
+        "trade_details": {"action": "buy", "amount": 0.1, "symbol": "BTC"},
+        "user_confirmed": False,
+        "trade_executed": False,
+    }
+
+    # First execution - will interrupt
+    result = await app.invoke(initial_state, config=config)
+    if "__interrupt__" in result:
+        interrupt_info = result["__interrupt__"][0]
+        print(f"Question: {interrupt_info['value']['question']}")
+
+        # In a real app, collect this from UI/CLI/API; keep docs non-interactive.
+        user_confirmed = True
+
+        # \"Resume\" by invoking again with updated state (this graph re-checks at the entry node).
+        resume_state = {**initial_state, "user_confirmed": user_confirmed}
+        result = await app.invoke(resume_state, config=config)
+
+    print(f"Final result: {result}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Multi-Step Approval Workflow
 
 ```python
-class ApprovalState(TypedDict):
+import asyncio
+from typing import TypedDict
+
+from spoon_ai.graph import END, StateGraph, interrupt
+
+
+class ApprovalState(TypedDict, total=False):
     request: str
     manager_approved: bool
     compliance_approved: bool
     final_status: str
 
+
 async def request_manager_approval(state: ApprovalState) -> dict:
     if not state.get("manager_approved"):
-        interrupt({
-            "type": "manager_approval",
-            "request": state["request"],
-            "approver_role": "manager"
-        })
+        interrupt({"type": "manager_approval", "request": state.get("request", ""), "approver_role": "manager"})
     return {}
+
 
 async def request_compliance_approval(state: ApprovalState) -> dict:
     if not state.get("compliance_approved"):
-        interrupt({
-            "type": "compliance_approval",
-            "request": state["request"],
-            "approver_role": "compliance"
-        })
+        interrupt({"type": "compliance_approval", "request": state.get("request", ""), "approver_role": "compliance"})
     return {}
 
+
 async def execute_request(state: ApprovalState) -> dict:
-    if state["manager_approved"] and state["compliance_approved"]:
+    if state.get("manager_approved") and state.get("compliance_approved"):
         return {"final_status": "approved_and_executed"}
     return {"final_status": "rejected"}
 
-# Wire up: request → manager → compliance → execute
+
+# Wire up: manager → compliance → execute
+graph = StateGraph(ApprovalState)
+graph.add_node("manager", request_manager_approval)
+graph.add_node("compliance", request_compliance_approval)
+graph.add_node("execute", execute_request)
+graph.set_entry_point("manager")
+graph.add_edge("manager", "compliance")
+graph.add_edge("compliance", "execute")
+graph.add_edge("execute", END)
+app = graph.compile()
+
+
+async def main() -> None:
+    config = {"configurable": {"thread_id": "approval_session"}}
+
+    # 1) manager approval interrupt
+    state = {"request": "approve transfer", "manager_approved": False, "compliance_approved": False}
+    result = await app.invoke(state, config=config)
+    print("step1:", result.get("__interrupt__"))
+
+    # 2) compliance approval interrupt
+    state = {**state, "manager_approved": True}
+    result = await app.invoke(state, config=config)
+    print("step2:", result.get("__interrupt__"))
+
+    # 3) fully approved
+    state = {**state, "compliance_approved": True}
+    result = await app.invoke(state, config=config)
+    print("final:", result.get("final_status"))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Interrupt Best Practices
@@ -16572,6 +16865,8 @@ retry_policy = ParallelRetryPolicy(
 Prevent cascading failures:
 
 ```python
+from spoon_ai.graph.config import ParallelGroupConfig
+
 config = ParallelGroupConfig(
     # After 5 failures, disable the group
     circuit_breaker_threshold=5,
@@ -16584,6 +16879,23 @@ config = ParallelGroupConfig(
 ### Error Handling in Nodes
 
 ```python
+import asyncio
+from typing import TypedDict
+
+
+class MyState(TypedDict, total=False):
+    symbol: str
+
+
+async def external_api_call(symbol: str) -> dict:
+    # Minimal stub for docs. Replace with a real client call.
+    if symbol == "TIMEOUT":
+        raise TimeoutError("simulated timeout")
+    if symbol == "DOWN":
+        raise ConnectionError("simulated connection error")
+    return {"symbol": symbol, "price": 123.45}
+
+
 async def robust_api_node(state: MyState) -> dict:
     """Node with comprehensive error handling."""
     import logging
@@ -16620,12 +16932,32 @@ async def robust_api_node(state: MyState) -> dict:
             "error": f"Unexpected: {e}",
             "status": "failed"
         }
+
+
+async def main() -> None:
+    for symbol in ["BTC", "DOWN", "TIMEOUT"]:
+        result = await robust_api_node({"symbol": symbol})
+        print(symbol, "->", result["status"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### State Validation
 
 ```python
+import asyncio
+from typing import TypedDict
+
+from spoon_ai.graph import END, StateGraph
 from spoon_ai.graph.config import GraphConfig
+
+class MyState(TypedDict, total=False):
+    user_id: str
+    amount: float
+    output: str
+
 
 def validate_state(state: dict) -> None:
     """Raise exception if state is invalid."""
@@ -16642,6 +16974,30 @@ config = GraphConfig(
 
 graph = StateGraph(MyState)
 graph.config = config
+
+
+async def process(state: MyState) -> dict:
+    return {"output": "ok"}
+
+
+graph.add_node("process", process)
+graph.set_entry_point("process")
+graph.add_edge("process", END)
+app = graph.compile()
+
+
+async def main() -> None:
+    try:
+        await app.invoke({"amount": 1.0})  # missing user_id
+    except Exception as e:
+        print("validation failed:", str(e)[:80])
+
+    result = await app.invoke({"user_id": "user_123", "amount": 1.0})
+    print(result["output"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ---
@@ -16653,6 +17009,8 @@ Manage system resources and prevent overload.
 ### Rate Limiting
 
 ```python
+from spoon_ai.graph.config import ParallelGroupConfig
+
 config = ParallelGroupConfig(
     rate_limit_per_second=10.0,  # Max 10 requests/second
     max_in_flight=5,            # Max 5 concurrent tasks
@@ -16672,6 +17030,8 @@ config = GraphConfig(
 ### Timeout Configuration
 
 ```python
+from spoon_ai.graph.config import ParallelGroupConfig, RouterConfig
+
 config = ParallelGroupConfig(
     timeout=30.0,  # 30 second timeout for parallel group
 )
@@ -17021,6 +17381,9 @@ if __name__ == "__main__":
 ### With Parallel Groups
 
 ```python
+from typing import Any, Dict, TypedDict
+
+from spoon_ai.graph import END
 from spoon_ai.graph.builder import (
     DeclarativeGraphBuilder,
     GraphTemplate,
@@ -17106,24 +17469,47 @@ One key advantage of declarative templates is serialization:
 
 ```python
 import json
+import tempfile
+from pathlib import Path
+from typing import TypedDict, List, Dict, Any
+
+from spoon_ai.graph import END
+from spoon_ai.graph.builder import GraphTemplate, NodeSpec, EdgeSpec
+
+
+class DemoState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def process(state: DemoState) -> dict:
+    return {"output": state.get("input", "")}
+
+
+template = GraphTemplate(
+    entry_point="process",
+    nodes=[NodeSpec("process", process)],
+    edges=[EdgeSpec("process", END)],
+)
 
 # Serialize template (for storage/versioning)
 template_dict = {
     "entry_point": template.entry_point,
     "nodes": [{"name": n.name, "parallel_group": n.parallel_group} for n in template.nodes],
-    "edges": [{"source": e.source, "target": e.target} for e in template.edges],
+    "edges": [{"start": e.start, "end": e.end} for e in template.edges],
 }
 
-# Save to file
-with open("workflow_template.json", "w") as f:
-    json.dump(template_dict, f, indent=2)
+# Save to a temp file (safe for repeated runs)
+out_path = Path(tempfile.gettempdir()) / "workflow_template.json"
+out_path.write_text(json.dumps(template_dict, indent=2), encoding="utf-8")
+print(f"Wrote template: {out_path}")
 ```
 
 ---
 
 ## High-Level API
 
-The most advanced approach. Uses LLM to automatically infer parameters and make routing decisions.
+The most advanced approach. Uses an LLM (optional) to infer intent/parameters and helps you build and run a graph per user query.
 
 ### When to Use
 
@@ -17136,131 +17522,134 @@ The most advanced approach. Uses LLM to automatically infer parameters and make 
 ### Key Components
 
 ```python
-from spoon_ai.graph.builder import (
-    HighLevelGraphAPI,
-    Intent,
-    MCPToolSpec,
-    NodePlugin,
-)
+from spoon_ai.graph.builder import HighLevelGraphAPI, Intent, GraphTemplate, NodeSpec, EdgeSpec
+from spoon_ai.graph.mcp_integration import MCPToolSpec
 ```
 
 | Component | Purpose |
 |-----------|---------|
 | `HighLevelGraphAPI` | Main interface for intelligent graphs |
-| `Intent` | Define possible user intents |
-| `MCPToolSpec` | Integrate MCP tools |
-| `NodePlugin` | Custom node behavior extensions |
+| `Intent` | Intent analysis result (`category`, `confidence`, `metadata`) |
+| `GraphTemplate` / `NodeSpec` / `EdgeSpec` | Declarative graph definition used to build a `StateGraph` |
+| `MCPToolSpec` | Register MCP tools for a given intent category |
 
-### Example with Intent Classification
+### Minimal Example (choose a template by inferred intent)
 
 ```python
-from spoon_ai.graph.builder import (
-    HighLevelGraphAPI,
-    Intent,
-    GraphTemplate,
-    NodeSpec,
-    EdgeSpec,
-)
+import asyncio
+import json
+from typing import Any, Dict, List, TypedDict
 
-# Define possible intents
-intents = [
-    Intent(
-        name="price_query",
-        description="User wants to know the price of a cryptocurrency",
-        required_params=["symbol"],
-        example_queries=["What is BTC price?", "How much is ETH?"]
-    ),
-    Intent(
-        name="market_analysis",
-        description="User wants market analysis or trends",
-        required_params=["symbol", "timeframe"],
-        example_queries=["Analyze BTC trend", "What's the ETH outlook?"]
-    ),
-    Intent(
-        name="general_question",
-        description="General questions about crypto",
-        required_params=[],
-        example_queries=["What is blockchain?", "How do I stake?"]
-    ),
-]
+from spoon_ai.graph import END
+from spoon_ai.graph.builder import HighLevelGraphAPI, Intent, GraphTemplate, NodeSpec, EdgeSpec
+from spoon_ai.schema import Message
 
-# Create high-level API
-api = HighLevelGraphAPI(
-    state_schema=AnalysisState,
-    intents=intents,
-    llm_provider="openai",  # or "anthropic", "deepseek"
-)
 
-# Build nodes for each intent
-async def handle_price_query(state):
-    symbol = state.get("symbol", "BTC")
-    return {"result": f"Price for {symbol}: $45,000"}
+class AnalysisState(TypedDict, total=False):
+    user_query: str
+    query_intent: str
+    result: str
 
-async def handle_market_analysis(state):
-    symbol = state.get("symbol", "BTC")
-    timeframe = state.get("timeframe", "24h")
-    return {"result": f"Analysis for {symbol} ({timeframe}): Bullish"}
 
-async def handle_general(state):
-    return {"result": "General crypto information..."}
+async def price_handler(state: Dict[str, Any]) -> dict:
+    return {"result": f"Price handler (stub): {state['user_query']}"}
 
-# Register handlers
-api.register_intent_handler("price_query", handle_price_query)
-api.register_intent_handler("market_analysis", handle_market_analysis)
-api.register_intent_handler("general_question", handle_general)
 
-# Build and compile
-graph = api.build()
-app = graph.compile()
+async def general_handler(state: Dict[str, Any]) -> dict:
+    return {"result": f"General handler (stub): {state['user_query']}"}
 
-# Usage: API automatically classifies intent and extracts params
+
+def intent_prompt_builder(query: str) -> List[Message]:
+    return [
+        Message(
+            role="system",
+            content='Return JSON only: {"category": "price_query|general_qa", "confidence": 0.0-1.0}',
+        ),
+        Message(role="user", content=query),
+    ]
+
+
+def intent_parser(text: str) -> Dict[str, Any]:
+    try:
+        return json.loads(text)
+    except Exception:
+        return {}
+
+
+def build_template(intent: Intent) -> GraphTemplate:
+    if intent.category == "price_query":
+        return GraphTemplate(
+            entry_point="price_handler",
+            nodes=[NodeSpec("price_handler", price_handler)],
+            edges=[EdgeSpec("price_handler", END)],
+        )
+    return GraphTemplate(
+        entry_point="general_handler",
+        nodes=[NodeSpec("general_handler", general_handler)],
+        edges=[EdgeSpec("general_handler", END)],
+    )
+
+
 async def main():
-    result = await app.invoke({
-        "user_query": "What is the current Bitcoin price?",
-        # Other fields auto-populated by LLM
-    })
-    print(result["result"])
+    api = HighLevelGraphAPI(
+        AnalysisState,
+        intent_prompt_builder=intent_prompt_builder,
+        intent_parser=intent_parser,
+    )
+
+    intent, state = await api.build_initial_state("What is BTC price?")
+    template = build_template(intent)
+    graph = api.build_graph(template)
+    app = graph.compile()
+
+    result = await app.invoke(state)
+    print("intent:", intent.category)
+    print("result:", result["result"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
-### Automatic Parameter Inference
+### Automatic Parameter Inference (optional)
 
-The High-Level API can extract parameters from natural language:
+The High-Level API can infer extra parameters and merge them into the initial state **only if** you provide:
+- `parameter_prompt_builder(query, intent) -> List[Message]`
+- `parameter_parser(text, intent) -> Dict[str, Any]`
 
 ```python
+# Example:
 # User query: "Analyze ETH trend for the past week"
-# API automatically extracts:
-# - intent: "market_analysis"
-# - symbol: "ETH"
-# - timeframe: "1w"
+# Your parameter parser could return:
+# {"symbol": "ETH", "timeframe": "1w"}
 ```
 
-### Integration with MCP Tools
+### Integration with MCP Tools (optional)
 
 ```python
-from spoon_ai.graph.builder import MCPToolSpec
+from typing import TypedDict
 
-# Define MCP tools for the graph
-mcp_tools = [
-    MCPToolSpec(
-        name="tavily-search",
-        description="Web search for crypto news",
-        server_type="stdio",
-        command="npx -y tavily-mcp"
-    ),
-    MCPToolSpec(
-        name="crypto-data",
-        description="Real-time crypto market data",
-        server_type="http",
-        endpoint="http://localhost:8080"
-    ),
-]
+from spoon_ai.graph.builder import HighLevelGraphAPI
+from spoon_ai.graph.mcp_integration import MCPToolSpec
 
-# Create API with MCP tools
-api = HighLevelGraphAPI(
-    state_schema=AnalysisState,
-    intents=intents,
-    mcp_tools=mcp_tools,
+
+class MyState(TypedDict, total=False):
+    user_query: str
+
+
+api = HighLevelGraphAPI(MyState)
+
+api.register_mcp_tool(
+    intent_category="research",
+    spec=MCPToolSpec(name="tavily-search"),
+    config={
+        "command": "npx",
+        "args": ["--yes", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": "..."},
+    },
 )
+
+tool = api.create_mcp_tool("tavily-search")
 ```
 
 ---
@@ -17271,6 +17660,21 @@ api = HighLevelGraphAPI(
 
 ```python
 # Start with imperative for prototyping
+from typing import TypedDict
+
+from spoon_ai.graph import StateGraph, END
+from spoon_ai.graph.builder import GraphTemplate, NodeSpec, EdgeSpec
+
+
+class MyState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def process_fn(state: MyState) -> dict:
+    return {"output": f"processed: {state.get('input', '')}"}
+
+
 graph = StateGraph(MyState)
 graph.add_node("process", process_fn)
 graph.set_entry_point("process")
@@ -17287,6 +17691,29 @@ template = GraphTemplate(
 
 ```python
 # Good: Descriptive names
+from typing import TypedDict
+
+from spoon_ai.graph import StateGraph
+
+
+class MyState(TypedDict, total=False):
+    user_query: str
+
+
+async def classify_fn(state: MyState) -> dict:
+    return {}
+
+
+async def fetch_fn(state: MyState) -> dict:
+    return {}
+
+
+async def recommend_fn(state: MyState) -> dict:
+    return {}
+
+
+graph = StateGraph(MyState)
+
 graph.add_node("classify_user_intent", classify_fn)
 graph.add_node("fetch_market_data", fetch_fn)
 graph.add_node("generate_recommendation", recommend_fn)
@@ -17301,6 +17728,9 @@ graph.add_node("step3", recommend_fn)
 
 ```python
 # Group data fetching nodes
+from spoon_ai.graph.builder import ParallelGroupSpec
+from spoon_ai.graph.config import ParallelGroupConfig
+
 parallel_groups = [
     ParallelGroupSpec(
         name="market_data",
@@ -17308,12 +17738,51 @@ parallel_groups = [
         config=ParallelGroupConfig(join_strategy="all")
     )
 ]
+print(parallel_groups)
 ```
 
 ### 4. Handle All Routing Cases
 
 ```python
 # Always have a fallback
+from typing import TypedDict
+
+from spoon_ai.graph import StateGraph, END
+
+
+class RoutingState(TypedDict, total=False):
+    route: str
+    output: str
+
+
+async def classifier(state: RoutingState) -> dict:
+    # In real graphs, this would set an intent/category based on user input.
+    return {"route": state.get("route", "unknown")}
+
+
+async def handler_1(state: RoutingState) -> dict:
+    return {"output": "handled by handler_1"}
+
+
+async def handler_2(state: RoutingState) -> dict:
+    return {"output": "handled by handler_2"}
+
+
+async def fallback_handler(state: RoutingState) -> dict:
+    return {"output": "handled by fallback_handler"}
+
+
+def route_function(state: RoutingState) -> str:
+    return state.get("route", "unknown")
+
+
+graph = StateGraph(RoutingState)
+graph.add_node("classifier", classifier)
+graph.add_node("handler_1", handler_1)
+graph.add_node("handler_2", handler_2)
+graph.add_node("fallback_handler", fallback_handler)
+graph.set_entry_point("classifier")
+
 graph.add_conditional_edges(
     "classifier",
     route_function,
@@ -17323,11 +17792,34 @@ graph.add_conditional_edges(
         "unknown": "fallback_handler"  # Don't forget this!
     }
 )
+
+graph.add_edge("handler_1", END)
+graph.add_edge("handler_2", END)
+graph.add_edge("fallback_handler", END)
 ```
 
 ### 5. Document Your Templates
 
 ```python
+from typing import TypedDict
+
+from spoon_ai.graph import END
+from spoon_ai.graph.builder import GraphTemplate, NodeSpec, EdgeSpec
+from spoon_ai.graph.config import GraphConfig
+
+
+class MyState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def start(state: MyState) -> dict:
+    return {"output": "ok"}
+
+
+nodes = [NodeSpec("start", start)]
+edges = [EdgeSpec("start", END)]
+
 template = GraphTemplate(
     entry_point="start",
     nodes=nodes,
@@ -17466,22 +17958,55 @@ When a node returns an update, SpoonOS **merges** it into the existing state:
 | **None** | No change | Field keeps previous value |
 
 ```python
+import asyncio
+import os
+from typing import Any, Dict, TypedDict
+
+from spoon_ai.llm import LLMManager
 from spoon_ai.schema import Message
 
-# Example: LLM node returns partial update
+
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    intent: str
+    extracted_params: Dict[str, Any]
+    confidence: float
+
+
+llm = LLMManager()
+
+
 async def analyze_with_llm(state: ConversationState) -> dict:
-    response = await llm.chat([
-        Message(role="system", content="Analyze user intent and extract parameters."),
-        Message(role="user", content=state["user_query"])
-    ])
+    """Example: LLM node returns a partial update."""
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {
+            "intent": "price_query",
+            "extracted_params": {"symbol": "BTC"},
+            "confidence": 0.92,
+        }
+
+    await llm.chat(
+        [
+            Message(role="system", content="Analyze user intent and extract parameters."),
+            Message(role="user", content=state["user_query"]),
+        ],
+        max_tokens=80,
+    )
 
     # Only return fields that changed
     return {
         "intent": "price_query",
         "extracted_params": {"symbol": "BTC"},
-        "confidence": 0.92
+        "confidence": 0.92,
     }
-    # Other fields remain unchanged
+
+
+async def main() -> None:
+    print(await analyze_with_llm({"user_query": "BTC price?"}))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### State Best Practices
@@ -17503,7 +18028,22 @@ async def analyze_with_llm(state: ConversationState) -> dict:
 ### Node Contract
 
 ```python
+import asyncio
+import os
+from typing import Any, Dict, List, TypedDict
+
+from spoon_ai.llm import LLMManager
 from spoon_ai.schema import Message
+
+
+class MyState(TypedDict, total=False):
+    user_query: str
+    messages: List[Dict[str, Any]]
+    llm_response: str
+
+
+llm = LLMManager()
+
 
 async def my_llm_node(state: MyState) -> dict:
     """
@@ -17519,21 +18059,32 @@ async def my_llm_node(state: MyState) -> dict:
     query = state.get("user_query", "")
     messages = state.get("messages", [])  # List of dicts for serialization
 
-    # Convert history to Message objects and call LLM
-    history = [Message(role=m["role"], content=m["content"]) for m in messages]
-    response = await llm.chat(history + [
-        Message(role="user", content=query)
-    ])
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        response_text = f"(stub) response for: {query}"
+    else:
+        # Convert history to Message objects and call LLM
+        history = [Message(role=m["role"], content=m["content"]) for m in messages]
+        response = await llm.chat(history + [Message(role="user", content=query)], max_tokens=120)
+        response_text = response.content
 
     # Return updates (partial, not full state)
     # Store messages as dicts for JSON serialization
     return {
-        "llm_response": response.content,
+        "llm_response": response_text,
         "messages": messages + [
             {"role": "user", "content": query},
-            {"role": "assistant", "content": response.content}
+            {"role": "assistant", "content": response_text}
         ]
     }
+
+
+async def main() -> None:
+    result = await my_llm_node({"user_query": "hello", "messages": []})
+    print(result["llm_response"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Node Patterns for LLM
@@ -17541,87 +18092,226 @@ async def my_llm_node(state: MyState) -> dict:
 #### Pattern 1: Intent Classification
 
 ```python
+import asyncio
+import os
+from typing import Any, Dict, List, TypedDict
+
+from spoon_ai.llm import LLMManager
+from spoon_ai.schema import Message
+
+
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    intent: str
+    confidence: float
+    messages: List[Dict[str, Any]]
+
+
+llm = LLMManager()
+
+
 async def classify_intent_node(state: ConversationState) -> dict:
     """Use LLM to classify user intent."""
-    response = await llm.chat([
-        Message(role="system", content="""Classify the query into one of:
-        - price_query: asking about cryptocurrency prices
-        - analysis_request: requesting market analysis
-        - trade_command: wanting to execute a trade
-        - general_question: other questions
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"intent": "general_question", "confidence": 0.9}
 
-        Respond with JSON: {"intent": "category", "confidence": 0.0-1.0}"""),
-        Message(role="user", content=state["user_query"])
-    ])
+    response = await llm.chat(
+        [
+            Message(
+                role="system",
+                content=(
+                    'Respond with JSON only: {"intent": "price_query|analysis_request|trade_command|general_question", '
+                    '"confidence": 0.0-1.0}'
+                ),
+            ),
+            Message(role="user", content=state["user_query"]),
+        ],
+        max_tokens=80,
+    )
 
     import json
+
     result = json.loads(response.content)
-    return {
-        "intent": result["intent"],
-        "confidence": result["confidence"]
-    }
+    return {"intent": result["intent"], "confidence": result["confidence"]}
+
+
+async def main() -> None:
+    print(await classify_intent_node({"user_query": "What is BTC price?"}))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 #### Pattern 2: Parameter Extraction
 
 ```python
+import asyncio
+import os
+from typing import Any, Dict, TypedDict
+
+from spoon_ai.llm import LLMManager
+from spoon_ai.schema import Message
+
+
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    extracted_params: Dict[str, Any]
+
+
+llm = LLMManager()
+
+
 async def extract_params_node(state: ConversationState) -> dict:
     """Use LLM to extract parameters from natural language."""
-    response = await llm.chat([
-        Message(role="system", content="""Extract trading parameters from the query.
-        Return JSON with: symbol, action (buy/sell), amount, price_type (market/limit)
-        Example: {"symbol": "BTC", "action": "buy", "amount": 0.1, "price_type": "market"}"""),
-        Message(role="user", content=state["user_query"])
-    ])
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"extracted_params": {"symbol": "BTC", "action": "buy", "amount": 0.1, "price_type": "market"}}
+
+    response = await llm.chat(
+        [
+            Message(
+                role="system",
+                content=(
+                    'Extract trading parameters as JSON only. Example: '
+                    '{"symbol": "BTC", "action": "buy", "amount": 0.1, "price_type": "market"}'
+                ),
+            ),
+            Message(role="user", content=state["user_query"]),
+        ],
+        max_tokens=120,
+    )
 
     import json
+
     params = json.loads(response.content)
     return {"extracted_params": params}
+
+
+async def main() -> None:
+    print(await extract_params_node({"user_query": "Buy 0.1 BTC at market"}))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 #### Pattern 3: Analysis with Context
 
 ```python
+import asyncio
+import os
+from typing import Any, Dict, List, TypedDict
+
+from spoon_ai.llm import LLMManager
+from spoon_ai.schema import Message
+
+
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    intent: str
+    tool_results: Dict[str, Any]
+    messages: List[Dict[str, Any]]
+    llm_analysis: str
+
+
+llm = LLMManager()
+
+
 async def analyze_with_context_node(state: ConversationState) -> dict:
     """LLM analysis using accumulated context."""
-    # Build context from previous results
     context = f"""
-    User Query: {state['user_query']}
-    Intent: {state['intent']}
-    Market Data: {state.get('tool_results', {}).get('market_data', 'N/A')}
-    Historical Context: {state.get('messages', [])[-3:]}
-    """
+User Query: {state.get('user_query')}
+Intent: {state.get('intent')}
+Market Data: {state.get('tool_results', {}).get('market_data', 'N/A')}
+Recent Messages: {state.get('messages', [])[-3:]}
+"""
 
-    response = await llm.chat([
-        Message(role="system", content="You are an expert crypto analyst. Provide detailed analysis."),
-        Message(role="user", content=context)
-    ])
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"llm_analysis": f"(stub) analysis for: {state.get('user_query', '')}"}
+
+    response = await llm.chat(
+        [
+            Message(role="system", content="You are an expert crypto analyst. Provide detailed analysis."),
+            Message(role="user", content=context),
+        ],
+        max_tokens=200,
+    )
 
     return {"llm_analysis": response.content}
+
+
+async def main() -> None:
+    result = await analyze_with_context_node(
+        {"user_query": "Analyze BTC", "intent": "analysis_request", "tool_results": {}, "messages": []}
+    )
+    print(result["llm_analysis"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 #### Pattern 4: Response Generation
 
 ```python
+import asyncio
+import os
+from typing import Any, Dict, List, TypedDict
+
+from spoon_ai.llm import LLMManager
+from spoon_ai.schema import Message
+
+
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    llm_analysis: str
+    tool_results: Dict[str, Any]
+    messages: List[Dict[str, Any]]
+    final_response: str
+
+
+llm = LLMManager()
+
+
 async def generate_response_node(state: ConversationState) -> dict:
     """Generate final user-facing response."""
-    response = await llm.chat([
-        Message(role="system", content="""Generate a helpful, concise response.
-        Be clear and actionable. Include relevant data points."""),
-        Message(role="user", content=f"""
-        Original Query: {state['user_query']}
-        Analysis: {state['llm_analysis']}
-        Data: {state.get('tool_results', {})}
-
-        Generate the final response:""")
-    ])
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        response_text = f"(stub) response for: {state.get('user_query', '')}"
+    else:
+        response = await llm.chat(
+            [
+                Message(
+                    role="system",
+                    content="Generate a helpful, concise response. Be clear and actionable.",
+                ),
+                Message(
+                    role="user",
+                    content=(
+                        f"Original Query: {state.get('user_query')}\n"
+                        f"Analysis: {state.get('llm_analysis')}\n"
+                        f"Data: {state.get('tool_results', {})}\n"
+                    ),
+                ),
+            ],
+            max_tokens=200,
+        )
+        response_text = response.content
 
     return {
-        "final_response": response.content,
-        "messages": state.get("messages", []) + [
-            {"role": "assistant", "content": response.content}
-        ]
+        "final_response": response_text,
+        "messages": state.get("messages", []) + [{"role": "assistant", "content": response_text}],
     }
+
+
+async def main() -> None:
+    result = await generate_response_node(
+        {"user_query": "hello", "llm_analysis": "", "tool_results": {}, "messages": []}
+    )
+    print(result["final_response"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ---
@@ -17635,21 +18325,52 @@ async def generate_response_node(state: ConversationState) -> dict:
 Always transition from source to target:
 
 ```python
+import asyncio
+from typing import Any, Dict, List, TypedDict
+
 from spoon_ai.graph import StateGraph, END
 
-graph = StateGraph(ConversationState)
 
-# Add LLM-powered nodes
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    intent: str
+    llm_analysis: str
+    final_response: str
+    messages: List[Dict[str, Any]]
+
+
+async def classify_intent_node(state: ConversationState) -> dict:
+    return {"intent": "general_question"}
+
+
+async def analyze_with_context_node(state: ConversationState) -> dict:
+    return {"llm_analysis": f"(stub) analysis of: {state.get('user_query', '')}"}
+
+
+async def generate_response_node(state: ConversationState) -> dict:
+    return {"final_response": f"(stub) response: {state.get('llm_analysis', '')}"}
+
+
+graph = StateGraph(ConversationState)
 graph.add_node("classify", classify_intent_node)
 graph.add_node("analyze", analyze_with_context_node)
 graph.add_node("respond", generate_response_node)
 
-# Static edges: classify → analyze → respond → END
+graph.set_entry_point("classify")
 graph.add_edge("classify", "analyze")
 graph.add_edge("analyze", "respond")
 graph.add_edge("respond", END)
 
-graph.set_entry_point("classify")
+app = graph.compile()
+
+
+async def main() -> None:
+    result = await app.invoke({"user_query": "Explain Bitcoin"})
+    print(result["final_response"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### 2. Conditional Edges (LLM-Driven Routing)
@@ -17657,6 +18378,19 @@ graph.set_entry_point("classify")
 Route based on LLM classification:
 
 ```python
+import asyncio
+from typing import TypedDict
+
+from spoon_ai.graph import StateGraph, END
+
+
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    intent: str
+    confidence: float
+    output: str
+
+
 def route_by_intent(state: ConversationState) -> str:
     """Route based on LLM-classified intent."""
     intent = state.get("intent", "general")
@@ -17668,17 +18402,72 @@ def route_by_intent(state: ConversationState) -> str:
 
     return intent
 
+
+async def classify(state: ConversationState) -> dict:
+    q = (state.get("user_query") or "").lower()
+    if "price" in q:
+        return {"intent": "price_query", "confidence": 0.95}
+    if "analy" in q:
+        return {"intent": "analysis_request", "confidence": 0.9}
+    if "buy" in q or "sell" in q:
+        return {"intent": "trade_command", "confidence": 0.9}
+    return {"intent": "general_question", "confidence": 0.9}
+
+
+async def fetch_price(state: ConversationState) -> dict:
+    return {"output": "price handler"}
+
+
+async def deep_analysis(state: ConversationState) -> dict:
+    return {"output": "analysis handler"}
+
+
+async def confirm_trade(state: ConversationState) -> dict:
+    return {"output": "trade confirmation handler"}
+
+
+async def general_response(state: ConversationState) -> dict:
+    return {"output": "general handler"}
+
+
+async def ask_clarification(state: ConversationState) -> dict:
+    return {"output": "clarification handler"}
+
+
+graph = StateGraph(ConversationState)
+graph.add_node("classify", classify)
+graph.add_node("fetch_price", fetch_price)
+graph.add_node("deep_analysis", deep_analysis)
+graph.add_node("confirm_trade", confirm_trade)
+graph.add_node("general_response", general_response)
+graph.add_node("ask_clarification", ask_clarification)
+graph.set_entry_point("classify")
+
 graph.add_conditional_edges(
-    source="classify",
-    condition=route_by_intent,
-    path_map={
+    "classify",
+    route_by_intent,
+    {
         "price_query": "fetch_price",
         "analysis_request": "deep_analysis",
         "trade_command": "confirm_trade",
         "general_question": "general_response",
-        "clarify": "ask_clarification"
-    }
+        "clarify": "ask_clarification",
+    },
 )
+
+for node in ["fetch_price", "deep_analysis", "confirm_trade", "general_response", "ask_clarification"]:
+    graph.add_edge(node, END)
+
+app = graph.compile()
+
+
+async def main() -> None:
+    result = await app.invoke({"user_query": "price of BTC?"})
+    print(result["output"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ```mermaid
@@ -17692,41 +18481,64 @@ graph TD
 
 ### 3. LLM-Powered Routing (Dynamic)
 
-Let the LLM itself decide the next step:
+Let the LLM itself decide the next step. The simplest way is to enable the built-in LLM router and let it select the next node name.
 
 ```python
-async def llm_router_node(state: ConversationState) -> dict:
-    """LLM decides the next node to execute."""
-    available_actions = ["search_web", "query_database", "generate_response", "ask_human"]
+import asyncio
+from typing import TypedDict
 
-    response = await llm.chat([
-        Message(role="system", content=f"""Based on the current state, decide the next action.
-        Available actions: {available_actions}
+from spoon_ai.graph import StateGraph, END
+from spoon_ai.graph.config import GraphConfig, RouterConfig
 
-        Consider:
-        - User query: {state['user_query']}
-        - Current data: {state.get('tool_results', {})}
-        - Confidence: {state.get('confidence', 0)}
 
-        Respond with just the action name."""),
-        Message(role="user", content="What's the next step?")
-    ])
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    result: str
 
-    return {"next_action": response.content.strip()}
 
-def route_by_llm_decision(state: ConversationState) -> str:
-    return state.get("next_action", "generate_response")
+async def route(state: ConversationState) -> dict:
+    # No-op entry node. LLM routing runs after this node.
+    return state
 
-graph.add_conditional_edges(
-    source="decide_next",
-    condition=route_by_llm_decision,
-    path_map={
-        "search_web": "web_search",
-        "query_database": "db_query",
-        "generate_response": "respond",
-        "ask_human": "human_input"
-    }
+
+async def web_search(state: ConversationState) -> dict:
+    return {"result": f"(stub) web search: {state['user_query']}"}
+
+
+async def respond(state: ConversationState) -> dict:
+    return {"result": f"(stub) response: {state['user_query']}"}
+
+
+graph = StateGraph(ConversationState)
+graph.add_node("route", route)
+graph.add_node("web_search", web_search)
+graph.add_node("respond", respond)
+graph.set_entry_point("route")
+
+# Once a handler runs, end the graph.
+graph.add_edge("web_search", END)
+graph.add_edge("respond", END)
+
+# Enable LLM routing and restrict targets.
+graph.config = GraphConfig(
+    router=RouterConfig(
+        allow_llm=True,
+        allowed_targets=["web_search", "respond"],
+        default_target="respond",
+    )
 )
+graph.enable_llm_routing(config={"model": "gpt-4", "temperature": 0.1, "max_tokens": 50})
+
+app = graph.compile()
+
+
+async def main():
+    result = await app.invoke({"user_query": "Any BTC news today?", "result": ""})
+    print(result["result"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Complete LLM Routing Example
@@ -17817,6 +18629,17 @@ graph.add_edge("analysis_handler", END)
 graph.add_edge("general_handler", END)
 
 app = graph.compile()
+
+
+async def main():
+    result = await app.invoke(
+        {"query": "What is the current price of Bitcoin?", "intent": "", "confidence": 0.0, "result": ""}
+    )
+    print(result["result"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ---
@@ -17832,55 +18655,135 @@ app = graph.compile()
 ### Configuring Checkpointing
 
 ```python
+from typing import Any, Dict, List, TypedDict
+
 from spoon_ai.graph import StateGraph, InMemoryCheckpointer
 
 checkpointer = InMemoryCheckpointer(
     max_checkpoints_per_thread=100
 )
 
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    messages: List[Dict[str, Any]]
+    llm_analysis: str
+
 graph = StateGraph(
     ConversationState,
     checkpointer=checkpointer
 )
+print("checkpointer configured:", graph.checkpointer is checkpointer)
 ```
 
 ### Multi-Turn LLM Conversations
 
 ```python
-# First turn
-result = await app.invoke(
-    {"user_query": "What is Bitcoin?", "messages": []},
-    config={"configurable": {"thread_id": "user_123_session"}}
-)
+import asyncio
 
-# Second turn - LLM has context from first turn
-result = await app.invoke(
-    {"user_query": "What about its price trend?", "messages": result["messages"]},
-    config={"configurable": {"thread_id": "user_123_session"}}
-)
+from typing import Any, Dict, List, TypedDict
 
-# The LLM knows "its" refers to Bitcoin from the conversation history
+from spoon_ai.graph import StateGraph, END, InMemoryCheckpointer
+
+
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    messages: List[Dict[str, Any]]
+    llm_response: str
+
+
+checkpointer = InMemoryCheckpointer(max_checkpoints_per_thread=100)
+
+
+async def respond(state: ConversationState) -> dict:
+    # Minimal, deterministic "LLM" for docs.
+    user_query = state.get("user_query", "")
+    response_text = f"(stub) answer to: {user_query}"
+    messages = state.get("messages", [])
+    return {
+        "llm_response": response_text,
+        "messages": messages
+        + [{"role": "user", "content": user_query}, {"role": "assistant", "content": response_text}],
+    }
+
+
+graph = StateGraph(ConversationState, checkpointer=checkpointer)
+graph.add_node("respond", respond)
+graph.set_entry_point("respond")
+graph.add_edge("respond", END)
+app = graph.compile()
+
+
+async def main() -> None:
+    # First turn
+    result = await app.invoke(
+        {"user_query": "What is Bitcoin?", "messages": []},
+        config={"configurable": {"thread_id": "user_123_session"}},
+    )
+
+    # Second turn - LLM has context from first turn
+    result = await app.invoke(
+        {"user_query": "What about its price trend?", "messages": result["messages"]},
+        config={"configurable": {"thread_id": "user_123_session"}},
+    )
+
+    # The LLM knows "its" refers to Bitcoin from the conversation history
+    print(result)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Recovery from Failure
 
 ```python
-try:
-    result = await app.invoke(
-        initial_state,
-        config={"configurable": {"thread_id": "analysis_session"}}
-    )
-except Exception as e:
-    print(f"Failed: {e}")
+import asyncio
+from typing import TypedDict
 
-    # Get last successful state
-    last_state = graph.get_state(
-        {"configurable": {"thread_id": "analysis_session"}}
-    )
+from spoon_ai.graph import StateGraph, END, InMemoryCheckpointer
 
-    if last_state:
-        print(f"Last node: {last_state.metadata.get('node')}")
-        print(f"LLM responses so far: {last_state.values.get('llm_analysis')}")
+
+class ConversationState(TypedDict, total=False):
+    user_query: str
+    llm_analysis: str
+    should_fail: bool
+
+
+checkpointer = InMemoryCheckpointer(max_checkpoints_per_thread=100)
+
+
+async def maybe_fail(state: ConversationState) -> dict:
+    if state.get("should_fail"):
+        raise RuntimeError("simulated failure")
+    return {"llm_analysis": f"(stub) analysis for: {state.get('user_query', '')}"}
+
+
+graph = StateGraph(ConversationState, checkpointer=checkpointer)
+graph.add_node("maybe_fail", maybe_fail)
+graph.set_entry_point("maybe_fail")
+graph.add_edge("maybe_fail", END)
+app = graph.compile()
+
+
+async def main() -> None:
+    config = {"configurable": {"thread_id": "analysis_session"}}
+    try:
+        initial_state = {"user_query": "Analyze BTC", "llm_analysis": "", "should_fail": True}
+        result = await app.invoke(initial_state, config=config)
+        print(result)
+    except Exception as e:
+        print(f"Failed: {e}")
+
+        # Get last successful state
+        last_state = graph.get_state(config)
+
+        if last_state:
+            print(f"Last node: {last_state.metadata.get('node')}")
+            print(f"Checkpoint values: {last_state.values}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ---
@@ -19003,80 +19906,167 @@ The Graph System integrates seamlessly with the broader SpoonOS ecosystem. This 
 ### Basic GraphAgent Usage
 
 ```python
-from spoon_ai.graph import StateGraph, GraphAgent
+import asyncio
+from typing import TypedDict
 
-# Build your graph
-graph = build_analysis_graph()  # Returns compiled StateGraph
+from spoon_ai.graph import END, StateGraph, GraphAgent
 
-# Create agent with memory
-agent = GraphAgent(
-    name="crypto_analyzer",
-    graph=graph,
-    memory_path="./agent_memory",
-    session_id="user_123_session",
-    preserve_state=True,  # Preserve state between runs
-)
 
-# Execute
-result = await agent.run("Analyze BTC price trends")
-print(result)
+class AnalysisState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def analyze(state: AnalysisState) -> dict:
+    return {"output": f"Analyzed: {state.get('input', '')}"}
+
+
+def build_analysis_graph() -> StateGraph:
+    graph = StateGraph(AnalysisState)
+    graph.add_node("analyze", analyze)
+    graph.set_entry_point("analyze")
+    graph.add_edge("analyze", END)
+    return graph  # IMPORTANT: uncompiled StateGraph
+
+
+async def main():
+    agent = GraphAgent(
+        name="crypto_analyzer",
+        graph=build_analysis_graph(),
+        memory_path="./agent_memory",
+        session_id="user_123_session",
+        preserve_state=True,  # Preserve state between runs
+    )
+
+    result = await agent.run("Analyze BTC price trends")
+    print(result)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Agent Configuration
 
 ```python
+from typing import TypedDict
+
+from spoon_ai.graph import END, StateGraph, GraphAgent
+
+
+class AnalysisState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def analyze(state: AnalysisState) -> dict:
+    return {"output": f"Analyzed: {state.get('input', '')}"}
+
+
+def build_analysis_graph() -> StateGraph:
+    graph = StateGraph(AnalysisState)
+    graph.add_node("analyze", analyze)
+    graph.set_entry_point("analyze")
+    graph.add_edge("analyze", END)
+    return graph  # IMPORTANT: uncompiled StateGraph
+
+
 agent = GraphAgent(
-    # Identity
     name="trading_assistant",
-    description="AI assistant for cryptocurrency trading",
-
-    # Graph
-    graph=compiled_graph,
-
-    # Memory
-    memory_path="./memory",           # Directory for memory storage
-    session_id="session_abc123",      # Unique session identifier
-
-    # Behavior
-    preserve_state=True,              # Keep state between runs
-    max_history=100,                  # Max messages in history
-
-    # LLM
-    llm_provider="openai",            # Default LLM provider
-    model="gpt-4",                    # Default model
+    graph=build_analysis_graph(),  # StateGraph (uncompiled)
+    preserve_state=True,  # Keep state between runs
+    memory_path="./memory",  # Directory for memory storage
+    session_id="session_abc123",  # Unique session identifier
+    max_metadata_size=1024,  # Optional: cap stored metadata
 )
+
+print(f"Configured agent session: {agent.memory.session_id}")
 ```
 
 ### Execution Metadata
 
 ```python
-# Run the agent
-result = await agent.run("What's the BTC outlook?")
+import asyncio
+from typing import TypedDict
 
-# Access execution metadata
-metadata = agent.get_execution_metadata()
+from spoon_ai.graph import END, StateGraph, GraphAgent
 
-print(f"Successful: {metadata.get('execution_successful')}")
-print(f"Duration: {metadata.get('execution_time_ms')}ms")
-print(f"Nodes executed: {metadata.get('nodes_executed')}")
-print(f"Final node: {metadata.get('final_node')}")
+
+async def main() -> None:
+    class AnalysisState(TypedDict, total=False):
+        input: str
+        output: str
+
+    async def analyze(state: AnalysisState) -> dict:
+        return {"output": f"Analyzed: {state.get('input', '')}"}
+
+    graph = StateGraph(AnalysisState)
+    graph.add_node("analyze", analyze)
+    graph.set_entry_point("analyze")
+    graph.add_edge("analyze", END)
+
+    agent = GraphAgent(
+        name="trading_assistant",
+        graph=graph,  # uncompiled StateGraph
+        memory_path="./memory",
+        session_id="session_abc123",
+        preserve_state=True,
+    )
+
+    # Run the agent
+    result = await agent.run("What's the BTC outlook?")
+    print(result)
+
+    # Access execution metadata
+    metadata = agent.get_execution_metadata()
+
+    print(f"Successful: {metadata.get('execution_successful')}")
+    print(f"Last request: {metadata.get('last_request')}")
+    print(f"Timestamp: {metadata.get('execution_time')}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Session Management
 
 ```python
+from typing import TypedDict
+
+from spoon_ai.graph import END, StateGraph, GraphAgent
+
+
+class AnalysisState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def analyze(state: AnalysisState) -> dict:
+    return {"output": f"Analyzed: {state.get('input', '')}"}
+
+
+def build_analysis_graph() -> StateGraph:
+    graph = StateGraph(AnalysisState)
+    graph.add_node("analyze", analyze)
+    graph.set_entry_point("analyze")
+    graph.add_edge("analyze", END)
+    return graph
+
+
+agent = GraphAgent(
+    name="session_manager",
+    graph=build_analysis_graph(),
+    memory_path="./memory",
+    session_id="user_123_session",
+)
+
 # Current session
-print(f"Current session: {agent.session_id}")
+print(f"Current session: {agent.memory.session_id}")
 
 # Switch sessions
 agent.load_session("user_456_session")
-
-# Create new session
-agent.new_session("user_789_session")
-
-# List all sessions
-sessions = agent.list_sessions()
-print(f"Available sessions: {sessions}")
+print(f"Current session: {agent.memory.session_id}")
 ```
 
 ---
@@ -19088,98 +20078,142 @@ Use SpoonOS tools within graph nodes for external capabilities.
 ### Using Built-in Tools
 
 ```python
+from typing import Any, TypedDict
+
 from spoon_toolkits.crypto.crypto_powerdata.tools import CryptoPowerDataCEXTool
+
+
+class MarketState(TypedDict, total=False):
+    symbol: str
+    market_data: Any
+    data_source: str
+    tool_error: str
+
 
 async def fetch_market_data(state: MarketState) -> dict:
     """Node that uses the CryptoPowerData tool."""
     symbol = state.get("symbol", "BTC")
-
-    # Initialize tool
     tool = CryptoPowerDataCEXTool()
 
-    # Execute tool
-    result = await tool.run(
+    result = await tool.execute(
         exchange="binance",
         symbol=f"{symbol}/USDT",
         timeframe="1h",
-        limit=24
+        limit=24,
     )
 
-    return {
-        "market_data": result,
-        "data_source": "binance"
-    }
+    if getattr(result, "error", None):
+        return {"market_data": {}, "data_source": "binance", "tool_error": result.error}
+
+    return {"market_data": result.output, "data_source": "binance"}
 ```
 
 ### Tool Result Handling
 
 ```python
+import asyncio
+import os
+from typing import Any, TypedDict
+
+
+try:
+    from spoon_toolkits.crypto.crypto_data_tools.price_data import GetTokenPriceTool
+except Exception:  # pragma: no cover - optional dependency
+    GetTokenPriceTool = None
+
+
+class ProcessState(TypedDict, total=False):
+    symbol: str
+    tool_status: str
+    tool_error: str
+    tool_output: Any
+
+
 async def process_with_tool(state: ProcessState) -> dict:
     """Robust tool usage with error handling."""
-    from spoon_ai.tools import ToolManager
+    if os.getenv("DOC_SNIPPET_MODE") == "1" or GetTokenPriceTool is None:
+        return {"tool_status": "skipped", "tool_output": {"reason": "DOC_SNIPPET_MODE or missing toolkit"}}
 
-    tool_manager = ToolManager()
-
+    tool = GetTokenPriceTool()
     try:
-        # Get tool by name
-        search_tool = tool_manager.get_tool("tavily-search")
-
-        # Execute
-        result = await search_tool.run(
-            query=state.get("search_query"),
-            max_results=5
-        )
-
-        return {
-            "search_results": result.get("results", []),
-            "tool_status": "success"
-        }
-
+        result = await tool.execute(symbol=state.get("symbol", "ETH-USDC"))
+        if getattr(result, "error", None):
+            return {"tool_status": "error", "tool_error": result.error}
+        return {"tool_status": "success", "tool_output": result.output}
     except Exception as e:
-        return {
-            "search_results": [],
-            "tool_status": "error",
-            "tool_error": str(e)
-        }
+        return {"tool_status": "error", "tool_error": str(e)}
+
+
+async def main() -> None:
+    print(await process_with_tool({"symbol": "ETH-USDC"}))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Multiple Tools in One Node
 
 ```python
+import asyncio
+import os
+from typing import Any, Dict, TypedDict
+
+
+try:
+    from spoon_toolkits.crypto.crypto_powerdata.tools import CryptoPowerDataCEXTool
+except Exception:  # pragma: no cover - optional dependency
+    CryptoPowerDataCEXTool = None
+
+try:
+    from spoon_toolkits.crypto.crypto_data_tools.price_data import GetTokenPriceTool
+except Exception:  # pragma: no cover - optional dependency
+    GetTokenPriceTool = None
+
+
+class AnalysisState(TypedDict, total=False):
+    symbol: str
+    price_data: Any
+    dex_price: Any
+
+
 async def comprehensive_analysis(state: AnalysisState) -> dict:
     """Node that orchestrates multiple tools."""
     symbol = state.get("symbol", "BTC")
-    results = {}
+
+    if os.getenv("DOC_SNIPPET_MODE") == "1" or CryptoPowerDataCEXTool is None or GetTokenPriceTool is None:
+        return {
+            "price_data": {"source": "stub", "symbol": symbol},
+            "dex_price": {"source": "stub", "symbol": symbol},
+        }
+
+    results: Dict[str, Any] = {}
 
     # Tool 1: Price data
     price_tool = CryptoPowerDataCEXTool()
-    price_data = await price_tool.run(
+    price_data = await price_tool.execute(
         exchange="binance",
         symbol=f"{symbol}/USDT",
         timeframe="1h",
-        limit=24
+        limit=24,
     )
-    results["price_data"] = price_data
+    results["price_data"] = price_data.output if not getattr(price_data, "error", None) else {"error": price_data.error}
 
-    # Tool 2: News search
-    from spoon_ai.tools import TavilySearchTool
-    news_tool = TavilySearchTool()
-    news = await news_tool.run(
-        query=f"{symbol} cryptocurrency news",
-        max_results=5
-    )
-    results["news"] = news
-
-    # Tool 3: Security check
-    from spoon_toolkits.crypto.gopluslabs.tools import TokenSecurityTool
-    security_tool = TokenSecurityTool()
-    security = await security_tool.run(
-        chain_id="1",
-        token_address=state.get("token_address", "")
-    )
-    results["security"] = security
+    # Tool 2: DEX spot price snapshot
+    dex_tool = GetTokenPriceTool()
+    dex_price = await dex_tool.execute(symbol=f"{symbol}-USDC", exchange="uniswap")
+    results["dex_price"] = dex_price.output if not getattr(dex_price, "error", None) else {"error": dex_price.error}
 
     return results
+
+
+async def main() -> None:
+    result = await comprehensive_analysis({"symbol": "BTC"})
+    print(result)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ---
@@ -19202,70 +20236,63 @@ graph LR
 ### Using MCP Tools in Graphs
 
 ```python
-from spoon_ai.graph.mcp_integration import MCPToolNode
-from spoon_ai.graph import StateGraph
+import os
+from typing import Any, TypedDict
 
-# Define MCP server connection
-mcp_config = {
-    "server_type": "stdio",
-    "command": "npx",
-    "args": ["-y", "tavily-mcp"],
-    "env": {"TAVILY_API_KEY": "your-key"}
-}
+from spoon_ai.tools.mcp_tool import MCPTool
 
-# Create MCP-enabled node
+
+class SearchState(TypedDict, total=False):
+    query: str
+    search_results: Any
+
+
+tavily_tool = MCPTool(
+    name="tavily-search",
+    description="Web search via Tavily",
+    mcp_config={
+        "command": "npx",
+        "args": ["--yes", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": os.getenv("TAVILY_API_KEY", "")},
+    },
+)
+
+
 async def mcp_search_node(state: SearchState) -> dict:
-    """Node that uses MCP tools."""
-    from spoon_ai.agents.mcp_client_mixin import MCPClientMixin
+    """Node that calls an MCP tool."""
+    if not os.getenv("TAVILY_API_KEY"):
+        return {"search_results": "Skipping: TAVILY_API_KEY not set"}
 
-    # Initialize MCP client
-    mcp = MCPClientMixin()
-    await mcp.connect_to_server(mcp_config)
-
-    # Get available tools
-    tools = await mcp.list_tools()
-    print(f"Available MCP tools: {[t.name for t in tools]}")
-
-    # Call a tool
-    result = await mcp.call_tool(
-        "search",
-        {"query": state.get("query")}
-    )
-
-    await mcp.disconnect()
-
+    result = await tavily_tool.execute(query=state.get("query", ""), max_results=5)
     return {"search_results": result}
 ```
 
 ### High-Level MCP Integration
 
 ```python
-from spoon_ai.graph.builder import HighLevelGraphAPI, MCPToolSpec
+from typing import TypedDict
 
-# Define MCP tools
-mcp_tools = [
-    MCPToolSpec(
-        name="web-search",
-        description="Search the web",
-        server_type="stdio",
-        command="npx -y tavily-mcp"
-    ),
-    MCPToolSpec(
-        name="file-system",
-        description="File operations",
-        server_type="stdio",
-        command="npx -y @anthropic/mcp-server-filesystem"
-    ),
-]
+from spoon_ai.graph.builder import HighLevelGraphAPI
+from spoon_ai.graph.mcp_integration import MCPToolSpec
 
-# Create graph with MCP tools
-api = HighLevelGraphAPI(
-    state_schema=MyState,
-    intents=intents,
-    mcp_tools=mcp_tools,
+
+class MyState(TypedDict, total=False):
+    user_query: str
+
+
+api = HighLevelGraphAPI(MyState)
+
+api.register_mcp_tool(
+    intent_category="research",
+    spec=MCPToolSpec(name="tavily-search"),
+    config={
+        "command": "npx",
+        "args": ["--yes", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": "..."},
+    },
 )
 
-graph = api.build()
+tool = api.create_mcp_tool("tavily-search")
 ```
 
 ### For More MCP Information
@@ -19285,12 +20312,34 @@ Persist state and conversation history across sessions.
 ### GraphAgent Memory Operations
 
 ```python
+from typing import TypedDict
+
+from spoon_ai.graph import END, StateGraph, GraphAgent
+
+
+class AnalysisState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def analyze(state: AnalysisState) -> dict:
+    return {"output": f"Analyzed: {state.get('input', '')}"}
+
+
+def build_analysis_graph() -> StateGraph:
+    graph = StateGraph(AnalysisState)
+    graph.add_node("analyze", analyze)
+    graph.set_entry_point("analyze")
+    graph.add_edge("analyze", END)
+    return graph
+
+
 # Create agent with memory
 agent = GraphAgent(
     name="assistant",
-    graph=graph,
+    graph=build_analysis_graph(),
     memory_path="./memory",
-    session_id="user_123"
+    session_id="user_123",
 )
 
 # Set metadata
@@ -19307,59 +20356,133 @@ prefs = agent.get_memory_metadata("user_preferences")
 # Get statistics
 stats = agent.get_memory_statistics()
 print(f"Total messages: {stats['total_messages']}")
-print(f"Total tokens: {stats['total_tokens']}")
-print(f"Session count: {stats['session_count']}")
+print(f"Session id: {stats['session_id']}")
+print(f"Storage path: {stats['storage_path']}")
+print(f"File size: {stats['file_size']} bytes")
 ```
 
 ### Memory Search
 
 ```python
-# Search conversation history
-matches = agent.search_memory(
-    query="bitcoin analysis",
-    limit=5
+from typing import TypedDict
+
+from spoon_ai.graph import END, StateGraph, GraphAgent
+
+
+class AnalysisState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def analyze(state: AnalysisState) -> dict:
+    return {"output": f"Analyzed: {state.get('input', '')}"}
+
+
+def build_analysis_graph() -> StateGraph:
+    graph = StateGraph(AnalysisState)
+    graph.add_node("analyze", analyze)
+    graph.set_entry_point("analyze")
+    graph.add_edge("analyze", END)
+    return graph
+
+
+agent = GraphAgent(
+    name="assistant",
+    graph=build_analysis_graph(),
+    memory_path="./memory",
+    session_id="user_123",
 )
 
+# Add an example message, then search.
+agent.memory.add_message({"role": "assistant", "content": "Here is a short bitcoin analysis..."})
+
+matches = agent.search_memory(query="bitcoin analysis", limit=5)
 for match in matches:
-    print(f"Score: {match['score']}")
-    print(f"Content: {match['content'][:100]}...")
-    print(f"Timestamp: {match['timestamp']}")
+    print(f"Content: {str(match.get('content', ''))[:100]}...")
+    print(f"Timestamp: {match.get('timestamp')}")
     print("---")
 ```
 
 ### State Persistence
 
 ```python
-# Enable state persistence
+import asyncio
+from typing import TypedDict
+
+from spoon_ai.graph import END, StateGraph, GraphAgent
+
+
+class AgentState(TypedDict, total=False):
+    input: str
+    favorite_token: str
+    output: str
+
+
+async def process(state: AgentState) -> dict:
+    text = (state.get("input") or "").lower()
+    if "remember" in text and "favorite token" in text and " is " in text:
+        token = state["input"].split(" is ", 1)[-1].strip().upper()
+        return {"favorite_token": token, "output": f"Okay. I'll remember your favorite token is {token}."}
+    if "favorite token" in text:
+        token = state.get("favorite_token") or "not set yet"
+        return {"output": f"Your favorite token is {token}."}
+    return {"output": f"Echo: {state.get('input', '')}"}
+
+
+graph = StateGraph(AgentState)
+graph.add_node("process", process)
+graph.set_entry_point("process")
+graph.add_edge("process", END)
+
+# Enable state persistence at the agent layer.
 agent = GraphAgent(
     name="persistent_agent",
-    graph=graph,
+    graph=graph,  # uncompiled StateGraph
     preserve_state=True,  # Key setting
-    memory_path="./memory"
+    memory_path="./memory",
 )
 
-# First run
-result1 = await agent.run("Remember my favorite token is SOL")
 
-# Later run (state is preserved)
-result2 = await agent.run("What's my favorite token?")
-# Agent can access information from previous runs
+async def main() -> None:
+    # First run
+    print(await agent.run("Remember my favorite token is SOL"))
+
+    # Later run (state is preserved)
+    print(await agent.run("What's my favorite token?"))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Memory with Checkpointing
 
 ```python
 from spoon_ai.graph import InMemoryCheckpointer
+from typing import TypedDict
+
+from spoon_ai.graph import END, StateGraph, GraphAgent
 
 # Combine graph checkpointing with agent memory
 checkpointer = InMemoryCheckpointer(max_checkpoints_per_thread=50)
 
+class MyState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def process(state: MyState) -> dict:
+    return {"output": f"processed: {state.get('input', '')}"}
+
+
 graph = StateGraph(MyState, checkpointer=checkpointer)
-# ... build graph ...
+graph.add_node("process", process)
+graph.set_entry_point("process")
+graph.add_edge("process", END)
 
 agent = GraphAgent(
     name="full_memory_agent",
-    graph=graph.compile(),
+    graph=graph,
     memory_path="./memory",
     preserve_state=True
 )
@@ -19367,6 +20490,7 @@ agent = GraphAgent(
 # Now you have:
 # 1. Graph-level checkpoints (for recovery within a run)
 # 2. Agent-level memory (for persistence across runs)
+print("checkpointing enabled:", agent.graph.graph.checkpointer is checkpointer)
 ```
 
 ---
@@ -19378,58 +20502,117 @@ Track execution and diagnose issues.
 ### Enable Monitoring
 
 ```python
-# Enable specific metrics
-graph.enable_monitoring([
-    "execution_time",
-    "success_rate",
-    "routing_performance",
-    "node_stats",
-])
+from typing import TypedDict
 
+from spoon_ai.graph import END, StateGraph
+
+
+class MonitorState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def process(state: MonitorState) -> dict:
+    return {"output": f"processed: {state.get('input', '')}"}
+
+
+graph = StateGraph(MonitorState)
+graph.add_node("process", process)
+graph.set_entry_point("process")
+graph.add_edge("process", END)
+
+graph.enable_monitoring(["execution_time", "success_rate", "routing_performance", "node_stats"])
 app = graph.compile()
 ```
 
 ### Execution Metrics
 
 ```python
-# Run the graph
-result = await app.invoke(initial_state)
+import asyncio
+from typing import TypedDict
 
-# Get metrics
-metrics = app.get_execution_metrics()
+from spoon_ai.graph import END, StateGraph
 
-print(f"""
-Execution Summary:
-  Total executions: {metrics['total_executions']}
-  Success rate: {metrics['success_rate']:.1%}
-  Avg execution time: {metrics['avg_execution_time']:.3f}s
-  Max execution time: {metrics['max_execution_time']:.3f}s
-""")
 
-# Per-node statistics
-print("Per-Node Statistics:")
-for node, stats in metrics.get('node_stats', {}).items():
-    print(f"  {node}:")
-    print(f"    Calls: {stats['count']}")
-    print(f"    Avg time: {stats['avg_time']:.3f}s")
-    print(f"    Error rate: {stats['error_rate']:.1%}")
+async def main() -> None:
+    class MonitorState(TypedDict, total=False):
+        input: str
+        output: str
+
+    async def process(state: MonitorState) -> dict:
+        return {"output": f"processed: {state.get('input', '')}"}
+
+    graph = StateGraph(MonitorState)
+    graph.enable_monitoring(["execution_time", "success_rate", "routing_performance", "node_stats"])
+    graph.add_node("process", process)
+    graph.set_entry_point("process")
+    graph.add_edge("process", END)
+
+    app = graph.compile()
+    initial_state = {"input": "hello", "output": ""}
+
+    # Run the graph
+    result = await app.invoke(initial_state)
+    print(result)
+
+    # Get metrics
+    metrics = app.get_execution_metrics()
+
+    print("Execution Summary:")
+    print(f"  Total executions: {metrics['total_executions']}")
+    print(f"  Success rate: {metrics['success_rate']:.1%}")
+    print(f"  Avg execution time: {metrics['avg_execution_time']:.3f}s")
+
+    # Per-node statistics
+    print("Per-Node Statistics:")
+    for node, stats in metrics.get("node_stats", {}).items():
+        print(f"  {node}:")
+        print(f"    Calls: {stats['count']}")
+        print(f"    Avg time: {stats['avg_time']:.3f}s")
+        print(f"    Error rate: {stats['error_rate']:.1%}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Execution History
 
 ```python
-# Get detailed step-by-step history
-history = app.get_execution_history()
+import asyncio
+from typing import TypedDict
 
-for step in history:
-    print(f"""
-Step: {step['node']}
-  Iteration: {step['iteration']}
-  Success: {step['success']}
-  Execution time: {step['execution_time']:.3f}s
-  Timestamp: {step['timestamp']}
-  State keys modified: {step.get('modified_keys', [])}
-""")
+from spoon_ai.graph import END, StateGraph
+
+
+class MonitorState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def process(state: MonitorState) -> dict:
+    return {"output": f"processed: {state.get('input', '')}"}
+
+
+graph = StateGraph(MonitorState)
+graph.add_node("process", process)
+graph.set_entry_point("process")
+graph.add_edge("process", END)
+app = graph.compile()
+
+
+async def main() -> None:
+    await app.invoke({"input": "hello"})
+    for step in app.execution_history:
+        print(
+            f"Node: {step.get('node_name')}\n"
+            f"  Success: {step.get('success')}\n"
+            f"  Execution time: {step.get('execution_time', 0.0):.3f}s\n"
+        )
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Debugging with Checkpoints
@@ -19439,34 +20622,85 @@ Step: {step['node']}
 import logging
 logging.getLogger("spoon_ai.graph").setLevel(logging.DEBUG)
 
-# Run with checkpointing
-result = await app.invoke(
-    initial_state,
-    config={"configurable": {"thread_id": "debug_session"}}
-)
+import asyncio
+from typing import TypedDict
 
-# Inspect checkpoint history
-config = {"configurable": {"thread_id": "debug_session"}}
-for checkpoint in graph.get_state_history(config):
-    print(f"After node: {checkpoint.metadata.get('node')}")
-    print(f"State: {checkpoint.values}")
-    print("---")
+from spoon_ai.graph import END, StateGraph
+
+
+async def main() -> None:
+    class DebugState(TypedDict, total=False):
+        input: str
+        output: str
+
+    async def process(state: DebugState) -> dict:
+        return {"output": f"processed: {state.get('input', '')}"}
+
+    graph = StateGraph(DebugState)
+    graph.add_node("process", process)
+    graph.set_entry_point("process")
+    graph.add_edge("process", END)
+    app = graph.compile()
+    initial_state = {"input": "hello"}
+
+    # Run with checkpointing
+    result = await app.invoke(
+        initial_state,
+        config={"configurable": {"thread_id": "debug_session"}},
+    )
+    print(result)
+
+    # Inspect checkpoint history
+    config = {"configurable": {"thread_id": "debug_session"}}
+    for checkpoint in graph.get_state_history(config):
+        print(f"After node: {checkpoint.metadata.get('node')}")
+        print(f"State: {checkpoint.values}")
+        print("---")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Streaming for Real-Time Monitoring
 
 ```python
 # Stream execution for real-time updates
-async for update in app.stream(initial_state):
-    node = update.get("__node__", "unknown")
-    print(f"[{node}] State update: {list(update.keys())}")
+import asyncio
+from typing import TypedDict
 
-    # Check for specific conditions
-    if update.get("error"):
-        print(f"  ERROR: {update['error']}")
+from spoon_ai.graph import END, StateGraph
 
-    if update.get("confidence", 0) < 0.5:
-        print(f"  LOW CONFIDENCE: {update.get('confidence')}")
+
+async def main() -> None:
+    class StreamState(TypedDict, total=False):
+        input: str
+        output: str
+
+    async def process(state: StreamState) -> dict:
+        return {"output": f"processed: {state.get('input', '')}"}
+
+    graph = StateGraph(StreamState)
+    graph.add_node("process", process)
+    graph.set_entry_point("process")
+    graph.add_edge("process", END)
+    app = graph.compile()
+    initial_state = {"input": "hello"}
+
+    async for update in app.stream(initial_state):
+        node = update.get("__node__", "unknown")
+        print(f"[{node}] State update: {list(update.keys())}")
+
+        # Check for specific conditions
+        if update.get("error"):
+            print(f"  ERROR: {update['error']}")
+
+        if update.get("confidence", 0) < 0.5:
+            print(f"  LOW CONFIDENCE: {update.get('confidence')}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ---
@@ -19476,91 +20710,233 @@ async for update in app.stream(initial_state):
 ### Pattern 1: Full-Stack Agent
 
 ```python
-from spoon_ai.graph import StateGraph, GraphAgent, InMemoryCheckpointer
-from spoon_ai.tools import ToolManager
+import asyncio
+from typing import Any, TypedDict
 
-# 1. Build graph with tools
-async def tool_node(state):
-    tool_manager = ToolManager()
-    result = await tool_manager.execute("crypto-price", {"symbol": state["symbol"]})
-    return {"price_data": result}
+from spoon_ai.graph import END, StateGraph, GraphAgent, InMemoryCheckpointer
 
-graph = StateGraph(MyState, checkpointer=InMemoryCheckpointer())
-graph.add_node("fetch_data", tool_node)
-# ... more nodes ...
-app = graph.compile()
+try:
+    # Optional: toolkit-based market data tool
+    from spoon_toolkits.crypto.crypto_powerdata.tools import CryptoPowerDataCEXTool
+except Exception:  # pragma: no cover - optional dependency
+    CryptoPowerDataCEXTool = None
 
-# 2. Wrap with GraphAgent
-agent = GraphAgent(
-    name="full_stack_agent",
-    graph=app,
-    memory_path="./memory",
-    preserve_state=True
-)
 
-# 3. Enable monitoring
-graph.enable_monitoring(["execution_time", "node_stats"])
+class FullStackState(TypedDict, total=False):
+    input: str
+    symbol: str
+    price_data: Any
+    output: str
 
-# 4. Use the agent
-result = await agent.run("Analyze BTC")
+
+async def extract_symbol(state: FullStackState) -> dict:
+    text = (state.get("input") or "").upper()
+    if "ETH" in text:
+        symbol = "ETH"
+    elif "SOL" in text:
+        symbol = "SOL"
+    else:
+        symbol = "BTC"
+    return {"symbol": symbol}
+
+
+async def fetch_price(state: FullStackState) -> dict:
+    if CryptoPowerDataCEXTool is None:
+        return {"output": "Skipping: spoon_toolkits is not installed"}
+
+    tool = CryptoPowerDataCEXTool()
+    result = await tool.execute(
+        exchange="binance",
+        symbol=f"{state.get('symbol', 'BTC')}/USDT",
+        timeframe="1h",
+        limit=10,
+    )
+    if getattr(result, "error", None):
+        return {"output": f"Tool error: {result.error}", "price_data": {}}
+    return {"price_data": result.output}
+
+
+async def format_output(state: FullStackState) -> dict:
+    if state.get("output"):
+        return {"output": state["output"]}
+    preview = str(state.get("price_data", {}))[:200]
+    return {"output": f"Fetched price data for {state.get('symbol')}: {preview}..."}
+
+
+def build_graph() -> StateGraph:
+    graph = StateGraph(FullStackState, checkpointer=InMemoryCheckpointer())
+    graph.enable_monitoring(["execution_time", "node_stats"])
+
+    graph.add_node("extract_symbol", extract_symbol)
+    graph.add_node("fetch_price", fetch_price)
+    graph.add_node("format_output", format_output)
+
+    graph.set_entry_point("extract_symbol")
+    graph.add_edge("extract_symbol", "fetch_price")
+    graph.add_edge("fetch_price", "format_output")
+    graph.add_edge("format_output", END)
+    return graph
+
+
+async def main() -> None:
+    agent = GraphAgent(
+        name="full_stack_agent",
+        graph=build_graph(),  # IMPORTANT: pass StateGraph (uncompiled)
+        memory_path="./memory",
+        preserve_state=True,
+    )
+
+    result = await agent.run("Analyze BTC")
+    print(result)
+    print(agent.graph.get_execution_metrics())
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Pattern 2: Multi-Agent Handoff
 
 ```python
-# Agent 1: Research
-research_agent = GraphAgent(
-    name="researcher",
-    graph=research_graph,
-    session_id="shared_session"
-)
+import asyncio
+from typing import TypedDict
 
-# Agent 2: Analysis
-analysis_agent = GraphAgent(
-    name="analyst",
-    graph=analysis_graph,
-    session_id="shared_session"  # Same session = shared memory
-)
+from spoon_ai.graph import END, StateGraph, GraphAgent
 
-# Agent 3: Execution
-execution_agent = GraphAgent(
-    name="executor",
-    graph=execution_graph,
-    session_id="shared_session"
-)
 
-# Handoff pattern
-research_result = await research_agent.run("Research BTC market")
-analysis_result = await analysis_agent.run("Analyze the research findings")
-execution_result = await execution_agent.run("Execute based on analysis")
+class HandoffState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+def build_research_graph() -> StateGraph:
+    graph = StateGraph(HandoffState)
+
+    async def research(state: HandoffState) -> dict:
+        return {"output": f"Research findings: {state.get('input', '')}"}
+
+    graph.add_node("research", research)
+    graph.set_entry_point("research")
+    graph.add_edge("research", END)
+    return graph
+
+
+def build_analysis_graph() -> StateGraph:
+    graph = StateGraph(HandoffState)
+
+    async def analyze(state: HandoffState) -> dict:
+        return {"output": f"Analysis: {state.get('input', '')}"}
+
+    graph.add_node("analyze", analyze)
+    graph.set_entry_point("analyze")
+    graph.add_edge("analyze", END)
+    return graph
+
+
+def build_execution_graph() -> StateGraph:
+    graph = StateGraph(HandoffState)
+
+    async def execute(state: HandoffState) -> dict:
+        return {"output": f"Execution plan: {state.get('input', '')}"}
+
+    graph.add_node("execute", execute)
+    graph.set_entry_point("execute")
+    graph.add_edge("execute", END)
+    return graph
+
+
+async def main() -> None:
+    # Agents are isolated. Hand off results explicitly via inputs.
+    session_id = "handoff_session"
+    memory_path = "./memory"
+
+    research_agent = GraphAgent(
+        name="researcher",
+        graph=build_research_graph(),
+        session_id=session_id,
+        memory_path=memory_path,
+    )
+
+    analysis_agent = GraphAgent(
+        name="analyst",
+        graph=build_analysis_graph(),
+        session_id=session_id,
+        memory_path=memory_path,
+    )
+
+    execution_agent = GraphAgent(
+        name="executor",
+        graph=build_execution_graph(),
+        session_id=session_id,
+        memory_path=memory_path,
+    )
+
+    research_result = await research_agent.run("Research BTC market")
+    analysis_result = await analysis_agent.run(f"Analyze: {research_result}")
+    execution_result = await execution_agent.run(f"Execute: {analysis_result}")
+
+    print(research_result)
+    print(analysis_result)
+    print(execution_result)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Pattern 3: Event-Driven Graph
 
 ```python
-async def event_handler(event_type: str, data: dict):
-    """Handle events from external systems."""
+import asyncio
+import json
+from typing import Any, Dict, TypedDict
+
+from spoon_ai.graph import END, StateGraph, GraphAgent
+
+
+class EventState(TypedDict, total=False):
+    input: str
+    event_type: str
+    event_data: Dict[str, Any]
+    output: str
+
+
+def build_event_graph() -> StateGraph:
+    graph = StateGraph(EventState)
+
+    async def parse_event(state: EventState) -> dict:
+        payload = json.loads(state.get("input", "{}"))
+        return {"event_type": payload.get("event_type", ""), "event_data": payload.get("data", {})}
+
+    async def process_event(state: EventState) -> dict:
+        return {"output": f"Processed {state.get('event_type')}: {state.get('event_data')}"}
+
+    graph.add_node("parse_event", parse_event)
+    graph.add_node("process_event", process_event)
+    graph.set_entry_point("parse_event")
+    graph.add_edge("parse_event", "process_event")
+    graph.add_edge("process_event", END)
+    return graph
+
+
+async def handle_event(event_type: str, data: dict) -> str:
     agent = GraphAgent(
         name="event_processor",
-        graph=event_graph,
-        session_id=f"event_{event_type}"
+        graph=build_event_graph(),
+        session_id=f"event_{event_type}",
+        memory_path="./memory",
     )
+    payload = json.dumps({"event_type": event_type, "data": data})
+    return await agent.run(payload)
 
-    result = await agent.run(
-        f"Process {event_type} event",
-        initial_state={"event_data": data}
-    )
 
-    return result
+async def main() -> None:
+    print(await handle_event("price_alert", {"symbol": "BTC", "price": 50000}))
+    print(await handle_event("trade_signal", {"symbol": "ETH", "side": "buy"}))
 
-# Register handlers
-@on_event("price_alert")
-async def handle_price_alert(data):
-    return await event_handler("price_alert", data)
 
-@on_event("trade_signal")
-async def handle_trade_signal(data):
-    return await event_handler("trade_signal", data)
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ---
@@ -19690,10 +21066,13 @@ python my_first_graph.py
 ### 1. Define Your State Schema
 
 ```python
+from typing import Any, Dict, List, TypedDict
+
+
 class ChatState(TypedDict):
-    messages: List[dict]   # Conversation history
-    user_query: str        # User input
-    llm_response: str      # LLM output
+    messages: List[Dict[str, Any]]   # Conversation history
+    user_query: str                  # User input
+    llm_response: str                # LLM output
 ```
 
 **State** flows through your entire graph. Every node can read from it and write to it.
@@ -19707,12 +21086,31 @@ class ChatState(TypedDict):
 ### 2. Create an LLM-Powered Node
 
 ```python
+import os
+from typing import Any, Dict, List, TypedDict
+
+from spoon_ai.llm import LLMManager
+from spoon_ai.schema import Message
+
+
+class ChatState(TypedDict, total=False):
+    messages: List[Dict[str, Any]]
+    user_query: str
+    llm_response: str
+
+
+llm = LLMManager()
+
+
 async def analyze_query(state: ChatState) -> dict:
     """Use LLM to analyze the user query."""
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"llm_response": f"(stub) analyzed: {state.get('user_query', '')}"}
+
     response = await llm.chat([
         Message(role="system", content="You are a helpful crypto assistant."),
         Message(role="user", content=state["user_query"])
-    ])
+    ], max_tokens=200)
     return {"llm_response": response.content}
 ```
 
@@ -19724,6 +21122,22 @@ async def analyze_query(state: ChatState) -> dict:
 ### 3. Build and Execute
 
 ```python
+from typing import Any, Dict, List, TypedDict
+
+from spoon_ai.graph import StateGraph, END
+
+
+class ChatState(TypedDict, total=False):
+    messages: List[Dict[str, Any]]
+    user_query: str
+    llm_response: str
+
+
+async def analyze_query(state: ChatState) -> dict:
+    # Keep this snippet runnable without requiring an LLM key.
+    return {"llm_response": f"(stub) analyzed: {state.get('user_query', '')}"}
+
+
 graph = StateGraph(ChatState)
 graph.add_node("analyze", analyze_query)
 graph.set_entry_point("analyze")
@@ -19742,6 +21156,7 @@ Here's a more realistic example with multiple LLM calls:
 
 ```python
 import asyncio
+import os
 from typing import TypedDict, List
 from spoon_ai.graph import StateGraph, END
 from spoon_ai.llm import LLMManager
@@ -19757,6 +21172,8 @@ llm = LLMManager()
 
 async def classify_intent(state: AnalysisState) -> dict:
     """LLM classifies the user's intent."""
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"intent": "analysis_request"}
     response = await llm.chat([
         Message(role="system", content="""Classify the user query into one of:
         - price_query: asking about price
@@ -19769,6 +21186,8 @@ async def classify_intent(state: AnalysisState) -> dict:
 
 async def generate_analysis(state: AnalysisState) -> dict:
     """LLM generates detailed analysis."""
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"analysis": f"(stub) analysis for: {state['user_query']}"}
     response = await llm.chat([
         Message(role="system", content="You are a crypto analyst. Provide detailed analysis."),
         Message(role="user", content=f"Analyze: {state['user_query']}")
@@ -19777,6 +21196,8 @@ async def generate_analysis(state: AnalysisState) -> dict:
 
 async def format_response(state: AnalysisState) -> dict:
     """LLM formats the final response."""
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"final_response": f"(stub) summary: {state.get('analysis', '')[:80]}..."}
     response = await llm.chat([
         Message(role="system", content="Format this analysis into a concise, user-friendly response."),
         Message(role="user", content=f"Intent: {state['intent']}\nAnalysis: {state['analysis']}")
