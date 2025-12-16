@@ -261,6 +261,9 @@ if __name__ == "__main__":
 ### With Parallel Groups
 
 ```python
+from typing import Any, Dict, TypedDict
+
+from spoon_ai.graph import END
 from spoon_ai.graph.builder import (
     DeclarativeGraphBuilder,
     GraphTemplate,
@@ -346,24 +349,47 @@ One key advantage of declarative templates is serialization:
 
 ```python
 import json
+import tempfile
+from pathlib import Path
+from typing import TypedDict, List, Dict, Any
+
+from spoon_ai.graph import END
+from spoon_ai.graph.builder import GraphTemplate, NodeSpec, EdgeSpec
+
+
+class DemoState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def process(state: DemoState) -> dict:
+    return {"output": state.get("input", "")}
+
+
+template = GraphTemplate(
+    entry_point="process",
+    nodes=[NodeSpec("process", process)],
+    edges=[EdgeSpec("process", END)],
+)
 
 # Serialize template (for storage/versioning)
 template_dict = {
     "entry_point": template.entry_point,
     "nodes": [{"name": n.name, "parallel_group": n.parallel_group} for n in template.nodes],
-    "edges": [{"source": e.source, "target": e.target} for e in template.edges],
+    "edges": [{"start": e.start, "end": e.end} for e in template.edges],
 }
 
-# Save to file
-with open("workflow_template.json", "w") as f:
-    json.dump(template_dict, f, indent=2)
+# Save to a temp file (safe for repeated runs)
+out_path = Path(tempfile.gettempdir()) / "workflow_template.json"
+out_path.write_text(json.dumps(template_dict, indent=2), encoding="utf-8")
+print(f"Wrote template: {out_path}")
 ```
 
 ---
 
 ## High-Level API
 
-The most advanced approach. Uses LLM to automatically infer parameters and make routing decisions.
+The most advanced approach. Uses an LLM (optional) to infer intent/parameters and helps you build and run a graph per user query.
 
 ### When to Use
 
@@ -376,131 +402,134 @@ The most advanced approach. Uses LLM to automatically infer parameters and make 
 ### Key Components
 
 ```python
-from spoon_ai.graph.builder import (
-    HighLevelGraphAPI,
-    Intent,
-    MCPToolSpec,
-    NodePlugin,
-)
+from spoon_ai.graph.builder import HighLevelGraphAPI, Intent, GraphTemplate, NodeSpec, EdgeSpec
+from spoon_ai.graph.mcp_integration import MCPToolSpec
 ```
 
 | Component | Purpose |
 |-----------|---------|
 | `HighLevelGraphAPI` | Main interface for intelligent graphs |
-| `Intent` | Define possible user intents |
-| `MCPToolSpec` | Integrate MCP tools |
-| `NodePlugin` | Custom node behavior extensions |
+| `Intent` | Intent analysis result (`category`, `confidence`, `metadata`) |
+| `GraphTemplate` / `NodeSpec` / `EdgeSpec` | Declarative graph definition used to build a `StateGraph` |
+| `MCPToolSpec` | Register MCP tools for a given intent category |
 
-### Example with Intent Classification
+### Minimal Example (choose a template by inferred intent)
 
 ```python
-from spoon_ai.graph.builder import (
-    HighLevelGraphAPI,
-    Intent,
-    GraphTemplate,
-    NodeSpec,
-    EdgeSpec,
-)
+import asyncio
+import json
+from typing import Any, Dict, List, TypedDict
 
-# Define possible intents
-intents = [
-    Intent(
-        name="price_query",
-        description="User wants to know the price of a cryptocurrency",
-        required_params=["symbol"],
-        example_queries=["What is BTC price?", "How much is ETH?"]
-    ),
-    Intent(
-        name="market_analysis",
-        description="User wants market analysis or trends",
-        required_params=["symbol", "timeframe"],
-        example_queries=["Analyze BTC trend", "What's the ETH outlook?"]
-    ),
-    Intent(
-        name="general_question",
-        description="General questions about crypto",
-        required_params=[],
-        example_queries=["What is blockchain?", "How do I stake?"]
-    ),
-]
+from spoon_ai.graph import END
+from spoon_ai.graph.builder import HighLevelGraphAPI, Intent, GraphTemplate, NodeSpec, EdgeSpec
+from spoon_ai.schema import Message
 
-# Create high-level API
-api = HighLevelGraphAPI(
-    state_schema=AnalysisState,
-    intents=intents,
-    llm_provider="openai",  # or "anthropic", "deepseek"
-)
 
-# Build nodes for each intent
-async def handle_price_query(state):
-    symbol = state.get("symbol", "BTC")
-    return {"result": f"Price for {symbol}: $45,000"}
+class AnalysisState(TypedDict, total=False):
+    user_query: str
+    query_intent: str
+    result: str
 
-async def handle_market_analysis(state):
-    symbol = state.get("symbol", "BTC")
-    timeframe = state.get("timeframe", "24h")
-    return {"result": f"Analysis for {symbol} ({timeframe}): Bullish"}
 
-async def handle_general(state):
-    return {"result": "General crypto information..."}
+async def price_handler(state: Dict[str, Any]) -> dict:
+    return {"result": f"Price handler (stub): {state['user_query']}"}
 
-# Register handlers
-api.register_intent_handler("price_query", handle_price_query)
-api.register_intent_handler("market_analysis", handle_market_analysis)
-api.register_intent_handler("general_question", handle_general)
 
-# Build and compile
-graph = api.build()
-app = graph.compile()
+async def general_handler(state: Dict[str, Any]) -> dict:
+    return {"result": f"General handler (stub): {state['user_query']}"}
 
-# Usage: API automatically classifies intent and extracts params
+
+def intent_prompt_builder(query: str) -> List[Message]:
+    return [
+        Message(
+            role="system",
+            content='Return JSON only: {"category": "price_query|general_qa", "confidence": 0.0-1.0}',
+        ),
+        Message(role="user", content=query),
+    ]
+
+
+def intent_parser(text: str) -> Dict[str, Any]:
+    try:
+        return json.loads(text)
+    except Exception:
+        return {}
+
+
+def build_template(intent: Intent) -> GraphTemplate:
+    if intent.category == "price_query":
+        return GraphTemplate(
+            entry_point="price_handler",
+            nodes=[NodeSpec("price_handler", price_handler)],
+            edges=[EdgeSpec("price_handler", END)],
+        )
+    return GraphTemplate(
+        entry_point="general_handler",
+        nodes=[NodeSpec("general_handler", general_handler)],
+        edges=[EdgeSpec("general_handler", END)],
+    )
+
+
 async def main():
-    result = await app.invoke({
-        "user_query": "What is the current Bitcoin price?",
-        # Other fields auto-populated by LLM
-    })
-    print(result["result"])
+    api = HighLevelGraphAPI(
+        AnalysisState,
+        intent_prompt_builder=intent_prompt_builder,
+        intent_parser=intent_parser,
+    )
+
+    intent, state = await api.build_initial_state("What is BTC price?")
+    template = build_template(intent)
+    graph = api.build_graph(template)
+    app = graph.compile()
+
+    result = await app.invoke(state)
+    print("intent:", intent.category)
+    print("result:", result["result"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
-### Automatic Parameter Inference
+### Automatic Parameter Inference (optional)
 
-The High-Level API can extract parameters from natural language:
+The High-Level API can infer extra parameters and merge them into the initial state **only if** you provide:
+- `parameter_prompt_builder(query, intent) -> List[Message]`
+- `parameter_parser(text, intent) -> Dict[str, Any]`
 
 ```python
+# Example:
 # User query: "Analyze ETH trend for the past week"
-# API automatically extracts:
-# - intent: "market_analysis"
-# - symbol: "ETH"
-# - timeframe: "1w"
+# Your parameter parser could return:
+# {"symbol": "ETH", "timeframe": "1w"}
 ```
 
-### Integration with MCP Tools
+### Integration with MCP Tools (optional)
 
 ```python
-from spoon_ai.graph.builder import MCPToolSpec
+from typing import TypedDict
 
-# Define MCP tools for the graph
-mcp_tools = [
-    MCPToolSpec(
-        name="tavily-search",
-        description="Web search for crypto news",
-        server_type="stdio",
-        command="npx -y tavily-mcp"
-    ),
-    MCPToolSpec(
-        name="crypto-data",
-        description="Real-time crypto market data",
-        server_type="http",
-        endpoint="http://localhost:8080"
-    ),
-]
+from spoon_ai.graph.builder import HighLevelGraphAPI
+from spoon_ai.graph.mcp_integration import MCPToolSpec
 
-# Create API with MCP tools
-api = HighLevelGraphAPI(
-    state_schema=AnalysisState,
-    intents=intents,
-    mcp_tools=mcp_tools,
+
+class MyState(TypedDict, total=False):
+    user_query: str
+
+
+api = HighLevelGraphAPI(MyState)
+
+api.register_mcp_tool(
+    intent_category="research",
+    spec=MCPToolSpec(name="tavily-search"),
+    config={
+        "command": "npx",
+        "args": ["--yes", "tavily-mcp"],
+        "env": {"TAVILY_API_KEY": "..."},
+    },
 )
+
+tool = api.create_mcp_tool("tavily-search")
 ```
 
 ---
@@ -511,6 +540,21 @@ api = HighLevelGraphAPI(
 
 ```python
 # Start with imperative for prototyping
+from typing import TypedDict
+
+from spoon_ai.graph import StateGraph, END
+from spoon_ai.graph.builder import GraphTemplate, NodeSpec, EdgeSpec
+
+
+class MyState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def process_fn(state: MyState) -> dict:
+    return {"output": f"processed: {state.get('input', '')}"}
+
+
 graph = StateGraph(MyState)
 graph.add_node("process", process_fn)
 graph.set_entry_point("process")
@@ -527,6 +571,29 @@ template = GraphTemplate(
 
 ```python
 # Good: Descriptive names
+from typing import TypedDict
+
+from spoon_ai.graph import StateGraph
+
+
+class MyState(TypedDict, total=False):
+    user_query: str
+
+
+async def classify_fn(state: MyState) -> dict:
+    return {}
+
+
+async def fetch_fn(state: MyState) -> dict:
+    return {}
+
+
+async def recommend_fn(state: MyState) -> dict:
+    return {}
+
+
+graph = StateGraph(MyState)
+
 graph.add_node("classify_user_intent", classify_fn)
 graph.add_node("fetch_market_data", fetch_fn)
 graph.add_node("generate_recommendation", recommend_fn)
@@ -541,6 +608,9 @@ graph.add_node("step3", recommend_fn)
 
 ```python
 # Group data fetching nodes
+from spoon_ai.graph.builder import ParallelGroupSpec
+from spoon_ai.graph.config import ParallelGroupConfig
+
 parallel_groups = [
     ParallelGroupSpec(
         name="market_data",
@@ -548,12 +618,51 @@ parallel_groups = [
         config=ParallelGroupConfig(join_strategy="all")
     )
 ]
+print(parallel_groups)
 ```
 
 ### 4. Handle All Routing Cases
 
 ```python
 # Always have a fallback
+from typing import TypedDict
+
+from spoon_ai.graph import StateGraph, END
+
+
+class RoutingState(TypedDict, total=False):
+    route: str
+    output: str
+
+
+async def classifier(state: RoutingState) -> dict:
+    # In real graphs, this would set an intent/category based on user input.
+    return {"route": state.get("route", "unknown")}
+
+
+async def handler_1(state: RoutingState) -> dict:
+    return {"output": "handled by handler_1"}
+
+
+async def handler_2(state: RoutingState) -> dict:
+    return {"output": "handled by handler_2"}
+
+
+async def fallback_handler(state: RoutingState) -> dict:
+    return {"output": "handled by fallback_handler"}
+
+
+def route_function(state: RoutingState) -> str:
+    return state.get("route", "unknown")
+
+
+graph = StateGraph(RoutingState)
+graph.add_node("classifier", classifier)
+graph.add_node("handler_1", handler_1)
+graph.add_node("handler_2", handler_2)
+graph.add_node("fallback_handler", fallback_handler)
+graph.set_entry_point("classifier")
+
 graph.add_conditional_edges(
     "classifier",
     route_function,
@@ -563,11 +672,34 @@ graph.add_conditional_edges(
         "unknown": "fallback_handler"  # Don't forget this!
     }
 )
+
+graph.add_edge("handler_1", END)
+graph.add_edge("handler_2", END)
+graph.add_edge("fallback_handler", END)
 ```
 
 ### 5. Document Your Templates
 
 ```python
+from typing import TypedDict
+
+from spoon_ai.graph import END
+from spoon_ai.graph.builder import GraphTemplate, NodeSpec, EdgeSpec
+from spoon_ai.graph.config import GraphConfig
+
+
+class MyState(TypedDict, total=False):
+    input: str
+    output: str
+
+
+async def start(state: MyState) -> dict:
+    return {"output": "ok"}
+
+
+nodes = [NodeSpec("start", start)]
+edges = [EdgeSpec("start", END)]
+
 template = GraphTemplate(
     entry_point="start",
     nodes=nodes,

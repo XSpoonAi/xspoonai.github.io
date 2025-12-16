@@ -113,10 +113,13 @@ python my_first_graph.py
 ### 1. Define Your State Schema
 
 ```python
+from typing import Any, Dict, List, TypedDict
+
+
 class ChatState(TypedDict):
-    messages: List[dict]   # Conversation history
-    user_query: str        # User input
-    llm_response: str      # LLM output
+    messages: List[Dict[str, Any]]   # Conversation history
+    user_query: str                  # User input
+    llm_response: str                # LLM output
 ```
 
 **State** flows through your entire graph. Every node can read from it and write to it.
@@ -130,12 +133,31 @@ class ChatState(TypedDict):
 ### 2. Create an LLM-Powered Node
 
 ```python
+import os
+from typing import Any, Dict, List, TypedDict
+
+from spoon_ai.llm import LLMManager
+from spoon_ai.schema import Message
+
+
+class ChatState(TypedDict, total=False):
+    messages: List[Dict[str, Any]]
+    user_query: str
+    llm_response: str
+
+
+llm = LLMManager()
+
+
 async def analyze_query(state: ChatState) -> dict:
     """Use LLM to analyze the user query."""
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"llm_response": f"(stub) analyzed: {state.get('user_query', '')}"}
+
     response = await llm.chat([
         Message(role="system", content="You are a helpful crypto assistant."),
         Message(role="user", content=state["user_query"])
-    ])
+    ], max_tokens=200)
     return {"llm_response": response.content}
 ```
 
@@ -147,6 +169,22 @@ async def analyze_query(state: ChatState) -> dict:
 ### 3. Build and Execute
 
 ```python
+from typing import Any, Dict, List, TypedDict
+
+from spoon_ai.graph import StateGraph, END
+
+
+class ChatState(TypedDict, total=False):
+    messages: List[Dict[str, Any]]
+    user_query: str
+    llm_response: str
+
+
+async def analyze_query(state: ChatState) -> dict:
+    # Keep this snippet runnable without requiring an LLM key.
+    return {"llm_response": f"(stub) analyzed: {state.get('user_query', '')}"}
+
+
 graph = StateGraph(ChatState)
 graph.add_node("analyze", analyze_query)
 graph.set_entry_point("analyze")
@@ -165,6 +203,7 @@ Here's a more realistic example with multiple LLM calls:
 
 ```python
 import asyncio
+import os
 from typing import TypedDict, List
 from spoon_ai.graph import StateGraph, END
 from spoon_ai.llm import LLMManager
@@ -180,6 +219,8 @@ llm = LLMManager()
 
 async def classify_intent(state: AnalysisState) -> dict:
     """LLM classifies the user's intent."""
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"intent": "analysis_request"}
     response = await llm.chat([
         Message(role="system", content="""Classify the user query into one of:
         - price_query: asking about price
@@ -192,6 +233,8 @@ async def classify_intent(state: AnalysisState) -> dict:
 
 async def generate_analysis(state: AnalysisState) -> dict:
     """LLM generates detailed analysis."""
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"analysis": f"(stub) analysis for: {state['user_query']}"}
     response = await llm.chat([
         Message(role="system", content="You are a crypto analyst. Provide detailed analysis."),
         Message(role="user", content=f"Analyze: {state['user_query']}")
@@ -200,6 +243,8 @@ async def generate_analysis(state: AnalysisState) -> dict:
 
 async def format_response(state: AnalysisState) -> dict:
     """LLM formats the final response."""
+    if os.getenv("DOC_SNIPPET_MODE") == "1":
+        return {"final_response": f"(stub) summary: {state.get('analysis', '')[:80]}..."}
     response = await llm.chat([
         Message(role="system", content="Format this analysis into a concise, user-friendly response."),
         Message(role="user", content=f"Intent: {state['intent']}\nAnalysis: {state['analysis']}")
