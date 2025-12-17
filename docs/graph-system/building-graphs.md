@@ -149,6 +149,28 @@ graph.add_edge("news", END)
 graph.add_edge("general", END)
 
 app = graph.compile()
+
+async def main():
+    # Test with different queries
+    test_queries = [
+        "What is the price of Bitcoin?",
+        "Show me crypto news",
+        "Tell me about blockchain"
+    ]
+    
+    for query in test_queries:
+        result = await app.invoke({
+            "query": query,
+            "category": "",
+            "result": ""
+        })
+        print(f"Query: {query}")
+        print(f"Category: {result['category']}")
+        print(f"Result: {result['result']}")
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
 ```
 
 ### API Reference
@@ -341,6 +363,29 @@ template = GraphTemplate(
 builder = DeclarativeGraphBuilder(DataState)
 graph = builder.build(template)
 app = graph.compile()
+
+
+async def main():
+    # Test the parallel group execution
+    result = await app.invoke({
+        "symbol": "BTC",
+        "binance_data": {},
+        "coinbase_data": {},
+        "kraken_data": {},
+        "aggregated": {}
+    })
+    
+    print("Parallel Group Execution Results:")
+    print(f"Symbol: {result['symbol']}")
+    print(f"\nBinance Data: {result['binance_data']}")
+    print(f"Coinbase Data: {result['coinbase_data']}")
+    print(f"Kraken Data: {result['kraken_data']}")
+    print(f"\nAggregated Average Price: {result['aggregated']['average_price']}")
+
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
 ```
 
 ### Template Serialization
@@ -544,7 +589,7 @@ from typing import TypedDict
 
 from spoon_ai.graph import StateGraph, END
 from spoon_ai.graph.builder import GraphTemplate, NodeSpec, EdgeSpec
-
+from spoon_ai.graph.builder import DeclarativeGraphBuilder
 
 class MyState(TypedDict, total=False):
     input: str
@@ -565,6 +610,11 @@ template = GraphTemplate(
     nodes=[NodeSpec("process", process_fn)],
     edges=[EdgeSpec("process", END)],
 )
+
+# Build declarative graph
+builder = DeclarativeGraphBuilder(MyState)
+declarative_graph = builder.build(template)
+declarative_app = declarative_graph.compile()
 ```
 
 ### 2. Use Meaningful Node Names
@@ -597,11 +647,6 @@ graph = StateGraph(MyState)
 graph.add_node("classify_user_intent", classify_fn)
 graph.add_node("fetch_market_data", fetch_fn)
 graph.add_node("generate_recommendation", recommend_fn)
-
-# Bad: Generic names
-graph.add_node("step1", classify_fn)
-graph.add_node("step2", fetch_fn)
-graph.add_node("step3", recommend_fn)
 ```
 
 ### 3. Group Related Functionality
@@ -686,7 +731,7 @@ from typing import TypedDict
 from spoon_ai.graph import END
 from spoon_ai.graph.builder import GraphTemplate, NodeSpec, EdgeSpec
 from spoon_ai.graph.config import GraphConfig
-
+from spoon_ai.graph.builder import DeclarativeGraphBuilder
 
 class MyState(TypedDict, total=False):
     input: str
@@ -711,6 +756,10 @@ template = GraphTemplate(
         # and market analysis with LLM-powered routing
     ),
 )
+# Build and compile
+builder = DeclarativeGraphBuilder(MyState)
+graph = builder.build(template)
+app = graph.compile()
 ```
 
 ---
