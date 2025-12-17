@@ -374,11 +374,24 @@ async def mcp_search_node(state: SearchState) -> dict:
 
     result = await tavily_tool.execute(query=state.get("query", ""), max_results=5)
     return {"search_results": result}
+
+async def main():
+    # Test the MCP tool node
+    result = await mcp_search_node({"query": "Bitcoin price"})
+    print(f"\nQuery: Bitcoin price")
+    print(f"Results: {result.get('search_results', 'No results')}")
+
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
 ```
 
 ### High-Level MCP Integration
 
 ```python
+import os
+import asyncio
 from typing import TypedDict
 
 from spoon_ai.graph.builder import HighLevelGraphAPI
@@ -389,19 +402,39 @@ class MyState(TypedDict, total=False):
     user_query: str
 
 
-api = HighLevelGraphAPI(MyState)
+async def main():
+    api = HighLevelGraphAPI(MyState)
+    
+    # Check if TAVILY_API_KEY is configured
+    tavily_key = os.getenv("TAVILY_API_KEY", "").strip()
+    if not tavily_key or "..." in tavily_key:
+        print("Note: TAVILY_API_KEY not configured. MCP tool registration skipped.")
+        print("To use this example, set TAVILY_API_KEY environment variable.")
+        return
+    
+    # Register MCP tool using HighLevelGraphAPI
+    api.register_mcp_tool(
+        intent_category="research",
+        spec=MCPToolSpec(name="tavily-search"),
+        config={
+            "command": "npx",
+            "args": ["--yes", "tavily-mcp"],
+            "env": {"TAVILY_API_KEY": tavily_key},
+        },
+    )
+    
+    # Create the tool instance
+    tool = api.create_mcp_tool("tavily-search")
+    
+    if tool:
+        result = await tool.execute(query="Bitcoin price", max_results=3)
+        print(f"Search results: {len(str(result))} characters returned")
+    else:
+        print("Failed to create MCP tool. Check configuration.")
 
-api.register_mcp_tool(
-    intent_category="research",
-    spec=MCPToolSpec(name="tavily-search"),
-    config={
-        "command": "npx",
-        "args": ["--yes", "tavily-mcp"],
-        "env": {"TAVILY_API_KEY": "..."},
-    },
-)
 
-tool = api.create_mcp_tool("tavily-search")
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### For More MCP Information
@@ -632,6 +665,15 @@ graph.add_edge("process", END)
 
 graph.enable_monitoring(["execution_time", "success_rate", "routing_performance", "node_stats"])
 app = graph.compile()
+
+async def main():
+    # Execute the graph
+    result = await app.invoke({"input": "test", "output": ""})
+    print(result)
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
 ```
 
 ### Execution Metrics
