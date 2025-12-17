@@ -285,10 +285,11 @@ if __name__ == "__main__":
 Let an LLM decide the next step:
 
 ```python
+import asyncio
 from spoon_ai.graph.config import GraphConfig, RouterConfig
-from typing import TypedDict
+from typing import TypedDict, Any
 
-from spoon_ai.graph import StateGraph
+from spoon_ai.graph import StateGraph, END
 
 config = GraphConfig(
     router=RouterConfig(
@@ -303,15 +304,53 @@ class AnalysisState(TypedDict, total=False):
     user_query: str
     output: str
 
-graph = StateGraph(AnalysisState)
+async def route(state: AnalysisState) -> dict:
+    return {}
+
+async def price_handler(state: AnalysisState) -> dict:
+    return {"output": "Price handler executed"}
+
+async def trade_handler(state: AnalysisState) -> dict:
+    return {"output": "Trade handler executed"}
+
+async def analysis_handler(state: AnalysisState) -> dict:
+    return {"output": "Analysis handler executed"}
+
+async def fallback_handler(state: AnalysisState) -> dict:
+    return {"output": "Fallback handler executed"}
+
+graph = StateGraph[Any](AnalysisState)
+graph.add_node("route", route)
+graph.add_node("price_handler", price_handler)
+graph.add_node("trade_handler", trade_handler)
+graph.add_node("analysis_handler", analysis_handler)
+graph.add_node("fallback_handler", fallback_handler)
+graph.set_entry_point("route")
+
+graph.add_edge("price_handler", END)
+graph.add_edge("trade_handler", END)
+graph.add_edge("analysis_handler", END)
+graph.add_edge("fallback_handler", END)
+
 graph.config = config
 
-# Or enable after creation
+# Enable LLM routing
 graph.enable_llm_routing(config={
     "model": "gpt-4",
     "temperature": 0.1,
     "max_tokens": 50,
 })
+
+app = graph.compile()
+
+
+async def main():
+    result = await app.invoke({"user_query": "What is the price of Bitcoin?", "output": ""})
+    print(result["output"])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ### Routing Decision Matrix
@@ -384,6 +423,20 @@ graph.add_edge("fetch_kraken", "aggregate")
 graph.add_edge("aggregate", END)
 
 app = graph.compile()
+
+async def main():
+    result = await app.invoke({
+        "symbol": "BTC",
+        "binance": {},
+        "coinbase": {},
+        "kraken": {},
+        "output": ""
+    })
+    print(result["output"])
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
 ```
 
 ### Join Strategies
@@ -518,6 +571,38 @@ graph.add_edge("aggregate", END)
 
 graph.set_entry_point("fetch_a")
 app = graph.compile()
+
+
+async def main():
+    # Test case 1: Normal execution
+    print("Test 1: Normal execution (quorum: 2 of 3)")
+    result1 = await app.invoke({
+        "symbol": "BTC",
+        "source_a_data": {},
+        "source_b_data": {},
+        "source_c_data": {},
+        "aggregated_price": 0.0,
+        "errors": []
+    })
+    print(f"  Aggregated price: ${result1['aggregated_price']:.2f}")
+    print(f"  Errors: {result1.get('errors', [])}")
+    
+    # Test case 2: One source fails (quorum still met)
+    print("\nTest 2: Source C fails (quorum: 2 of 3 still met)")
+    result2 = await app.invoke({
+        "symbol": "FAIL",
+        "source_a_data": {},
+        "source_b_data": {},
+        "source_c_data": {},
+        "aggregated_price": 0.0,
+        "errors": []
+    })
+    print(f"  Aggregated price: ${result2['aggregated_price']:.2f}")
+    print(f"  Errors: {result2.get('errors', [])}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ---
