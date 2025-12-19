@@ -15999,7 +15999,7 @@ python -m venv spoon-env
 
 > 💡 On newer Apple Silicon Macs the `python` shim may not point to Python 3.
 > Use `python3` for all commands unless you have explicitly configured `python`
-> to target Python 3.12 or later.
+> to target Python 3.12 or 3.13.
 
 2. Install core package in editable mode
 
@@ -16011,11 +16011,11 @@ uv pip install -e .    # or `pip install -e .` if you don't use uv
 
 3. (Optional) Install Toolkits Package from local repo
 
-If you want to use the extended blockchain and data tools from `spoon_toolkits`, install the **spoon-toolkits** package from the `spoon-toolkits` folder:
+If you want to use the extended blockchain and data tools from `spoon_toolkits`, install the **spoon-toolkits** package from the `spoon-toolkit` folder:
 
 ```bash
-git clone https://github.com/XSpoonAi/spoon-toolkits.git
-cd spoon-toolkits
+git clone https://github.com/XSpoonAi/spoon-toolkit.git
+cd spoon-toolkit
 pip install -e .
 ```
 
@@ -22664,10 +22664,9 @@ ModuleNotFoundError: No module named 'asyncio'
 ```
 
 **Solution:**
-1. Ensure Python 3.12+ is installed:
+1. Ensure Python 3.12 or Python 3.13 is installed:
    ```bash
    python --version
-   # Should show Python 3.12.0 or higher
    ```
 
 2. Create a new virtual environment:
