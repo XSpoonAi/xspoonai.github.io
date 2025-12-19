@@ -225,6 +225,8 @@ if __name__ == "__main__":
 If you want token-by-token output for a more interactive experience:
 
 ```python
+import asyncio
+
 async def stream_demo():
     llm = ChatBot(
         llm_provider="openai",
@@ -238,6 +240,9 @@ async def stream_demo():
     async for chunk in llm.astream(messages=messages):
         print(chunk.delta or "", end="", flush=True)
     print()  # New line at end
+
+if __name__ == "__main__":
+    asyncio.run(stream_demo())
 ```
 
 ## Full Example Code
