@@ -12362,7 +12362,7 @@ class SpoonMacroAnalysisAgent(SpoonReactMCP):
     async def initialize(self):
         tavily_key = os.getenv("TAVILY_API_KEY")
         if not tavily_key:
-            raise Val ueError("Set TAVILY_API_KEYbefore running the agent.")
+            raise ValueError("Set TAVILY_API_KEYbefore running the agent.")
 
         tavily_tool = MCPTool(
             name="tavily-search",
@@ -13471,7 +13471,7 @@ llm = ChatBot(
 ```python
 # Google configuration with default model
 llm = ChatBot(
-    model_name="gemini-3-pro",  # Check docs for latest model names
+    model_name="gemini-3-pro-preview",  # Check docs for latest model names
     llm_provider="gemini",
     temperature=0.1
 )
@@ -13591,6 +13591,7 @@ async def main():
     
 if __name__ == "__main__":
     asyncio.run(main())
+```
 
 ### Streaming Responses
 
@@ -13725,6 +13726,12 @@ The framework uses structured error types for clean error handling:
 ```python
 from spoon_ai.llm.errors import RateLimitError, AuthenticationError, ModelNotFoundError
 
+llm = ChatBot(
+    model_name="gemini-2.5-flash",
+    llm_provider="gemini",
+    temperature=0.1
+)
+
 # Simple error handling with specific error types
 response = await llm.ask([{"role": "user", "content": "Hello world"}])
 
@@ -13738,15 +13745,23 @@ response = await llm.ask([{"role": "user", "content": "Hello world"}])
 ### Graceful Degradation
 
 ```python
+import asyncio
+from spoon_ai.llm.manager import LLMManager
+from spoon_ai.schema import Message
+
 # Framework provides graceful degradation patterns
 llm_manager = LLMManager()
 llm_manager.default_provider = "openai"
-llm_manager.set_fallback_chain(["openai", "deepseek", "gemini"]) # Cost-effective fallbacks
+llm_manager.set_fallback_chain(["openai", "deepseek", "gemini"])  # Cost-effective fallbacks
 
 # If primary fails, automatically uses fallback
 # No manual error handling required
-messages = [Message(role="user", content="Complex reasoning task: Explain quantum computing and its applications")]
-await llm_manager.chat(messages)
+async def main():
+    messages = [Message(role="user", content="Complex reasoning task: Explain quantum computing and its applications")]
+    response = await llm_manager.chat(messages)
+    print(response.content)
+
+asyncio.run(main())
 ```
 
 ## Monitoring & Metrics
@@ -13754,23 +13769,28 @@ await llm_manager.chat(messages)
 ### Usage Tracking
 
 ```python
-from spoon_ai.llm.monitoring import MetricsCollector, get_metrics_collector
+import asyncio
+from spoon_ai.chat import ChatBot
+from spoon_ai.llm.monitoring import get_metrics_collector
 
 # Get the global metrics collector
 collector = get_metrics_collector()
 
-# Metrics are automatically tracked during LLM calls
-response = await llm.ask([{"role": "user", "content": "Hello"}])
+llm = ChatBot(model_name="gemini-2.5-flash", llm_provider="gemini")
 
-# Get collected stats per provider
- stats = collector.get_provider_stats("openai")
-print(f" Total requests: {stats.total_requests}")
-print(f" Successful requests: {stats.successful_requests}")
-print(f" Failed requests: {stats.failed_requests}")
-print(f" Success rate: {stats.success_rate:.2f}%")
-print(f" Average duration: {stats.average_duration:.3f}s")
-print(f" Total tokens: {stats.total_tokens}")
-print(f" Total cost: ${stats.total_cost:.6f}")
+async def main():
+    # Metrics are automatically tracked during LLM calls
+    response = await llm.ask([{"role": "user", "content": "Hello"}])
+    
+    # Get collected stats per provider
+    stats = collector.get_provider_stats("gemini")
+    print(f"Total requests: {stats.total_requests}")
+    print(f"Success rate: {stats.success_rate:.2f}%")
+    print(f"Average duration: {stats.average_duration:.3f}s")
+    print(f"Total tokens: {stats.total_tokens}")
+    print(f"Total cost: ${stats.total_cost:.6f}")
+
+asyncio.run(main())
 ```
 
 ### Performance Monitoring
@@ -13783,18 +13803,38 @@ print(f" Total cost: ${stats.total_cost:.6f}")
 # - Error tracking per provider
 
 # Access provider-specific stats
-for provider in ["openai", "anthropic", "gemini"]:
-    stats = collector.get_provider_stats(provider)
-    if stats and stats.total_requests > 0:
-        print(f"{provider}: {stats.total_requests} requests, {stats.failed_requests} errors")
+import asyncio
+from spoon_ai.chat import ChatBot
+from spoon_ai.llm.monitoring import get_metrics_collector
 
-# Access provider-specific stats
-all_stats = collector.get_all_stats()
-if all_stats:
-    print(f"\n📈 All Providers Summary:")
-    for provider_name, provider_stats in all_stats.items():
-        print(f"{provider_name}: {provider_stats.total_requests} requests, "
-                f"{provider_stats.success_rate:.1f}% success rate")
+# The MetricsCollector automatically tracks:
+# - Request counts and success/failure rates
+# - Token usage (input/output)
+# - Latency statistics (average, min, max)
+# - Error tracking per provider
+
+collector = get_metrics_collector()
+llm = ChatBot(model_name="gemini-2.5-flash", llm_provider="gemini")
+
+async def main():
+    # Make some requests to generate metrics
+    await llm.ask([{"role": "user", "content": "Hello"}])
+    
+    # Access provider-specific stats
+    for provider in ["openai", "anthropic", "gemini"]:
+        stats = collector.get_provider_stats(provider)
+        if stats and stats.total_requests > 0:
+            print(f"{provider}: {stats.total_requests} requests, {stats.failed_requests} errors")
+    
+    # Access all provider stats
+    all_stats = collector.get_all_stats()
+    if all_stats:
+        print(f"\nAll Providers Summary:")
+        for provider_name, provider_stats in all_stats.items():
+            print(f"{provider_name}: {provider_stats.total_requests} requests, "
+                  f"{provider_stats.success_rate:.1f}% success rate")
+
+asyncio.run(main())
 ```
 
 ## Best Practices
@@ -13828,12 +13868,24 @@ The SpoonOS framework follows a "fail-fast, recover-gracefully" approach:
 
 ```python
 # Preferred: Let framework handle errors
-messages = [Message(role="user", content="Hello world")]
-response = await llm_manager.chat("Hello world")
+import asyncio
+from spoon_ai.chat import ChatBot
+from spoon_ai.llm.errors import RateLimitError, AuthenticationError, ModelNotFoundError
 
-# Only use explicit error handling for custom business logic
-if response.provider != "openai":
-    logger.info(f"Fell back to {response.provider}")
+llm = ChatBot(model_name="gemini-2.5-flash", llm_provider="gemini")
+
+async def main():
+    try:
+        response = await llm.ask([{"role": "user", "content": "Hello world"}])
+        print(response)
+    except AuthenticationError as e:
+        print(f"Authentication failed: {e.message}")
+    except RateLimitError as e:
+        print(f"Rate limit exceeded: {e.message}")
+    except ModelNotFoundError as e:
+        print(f"Model not found: {e.model}")
+
+asyncio.run(main())
 ```
 
 ## Next Steps
@@ -13911,7 +13963,7 @@ mem0 = SpoonMem0({"user_id": "user_123"})
 
 # Store and search
 mem0.add_text("User prefers dark mode")
-results = mem0.search("UI preferences")
+results = mem0.search_memory("UI preferences")
 print(results)
 ```
 
@@ -13925,11 +13977,12 @@ print(results)
 from spoon_ai.memory.mem0_client import SpoonMem0
 
 mem0 = SpoonMem0({
-    "api_key": "YOUR_MEM0_API_KEY",   # or MEM0_API_KEY env var
+    "api_key": os.getenv("MEM0_API_KEY"),   # or MEM0_API_KEY env var
     "user_id": "user_123",            # scope all operations to this user
     "collection": "my_namespace",     # optional namespace isolation
     "metadata": {"project": "demo"},  # auto-attached to writes
-    "filters": {"project": "demo"},   # auto-applied to queries
+    # filters should use allowed fields: user_id, agent_id, metadata, etc.
+    # "filters": {"metadata": {"project": "demo"}},  # if needed, use metadata wrapper
     "async_mode": False,              # sync writes (default)
 })
 
@@ -13973,7 +14026,7 @@ all_memories = mem0.get_all_memory(user_id="user_123", limit=20)  # returns [] i
 ```
 
 ## Demo: Intelligent Web3 Portfolio Assistant
-Path: `examples/mem0_agent_demo.py`
+Path: `[examples/mem0_tool_agent.py](https://github.com/XSpoonAi/spoon-toolkit/blob/main/examples/mem0_tool_agent.py)`
 
 Key idea: The agent (ChatBot) is configured with Mem0 so it can recall user preferences after restart.
 
@@ -14003,9 +14056,10 @@ Flow:
 2) **Session 2** – reload a fresh ChatBot with the same `mem0_config`; the agent recalls past preferences (via Mem0 search) before answering.
 3) **Session 3** – user pivots to safe Arbitrum yield; new info is stored; subsequent queries reflect updated preferences.
 
+[]
 Run the demo:
 ```bash
-python examples/mem0_agent_demo.py
+python examples/mem0_tool_agent.py
 ```
 
 ## Notes & Best Practices
@@ -14170,7 +14224,7 @@ async def main():
     await mcp_tool.ensure_parameters_loaded()
 
     # Call the tool
-    result = await mcp_tool.execute(repo="XSpoonAi/spoon-core")
+    result = await mcp_tool.execute(repoName="XSpoonAi/spoon-core")
     print(result)
 
 asyncio.run(main())
@@ -14745,39 +14799,45 @@ For fine-grained control beyond `ChatBot`'s automatic handling, use `ShortTermMe
 
 ```python
 import asyncio
+from spoon_ai.chat import ChatBot
 from spoon_ai.memory.short_term_manager import ShortTermMemoryManager, TrimStrategy
 from spoon_ai.schema import Message
 
-manager = ShortTermMemoryManager()
+chatbot = ChatBot(model_name="gemini-2.5-flash", llm_provider="gemini")
+manager = chatbot.short_term_memory_manager
 history = [
     Message(id="u1", role="user", content="Hello!"),
     Message(id="a1", role="assistant", content="Hi there — how can I help?"),
     Message(id="u2", role="user", content="What's DeFi?"),
 ]
 
-
-#  Trim the message list by token budget
-trimmed = asyncio.run(
-    manager.trim_messages(
+async def main():
+    # Trim the message list by token budget
+    trimmed = await manager.trim_messages(
         messages=history,
         max_tokens=48,
         strategy=TrimStrategy.FROM_END,
         keep_system=True,
     )
-)
-
-#  Summarize history before model call
-llm_ready, removals, summary = asyncio.run(
-    manager.summarize_messages(
+    print(f"Trimmed to {len(trimmed)} messages")
+    
+    # Summarize history - can use chatbot.llm_manager, chatbot.llm_provider, chatbot.latest_summary
+    llm_ready, removals, summary = await manager.summarize_messages(
         messages=history,
-        max_tokens_before_summary=48,
+        max_tokens_before_summary=10,  # Low threshold to trigger summary
         messages_to_keep=2,
-        summary_model="anthropic/claude-3.5-sonnet",
+        summary_model="gemini-2.5-flash",
         llm_manager=chatbot.llm_manager,
         llm_provider=chatbot.llm_provider,
-        existing_summary=chatbot.latest_summary() or "",
+        existing_summary=chatbot.latest_summary or "",
     )
-)
+    if summary:
+        print(f"Summary: {summary[:100]}...")
+    else:
+        print("No summary generated (tokens below threshold)")
+
+asyncio.run(main())
+
 ```
 
  `llm_ready` — condensed history you can pass to the LLM
@@ -14786,8 +14846,10 @@ llm_ready, removals, summary = asyncio.run(
 Note: both `summarize_messages()` and `ChatBot.ask()` invoke your configured LLM. Ensure `chatbot.llm_manager`/`chatbot.llm_provider` (and any required API keys or env vars) are set so these examples can run end‑to‑end.
 
 ```python
+import asyncio
 from spoon_ai.chat import ChatBot
 from spoon_ai.graph.reducers import add_messages
+from spoon_ai.schema import Message
 
 chatbot = ChatBot(enable_short_term_memory=True)
 history = [
@@ -14805,6 +14867,9 @@ remove_all = chatbot.remove_all_messages()
 # Apply directives to persisted history
 updated_history = add_messages(history, [remove_last])
 cleared_history = add_messages(history, [remove_all])
+
+print("Updated history:", updated_history)
+print("Cleared history:", cleared_history)
 ```
 
 `add_messages()` merges the removal directives into the existing history,
@@ -14819,19 +14884,44 @@ when summarization trims older turns.
 every time the graph runs, you can retrieve the latest snapshot (messages plus metadata), iterate the full checkpoint history, or read a `CheckpointTuple` for an external consumer. This makes it easy to debug memory behaviour, replay from any checkpoint, or sync state to persistent storage. The example below shows how to fetch the most recent summary, list all checkpoints, and view the tuple-style payload.
 
 ```python
+import asyncio
+from spoon_ai.graph import StateGraph, InMemoryCheckpointer, END
+from typing import TypedDict
+
+class MyState(TypedDict, total=False):
+    messages: list
+
+checkpointer = InMemoryCheckpointer()
+graph = StateGraph(MyState, checkpointer=checkpointer)
+graph.add_node("echo", lambda state: state)
+graph.set_entry_point("echo")
+graph.add_edge("echo", END)
+
+app = graph.compile()
 config = {"configurable": {"thread_id": "memory_demo_thread"}}
 
-snapshot = graph.get_state(config)
-print("Latest checkpoint:", snapshot.metadata.get("checkpoint_id"))
+async def main():
+    # Run graph to create checkpoints
+    await app.invoke({"messages": []}, config=config)
+    
+    # View checkpoints
+    snapshot = graph.get_state(config)
+    if snapshot:
+        print("Latest checkpoint:", snapshot.metadata.get("checkpoint_id"))
+    else:
+        print("No checkpoint found")
+    
+    for snap in graph.get_state_history(config):
+        print("History id:", snap.metadata.get("checkpoint_id"))
+    
+    checkpoint_tuple = graph.checkpointer.get_checkpoint_tuple(config)
+    if checkpoint_tuple:
+        print("Checkpoint tuple:", checkpoint_tuple)
+    
+    for entry in graph.checkpointer.iter_checkpoint_history(config):
+        print("Tuple history entry:", entry)
 
-for snap in graph.get_state_history(config):
-    print("History id:", snap.metadata.get("checkpoint_id"))
-
-checkpoint_tuple = graph.checkpointer.get_checkpoint_tuple(config)
-print("Checkpoint tuple:", checkpoint_tuple)
-
-for entry in graph.checkpointer.iter_checkpoint_history(config):
-    print("Tuple history entry:", entry)
+asyncio.run(main())
 ```
 
 If you are using a compiled graph (`CompiledGraph`), call `graph.graph.get_state(config)` and `graph.graph.get_state_history(config)` instead; the snippet above assumes `graph` is a `StateGraph`.
@@ -14992,12 +15082,19 @@ If you install `spoon-toolkits`, import the concrete tools you need:
 ```python
 from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
 from spoon_ai.tools import ToolManager
+import asyncio
 
 crypto_tools = [
     CryptoPowerDataPriceTool(),
     CryptoPowerDataCEXTool(),
 ]
 manager = ToolManager(crypto_tools)
+
+async def main():
+    result = await manager.execute(name="crypto_powerdata_price", tool_input={"source": "cex", "exchange": "binance", "symbol": "BTC/USDT"})
+    print(result)
+
+asyncio.run(main())
 ```
 
 Environment variables for these tools depend on the specific provider (e.g., `OKX_API_KEY`, `BITQUERY_API_KEY`, `RPC_URL`, etc.).
@@ -15028,6 +15125,7 @@ SpoonOS agents primarily use `MCPTool` (MCP client) to talk to remote MCP server
 
 ```python
 from spoon_ai.tools.mcp_tool import MCPTool
+import asyncio  
 
 # Example: connect to DeepWiki SSE MCP server
 deepwiki = MCPTool(
@@ -15157,11 +15255,18 @@ async def main():
         description="Access to premium data"
     )
 
-    # Sign and create payment receipt
-    receipt = await service.sign_and_pay(request)
-    print(f"Payment signed: {receipt}")
+    # Build payment requirements and sign payment header
+    requirements = service.build_payment_requirements(request)
+    header = service.build_payment_header(requirements)
+    print(f"Payment header: {header}")
+    
+    # Verify and settle payment (optional)
+    # outcome = await service.verify_and_settle(header, requirements)
+    # print(f"Payment verified: {outcome.verify.is_valid}")
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
+
 ```
 
 > **Note:** For agent-based x402 payments, the agent handles 402 responses automatically when configured with payment capabilities. See the full examples in the x402 package for complete integration patterns.
