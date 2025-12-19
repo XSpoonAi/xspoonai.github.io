@@ -112,7 +112,7 @@ llm = ChatBot(
 ```python
 # Google configuration with default model
 llm = ChatBot(
-    model_name="gemini-3-pro",  # Check docs for latest model names
+    model_name="gemini-3-pro-preview",  # Check docs for latest model names
     llm_provider="gemini",
     temperature=0.1
 )
@@ -232,6 +232,7 @@ async def main():
     
 if __name__ == "__main__":
     asyncio.run(main())
+```
 
 ### Streaming Responses
 
@@ -366,6 +367,12 @@ The framework uses structured error types for clean error handling:
 ```python
 from spoon_ai.llm.errors import RateLimitError, AuthenticationError, ModelNotFoundError
 
+llm = ChatBot(
+    model_name="gemini-2.5-flash",
+    llm_provider="gemini",
+    temperature=0.1
+)
+
 # Simple error handling with specific error types
 response = await llm.ask([{"role": "user", "content": "Hello world"}])
 
@@ -379,15 +386,23 @@ response = await llm.ask([{"role": "user", "content": "Hello world"}])
 ### Graceful Degradation
 
 ```python
+import asyncio
+from spoon_ai.llm.manager import LLMManager
+from spoon_ai.schema import Message
+
 # Framework provides graceful degradation patterns
 llm_manager = LLMManager()
 llm_manager.default_provider = "openai"
-llm_manager.set_fallback_chain(["openai", "deepseek", "gemini"]) # Cost-effective fallbacks
+llm_manager.set_fallback_chain(["openai", "deepseek", "gemini"])  # Cost-effective fallbacks
 
 # If primary fails, automatically uses fallback
 # No manual error handling required
-messages = [Message(role="user", content="Complex reasoning task: Explain quantum computing and its applications")]
-await llm_manager.chat(messages)
+async def main():
+    messages = [Message(role="user", content="Complex reasoning task: Explain quantum computing and its applications")]
+    response = await llm_manager.chat(messages)
+    print(response.content)
+
+asyncio.run(main())
 ```
 
 ## Monitoring & Metrics
@@ -395,23 +410,28 @@ await llm_manager.chat(messages)
 ### Usage Tracking
 
 ```python
-from spoon_ai.llm.monitoring import MetricsCollector, get_metrics_collector
+import asyncio
+from spoon_ai.chat import ChatBot
+from spoon_ai.llm.monitoring import get_metrics_collector
 
 # Get the global metrics collector
 collector = get_metrics_collector()
 
-# Metrics are automatically tracked during LLM calls
-response = await llm.ask([{"role": "user", "content": "Hello"}])
+llm = ChatBot(model_name="gemini-2.5-flash", llm_provider="gemini")
 
-# Get collected stats per provider
- stats = collector.get_provider_stats("openai")
-print(f" Total requests: {stats.total_requests}")
-print(f" Successful requests: {stats.successful_requests}")
-print(f" Failed requests: {stats.failed_requests}")
-print(f" Success rate: {stats.success_rate:.2f}%")
-print(f" Average duration: {stats.average_duration:.3f}s")
-print(f" Total tokens: {stats.total_tokens}")
-print(f" Total cost: ${stats.total_cost:.6f}")
+async def main():
+    # Metrics are automatically tracked during LLM calls
+    response = await llm.ask([{"role": "user", "content": "Hello"}])
+    
+    # Get collected stats per provider
+    stats = collector.get_provider_stats("gemini")
+    print(f"Total requests: {stats.total_requests}")
+    print(f"Success rate: {stats.success_rate:.2f}%")
+    print(f"Average duration: {stats.average_duration:.3f}s")
+    print(f"Total tokens: {stats.total_tokens}")
+    print(f"Total cost: ${stats.total_cost:.6f}")
+
+asyncio.run(main())
 ```
 
 ### Performance Monitoring
@@ -424,18 +444,38 @@ print(f" Total cost: ${stats.total_cost:.6f}")
 # - Error tracking per provider
 
 # Access provider-specific stats
-for provider in ["openai", "anthropic", "gemini"]:
-    stats = collector.get_provider_stats(provider)
-    if stats and stats.total_requests > 0:
-        print(f"{provider}: {stats.total_requests} requests, {stats.failed_requests} errors")
+import asyncio
+from spoon_ai.chat import ChatBot
+from spoon_ai.llm.monitoring import get_metrics_collector
 
-# Access provider-specific stats
-all_stats = collector.get_all_stats()
-if all_stats:
-    print(f"\n📈 All Providers Summary:")
-    for provider_name, provider_stats in all_stats.items():
-        print(f"{provider_name}: {provider_stats.total_requests} requests, "
-                f"{provider_stats.success_rate:.1f}% success rate")
+# The MetricsCollector automatically tracks:
+# - Request counts and success/failure rates
+# - Token usage (input/output)
+# - Latency statistics (average, min, max)
+# - Error tracking per provider
+
+collector = get_metrics_collector()
+llm = ChatBot(model_name="gemini-2.5-flash", llm_provider="gemini")
+
+async def main():
+    # Make some requests to generate metrics
+    await llm.ask([{"role": "user", "content": "Hello"}])
+    
+    # Access provider-specific stats
+    for provider in ["openai", "anthropic", "gemini"]:
+        stats = collector.get_provider_stats(provider)
+        if stats and stats.total_requests > 0:
+            print(f"{provider}: {stats.total_requests} requests, {stats.failed_requests} errors")
+    
+    # Access all provider stats
+    all_stats = collector.get_all_stats()
+    if all_stats:
+        print(f"\nAll Providers Summary:")
+        for provider_name, provider_stats in all_stats.items():
+            print(f"{provider_name}: {provider_stats.total_requests} requests, "
+                  f"{provider_stats.success_rate:.1f}% success rate")
+
+asyncio.run(main())
 ```
 
 ## Best Practices
@@ -469,12 +509,24 @@ The SpoonOS framework follows a "fail-fast, recover-gracefully" approach:
 
 ```python
 # Preferred: Let framework handle errors
-messages = [Message(role="user", content="Hello world")]
-response = await llm_manager.chat("Hello world")
+import asyncio
+from spoon_ai.chat import ChatBot
+from spoon_ai.llm.errors import RateLimitError, AuthenticationError, ModelNotFoundError
 
-# Only use explicit error handling for custom business logic
-if response.provider != "openai":
-    logger.info(f"Fell back to {response.provider}")
+llm = ChatBot(model_name="gemini-2.5-flash", llm_provider="gemini")
+
+async def main():
+    try:
+        response = await llm.ask([{"role": "user", "content": "Hello world"}])
+        print(response)
+    except AuthenticationError as e:
+        print(f"Authentication failed: {e.message}")
+    except RateLimitError as e:
+        print(f"Rate limit exceeded: {e.message}")
+    except ModelNotFoundError as e:
+        print(f"Model not found: {e.model}")
+
+asyncio.run(main())
 ```
 
 ## Next Steps

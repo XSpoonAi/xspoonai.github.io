@@ -150,7 +150,7 @@ async def main():
     await mcp_tool.ensure_parameters_loaded()
 
     # Call the tool
-    result = await mcp_tool.execute(repo="XSpoonAi/spoon-core")
+    result = await mcp_tool.execute(repoName="XSpoonAi/spoon-core")
     print(result)
 
 asyncio.run(main())

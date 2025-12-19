@@ -76,11 +76,18 @@ async def main():
         description="Access to premium data"
     )
 
-    # Sign and create payment receipt
-    receipt = await service.sign_and_pay(request)
-    print(f"Payment signed: {receipt}")
+    # Build payment requirements and sign payment header
+    requirements = service.build_payment_requirements(request)
+    header = service.build_payment_header(requirements)
+    print(f"Payment header: {header}")
+    
+    # Verify and settle payment (optional)
+    # outcome = await service.verify_and_settle(header, requirements)
+    # print(f"Payment verified: {outcome.verify.is_valid}")
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
+
 ```
 
 > **Note:** For agent-based x402 payments, the agent handles 402 responses automatically when configured with payment capabilities. See the full examples in the x402 package for complete integration patterns.

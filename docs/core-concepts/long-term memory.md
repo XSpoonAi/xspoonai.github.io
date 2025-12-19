@@ -63,7 +63,7 @@ mem0 = SpoonMem0({"user_id": "user_123"})
 
 # Store and search
 mem0.add_text("User prefers dark mode")
-results = mem0.search("UI preferences")
+results = mem0.search_memory("UI preferences")
 print(results)
 ```
 
@@ -77,11 +77,12 @@ print(results)
 from spoon_ai.memory.mem0_client import SpoonMem0
 
 mem0 = SpoonMem0({
-    "api_key": "YOUR_MEM0_API_KEY",   # or MEM0_API_KEY env var
+    "api_key": os.getenv("MEM0_API_KEY"),   # or MEM0_API_KEY env var
     "user_id": "user_123",            # scope all operations to this user
     "collection": "my_namespace",     # optional namespace isolation
     "metadata": {"project": "demo"},  # auto-attached to writes
-    "filters": {"project": "demo"},   # auto-applied to queries
+    # filters should use allowed fields: user_id, agent_id, metadata, etc.
+    # "filters": {"metadata": {"project": "demo"}},  # if needed, use metadata wrapper
     "async_mode": False,              # sync writes (default)
 })
 
@@ -125,7 +126,7 @@ all_memories = mem0.get_all_memory(user_id="user_123", limit=20)  # returns [] i
 ```
 
 ## Demo: Intelligent Web3 Portfolio Assistant
-Path: `examples/mem0_agent_demo.py`
+Path: `[examples/mem0_tool_agent.py](https://github.com/XSpoonAi/spoon-toolkit/blob/main/examples/mem0_tool_agent.py)`
 
 Key idea: The agent (ChatBot) is configured with Mem0 so it can recall user preferences after restart.
 
@@ -155,9 +156,10 @@ Flow:
 2) **Session 2** – reload a fresh ChatBot with the same `mem0_config`; the agent recalls past preferences (via Mem0 search) before answering.
 3) **Session 3** – user pivots to safe Arbitrum yield; new info is stored; subsequent queries reflect updated preferences.
 
+[]
 Run the demo:
 ```bash
-python examples/mem0_agent_demo.py
+python examples/mem0_tool_agent.py
 ```
 
 ## Notes & Best Practices

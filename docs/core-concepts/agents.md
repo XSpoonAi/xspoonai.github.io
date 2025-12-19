@@ -250,7 +250,7 @@ class SpoonMacroAnalysisAgent(SpoonReactMCP):
     async def initialize(self):
         tavily_key = os.getenv("TAVILY_API_KEY")
         if not tavily_key:
-            raise Val ueError("Set TAVILY_API_KEYbefore running the agent.")
+            raise ValueError("Set TAVILY_API_KEYbefore running the agent.")
 
         tavily_tool = MCPTool(
             name="tavily-search",
