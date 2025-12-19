@@ -150,12 +150,19 @@ If you install `spoon-toolkits`, import the concrete tools you need:
 ```python
 from spoon_toolkits import CryptoPowerDataPriceTool, CryptoPowerDataCEXTool
 from spoon_ai.tools import ToolManager
+import asyncio
 
 crypto_tools = [
     CryptoPowerDataPriceTool(),
     CryptoPowerDataCEXTool(),
 ]
 manager = ToolManager(crypto_tools)
+
+async def main():
+    result = await manager.execute(name="crypto_powerdata_price", tool_input={"source": "cex", "exchange": "binance", "symbol": "BTC/USDT"})
+    print(result)
+
+asyncio.run(main())
 ```
 
 Environment variables for these tools depend on the specific provider (e.g., `OKX_API_KEY`, `BITQUERY_API_KEY`, `RPC_URL`, etc.).
@@ -186,6 +193,7 @@ SpoonOS agents primarily use `MCPTool` (MCP client) to talk to remote MCP server
 
 ```python
 from spoon_ai.tools.mcp_tool import MCPTool
+import asyncio  
 
 # Example: connect to DeepWiki SSE MCP server
 deepwiki = MCPTool(
