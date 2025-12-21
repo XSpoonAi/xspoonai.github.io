@@ -97,27 +97,18 @@ title: spoon_ai
     * [get\_supported\_providers](#spoon_ai.llm.response_normalizer.ResponseNormalizer.get_supported_providers)
   * [get\_response\_normalizer](#spoon_ai.llm.response_normalizer.get_response_normalizer)
 * [spoon\_ai.llm.cache](#spoon_ai.llm.cache)
-  * [CacheEntry](#spoon_ai.llm.cache.CacheEntry)
-    * [is\_expired](#spoon_ai.llm.cache.CacheEntry.is_expired)
-    * [touch](#spoon_ai.llm.cache.CacheEntry.touch)
   * [LLMResponseCache](#spoon_ai.llm.cache.LLMResponseCache)
     * [\_\_init\_\_](#spoon_ai.llm.cache.LLMResponseCache.__init__)
     * [get](#spoon_ai.llm.cache.LLMResponseCache.get)
-    * [put](#spoon_ai.llm.cache.LLMResponseCache.put)
+    * [set](#spoon_ai.llm.cache.LLMResponseCache.set)
     * [clear](#spoon_ai.llm.cache.LLMResponseCache.clear)
     * [get\_stats](#spoon_ai.llm.cache.LLMResponseCache.get_stats)
-    * [cleanup\_expired](#spoon_ai.llm.cache.LLMResponseCache.cleanup_expired)
-  * [get\_global\_cache](#spoon_ai.llm.cache.get_global_cache)
-  * [set\_global\_cache](#spoon_ai.llm.cache.set_global_cache)
   * [CachedLLMManager](#spoon_ai.llm.cache.CachedLLMManager)
     * [\_\_init\_\_](#spoon_ai.llm.cache.CachedLLMManager.__init__)
     * [chat](#spoon_ai.llm.cache.CachedLLMManager.chat)
-    * [chat\_with\_tools](#spoon_ai.llm.cache.CachedLLMManager.chat_with_tools)
-    * [enable\_cache](#spoon_ai.llm.cache.CachedLLMManager.enable_cache)
-    * [disable\_cache](#spoon_ai.llm.cache.CachedLLMManager.disable_cache)
+    * [chat\_stream](#spoon_ai.llm.cache.CachedLLMManager.chat_stream)
     * [clear\_cache](#spoon_ai.llm.cache.CachedLLMManager.clear_cache)
     * [get\_cache\_stats](#spoon_ai.llm.cache.CachedLLMManager.get_cache_stats)
-    * [\_\_getattr\_\_](#spoon_ai.llm.cache.CachedLLMManager.__getattr__)
 * [spoon\_ai.llm.interface](#spoon_ai.llm.interface)
   * [ProviderCapability](#spoon_ai.llm.interface.ProviderCapability)
   * [ProviderMetadata](#spoon_ai.llm.interface.ProviderMetadata)
@@ -158,6 +149,8 @@ title: spoon_ai
     * [get\_metadata](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.get_metadata)
     * [health\_check](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.health_check)
     * [cleanup](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.cleanup)
+* [spoon\_ai.llm.providers.ollama\_provider](#spoon_ai.llm.providers.ollama_provider)
+  * [OllamaProvider](#spoon_ai.llm.providers.ollama_provider.OllamaProvider)
 * [spoon\_ai.llm.providers.openai\_provider](#spoon_ai.llm.providers.openai_provider)
   * [OpenAIProvider](#spoon_ai.llm.providers.openai_provider.OpenAIProvider)
     * [get\_metadata](#spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata)
@@ -638,6 +631,7 @@ title: spoon_ai
     * [get\_diagnostics](#spoon_ai.agents.base.BaseAgent.get_diagnostics)
 * [spoon\_ai.rag.embeddings](#spoon_ai.rag.embeddings)
   * [HashEmbeddingClient](#spoon_ai.rag.embeddings.HashEmbeddingClient)
+  * [get\_embedding\_client](#spoon_ai.rag.embeddings.get_embedding_client)
 * [spoon\_ai.rag.loader](#spoon_ai.rag.loader)
 * [spoon\_ai.rag.retriever](#spoon_ai.rag.retriever)
 * [spoon\_ai.rag.qa](#spoon_ai.rag.qa)
@@ -655,7 +649,6 @@ title: spoon_ai
 * [spoon\_ai.rag.config](#spoon_ai.rag.config)
   * [RagConfig](#spoon_ai.rag.config.RagConfig)
     * [backend](#spoon_ai.rag.config.RagConfig.backend)
-    * [embeddings\_provider](#spoon_ai.rag.config.RagConfig.embeddings_provider)
 * [spoon\_ai.rag](#spoon_ai.rag)
 * [spoon\_ai.rag.index](#spoon_ai.rag.index)
 * [spoon\_ai.prompts.toolcall](#spoon_ai.prompts.toolcall)
@@ -762,18 +755,6 @@ title: spoon_ai
   * [SpoonMem0](#spoon_ai.memory.mem0_client.SpoonMem0)
     * [add\_text](#spoon_ai.memory.mem0_client.SpoonMem0.add_text)
     * [get\_all\_memory](#spoon_ai.memory.mem0_client.SpoonMem0.get_all_memory)
-* [spoon\_ai.retrieval.chroma](#spoon_ai.retrieval.chroma)
-* [spoon\_ai.retrieval.qdrant](#spoon_ai.retrieval.qdrant)
-* [spoon\_ai.retrieval.document\_loader](#spoon_ai.retrieval.document_loader)
-  * [BasicTextSplitter](#spoon_ai.retrieval.document_loader.BasicTextSplitter)
-    * [split\_text](#spoon_ai.retrieval.document_loader.BasicTextSplitter.split_text)
-    * [split\_documents](#spoon_ai.retrieval.document_loader.BasicTextSplitter.split_documents)
-  * [DocumentLoader](#spoon_ai.retrieval.document_loader.DocumentLoader)
-    * [load\_directory](#spoon_ai.retrieval.document_loader.DocumentLoader.load_directory)
-    * [load\_file](#spoon_ai.retrieval.document_loader.DocumentLoader.load_file)
-* [spoon\_ai.retrieval](#spoon_ai.retrieval)
-* [spoon\_ai.retrieval.base](#spoon_ai.retrieval.base)
-  * [BaseRetrievalClient](#spoon_ai.retrieval.base.BaseRetrievalClient)
 
 <a id="spoon_ai"></a>
 
@@ -2141,47 +2122,7 @@ Get global response normalizer instance.
 
 # Module `spoon_ai.llm.cache`
 
-Caching system for LLM responses to improve performance.
-
-<a id="spoon_ai.llm.cache.CacheEntry"></a>
-
-## `CacheEntry` Objects
-
-```python
-@dataclass
-class CacheEntry()
-```
-
-Cache entry for LLM responses.
-
-<a id="spoon_ai.llm.cache.CacheEntry.is_expired"></a>
-
-#### `is_expired`
-
-```python
-def is_expired(ttl: float) -> bool
-```
-
-Check if cache entry is expired.
-
-**Arguments**:
-
-- `ttl` - Time to live in seconds
-  
-
-**Returns**:
-
-- `bool` - True if expired
-
-<a id="spoon_ai.llm.cache.CacheEntry.touch"></a>
-
-#### `touch`
-
-```python
-def touch() -> None
-```
-
-Update access information.
+LLM Response Caching - Cache LLM responses to avoid redundant API calls.
 
 <a id="spoon_ai.llm.cache.LLMResponseCache"></a>
 
@@ -2191,22 +2132,22 @@ Update access information.
 class LLMResponseCache()
 ```
 
-Cache for LLM responses with TTL and size limits.
+Cache for LLM responses to avoid redundant API calls.
 
 <a id="spoon_ai.llm.cache.LLMResponseCache.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(max_size: int = 1000, default_ttl: float = 3600)
+def __init__(default_ttl: int = 3600, max_size: int = 1000)
 ```
 
-Initialize cache.
+Initialize the cache.
 
 **Arguments**:
 
-- `max_size` - Maximum number of entries
-- `default_ttl` - Default time to live in seconds
+- `default_ttl` - Default time-to-live in seconds (default: 1 hour)
+- `max_size` - Maximum number of cached entries (default: 1000)
 
 <a id="spoon_ai.llm.cache.LLMResponseCache.get"></a>
 
@@ -2214,31 +2155,32 @@ Initialize cache.
 
 ```python
 def get(messages: List[Message],
-        provider: str,
-        ttl: Optional[float] = None,
+        provider: Optional[str] = None,
         **kwargs) -> Optional[LLMResponse]
 ```
 
-Get cached response if available and not expired.
+Get cached response if available.
 
 **Arguments**:
 
-- `messages` - List of messages
-- `provider` - Provider name
-- `ttl` - Time to live override
+- `messages` - List of conversation messages
+- `provider` - Provider name (optional)
 - `**kwargs` - Additional parameters
   
 
 **Returns**:
 
-- `Optional[LLMResponse]` - Cached response if available
+- `Optional[LLMResponse]` - Cached response if found and not expired, None otherwise
 
-<a id="spoon_ai.llm.cache.LLMResponseCache.put"></a>
+<a id="spoon_ai.llm.cache.LLMResponseCache.set"></a>
 
-#### `put`
+#### `set`
 
 ```python
-def put(messages: List[Message], provider: str, response: LLMResponse,
+def set(messages: List[Message],
+        response: LLMResponse,
+        provider: Optional[str] = None,
+        ttl: Optional[int] = None,
         **kwargs) -> None
 ```
 
@@ -2246,9 +2188,10 @@ Store response in cache.
 
 **Arguments**:
 
-- `messages` - List of messages
-- `provider` - Provider name
-- `response` - Response to cache
+- `messages` - List of conversation messages
+- `response` - LLM response to cache
+- `provider` - Provider name (optional)
+- `ttl` - Time-to-live in seconds (optional, uses default if not provided)
 - `**kwargs` - Additional parameters
 
 <a id="spoon_ai.llm.cache.LLMResponseCache.clear"></a>
@@ -2259,7 +2202,7 @@ Store response in cache.
 def clear() -> None
 ```
 
-Clear all cache entries.
+Clear all cached entries.
 
 <a id="spoon_ai.llm.cache.LLMResponseCache.get_stats"></a>
 
@@ -2273,49 +2216,7 @@ Get cache statistics.
 
 **Returns**:
 
-  Dict[str, Any]: Cache statistics
-
-<a id="spoon_ai.llm.cache.LLMResponseCache.cleanup_expired"></a>
-
-#### `cleanup_expired`
-
-```python
-def cleanup_expired() -> int
-```
-
-Remove expired entries.
-
-**Returns**:
-
-- `int` - Number of entries removed
-
-<a id="spoon_ai.llm.cache.get_global_cache"></a>
-
-#### `get_global_cache`
-
-```python
-def get_global_cache() -> LLMResponseCache
-```
-
-Get global cache instance.
-
-**Returns**:
-
-- `LLMResponseCache` - Global cache instance
-
-<a id="spoon_ai.llm.cache.set_global_cache"></a>
-
-#### `set_global_cache`
-
-```python
-def set_global_cache(cache: LLMResponseCache) -> None
-```
-
-Set global cache instance.
-
-**Arguments**:
-
-- `cache` - Cache instance to set as global
+  Dict[str, Any]: Cache statistics including size, max_size, etc.
 
 <a id="spoon_ai.llm.cache.CachedLLMManager"></a>
 
@@ -2325,22 +2226,23 @@ Set global cache instance.
 class CachedLLMManager()
 ```
 
-LLM Manager wrapper with caching support.
+Wrapper around LLMManager that adds response caching.
 
 <a id="spoon_ai.llm.cache.CachedLLMManager.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(manager, cache: Optional[LLMResponseCache] = None)
+def __init__(llm_manager: LLMManager,
+             cache: Optional[LLMResponseCache] = None)
 ```
 
-Initialize cached manager.
+Initialize cached LLM manager.
 
 **Arguments**:
 
-- `manager` - LLM manager instance
-- `cache` - Cache instance (optional)
+- `llm_manager` - The underlying LLMManager instance
+- `cache` - Optional cache instance (creates new one if not provided)
 
 <a id="spoon_ai.llm.cache.CachedLLMManager.chat"></a>
 
@@ -2350,69 +2252,49 @@ Initialize cached manager.
 async def chat(messages: List[Message],
                provider: Optional[str] = None,
                use_cache: bool = True,
+               cache_ttl: Optional[int] = None,
                **kwargs) -> LLMResponse
 ```
 
-Chat with caching support.
+Send chat request with caching support.
 
 **Arguments**:
 
-- `messages` - List of messages
-- `provider` - Provider name
-- `use_cache` - Whether to use cache
+- `messages` - List of conversation messages
+- `provider` - Specific provider to use (optional)
+- `use_cache` - Whether to use cache (default: True)
+- `cache_ttl` - Custom TTL for this request (optional)
 - `**kwargs` - Additional parameters
   
 
 **Returns**:
 
-- `LLMResponse` - Response (cached or fresh)
+- `LLMResponse` - LLM response (from cache or API)
 
-<a id="spoon_ai.llm.cache.CachedLLMManager.chat_with_tools"></a>
+<a id="spoon_ai.llm.cache.CachedLLMManager.chat_stream"></a>
 
-#### `chat_with_tools`
+#### `chat_stream`
 
 ```python
-async def chat_with_tools(messages: List[Message],
-                          tools: List[Dict],
-                          provider: Optional[str] = None,
-                          use_cache: bool = True,
-                          **kwargs) -> LLMResponse
+async def chat_stream(messages: List[Message],
+                      provider: Optional[str] = None,
+                      callbacks: Optional[List] = None,
+                      **kwargs)
 ```
 
-Chat with tools and caching support.
+Send streaming chat request (caching not supported for streaming).
 
 **Arguments**:
 
-- `messages` - List of messages
-- `tools` - List of tools
-- `provider` - Provider name
-- `use_cache` - Whether to use cache
+- `messages` - List of conversation messages
+- `provider` - Specific provider to use (optional)
+- `callbacks` - Optional callback handlers
 - `**kwargs` - Additional parameters
   
 
-**Returns**:
+**Yields**:
 
-- `LLMResponse` - Response (cached or fresh)
-
-<a id="spoon_ai.llm.cache.CachedLLMManager.enable_cache"></a>
-
-#### `enable_cache`
-
-```python
-def enable_cache() -> None
-```
-
-Enable caching.
-
-<a id="spoon_ai.llm.cache.CachedLLMManager.disable_cache"></a>
-
-#### `disable_cache`
-
-```python
-def disable_cache() -> None
-```
-
-Disable caching.
+- `LLMResponseChunk` - Streaming response chunks
 
 <a id="spoon_ai.llm.cache.CachedLLMManager.clear_cache"></a>
 
@@ -2422,7 +2304,7 @@ Disable caching.
 def clear_cache() -> None
 ```
 
-Clear cache.
+Clear the response cache.
 
 <a id="spoon_ai.llm.cache.CachedLLMManager.get_cache_stats"></a>
 
@@ -2437,16 +2319,6 @@ Get cache statistics.
 **Returns**:
 
   Dict[str, Any]: Cache statistics
-
-<a id="spoon_ai.llm.cache.CachedLLMManager.__getattr__"></a>
-
-#### `__getattr__`
-
-```python
-def __getattr__(name)
-```
-
-Delegate other methods to the underlying manager.
 
 <a id="spoon_ai.llm.interface"></a>
 
@@ -2955,6 +2827,39 @@ async def cleanup() -> None
 ```
 
 Cleanup provider resources.
+
+<a id="spoon_ai.llm.providers.ollama_provider"></a>
+
+# Module `spoon_ai.llm.providers.ollama_provider`
+
+Ollama Provider implementation for the unified LLM interface.
+
+Ollama runs locally and exposes an HTTP API (default: http://localhost:11434).
+This provider supports chat, completion, and streaming.
+
+**Notes**:
+
+  - Ollama does not require an API key; the configuration layer may still provide
+  a placeholder api_key value for consistency.
+  - Tool calling is not implemented here.
+
+<a id="spoon_ai.llm.providers.ollama_provider.OllamaProvider"></a>
+
+## `OllamaProvider` Objects
+
+```python
+@register_provider(
+    "ollama",
+    [
+        ProviderCapability.CHAT,
+        ProviderCapability.COMPLETION,
+        ProviderCapability.STREAMING,
+    ],
+)
+class OllamaProvider(LLMProviderInterface)
+```
+
+Local Ollama provider via HTTP.
 
 <a id="spoon_ai.llm.providers.openai_provider"></a>
 
@@ -8283,6 +8188,27 @@ Deterministic offline embedding via hashing.
 Produces fixed-length vectors in [0,1] normalized range. Not semantically meaningful
 but stable for tests and offline demos.
 
+<a id="spoon_ai.rag.embeddings.get_embedding_client"></a>
+
+#### `get_embedding_client`
+
+```python
+def get_embedding_client(
+        provider: Optional[str],
+        *,
+        openai_api_key: Optional[str] = None,
+        openai_model: str = "text-embedding-3-small") -> EmbeddingClient
+```
+
+Create an embedding client.
+
+Provider selection rules:
+- provider is None/"auto": pick the first configured embeddings provider using a dedicated
+  priority order (OpenAI &gt; OpenRouter &gt; Gemini).
+- provider is "openai" / "openrouter" / "gemini" / "ollama": force that provider (uses core env config when applicable).
+- provider is "openai_compatible": use OpenAI-compatible embeddings via RAG_EMBEDDINGS_* env vars.
+- otherwise: deterministic hash embeddings (offline).
+
 <a id="spoon_ai.rag.loader"></a>
 
 # Module `spoon_ai.rag.loader`
@@ -8391,12 +8317,6 @@ class RagConfig()
 #### `backend`
 
 faiss|pinecone|qdrant|chroma
-
-<a id="spoon_ai.rag.config.RagConfig.embeddings_provider"></a>
-
-#### `embeddings_provider`
-
-anyroute|openai|hash
 
 <a id="spoon_ai.rag"></a>
 
@@ -9654,93 +9574,4 @@ def get_all_memory(user_id: Optional[str] = None,
 ```
 
 Retrieve all memories for a user (subject to backend limits).
-
-<a id="spoon_ai.retrieval.chroma"></a>
-
-# Module `spoon_ai.retrieval.chroma`
-
-<a id="spoon_ai.retrieval.qdrant"></a>
-
-# Module `spoon_ai.retrieval.qdrant`
-
-<a id="spoon_ai.retrieval.document_loader"></a>
-
-# Module `spoon_ai.retrieval.document_loader`
-
-<a id="spoon_ai.retrieval.document_loader.BasicTextSplitter"></a>
-
-## `BasicTextSplitter` Objects
-
-```python
-class BasicTextSplitter()
-```
-
-Simple text splitter to replace langchain's RecursiveCharacterTextSplitter
-
-<a id="spoon_ai.retrieval.document_loader.BasicTextSplitter.split_text"></a>
-
-#### `split_text`
-
-```python
-def split_text(text: str) -> List[str]
-```
-
-Split text into chunks
-
-<a id="spoon_ai.retrieval.document_loader.BasicTextSplitter.split_documents"></a>
-
-#### `split_documents`
-
-```python
-def split_documents(documents: List[Document]) -> List[Document]
-```
-
-Split document collection into smaller document chunks
-
-<a id="spoon_ai.retrieval.document_loader.DocumentLoader"></a>
-
-## `DocumentLoader` Objects
-
-```python
-class DocumentLoader()
-```
-
-<a id="spoon_ai.retrieval.document_loader.DocumentLoader.load_directory"></a>
-
-#### `load_directory`
-
-```python
-def load_directory(directory_path: str,
-                   glob_pattern: Optional[str] = None) -> List[Document]
-```
-
-Load documents from a directory
-
-<a id="spoon_ai.retrieval.document_loader.DocumentLoader.load_file"></a>
-
-#### `load_file`
-
-```python
-def load_file(file_path: str) -> List[Document]
-```
-
-Load a single file and return the documents
-
-<a id="spoon_ai.retrieval"></a>
-
-# Module `spoon_ai.retrieval`
-
-<a id="spoon_ai.retrieval.base"></a>
-
-# Module `spoon_ai.retrieval.base`
-
-<a id="spoon_ai.retrieval.base.BaseRetrievalClient"></a>
-
-## `BaseRetrievalClient` Objects
-
-```python
-class BaseRetrievalClient()
-```
-
-Abstract base class for retrieval clients.
 
