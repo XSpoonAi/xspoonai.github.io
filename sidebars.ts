@@ -31,6 +31,8 @@ const sidebars: SidebarsConfig = {
         'core-concepts/agents',
         'core-concepts/tools',
         'core-concepts/llm-providers',
+        'core-concepts/vision',
+        'core-concepts/rag',
         'core-concepts/mcp-protocol',
         'core-concepts/Short-term memory',
         'core-concepts/x402-payments',
