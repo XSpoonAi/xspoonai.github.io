@@ -1,6 +1,6 @@
 ---
 id: spoon_ai.payments
-slug: /api-reference/spoon_ai/payments//index
+slug: /api-reference/spoon_ai/payments
 title: spoon_ai.payments
 ---
 
