@@ -41,3 +41,46 @@ Give Cursor, Codex, Claude Code, and similar assistants the right context to gen
 - "Read the source or examples you will copy from; cite file path and line range before coding."
 - "Confirm tool/agent/LLM signatures from code, not from guesswork; show the imports you plan to use."
 - "If unsure, fetch the specific file via MCP and restate the interface before implementing."
+
+## Method 5: Vibe Code with Skills
+
+Use SpoonOS Skills for the ultimate vibe coding experience. Skills provide ready-to-use prompts, tools, and scripts that you can drop into your project and customize.
+
+### Quick Start with Skills
+
+```bash
+# Get Web3 skills from the awesome collection
+git clone https://github.com/XSpoonAi/spoon-awesome-skill.git
+
+# Copy skills to your project
+cp -r spoon-awesome-skill/web3-skills/defi ./skills/
+```
+
+### Build Skill-Powered Agents
+
+```python
+from spoon_ai.agents import SpoonReactSkill
+from spoon_ai.chat import ChatBot
+
+agent = SpoonReactSkill(
+    llm=ChatBot(llm_provider="openai", model_name="gpt-4o-mini"),
+    skill_paths=["./skills"],
+    scripts_enabled=True,
+    auto_trigger_skills=True
+)
+
+await agent.initialize()
+await agent.activate_skill("defi")
+
+# The AI figures out how to use the skill's scripts and prompts
+response = await agent.run("Get a quote to swap 1 ETH for USDC")
+```
+
+### Why Skills for Vibe Coding?
+
+1. **Copy & Customize**: Drop SKILL.md files into your workspace, tweak the prompts
+2. **AI Decides How**: Enable scripts and let the AI figure out tool usage
+3. **Portable**: Skills are self-contained folders - easy to share and version
+4. **Web3 Ready**: Get production skills from [spoon-awesome-skill](https://github.com/XSpoonAi/spoon-awesome-skill)
+
+See the full [Building Skill Agents](./build-skill-agents) guide for detailed instructions.

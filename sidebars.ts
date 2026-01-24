@@ -29,6 +29,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'core-concepts/agents',
+        'core-concepts/skills',
         'core-concepts/tools',
         'core-concepts/llm-providers',
         'core-concepts/vision',
@@ -62,6 +63,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'how-to-guides/build-first-agent',
+        'how-to-guides/build-skill-agents',
         'how-to-guides/add-custom-tools',
         'how-to-guides/vibe-coding',
         'how-to-guides/x402-payments',
