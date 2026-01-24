@@ -76,15 +76,7 @@ Generated from spoon_ai sources. Each module below has its own page.
 - [spoon_ai.neofs.client](./spoon_ai/neofs/client.md)
 - [spoon_ai.neofs.models](./spoon_ai/neofs/models.md)
 - [spoon_ai.neofs.utils](./spoon_ai/neofs/utils.md)
-- [spoon_ai.payments](./spoon_ai/payments/)
-- [spoon_ai.payments.app](./spoon_ai/payments/app.md)
-- [spoon_ai.payments.cli](./spoon_ai/payments/cli.md)
-- [spoon_ai.payments.config](./spoon_ai/payments/config.md)
-- [spoon_ai.payments.exceptions](./spoon_ai/payments/exceptions.md)
-- [spoon_ai.payments.facilitator_client](./spoon_ai/payments/facilitator_client.md)
-- [spoon_ai.payments.models](./spoon_ai/payments/models.md)
-- [spoon_ai.payments.server](./spoon_ai/payments/server.md)
-- [spoon_ai.payments.x402_service](./spoon_ai/payments/x402_service.md)
+- [spoon_ai.payments](./spoon_ai/payments.md)
 - [spoon_ai.prompts](./spoon_ai/prompts/)
 - [spoon_ai.prompts.spoon_react](./spoon_ai/prompts/spoon_react.md)
 - [spoon_ai.prompts.toolcall](./spoon_ai/prompts/toolcall.md)
@@ -23832,236 +23824,11 @@ Returns (signature_hex, compressed_pubkey_hex)
 
 ---
 
-FILE: docs/api-reference/spoon_ai/payments/app.md
-
----
-id: spoon_ai.payments.app
-slug: /api-reference/spoon_ai/payments/app
-title: spoon_ai.payments.app
----
-
-# Table of Contents
-
-* [spoon\_ai.payments.app](#spoon_ai.payments.app)
-
-<a id="spoon_ai.payments.app"></a>
-
-# Module `spoon_ai.payments.app`
-
----
-
-FILE: docs/api-reference/spoon_ai/payments/cli.md
-
----
-id: spoon_ai.payments.cli
-slug: /api-reference/spoon_ai/payments/cli
-title: spoon_ai.payments.cli
----
-
-# Table of Contents
-
-* [spoon\_ai.payments.cli](#spoon_ai.payments.cli)
-
-<a id="spoon_ai.payments.cli"></a>
-
-# Module `spoon_ai.payments.cli`
-
----
-
-FILE: docs/api-reference/spoon_ai/payments/config.md
-
----
-id: spoon_ai.payments.config
-slug: /api-reference/spoon_ai/payments/config
-title: spoon_ai.payments.config
----
-
-# Table of Contents
-
-* [spoon\_ai.payments.config](#spoon_ai.payments.config)
-  * [X402ConfigurationError](#spoon_ai.payments.config.X402ConfigurationError)
-  * [X402PaywallBranding](#spoon_ai.payments.config.X402PaywallBranding)
-  * [X402ClientConfig](#spoon_ai.payments.config.X402ClientConfig)
-  * [X402Settings](#spoon_ai.payments.config.X402Settings)
-    * [amount\_in\_atomic\_units](#spoon_ai.payments.config.X402Settings.amount_in_atomic_units)
-    * [build\_asset\_extra](#spoon_ai.payments.config.X402Settings.build_asset_extra)
-    * [load](#spoon_ai.payments.config.X402Settings.load)
-
-<a id="spoon_ai.payments.config"></a>
-
-# Module `spoon_ai.payments.config`
-
-<a id="spoon_ai.payments.config.X402ConfigurationError"></a>
-
-## `X402ConfigurationError` Objects
-
-```python
-class X402ConfigurationError(Exception)
-```
-
-Raised when required x402 configuration is missing or invalid.
-
-<a id="spoon_ai.payments.config.X402PaywallBranding"></a>
-
-## `X402PaywallBranding` Objects
-
-```python
-class X402PaywallBranding(BaseModel)
-```
-
-Optional branding customisations for the embedded paywall template.
-
-<a id="spoon_ai.payments.config.X402ClientConfig"></a>
-
-## `X402ClientConfig` Objects
-
-```python
-class X402ClientConfig(BaseModel)
-```
-
-Holds client-side signing configuration used for outbound payments.
-
-<a id="spoon_ai.payments.config.X402Settings"></a>
-
-## `X402Settings` Objects
-
-```python
-class X402Settings(BaseModel)
-```
-
-Resolved configuration view for x402 payments inside SpoonOS.
-
-<a id="spoon_ai.payments.config.X402Settings.amount_in_atomic_units"></a>
-
-#### `amount_in_atomic_units`
-
-```python
-@property
-def amount_in_atomic_units() -> str
-```
-
-Return the configured maximum amount encoded as atomic units (string).
-
-<a id="spoon_ai.payments.config.X402Settings.build_asset_extra"></a>
-
-#### `build_asset_extra`
-
-```python
-def build_asset_extra() -> Dict[str, Any]
-```
-
-Construct the `extra` payload for the payment requirements.
-
-<a id="spoon_ai.payments.config.X402Settings.load"></a>
-
-#### `load`
-
-```python
-@classmethod
-def load(cls,
-         config_manager: Optional[ConfigManager] = None) -> "X402Settings"
-```
-
-Load settings from config.json with .env fallbacks.
-
----
-
-FILE: docs/api-reference/spoon_ai/payments/exceptions.md
-
----
-id: spoon_ai.payments.exceptions
-slug: /api-reference/spoon_ai/payments/exceptions
-title: spoon_ai.payments.exceptions
----
-
-# Table of Contents
-
-* [spoon\_ai.payments.exceptions](#spoon_ai.payments.exceptions)
-  * [X402PaymentError](#spoon_ai.payments.exceptions.X402PaymentError)
-  * [X402ConfigurationError](#spoon_ai.payments.exceptions.X402ConfigurationError)
-  * [X402VerificationError](#spoon_ai.payments.exceptions.X402VerificationError)
-  * [X402SettlementError](#spoon_ai.payments.exceptions.X402SettlementError)
-
-<a id="spoon_ai.payments.exceptions"></a>
-
-# Module `spoon_ai.payments.exceptions`
-
-<a id="spoon_ai.payments.exceptions.X402PaymentError"></a>
-
-## `X402PaymentError` Objects
-
-```python
-class X402PaymentError(Exception)
-```
-
-Base exception for x402 payment operations.
-
-<a id="spoon_ai.payments.exceptions.X402ConfigurationError"></a>
-
-## `X402ConfigurationError` Objects
-
-```python
-class X402ConfigurationError(X402PaymentError)
-```
-
-Raised when integration configuration is invalid or incomplete.
-
-<a id="spoon_ai.payments.exceptions.X402VerificationError"></a>
-
-## `X402VerificationError` Objects
-
-```python
-class X402VerificationError(X402PaymentError)
-```
-
-Raised when a payment header fails verification against the facilitator.
-
-<a id="spoon_ai.payments.exceptions.X402SettlementError"></a>
-
-## `X402SettlementError` Objects
-
-```python
-class X402SettlementError(X402PaymentError)
-```
-
-Raised when settlement fails or returns an error response.
-
----
-
-FILE: docs/api-reference/spoon_ai/payments/facilitator_client.md
-
----
-id: spoon_ai.payments.facilitator_client
-slug: /api-reference/spoon_ai/payments/facilitator_client
-title: spoon_ai.payments.facilitator_client
----
-
-# Table of Contents
-
-* [spoon\_ai.payments.facilitator\_client](#spoon_ai.payments.facilitator_client)
-  * [X402FacilitatorClient](#spoon_ai.payments.facilitator_client.X402FacilitatorClient)
-
-<a id="spoon_ai.payments.facilitator_client"></a>
-
-# Module `spoon_ai.payments.facilitator_client`
-
-<a id="spoon_ai.payments.facilitator_client.X402FacilitatorClient"></a>
-
-## `X402FacilitatorClient` Objects
-
-```python
-class X402FacilitatorClient()
-```
-
-Thin wrapper over the upstream facilitator client with async header hooks.
-
----
-
-FILE: docs/api-reference/spoon_ai/payments/index.md
+FILE: docs/api-reference/spoon_ai/payments.md
 
 ---
 id: spoon_ai.payments
-slug: /api-reference/spoon_ai/payments//index
+slug: /api-reference/spoon_ai/payments
 title: spoon_ai.payments
 ---
 
@@ -24397,204 +24164,6 @@ class X402PaymentReceipt(BaseModel)
 ```
 
 Decoded representation of the X-PAYMENT-RESPONSE header.
-
----
-
-FILE: docs/api-reference/spoon_ai/payments/models.md
-
----
-id: spoon_ai.payments.models
-slug: /api-reference/spoon_ai/payments/models
-title: spoon_ai.payments.models
----
-
-# Table of Contents
-
-* [spoon\_ai.payments.models](#spoon_ai.payments.models)
-  * [X402PaymentRequest](#spoon_ai.payments.models.X402PaymentRequest)
-  * [X402VerifyResult](#spoon_ai.payments.models.X402VerifyResult)
-  * [X402SettleResult](#spoon_ai.payments.models.X402SettleResult)
-  * [X402PaymentOutcome](#spoon_ai.payments.models.X402PaymentOutcome)
-  * [X402PaymentReceipt](#spoon_ai.payments.models.X402PaymentReceipt)
-
-<a id="spoon_ai.payments.models"></a>
-
-# Module `spoon_ai.payments.models`
-
-<a id="spoon_ai.payments.models.X402PaymentRequest"></a>
-
-## `X402PaymentRequest` Objects
-
-```python
-class X402PaymentRequest(BaseModel)
-```
-
-Describes a payment requirement that should be issued for a resource.
-
-<a id="spoon_ai.payments.models.X402VerifyResult"></a>
-
-## `X402VerifyResult` Objects
-
-```python
-class X402VerifyResult(BaseModel)
-```
-
-Captures the facilitator verification response.
-
-<a id="spoon_ai.payments.models.X402SettleResult"></a>
-
-## `X402SettleResult` Objects
-
-```python
-class X402SettleResult(BaseModel)
-```
-
-Captures settlement details.
-
-<a id="spoon_ai.payments.models.X402PaymentOutcome"></a>
-
-## `X402PaymentOutcome` Objects
-
-```python
-class X402PaymentOutcome(BaseModel)
-```
-
-Aggregates verification and settlement outcomes.
-
-<a id="spoon_ai.payments.models.X402PaymentReceipt"></a>
-
-## `X402PaymentReceipt` Objects
-
-```python
-class X402PaymentReceipt(BaseModel)
-```
-
-Decoded representation of the X-PAYMENT-RESPONSE header.
-
----
-
-FILE: docs/api-reference/spoon_ai/payments/server.md
-
----
-id: spoon_ai.payments.server
-slug: /api-reference/spoon_ai/payments/server
-title: spoon_ai.payments.server
----
-
-# Table of Contents
-
-* [spoon\_ai.payments.server](#spoon_ai.payments.server)
-  * [create\_paywalled\_router](#spoon_ai.payments.server.create_paywalled_router)
-
-<a id="spoon_ai.payments.server"></a>
-
-# Module `spoon_ai.payments.server`
-
-<a id="spoon_ai.payments.server.create_paywalled_router"></a>
-
-#### `create_paywalled_router`
-
-```python
-def create_paywalled_router(
-    service: Optional[X402PaymentService] = None,
-    agent_factory: AgentFactory = _default_agent_factory,
-    payment_message: str = "Payment required to invoke this agent."
-) -> APIRouter
-```
-
-Build a FastAPI router that protects agent invocations behind an x402 paywall.
-
-**Arguments**:
-
-- `service` - Optional pre-configured payment service.
-- `agent_factory` - Coroutine that returns an initialized agent given its name.
-- `payment_message` - Message displayed when payment is required.
-  
-
-**Returns**:
-
-- `APIRouter` - Router with `/invoke/&#123;agent_name&#125;` endpoint ready to mount.
-
----
-
-FILE: docs/api-reference/spoon_ai/payments/x402_service.md
-
----
-id: spoon_ai.payments.x402_service
-slug: /api-reference/spoon_ai/payments/x402_service
-title: spoon_ai.payments.x402_service
----
-
-# Table of Contents
-
-* [spoon\_ai.payments.x402\_service](#spoon_ai.payments.x402_service)
-  * [X402PaymentService](#spoon_ai.payments.x402_service.X402PaymentService)
-    * [discover\_resources](#spoon_ai.payments.x402_service.X402PaymentService.discover_resources)
-    * [render\_paywall\_html](#spoon_ai.payments.x402_service.X402PaymentService.render_paywall_html)
-    * [build\_payment\_header](#spoon_ai.payments.x402_service.X402PaymentService.build_payment_header)
-    * [decode\_payment\_response](#spoon_ai.payments.x402_service.X402PaymentService.decode_payment_response)
-
-<a id="spoon_ai.payments.x402_service"></a>
-
-# Module `spoon_ai.payments.x402_service`
-
-<a id="spoon_ai.payments.x402_service.X402PaymentService"></a>
-
-## `X402PaymentService` Objects
-
-```python
-class X402PaymentService()
-```
-
-High level service that aligns the x402 SDK with SpoonOS conventions.
-
-<a id="spoon_ai.payments.x402_service.X402PaymentService.discover_resources"></a>
-
-#### `discover_resources`
-
-```python
-async def discover_resources(
-        *,
-        resource_type: Optional[str] = None,
-        limit: Optional[int] = None,
-        offset: Optional[int] = None) -> ListDiscoveryResourcesResponse
-```
-
-Query the facilitator discovery endpoint for registered paywalled resources.
-
-<a id="spoon_ai.payments.x402_service.X402PaymentService.render_paywall_html"></a>
-
-#### `render_paywall_html`
-
-```python
-def render_paywall_html(error: str,
-                        request: Optional[X402PaymentRequest] = None,
-                        headers: Optional[Dict[str, Any]] = None) -> str
-```
-
-Render the embedded paywall HTML with payment requirements.
-
-<a id="spoon_ai.payments.x402_service.X402PaymentService.build_payment_header"></a>
-
-#### `build_payment_header`
-
-```python
-def build_payment_header(requirements: PaymentRequirements,
-                         *,
-                         max_value: Optional[int] = None) -> str
-```
-
-Create a signed X-PAYMENT header for outbound requests.
-
-<a id="spoon_ai.payments.x402_service.X402PaymentService.decode_payment_response"></a>
-
-#### `decode_payment_response`
-
-```python
-def decode_payment_response(header_value: str) -> X402PaymentReceipt
-```
-
-Decode an X-PAYMENT-RESPONSE header into a structured receipt.
 
 ---
 
@@ -34443,6 +34012,160 @@ result = await mcp_tools.execute_tool("slow_tool", {})
 
 ---
 
+FILE: docs/core-concepts/rag.md
+
+# RAG (Retrieval-Augmented Generation)
+
+SpoonOS ships a minimal, switchable RAG stack under `spoon_ai.rag`:
+
+- Index local files/dirs/URLs
+- Retrieve top-k chunks
+- Answer questions with `[n]` citations
+
+## Installation
+
+The RAG system supports multiple vector-store backends.
+
+### Basic (FAISS / Offline)
+
+```bash
+pip install faiss-cpu  # Optional: real FAISS backend
+# or no extra install for offline/in-memory testing
+```
+
+### Advanced Backends
+
+```bash
+pip install chromadb        # Chroma
+pip install pinecone-client  # Pinecone
+pip install qdrant-client    # Qdrant
+```
+
+## Basic Usage
+
+### 1) Initialize components
+
+```python
+import os
+from spoon_ai.rag import (
+    get_default_config,
+    get_vector_store,
+    get_embedding_client,
+    RagIndex,
+    RagRetriever,
+    RagQA,
+)
+from spoon_ai.chat import ChatBot
+
+# Example: enable embeddings
+# os.environ["OPENAI_API_KEY"] = "sk-..."
+# or
+# os.environ["OPENROUTER_API_KEY"] = "sk-or-..."
+
+cfg = get_default_config()
+store = get_vector_store(cfg.backend)
+embed = get_embedding_client(
+    cfg.embeddings_provider,
+    openai_model=cfg.openai_embeddings_model,
+)
+```
+
+### 2) Ingest
+
+```python
+index = RagIndex(config=cfg, store=store, embeddings=embed)
+count = index.ingest(["./my_documents", "https://example.com/article"])
+print(f"Ingested {count} chunks.")
+```
+
+### 3) Retrieve
+
+```python
+retriever = RagRetriever(config=cfg, store=store, embeddings=embed)
+chunks = retriever.retrieve("How do I use SpoonAI?", top_k=3)
+for c in chunks:
+    print(f"[{c.score:.2f}] {c.text[:100]}... (Source: {c.metadata.get('source')})")
+```
+
+### 4) QA with citations
+
+```python
+llm = ChatBot()  # uses the configured core LLM provider
+qa = RagQA(config=cfg, llm=llm)
+result = await qa.answer("How do I use SpoonAI?", chunks)
+
+print("Answer:", result.answer)
+for cite in result.citations:
+    print(f"- {cite.marker} {cite.source}")
+```
+
+## Configuration
+
+### Core env vars
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `RAG_BACKEND` | Vector store backend (`faiss`, `chroma`, `pinecone`, `qdrant`) | `faiss` |
+| `RAG_COLLECTION` | Collection name | `default` |
+| `RAG_DIR` | Persistence directory (used by some backends) | `.rag_store` |
+| `TOP_K` | Default number of chunks to retrieve | `5` |
+| `CHUNK_SIZE` | Chunk size | `800` |
+| `CHUNK_OVERLAP` | Chunk overlap | `120` |
+
+### Embeddings selection
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `RAG_EMBEDDINGS_PROVIDER` | `auto`, `openai`, `openrouter`, `gemini`, `openai_compatible`, `ollama`, `hash` (`auto` uses OpenAI > OpenRouter > Gemini > openai_compatible) | `auto` |
+| `RAG_EMBEDDINGS_MODEL` | Embedding model id (provider-specific) | `text-embedding-3-small` |
+| `RAG_EMBEDDINGS_API_KEY` | API key for `openai_compatible` embeddings | None |
+| `RAG_EMBEDDINGS_BASE_URL` | Base URL for `openai_compatible` embeddings (OpenAI-compatible `/embeddings`) | None |
+
+### Provider keys (when used)
+
+- `OPENAI_API_KEY` (OpenAI embeddings)
+- `OPENROUTER_API_KEY` (OpenRouter embeddings)
+- `GEMINI_API_KEY` (Gemini embeddings)
+- `OLLAMA_BASE_URL` (Ollama embeddings, default: `http://localhost:11434`)
+
+## Backends & Smoke Tests
+
+### Vector stores (`RAG_BACKEND`)
+
+- `faiss` (default): local/offline friendly. Falls back to an in-memory cosine store if FAISS is not installed.
+- `pinecone`: cloud vector DB (requires `PINECONE_API_KEY`, optional `RAG_PINECONE_INDEX`).
+- `qdrant`: local/cloud (requires `qdrant-client`; uses `QDRANT_URL` / `QDRANT_PATH`).
+- `chroma`: local (requires `chromadb`; persists under `${RAG_DIR:-.rag_store}/chroma`).
+
+### Smoke tests
+
+```bash
+# Offline (no LLM calls)
+RAG_BACKEND=faiss RAG_FAKE_QA=1 python examples/smoke/rag_faiss_smoke.py
+
+# Pinecone
+export PINECONE_API_KEY=...
+RAG_BACKEND=pinecone RAG_FAKE_QA=1 python examples/smoke/rag_pinecone_smoke.py
+
+# Qdrant
+pip install qdrant-client
+export QDRANT_URL=http://localhost:6333
+RAG_BACKEND=qdrant RAG_FAKE_QA=1 python examples/smoke/rag_qdrant_smoke.py
+
+# Chroma
+pip install chromadb
+RAG_BACKEND=chroma RAG_FAKE_QA=1 python examples/smoke/rag_chroma_smoke.py
+```
+
+## Runnable Examples
+
+```bash
+python examples/rag_react_agent_demo.py
+python examples/rag_graph_agent_demo.py
+```
+
+---
+
 FILE: docs/core-concepts/Short-term memory.md
 
 # Short-Term Memory
@@ -34654,6 +34377,376 @@ asyncio.run(main())
 ```
 
 If you are using a compiled graph (`CompiledGraph`), call `graph.graph.get_state(config)` and `graph.graph.get_state_history(config)` instead; the snippet above assumes `graph` is a `StateGraph`.
+
+---
+
+FILE: docs/core-concepts/skills.md
+
+# Skills
+
+Skills are modular, reusable AI capabilities that can be dynamically activated to enhance your agents. They provide a powerful way to organize prompts, tools, and scripts into portable packages.
+
+:::tip Web3 Skills Collection
+Production-ready Web3 skills for cryptocurrency research, DeFi analysis, and blockchain development are available at **[spoon-awesome-skill](https://github.com/XSpoonAi/spoon-awesome-skill)**. Clone and customize them for your projects!
+:::
+
+## Overview
+
+A skill is a self-contained module defined by a `SKILL.md` file. Each skill encapsulates:
+
+| Component | Description |
+|-----------|-------------|
+| **Metadata** | Name, description, version, tags, and triggers |
+| **Instructions** | Markdown prompts injected into the agent's context |
+| **Scripts** | Executable Python/Shell scripts exposed as tools |
+| **Triggers** | Keywords, patterns, or intents for auto-activation |
+
+## Design Philosophy
+
+### Portability
+
+Skills are self-contained folders that can be shared by simply copying directories:
+
+```
+skills/
+└── defi/
+    ├── SKILL.md           # Metadata + instructions
+    └── scripts/
+        └── uniswap_quote.py
+```
+
+No external dependencies or complex setup required—just copy and use.
+
+### Dynamic Activation
+
+Skills support multiple activation modes:
+
+| Mode | Description | Example |
+|------|-------------|---------|
+| **Manual** | Explicitly activated via code | `await agent.activate_skill("defi")` |
+| **Auto-triggered** | Activated based on user input patterns | User says "swap ETH" → triggers `defi` skill |
+| **Composed** | Skills that require or include other skills | `advanced-trading` includes `defi` |
+
+### Vibe Coding Experience
+
+Skills enable a **"vibe coding"** workflow where you:
+
+1. **Copy** existing skills from [spoon-awesome-skill](https://github.com/XSpoonAi/spoon-awesome-skill)
+2. **Customize** the SKILL.md prompts for your use case
+3. **Enable scripts** and let the AI figure out how to use them
+4. **Ship** without writing complex agent logic
+
+## SKILL.md Specification
+
+The `SKILL.md` file is the heart of every skill. It uses YAML frontmatter for metadata followed by Markdown instructions.
+
+### Complete Schema
+
+```yaml
+---
+# ===== Required Fields =====
+name: skill-name                    # Unique identifier (lowercase, hyphens)
+description: What the skill does    # Human-readable description
+
+# ===== Optional Metadata =====
+version: 1.0.0                      # Semantic version
+author: Your Name                   # Skill author
+tags:                               # Categorization tags
+  - research
+  - web3
+  - defi
+
+# ===== Trigger Configuration =====
+triggers:
+  - type: keyword                   # Trigger type: keyword | pattern | intent
+    keywords:                       # Words that activate the skill
+      - research
+      - analyze
+      - investigate
+    priority: 80                    # 0-100, higher = more likely to activate
+
+  - type: pattern                   # Regex-based triggers
+    patterns:
+      - "(?i)analyze.*data"
+      - "(?i)research.*topic"
+    priority: 70
+
+  - type: intent                    # LLM-classified intent triggers
+    intent_category: research
+    priority: 90
+
+# ===== Parameters =====
+parameters:                         # Input parameters the skill accepts
+  - name: topic
+    type: string                    # string | integer | boolean | float
+    required: true
+    default: null
+    description: Research topic
+
+# ===== Script Configuration =====
+scripts:
+  enabled: true                     # Enable/disable all scripts for this skill
+  working_directory: ./scripts      # Base directory for script files
+
+  definitions:
+    - name: web_search              # Script identifier
+      description: Search the web   # Tool description shown to agent
+      type: python                  # python | shell | bash
+      file: search.py               # Relative to working_directory
+      timeout: 30                   # Execution timeout in seconds
+      run_on_activation: false      # Auto-run when skill activates
+      run_on_deactivation: false    # Auto-run when skill deactivates
+      working_directory: ./custom   # Override skill-level working_directory
+
+    - name: inline_script
+      type: bash
+      inline: |                     # Inline script (alternative to file)
+        echo "Hello from inline script"
+      timeout: 10
+---
+
+# Skill Instructions
+
+Your prompt content here. This Markdown content is injected into
+the agent's system prompt when the skill is activated.
+
+## Capabilities
+- List what the agent can do with this skill
+
+## Guidelines
+1. Behavioral instructions for the agent
+2. How to use the available tools
+3. Output format expectations
+```
+
+### Field Reference
+
+#### Core Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | string | ✓ | Unique skill identifier. Use lowercase with hyphens. |
+| `description` | string | ✓ | Human-readable description of the skill's purpose. |
+| `version` | string | | Semantic version (e.g., `1.0.0`). |
+| `author` | string | | Skill author name or organization. |
+| `tags` | string[] | | Categorization tags for discovery and filtering. |
+
+#### Trigger Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `triggers[].type` | enum | `keyword`, `pattern`, or `intent` |
+| `triggers[].keywords` | string[] | Words that trigger activation (for `keyword` type) |
+| `triggers[].patterns` | string[] | Regex patterns (for `pattern` type) |
+| `triggers[].intent_category` | string | Intent label (for `intent` type) |
+| `triggers[].priority` | number | 0-100 priority score. Higher values take precedence. |
+
+#### Parameter Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `parameters[].name` | string | Parameter identifier |
+| `parameters[].type` | enum | `string`, `integer`, `boolean`, or `float` |
+| `parameters[].required` | boolean | Whether the parameter is required |
+| `parameters[].default` | any | Default value if not provided |
+| `parameters[].description` | string | Human-readable description |
+
+#### Script Fields
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `scripts.enabled` | boolean | `true` | Master switch for all scripts in this skill |
+| `scripts.working_directory` | string | `./scripts` | Base directory for script files |
+| `scripts.definitions[].name` | string | | Script identifier (exposed as tool name) |
+| `scripts.definitions[].description` | string | | Tool description shown to the agent |
+| `scripts.definitions[].type` | enum | `python` | `python`, `shell`, or `bash` |
+| `scripts.definitions[].file` | string | | Script file path (relative to working_directory) |
+| `scripts.definitions[].inline` | string | | Inline script content (alternative to file) |
+| `scripts.definitions[].timeout` | number | `30` | Execution timeout in seconds |
+| `scripts.definitions[].working_directory` | string | | Override skill-level working_directory |
+| `scripts.definitions[].run_on_activation` | boolean | `false` | Auto-run when skill activates |
+| `scripts.definitions[].run_on_deactivation` | boolean | `false` | Auto-run when skill deactivates |
+
+## Trigger System
+
+Triggers determine when a skill should be automatically activated based on user input.
+
+### Keyword Triggers
+
+Match specific words in user input:
+
+```yaml
+triggers:
+  - type: keyword
+    keywords:
+      - uniswap
+      - swap
+      - defi
+    priority: 80
+```
+
+**Matching behavior**: Case-insensitive word boundary matching. "I want to swap tokens" matches `swap`.
+
+### Pattern Triggers
+
+Use regular expressions for complex matching:
+
+```yaml
+triggers:
+  - type: pattern
+    patterns:
+      - "(?i)swap.*for.*"           # "swap ETH for USDC"
+      - "(?i)liquidity.*pool"       # "add liquidity to pool"
+    priority: 70
+```
+
+**Matching behavior**: Full regex support with flags (e.g., `(?i)` for case-insensitive).
+
+### Intent Triggers
+
+Use LLM classification for semantic matching:
+
+```yaml
+triggers:
+  - type: intent
+    intent_category: defi_trading
+    priority: 90
+```
+
+**Matching behavior**: The agent's LLM classifies user intent and matches against the category.
+
+### Priority Resolution
+
+When multiple skills match, priority determines activation order:
+
+1. Higher priority values win (0-100 scale)
+2. Equal priorities: first match wins
+3. `max_auto_skills` limits concurrent auto-activated skills
+
+## Script Execution
+
+Scripts are executable files that become agent tools when a skill is activated.
+
+### Script Types
+
+| Type | Interpreter | Use Case |
+|------|-------------|----------|
+| `python` | Python 3 | Complex logic, API calls, data processing |
+| `shell` | System shell | Simple commands, file operations |
+| `bash` | Bash | Bash-specific features, scripting |
+
+### Input/Output Protocol
+
+Scripts receive input via **stdin** and return output via **stdout**:
+
+```python
+#!/usr/bin/env python3
+import sys
+import json
+
+def main():
+    # Read input from stdin
+    input_data = sys.stdin.read().strip()
+
+    # Parse JSON input (optional)
+    try:
+        params = json.loads(input_data)
+    except json.JSONDecodeError:
+        params = {"query": input_data}
+
+    # Process and return result
+    result = {"status": "success", "data": process(params)}
+
+    # Output JSON to stdout
+    print(json.dumps(result, indent=2))
+
+if __name__ == "__main__":
+    main()
+```
+
+### Lifecycle Scripts
+
+Scripts can run automatically during skill lifecycle:
+
+```yaml
+scripts:
+  definitions:
+    - name: setup
+      type: python
+      file: setup.py
+      run_on_activation: true      # Runs when skill activates
+
+    - name: cleanup
+      type: bash
+      inline: "rm -rf /tmp/cache_*"
+      run_on_deactivation: true    # Runs when skill deactivates
+```
+
+## MCP vs Skills
+
+SpoonOS supports both MCP-based and skill-based agents:
+
+| Feature | MCP Tools | Skills |
+|---------|-----------|--------|
+| Tool source | External MCP servers | SKILL.md scripts |
+| Prompts | Manual configuration | Auto-injected from SKILL.md |
+| Auto-activation | No | Yes (via triggers) |
+| Portability | Requires MCP server setup | Copy folder |
+| Best for | External services (databases, APIs) | Self-contained capabilities |
+
+**Choose MCP** when integrating external services that have MCP servers.
+
+**Choose Skills** for portable, self-contained AI capabilities with custom prompts.
+
+## Security Considerations
+
+### Script Execution Risks
+
+- Scripts run with your Python process permissions
+- No sandboxing by default—scripts have full system access
+- Input from the agent is passed directly to scripts
+
+### Mitigation Strategies
+
+1. **Disable scripts in production** if not needed:
+   ```python
+   agent = SpoonReactSkill(scripts_enabled=False)
+   ```
+
+2. **Validate inputs** in your scripts:
+   ```python
+   def validate_input(data):
+       if not isinstance(data, dict):
+           raise ValueError("Invalid input format")
+       # Additional validation...
+   ```
+
+3. **Review third-party skills** before using them
+
+4. **Use per-skill disable** for untrusted skills:
+   ```yaml
+   scripts:
+     enabled: false  # Disable scripts for this skill
+   ```
+
+## Web3 Skills Collection
+
+The [spoon-awesome-skill](https://github.com/XSpoonAi/spoon-awesome-skill) repository provides production-ready skills:
+
+| Skill | Description |
+|-------|-------------|
+| **defi** | DeFi protocol interactions (Uniswap, Aave, Compound) |
+| **onchain-analysis** | On-chain data analysis (Etherscan, gas tracking) |
+| **nft** | NFT market analysis (OpenSea, rarity calculations) |
+| **wallet** | Wallet operations and portfolio tracking |
+| **solana** | Solana ecosystem (Jupiter, Raydium) |
+| **neo** | Neo N3 ecosystem (NeoX, NeoFS) |
+
+## Next Steps
+
+- **[Building Skill Agents](/docs/how-to-guides/build-skill-agents)**: Step-by-step tutorial for building skill-powered agents
+- **[spoon-awesome-skill](https://github.com/XSpoonAi/spoon-awesome-skill)**: Ready-to-use Web3 skills
+- **[Vibe Coding](/docs/how-to-guides/vibe-coding)**: Rapid prototyping workflow with skills
 
 ---
 
@@ -42741,6 +42834,474 @@ Now that you've built your first agent, explore these advanced topics:
 
 ---
 
+FILE: docs/how-to-guides/build-skill-agents.md
+
+# Building Skill Agents
+
+Learn how to build powerful AI agents using SpoonOS's skill system. This guide walks you through the complete workflow from creating your first skill to deploying production-ready skill agents.
+
+:::tip Web3 Skills Available
+Ready-to-use Web3 skills for cryptocurrency research, DeFi analysis, and blockchain development are available at **[spoon-awesome-skill](https://github.com/XSpoonAi/spoon-awesome-skill)**. Copy them to your workspace and start building!
+:::
+
+:::info Skill Specification Reference
+For detailed SKILL.md schema, field definitions, and trigger system documentation, see the **[Skills Core Concepts](/docs/core-concepts/skills)** page.
+:::
+
+## Prerequisites
+
+Before building skill agents, ensure you have:
+
+1. **SpoonOS installed**: Follow the [Installation Guide](/docs/getting-started/installation)
+2. **Python 3.9+**: Required for script execution
+3. **LLM API access**: OpenAI, Anthropic, or other supported provider
+
+## Quick Start: Your First Skill Agent
+
+### Step 1: Create a Skill Directory
+
+```bash
+mkdir -p ./skills/my-assistant
+```
+
+### Step 2: Create SKILL.md
+
+Create `./skills/my-assistant/SKILL.md`:
+
+```markdown
+---
+name: my-assistant
+description: A helpful research assistant
+version: 1.0.0
+tags:
+  - research
+  - assistant
+
+triggers:
+  - type: keyword
+    keywords:
+      - research
+      - find
+      - search
+    priority: 80
+---
+
+# Research Assistant
+
+You are now in **Research Mode**.
+
+## Your Capabilities
+- Search for information on any topic
+- Analyze and summarize findings
+- Provide citations and sources
+
+## Guidelines
+1. Always verify information from multiple perspectives
+2. Cite your sources clearly
+3. Present balanced, factual responses
+```
+
+### Step 3: Build Your Agent
+
+```python
+import asyncio
+from spoon_ai.agents import SpoonReactSkill
+from spoon_ai.chat import ChatBot
+
+async def main():
+    # Create the skill agent
+    agent = SpoonReactSkill(
+        llm=ChatBot(llm_provider="openai", model_name="gpt-4o-mini"),
+        skill_paths=["./skills"],
+        auto_trigger_skills=True
+    )
+
+    # Initialize and activate your skill
+    await agent.initialize()
+    await agent.activate_skill("my-assistant")
+
+    # Run with skill-enhanced context
+    response = await agent.run("Research the latest trends in AI")
+    print(response)
+
+asyncio.run(main())
+```
+
+**That's it!** Your agent now has the research assistant skill's context and capabilities.
+
+## Adding Scripts to Skills
+
+Scripts transform your skills from prompt-only modules into powerful tools.
+
+### Step 1: Add Scripts Directory
+
+```bash
+mkdir -p ./skills/my-assistant/scripts
+```
+
+### Step 2: Create a Script
+
+Create `./skills/my-assistant/scripts/web_search.py`:
+
+```python
+#!/usr/bin/env python3
+import sys
+import json
+
+def search(query: str) -> dict:
+    """Your search implementation here."""
+    # Example: integrate with Tavily, SerpAPI, or custom search
+    return {
+        "status": "success",
+        "query": query,
+        "results": [
+            {"title": "Example Result", "url": "https://example.com"}
+        ]
+    }
+
+if __name__ == "__main__":
+    query = sys.stdin.read().strip()
+    result = search(query)
+    print(json.dumps(result, indent=2))
+```
+
+### Step 3: Register Script in SKILL.md
+
+Update the frontmatter:
+
+```yaml
+---
+name: my-assistant
+description: A helpful research assistant
+version: 1.0.0
+
+triggers:
+  - type: keyword
+    keywords: [research, find, search]
+    priority: 80
+
+scripts:
+  enabled: true
+  working_directory: ./scripts
+  definitions:
+    - name: web_search
+      description: Search the web for information
+      type: python
+      file: web_search.py
+      timeout: 30
+---
+```
+
+### Step 4: Enable Scripts in Agent
+
+```python
+agent = SpoonReactSkill(
+    llm=ChatBot(llm_provider="openai", model_name="gpt-4o-mini"),
+    skill_paths=["./skills"],
+    scripts_enabled=True,  # Enable script execution
+    auto_trigger_skills=True
+)
+```
+
+The agent now has access to `web_search` as a callable tool!
+
+## Vibe Coding Workflow
+
+Skills enable rapid prototyping through a "vibe coding" approach:
+
+### 1. Clone Existing Skills
+
+```bash
+# Get production-ready Web3 skills
+git clone https://github.com/XSpoonAi/spoon-awesome-skill.git
+
+# Copy what you need
+cp -r spoon-awesome-skill/web3-skills/defi ./skills/
+```
+
+### 2. Customize the Prompts
+
+Edit `./skills/defi/SKILL.md` to match your use case. Focus on the Markdown instructions section—this is what shapes the agent's behavior.
+
+### 3. Let the AI Figure It Out
+
+```python
+agent = SpoonReactSkill(
+    skill_paths=["./skills"],
+    scripts_enabled=True,
+    auto_trigger_skills=True,
+    max_auto_skills=3
+)
+
+await agent.initialize()
+
+# The agent auto-activates relevant skills based on user input
+response = await agent.run("Get a quote to swap 1 ETH for USDC on Uniswap")
+```
+
+### 4. Iterate and Ship
+
+- Tweak prompts based on agent behavior
+- Add or modify scripts as needed
+- Ship without writing complex orchestration logic
+
+## Using Web3 Skills
+
+The [spoon-awesome-skill](https://github.com/XSpoonAi/spoon-awesome-skill) repository provides production-ready skills:
+
+### Available Skills
+
+| Skill | Description | Key Scripts |
+|-------|-------------|-------------|
+| **defi** | DeFi protocol interactions | `uniswap_quote.py`, `aave_positions.py` |
+| **onchain-analysis** | On-chain data analysis | `etherscan_address.py`, `gas_tracker.py` |
+| **nft** | NFT market analysis | `opensea_collection.py`, `nft_rarity.py` |
+| **wallet** | Wallet operations | `wallet_balance.py`, `portfolio_tracker.py` |
+| **solana** | Solana ecosystem | `jupiter_quote.py`, `solana_balance.py` |
+| **neo** | Neo N3 ecosystem | `neo_balance.py`, `neo_transfer.py` |
+
+### Quick Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/XSpoonAi/spoon-awesome-skill.git
+
+# Copy skills to your project
+cp -r spoon-awesome-skill/web3-skills/defi ./skills/
+cp -r spoon-awesome-skill/web3-skills/wallet ./skills/
+```
+
+### Environment Variables
+
+Set up required API keys:
+
+```bash
+export ETHERSCAN_API_KEY="your_key"
+export RPC_URL="https://eth.llamarpc.com"
+```
+
+### Web3 Agent Example
+
+```python
+from spoon_ai.agents import SpoonReactSkill
+from spoon_ai.chat import ChatBot
+
+class Web3Agent(SpoonReactSkill):
+    """Web3 research agent using skills from spoon-awesome-skill."""
+
+    def __init__(self, **kwargs):
+        kwargs.setdefault('skill_paths', ['./skills'])
+        kwargs.setdefault('scripts_enabled', True)
+        kwargs.setdefault('auto_trigger_skills', True)
+        kwargs.setdefault('max_auto_skills', 3)
+        super().__init__(**kwargs)
+
+    async def initialize(self, __context=None):
+        await super().initialize(__context)
+
+        # List available skills
+        print(f"Available skills: {self.list_skills()}")
+
+        # Pre-activate commonly used skills
+        if "defi" in self.list_skills():
+            await self.activate_skill("defi")
+
+async def main():
+    agent = Web3Agent(
+        llm=ChatBot(llm_provider="openai", model_name="gpt-4o-mini")
+    )
+    await agent.initialize()
+
+    # DeFi queries
+    response = await agent.run("Get a quote to swap 1 ETH for USDC on Uniswap")
+    print(response)
+```
+
+## Skill Manager API
+
+The `SpoonReactSkill` agent provides comprehensive skill management:
+
+### Listing and Discovery
+
+```python
+# List all available skills
+skills = agent.list_skills()
+print(f"Available: {skills}")
+
+# Get detailed info about a skill
+info = agent.skill_manager.get_skill_info("defi")
+print(f"Description: {info['description']}")
+print(f"Triggers: {info['triggers']}")
+```
+
+### Activation and Deactivation
+
+```python
+# Activate with optional context
+await agent.activate_skill("defi", {"chain": "ethereum"})
+
+# Check if active
+is_active = agent.skill_manager.is_active("defi")
+
+# Get all active skills
+active = agent.skill_manager.get_active_skills()
+
+# Deactivate when done
+await agent.deactivate_skill("defi")
+```
+
+### Working with Tools
+
+```python
+# Get tools from all active skills
+tools = agent.skill_manager.get_active_tools()
+for tool in tools:
+    print(f"Tool: {tool.name} - {tool.description}")
+
+# Get combined prompt context from all active skills
+context = agent.skill_manager.get_active_context()
+```
+
+### Direct Script Execution
+
+```python
+# Execute a specific script manually
+result = await agent.skill_manager.execute_script(
+    "defi",
+    "uniswap_quote",
+    input_text='{"token_in": "ETH", "token_out": "USDC", "amount": "1"}'
+)
+
+if result.success:
+    print(f"Output: {result.stdout}")
+else:
+    print(f"Error: {result.error}")
+```
+
+### Statistics
+
+```python
+# Get skill system statistics
+stats = agent.get_skill_stats()
+print(f"Active skills: {stats['active_skills']}")
+print(f"Scripts enabled: {stats['scripts_enabled']}")
+print(f"Available skills: {stats['available_skills']}")
+```
+
+## Best Practices
+
+### 1. Keep Skills Focused
+
+Each skill should do one thing well. Compose multiple skills for complex tasks rather than creating monolithic skills.
+
+```python
+# Good: Compose focused skills
+await agent.activate_skill("defi")
+await agent.activate_skill("wallet")
+
+# Bad: One giant "everything" skill
+```
+
+### 2. Use Appropriate Triggers
+
+Set trigger priorities to avoid conflicts:
+
+```yaml
+triggers:
+  # High priority for specific terms
+  - type: keyword
+    keywords: [uniswap, aave]
+    priority: 90
+
+  # Lower priority for general terms
+  - type: keyword
+    keywords: [swap, trade]
+    priority: 70
+```
+
+### 3. Handle Errors Gracefully
+
+```python
+try:
+    await agent.activate_skill("my-skill")
+except ValueError as e:
+    print(f"Skill activation failed: {e}")
+    # Fallback to alternative skill or approach
+```
+
+### 4. Validate Script Inputs
+
+In your scripts, always validate input:
+
+```python
+import json
+import sys
+
+def main():
+    try:
+        input_data = json.loads(sys.stdin.read())
+    except json.JSONDecodeError:
+        print(json.dumps({"error": "Invalid JSON input"}))
+        sys.exit(1)
+
+    # Validate required fields
+    if "query" not in input_data:
+        print(json.dumps({"error": "Missing required field: query"}))
+        sys.exit(1)
+
+    # Process...
+```
+
+### 5. Use Per-Skill Script Control
+
+Disable scripts for skills that don't need them:
+
+```yaml
+scripts:
+  enabled: false  # This skill only provides prompts
+```
+
+## Troubleshooting
+
+### Skill Not Found
+
+```
+ValueError: Skill 'my-skill' not found
+```
+
+**Solution**: Check that:
+1. The skill directory exists in one of your `skill_paths`
+2. The directory contains a valid `SKILL.md` file
+3. The `name` field in SKILL.md matches what you're activating
+
+### Script Execution Failed
+
+```
+ScriptResult(success=False, error="Script timed out")
+```
+
+**Solution**:
+1. Increase the `timeout` value in SKILL.md
+2. Check that the script is executable
+3. Verify the script runs correctly standalone
+
+### Auto-Trigger Not Working
+
+**Solution**: Check that:
+1. `auto_trigger_skills=True` is set on the agent
+2. The skill has valid triggers defined
+3. The trigger priority is high enough
+4. `max_auto_skills` hasn't been reached
+
+## Next Steps
+
+- **[Skills Core Concepts](/docs/core-concepts/skills)**: Deep dive into SKILL.md specification and trigger system
+- **[spoon-awesome-skill](https://github.com/XSpoonAi/spoon-awesome-skill)**: Browse and use production Web3 skills
+- **[Vibe Coding Guide](./vibe-coding)**: Learn more about rapid prototyping with skills
+- **[API Reference](/docs/api-reference)**: Complete `SpoonReactSkill` API documentation
+
+---
+
 FILE: docs/how-to-guides/multimodal-file-uploads.md
 
 # Multimodal File Uploads
@@ -43045,6 +43606,49 @@ Give Cursor, Codex, Claude Code, and similar assistants the right context to gen
 - "Read the source or examples you will copy from; cite file path and line range before coding."
 - "Confirm tool/agent/LLM signatures from code, not from guesswork; show the imports you plan to use."
 - "If unsure, fetch the specific file via MCP and restate the interface before implementing."
+
+## Method 5: Vibe Code with Skills
+
+Use SpoonOS Skills for the ultimate vibe coding experience. Skills provide ready-to-use prompts, tools, and scripts that you can drop into your project and customize.
+
+### Quick Start with Skills
+
+```bash
+# Get Web3 skills from the awesome collection
+git clone https://github.com/XSpoonAi/spoon-awesome-skill.git
+
+# Copy skills to your project
+cp -r spoon-awesome-skill/web3-skills/defi ./skills/
+```
+
+### Build Skill-Powered Agents
+
+```python
+from spoon_ai.agents import SpoonReactSkill
+from spoon_ai.chat import ChatBot
+
+agent = SpoonReactSkill(
+    llm=ChatBot(llm_provider="openai", model_name="gpt-4o-mini"),
+    skill_paths=["./skills"],
+    scripts_enabled=True,
+    auto_trigger_skills=True
+)
+
+await agent.initialize()
+await agent.activate_skill("defi")
+
+# The AI figures out how to use the skill's scripts and prompts
+response = await agent.run("Get a quote to swap 1 ETH for USDC")
+```
+
+### Why Skills for Vibe Coding?
+
+1. **Copy & Customize**: Drop SKILL.md files into your workspace, tweak the prompts
+2. **AI Decides How**: Enable scripts and let the AI figure out tool usage
+3. **Portable**: Skills are self-contained folders - easy to share and version
+4. **Web3 Ready**: Get production skills from [spoon-awesome-skill](https://github.com/XSpoonAi/spoon-awesome-skill)
+
+See the full [Building Skill Agents](./build-skill-agents) guide for detailed instructions.
 
 ---
 
