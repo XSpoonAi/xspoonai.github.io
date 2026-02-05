@@ -22,7 +22,7 @@ This provider supports chat, completion, and streaming.
 
   - Ollama does not require an API key; the configuration layer may still provide
   a placeholder api_key value for consistency.
-  - Tool calling is not implemented here.
+  - Tool calling is supported via /api/chat (tools + tool_calls).
 
 <a id="spoon_ai.llm.providers.ollama_provider.OllamaProvider"></a>
 
@@ -34,6 +34,7 @@ This provider supports chat, completion, and streaming.
     [
         ProviderCapability.CHAT,
         ProviderCapability.COMPLETION,
+        ProviderCapability.TOOLS,
         ProviderCapability.STREAMING,
     ],
 )

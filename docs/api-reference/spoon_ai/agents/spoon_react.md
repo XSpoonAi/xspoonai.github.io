@@ -10,6 +10,7 @@ title: spoon_ai.agents.spoon_react
   * [create\_configured\_chatbot](#spoon_ai.agents.spoon_react.create_configured_chatbot)
   * [SpoonReactAI](#spoon_ai.agents.spoon_react.SpoonReactAI)
     * [\_\_init\_\_](#spoon_ai.agents.spoon_react.SpoonReactAI.__init__)
+    * [connect](#spoon_ai.agents.spoon_react.SpoonReactAI.connect)
     * [initialize](#spoon_ai.agents.spoon_react.SpoonReactAI.initialize)
     * [run](#spoon_ai.agents.spoon_react.SpoonReactAI.run)
 
@@ -32,7 +33,7 @@ Create a ChatBot instance with intelligent provider selection.
 ## `SpoonReactAI` Objects
 
 ```python
-class SpoonReactAI(ToolCallAgent)
+class SpoonReactAI(MCPClientMixin, ToolCallAgent)
 ```
 
 <a id="spoon_ai.agents.spoon_react.SpoonReactAI.__init__"></a>
@@ -44,6 +45,16 @@ def __init__(**kwargs)
 ```
 
 Initialize SpoonReactAI with both ToolCallAgent and MCPClientMixin initialization
+
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.connect"></a>
+
+#### `connect`
+
+```python
+async def connect()
+```
+
+Establish connection to MCP server.
 
 <a id="spoon_ai.agents.spoon_react.SpoonReactAI.initialize"></a>
 

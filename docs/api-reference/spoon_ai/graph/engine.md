@@ -7,6 +7,10 @@ title: spoon_ai.graph.engine
 # Table of Contents
 
 * [spoon\_ai.graph.engine](#spoon_ai.graph.engine)
+  * [create\_multimodal\_message](#spoon_ai.graph.engine.create_multimodal_message)
+  * [create\_vision\_user\_message](#spoon_ai.graph.engine.create_vision_user_message)
+  * [create\_pdf\_message](#spoon_ai.graph.engine.create_pdf_message)
+  * [create\_document\_message](#spoon_ai.graph.engine.create_document_message)
   * [BaseNode](#spoon_ai.graph.engine.BaseNode)
     * [\_\_call\_\_](#spoon_ai.graph.engine.BaseNode.__call__)
   * [RunnableNode](#spoon_ai.graph.engine.RunnableNode)
@@ -45,6 +49,173 @@ title: spoon_ai.graph.engine
 # Module `spoon_ai.graph.engine`
 
 Graph engine: StateGraph, CompiledGraph, and interrupt API implementation.
+
+<a id="spoon_ai.graph.engine.create_multimodal_message"></a>
+
+#### `create_multimodal_message`
+
+```python
+def create_multimodal_message(
+        role: str,
+        text: str,
+        image_url: Optional[str] = None,
+        image_data: Optional[str] = None,
+        image_media_type: str = "image/png",
+        detail: Literal["auto", "low", "high"] = "auto") -> Message
+```
+
+Create a multimodal message for use in graph state.
+
+Supports both URL-based and base64-encoded images.
+
+**Arguments**:
+
+- `role` - Message role (user, assistant, system)
+- `text` - Text content
+- `image_url` - URL of the image (including data URLs)
+- `image_data` - Base64-encoded image data (alternative to image_url)
+- `image_media_type` - MIME type for base64 images
+- `detail` - Image detail level (auto, low, high)
+  
+
+**Returns**:
+
+- `Message` - A multimodal message ready for graph state
+  
+
+**Example**:
+
+    ```python
+    # In a graph node function
+    async def analyze_image(state: State) -> dict:
+        msg = create_multimodal_message(
+            "user",
+            "Analyze this chart",
+            image_url="https://example.com/chart.png"
+        )
+        return {"messages": [msg]}
+    ```
+
+<a id="spoon_ai.graph.engine.create_vision_user_message"></a>
+
+#### `create_vision_user_message`
+
+```python
+def create_vision_user_message(text: str, images: List[Dict[str,
+                                                            str]]) -> Message
+```
+
+Create a user message with multiple images.
+
+**Arguments**:
+
+- `text` - Text prompt
+- `images` - List of image specs, each with either:
+  - &#123;"url": "https://..."&#125; for URL-based images
+  - &#123;"data": "&lt;base64&gt;", "media_type": "image/png"&#125; for base64 images
+  
+
+**Returns**:
+
+- `Message` - A multimodal message with multiple images
+  
+
+**Example**:
+
+    ```python
+    msg = create_vision_user_message(
+        "Compare these two charts",
+        images=[
+            {"url": "https://example.com/chart1.png"},
+            {"url": "https://example.com/chart2.png"}
+        ]
+    )
+    ```
+
+<a id="spoon_ai.graph.engine.create_pdf_message"></a>
+
+#### `create_pdf_message`
+
+```python
+def create_pdf_message(role: str,
+                       text: str,
+                       pdf_data: str,
+                       filename: Optional[str] = None) -> Message
+```
+
+Create a message with a PDF document for use in graph state.
+
+**Arguments**:
+
+- `role` - Message role (user, assistant, system)
+- `text` - Text content
+- `pdf_data` - Base64-encoded PDF data
+- `filename` - Optional filename for the PDF
+  
+
+**Returns**:
+
+- `Message` - A multimodal message with PDF ready for graph state
+  
+
+**Example**:
+
+    ```python
+    # In a graph node function
+    async def analyze_document(state: State) -> dict:
+        msg = create_pdf_message(
+            "user",
+            "Summarize this whitepaper",
+            pdf_data="<base64_encoded_pdf>",
+            filename="bitcoin.pdf"
+        )
+        return {"messages": [msg]}
+    ```
+
+<a id="spoon_ai.graph.engine.create_document_message"></a>
+
+#### `create_document_message`
+
+```python
+def create_document_message(role: str,
+                            text: str,
+                            document_data: str,
+                            media_type: str = "application/pdf",
+                            filename: Optional[str] = None) -> Message
+```
+
+Create a message with a document for use in graph state.
+
+Supports various document types including PDF, text files, etc.
+
+**Arguments**:
+
+- `role` - Message role (user, assistant, system)
+- `text` - Text content
+- `document_data` - Base64-encoded document data
+- `media_type` - MIME type of the document (default: application/pdf)
+- `filename` - Optional filename for the document
+  
+
+**Returns**:
+
+- `Message` - A multimodal message with document ready for graph state
+  
+
+**Example**:
+
+    ```python
+    # In a graph node function
+    async def process_report(state: State) -> dict:
+        msg = create_document_message(
+            "user",
+            "Extract key metrics from this report",
+            document_data="<base64_encoded_data>",
+            media_type="application/pdf",
+            filename="annual_report.pdf"
+        )
+        return {"messages": [msg]}
+    ```
 
 <a id="spoon_ai.graph.engine.BaseNode"></a>
 

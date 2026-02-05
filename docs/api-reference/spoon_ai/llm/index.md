@@ -7,26 +7,6 @@ title: spoon_ai.llm
 # Table of Contents
 
 * [spoon\_ai.llm](#spoon_ai.llm)
-* [spoon\_ai.llm.vlm\_provider.gemini](#spoon_ai.llm.vlm_provider.gemini)
-  * [GeminiConfig](#spoon_ai.llm.vlm_provider.gemini.GeminiConfig)
-    * [validate\_api\_key](#spoon_ai.llm.vlm_provider.gemini.GeminiConfig.validate_api_key)
-  * [GeminiProvider](#spoon_ai.llm.vlm_provider.gemini.GeminiProvider)
-    * [\_\_init\_\_](#spoon_ai.llm.vlm_provider.gemini.GeminiProvider.__init__)
-    * [chat](#spoon_ai.llm.vlm_provider.gemini.GeminiProvider.chat)
-    * [completion](#spoon_ai.llm.vlm_provider.gemini.GeminiProvider.completion)
-    * [chat\_with\_tools](#spoon_ai.llm.vlm_provider.gemini.GeminiProvider.chat_with_tools)
-    * [generate\_content](#spoon_ai.llm.vlm_provider.gemini.GeminiProvider.generate_content)
-* [spoon\_ai.llm.vlm\_provider.base](#spoon_ai.llm.vlm_provider.base)
-  * [LLMConfig](#spoon_ai.llm.vlm_provider.base.LLMConfig)
-  * [LLMResponse](#spoon_ai.llm.vlm_provider.base.LLMResponse)
-    * [text](#spoon_ai.llm.vlm_provider.base.LLMResponse.text)
-  * [LLMBase](#spoon_ai.llm.vlm_provider.base.LLMBase)
-    * [\_\_init\_\_](#spoon_ai.llm.vlm_provider.base.LLMBase.__init__)
-    * [chat](#spoon_ai.llm.vlm_provider.base.LLMBase.chat)
-    * [completion](#spoon_ai.llm.vlm_provider.base.LLMBase.completion)
-    * [chat\_with\_tools](#spoon_ai.llm.vlm_provider.base.LLMBase.chat_with_tools)
-    * [generate\_image](#spoon_ai.llm.vlm_provider.base.LLMBase.generate_image)
-    * [reset\_output\_handler](#spoon_ai.llm.vlm_provider.base.LLMBase.reset_output_handler)
 * [spoon\_ai.llm.factory](#spoon_ai.llm.factory)
   * [LLMFactory](#spoon_ai.llm.factory.LLMFactory)
     * [register](#spoon_ai.llm.factory.LLMFactory.register)
@@ -103,6 +83,7 @@ title: spoon_ai.llm
     * [health\_check](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.health_check)
     * [cleanup](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.cleanup)
 * [spoon\_ai.llm.providers.openai\_compatible\_provider](#spoon_ai.llm.providers.openai_compatible_provider)
+  * [MAX\_INLINE\_FILE\_SIZE](#spoon_ai.llm.providers.openai_compatible_provider.MAX_INLINE_FILE_SIZE)
   * [OpenAICompatibleProvider](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider)
     * [get\_provider\_name](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.get_provider_name)
     * [get\_default\_base\_url](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.get_default_base_url)
@@ -217,325 +198,6 @@ Unified LLM infrastructure package.
 
 This package provides a unified interface for working with different LLM providers,
 including comprehensive configuration management, monitoring, and error handling.
-
-<a id="spoon_ai.llm.vlm_provider.gemini"></a>
-
-# Module `spoon_ai.llm.vlm_provider.gemini`
-
-<a id="spoon_ai.llm.vlm_provider.gemini.GeminiConfig"></a>
-
-## `GeminiConfig` Objects
-
-```python
-class GeminiConfig(LLMConfig)
-```
-
-Gemini Configuration
-
-<a id="spoon_ai.llm.vlm_provider.gemini.GeminiConfig.validate_api_key"></a>
-
-#### `validate_api_key`
-
-```python
-@model_validator(mode='after')
-def validate_api_key()
-```
-
-Validate that API key is provided
-
-<a id="spoon_ai.llm.vlm_provider.gemini.GeminiProvider"></a>
-
-## `GeminiProvider` Objects
-
-```python
-@LLMFactory.register("gemini")
-class GeminiProvider(LLMBase)
-```
-
-Gemini Provider Implementation
-
-<a id="spoon_ai.llm.vlm_provider.gemini.GeminiProvider.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(config_path: str = "config/config.toml",
-             config_name: str = "chitchat")
-```
-
-Initialize Gemini Provider
-
-**Arguments**:
-
-- `config_path` - Configuration file path
-- `config_name` - Configuration name
-  
-
-**Raises**:
-
-- `ValueError` - If GEMINI_API_KEY environment variable is not set
-
-<a id="spoon_ai.llm.vlm_provider.gemini.GeminiProvider.chat"></a>
-
-#### `chat`
-
-```python
-async def chat(messages: List[Message],
-               system_msgs: Optional[List[Message]] = None,
-               response_modalities: Optional[List[str]] = None,
-               **kwargs) -> LLMResponse
-```
-
-Send chat request to Gemini and get response
-
-**Arguments**:
-
-- `messages` - List of messages
-- `system_msgs` - List of system messages
-- `response_modalities` - List of response modalities (optional, e.g. ['Text', 'Image'])
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response
-
-<a id="spoon_ai.llm.vlm_provider.gemini.GeminiProvider.completion"></a>
-
-#### `completion`
-
-```python
-async def completion(prompt: str, **kwargs) -> LLMResponse
-```
-
-Send text completion request to Gemini and get response
-
-**Arguments**:
-
-- `prompt` - Prompt text
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response
-
-<a id="spoon_ai.llm.vlm_provider.gemini.GeminiProvider.chat_with_tools"></a>
-
-#### `chat_with_tools`
-
-```python
-async def chat_with_tools(messages: List[Message],
-                          system_msgs: Optional[List[Message]] = None,
-                          tools: Optional[List[Dict]] = None,
-                          tool_choice: Literal["none", "auto",
-                                               "required"] = "auto",
-                          **kwargs) -> LLMResponse
-```
-
-Send chat request to Gemini that may contain tool calls and get response
-
-Note: Gemini currently doesn't support tool calls, this method will use regular chat method
-
-**Arguments**:
-
-- `messages` - List of messages
-- `system_msgs` - List of system messages
-- `tools` - List of tools (not supported by Gemini)
-- `tool_choice` - Tool choice mode (not supported by Gemini)
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response
-
-<a id="spoon_ai.llm.vlm_provider.gemini.GeminiProvider.generate_content"></a>
-
-#### `generate_content`
-
-```python
-async def generate_content(model: Optional[str] = None,
-                           contents: Union[str, List, types.Content,
-                                           types.Part] = None,
-                           config: Optional[
-                               types.GenerateContentConfig] = None,
-                           **kwargs) -> LLMResponse
-```
-
-Directly call Gemini's generate_content interface
-
-**Arguments**:
-
-- `model` - Model name (optional, will override model in configuration)
-- `contents` - Request content, can be string, list, or types.Content/types.Part object
-- `config` - Generation configuration
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response
-
-<a id="spoon_ai.llm.vlm_provider.base"></a>
-
-# Module `spoon_ai.llm.vlm_provider.base`
-
-<a id="spoon_ai.llm.vlm_provider.base.LLMConfig"></a>
-
-## `LLMConfig` Objects
-
-```python
-class LLMConfig(BaseModel)
-```
-
-Base class for LLM configuration
-
-<a id="spoon_ai.llm.vlm_provider.base.LLMResponse"></a>
-
-## `LLMResponse` Objects
-
-```python
-class LLMResponse(BaseModel)
-```
-
-Base class for LLM response
-
-<a id="spoon_ai.llm.vlm_provider.base.LLMResponse.text"></a>
-
-#### `text`
-
-Original text response
-
-<a id="spoon_ai.llm.vlm_provider.base.LLMBase"></a>
-
-## `LLMBase` Objects
-
-```python
-class LLMBase(ABC)
-```
-
-Base abstract class for LLM, defining interfaces that all LLM providers must implement
-
-<a id="spoon_ai.llm.vlm_provider.base.LLMBase.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(config_path: str = "config/config.toml",
-             config_name: str = "llm")
-```
-
-Initialize LLM interface
-
-**Arguments**:
-
-- `config_path` - Configuration file path
-- `config_name` - Configuration name
-
-<a id="spoon_ai.llm.vlm_provider.base.LLMBase.chat"></a>
-
-#### `chat`
-
-```python
-@abstractmethod
-async def chat(messages: List[Message],
-               system_msgs: Optional[List[Message]] = None,
-               **kwargs) -> LLMResponse
-```
-
-Send chat request to LLM and get response
-
-**Arguments**:
-
-- `messages` - List of messages
-- `system_msgs` - List of system messages
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response
-
-<a id="spoon_ai.llm.vlm_provider.base.LLMBase.completion"></a>
-
-#### `completion`
-
-```python
-@abstractmethod
-async def completion(prompt: str, **kwargs) -> LLMResponse
-```
-
-Send text completion request to LLM and get response
-
-**Arguments**:
-
-- `prompt` - Prompt text
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response
-
-<a id="spoon_ai.llm.vlm_provider.base.LLMBase.chat_with_tools"></a>
-
-#### `chat_with_tools`
-
-```python
-@abstractmethod
-async def chat_with_tools(messages: List[Message],
-                          system_msgs: Optional[List[Message]] = None,
-                          tools: Optional[List[Dict]] = None,
-                          tool_choice: Literal["none", "auto",
-                                               "required"] = "auto",
-                          **kwargs) -> LLMResponse
-```
-
-Send chat request that may contain tool calls to LLM and get response
-
-**Arguments**:
-
-- `messages` - List of messages
-- `system_msgs` - List of system messages
-- `tools` - List of tools
-- `tool_choice` - Tool selection mode
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response
-
-<a id="spoon_ai.llm.vlm_provider.base.LLMBase.generate_image"></a>
-
-#### `generate_image`
-
-```python
-async def generate_image(prompt: str, **kwargs) -> Union[str, List[str]]
-```
-
-Generate image (optional implementation)
-
-**Arguments**:
-
-- `prompt` - Prompt text
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-  Union[str, List[str]]: Image URL or list of URLs
-
-<a id="spoon_ai.llm.vlm_provider.base.LLMBase.reset_output_handler"></a>
-
-#### `reset_output_handler`
-
-```python
-def reset_output_handler()
-```
-
-Reset output handler
 
 <a id="spoon_ai.llm.factory"></a>
 
@@ -1652,6 +1314,12 @@ Cleanup Gemini provider resources.
 OpenAI Compatible Provider base class for providers that use OpenAI-compatible APIs.
 This includes OpenAI, OpenRouter, DeepSeek, and other providers with similar interfaces.
 
+<a id="spoon_ai.llm.providers.openai_compatible_provider.MAX_INLINE_FILE_SIZE"></a>
+
+#### `MAX_INLINE_FILE_SIZE`
+
+4MB in bytes
+
 <a id="spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider"></a>
 
 ## `OpenAICompatibleProvider` Objects
@@ -1802,7 +1470,7 @@ This provider supports chat, completion, and streaming.
 
   - Ollama does not require an API key; the configuration layer may still provide
   a placeholder api_key value for consistency.
-  - Tool calling is not implemented here.
+  - Tool calling is supported via /api/chat (tools + tool_calls).
 
 <a id="spoon_ai.llm.providers.ollama_provider.OllamaProvider"></a>
 
@@ -1814,6 +1482,7 @@ This provider supports chat, completion, and streaming.
     [
         ProviderCapability.CHAT,
         ProviderCapability.COMPLETION,
+        ProviderCapability.TOOLS,
         ProviderCapability.STREAMING,
     ],
 )

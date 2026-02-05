@@ -50,6 +50,34 @@ title: spoon_ai.graph
   * [MCPToolDiscoveryEngine](#spoon_ai.graph.mcp_integration.MCPToolDiscoveryEngine)
   * [MCPIntegrationManager](#spoon_ai.graph.mcp_integration.MCPIntegrationManager)
 * [spoon\_ai.graph.exceptions](#spoon_ai.graph.exceptions)
+* [spoon\_ai.graph.cache](#spoon_ai.graph.cache)
+  * [compute\_cache\_key](#spoon_ai.graph.cache.compute_cache_key)
+  * [CacheEntry](#spoon_ai.graph.cache.CacheEntry)
+    * [is\_expired](#spoon_ai.graph.cache.CacheEntry.is_expired)
+    * [to\_dict](#spoon_ai.graph.cache.CacheEntry.to_dict)
+    * [from\_dict](#spoon_ai.graph.cache.CacheEntry.from_dict)
+  * [BaseCache](#spoon_ai.graph.cache.BaseCache)
+    * [get](#spoon_ai.graph.cache.BaseCache.get)
+    * [set](#spoon_ai.graph.cache.BaseCache.set)
+    * [delete](#spoon_ai.graph.cache.BaseCache.delete)
+    * [clear](#spoon_ai.graph.cache.BaseCache.clear)
+    * [get\_or\_compute](#spoon_ai.graph.cache.BaseCache.get_or_compute)
+  * [InMemoryCache](#spoon_ai.graph.cache.InMemoryCache)
+    * [\_\_init\_\_](#spoon_ai.graph.cache.InMemoryCache.__init__)
+    * [get](#spoon_ai.graph.cache.InMemoryCache.get)
+    * [set](#spoon_ai.graph.cache.InMemoryCache.set)
+    * [delete](#spoon_ai.graph.cache.InMemoryCache.delete)
+    * [clear](#spoon_ai.graph.cache.InMemoryCache.clear)
+    * [get\_stats](#spoon_ai.graph.cache.InMemoryCache.get_stats)
+  * [SQLiteCache](#spoon_ai.graph.cache.SQLiteCache)
+    * [\_\_init\_\_](#spoon_ai.graph.cache.SQLiteCache.__init__)
+    * [get](#spoon_ai.graph.cache.SQLiteCache.get)
+    * [set](#spoon_ai.graph.cache.SQLiteCache.set)
+    * [delete](#spoon_ai.graph.cache.SQLiteCache.delete)
+    * [clear](#spoon_ai.graph.cache.SQLiteCache.clear)
+    * [get\_stats](#spoon_ai.graph.cache.SQLiteCache.get_stats)
+  * [create\_memory\_cache](#spoon_ai.graph.cache.create_memory_cache)
+  * [create\_sqlite\_cache](#spoon_ai.graph.cache.create_sqlite_cache)
 * [spoon\_ai.graph.reducers](#spoon_ai.graph.reducers)
 * [spoon\_ai.graph.decorators](#spoon_ai.graph.decorators)
 * [spoon\_ai.graph.config](#spoon_ai.graph.config)
@@ -60,6 +88,10 @@ title: spoon_ai.graph
     * [error\_strategy](#spoon_ai.graph.config.ParallelGroupConfig.error_strategy)
   * [GraphConfig](#spoon_ai.graph.config.GraphConfig)
 * [spoon\_ai.graph.engine](#spoon_ai.graph.engine)
+  * [create\_multimodal\_message](#spoon_ai.graph.engine.create_multimodal_message)
+  * [create\_vision\_user\_message](#spoon_ai.graph.engine.create_vision_user_message)
+  * [create\_pdf\_message](#spoon_ai.graph.engine.create_pdf_message)
+  * [create\_document\_message](#spoon_ai.graph.engine.create_document_message)
   * [BaseNode](#spoon_ai.graph.engine.BaseNode)
     * [\_\_call\_\_](#spoon_ai.graph.engine.BaseNode.__call__)
   * [RunnableNode](#spoon_ai.graph.engine.RunnableNode)
@@ -514,6 +546,426 @@ High level coordinator for MCP tool usage within graphs.
 
 Graph engine exception definitions (public within graph package).
 
+<a id="spoon_ai.graph.cache"></a>
+
+# Module `spoon_ai.graph.cache`
+
+Cache System for Graph Workflows.
+
+Provides caching for node outputs in graph workflows to avoid redundant
+computation and speed up execution.
+
+Types of caching:
+1. Node-level caching - caches node outputs based on inputs
+2. In-memory and persistent (SQLite) backends
+
+Compatible with LangGraph BaseCache interface.
+
+Usage:
+    from spoon_ai.graph.cache import InMemoryCache, SQLiteCache
+
+    # In-memory cache (for testing/short sessions)
+    cache = InMemoryCache()
+
+    # SQLite cache (persistent across sessions)
+    cache = SQLiteCache("cache.db")
+
+    # Use with graph
+    graph = StateGraph(...)
+    compiled = graph.compile(cache=cache)
+
+<a id="spoon_ai.graph.cache.compute_cache_key"></a>
+
+#### `compute_cache_key`
+
+```python
+def compute_cache_key(node_name: str,
+                      inputs: Dict[str, Any],
+                      config: Optional[Dict[str, Any]] = None) -> str
+```
+
+Compute a cache key from node name and inputs.
+
+**Arguments**:
+
+- `node_name` - Name of the node
+- `inputs` - Input values to the node
+- `config` - Optional configuration
+  
+
+**Returns**:
+
+  SHA256 hash as cache key
+
+<a id="spoon_ai.graph.cache.CacheEntry"></a>
+
+## `CacheEntry` Objects
+
+```python
+class CacheEntry()
+```
+
+A cached value with metadata.
+
+<a id="spoon_ai.graph.cache.CacheEntry.is_expired"></a>
+
+#### `is_expired`
+
+```python
+def is_expired() -> bool
+```
+
+Check if cache entry has expired.
+
+<a id="spoon_ai.graph.cache.CacheEntry.to_dict"></a>
+
+#### `to_dict`
+
+```python
+def to_dict() -> Dict[str, Any]
+```
+
+Serialize to dictionary.
+
+<a id="spoon_ai.graph.cache.CacheEntry.from_dict"></a>
+
+#### `from_dict`
+
+```python
+@classmethod
+def from_dict(cls, data: Dict[str, Any]) -> "CacheEntry"
+```
+
+Deserialize from dictionary.
+
+<a id="spoon_ai.graph.cache.BaseCache"></a>
+
+## `BaseCache` Objects
+
+```python
+class BaseCache(ABC)
+```
+
+Abstract base class for graph caches.
+
+Compatible with LangGraph BaseCache interface.
+
+<a id="spoon_ai.graph.cache.BaseCache.get"></a>
+
+#### `get`
+
+```python
+@abstractmethod
+def get(key: str) -> Optional[Any]
+```
+
+Get a cached value by key.
+
+**Arguments**:
+
+- `key` - Cache key
+  
+
+**Returns**:
+
+  Cached value or None if not found/expired
+
+<a id="spoon_ai.graph.cache.BaseCache.set"></a>
+
+#### `set`
+
+```python
+@abstractmethod
+def set(key: str,
+        value: Any,
+        node_name: str = "",
+        ttl_seconds: Optional[int] = None,
+        metadata: Optional[Dict[str, Any]] = None) -> None
+```
+
+Set a cached value.
+
+**Arguments**:
+
+- `key` - Cache key
+- `value` - Value to cache
+- `node_name` - Name of the node that produced this value
+- `ttl_seconds` - Time-to-live in seconds (None = no expiry)
+- `metadata` - Optional metadata
+
+<a id="spoon_ai.graph.cache.BaseCache.delete"></a>
+
+#### `delete`
+
+```python
+@abstractmethod
+def delete(key: str) -> bool
+```
+
+Delete a cached value.
+
+**Arguments**:
+
+- `key` - Cache key
+  
+
+**Returns**:
+
+  True if deleted, False if not found
+
+<a id="spoon_ai.graph.cache.BaseCache.clear"></a>
+
+#### `clear`
+
+```python
+@abstractmethod
+def clear() -> None
+```
+
+Clear all cached values.
+
+<a id="spoon_ai.graph.cache.BaseCache.get_or_compute"></a>
+
+#### `get_or_compute`
+
+```python
+def get_or_compute(key: str,
+                   compute_fn: callable,
+                   node_name: str = "",
+                   ttl_seconds: Optional[int] = None) -> Tuple[Any, bool]
+```
+
+Get cached value or compute and cache it.
+
+**Arguments**:
+
+- `key` - Cache key
+- `compute_fn` - Function to compute value if not cached
+- `node_name` - Name of the node
+- `ttl_seconds` - Time-to-live for cached value
+  
+
+**Returns**:
+
+  Tuple of (value, was_cached)
+
+<a id="spoon_ai.graph.cache.InMemoryCache"></a>
+
+## `InMemoryCache` Objects
+
+```python
+class InMemoryCache(BaseCache)
+```
+
+In-memory cache implementation.
+
+Fast but not persistent across sessions. Suitable for:
+- Testing
+- Short-running workflows
+- When persistence is not needed
+
+<a id="spoon_ai.graph.cache.InMemoryCache.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(max_entries: int = 1000,
+             default_ttl_seconds: Optional[int] = None)
+```
+
+Initialize in-memory cache.
+
+**Arguments**:
+
+- `max_entries` - Maximum number of entries to keep
+- `default_ttl_seconds` - Default TTL for entries (None = no expiry)
+
+<a id="spoon_ai.graph.cache.InMemoryCache.get"></a>
+
+#### `get`
+
+```python
+def get(key: str) -> Optional[Any]
+```
+
+Get cached value.
+
+<a id="spoon_ai.graph.cache.InMemoryCache.set"></a>
+
+#### `set`
+
+```python
+def set(key: str,
+        value: Any,
+        node_name: str = "",
+        ttl_seconds: Optional[int] = None,
+        metadata: Optional[Dict[str, Any]] = None) -> None
+```
+
+Set cached value.
+
+<a id="spoon_ai.graph.cache.InMemoryCache.delete"></a>
+
+#### `delete`
+
+```python
+def delete(key: str) -> bool
+```
+
+Delete cached value.
+
+<a id="spoon_ai.graph.cache.InMemoryCache.clear"></a>
+
+#### `clear`
+
+```python
+def clear() -> None
+```
+
+Clear all cached values.
+
+<a id="spoon_ai.graph.cache.InMemoryCache.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, Any]
+```
+
+Get cache statistics.
+
+<a id="spoon_ai.graph.cache.SQLiteCache"></a>
+
+## `SQLiteCache` Objects
+
+```python
+class SQLiteCache(BaseCache)
+```
+
+SQLite-based persistent cache.
+
+Persistent across sessions. Suitable for:
+- Production use
+- Long-running workflows
+- When you want to reuse cached results
+
+<a id="spoon_ai.graph.cache.SQLiteCache.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(db_path: str = "graph_cache.db",
+             default_ttl_seconds: Optional[int] = None,
+             max_entries: Optional[int] = None)
+```
+
+Initialize SQLite cache.
+
+**Arguments**:
+
+- `db_path` - Path to SQLite database file
+- `default_ttl_seconds` - Default TTL for entries (None = no expiry)
+- `max_entries` - Maximum entries to keep (None = unlimited)
+
+<a id="spoon_ai.graph.cache.SQLiteCache.get"></a>
+
+#### `get`
+
+```python
+def get(key: str) -> Optional[Any]
+```
+
+Get cached value.
+
+<a id="spoon_ai.graph.cache.SQLiteCache.set"></a>
+
+#### `set`
+
+```python
+def set(key: str,
+        value: Any,
+        node_name: str = "",
+        ttl_seconds: Optional[int] = None,
+        metadata: Optional[Dict[str, Any]] = None) -> None
+```
+
+Set cached value.
+
+<a id="spoon_ai.graph.cache.SQLiteCache.delete"></a>
+
+#### `delete`
+
+```python
+def delete(key: str) -> bool
+```
+
+Delete cached value.
+
+<a id="spoon_ai.graph.cache.SQLiteCache.clear"></a>
+
+#### `clear`
+
+```python
+def clear() -> None
+```
+
+Clear all cached values.
+
+<a id="spoon_ai.graph.cache.SQLiteCache.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, Any]
+```
+
+Get cache statistics.
+
+<a id="spoon_ai.graph.cache.create_memory_cache"></a>
+
+#### `create_memory_cache`
+
+```python
+def create_memory_cache(
+        max_entries: int = 1000,
+        default_ttl_seconds: Optional[int] = None) -> InMemoryCache
+```
+
+Create an in-memory cache.
+
+**Arguments**:
+
+- `max_entries` - Maximum entries to keep
+- `default_ttl_seconds` - Default TTL
+  
+
+**Returns**:
+
+  Configured InMemoryCache
+
+<a id="spoon_ai.graph.cache.create_sqlite_cache"></a>
+
+#### `create_sqlite_cache`
+
+```python
+def create_sqlite_cache(db_path: str = "graph_cache.db",
+                        default_ttl_seconds: Optional[int] = None,
+                        max_entries: Optional[int] = None) -> SQLiteCache
+```
+
+Create a SQLite cache.
+
+**Arguments**:
+
+- `db_path` - Path to database file
+- `default_ttl_seconds` - Default TTL
+- `max_entries` - Maximum entries
+  
+
+**Returns**:
+
+  Configured SQLiteCache
+
 <a id="spoon_ai.graph.reducers"></a>
 
 # Module `spoon_ai.graph.reducers`
@@ -593,6 +1045,173 @@ Top-level configuration applied to an entire graph instance.
 # Module `spoon_ai.graph.engine`
 
 Graph engine: StateGraph, CompiledGraph, and interrupt API implementation.
+
+<a id="spoon_ai.graph.engine.create_multimodal_message"></a>
+
+#### `create_multimodal_message`
+
+```python
+def create_multimodal_message(
+        role: str,
+        text: str,
+        image_url: Optional[str] = None,
+        image_data: Optional[str] = None,
+        image_media_type: str = "image/png",
+        detail: Literal["auto", "low", "high"] = "auto") -> Message
+```
+
+Create a multimodal message for use in graph state.
+
+Supports both URL-based and base64-encoded images.
+
+**Arguments**:
+
+- `role` - Message role (user, assistant, system)
+- `text` - Text content
+- `image_url` - URL of the image (including data URLs)
+- `image_data` - Base64-encoded image data (alternative to image_url)
+- `image_media_type` - MIME type for base64 images
+- `detail` - Image detail level (auto, low, high)
+  
+
+**Returns**:
+
+- `Message` - A multimodal message ready for graph state
+  
+
+**Example**:
+
+    ```python
+    # In a graph node function
+    async def analyze_image(state: State) -> dict:
+        msg = create_multimodal_message(
+            "user",
+            "Analyze this chart",
+            image_url="https://example.com/chart.png"
+        )
+        return {"messages": [msg]}
+    ```
+
+<a id="spoon_ai.graph.engine.create_vision_user_message"></a>
+
+#### `create_vision_user_message`
+
+```python
+def create_vision_user_message(text: str, images: List[Dict[str,
+                                                            str]]) -> Message
+```
+
+Create a user message with multiple images.
+
+**Arguments**:
+
+- `text` - Text prompt
+- `images` - List of image specs, each with either:
+  - &#123;"url": "https://..."&#125; for URL-based images
+  - &#123;"data": "&lt;base64&gt;", "media_type": "image/png"&#125; for base64 images
+  
+
+**Returns**:
+
+- `Message` - A multimodal message with multiple images
+  
+
+**Example**:
+
+    ```python
+    msg = create_vision_user_message(
+        "Compare these two charts",
+        images=[
+            {"url": "https://example.com/chart1.png"},
+            {"url": "https://example.com/chart2.png"}
+        ]
+    )
+    ```
+
+<a id="spoon_ai.graph.engine.create_pdf_message"></a>
+
+#### `create_pdf_message`
+
+```python
+def create_pdf_message(role: str,
+                       text: str,
+                       pdf_data: str,
+                       filename: Optional[str] = None) -> Message
+```
+
+Create a message with a PDF document for use in graph state.
+
+**Arguments**:
+
+- `role` - Message role (user, assistant, system)
+- `text` - Text content
+- `pdf_data` - Base64-encoded PDF data
+- `filename` - Optional filename for the PDF
+  
+
+**Returns**:
+
+- `Message` - A multimodal message with PDF ready for graph state
+  
+
+**Example**:
+
+    ```python
+    # In a graph node function
+    async def analyze_document(state: State) -> dict:
+        msg = create_pdf_message(
+            "user",
+            "Summarize this whitepaper",
+            pdf_data="<base64_encoded_pdf>",
+            filename="bitcoin.pdf"
+        )
+        return {"messages": [msg]}
+    ```
+
+<a id="spoon_ai.graph.engine.create_document_message"></a>
+
+#### `create_document_message`
+
+```python
+def create_document_message(role: str,
+                            text: str,
+                            document_data: str,
+                            media_type: str = "application/pdf",
+                            filename: Optional[str] = None) -> Message
+```
+
+Create a message with a document for use in graph state.
+
+Supports various document types including PDF, text files, etc.
+
+**Arguments**:
+
+- `role` - Message role (user, assistant, system)
+- `text` - Text content
+- `document_data` - Base64-encoded document data
+- `media_type` - MIME type of the document (default: application/pdf)
+- `filename` - Optional filename for the document
+  
+
+**Returns**:
+
+- `Message` - A multimodal message with document ready for graph state
+  
+
+**Example**:
+
+    ```python
+    # In a graph node function
+    async def process_report(state: State) -> dict:
+        msg = create_document_message(
+            "user",
+            "Extract key metrics from this report",
+            document_data="<base64_encoded_data>",
+            media_type="application/pdf",
+            filename="annual_report.pdf"
+        )
+        return {"messages": [msg]}
+    ```
 
 <a id="spoon_ai.graph.engine.BaseNode"></a>
 

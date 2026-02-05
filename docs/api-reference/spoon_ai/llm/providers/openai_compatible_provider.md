@@ -7,6 +7,7 @@ title: spoon_ai.llm.providers.openai_compatible_provider
 # Table of Contents
 
 * [spoon\_ai.llm.providers.openai\_compatible\_provider](#spoon_ai.llm.providers.openai_compatible_provider)
+  * [MAX\_INLINE\_FILE\_SIZE](#spoon_ai.llm.providers.openai_compatible_provider.MAX_INLINE_FILE_SIZE)
   * [OpenAICompatibleProvider](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider)
     * [get\_provider\_name](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.get_provider_name)
     * [get\_default\_base\_url](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.get_default_base_url)
@@ -27,6 +28,12 @@ title: spoon_ai.llm.providers.openai_compatible_provider
 
 OpenAI Compatible Provider base class for providers that use OpenAI-compatible APIs.
 This includes OpenAI, OpenRouter, DeepSeek, and other providers with similar interfaces.
+
+<a id="spoon_ai.llm.providers.openai_compatible_provider.MAX_INLINE_FILE_SIZE"></a>
+
+#### `MAX_INLINE_FILE_SIZE`
+
+4MB in bytes
 
 <a id="spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider"></a>
 
