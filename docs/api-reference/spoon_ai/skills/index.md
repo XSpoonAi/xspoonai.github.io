@@ -7,6 +7,27 @@ title: spoon_ai.skills
 # Table of Contents
 
 * [spoon\_ai.skills](#spoon_ai.skills)
+* [spoon\_ai.skills.models](#spoon_ai.skills.models)
+  * [SkillState](#spoon_ai.skills.models.SkillState)
+  * [ScriptType](#spoon_ai.skills.models.ScriptType)
+  * [SkillScript](#spoon_ai.skills.models.SkillScript)
+    * [validate\_source](#spoon_ai.skills.models.SkillScript.validate_source)
+  * [ScriptConfig](#spoon_ai.skills.models.ScriptConfig)
+    * [get\_script](#spoon_ai.skills.models.ScriptConfig.get_script)
+    * [get\_activation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_activation_scripts)
+    * [get\_deactivation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts)
+  * [ScriptResult](#spoon_ai.skills.models.ScriptResult)
+    * [to\_string](#spoon_ai.skills.models.ScriptResult.to_string)
+  * [SkillTrigger](#spoon_ai.skills.models.SkillTrigger)
+  * [SkillParameter](#spoon_ai.skills.models.SkillParameter)
+  * [SkillPrerequisite](#spoon_ai.skills.models.SkillPrerequisite)
+  * [SkillMetadata](#spoon_ai.skills.models.SkillMetadata)
+    * [has\_scripts](#spoon_ai.skills.models.SkillMetadata.has_scripts)
+    * [scripts\_enabled](#spoon_ai.skills.models.SkillMetadata.scripts_enabled)
+  * [Skill](#spoon_ai.skills.models.Skill)
+    * [name](#spoon_ai.skills.models.Skill.name)
+    * [description](#spoon_ai.skills.models.Skill.description)
+    * [get\_prompt\_injection](#spoon_ai.skills.models.Skill.get_prompt_injection)
 * [spoon\_ai.skills.loader](#spoon_ai.skills.loader)
   * [SkillLoader](#spoon_ai.skills.loader.SkillLoader)
     * [\_\_init\_\_](#spoon_ai.skills.loader.SkillLoader.__init__)
@@ -21,12 +42,6 @@ title: spoon_ai.skills
     * [get\_tools](#spoon_ai.skills.loader.SkillLoader.get_tools)
     * [clear\_cache](#spoon_ai.skills.loader.SkillLoader.clear_cache)
     * [reload](#spoon_ai.skills.loader.SkillLoader.reload)
-* [spoon\_ai.skills.script\_tool](#spoon_ai.skills.script_tool)
-  * [ScriptTool](#spoon_ai.skills.script_tool.ScriptTool)
-    * [\_\_init\_\_](#spoon_ai.skills.script_tool.ScriptTool.__init__)
-    * [execute](#spoon_ai.skills.script_tool.ScriptTool.execute)
-    * [to\_param](#spoon_ai.skills.script_tool.ScriptTool.to_param)
-  * [create\_script\_tools](#spoon_ai.skills.script_tool.create_script_tools)
 * [spoon\_ai.skills.executor](#spoon_ai.skills.executor)
   * [MAX\_OUTPUT\_SIZE](#spoon_ai.skills.executor.MAX_OUTPUT_SIZE)
   * [ScriptExecutionError](#spoon_ai.skills.executor.ScriptExecutionError)
@@ -40,6 +55,25 @@ title: spoon_ai.skills
   * [get\_executor](#spoon_ai.skills.executor.get_executor)
   * [configure\_executor](#spoon_ai.skills.executor.configure_executor)
   * [set\_scripts\_enabled](#spoon_ai.skills.executor.set_scripts_enabled)
+* [spoon\_ai.skills.registry](#spoon_ai.skills.registry)
+  * [SkillRegistry](#spoon_ai.skills.registry.SkillRegistry)
+    * [register](#spoon_ai.skills.registry.SkillRegistry.register)
+    * [unregister](#spoon_ai.skills.registry.SkillRegistry.unregister)
+    * [get](#spoon_ai.skills.registry.SkillRegistry.get)
+    * [list\_names](#spoon_ai.skills.registry.SkillRegistry.list_names)
+    * [list\_skills](#spoon_ai.skills.registry.SkillRegistry.list_skills)
+    * [find\_by\_tag](#spoon_ai.skills.registry.SkillRegistry.find_by_tag)
+    * [find\_by\_keyword](#spoon_ai.skills.registry.SkillRegistry.find_by_keyword)
+    * [find\_by\_pattern](#spoon_ai.skills.registry.SkillRegistry.find_by_pattern)
+    * [find\_by\_intent](#spoon_ai.skills.registry.SkillRegistry.find_by_intent)
+    * [find\_all\_matching](#spoon_ai.skills.registry.SkillRegistry.find_all_matching)
+    * [get\_intent\_categories](#spoon_ai.skills.registry.SkillRegistry.get_intent_categories)
+* [spoon\_ai.skills.script\_tool](#spoon_ai.skills.script_tool)
+  * [ScriptTool](#spoon_ai.skills.script_tool.ScriptTool)
+    * [\_\_init\_\_](#spoon_ai.skills.script_tool.ScriptTool.__init__)
+    * [execute](#spoon_ai.skills.script_tool.ScriptTool.execute)
+    * [to\_param](#spoon_ai.skills.script_tool.ScriptTool.to_param)
+  * [create\_script\_tools](#spoon_ai.skills.script_tool.create_script_tools)
 * [spoon\_ai.skills.manager](#spoon_ai.skills.manager)
   * [SkillManager](#spoon_ai.skills.manager.SkillManager)
     * [\_\_init\_\_](#spoon_ai.skills.manager.SkillManager.__init__)
@@ -65,40 +99,6 @@ title: spoon_ai.skills
     * [get\_script\_tools](#spoon_ai.skills.manager.SkillManager.get_script_tools)
     * [get\_skill\_info](#spoon_ai.skills.manager.SkillManager.get_skill_info)
     * [get\_stats](#spoon_ai.skills.manager.SkillManager.get_stats)
-* [spoon\_ai.skills.registry](#spoon_ai.skills.registry)
-  * [SkillRegistry](#spoon_ai.skills.registry.SkillRegistry)
-    * [register](#spoon_ai.skills.registry.SkillRegistry.register)
-    * [unregister](#spoon_ai.skills.registry.SkillRegistry.unregister)
-    * [get](#spoon_ai.skills.registry.SkillRegistry.get)
-    * [list\_names](#spoon_ai.skills.registry.SkillRegistry.list_names)
-    * [list\_skills](#spoon_ai.skills.registry.SkillRegistry.list_skills)
-    * [find\_by\_tag](#spoon_ai.skills.registry.SkillRegistry.find_by_tag)
-    * [find\_by\_keyword](#spoon_ai.skills.registry.SkillRegistry.find_by_keyword)
-    * [find\_by\_pattern](#spoon_ai.skills.registry.SkillRegistry.find_by_pattern)
-    * [find\_by\_intent](#spoon_ai.skills.registry.SkillRegistry.find_by_intent)
-    * [find\_all\_matching](#spoon_ai.skills.registry.SkillRegistry.find_all_matching)
-    * [get\_intent\_categories](#spoon_ai.skills.registry.SkillRegistry.get_intent_categories)
-* [spoon\_ai.skills.models](#spoon_ai.skills.models)
-  * [SkillState](#spoon_ai.skills.models.SkillState)
-  * [ScriptType](#spoon_ai.skills.models.ScriptType)
-  * [SkillScript](#spoon_ai.skills.models.SkillScript)
-    * [validate\_source](#spoon_ai.skills.models.SkillScript.validate_source)
-  * [ScriptConfig](#spoon_ai.skills.models.ScriptConfig)
-    * [get\_script](#spoon_ai.skills.models.ScriptConfig.get_script)
-    * [get\_activation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_activation_scripts)
-    * [get\_deactivation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts)
-  * [ScriptResult](#spoon_ai.skills.models.ScriptResult)
-    * [to\_string](#spoon_ai.skills.models.ScriptResult.to_string)
-  * [SkillTrigger](#spoon_ai.skills.models.SkillTrigger)
-  * [SkillParameter](#spoon_ai.skills.models.SkillParameter)
-  * [SkillPrerequisite](#spoon_ai.skills.models.SkillPrerequisite)
-  * [SkillMetadata](#spoon_ai.skills.models.SkillMetadata)
-    * [has\_scripts](#spoon_ai.skills.models.SkillMetadata.has_scripts)
-    * [scripts\_enabled](#spoon_ai.skills.models.SkillMetadata.scripts_enabled)
-  * [Skill](#spoon_ai.skills.models.Skill)
-    * [name](#spoon_ai.skills.models.Skill.name)
-    * [description](#spoon_ai.skills.models.Skill.description)
-    * [get\_prompt\_injection](#spoon_ai.skills.models.Skill.get_prompt_injection)
 
 <a id="spoon_ai.skills"></a>
 
@@ -137,6 +137,250 @@ Usage:
 
     # Find matching skills for user input
     matches = await manager.find_matching_skills("research quantum computing")
+
+<a id="spoon_ai.skills.models"></a>
+
+# Module `spoon_ai.skills.models`
+
+Skill system data models.
+
+Pydantic schemas for skill definition, following Anthropic Skills specification
+with XSpoonAi extensions.
+
+<a id="spoon_ai.skills.models.SkillState"></a>
+
+## `SkillState` Objects
+
+```python
+class SkillState(str, Enum)
+```
+
+Skill activation state.
+
+<a id="spoon_ai.skills.models.ScriptType"></a>
+
+## `ScriptType` Objects
+
+```python
+class ScriptType(str, Enum)
+```
+
+Supported script execution types.
+
+<a id="spoon_ai.skills.models.SkillScript"></a>
+
+## `SkillScript` Objects
+
+```python
+class SkillScript(BaseModel)
+```
+
+Script definition within a skill.
+
+Scripts are executed by the agent when needed. The AI decides
+how to call scripts - users only control whether scripts are allowed.
+
+Example in SKILL.md:
+    scripts:
+      - name: fetch_data
+        description: Fetch latest market data
+        type: python
+        file: scripts/fetch_data.py
+
+<a id="spoon_ai.skills.models.SkillScript.validate_source"></a>
+
+#### `validate_source`
+
+```python
+@model_validator(mode='after')
+def validate_source()
+```
+
+Ensure either file or inline is provided.
+
+<a id="spoon_ai.skills.models.ScriptConfig"></a>
+
+## `ScriptConfig` Objects
+
+```python
+class ScriptConfig(BaseModel)
+```
+
+Script configuration section in skill metadata.
+
+Example in SKILL.md:
+    scripts:
+      enabled: true
+      working_directory: ./scripts
+      definitions:
+        - name: analyze
+          type: python
+          file: analyze.py
+
+<a id="spoon_ai.skills.models.ScriptConfig.get_script"></a>
+
+#### `get_script`
+
+```python
+def get_script(name: str) -> Optional[SkillScript]
+```
+
+Get script by name.
+
+<a id="spoon_ai.skills.models.ScriptConfig.get_activation_scripts"></a>
+
+#### `get_activation_scripts`
+
+```python
+def get_activation_scripts() -> List[SkillScript]
+```
+
+Get scripts to run on activation.
+
+<a id="spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts"></a>
+
+#### `get_deactivation_scripts`
+
+```python
+def get_deactivation_scripts() -> List[SkillScript]
+```
+
+Get scripts to run on deactivation.
+
+<a id="spoon_ai.skills.models.ScriptResult"></a>
+
+## `ScriptResult` Objects
+
+```python
+class ScriptResult(BaseModel)
+```
+
+Result of script execution.
+
+<a id="spoon_ai.skills.models.ScriptResult.to_string"></a>
+
+#### `to_string`
+
+```python
+def to_string() -> str
+```
+
+Convert to string for agent context.
+
+<a id="spoon_ai.skills.models.SkillTrigger"></a>
+
+## `SkillTrigger` Objects
+
+```python
+class SkillTrigger(BaseModel)
+```
+
+Trigger configuration for skill activation.
+
+<a id="spoon_ai.skills.models.SkillParameter"></a>
+
+## `SkillParameter` Objects
+
+```python
+class SkillParameter(BaseModel)
+```
+
+Parameter definition for skills.
+
+<a id="spoon_ai.skills.models.SkillPrerequisite"></a>
+
+## `SkillPrerequisite` Objects
+
+```python
+class SkillPrerequisite(BaseModel)
+```
+
+Prerequisites for skill execution.
+
+<a id="spoon_ai.skills.models.SkillMetadata"></a>
+
+## `SkillMetadata` Objects
+
+```python
+class SkillMetadata(BaseModel)
+```
+
+Skill metadata from YAML frontmatter.
+
+Required fields (Anthropic-compatible):
+- name: Unique skill identifier
+- description: Human-readable description
+
+Optional fields (XSpoonAi extensions):
+- triggers, parameters, prerequisites, composes, etc.
+
+<a id="spoon_ai.skills.models.SkillMetadata.has_scripts"></a>
+
+#### `has_scripts`
+
+```python
+def has_scripts() -> bool
+```
+
+Check if skill has scripts defined.
+
+<a id="spoon_ai.skills.models.SkillMetadata.scripts_enabled"></a>
+
+#### `scripts_enabled`
+
+```python
+def scripts_enabled() -> bool
+```
+
+Check if scripts are enabled for this skill.
+
+<a id="spoon_ai.skills.models.Skill"></a>
+
+## `Skill` Objects
+
+```python
+class Skill(BaseModel)
+```
+
+Complete skill definition.
+
+Combines metadata from YAML frontmatter with markdown instructions.
+
+<a id="spoon_ai.skills.models.Skill.name"></a>
+
+#### `name`
+
+```python
+@property
+def name() -> str
+```
+
+Convenience property for skill name.
+
+<a id="spoon_ai.skills.models.Skill.description"></a>
+
+#### `description`
+
+```python
+@property
+def description() -> str
+```
+
+Convenience property for skill description.
+
+<a id="spoon_ai.skills.models.Skill.get_prompt_injection"></a>
+
+#### `get_prompt_injection`
+
+```python
+def get_prompt_injection() -> str
+```
+
+Generate prompt content to inject into agent's system prompt.
+
+**Returns**:
+
+  Formatted skill instructions with metadata
 
 <a id="spoon_ai.skills.loader"></a>
 
@@ -353,100 +597,6 @@ Reload a specific skill from disk.
 
   Reloaded Skill or None if not found
 
-<a id="spoon_ai.skills.script_tool"></a>
-
-# Module `spoon_ai.skills.script_tool`
-
-Script-based tool for agent integration.
-
-Wraps SkillScript as a BaseTool that agents can call.
-AI decides how to use scripts - users only control whether scripts are allowed.
-
-<a id="spoon_ai.skills.script_tool.ScriptTool"></a>
-
-## `ScriptTool` Objects
-
-```python
-class ScriptTool(BaseTool)
-```
-
-Tool wrapper for skill scripts.
-
-Exposes a SkillScript as a callable tool that agents can invoke.
-The AI decides what input to provide - there's no fixed parameter schema.
-
-<a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(script: SkillScript,
-             skill_name: str,
-             working_directory: Optional[str] = None)
-```
-
-Create a tool from a script definition.
-
-**Arguments**:
-
-- `script` - SkillScript to wrap
-- `skill_name` - Parent skill name
-- `working_directory` - Base working directory
-
-<a id="spoon_ai.skills.script_tool.ScriptTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(input: Optional[str] = None, **kwargs) -> str
-```
-
-Execute the script.
-
-**Arguments**:
-
-- `input` - Optional input text to pass to script via stdin
-- `**kwargs` - Additional arguments (ignored)
-  
-
-**Returns**:
-
-  Script output as string
-
-<a id="spoon_ai.skills.script_tool.ScriptTool.to_param"></a>
-
-#### `to_param`
-
-```python
-def to_param() -> dict
-```
-
-Generate OpenAI-compatible function definition.
-
-<a id="spoon_ai.skills.script_tool.create_script_tools"></a>
-
-#### `create_script_tools`
-
-```python
-def create_script_tools(
-        skill_name: str,
-        scripts: List[SkillScript],
-        working_directory: Optional[str] = None) -> List[ScriptTool]
-```
-
-Create ScriptTool instances from script definitions.
-
-**Arguments**:
-
-- `skill_name` - Parent skill name
-- `scripts` - List of script definitions
-- `working_directory` - Base working directory (fallback if script has none)
-  
-
-**Returns**:
-
-  List of ScriptTool instances
-
 <a id="spoon_ai.skills.executor"></a>
 
 # Module `spoon_ai.skills.executor`
@@ -605,6 +755,305 @@ def set_scripts_enabled(enabled: bool) -> None
 ```
 
 Enable or disable script execution globally.
+
+<a id="spoon_ai.skills.registry"></a>
+
+# Module `spoon_ai.skills.registry`
+
+Thread-safe skill registry with indexing.
+
+Follows NodePluginSystem pattern from graph/builder.py.
+
+<a id="spoon_ai.skills.registry.SkillRegistry"></a>
+
+## `SkillRegistry` Objects
+
+```python
+class SkillRegistry()
+```
+
+Thread-safe registry for skills with fast trigger matching.
+
+Maintains indexes for:
+- Tags: O(1) lookup by tag
+- Keywords: O(1) lookup by keyword
+- Intents: O(1) lookup by intent category
+- Patterns: Compiled regex patterns for matching
+
+<a id="spoon_ai.skills.registry.SkillRegistry.register"></a>
+
+#### `register`
+
+```python
+def register(skill: Skill) -> None
+```
+
+Register a skill and update indexes.
+
+**Arguments**:
+
+- `skill` - Skill to register
+
+<a id="spoon_ai.skills.registry.SkillRegistry.unregister"></a>
+
+#### `unregister`
+
+```python
+def unregister(name: str) -> bool
+```
+
+Remove a skill from the registry.
+
+**Arguments**:
+
+- `name` - Skill name to remove
+  
+
+**Returns**:
+
+  True if removed, False if not found
+
+<a id="spoon_ai.skills.registry.SkillRegistry.get"></a>
+
+#### `get`
+
+```python
+def get(name: str) -> Optional[Skill]
+```
+
+Get a skill by name.
+
+**Arguments**:
+
+- `name` - Skill name
+  
+
+**Returns**:
+
+  Skill or None if not found
+
+<a id="spoon_ai.skills.registry.SkillRegistry.list_names"></a>
+
+#### `list_names`
+
+```python
+def list_names() -> List[str]
+```
+
+Get all registered skill names.
+
+<a id="spoon_ai.skills.registry.SkillRegistry.list_skills"></a>
+
+#### `list_skills`
+
+```python
+def list_skills() -> List[Skill]
+```
+
+Get all registered skills.
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_tag"></a>
+
+#### `find_by_tag`
+
+```python
+def find_by_tag(tag: str) -> List[Skill]
+```
+
+Find skills by tag.
+
+**Arguments**:
+
+- `tag` - Tag to search for
+  
+
+**Returns**:
+
+  List of matching skills
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_keyword"></a>
+
+#### `find_by_keyword`
+
+```python
+def find_by_keyword(text: str) -> List[Skill]
+```
+
+Find skills by keyword matching.
+
+Extracts words from text and matches against keyword index.
+
+**Arguments**:
+
+- `text` - Text to match keywords against
+  
+
+**Returns**:
+
+  List of matching skills (deduplicated)
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_pattern"></a>
+
+#### `find_by_pattern`
+
+```python
+def find_by_pattern(text: str) -> List[Skill]
+```
+
+Find skills by regex pattern matching.
+
+**Arguments**:
+
+- `text` - Text to match patterns against
+  
+
+**Returns**:
+
+  List of matching skills
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_intent"></a>
+
+#### `find_by_intent`
+
+```python
+def find_by_intent(intent_category: str) -> List[Skill]
+```
+
+Find skills by intent category.
+
+**Arguments**:
+
+- `intent_category` - Intent category to match
+  
+
+**Returns**:
+
+  List of matching skills
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_all_matching"></a>
+
+#### `find_all_matching`
+
+```python
+def find_all_matching(text: str) -> List[Skill]
+```
+
+Find all skills matching by keywords or patterns.
+
+Combines keyword and pattern matching, sorted by trigger priority.
+
+**Arguments**:
+
+- `text` - Text to match against
+  
+
+**Returns**:
+
+  List of matching skills, sorted by priority (highest first)
+
+<a id="spoon_ai.skills.registry.SkillRegistry.get_intent_categories"></a>
+
+#### `get_intent_categories`
+
+```python
+def get_intent_categories() -> List[str]
+```
+
+Get all registered intent categories.
+
+<a id="spoon_ai.skills.script_tool"></a>
+
+# Module `spoon_ai.skills.script_tool`
+
+Script-based tool for agent integration.
+
+Wraps SkillScript as a BaseTool that agents can call.
+AI decides how to use scripts - users only control whether scripts are allowed.
+
+<a id="spoon_ai.skills.script_tool.ScriptTool"></a>
+
+## `ScriptTool` Objects
+
+```python
+class ScriptTool(BaseTool)
+```
+
+Tool wrapper for skill scripts.
+
+Exposes a SkillScript as a callable tool that agents can invoke.
+The AI decides what input to provide - there's no fixed parameter schema.
+
+<a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(script: SkillScript,
+             skill_name: str,
+             working_directory: Optional[str] = None)
+```
+
+Create a tool from a script definition.
+
+**Arguments**:
+
+- `script` - SkillScript to wrap
+- `skill_name` - Parent skill name
+- `working_directory` - Base working directory
+
+<a id="spoon_ai.skills.script_tool.ScriptTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(input: Optional[str] = None, **kwargs) -> str
+```
+
+Execute the script.
+
+**Arguments**:
+
+- `input` - Optional input text to pass to script via stdin
+- `**kwargs` - Additional arguments (ignored)
+  
+
+**Returns**:
+
+  Script output as string
+
+<a id="spoon_ai.skills.script_tool.ScriptTool.to_param"></a>
+
+#### `to_param`
+
+```python
+def to_param() -> dict
+```
+
+Generate OpenAI-compatible function definition.
+
+<a id="spoon_ai.skills.script_tool.create_script_tools"></a>
+
+#### `create_script_tools`
+
+```python
+def create_script_tools(
+        skill_name: str,
+        scripts: List[SkillScript],
+        working_directory: Optional[str] = None) -> List[ScriptTool]
+```
+
+Create ScriptTool instances from script definitions.
+
+**Arguments**:
+
+- `skill_name` - Parent skill name
+- `scripts` - List of script definitions
+- `working_directory` - Base working directory (fallback if script has none)
+  
+
+**Returns**:
+
+  List of ScriptTool instances
 
 <a id="spoon_ai.skills.manager"></a>
 
@@ -997,453 +1446,4 @@ def get_stats() -> Dict[str, Any]
 ```
 
 Get statistics about the skill system.
-
-<a id="spoon_ai.skills.registry"></a>
-
-# Module `spoon_ai.skills.registry`
-
-Thread-safe skill registry with indexing.
-
-Follows NodePluginSystem pattern from graph/builder.py.
-
-<a id="spoon_ai.skills.registry.SkillRegistry"></a>
-
-## `SkillRegistry` Objects
-
-```python
-class SkillRegistry()
-```
-
-Thread-safe registry for skills with fast trigger matching.
-
-Maintains indexes for:
-- Tags: O(1) lookup by tag
-- Keywords: O(1) lookup by keyword
-- Intents: O(1) lookup by intent category
-- Patterns: Compiled regex patterns for matching
-
-<a id="spoon_ai.skills.registry.SkillRegistry.register"></a>
-
-#### `register`
-
-```python
-def register(skill: Skill) -> None
-```
-
-Register a skill and update indexes.
-
-**Arguments**:
-
-- `skill` - Skill to register
-
-<a id="spoon_ai.skills.registry.SkillRegistry.unregister"></a>
-
-#### `unregister`
-
-```python
-def unregister(name: str) -> bool
-```
-
-Remove a skill from the registry.
-
-**Arguments**:
-
-- `name` - Skill name to remove
-  
-
-**Returns**:
-
-  True if removed, False if not found
-
-<a id="spoon_ai.skills.registry.SkillRegistry.get"></a>
-
-#### `get`
-
-```python
-def get(name: str) -> Optional[Skill]
-```
-
-Get a skill by name.
-
-**Arguments**:
-
-- `name` - Skill name
-  
-
-**Returns**:
-
-  Skill or None if not found
-
-<a id="spoon_ai.skills.registry.SkillRegistry.list_names"></a>
-
-#### `list_names`
-
-```python
-def list_names() -> List[str]
-```
-
-Get all registered skill names.
-
-<a id="spoon_ai.skills.registry.SkillRegistry.list_skills"></a>
-
-#### `list_skills`
-
-```python
-def list_skills() -> List[Skill]
-```
-
-Get all registered skills.
-
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_tag"></a>
-
-#### `find_by_tag`
-
-```python
-def find_by_tag(tag: str) -> List[Skill]
-```
-
-Find skills by tag.
-
-**Arguments**:
-
-- `tag` - Tag to search for
-  
-
-**Returns**:
-
-  List of matching skills
-
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_keyword"></a>
-
-#### `find_by_keyword`
-
-```python
-def find_by_keyword(text: str) -> List[Skill]
-```
-
-Find skills by keyword matching.
-
-Extracts words from text and matches against keyword index.
-
-**Arguments**:
-
-- `text` - Text to match keywords against
-  
-
-**Returns**:
-
-  List of matching skills (deduplicated)
-
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_pattern"></a>
-
-#### `find_by_pattern`
-
-```python
-def find_by_pattern(text: str) -> List[Skill]
-```
-
-Find skills by regex pattern matching.
-
-**Arguments**:
-
-- `text` - Text to match patterns against
-  
-
-**Returns**:
-
-  List of matching skills
-
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_intent"></a>
-
-#### `find_by_intent`
-
-```python
-def find_by_intent(intent_category: str) -> List[Skill]
-```
-
-Find skills by intent category.
-
-**Arguments**:
-
-- `intent_category` - Intent category to match
-  
-
-**Returns**:
-
-  List of matching skills
-
-<a id="spoon_ai.skills.registry.SkillRegistry.find_all_matching"></a>
-
-#### `find_all_matching`
-
-```python
-def find_all_matching(text: str) -> List[Skill]
-```
-
-Find all skills matching by keywords or patterns.
-
-Combines keyword and pattern matching, sorted by trigger priority.
-
-**Arguments**:
-
-- `text` - Text to match against
-  
-
-**Returns**:
-
-  List of matching skills, sorted by priority (highest first)
-
-<a id="spoon_ai.skills.registry.SkillRegistry.get_intent_categories"></a>
-
-#### `get_intent_categories`
-
-```python
-def get_intent_categories() -> List[str]
-```
-
-Get all registered intent categories.
-
-<a id="spoon_ai.skills.models"></a>
-
-# Module `spoon_ai.skills.models`
-
-Skill system data models.
-
-Pydantic schemas for skill definition, following Anthropic Skills specification
-with XSpoonAi extensions.
-
-<a id="spoon_ai.skills.models.SkillState"></a>
-
-## `SkillState` Objects
-
-```python
-class SkillState(str, Enum)
-```
-
-Skill activation state.
-
-<a id="spoon_ai.skills.models.ScriptType"></a>
-
-## `ScriptType` Objects
-
-```python
-class ScriptType(str, Enum)
-```
-
-Supported script execution types.
-
-<a id="spoon_ai.skills.models.SkillScript"></a>
-
-## `SkillScript` Objects
-
-```python
-class SkillScript(BaseModel)
-```
-
-Script definition within a skill.
-
-Scripts are executed by the agent when needed. The AI decides
-how to call scripts - users only control whether scripts are allowed.
-
-Example in SKILL.md:
-    scripts:
-      - name: fetch_data
-        description: Fetch latest market data
-        type: python
-        file: scripts/fetch_data.py
-
-<a id="spoon_ai.skills.models.SkillScript.validate_source"></a>
-
-#### `validate_source`
-
-```python
-@model_validator(mode='after')
-def validate_source()
-```
-
-Ensure either file or inline is provided.
-
-<a id="spoon_ai.skills.models.ScriptConfig"></a>
-
-## `ScriptConfig` Objects
-
-```python
-class ScriptConfig(BaseModel)
-```
-
-Script configuration section in skill metadata.
-
-Example in SKILL.md:
-    scripts:
-      enabled: true
-      working_directory: ./scripts
-      definitions:
-        - name: analyze
-          type: python
-          file: analyze.py
-
-<a id="spoon_ai.skills.models.ScriptConfig.get_script"></a>
-
-#### `get_script`
-
-```python
-def get_script(name: str) -> Optional[SkillScript]
-```
-
-Get script by name.
-
-<a id="spoon_ai.skills.models.ScriptConfig.get_activation_scripts"></a>
-
-#### `get_activation_scripts`
-
-```python
-def get_activation_scripts() -> List[SkillScript]
-```
-
-Get scripts to run on activation.
-
-<a id="spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts"></a>
-
-#### `get_deactivation_scripts`
-
-```python
-def get_deactivation_scripts() -> List[SkillScript]
-```
-
-Get scripts to run on deactivation.
-
-<a id="spoon_ai.skills.models.ScriptResult"></a>
-
-## `ScriptResult` Objects
-
-```python
-class ScriptResult(BaseModel)
-```
-
-Result of script execution.
-
-<a id="spoon_ai.skills.models.ScriptResult.to_string"></a>
-
-#### `to_string`
-
-```python
-def to_string() -> str
-```
-
-Convert to string for agent context.
-
-<a id="spoon_ai.skills.models.SkillTrigger"></a>
-
-## `SkillTrigger` Objects
-
-```python
-class SkillTrigger(BaseModel)
-```
-
-Trigger configuration for skill activation.
-
-<a id="spoon_ai.skills.models.SkillParameter"></a>
-
-## `SkillParameter` Objects
-
-```python
-class SkillParameter(BaseModel)
-```
-
-Parameter definition for skills.
-
-<a id="spoon_ai.skills.models.SkillPrerequisite"></a>
-
-## `SkillPrerequisite` Objects
-
-```python
-class SkillPrerequisite(BaseModel)
-```
-
-Prerequisites for skill execution.
-
-<a id="spoon_ai.skills.models.SkillMetadata"></a>
-
-## `SkillMetadata` Objects
-
-```python
-class SkillMetadata(BaseModel)
-```
-
-Skill metadata from YAML frontmatter.
-
-Required fields (Anthropic-compatible):
-- name: Unique skill identifier
-- description: Human-readable description
-
-Optional fields (XSpoonAi extensions):
-- triggers, parameters, prerequisites, composes, etc.
-
-<a id="spoon_ai.skills.models.SkillMetadata.has_scripts"></a>
-
-#### `has_scripts`
-
-```python
-def has_scripts() -> bool
-```
-
-Check if skill has scripts defined.
-
-<a id="spoon_ai.skills.models.SkillMetadata.scripts_enabled"></a>
-
-#### `scripts_enabled`
-
-```python
-def scripts_enabled() -> bool
-```
-
-Check if scripts are enabled for this skill.
-
-<a id="spoon_ai.skills.models.Skill"></a>
-
-## `Skill` Objects
-
-```python
-class Skill(BaseModel)
-```
-
-Complete skill definition.
-
-Combines metadata from YAML frontmatter with markdown instructions.
-
-<a id="spoon_ai.skills.models.Skill.name"></a>
-
-#### `name`
-
-```python
-@property
-def name() -> str
-```
-
-Convenience property for skill name.
-
-<a id="spoon_ai.skills.models.Skill.description"></a>
-
-#### `description`
-
-```python
-@property
-def description() -> str
-```
-
-Convenience property for skill description.
-
-<a id="spoon_ai.skills.models.Skill.get_prompt_injection"></a>
-
-#### `get_prompt_injection`
-
-```python
-def get_prompt_injection() -> str
-```
-
-Generate prompt content to inject into agent's system prompt.
-
-**Returns**:
-
-  Formatted skill instructions with metadata
 
