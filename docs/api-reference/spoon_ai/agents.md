@@ -1,6 +1,6 @@
 ---
 id: spoon_ai.agents
-slug: /api-reference/spoon_ai/agents//index
+slug: /api-reference/spoon_ai/agents
 title: spoon_ai.agents
 ---
 
