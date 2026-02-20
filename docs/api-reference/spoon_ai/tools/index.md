@@ -7,35 +7,45 @@ title: spoon_ai.tools
 # Table of Contents
 
 * [spoon\_ai.tools](#spoon_ai.tools)
-* [spoon\_ai.tools.x402\_payment](#spoon_ai.tools.x402_payment)
-  * [X402PaymentHeaderTool](#spoon_ai.tools.x402_payment.X402PaymentHeaderTool)
-  * [X402PaywalledRequestTool](#spoon_ai.tools.x402_payment.X402PaywalledRequestTool)
-* [spoon\_ai.tools.rag\_tools](#spoon_ai.tools.rag_tools)
-* [spoon\_ai.tools.neofs\_tools](#spoon_ai.tools.neofs_tools)
-  * [get\_shared\_neofs\_client](#spoon_ai.tools.neofs_tools.get_shared_neofs_client)
-  * [CreateBearerTokenTool](#spoon_ai.tools.neofs_tools.CreateBearerTokenTool)
-  * [CreateContainerTool](#spoon_ai.tools.neofs_tools.CreateContainerTool)
-  * [UploadObjectTool](#spoon_ai.tools.neofs_tools.UploadObjectTool)
-  * [DownloadObjectByIdTool](#spoon_ai.tools.neofs_tools.DownloadObjectByIdTool)
-  * [GetObjectHeaderByIdTool](#spoon_ai.tools.neofs_tools.GetObjectHeaderByIdTool)
-  * [DownloadObjectByAttributeTool](#spoon_ai.tools.neofs_tools.DownloadObjectByAttributeTool)
-  * [GetObjectHeaderByAttributeTool](#spoon_ai.tools.neofs_tools.GetObjectHeaderByAttributeTool)
-  * [DeleteObjectTool](#spoon_ai.tools.neofs_tools.DeleteObjectTool)
-  * [SearchObjectsTool](#spoon_ai.tools.neofs_tools.SearchObjectsTool)
-  * [SetContainerEaclTool](#spoon_ai.tools.neofs_tools.SetContainerEaclTool)
-  * [GetContainerEaclTool](#spoon_ai.tools.neofs_tools.GetContainerEaclTool)
-  * [ListContainersTool](#spoon_ai.tools.neofs_tools.ListContainersTool)
-  * [GetContainerInfoTool](#spoon_ai.tools.neofs_tools.GetContainerInfoTool)
-  * [DeleteContainerTool](#spoon_ai.tools.neofs_tools.DeleteContainerTool)
-  * [GetNetworkInfoTool](#spoon_ai.tools.neofs_tools.GetNetworkInfoTool)
-  * [GetBalanceTool](#spoon_ai.tools.neofs_tools.GetBalanceTool)
-* [spoon\_ai.tools.base](#spoon_ai.tools.base)
-  * [reset\_secrets\_initialization](#spoon_ai.tools.base.reset_secrets_initialization)
-  * [ToolFailure](#spoon_ai.tools.base.ToolFailure)
-* [spoon\_ai.tools.mcp\_tool](#spoon_ai.tools.mcp_tool)
-  * [MCPTool](#spoon_ai.tools.mcp_tool.MCPTool)
-    * [call\_mcp\_tool](#spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool)
-    * [list\_available\_tools](#spoon_ai.tools.mcp_tool.MCPTool.list_available_tools)
+* [spoon\_ai.tools.turnkey\_tools](#spoon_ai.tools.turnkey_tools)
+  * [TurnkeyBaseTool](#spoon_ai.tools.turnkey_tools.TurnkeyBaseTool)
+    * [client](#spoon_ai.tools.turnkey_tools.TurnkeyBaseTool.client)
+  * [SignEVMTransactionTool](#spoon_ai.tools.turnkey_tools.SignEVMTransactionTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.SignEVMTransactionTool.execute)
+  * [SignMessageTool](#spoon_ai.tools.turnkey_tools.SignMessageTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.SignMessageTool.execute)
+  * [SignTypedDataTool](#spoon_ai.tools.turnkey_tools.SignTypedDataTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.SignTypedDataTool.execute)
+  * [BroadcastTransactionTool](#spoon_ai.tools.turnkey_tools.BroadcastTransactionTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.BroadcastTransactionTool.execute)
+  * [ListWalletsTool](#spoon_ai.tools.turnkey_tools.ListWalletsTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.ListWalletsTool.execute)
+  * [ListWalletAccountsTool](#spoon_ai.tools.turnkey_tools.ListWalletAccountsTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.ListWalletAccountsTool.execute)
+  * [GetActivityTool](#spoon_ai.tools.turnkey_tools.GetActivityTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.GetActivityTool.execute)
+  * [ListActivitiesTool](#spoon_ai.tools.turnkey_tools.ListActivitiesTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.ListActivitiesTool.execute)
+  * [WhoAmITool](#spoon_ai.tools.turnkey_tools.WhoAmITool)
+    * [execute](#spoon_ai.tools.turnkey_tools.WhoAmITool.execute)
+  * [BuildUnsignedEIP1559TxTool](#spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool.execute)
+  * [ListAllAccountsTool](#spoon_ai.tools.turnkey_tools.ListAllAccountsTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.ListAllAccountsTool.execute)
+  * [BatchSignTransactionsTool](#spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool.execute)
+  * [CreateWalletTool](#spoon_ai.tools.turnkey_tools.CreateWalletTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.CreateWalletTool.execute)
+  * [GetWalletTool](#spoon_ai.tools.turnkey_tools.GetWalletTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.GetWalletTool.execute)
+  * [CreateWalletAccountsTool](#spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool.execute)
+  * [CompleteTransactionWorkflowTool](#spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool)
+    * [execute](#spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool.execute)
+  * [get\_turnkey\_tools](#spoon_ai.tools.turnkey_tools.get_turnkey_tools)
+* [spoon\_ai.tools.tool\_manager](#spoon_ai.tools.tool_manager)
+  * [ToolManager](#spoon_ai.tools.tool_manager.ToolManager)
+    * [reindex](#spoon_ai.tools.tool_manager.ToolManager.reindex)
 * [spoon\_ai.tools.hitl](#spoon_ai.tools.hitl)
   * [InterruptOnConfig](#spoon_ai.tools.hitl.InterruptOnConfig)
   * [ApprovalDecision](#spoon_ai.tools.hitl.ApprovalDecision)
@@ -82,316 +92,460 @@ title: spoon_ai.tools
     * [get\_interrupt\_config](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.get_interrupt_config)
   * [create\_hitl\_middleware](#spoon_ai.tools.hitl.create_hitl_middleware)
   * [format\_tool\_call\_description](#spoon_ai.tools.hitl.format_tool_call_description)
-* [spoon\_ai.tools.tool\_manager](#spoon_ai.tools.tool_manager)
-  * [ToolManager](#spoon_ai.tools.tool_manager.ToolManager)
-    * [reindex](#spoon_ai.tools.tool_manager.ToolManager.reindex)
-* [spoon\_ai.tools.turnkey\_tools](#spoon_ai.tools.turnkey_tools)
-  * [TurnkeyBaseTool](#spoon_ai.tools.turnkey_tools.TurnkeyBaseTool)
-    * [client](#spoon_ai.tools.turnkey_tools.TurnkeyBaseTool.client)
-  * [SignEVMTransactionTool](#spoon_ai.tools.turnkey_tools.SignEVMTransactionTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.SignEVMTransactionTool.execute)
-  * [SignMessageTool](#spoon_ai.tools.turnkey_tools.SignMessageTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.SignMessageTool.execute)
-  * [SignTypedDataTool](#spoon_ai.tools.turnkey_tools.SignTypedDataTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.SignTypedDataTool.execute)
-  * [BroadcastTransactionTool](#spoon_ai.tools.turnkey_tools.BroadcastTransactionTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.BroadcastTransactionTool.execute)
-  * [ListWalletsTool](#spoon_ai.tools.turnkey_tools.ListWalletsTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.ListWalletsTool.execute)
-  * [ListWalletAccountsTool](#spoon_ai.tools.turnkey_tools.ListWalletAccountsTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.ListWalletAccountsTool.execute)
-  * [GetActivityTool](#spoon_ai.tools.turnkey_tools.GetActivityTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.GetActivityTool.execute)
-  * [ListActivitiesTool](#spoon_ai.tools.turnkey_tools.ListActivitiesTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.ListActivitiesTool.execute)
-  * [WhoAmITool](#spoon_ai.tools.turnkey_tools.WhoAmITool)
-    * [execute](#spoon_ai.tools.turnkey_tools.WhoAmITool.execute)
-  * [BuildUnsignedEIP1559TxTool](#spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool.execute)
-  * [ListAllAccountsTool](#spoon_ai.tools.turnkey_tools.ListAllAccountsTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.ListAllAccountsTool.execute)
-  * [BatchSignTransactionsTool](#spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool.execute)
-  * [CreateWalletTool](#spoon_ai.tools.turnkey_tools.CreateWalletTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.CreateWalletTool.execute)
-  * [GetWalletTool](#spoon_ai.tools.turnkey_tools.GetWalletTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.GetWalletTool.execute)
-  * [CreateWalletAccountsTool](#spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool.execute)
-  * [CompleteTransactionWorkflowTool](#spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool)
-    * [execute](#spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool.execute)
-  * [get\_turnkey\_tools](#spoon_ai.tools.turnkey_tools.get_turnkey_tools)
+* [spoon\_ai.tools.neofs\_tools](#spoon_ai.tools.neofs_tools)
+  * [get\_shared\_neofs\_client](#spoon_ai.tools.neofs_tools.get_shared_neofs_client)
+  * [CreateBearerTokenTool](#spoon_ai.tools.neofs_tools.CreateBearerTokenTool)
+  * [CreateContainerTool](#spoon_ai.tools.neofs_tools.CreateContainerTool)
+  * [UploadObjectTool](#spoon_ai.tools.neofs_tools.UploadObjectTool)
+  * [DownloadObjectByIdTool](#spoon_ai.tools.neofs_tools.DownloadObjectByIdTool)
+  * [GetObjectHeaderByIdTool](#spoon_ai.tools.neofs_tools.GetObjectHeaderByIdTool)
+  * [DownloadObjectByAttributeTool](#spoon_ai.tools.neofs_tools.DownloadObjectByAttributeTool)
+  * [GetObjectHeaderByAttributeTool](#spoon_ai.tools.neofs_tools.GetObjectHeaderByAttributeTool)
+  * [DeleteObjectTool](#spoon_ai.tools.neofs_tools.DeleteObjectTool)
+  * [SearchObjectsTool](#spoon_ai.tools.neofs_tools.SearchObjectsTool)
+  * [SetContainerEaclTool](#spoon_ai.tools.neofs_tools.SetContainerEaclTool)
+  * [GetContainerEaclTool](#spoon_ai.tools.neofs_tools.GetContainerEaclTool)
+  * [ListContainersTool](#spoon_ai.tools.neofs_tools.ListContainersTool)
+  * [GetContainerInfoTool](#spoon_ai.tools.neofs_tools.GetContainerInfoTool)
+  * [DeleteContainerTool](#spoon_ai.tools.neofs_tools.DeleteContainerTool)
+  * [GetNetworkInfoTool](#spoon_ai.tools.neofs_tools.GetNetworkInfoTool)
+  * [GetBalanceTool](#spoon_ai.tools.neofs_tools.GetBalanceTool)
+* [spoon\_ai.tools.rag\_tools](#spoon_ai.tools.rag_tools)
+* [spoon\_ai.tools.x402\_payment](#spoon_ai.tools.x402_payment)
+  * [X402PaymentHeaderTool](#spoon_ai.tools.x402_payment.X402PaymentHeaderTool)
+  * [X402PaywalledRequestTool](#spoon_ai.tools.x402_payment.X402PaywalledRequestTool)
+* [spoon\_ai.tools.mcp\_tool](#spoon_ai.tools.mcp_tool)
+  * [MCPTool](#spoon_ai.tools.mcp_tool.MCPTool)
+    * [call\_mcp\_tool](#spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool)
+    * [list\_available\_tools](#spoon_ai.tools.mcp_tool.MCPTool.list_available_tools)
+* [spoon\_ai.tools.base](#spoon_ai.tools.base)
+  * [reset\_secrets\_initialization](#spoon_ai.tools.base.reset_secrets_initialization)
+  * [ToolFailure](#spoon_ai.tools.base.ToolFailure)
 
 <a id="spoon_ai.tools"></a>
 
 # Module `spoon_ai.tools`
 
-<a id="spoon_ai.tools.x402_payment"></a>
+<a id="spoon_ai.tools.turnkey_tools"></a>
 
-# Module `spoon_ai.tools.x402_payment`
+# Module `spoon_ai.tools.turnkey_tools`
 
-<a id="spoon_ai.tools.x402_payment.X402PaymentHeaderTool"></a>
+Turnkey Tools - Secure Blockchain Operations
 
-## `X402PaymentHeaderTool` Objects
+This module provides Turnkey SDK tools for secure blockchain operations including:
+- Transaction signing and broadcasting
+- Message and EIP-712 signing
+- Multi-account management
+- Activity audit and monitoring
+- Wallet and account operations
 
-```python
-class X402PaymentHeaderTool(BaseTool)
-```
+<a id="spoon_ai.tools.turnkey_tools.TurnkeyBaseTool"></a>
 
-Create a signed X-PAYMENT header for a given resource.
-
-<a id="spoon_ai.tools.x402_payment.X402PaywalledRequestTool"></a>
-
-## `X402PaywalledRequestTool` Objects
-
-```python
-class X402PaywalledRequestTool(BaseTool)
-```
-
-Fetch a paywalled resource, handling the x402 402 negotiation automatically.
-
-<a id="spoon_ai.tools.rag_tools"></a>
-
-# Module `spoon_ai.tools.rag_tools`
-
-<a id="spoon_ai.tools.neofs_tools"></a>
-
-# Module `spoon_ai.tools.neofs_tools`
-
-NeoFS Tools for spoon_ai framework
-
-Simple wrappers around NeoFS client methods.
-Tools do NOT auto-create bearer tokens - Agent manages tokens.
-All parameters map directly to client method parameters.
-
-<a id="spoon_ai.tools.neofs_tools.get_shared_neofs_client"></a>
-
-#### `get_shared_neofs_client`
+## `TurnkeyBaseTool` Objects
 
 ```python
-def get_shared_neofs_client() -> NeoFSClient
+class TurnkeyBaseTool(BaseTool)
 ```
 
-Get shared NeoFSClient instance for all NeoFS tools.
+Base class for Turnkey tools with shared client initialization
 
-Returns the same client instance across all tool calls to ensure
-bearer token authentication works correctly.
+<a id="spoon_ai.tools.turnkey_tools.TurnkeyBaseTool.client"></a>
 
-<a id="spoon_ai.tools.neofs_tools.CreateBearerTokenTool"></a>
-
-## `CreateBearerTokenTool` Objects
+#### `client`
 
 ```python
-class CreateBearerTokenTool(BaseTool)
+@property
+def client()
 ```
 
-Create a bearer token for NeoFS operations
+Lazy initialization of Turnkey client
 
-<a id="spoon_ai.tools.neofs_tools.CreateContainerTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.SignEVMTransactionTool"></a>
 
-## `CreateContainerTool` Objects
+## `SignEVMTransactionTool` Objects
 
 ```python
-class CreateContainerTool(BaseTool)
+class SignEVMTransactionTool(TurnkeyBaseTool)
 ```
 
-Create a NeoFS container
+Sign EVM transaction using Turnkey
 
-<a id="spoon_ai.tools.neofs_tools.UploadObjectTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.SignEVMTransactionTool.execute"></a>
 
-## `UploadObjectTool` Objects
+#### `execute`
 
 ```python
-class UploadObjectTool(BaseTool)
+async def execute(sign_with: str, unsigned_tx: str, **kwargs) -> str
 ```
 
-Upload object to container
+Sign EVM transaction
 
-<a id="spoon_ai.tools.neofs_tools.DownloadObjectByIdTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.SignMessageTool"></a>
 
-## `DownloadObjectByIdTool` Objects
+## `SignMessageTool` Objects
 
 ```python
-class DownloadObjectByIdTool(BaseTool)
+class SignMessageTool(TurnkeyBaseTool)
 ```
 
-Download object by ID
+Sign arbitrary message using Turnkey
 
-<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByIdTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.SignMessageTool.execute"></a>
 
-## `GetObjectHeaderByIdTool` Objects
+#### `execute`
 
 ```python
-class GetObjectHeaderByIdTool(BaseTool)
+async def execute(sign_with: str,
+                  message: str,
+                  use_keccak256: bool = True,
+                  **kwargs) -> str
 ```
 
-Get object header by ID
+Sign message
 
-<a id="spoon_ai.tools.neofs_tools.DownloadObjectByAttributeTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.SignTypedDataTool"></a>
 
-## `DownloadObjectByAttributeTool` Objects
+## `SignTypedDataTool` Objects
 
 ```python
-class DownloadObjectByAttributeTool(BaseTool)
+class SignTypedDataTool(TurnkeyBaseTool)
 ```
 
-Download object by attribute
+Sign EIP-712 structured data using Turnkey
 
-<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByAttributeTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.SignTypedDataTool.execute"></a>
 
-## `GetObjectHeaderByAttributeTool` Objects
+#### `execute`
 
 ```python
-class GetObjectHeaderByAttributeTool(BaseTool)
+async def execute(sign_with: str, typed_data: dict, **kwargs) -> str
 ```
 
-Get object header by attribute
+Sign EIP-712 typed data
 
-<a id="spoon_ai.tools.neofs_tools.DeleteObjectTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.BroadcastTransactionTool"></a>
 
-## `DeleteObjectTool` Objects
+## `BroadcastTransactionTool` Objects
 
 ```python
-class DeleteObjectTool(BaseTool)
+class BroadcastTransactionTool(TurnkeyBaseTool)
 ```
 
-Delete an object
+Broadcast signed transaction to blockchain
 
-<a id="spoon_ai.tools.neofs_tools.SearchObjectsTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.BroadcastTransactionTool.execute"></a>
 
-## `SearchObjectsTool` Objects
+#### `execute`
 
 ```python
-class SearchObjectsTool(BaseTool)
+async def execute(signed_tx: str, rpc_url: str = None, **kwargs) -> str
 ```
 
-Search objects in container
+Broadcast transaction
 
-<a id="spoon_ai.tools.neofs_tools.SetContainerEaclTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.ListWalletsTool"></a>
 
-## `SetContainerEaclTool` Objects
+## `ListWalletsTool` Objects
 
 ```python
-class SetContainerEaclTool(BaseTool)
+class ListWalletsTool(TurnkeyBaseTool)
 ```
 
-Set eACL for container
+List all wallets in the organization
 
-<a id="spoon_ai.tools.neofs_tools.GetContainerEaclTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.ListWalletsTool.execute"></a>
 
-## `GetContainerEaclTool` Objects
+#### `execute`
 
 ```python
-class GetContainerEaclTool(BaseTool)
+async def execute(**kwargs) -> str
 ```
 
-Get eACL for container
+List wallets
 
-<a id="spoon_ai.tools.neofs_tools.ListContainersTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.ListWalletAccountsTool"></a>
 
-## `ListContainersTool` Objects
+## `ListWalletAccountsTool` Objects
 
 ```python
-class ListContainersTool(BaseTool)
+class ListWalletAccountsTool(TurnkeyBaseTool)
 ```
 
-List all containers
+List accounts for a specific wallet
 
-<a id="spoon_ai.tools.neofs_tools.GetContainerInfoTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.ListWalletAccountsTool.execute"></a>
 
-## `GetContainerInfoTool` Objects
+#### `execute`
 
 ```python
-class GetContainerInfoTool(BaseTool)
+async def execute(wallet_id: str,
+                  limit: str = None,
+                  before: str = None,
+                  after: str = None,
+                  **kwargs) -> str
 ```
 
-Get container info
+List wallet accounts
 
-<a id="spoon_ai.tools.neofs_tools.DeleteContainerTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.GetActivityTool"></a>
 
-## `DeleteContainerTool` Objects
+## `GetActivityTool` Objects
 
 ```python
-class DeleteContainerTool(BaseTool)
+class GetActivityTool(TurnkeyBaseTool)
 ```
 
-Delete container
+Get activity details by ID
 
-<a id="spoon_ai.tools.neofs_tools.GetNetworkInfoTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.GetActivityTool.execute"></a>
 
-## `GetNetworkInfoTool` Objects
+#### `execute`
 
 ```python
-class GetNetworkInfoTool(BaseTool)
+async def execute(activity_id: str, **kwargs) -> str
 ```
 
-Get network info
+Get activity details
 
-<a id="spoon_ai.tools.neofs_tools.GetBalanceTool"></a>
+<a id="spoon_ai.tools.turnkey_tools.ListActivitiesTool"></a>
 
-## `GetBalanceTool` Objects
+## `ListActivitiesTool` Objects
 
 ```python
-class GetBalanceTool(BaseTool)
+class ListActivitiesTool(TurnkeyBaseTool)
 ```
 
-Get balance for an address
+List recent activities in the organization
 
-<a id="spoon_ai.tools.base"></a>
+<a id="spoon_ai.tools.turnkey_tools.ListActivitiesTool.execute"></a>
 
-# Module `spoon_ai.tools.base`
-
-<a id="spoon_ai.tools.base.reset_secrets_initialization"></a>
-
-#### `reset_secrets_initialization`
+#### `execute`
 
 ```python
-def reset_secrets_initialization() -> None
+async def execute(limit: str = "10",
+                  before: str = None,
+                  after: str = None,
+                  filter_by_status: list = None,
+                  filter_by_type: list = None,
+                  **kwargs) -> str
 ```
 
-Reset the initialization flag. Useful for testing.
+List activities
 
-<a id="spoon_ai.tools.base.ToolFailure"></a>
+<a id="spoon_ai.tools.turnkey_tools.WhoAmITool"></a>
 
-## `ToolFailure` Objects
+## `WhoAmITool` Objects
 
 ```python
-class ToolFailure(Exception)
+class WhoAmITool(TurnkeyBaseTool)
 ```
 
-Exception to indicate a tool execution failure.
+Get organization information
 
-<a id="spoon_ai.tools.mcp_tool"></a>
+<a id="spoon_ai.tools.turnkey_tools.WhoAmITool.execute"></a>
 
-# Module `spoon_ai.tools.mcp_tool`
-
-<a id="spoon_ai.tools.mcp_tool.MCPTool"></a>
-
-## `MCPTool` Objects
+#### `execute`
 
 ```python
-class MCPTool(BaseTool, MCPClientMixin)
+async def execute(**kwargs) -> str
 ```
 
-<a id="spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool"></a>
+Get organization info
 
-#### `call_mcp_tool`
+<a id="spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool"></a>
+
+## `BuildUnsignedEIP1559TxTool` Objects
 
 ```python
-async def call_mcp_tool(tool_name: str, **kwargs)
+class BuildUnsignedEIP1559TxTool(BaseTool)
 ```
 
-Override the mixin method to add tool-specific error handling.
+Build unsigned EIP-1559 transaction (supports NeoX)
 
-<a id="spoon_ai.tools.mcp_tool.MCPTool.list_available_tools"></a>
+<a id="spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool.execute"></a>
 
-#### `list_available_tools`
+#### `execute`
 
 ```python
-async def list_available_tools() -> list
+async def execute(from_addr: str,
+                  to_addr: str = None,
+                  value_wei: str = "0",
+                  data_hex: str = "0x",
+                  priority_gwei: str = "1",
+                  max_fee_gwei: str = None,
+                  gas_limit: str = None,
+                  rpc_url: str = None,
+                  **kwargs) -> str
 ```
 
-List available tools from the MCP server.
+Build unsigned transaction (auto-detects NeoX)
+
+<a id="spoon_ai.tools.turnkey_tools.ListAllAccountsTool"></a>
+
+## `ListAllAccountsTool` Objects
+
+```python
+class ListAllAccountsTool(TurnkeyBaseTool)
+```
+
+List all accounts across all wallets in the organization
+
+<a id="spoon_ai.tools.turnkey_tools.ListAllAccountsTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(limit: str = "50", **kwargs) -> str
+```
+
+List all accounts across all wallets
+
+<a id="spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool"></a>
+
+## `BatchSignTransactionsTool` Objects
+
+```python
+class BatchSignTransactionsTool(TurnkeyBaseTool)
+```
+
+Batch sign transactions for multiple accounts
+
+<a id="spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(to_address: str,
+                  value_wei: str,
+                  data_hex: str = "0x",
+                  max_accounts: str = "3",
+                  enable_broadcast: bool = False,
+                  rpc_url: str = None,
+                  **kwargs) -> str
+```
+
+Batch sign transactions for multiple accounts
+
+<a id="spoon_ai.tools.turnkey_tools.CreateWalletTool"></a>
+
+## `CreateWalletTool` Objects
+
+```python
+class CreateWalletTool(TurnkeyBaseTool)
+```
+
+Create a new wallet
+
+<a id="spoon_ai.tools.turnkey_tools.CreateWalletTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(wallet_name: str,
+                  accounts_json: str = None,
+                  mnemonic_length: str = "24",
+                  **kwargs) -> str
+```
+
+Create a new wallet
+
+<a id="spoon_ai.tools.turnkey_tools.GetWalletTool"></a>
+
+## `GetWalletTool` Objects
+
+```python
+class GetWalletTool(TurnkeyBaseTool)
+```
+
+Get wallet information by wallet ID
+
+<a id="spoon_ai.tools.turnkey_tools.GetWalletTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(wallet_id: str, **kwargs) -> str
+```
+
+Get wallet information
+
+<a id="spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool"></a>
+
+## `CreateWalletAccountsTool` Objects
+
+```python
+class CreateWalletAccountsTool(TurnkeyBaseTool)
+```
+
+Add accounts to an existing wallet
+
+<a id="spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(wallet_id: str, accounts_json: str, **kwargs) -> str
+```
+
+Add accounts to existing wallet
+
+<a id="spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool"></a>
+
+## `CompleteTransactionWorkflowTool` Objects
+
+```python
+class CompleteTransactionWorkflowTool(TurnkeyBaseTool)
+```
+
+Complete transaction workflow: build, sign, and optionally broadcast
+
+<a id="spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(sign_with: str,
+                  to_address: str,
+                  value_wei: str,
+                  data_hex: str = "0x",
+                  enable_broadcast: bool = False,
+                  rpc_url: str = None,
+                  **kwargs) -> str
+```
+
+Complete transaction workflow
+
+<a id="spoon_ai.tools.turnkey_tools.get_turnkey_tools"></a>
+
+#### `get_turnkey_tools`
+
+```python
+def get_turnkey_tools() -> List[BaseTool]
+```
+
+Get all Turnkey tools
+
+<a id="spoon_ai.tools.tool_manager"></a>
+
+# Module `spoon_ai.tools.tool_manager`
+
+<a id="spoon_ai.tools.tool_manager.ToolManager"></a>
+
+## `ToolManager` Objects
+
+```python
+class ToolManager()
+```
+
+<a id="spoon_ai.tools.tool_manager.ToolManager.reindex"></a>
+
+#### `reindex`
+
+```python
+def reindex() -> None
+```
+
+Rebuild the internal name-&gt;tool mapping. Useful if tools have been renamed dynamically.
 
 <a id="spoon_ai.tools.hitl"></a>
 
@@ -1082,424 +1236,270 @@ Default description formatter for tool calls.
 
 Can be used as a base for custom description functions.
 
-<a id="spoon_ai.tools.tool_manager"></a>
+<a id="spoon_ai.tools.neofs_tools"></a>
 
-# Module `spoon_ai.tools.tool_manager`
+# Module `spoon_ai.tools.neofs_tools`
 
-<a id="spoon_ai.tools.tool_manager.ToolManager"></a>
+NeoFS Tools for spoon_ai framework
 
-## `ToolManager` Objects
+Simple wrappers around NeoFS client methods.
+Tools do NOT auto-create bearer tokens - Agent manages tokens.
+All parameters map directly to client method parameters.
 
-```python
-class ToolManager()
-```
+<a id="spoon_ai.tools.neofs_tools.get_shared_neofs_client"></a>
 
-<a id="spoon_ai.tools.tool_manager.ToolManager.reindex"></a>
-
-#### `reindex`
+#### `get_shared_neofs_client`
 
 ```python
-def reindex() -> None
+def get_shared_neofs_client() -> NeoFSClient
 ```
 
-Rebuild the internal name-&gt;tool mapping. Useful if tools have been renamed dynamically.
+Get shared NeoFSClient instance for all NeoFS tools.
 
-<a id="spoon_ai.tools.turnkey_tools"></a>
+Returns the same client instance across all tool calls to ensure
+bearer token authentication works correctly.
 
-# Module `spoon_ai.tools.turnkey_tools`
+<a id="spoon_ai.tools.neofs_tools.CreateBearerTokenTool"></a>
 
-Turnkey Tools - Secure Blockchain Operations
-
-This module provides Turnkey SDK tools for secure blockchain operations including:
-- Transaction signing and broadcasting
-- Message and EIP-712 signing
-- Multi-account management
-- Activity audit and monitoring
-- Wallet and account operations
-
-<a id="spoon_ai.tools.turnkey_tools.TurnkeyBaseTool"></a>
-
-## `TurnkeyBaseTool` Objects
+## `CreateBearerTokenTool` Objects
 
 ```python
-class TurnkeyBaseTool(BaseTool)
+class CreateBearerTokenTool(BaseTool)
 ```
 
-Base class for Turnkey tools with shared client initialization
+Create a bearer token for NeoFS operations
 
-<a id="spoon_ai.tools.turnkey_tools.TurnkeyBaseTool.client"></a>
+<a id="spoon_ai.tools.neofs_tools.CreateContainerTool"></a>
 
-#### `client`
+## `CreateContainerTool` Objects
 
 ```python
-@property
-def client()
+class CreateContainerTool(BaseTool)
 ```
 
-Lazy initialization of Turnkey client
+Create a NeoFS container
 
-<a id="spoon_ai.tools.turnkey_tools.SignEVMTransactionTool"></a>
+<a id="spoon_ai.tools.neofs_tools.UploadObjectTool"></a>
 
-## `SignEVMTransactionTool` Objects
+## `UploadObjectTool` Objects
 
 ```python
-class SignEVMTransactionTool(TurnkeyBaseTool)
+class UploadObjectTool(BaseTool)
 ```
 
-Sign EVM transaction using Turnkey
+Upload object to container
 
-<a id="spoon_ai.tools.turnkey_tools.SignEVMTransactionTool.execute"></a>
+<a id="spoon_ai.tools.neofs_tools.DownloadObjectByIdTool"></a>
 
-#### `execute`
+## `DownloadObjectByIdTool` Objects
 
 ```python
-async def execute(sign_with: str, unsigned_tx: str, **kwargs) -> str
+class DownloadObjectByIdTool(BaseTool)
 ```
 
-Sign EVM transaction
+Download object by ID
 
-<a id="spoon_ai.tools.turnkey_tools.SignMessageTool"></a>
+<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByIdTool"></a>
 
-## `SignMessageTool` Objects
+## `GetObjectHeaderByIdTool` Objects
 
 ```python
-class SignMessageTool(TurnkeyBaseTool)
+class GetObjectHeaderByIdTool(BaseTool)
 ```
 
-Sign arbitrary message using Turnkey
+Get object header by ID
 
-<a id="spoon_ai.tools.turnkey_tools.SignMessageTool.execute"></a>
+<a id="spoon_ai.tools.neofs_tools.DownloadObjectByAttributeTool"></a>
 
-#### `execute`
+## `DownloadObjectByAttributeTool` Objects
 
 ```python
-async def execute(sign_with: str,
-                  message: str,
-                  use_keccak256: bool = True,
-                  **kwargs) -> str
+class DownloadObjectByAttributeTool(BaseTool)
 ```
 
-Sign message
+Download object by attribute
 
-<a id="spoon_ai.tools.turnkey_tools.SignTypedDataTool"></a>
+<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByAttributeTool"></a>
 
-## `SignTypedDataTool` Objects
+## `GetObjectHeaderByAttributeTool` Objects
 
 ```python
-class SignTypedDataTool(TurnkeyBaseTool)
+class GetObjectHeaderByAttributeTool(BaseTool)
 ```
 
-Sign EIP-712 structured data using Turnkey
+Get object header by attribute
 
-<a id="spoon_ai.tools.turnkey_tools.SignTypedDataTool.execute"></a>
+<a id="spoon_ai.tools.neofs_tools.DeleteObjectTool"></a>
 
-#### `execute`
+## `DeleteObjectTool` Objects
 
 ```python
-async def execute(sign_with: str, typed_data: dict, **kwargs) -> str
+class DeleteObjectTool(BaseTool)
 ```
 
-Sign EIP-712 typed data
+Delete an object
 
-<a id="spoon_ai.tools.turnkey_tools.BroadcastTransactionTool"></a>
+<a id="spoon_ai.tools.neofs_tools.SearchObjectsTool"></a>
 
-## `BroadcastTransactionTool` Objects
+## `SearchObjectsTool` Objects
 
 ```python
-class BroadcastTransactionTool(TurnkeyBaseTool)
+class SearchObjectsTool(BaseTool)
 ```
 
-Broadcast signed transaction to blockchain
+Search objects in container
 
-<a id="spoon_ai.tools.turnkey_tools.BroadcastTransactionTool.execute"></a>
+<a id="spoon_ai.tools.neofs_tools.SetContainerEaclTool"></a>
 
-#### `execute`
+## `SetContainerEaclTool` Objects
 
 ```python
-async def execute(signed_tx: str, rpc_url: str = None, **kwargs) -> str
+class SetContainerEaclTool(BaseTool)
 ```
 
-Broadcast transaction
+Set eACL for container
 
-<a id="spoon_ai.tools.turnkey_tools.ListWalletsTool"></a>
+<a id="spoon_ai.tools.neofs_tools.GetContainerEaclTool"></a>
 
-## `ListWalletsTool` Objects
+## `GetContainerEaclTool` Objects
 
 ```python
-class ListWalletsTool(TurnkeyBaseTool)
+class GetContainerEaclTool(BaseTool)
 ```
 
-List all wallets in the organization
+Get eACL for container
 
-<a id="spoon_ai.tools.turnkey_tools.ListWalletsTool.execute"></a>
+<a id="spoon_ai.tools.neofs_tools.ListContainersTool"></a>
 
-#### `execute`
+## `ListContainersTool` Objects
 
 ```python
-async def execute(**kwargs) -> str
+class ListContainersTool(BaseTool)
 ```
 
-List wallets
+List all containers
 
-<a id="spoon_ai.tools.turnkey_tools.ListWalletAccountsTool"></a>
+<a id="spoon_ai.tools.neofs_tools.GetContainerInfoTool"></a>
 
-## `ListWalletAccountsTool` Objects
+## `GetContainerInfoTool` Objects
 
 ```python
-class ListWalletAccountsTool(TurnkeyBaseTool)
+class GetContainerInfoTool(BaseTool)
 ```
 
-List accounts for a specific wallet
+Get container info
 
-<a id="spoon_ai.tools.turnkey_tools.ListWalletAccountsTool.execute"></a>
+<a id="spoon_ai.tools.neofs_tools.DeleteContainerTool"></a>
 
-#### `execute`
+## `DeleteContainerTool` Objects
 
 ```python
-async def execute(wallet_id: str,
-                  limit: str = None,
-                  before: str = None,
-                  after: str = None,
-                  **kwargs) -> str
+class DeleteContainerTool(BaseTool)
 ```
 
-List wallet accounts
+Delete container
 
-<a id="spoon_ai.tools.turnkey_tools.GetActivityTool"></a>
+<a id="spoon_ai.tools.neofs_tools.GetNetworkInfoTool"></a>
 
-## `GetActivityTool` Objects
+## `GetNetworkInfoTool` Objects
 
 ```python
-class GetActivityTool(TurnkeyBaseTool)
+class GetNetworkInfoTool(BaseTool)
 ```
 
-Get activity details by ID
+Get network info
 
-<a id="spoon_ai.tools.turnkey_tools.GetActivityTool.execute"></a>
+<a id="spoon_ai.tools.neofs_tools.GetBalanceTool"></a>
 
-#### `execute`
+## `GetBalanceTool` Objects
 
 ```python
-async def execute(activity_id: str, **kwargs) -> str
+class GetBalanceTool(BaseTool)
 ```
 
-Get activity details
+Get balance for an address
 
-<a id="spoon_ai.tools.turnkey_tools.ListActivitiesTool"></a>
+<a id="spoon_ai.tools.rag_tools"></a>
 
-## `ListActivitiesTool` Objects
+# Module `spoon_ai.tools.rag_tools`
+
+<a id="spoon_ai.tools.x402_payment"></a>
+
+# Module `spoon_ai.tools.x402_payment`
+
+<a id="spoon_ai.tools.x402_payment.X402PaymentHeaderTool"></a>
+
+## `X402PaymentHeaderTool` Objects
 
 ```python
-class ListActivitiesTool(TurnkeyBaseTool)
+class X402PaymentHeaderTool(BaseTool)
 ```
 
-List recent activities in the organization
+Create a signed X-PAYMENT header for a given resource.
 
-<a id="spoon_ai.tools.turnkey_tools.ListActivitiesTool.execute"></a>
+<a id="spoon_ai.tools.x402_payment.X402PaywalledRequestTool"></a>
 
-#### `execute`
+## `X402PaywalledRequestTool` Objects
 
 ```python
-async def execute(limit: str = "10",
-                  before: str = None,
-                  after: str = None,
-                  filter_by_status: list = None,
-                  filter_by_type: list = None,
-                  **kwargs) -> str
+class X402PaywalledRequestTool(BaseTool)
 ```
 
-List activities
+Fetch a paywalled resource, handling the x402 402 negotiation automatically.
 
-<a id="spoon_ai.tools.turnkey_tools.WhoAmITool"></a>
+<a id="spoon_ai.tools.mcp_tool"></a>
 
-## `WhoAmITool` Objects
+# Module `spoon_ai.tools.mcp_tool`
+
+<a id="spoon_ai.tools.mcp_tool.MCPTool"></a>
+
+## `MCPTool` Objects
 
 ```python
-class WhoAmITool(TurnkeyBaseTool)
+class MCPTool(BaseTool, MCPClientMixin)
 ```
 
-Get organization information
+<a id="spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool"></a>
 
-<a id="spoon_ai.tools.turnkey_tools.WhoAmITool.execute"></a>
-
-#### `execute`
+#### `call_mcp_tool`
 
 ```python
-async def execute(**kwargs) -> str
+async def call_mcp_tool(tool_name: str, **kwargs)
 ```
 
-Get organization info
+Override the mixin method to add tool-specific error handling.
 
-<a id="spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool"></a>
+<a id="spoon_ai.tools.mcp_tool.MCPTool.list_available_tools"></a>
 
-## `BuildUnsignedEIP1559TxTool` Objects
+#### `list_available_tools`
 
 ```python
-class BuildUnsignedEIP1559TxTool(BaseTool)
+async def list_available_tools() -> list
 ```
 
-Build unsigned EIP-1559 transaction (supports NeoX)
+List available tools from the MCP server.
 
-<a id="spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool.execute"></a>
+<a id="spoon_ai.tools.base"></a>
 
-#### `execute`
+# Module `spoon_ai.tools.base`
+
+<a id="spoon_ai.tools.base.reset_secrets_initialization"></a>
+
+#### `reset_secrets_initialization`
 
 ```python
-async def execute(from_addr: str,
-                  to_addr: str = None,
-                  value_wei: str = "0",
-                  data_hex: str = "0x",
-                  priority_gwei: str = "1",
-                  max_fee_gwei: str = None,
-                  gas_limit: str = None,
-                  rpc_url: str = None,
-                  **kwargs) -> str
+def reset_secrets_initialization() -> None
 ```
 
-Build unsigned transaction (auto-detects NeoX)
+Reset the initialization flag. Useful for testing.
 
-<a id="spoon_ai.tools.turnkey_tools.ListAllAccountsTool"></a>
+<a id="spoon_ai.tools.base.ToolFailure"></a>
 
-## `ListAllAccountsTool` Objects
+## `ToolFailure` Objects
 
 ```python
-class ListAllAccountsTool(TurnkeyBaseTool)
+class ToolFailure(Exception)
 ```
 
-List all accounts across all wallets in the organization
-
-<a id="spoon_ai.tools.turnkey_tools.ListAllAccountsTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(limit: str = "50", **kwargs) -> str
-```
-
-List all accounts across all wallets
-
-<a id="spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool"></a>
-
-## `BatchSignTransactionsTool` Objects
-
-```python
-class BatchSignTransactionsTool(TurnkeyBaseTool)
-```
-
-Batch sign transactions for multiple accounts
-
-<a id="spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(to_address: str,
-                  value_wei: str,
-                  data_hex: str = "0x",
-                  max_accounts: str = "3",
-                  enable_broadcast: bool = False,
-                  rpc_url: str = None,
-                  **kwargs) -> str
-```
-
-Batch sign transactions for multiple accounts
-
-<a id="spoon_ai.tools.turnkey_tools.CreateWalletTool"></a>
-
-## `CreateWalletTool` Objects
-
-```python
-class CreateWalletTool(TurnkeyBaseTool)
-```
-
-Create a new wallet
-
-<a id="spoon_ai.tools.turnkey_tools.CreateWalletTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(wallet_name: str,
-                  accounts_json: str = None,
-                  mnemonic_length: str = "24",
-                  **kwargs) -> str
-```
-
-Create a new wallet
-
-<a id="spoon_ai.tools.turnkey_tools.GetWalletTool"></a>
-
-## `GetWalletTool` Objects
-
-```python
-class GetWalletTool(TurnkeyBaseTool)
-```
-
-Get wallet information by wallet ID
-
-<a id="spoon_ai.tools.turnkey_tools.GetWalletTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(wallet_id: str, **kwargs) -> str
-```
-
-Get wallet information
-
-<a id="spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool"></a>
-
-## `CreateWalletAccountsTool` Objects
-
-```python
-class CreateWalletAccountsTool(TurnkeyBaseTool)
-```
-
-Add accounts to an existing wallet
-
-<a id="spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(wallet_id: str, accounts_json: str, **kwargs) -> str
-```
-
-Add accounts to existing wallet
-
-<a id="spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool"></a>
-
-## `CompleteTransactionWorkflowTool` Objects
-
-```python
-class CompleteTransactionWorkflowTool(TurnkeyBaseTool)
-```
-
-Complete transaction workflow: build, sign, and optionally broadcast
-
-<a id="spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(sign_with: str,
-                  to_address: str,
-                  value_wei: str,
-                  data_hex: str = "0x",
-                  enable_broadcast: bool = False,
-                  rpc_url: str = None,
-                  **kwargs) -> str
-```
-
-Complete transaction workflow
-
-<a id="spoon_ai.tools.turnkey_tools.get_turnkey_tools"></a>
-
-#### `get_turnkey_tools`
-
-```python
-def get_turnkey_tools() -> List[BaseTool]
-```
-
-Get all Turnkey tools
+Exception to indicate a tool execution failure.
 
