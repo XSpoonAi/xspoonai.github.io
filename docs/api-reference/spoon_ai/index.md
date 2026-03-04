@@ -492,10 +492,21 @@ title: spoon_ai
 * [spoon\_ai.payments.server](#spoon_ai.payments.server)
   * [create\_paywalled\_router](#spoon_ai.payments.server.create_paywalled_router)
 * [spoon\_ai.rag.index](#spoon_ai.rag.index)
+* [spoon\_ai.rag.parser](#spoon_ai.rag.parser)
+* [spoon\_ai.rag.parser.unstructured\_parser](#spoon_ai.rag.parser.unstructured_parser)
+  * [ParsedDocument](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument)
+    * [filename](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filename)
+    * [filepath](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filepath)
+    * [elements](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument.elements)
+  * [UnstructuredParser](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser)
+    * [\_\_init\_\_](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.__init__)
+    * [parse\_url](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_url)
+    * [parse\_file](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_file)
+    * [parse\_directory](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_directory)
+    * [parse](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse)
 * [spoon\_ai.rag.embeddings](#spoon_ai.rag.embeddings)
   * [HashEmbeddingClient](#spoon_ai.rag.embeddings.HashEmbeddingClient)
   * [get\_embedding\_client](#spoon_ai.rag.embeddings.get_embedding_client)
-* [spoon\_ai.rag.loader](#spoon_ai.rag.loader)
 * [spoon\_ai.rag.vectorstores.base](#spoon_ai.rag.vectorstores.base)
   * [VectorStore](#spoon_ai.rag.vectorstores.base.VectorStore)
     * [query](#spoon_ai.rag.vectorstores.base.VectorStore.query)
@@ -509,9 +520,19 @@ title: spoon_ai
   * [get\_vector\_store](#spoon_ai.rag.vectorstores.registry.get_vector_store)
 * [spoon\_ai.rag](#spoon_ai.rag)
 * [spoon\_ai.rag.qa](#spoon_ai.rag.qa)
+* [spoon\_ai.rag.chunk](#spoon_ai.rag.chunk)
+  * [recursive\_chunk](#spoon_ai.rag.chunk.recursive_chunk)
+  * [simple\_chunk](#spoon_ai.rag.chunk.simple_chunk)
+  * [paragraph\_chunk](#spoon_ai.rag.chunk.paragraph_chunk)
+  * [chunk\_text](#spoon_ai.rag.chunk.chunk_text)
 * [spoon\_ai.rag.config](#spoon_ai.rag.config)
+  * [ensure\_dotenv](#spoon_ai.rag.config.ensure_dotenv)
   * [RagConfig](#spoon_ai.rag.config.RagConfig)
     * [backend](#spoon_ai.rag.config.RagConfig.backend)
+    * [embeddings\_model](#spoon_ai.rag.config.RagConfig.embeddings_model)
+    * [retrieval\_overfetch\_factor](#spoon_ai.rag.config.RagConfig.retrieval_overfetch_factor)
+    * [rrf\_k](#spoon_ai.rag.config.RagConfig.rrf_k)
+    * [openai\_embeddings\_model](#spoon_ai.rag.config.RagConfig.openai_embeddings_model)
 * [spoon\_ai.rag.retriever](#spoon_ai.rag.retriever)
 * [spoon\_ai.memory.mem0\_client](#spoon_ai.memory.mem0_client)
   * [SpoonMem0](#spoon_ai.memory.mem0_client.SpoonMem0)
@@ -723,6 +744,7 @@ title: spoon_ai
     * [discover\_skills](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills)
 * [spoon\_ai.agents.base](#spoon_ai.agents.base)
   * [ThreadSafeOutputQueue](#spoon_ai.agents.base.ThreadSafeOutputQueue)
+    * [put\_nowait](#spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait)
     * [get](#spoon_ai.agents.base.ThreadSafeOutputQueue.get)
   * [BaseAgent](#spoon_ai.agents.base.BaseAgent)
     * [add\_message](#spoon_ai.agents.base.BaseAgent.add_message)
@@ -1225,11 +1247,15 @@ title: spoon_ai
 * [spoon\_ai.tools.mcp\_tool](#spoon_ai.tools.mcp_tool)
   * [MCPTool](#spoon_ai.tools.mcp_tool.MCPTool)
     * [call\_mcp\_tool](#spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool)
+    * [expand\_server\_tools](#spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools)
     * [list\_available\_tools](#spoon_ai.tools.mcp_tool.MCPTool.list_available_tools)
 * [spoon\_ai.tools](#spoon_ai.tools)
 * [spoon\_ai.tools.hitl](#spoon_ai.tools.hitl)
   * [InterruptOnConfig](#spoon_ai.tools.hitl.InterruptOnConfig)
   * [ApprovalDecision](#spoon_ai.tools.hitl.ApprovalDecision)
+  * [ApprovalResponse](#spoon_ai.tools.hitl.ApprovalResponse)
+    * [\_\_post\_init\_\_](#spoon_ai.tools.hitl.ApprovalResponse.__post_init__)
+  * [normalize\_decision](#spoon_ai.tools.hitl.normalize_decision)
   * [DecisionInput](#spoon_ai.tools.hitl.DecisionInput)
     * [args](#spoon_ai.tools.hitl.DecisionInput.args)
     * [reason](#spoon_ai.tools.hitl.DecisionInput.reason)
@@ -1270,6 +1296,7 @@ title: spoon_ai
     * [set\_resume\_data](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.set_resume_data)
     * [before\_agent](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.before_agent)
     * [awrap\_model\_call](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.awrap_model_call)
+    * [awrap\_tool\_call](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.awrap_tool_call)
     * [get\_interrupt\_config](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.get_interrupt_config)
   * [create\_hitl\_middleware](#spoon_ai.tools.hitl.create_hitl_middleware)
   * [format\_tool\_call\_description](#spoon_ai.tools.hitl.format_tool_call_description)
@@ -7975,6 +8002,157 @@ Build a FastAPI router that protects agent invocations behind an x402 paywall.
 
 # Module `spoon_ai.rag.index`
 
+<a id="spoon_ai.rag.parser"></a>
+
+# Module `spoon_ai.rag.parser`
+
+<a id="spoon_ai.rag.parser.unstructured_parser"></a>
+
+# Module `spoon_ai.rag.parser.unstructured_parser`
+
+Unstructured-based document parser for RAG system.
+
+Supports loading documents from:
+- URLs (http/https)
+- Directory paths (recursive)
+- Single file paths
+
+<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument"></a>
+
+## `ParsedDocument` Objects
+
+```python
+@dataclass
+class ParsedDocument()
+```
+
+Represents a parsed document with its elements.
+
+<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filename"></a>
+
+#### `filename`
+
+Original filename (e.g., "README.md")
+
+<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filepath"></a>
+
+#### `filepath`
+
+Full file path or URL
+
+<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument.elements"></a>
+
+#### `elements`
+
+unstructured parsed elements
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser"></a>
+
+## `UnstructuredParser` Objects
+
+```python
+class UnstructuredParser()
+```
+
+Parser using unstructured library for document parsing.
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(ignore_dirs: Optional[set] = None)
+```
+
+Initialize the parser.
+
+**Arguments**:
+
+- `ignore_dirs` - Set of directory names to ignore when traversing
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_url"></a>
+
+#### `parse_url`
+
+```python
+def parse_url(url: str) -> Optional[ParsedDocument]
+```
+
+Parse a document from URL.
+
+Supports:
+- GitHub URLs (auto-converts to raw)
+- Plain text/code files (direct download)
+- HTML pages (uses Jina Reader or unstructured)
+
+**Arguments**:
+
+- `url` - URL to fetch and parse
+  
+
+**Returns**:
+
+  ParsedDocument or None if parsing fails
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_file"></a>
+
+#### `parse_file`
+
+```python
+def parse_file(path: Path) -> Optional[ParsedDocument]
+```
+
+Parse a single file using unstructured partition.
+
+**Arguments**:
+
+- `path` - Path to the file
+  
+
+**Returns**:
+
+  ParsedDocument or None if parsing fails
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_directory"></a>
+
+#### `parse_directory`
+
+```python
+def parse_directory(dir_path: Path) -> List[ParsedDocument]
+```
+
+Parse all files in a directory recursively.
+
+Skips directories in self.ignore_dirs.
+
+**Arguments**:
+
+- `dir_path` - Directory path to traverse
+  
+
+**Returns**:
+
+  List of ParsedDocument
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse"></a>
+
+#### `parse`
+
+```python
+def parse(paths_or_urls: Iterable[str]) -> List[ParsedDocument]
+```
+
+Parse documents from multiple sources (URLs, directories, files).
+
+**Arguments**:
+
+- `paths_or_urls` - Iterable of URLs, directory paths, or file paths
+  
+
+**Returns**:
+
+  List of ParsedDocument
+
 <a id="spoon_ai.rag.embeddings"></a>
 
 # Module `spoon_ai.rag.embeddings`
@@ -8012,10 +8190,6 @@ Provider selection rules:
 - provider is "openai" / "openrouter" / "gemini" / "ollama": force that provider (uses core env config when applicable).
 - provider is "openai_compatible": use OpenAI-compatible embeddings via RAG_EMBEDDINGS_* env vars.
 - otherwise: deterministic hash embeddings (offline).
-
-<a id="spoon_ai.rag.loader"></a>
-
-# Module `spoon_ai.rag.loader`
 
 <a id="spoon_ai.rag.vectorstores.base"></a>
 
@@ -8103,9 +8277,131 @@ Backends:
 
 # Module `spoon_ai.rag.qa`
 
+<a id="spoon_ai.rag.chunk"></a>
+
+# Module `spoon_ai.rag.chunk`
+
+Recursive chunking module for RAG system.
+
+Provides element-aware chunking that:
+- Keeps atomic elements (tables, code, formulas) intact
+- Starts new chunks at title/header elements
+- Splits long text elements by paragraphs
+- Adds overlap between chunks
+
+<a id="spoon_ai.rag.chunk.recursive_chunk"></a>
+
+#### `recursive_chunk`
+
+```python
+def recursive_chunk(elements: List,
+                    chunk_size: int = 1200,
+                    overlap: int = 120) -> List[str]
+```
+
+Recursively chunk elements based on element types with overlap.
+
+**Arguments**:
+
+- `elements` - List of unstructured elements
+- `chunk_size` - Maximum characters per chunk
+- `overlap` - Overlap characters between chunks
+  
+
+**Returns**:
+
+  List of chunk texts (strings)
+
+<a id="spoon_ai.rag.chunk.simple_chunk"></a>
+
+#### `simple_chunk`
+
+```python
+def simple_chunk(text: str,
+                 chunk_size: int = 1200,
+                 overlap: int = 120) -> List[str]
+```
+
+Simple sliding window chunking with overlap.
+
+**Arguments**:
+
+- `text` - Text to chunk
+- `chunk_size` - Maximum characters per chunk
+- `overlap` - Overlap characters between chunks
+  
+
+**Returns**:
+
+  List of chunk texts
+
+<a id="spoon_ai.rag.chunk.paragraph_chunk"></a>
+
+#### `paragraph_chunk`
+
+```python
+def paragraph_chunk(text: str,
+                    chunk_size: int = 1200,
+                    overlap: int = 120) -> List[str]
+```
+
+Paragraph-based chunking with overlap.
+
+**Arguments**:
+
+- `text` - Text to chunk
+- `chunk_size` - Maximum characters per chunk
+- `overlap` - Overlap characters between chunks
+  
+
+**Returns**:
+
+  List of chunk texts
+
+<a id="spoon_ai.rag.chunk.chunk_text"></a>
+
+#### `chunk_text`
+
+```python
+def chunk_text(text: str,
+               chunk_size: int = 1200,
+               overlap: int = 120,
+               chunk_method: str = 'recursive',
+               elements: Optional[List] = None) -> List[str]
+```
+
+Chunk text using specified method.
+
+**Arguments**:
+
+- `text` - Text to chunk
+- `chunk_size` - Maximum characters per chunk
+- `overlap` - Overlap characters between chunks
+- `chunk_method` - Chunking method - 'simple', 'paragraph', or 'recursive'
+- `elements` - Optional unstructured elements (required for 'recursive')
+  
+
+**Returns**:
+
+  List of chunk texts
+
 <a id="spoon_ai.rag.config"></a>
 
 # Module `spoon_ai.rag.config`
+
+<a id="spoon_ai.rag.config.ensure_dotenv"></a>
+
+#### `ensure_dotenv`
+
+```python
+def ensure_dotenv() -> None
+```
+
+Load .env file once if python-dotenv is available.
+
+Does NOT override existing environment variables (e.g. those injected by
+CI/CD).  Call this explicitly before reading env-based config rather than
+relying on import-time side effects.
 
 <a id="spoon_ai.rag.config.RagConfig"></a>
 
@@ -8121,6 +8417,35 @@ class RagConfig()
 #### `backend`
 
 faiss|pinecone|qdrant|chroma
+
+<a id="spoon_ai.rag.config.RagConfig.embeddings_model"></a>
+
+#### `embeddings_model`
+
+Generic model name for all embedding providers
+
+<a id="spoon_ai.rag.config.RagConfig.retrieval_overfetch_factor"></a>
+
+#### `retrieval_overfetch_factor`
+
+overfetch multiplier: max(top_k * factor, 20)
+
+<a id="spoon_ai.rag.config.RagConfig.rrf_k"></a>
+
+#### `rrf_k`
+
+RRF smoothing constant
+
+<a id="spoon_ai.rag.config.RagConfig.openai_embeddings_model"></a>
+
+#### `openai_embeddings_model`
+
+```python
+@property
+def openai_embeddings_model() -> str
+```
+
+Deprecated: use 'embeddings_model' instead. Kept for backward compatibility.
 
 <a id="spoon_ai.rag.retriever"></a>
 
@@ -11548,19 +11873,23 @@ Initializes both SpoonReactAI and skill system components.
 #### `run`
 
 ```python
-async def run(request: Optional[str] = None) -> str
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None) -> str
 ```
 
-Execute agent with skill auto-activation.
+Execute agent with per-turn auto skill activation.
 
 Flow:
-1. Auto-detect and activate relevant skills (if enabled)
-2. Inject skill context into system prompt
-3. Execute parent SpoonReactAI.run()
+1. Auto-detect and activate relevant skills (ephemeral for this run)
+2. Sync skill tools into available_tools
+3. Refresh base prompts with current tools
+4. Execute parent SpoonReactAI.run()
+5. Auto-deactivate skills activated in this turn
 
 **Arguments**:
 
 - `request` - User request/message
+- `timeout` - Optional timeout in seconds
   
 
 **Returns**:
@@ -11621,12 +11950,22 @@ class ThreadSafeOutputQueue()
 
 Thread-safe output queue with fair access and timeout protection
 
+<a id="spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait"></a>
+
+#### `put_nowait`
+
+```python
+def put_nowait(item: Any) -> None
+```
+
+Non-blocking put - delegates to the underlying asyncio.Queue.
+
 <a id="spoon_ai.agents.base.ThreadSafeOutputQueue.get"></a>
 
 #### `get`
 
 ```python
-async def get(timeout: Optional[float] = 30.0) -> Any
+async def get(timeout: float | None = 30.0) -> Any
 ```
 
 Get item with timeout and fair access
@@ -11648,10 +11987,10 @@ Thread-safe base class for all agents with proper concurrency handling.
 ```python
 async def add_message(role: Literal["user", "assistant", "tool"],
                       content: MessageContent,
-                      tool_call_id: Optional[str] = None,
-                      tool_calls: Optional[List[ToolCall]] = None,
-                      tool_name: Optional[str] = None,
-                      timeout: Optional[float] = None) -> None
+                      tool_call_id: str | None = None,
+                      tool_calls: list[ToolCall] | None = None,
+                      tool_name: str | None = None,
+                      timeout: float | None = None) -> None
 ```
 
 Thread-safe message addition with timeout protection.
@@ -11676,12 +12015,12 @@ Supports both text-only and multimodal content:
 ```python
 async def add_message_with_image(role: Literal["user", "assistant"],
                                  text: str,
-                                 image_url: Optional[str] = None,
-                                 image_data: Optional[str] = None,
+                                 image_url: str | None = None,
+                                 image_data: str | None = None,
                                  image_media_type: str = "image/png",
                                  detail: Literal["auto", "low",
                                                  "high"] = "auto",
-                                 timeout: Optional[float] = None) -> None
+                                 timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with an image.
@@ -11724,8 +12063,8 @@ Supports both URL-based and base64-encoded images.
 async def add_message_with_pdf(role: Literal["user", "assistant"],
                                text: str,
                                pdf_data: str,
-                               filename: Optional[str] = None,
-                               timeout: Optional[float] = None) -> None
+                               filename: str | None = None,
+                               timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with a PDF document.
@@ -11758,8 +12097,8 @@ async def add_message_with_document(role: Literal["user", "assistant"],
                                     text: str,
                                     document_data: str,
                                     media_type: str = "application/pdf",
-                                    filename: Optional[str] = None,
-                                    timeout: Optional[float] = None) -> None
+                                    filename: str | None = None,
+                                    timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with a document.
@@ -11795,7 +12134,7 @@ Supports various document types including PDF, text, etc.
 async def add_message_with_pdf_file(role: Literal["user", "assistant"],
                                     text: str,
                                     file_path: str,
-                                    timeout: Optional[float] = None) -> None
+                                    timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with a PDF file from disk.
@@ -11827,7 +12166,7 @@ async def add_message_with_image_file(role: Literal["user", "assistant"],
                                       text: str,
                                       file_path: str,
                                       detail: str = "auto",
-                                      timeout: Optional[float] = None) -> None
+                                      timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with an image file from disk.
@@ -11859,7 +12198,7 @@ Automatically handles base64 encoding and MIME type detection.
 async def add_message_with_file(role: Literal["user", "assistant"],
                                 text: str,
                                 file_path: str,
-                                timeout: Optional[float] = None) -> None
+                                timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with any supported file from disk.
@@ -11887,8 +12226,7 @@ Supports: PDF, images (png, jpg, gif, webp), text files.
 
 ```python
 @asynccontextmanager
-async def state_context(new_state: AgentState,
-                        timeout: Optional[float] = None)
+async def state_context(new_state: AgentState, timeout: float | None = None)
 ```
 
 Thread-safe state context manager with deadlock prevention.
@@ -11901,8 +12239,7 @@ false timeouts during network calls.
 #### `run`
 
 ```python
-async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None) -> str
+async def run(request: str | None = None, timeout: float | None = None) -> str
 ```
 
 Thread-safe run method with proper concurrency control, callback support, and Plan-Act-Reflect phases.
@@ -11912,7 +12249,7 @@ Thread-safe run method with proper concurrency control, callback support, and Pl
 #### `step`
 
 ```python
-async def step(run_id: Optional[uuid.UUID] = None) -> str
+async def step(run_id: uuid.UUID | None = None) -> str
 ```
 
 Override this method in subclasses - now with step-level locking and callback support.
@@ -12005,7 +12342,7 @@ Thread-safe chat history saving
 #### `stream`
 
 ```python
-async def stream(timeout: Optional[float] = None)
+async def stream(timeout: float | None = None)
 ```
 
 Thread-safe streaming with proper cleanup and timeout
@@ -12017,9 +12354,9 @@ Thread-safe streaming with proper cleanup and timeout
 ```python
 async def process_mcp_message(content: Any,
                               sender: str,
-                              message: Dict[str, Any],
+                              message: dict[str, Any],
                               agent_id: str,
-                              timeout: Optional[float] = None)
+                              timeout: float | None = None)
 ```
 
 Thread-safe MCP message processing with timeout protection
@@ -12074,7 +12411,7 @@ Set value in agent state (for middleware access).
 #### `update_agent_state`
 
 ```python
-def update_agent_state(updates: Dict[str, Any]) -> None
+def update_agent_state(updates: dict[str, Any]) -> None
 ```
 
 Bulk update agent state (for middleware access).
@@ -12088,7 +12425,7 @@ Bulk update agent state (for middleware access).
 #### `get_diagnostics`
 
 ```python
-def get_diagnostics() -> Dict[str, Any]
+def get_diagnostics() -> dict[str, Any]
 ```
 
 Get diagnostic information about the agent's state
@@ -12847,7 +13184,8 @@ Initialize async components and subscribe to topics
 #### `run`
 
 ```python
-async def run(request: Optional[str] = None) -> str
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None) -> str
 ```
 
 Ensure prompts reflect current tools before running.
@@ -13580,7 +13918,8 @@ Markdown content here...
 #### `__init__`
 
 ```python
-def __init__(additional_paths: Optional[List[Path]] = None)
+def __init__(additional_paths: Optional[List[Path]] = None,
+             include_default_paths: bool = True)
 ```
 
 Initialize loader with skill search paths.
@@ -14173,7 +14512,10 @@ class ScriptTool(BaseTool)
 Tool wrapper for skill scripts.
 
 Exposes a SkillScript as a callable tool that agents can invoke.
-The AI decides what input to provide - there's no fixed parameter schema.
+When the script defines an ``input_schema``, the tool parameters are
+derived from that schema so the LLM receives a structured contract.
+Otherwise a generic ``input`` string parameter is used for backward
+compatibility.
 
 <a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
 
@@ -14203,10 +14545,15 @@ async def execute(input: Optional[str] = None, **kwargs) -> str
 
 Execute the script.
 
+When the script declares an ``input_schema``, the LLM's structured
+kwargs are serialized to JSON and piped to stdin.  For legacy scripts
+that only declare a generic ``input`` string, the raw value is passed
+through as-is.
+
 **Arguments**:
 
-- `input` - Optional input text to pass to script via stdin
-- `**kwargs` - Additional arguments (ignored)
+- `input` - Optional input text (legacy path)
+- `**kwargs` - Structured arguments matching input_schema
   
 
 **Returns**:
@@ -14287,7 +14634,8 @@ Features:
 def __init__(skill_paths: Optional[List[str]] = None,
              llm: Optional["LLMManager"] = None,
              auto_discover: bool = True,
-             scripts_enabled: bool = True)
+             scripts_enabled: bool = True,
+             include_default_paths: bool = True)
 ```
 
 Initialize the skill manager.
@@ -16176,14 +16524,14 @@ Validate configuration after initialization.
 #### `model_dump`
 
 ```python
-def model_dump() -> Dict[str, Any]
+def model_dump() -> dict[str, Any]
 ```
 
 Convert the configuration to a dictionary.
 
 **Returns**:
 
-  Dict[str, Any]: Configuration as dictionary
+  dict[str, Any]: Configuration as dictionary
 
 <a id="spoon_ai.llm.config.ConfigurationManager"></a>
 
@@ -16272,56 +16620,56 @@ Get default provider from configuration with intelligent selection.
 #### `get_fallback_chain`
 
 ```python
-def get_fallback_chain() -> List[str]
+def get_fallback_chain() -> list[str]
 ```
 
 Get fallback chain from configuration.
 
 **Returns**:
 
-- `List[str]` - List of provider names in fallback order
+- `list[str]` - List of provider names in fallback order
 
 <a id="spoon_ai.llm.config.ConfigurationManager.list_configured_providers"></a>
 
 #### `list_configured_providers`
 
 ```python
-def list_configured_providers() -> List[str]
+def list_configured_providers() -> list[str]
 ```
 
 List all configured providers.
 
 **Returns**:
 
-- `List[str]` - List of provider names that have configuration
+- `list[str]` - List of provider names that have configuration
 
 <a id="spoon_ai.llm.config.ConfigurationManager.get_available_providers_by_priority"></a>
 
 #### `get_available_providers_by_priority`
 
 ```python
-def get_available_providers_by_priority() -> List[str]
+def get_available_providers_by_priority() -> list[str]
 ```
 
 Get available providers ordered by priority and quality.
 
 **Returns**:
 
-- `List[str]` - List of available provider names in priority order
+- `list[str]` - List of available provider names in priority order
 
 <a id="spoon_ai.llm.config.ConfigurationManager.get_provider_info"></a>
 
 #### `get_provider_info`
 
 ```python
-def get_provider_info() -> Dict[str, Dict[str, Any]]
+def get_provider_info() -> dict[str, dict[str, Any]]
 ```
 
 Get information about all providers and their availability.
 
 **Returns**:
 
-  Dict[str, Dict[str, Any]]: Provider information including availability
+  dict[str, dict[str, Any]]: Provider information including availability
 
 <a id="spoon_ai.llm.config.ConfigurationManager.reload_config"></a>
 
@@ -16945,7 +17293,7 @@ Handles fallback logic between providers.
 #### `execute_with_fallback`
 
 ```python
-async def execute_with_fallback(providers: List[str], operation, *args,
+async def execute_with_fallback(providers: list[str], operation, *args,
                                 **kwargs) -> LLMResponse
 ```
 
@@ -16982,7 +17330,7 @@ Handles load balancing between multiple provider instances.
 #### `select_provider`
 
 ```python
-def select_provider(providers: List[str],
+def select_provider(providers: list[str],
                     strategy: str = "round_robin") -> str
 ```
 
@@ -17033,11 +17381,11 @@ Central orchestrator for LLM providers with fallback and load balancing.
 #### `__init__`
 
 ```python
-def __init__(config_manager: Optional[ConfigurationManager] = None,
-             debug_logger: Optional[DebugLogger] = None,
-             metrics_collector: Optional[MetricsCollector] = None,
-             response_normalizer: Optional[ResponseNormalizer] = None,
-             registry: Optional[LLMProviderRegistry] = None)
+def __init__(config_manager: ConfigurationManager | None = None,
+             debug_logger: DebugLogger | None = None,
+             metrics_collector: MetricsCollector | None = None,
+             response_normalizer: ResponseNormalizer | None = None,
+             registry: LLMProviderRegistry | None = None)
 ```
 
 Initialize LLM Manager with enhanced provider state tracking.
@@ -17086,8 +17434,8 @@ Reset a provider's state and force reinitialization.
 #### `chat`
 
 ```python
-async def chat(messages: List[Message],
-               provider: Optional[str] = None,
+async def chat(messages: list[Message],
+               provider: str | None = None,
                **kwargs) -> LLMResponse
 ```
 
@@ -17109,9 +17457,9 @@ Send chat request with automatic provider selection and fallback.
 #### `chat_stream`
 
 ```python
-async def chat_stream(messages: List[Message],
-                      provider: Optional[str] = None,
-                      callbacks: Optional[List[BaseCallbackHandler]] = None,
+async def chat_stream(messages: list[Message],
+                      provider: str | None = None,
+                      callbacks: Optional[list[BaseCallbackHandler]] = None,
                       **kwargs) -> AsyncGenerator[LLMResponseChunk, None]
 ```
 
@@ -17135,7 +17483,7 @@ Send streaming chat request with callback support.
 
 ```python
 async def completion(prompt: str,
-                     provider: Optional[str] = None,
+                     provider: str | None = None,
                      **kwargs) -> LLMResponse
 ```
 
@@ -17157,9 +17505,9 @@ Send completion request.
 #### `chat_with_tools`
 
 ```python
-async def chat_with_tools(messages: List[Message],
-                          tools: List[Dict],
-                          provider: Optional[str] = None,
+async def chat_with_tools(messages: list[Message],
+                          tools: list[dict],
+                          provider: str | None = None,
                           **kwargs) -> LLMResponse
 ```
 
@@ -17182,7 +17530,7 @@ Send tool-enabled chat request.
 #### `set_fallback_chain`
 
 ```python
-def set_fallback_chain(providers: List[str]) -> None
+def set_fallback_chain(providers: list[str]) -> None
 ```
 
 Set fallback provider chain.
@@ -17220,14 +17568,14 @@ Disable load balancing.
 #### `health_check_all`
 
 ```python
-async def health_check_all() -> Dict[str, bool]
+async def health_check_all() -> dict[str, bool]
 ```
 
 Check health of all registered providers.
 
 **Returns**:
 
-  Dict[str, bool]: Provider health status
+  dict[str, bool]: Provider health status
 
 <a id="spoon_ai.llm.manager.LLMManager.get_stats"></a>
 
@@ -18492,6 +18840,25 @@ async def call_mcp_tool(tool_name: str, **kwargs)
 
 Override the mixin method to add tool-specific error handling.
 
+<a id="spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools"></a>
+
+#### `expand_server_tools`
+
+```python
+async def expand_server_tools() -> List["MCPTool"]
+```
+
+Expand this single MCPTool (one-per-server) into one MCPTool per
+real server tool.  Each returned tool shares the same MCP transport
+config and delegates execution to ``call_mcp_tool(real_name)``.
+
+If the server is unreachable or returns no tools, an empty list is
+returned (callers should keep the original proxy as fallback).
+
+**Returns**:
+
+  List of MCPTool instances, one per discovered server tool.
+
 <a id="spoon_ai.tools.mcp_tool.MCPTool.list_available_tools"></a>
 
 #### `list_available_tools`
@@ -18598,6 +18965,82 @@ class ApprovalDecision(str, Enum)
 ```
 
 Possible approval decisions.
+
+<a id="spoon_ai.tools.hitl.ApprovalResponse"></a>
+
+## `ApprovalResponse` Objects
+
+```python
+@dataclass
+class ApprovalResponse()
+```
+
+Response from approval_callback, supporting EDIT with modified arguments.
+
+Usage:
+    # Simple approve/reject
+    return ApprovalDecision.APPROVE
+
+    # Edit with modified arguments
+    return ApprovalResponse(
+        decision=ApprovalDecision.EDIT,
+        modified_arguments=&#123;"path": "/new/path", "mode": "read"&#125;
+    )
+
+<a id="spoon_ai.tools.hitl.ApprovalResponse.__post_init__"></a>
+
+#### `__post_init__`
+
+```python
+def __post_init__()
+```
+
+Validate that EDIT decisions include modified_arguments.
+
+<a id="spoon_ai.tools.hitl.normalize_decision"></a>
+
+#### `normalize_decision`
+
+```python
+def normalize_decision(
+    decision: Union[ApprovalDecision, str, Any]
+) -> tuple[ApprovalDecision, Optional[Dict[str, Any]]]
+```
+
+Normalize approval decision from various input types.
+
+**Arguments**:
+
+- `decision` - Can be:
+  - ApprovalDecision enum
+  - str ("approve", "edit", "reject")
+  - Duck-typed ApprovalResponse object (with decision and optional modified_arguments attributes)
+  This allows cross-module compatibility without requiring exact class match.
+  
+
+**Returns**:
+
+  Tuple of (ApprovalDecision, modified_arguments)
+  - modified_arguments is None unless decision is EDIT and provided in ApprovalResponse
+  
+
+**Examples**:
+
+  &gt;&gt;&gt; normalize_decision(ApprovalDecision.APPROVE)
+  (ApprovalDecision.APPROVE, None)
+  
+  &gt;&gt;&gt; normalize_decision("approve")
+  (ApprovalDecision.APPROVE, None)
+  
+  &gt;&gt;&gt; normalize_decision(ApprovalResponse(decision=ApprovalDecision.EDIT, modified_arguments=&#123;"x": 1&#125;))
+  (ApprovalDecision.EDIT, &#123;"x": 1&#125;)
+  
+  &gt;&gt;&gt; # Duck-typed object (cross-module compatibility)
+  &gt;&gt;&gt; class CustomResponse:
+  ...     decision = ApprovalDecision.EDIT
+  ...     modified_arguments = &#123;"x": 1&#125;
+  &gt;&gt;&gt; normalize_decision(CustomResponse())
+  (ApprovalDecision.EDIT, &#123;"x": 1&#125;)
 
 <a id="spoon_ai.tools.hitl.DecisionInput"></a>
 
@@ -18854,13 +19297,30 @@ Parsed and normalized interrupt configuration.
 
 ```python
 @classmethod
-def from_config(
-    cls,
-    config: Union[bool,
-                  InterruptOnConfig]) -> Optional["ParsedInterruptConfig"]
+def from_config(cls,
+                config: Union[bool, InterruptOnConfig],
+                tool_name: Optional[str] = None,
+                strict: bool = True) -> Optional["ParsedInterruptConfig"]
 ```
 
 Parse configuration from various formats.
+
+**Arguments**:
+
+- `config` - Configuration (bool or InterruptOnConfig dict)
+- `tool_name` - Optional tool name for error messages
+- `strict` - If True, raise ValueError on invalid allowed_decisions.
+  If False, log warning and use defaults for invalid values.
+  
+
+**Returns**:
+
+  ParsedInterruptConfig or None if config is False/None
+  
+
+**Raises**:
+
+- `ValueError` - If strict=True and allowed_decisions contains invalid values
 
 <a id="spoon_ai.tools.hitl.ParsedInterruptConfig.get_description"></a>
 
@@ -18890,7 +19350,8 @@ Supports batch interrupts for parallel tool calls.
 #### `__init__`
 
 ```python
-def __init__(interrupt_on: Dict[str, Union[bool, InterruptOnConfig]])
+def __init__(interrupt_on: Dict[str, Union[bool, InterruptOnConfig]],
+             strict: bool = True)
 ```
 
 Initialize HITL manager.
@@ -18901,6 +19362,8 @@ Initialize HITL manager.
   - Dict[str, bool]: Simple approval (True = require approval)
   - Dict[str, InterruptOnConfig]: Detailed configuration with
   allowed_decisions and description
+- `strict` - If True, raise ValueError on invalid allowed_decisions.
+  If False, log warning and use defaults for invalid values.
 
 <a id="spoon_ai.tools.hitl.HITLManager.should_interrupt"></a>
 
@@ -19072,8 +19535,9 @@ Interrupt Format (returned in result["__interrupt__"]):
 
 ```python
 def __init__(interrupt_on: Dict[str, Union[bool, InterruptOnConfig]],
-             approval_callback: Optional[Callable[["ApprovalRequest"],
-                                                  ApprovalDecision]] = None)
+             approval_callback: Optional[Callable[["ApprovalRequest"], Union[
+                 ApprovalDecision, "ApprovalResponse"]]] = None,
+             strict: bool = True)
 ```
 
 Initialize HITL middleware.
@@ -19089,13 +19553,30 @@ Initialize HITL middleware.
   - description: Static string or callable for dynamic description
 - `approval_callback` - Optional callback function for automatic approval.
   If provided, this callback is called instead of raising HITLInterrupt.
-  The callback receives an ApprovalRequest and returns an ApprovalDecision.
+  The callback receives an ApprovalRequest and returns:
+  - ApprovalDecision (APPROVE/REJECT)
+  - ApprovalResponse (for EDIT with modified arguments)
+  
 
-**Example**:
+**Examples**:
 
+  # Simple approve/reject
   def auto_approve(request):
-  print(f"Approving &#123;request.tool_name&#125;")
+  if request.tool_name == "dangerous_tool":
+  return ApprovalDecision.REJECT
   return ApprovalDecision.APPROVE
+  
+  # Edit with modified arguments
+  def auto_edit(request):
+  if request.tool_name == "file_write":
+  return ApprovalResponse(
+  decision=ApprovalDecision.EDIT,
+- `modified_arguments=&#123;"path"` - "/safe/path", **request.arguments&#125;
+  )
+  return ApprovalDecision.APPROVE
+- `strict` - If True, raise ValueError on invalid allowed_decisions.
+  If False, log warning and use defaults for invalid values.
+  Defaults to True for strict validation.
 
 <a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.set_resume_data"></a>
 
@@ -19134,6 +19615,26 @@ Intercept model response to collect tool calls requiring approval.
 
 This processes the model response and identifies tool calls that
 need approval, then raises an HITLInterrupt if any are found.
+
+<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.awrap_tool_call"></a>
+
+#### `awrap_tool_call`
+
+```python
+async def awrap_tool_call(
+        request: ToolCallRequest,
+        handler: Callable[[ToolCallRequest],
+                          ToolCallResult]) -> ToolCallResult
+```
+
+Intercept tool execution to enforce approval decisions.
+
+This is the PRIMARY interception point for tool execution in ToolCallAgent.
+Even if a tool call makes it through awrap_model_call, we check here before
+actual execution.
+
+CRITICAL: This method MUST be called before tool execution, and MUST return
+ToolCallResult(success=False, ...) when rejected to prevent execution.
 
 <a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.get_interrupt_config"></a>
 

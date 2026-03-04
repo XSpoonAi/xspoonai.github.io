@@ -33,7 +33,10 @@ class ScriptTool(BaseTool)
 Tool wrapper for skill scripts.
 
 Exposes a SkillScript as a callable tool that agents can invoke.
-The AI decides what input to provide - there's no fixed parameter schema.
+When the script defines an ``input_schema``, the tool parameters are
+derived from that schema so the LLM receives a structured contract.
+Otherwise a generic ``input`` string parameter is used for backward
+compatibility.
 
 <a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
 
@@ -63,10 +66,15 @@ async def execute(input: Optional[str] = None, **kwargs) -> str
 
 Execute the script.
 
+When the script declares an ``input_schema``, the LLM's structured
+kwargs are serialized to JSON and piped to stdin.  For legacy scripts
+that only declare a generic ``input`` string, the raw value is passed
+through as-is.
+
 **Arguments**:
 
-- `input` - Optional input text to pass to script via stdin
-- `**kwargs` - Additional arguments (ignored)
+- `input` - Optional input text (legacy path)
+- `**kwargs` - Structured arguments matching input_schema
   
 
 **Returns**:

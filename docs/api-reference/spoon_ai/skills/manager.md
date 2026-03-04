@@ -72,7 +72,8 @@ Features:
 def __init__(skill_paths: Optional[List[str]] = None,
              llm: Optional["LLMManager"] = None,
              auto_discover: bool = True,
-             scripts_enabled: bool = True)
+             scripts_enabled: bool = True,
+             include_default_paths: bool = True)
 ```
 
 Initialize the skill manager.

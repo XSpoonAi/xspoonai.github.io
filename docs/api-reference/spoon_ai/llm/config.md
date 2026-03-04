@@ -53,14 +53,14 @@ Validate configuration after initialization.
 #### `model_dump`
 
 ```python
-def model_dump() -> Dict[str, Any]
+def model_dump() -> dict[str, Any]
 ```
 
 Convert the configuration to a dictionary.
 
 **Returns**:
 
-  Dict[str, Any]: Configuration as dictionary
+  dict[str, Any]: Configuration as dictionary
 
 <a id="spoon_ai.llm.config.ConfigurationManager"></a>
 
@@ -149,56 +149,56 @@ Get default provider from configuration with intelligent selection.
 #### `get_fallback_chain`
 
 ```python
-def get_fallback_chain() -> List[str]
+def get_fallback_chain() -> list[str]
 ```
 
 Get fallback chain from configuration.
 
 **Returns**:
 
-- `List[str]` - List of provider names in fallback order
+- `list[str]` - List of provider names in fallback order
 
 <a id="spoon_ai.llm.config.ConfigurationManager.list_configured_providers"></a>
 
 #### `list_configured_providers`
 
 ```python
-def list_configured_providers() -> List[str]
+def list_configured_providers() -> list[str]
 ```
 
 List all configured providers.
 
 **Returns**:
 
-- `List[str]` - List of provider names that have configuration
+- `list[str]` - List of provider names that have configuration
 
 <a id="spoon_ai.llm.config.ConfigurationManager.get_available_providers_by_priority"></a>
 
 #### `get_available_providers_by_priority`
 
 ```python
-def get_available_providers_by_priority() -> List[str]
+def get_available_providers_by_priority() -> list[str]
 ```
 
 Get available providers ordered by priority and quality.
 
 **Returns**:
 
-- `List[str]` - List of available provider names in priority order
+- `list[str]` - List of available provider names in priority order
 
 <a id="spoon_ai.llm.config.ConfigurationManager.get_provider_info"></a>
 
 #### `get_provider_info`
 
 ```python
-def get_provider_info() -> Dict[str, Dict[str, Any]]
+def get_provider_info() -> dict[str, dict[str, Any]]
 ```
 
 Get information about all providers and their availability.
 
 **Returns**:
 
-  Dict[str, Dict[str, Any]]: Provider information including availability
+  dict[str, dict[str, Any]]: Provider information including availability
 
 <a id="spoon_ai.llm.config.ConfigurationManager.reload_config"></a>
 

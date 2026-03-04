@@ -1592,14 +1592,14 @@ Validate configuration after initialization.
 #### `model_dump`
 
 ```python
-def model_dump() -> Dict[str, Any]
+def model_dump() -> dict[str, Any]
 ```
 
 Convert the configuration to a dictionary.
 
 **Returns**:
 
-  Dict[str, Any]: Configuration as dictionary
+  dict[str, Any]: Configuration as dictionary
 
 <a id="spoon_ai.llm.config.ConfigurationManager"></a>
 
@@ -1688,56 +1688,56 @@ Get default provider from configuration with intelligent selection.
 #### `get_fallback_chain`
 
 ```python
-def get_fallback_chain() -> List[str]
+def get_fallback_chain() -> list[str]
 ```
 
 Get fallback chain from configuration.
 
 **Returns**:
 
-- `List[str]` - List of provider names in fallback order
+- `list[str]` - List of provider names in fallback order
 
 <a id="spoon_ai.llm.config.ConfigurationManager.list_configured_providers"></a>
 
 #### `list_configured_providers`
 
 ```python
-def list_configured_providers() -> List[str]
+def list_configured_providers() -> list[str]
 ```
 
 List all configured providers.
 
 **Returns**:
 
-- `List[str]` - List of provider names that have configuration
+- `list[str]` - List of provider names that have configuration
 
 <a id="spoon_ai.llm.config.ConfigurationManager.get_available_providers_by_priority"></a>
 
 #### `get_available_providers_by_priority`
 
 ```python
-def get_available_providers_by_priority() -> List[str]
+def get_available_providers_by_priority() -> list[str]
 ```
 
 Get available providers ordered by priority and quality.
 
 **Returns**:
 
-- `List[str]` - List of available provider names in priority order
+- `list[str]` - List of available provider names in priority order
 
 <a id="spoon_ai.llm.config.ConfigurationManager.get_provider_info"></a>
 
 #### `get_provider_info`
 
 ```python
-def get_provider_info() -> Dict[str, Dict[str, Any]]
+def get_provider_info() -> dict[str, dict[str, Any]]
 ```
 
 Get information about all providers and their availability.
 
 **Returns**:
 
-  Dict[str, Dict[str, Any]]: Provider information including availability
+  dict[str, dict[str, Any]]: Provider information including availability
 
 <a id="spoon_ai.llm.config.ConfigurationManager.reload_config"></a>
 
@@ -2361,7 +2361,7 @@ Handles fallback logic between providers.
 #### `execute_with_fallback`
 
 ```python
-async def execute_with_fallback(providers: List[str], operation, *args,
+async def execute_with_fallback(providers: list[str], operation, *args,
                                 **kwargs) -> LLMResponse
 ```
 
@@ -2398,7 +2398,7 @@ Handles load balancing between multiple provider instances.
 #### `select_provider`
 
 ```python
-def select_provider(providers: List[str],
+def select_provider(providers: list[str],
                     strategy: str = "round_robin") -> str
 ```
 
@@ -2449,11 +2449,11 @@ Central orchestrator for LLM providers with fallback and load balancing.
 #### `__init__`
 
 ```python
-def __init__(config_manager: Optional[ConfigurationManager] = None,
-             debug_logger: Optional[DebugLogger] = None,
-             metrics_collector: Optional[MetricsCollector] = None,
-             response_normalizer: Optional[ResponseNormalizer] = None,
-             registry: Optional[LLMProviderRegistry] = None)
+def __init__(config_manager: ConfigurationManager | None = None,
+             debug_logger: DebugLogger | None = None,
+             metrics_collector: MetricsCollector | None = None,
+             response_normalizer: ResponseNormalizer | None = None,
+             registry: LLMProviderRegistry | None = None)
 ```
 
 Initialize LLM Manager with enhanced provider state tracking.
@@ -2502,8 +2502,8 @@ Reset a provider's state and force reinitialization.
 #### `chat`
 
 ```python
-async def chat(messages: List[Message],
-               provider: Optional[str] = None,
+async def chat(messages: list[Message],
+               provider: str | None = None,
                **kwargs) -> LLMResponse
 ```
 
@@ -2525,9 +2525,9 @@ Send chat request with automatic provider selection and fallback.
 #### `chat_stream`
 
 ```python
-async def chat_stream(messages: List[Message],
-                      provider: Optional[str] = None,
-                      callbacks: Optional[List[BaseCallbackHandler]] = None,
+async def chat_stream(messages: list[Message],
+                      provider: str | None = None,
+                      callbacks: Optional[list[BaseCallbackHandler]] = None,
                       **kwargs) -> AsyncGenerator[LLMResponseChunk, None]
 ```
 
@@ -2551,7 +2551,7 @@ Send streaming chat request with callback support.
 
 ```python
 async def completion(prompt: str,
-                     provider: Optional[str] = None,
+                     provider: str | None = None,
                      **kwargs) -> LLMResponse
 ```
 
@@ -2573,9 +2573,9 @@ Send completion request.
 #### `chat_with_tools`
 
 ```python
-async def chat_with_tools(messages: List[Message],
-                          tools: List[Dict],
-                          provider: Optional[str] = None,
+async def chat_with_tools(messages: list[Message],
+                          tools: list[dict],
+                          provider: str | None = None,
                           **kwargs) -> LLMResponse
 ```
 
@@ -2598,7 +2598,7 @@ Send tool-enabled chat request.
 #### `set_fallback_chain`
 
 ```python
-def set_fallback_chain(providers: List[str]) -> None
+def set_fallback_chain(providers: list[str]) -> None
 ```
 
 Set fallback provider chain.
@@ -2636,14 +2636,14 @@ Disable load balancing.
 #### `health_check_all`
 
 ```python
-async def health_check_all() -> Dict[str, bool]
+async def health_check_all() -> dict[str, bool]
 ```
 
 Check health of all registered providers.
 
 **Returns**:
 
-  Dict[str, bool]: Provider health status
+  dict[str, bool]: Provider health status
 
 <a id="spoon_ai.llm.manager.LLMManager.get_stats"></a>
 

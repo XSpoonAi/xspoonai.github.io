@@ -65,7 +65,8 @@ Markdown content here...
 #### `__init__`
 
 ```python
-def __init__(additional_paths: Optional[List[Path]] = None)
+def __init__(additional_paths: Optional[List[Path]] = None,
+             include_default_paths: bool = True)
 ```
 
 Initialize loader with skill search paths.

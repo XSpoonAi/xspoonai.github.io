@@ -23,6 +23,7 @@ title: spoon_ai.agents
     * [discover\_skills](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills)
 * [spoon\_ai.agents.base](#spoon_ai.agents.base)
   * [ThreadSafeOutputQueue](#spoon_ai.agents.base.ThreadSafeOutputQueue)
+    * [put\_nowait](#spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait)
     * [get](#spoon_ai.agents.base.ThreadSafeOutputQueue.get)
   * [BaseAgent](#spoon_ai.agents.base.BaseAgent)
     * [add\_message](#spoon_ai.agents.base.BaseAgent.add_message)
@@ -247,19 +248,23 @@ Initializes both SpoonReactAI and skill system components.
 #### `run`
 
 ```python
-async def run(request: Optional[str] = None) -> str
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None) -> str
 ```
 
-Execute agent with skill auto-activation.
+Execute agent with per-turn auto skill activation.
 
 Flow:
-1. Auto-detect and activate relevant skills (if enabled)
-2. Inject skill context into system prompt
-3. Execute parent SpoonReactAI.run()
+1. Auto-detect and activate relevant skills (ephemeral for this run)
+2. Sync skill tools into available_tools
+3. Refresh base prompts with current tools
+4. Execute parent SpoonReactAI.run()
+5. Auto-deactivate skills activated in this turn
 
 **Arguments**:
 
 - `request` - User request/message
+- `timeout` - Optional timeout in seconds
   
 
 **Returns**:
@@ -320,12 +325,22 @@ class ThreadSafeOutputQueue()
 
 Thread-safe output queue with fair access and timeout protection
 
+<a id="spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait"></a>
+
+#### `put_nowait`
+
+```python
+def put_nowait(item: Any) -> None
+```
+
+Non-blocking put - delegates to the underlying asyncio.Queue.
+
 <a id="spoon_ai.agents.base.ThreadSafeOutputQueue.get"></a>
 
 #### `get`
 
 ```python
-async def get(timeout: Optional[float] = 30.0) -> Any
+async def get(timeout: float | None = 30.0) -> Any
 ```
 
 Get item with timeout and fair access
@@ -347,10 +362,10 @@ Thread-safe base class for all agents with proper concurrency handling.
 ```python
 async def add_message(role: Literal["user", "assistant", "tool"],
                       content: MessageContent,
-                      tool_call_id: Optional[str] = None,
-                      tool_calls: Optional[List[ToolCall]] = None,
-                      tool_name: Optional[str] = None,
-                      timeout: Optional[float] = None) -> None
+                      tool_call_id: str | None = None,
+                      tool_calls: list[ToolCall] | None = None,
+                      tool_name: str | None = None,
+                      timeout: float | None = None) -> None
 ```
 
 Thread-safe message addition with timeout protection.
@@ -375,12 +390,12 @@ Supports both text-only and multimodal content:
 ```python
 async def add_message_with_image(role: Literal["user", "assistant"],
                                  text: str,
-                                 image_url: Optional[str] = None,
-                                 image_data: Optional[str] = None,
+                                 image_url: str | None = None,
+                                 image_data: str | None = None,
                                  image_media_type: str = "image/png",
                                  detail: Literal["auto", "low",
                                                  "high"] = "auto",
-                                 timeout: Optional[float] = None) -> None
+                                 timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with an image.
@@ -423,8 +438,8 @@ Supports both URL-based and base64-encoded images.
 async def add_message_with_pdf(role: Literal["user", "assistant"],
                                text: str,
                                pdf_data: str,
-                               filename: Optional[str] = None,
-                               timeout: Optional[float] = None) -> None
+                               filename: str | None = None,
+                               timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with a PDF document.
@@ -457,8 +472,8 @@ async def add_message_with_document(role: Literal["user", "assistant"],
                                     text: str,
                                     document_data: str,
                                     media_type: str = "application/pdf",
-                                    filename: Optional[str] = None,
-                                    timeout: Optional[float] = None) -> None
+                                    filename: str | None = None,
+                                    timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with a document.
@@ -494,7 +509,7 @@ Supports various document types including PDF, text, etc.
 async def add_message_with_pdf_file(role: Literal["user", "assistant"],
                                     text: str,
                                     file_path: str,
-                                    timeout: Optional[float] = None) -> None
+                                    timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with a PDF file from disk.
@@ -526,7 +541,7 @@ async def add_message_with_image_file(role: Literal["user", "assistant"],
                                       text: str,
                                       file_path: str,
                                       detail: str = "auto",
-                                      timeout: Optional[float] = None) -> None
+                                      timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with an image file from disk.
@@ -558,7 +573,7 @@ Automatically handles base64 encoding and MIME type detection.
 async def add_message_with_file(role: Literal["user", "assistant"],
                                 text: str,
                                 file_path: str,
-                                timeout: Optional[float] = None) -> None
+                                timeout: float | None = None) -> None
 ```
 
 Convenience method to add a message with any supported file from disk.
@@ -586,8 +601,7 @@ Supports: PDF, images (png, jpg, gif, webp), text files.
 
 ```python
 @asynccontextmanager
-async def state_context(new_state: AgentState,
-                        timeout: Optional[float] = None)
+async def state_context(new_state: AgentState, timeout: float | None = None)
 ```
 
 Thread-safe state context manager with deadlock prevention.
@@ -600,8 +614,7 @@ false timeouts during network calls.
 #### `run`
 
 ```python
-async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None) -> str
+async def run(request: str | None = None, timeout: float | None = None) -> str
 ```
 
 Thread-safe run method with proper concurrency control, callback support, and Plan-Act-Reflect phases.
@@ -611,7 +624,7 @@ Thread-safe run method with proper concurrency control, callback support, and Pl
 #### `step`
 
 ```python
-async def step(run_id: Optional[uuid.UUID] = None) -> str
+async def step(run_id: uuid.UUID | None = None) -> str
 ```
 
 Override this method in subclasses - now with step-level locking and callback support.
@@ -704,7 +717,7 @@ Thread-safe chat history saving
 #### `stream`
 
 ```python
-async def stream(timeout: Optional[float] = None)
+async def stream(timeout: float | None = None)
 ```
 
 Thread-safe streaming with proper cleanup and timeout
@@ -716,9 +729,9 @@ Thread-safe streaming with proper cleanup and timeout
 ```python
 async def process_mcp_message(content: Any,
                               sender: str,
-                              message: Dict[str, Any],
+                              message: dict[str, Any],
                               agent_id: str,
-                              timeout: Optional[float] = None)
+                              timeout: float | None = None)
 ```
 
 Thread-safe MCP message processing with timeout protection
@@ -773,7 +786,7 @@ Set value in agent state (for middleware access).
 #### `update_agent_state`
 
 ```python
-def update_agent_state(updates: Dict[str, Any]) -> None
+def update_agent_state(updates: dict[str, Any]) -> None
 ```
 
 Bulk update agent state (for middleware access).
@@ -787,7 +800,7 @@ Bulk update agent state (for middleware access).
 #### `get_diagnostics`
 
 ```python
-def get_diagnostics() -> Dict[str, Any]
+def get_diagnostics() -> dict[str, Any]
 ```
 
 Get diagnostic information about the agent's state
@@ -1542,7 +1555,8 @@ Initialize async components and subscribe to topics
 #### `run`
 
 ```python
-async def run(request: Optional[str] = None) -> str
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None) -> str
 ```
 
 Ensure prompts reflect current tools before running.

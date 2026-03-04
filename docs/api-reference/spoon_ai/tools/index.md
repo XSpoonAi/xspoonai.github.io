@@ -35,10 +35,14 @@ title: spoon_ai.tools
 * [spoon\_ai.tools.mcp\_tool](#spoon_ai.tools.mcp_tool)
   * [MCPTool](#spoon_ai.tools.mcp_tool.MCPTool)
     * [call\_mcp\_tool](#spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool)
+    * [expand\_server\_tools](#spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools)
     * [list\_available\_tools](#spoon_ai.tools.mcp_tool.MCPTool.list_available_tools)
 * [spoon\_ai.tools.hitl](#spoon_ai.tools.hitl)
   * [InterruptOnConfig](#spoon_ai.tools.hitl.InterruptOnConfig)
   * [ApprovalDecision](#spoon_ai.tools.hitl.ApprovalDecision)
+  * [ApprovalResponse](#spoon_ai.tools.hitl.ApprovalResponse)
+    * [\_\_post\_init\_\_](#spoon_ai.tools.hitl.ApprovalResponse.__post_init__)
+  * [normalize\_decision](#spoon_ai.tools.hitl.normalize_decision)
   * [DecisionInput](#spoon_ai.tools.hitl.DecisionInput)
     * [args](#spoon_ai.tools.hitl.DecisionInput.args)
     * [reason](#spoon_ai.tools.hitl.DecisionInput.reason)
@@ -79,6 +83,7 @@ title: spoon_ai.tools
     * [set\_resume\_data](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.set_resume_data)
     * [before\_agent](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.before_agent)
     * [awrap\_model\_call](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.awrap_model_call)
+    * [awrap\_tool\_call](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.awrap_tool_call)
     * [get\_interrupt\_config](#spoon_ai.tools.hitl.HumanInTheLoopMiddleware.get_interrupt_config)
   * [create\_hitl\_middleware](#spoon_ai.tools.hitl.create_hitl_middleware)
   * [format\_tool\_call\_description](#spoon_ai.tools.hitl.format_tool_call_description)
@@ -383,6 +388,25 @@ async def call_mcp_tool(tool_name: str, **kwargs)
 
 Override the mixin method to add tool-specific error handling.
 
+<a id="spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools"></a>
+
+#### `expand_server_tools`
+
+```python
+async def expand_server_tools() -> List["MCPTool"]
+```
+
+Expand this single MCPTool (one-per-server) into one MCPTool per
+real server tool.  Each returned tool shares the same MCP transport
+config and delegates execution to ``call_mcp_tool(real_name)``.
+
+If the server is unreachable or returns no tools, an empty list is
+returned (callers should keep the original proxy as fallback).
+
+**Returns**:
+
+  List of MCPTool instances, one per discovered server tool.
+
 <a id="spoon_ai.tools.mcp_tool.MCPTool.list_available_tools"></a>
 
 #### `list_available_tools`
@@ -485,6 +509,82 @@ class ApprovalDecision(str, Enum)
 ```
 
 Possible approval decisions.
+
+<a id="spoon_ai.tools.hitl.ApprovalResponse"></a>
+
+## `ApprovalResponse` Objects
+
+```python
+@dataclass
+class ApprovalResponse()
+```
+
+Response from approval_callback, supporting EDIT with modified arguments.
+
+Usage:
+    # Simple approve/reject
+    return ApprovalDecision.APPROVE
+
+    # Edit with modified arguments
+    return ApprovalResponse(
+        decision=ApprovalDecision.EDIT,
+        modified_arguments=&#123;"path": "/new/path", "mode": "read"&#125;
+    )
+
+<a id="spoon_ai.tools.hitl.ApprovalResponse.__post_init__"></a>
+
+#### `__post_init__`
+
+```python
+def __post_init__()
+```
+
+Validate that EDIT decisions include modified_arguments.
+
+<a id="spoon_ai.tools.hitl.normalize_decision"></a>
+
+#### `normalize_decision`
+
+```python
+def normalize_decision(
+    decision: Union[ApprovalDecision, str, Any]
+) -> tuple[ApprovalDecision, Optional[Dict[str, Any]]]
+```
+
+Normalize approval decision from various input types.
+
+**Arguments**:
+
+- `decision` - Can be:
+  - ApprovalDecision enum
+  - str ("approve", "edit", "reject")
+  - Duck-typed ApprovalResponse object (with decision and optional modified_arguments attributes)
+  This allows cross-module compatibility without requiring exact class match.
+  
+
+**Returns**:
+
+  Tuple of (ApprovalDecision, modified_arguments)
+  - modified_arguments is None unless decision is EDIT and provided in ApprovalResponse
+  
+
+**Examples**:
+
+  &gt;&gt;&gt; normalize_decision(ApprovalDecision.APPROVE)
+  (ApprovalDecision.APPROVE, None)
+  
+  &gt;&gt;&gt; normalize_decision("approve")
+  (ApprovalDecision.APPROVE, None)
+  
+  &gt;&gt;&gt; normalize_decision(ApprovalResponse(decision=ApprovalDecision.EDIT, modified_arguments=&#123;"x": 1&#125;))
+  (ApprovalDecision.EDIT, &#123;"x": 1&#125;)
+  
+  &gt;&gt;&gt; # Duck-typed object (cross-module compatibility)
+  &gt;&gt;&gt; class CustomResponse:
+  ...     decision = ApprovalDecision.EDIT
+  ...     modified_arguments = &#123;"x": 1&#125;
+  &gt;&gt;&gt; normalize_decision(CustomResponse())
+  (ApprovalDecision.EDIT, &#123;"x": 1&#125;)
 
 <a id="spoon_ai.tools.hitl.DecisionInput"></a>
 
@@ -741,13 +841,30 @@ Parsed and normalized interrupt configuration.
 
 ```python
 @classmethod
-def from_config(
-    cls,
-    config: Union[bool,
-                  InterruptOnConfig]) -> Optional["ParsedInterruptConfig"]
+def from_config(cls,
+                config: Union[bool, InterruptOnConfig],
+                tool_name: Optional[str] = None,
+                strict: bool = True) -> Optional["ParsedInterruptConfig"]
 ```
 
 Parse configuration from various formats.
+
+**Arguments**:
+
+- `config` - Configuration (bool or InterruptOnConfig dict)
+- `tool_name` - Optional tool name for error messages
+- `strict` - If True, raise ValueError on invalid allowed_decisions.
+  If False, log warning and use defaults for invalid values.
+  
+
+**Returns**:
+
+  ParsedInterruptConfig or None if config is False/None
+  
+
+**Raises**:
+
+- `ValueError` - If strict=True and allowed_decisions contains invalid values
 
 <a id="spoon_ai.tools.hitl.ParsedInterruptConfig.get_description"></a>
 
@@ -777,7 +894,8 @@ Supports batch interrupts for parallel tool calls.
 #### `__init__`
 
 ```python
-def __init__(interrupt_on: Dict[str, Union[bool, InterruptOnConfig]])
+def __init__(interrupt_on: Dict[str, Union[bool, InterruptOnConfig]],
+             strict: bool = True)
 ```
 
 Initialize HITL manager.
@@ -788,6 +906,8 @@ Initialize HITL manager.
   - Dict[str, bool]: Simple approval (True = require approval)
   - Dict[str, InterruptOnConfig]: Detailed configuration with
   allowed_decisions and description
+- `strict` - If True, raise ValueError on invalid allowed_decisions.
+  If False, log warning and use defaults for invalid values.
 
 <a id="spoon_ai.tools.hitl.HITLManager.should_interrupt"></a>
 
@@ -959,8 +1079,9 @@ Interrupt Format (returned in result["__interrupt__"]):
 
 ```python
 def __init__(interrupt_on: Dict[str, Union[bool, InterruptOnConfig]],
-             approval_callback: Optional[Callable[["ApprovalRequest"],
-                                                  ApprovalDecision]] = None)
+             approval_callback: Optional[Callable[["ApprovalRequest"], Union[
+                 ApprovalDecision, "ApprovalResponse"]]] = None,
+             strict: bool = True)
 ```
 
 Initialize HITL middleware.
@@ -976,13 +1097,30 @@ Initialize HITL middleware.
   - description: Static string or callable for dynamic description
 - `approval_callback` - Optional callback function for automatic approval.
   If provided, this callback is called instead of raising HITLInterrupt.
-  The callback receives an ApprovalRequest and returns an ApprovalDecision.
+  The callback receives an ApprovalRequest and returns:
+  - ApprovalDecision (APPROVE/REJECT)
+  - ApprovalResponse (for EDIT with modified arguments)
+  
 
-**Example**:
+**Examples**:
 
+  # Simple approve/reject
   def auto_approve(request):
-  print(f"Approving &#123;request.tool_name&#125;")
+  if request.tool_name == "dangerous_tool":
+  return ApprovalDecision.REJECT
   return ApprovalDecision.APPROVE
+  
+  # Edit with modified arguments
+  def auto_edit(request):
+  if request.tool_name == "file_write":
+  return ApprovalResponse(
+  decision=ApprovalDecision.EDIT,
+- `modified_arguments=&#123;"path"` - "/safe/path", **request.arguments&#125;
+  )
+  return ApprovalDecision.APPROVE
+- `strict` - If True, raise ValueError on invalid allowed_decisions.
+  If False, log warning and use defaults for invalid values.
+  Defaults to True for strict validation.
 
 <a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.set_resume_data"></a>
 
@@ -1021,6 +1159,26 @@ Intercept model response to collect tool calls requiring approval.
 
 This processes the model response and identifies tool calls that
 need approval, then raises an HITLInterrupt if any are found.
+
+<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.awrap_tool_call"></a>
+
+#### `awrap_tool_call`
+
+```python
+async def awrap_tool_call(
+        request: ToolCallRequest,
+        handler: Callable[[ToolCallRequest],
+                          ToolCallResult]) -> ToolCallResult
+```
+
+Intercept tool execution to enforce approval decisions.
+
+This is the PRIMARY interception point for tool execution in ToolCallAgent.
+Even if a tool call makes it through awrap_model_call, we check here before
+actual execution.
+
+CRITICAL: This method MUST be called before tool execution, and MUST return
+ToolCallResult(success=False, ...) when rejected to prevent execution.
 
 <a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.get_interrupt_config"></a>
 

@@ -426,7 +426,8 @@ Markdown content here...
 #### `__init__`
 
 ```python
-def __init__(additional_paths: Optional[List[Path]] = None)
+def __init__(additional_paths: Optional[List[Path]] = None,
+             include_default_paths: bool = True)
 ```
 
 Initialize loader with skill search paths.
@@ -981,7 +982,10 @@ class ScriptTool(BaseTool)
 Tool wrapper for skill scripts.
 
 Exposes a SkillScript as a callable tool that agents can invoke.
-The AI decides what input to provide - there's no fixed parameter schema.
+When the script defines an ``input_schema``, the tool parameters are
+derived from that schema so the LLM receives a structured contract.
+Otherwise a generic ``input`` string parameter is used for backward
+compatibility.
 
 <a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
 
@@ -1011,10 +1015,15 @@ async def execute(input: Optional[str] = None, **kwargs) -> str
 
 Execute the script.
 
+When the script declares an ``input_schema``, the LLM's structured
+kwargs are serialized to JSON and piped to stdin.  For legacy scripts
+that only declare a generic ``input`` string, the raw value is passed
+through as-is.
+
 **Arguments**:
 
-- `input` - Optional input text to pass to script via stdin
-- `**kwargs` - Additional arguments (ignored)
+- `input` - Optional input text (legacy path)
+- `**kwargs` - Structured arguments matching input_schema
   
 
 **Returns**:
@@ -1095,7 +1104,8 @@ Features:
 def __init__(skill_paths: Optional[List[str]] = None,
              llm: Optional["LLMManager"] = None,
              auto_discover: bool = True,
-             scripts_enabled: bool = True)
+             scripts_enabled: bool = True,
+             include_default_paths: bool = True)
 ```
 
 Initialize the skill manager.

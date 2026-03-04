@@ -96,7 +96,7 @@ Handles fallback logic between providers.
 #### `execute_with_fallback`
 
 ```python
-async def execute_with_fallback(providers: List[str], operation, *args,
+async def execute_with_fallback(providers: list[str], operation, *args,
                                 **kwargs) -> LLMResponse
 ```
 
@@ -133,7 +133,7 @@ Handles load balancing between multiple provider instances.
 #### `select_provider`
 
 ```python
-def select_provider(providers: List[str],
+def select_provider(providers: list[str],
                     strategy: str = "round_robin") -> str
 ```
 
@@ -184,11 +184,11 @@ Central orchestrator for LLM providers with fallback and load balancing.
 #### `__init__`
 
 ```python
-def __init__(config_manager: Optional[ConfigurationManager] = None,
-             debug_logger: Optional[DebugLogger] = None,
-             metrics_collector: Optional[MetricsCollector] = None,
-             response_normalizer: Optional[ResponseNormalizer] = None,
-             registry: Optional[LLMProviderRegistry] = None)
+def __init__(config_manager: ConfigurationManager | None = None,
+             debug_logger: DebugLogger | None = None,
+             metrics_collector: MetricsCollector | None = None,
+             response_normalizer: ResponseNormalizer | None = None,
+             registry: LLMProviderRegistry | None = None)
 ```
 
 Initialize LLM Manager with enhanced provider state tracking.
@@ -237,8 +237,8 @@ Reset a provider's state and force reinitialization.
 #### `chat`
 
 ```python
-async def chat(messages: List[Message],
-               provider: Optional[str] = None,
+async def chat(messages: list[Message],
+               provider: str | None = None,
                **kwargs) -> LLMResponse
 ```
 
@@ -260,9 +260,9 @@ Send chat request with automatic provider selection and fallback.
 #### `chat_stream`
 
 ```python
-async def chat_stream(messages: List[Message],
-                      provider: Optional[str] = None,
-                      callbacks: Optional[List[BaseCallbackHandler]] = None,
+async def chat_stream(messages: list[Message],
+                      provider: str | None = None,
+                      callbacks: Optional[list[BaseCallbackHandler]] = None,
                       **kwargs) -> AsyncGenerator[LLMResponseChunk, None]
 ```
 
@@ -286,7 +286,7 @@ Send streaming chat request with callback support.
 
 ```python
 async def completion(prompt: str,
-                     provider: Optional[str] = None,
+                     provider: str | None = None,
                      **kwargs) -> LLMResponse
 ```
 
@@ -308,9 +308,9 @@ Send completion request.
 #### `chat_with_tools`
 
 ```python
-async def chat_with_tools(messages: List[Message],
-                          tools: List[Dict],
-                          provider: Optional[str] = None,
+async def chat_with_tools(messages: list[Message],
+                          tools: list[dict],
+                          provider: str | None = None,
                           **kwargs) -> LLMResponse
 ```
 
@@ -333,7 +333,7 @@ Send tool-enabled chat request.
 #### `set_fallback_chain`
 
 ```python
-def set_fallback_chain(providers: List[str]) -> None
+def set_fallback_chain(providers: list[str]) -> None
 ```
 
 Set fallback provider chain.
@@ -371,14 +371,14 @@ Disable load balancing.
 #### `health_check_all`
 
 ```python
-async def health_check_all() -> Dict[str, bool]
+async def health_check_all() -> dict[str, bool]
 ```
 
 Check health of all registered providers.
 
 **Returns**:
 
-  Dict[str, bool]: Provider health status
+  dict[str, bool]: Provider health status
 
 <a id="spoon_ai.llm.manager.LLMManager.get_stats"></a>
 
