@@ -7,15 +7,13 @@ title: spoon_ai.memory
 # Table of Contents
 
 * [spoon\_ai.memory](#spoon_ai.memory)
+* [spoon\_ai.memory.utils](#spoon_ai.memory.utils)
+  * [extract\_memories](#spoon_ai.memory.utils.extract_memories)
+  * [extract\_first\_memory\_id](#spoon_ai.memory.utils.extract_first_memory_id)
 * [spoon\_ai.memory.mem0\_client](#spoon_ai.memory.mem0_client)
   * [SpoonMem0](#spoon_ai.memory.mem0_client.SpoonMem0)
     * [add\_text](#spoon_ai.memory.mem0_client.SpoonMem0.add_text)
     * [get\_all\_memory](#spoon_ai.memory.mem0_client.SpoonMem0.get_all_memory)
-* [spoon\_ai.memory.remove\_message](#spoon_ai.memory.remove_message)
-  * [RemoveMessage](#spoon_ai.memory.remove_message.RemoveMessage)
-* [spoon\_ai.memory.utils](#spoon_ai.memory.utils)
-  * [extract\_memories](#spoon_ai.memory.utils.extract_memories)
-  * [extract\_first\_memory\_id](#spoon_ai.memory.utils.extract_first_memory_id)
 * [spoon\_ai.memory.checkpointer](#spoon_ai.memory.checkpointer)
   * [Checkpoint](#spoon_ai.memory.checkpointer.Checkpoint)
     * [messages](#spoon_ai.memory.checkpointer.Checkpoint.messages)
@@ -61,6 +59,8 @@ title: spoon_ai.memory
   * [ShortTermMemoryManager](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager)
     * [trim\_messages](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager.trim_messages)
     * [summarize\_messages](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager.summarize_messages)
+* [spoon\_ai.memory.remove\_message](#spoon_ai.memory.remove_message)
+  * [RemoveMessage](#spoon_ai.memory.remove_message.RemoveMessage)
 
 <a id="spoon_ai.memory"></a>
 
@@ -70,6 +70,34 @@ Short-term memory management for conversation history.
 
 This module provides memory management utilities for maintaining and optimizing
 conversation history in chat applications.
+
+<a id="spoon_ai.memory.utils"></a>
+
+# Module `spoon_ai.memory.utils`
+
+Memory helpers shared across Mem0 demos and utilities.
+
+<a id="spoon_ai.memory.utils.extract_memories"></a>
+
+#### `extract_memories`
+
+```python
+def extract_memories(result: Any) -> List[str]
+```
+
+Normalize Mem0 search/get responses into a list of memory strings.
+Supports common shapes: &#123;"memories": [...]&#125;, &#123;"results": [...]&#125;, &#123;"data": [...]&#125;, list, or scalar.
+
+<a id="spoon_ai.memory.utils.extract_first_memory_id"></a>
+
+#### `extract_first_memory_id`
+
+```python
+def extract_first_memory_id(result: Any) -> Optional[str]
+```
+
+Pull the first memory id from Mem0 responses.
+Supports common id fields: id, _id, memory_id, uuid.
 
 <a id="spoon_ai.memory.mem0_client"></a>
 
@@ -107,50 +135,6 @@ def get_all_memory(user_id: Optional[str] = None,
 ```
 
 Retrieve all memories for a user (subject to backend limits).
-
-<a id="spoon_ai.memory.remove_message"></a>
-
-# Module `spoon_ai.memory.remove_message`
-
-Helpers for emitting message-removal directives.
-
-<a id="spoon_ai.memory.remove_message.RemoveMessage"></a>
-
-## `RemoveMessage` Objects
-
-```python
-class RemoveMessage(BaseModel)
-```
-
-Lightweight message that signals another message should be removed.
-
-<a id="spoon_ai.memory.utils"></a>
-
-# Module `spoon_ai.memory.utils`
-
-Memory helpers shared across Mem0 demos and utilities.
-
-<a id="spoon_ai.memory.utils.extract_memories"></a>
-
-#### `extract_memories`
-
-```python
-def extract_memories(result: Any) -> List[str]
-```
-
-Normalize Mem0 search/get responses into a list of memory strings.
-Supports common shapes: &#123;"memories": [...]&#125;, &#123;"results": [...]&#125;, &#123;"data": [...]&#125;, list, or scalar.
-
-<a id="spoon_ai.memory.utils.extract_first_memory_id"></a>
-
-#### `extract_first_memory_id`
-
-```python
-def extract_first_memory_id(result: Any) -> Optional[str]
-```
-
-Pull the first memory id from Mem0 responses.
-Supports common id fields: id, _id, memory_id, uuid.
 
 <a id="spoon_ai.memory.checkpointer"></a>
 
@@ -713,4 +697,20 @@ async def summarize_messages(
 ```
 
 Summarize earlier messages and emit removal directives.
+
+<a id="spoon_ai.memory.remove_message"></a>
+
+# Module `spoon_ai.memory.remove_message`
+
+Helpers for emitting message-removal directives.
+
+<a id="spoon_ai.memory.remove_message.RemoveMessage"></a>
+
+## `RemoveMessage` Objects
+
+```python
+class RemoveMessage(BaseModel)
+```
+
+Lightweight message that signals another message should be removed.
 

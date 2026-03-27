@@ -7,25 +7,47 @@ title: spoon_ai.middleware
 # Table of Contents
 
 * [spoon\_ai.middleware](#spoon_ai.middleware)
-* [spoon\_ai.middleware.todolist](#spoon_ai.middleware.todolist)
-  * [TodoStatus](#spoon_ai.middleware.todolist.TodoStatus)
-  * [TodoItem](#spoon_ai.middleware.todolist.TodoItem)
-  * [TodoList](#spoon_ai.middleware.todolist.TodoList)
-    * [format\_display](#spoon_ai.middleware.todolist.TodoList.format_display)
-  * [WriteTodosTool](#spoon_ai.middleware.todolist.WriteTodosTool)
-    * [execute](#spoon_ai.middleware.todolist.WriteTodosTool.execute)
-  * [ReadTodosTool](#spoon_ai.middleware.todolist.ReadTodosTool)
-    * [execute](#spoon_ai.middleware.todolist.ReadTodosTool.execute)
-  * [TodoListMiddleware](#spoon_ai.middleware.todolist.TodoListMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.todolist.TodoListMiddleware.__init__)
-    * [tools](#spoon_ai.middleware.todolist.TodoListMiddleware.tools)
-    * [system\_prompt](#spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt)
-    * [todo\_list](#spoon_ai.middleware.todolist.TodoListMiddleware.todo_list)
-    * [get\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state)
-    * [restore\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state)
-    * [awrap\_model\_call](#spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call)
-    * [before\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.before_agent)
-    * [after\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.after_agent)
+* [spoon\_ai.middleware.summarization](#spoon_ai.middleware.summarization)
+  * [ContextFraction](#spoon_ai.middleware.summarization.ContextFraction)
+  * [ContextTokens](#spoon_ai.middleware.summarization.ContextTokens)
+  * [ContextMessages](#spoon_ai.middleware.summarization.ContextMessages)
+  * [ContextSize](#spoon_ai.middleware.summarization.ContextSize)
+  * [count\_tokens\_approximately](#spoon_ai.middleware.summarization.count_tokens_approximately)
+  * [RemoveMessage](#spoon_ai.middleware.summarization.RemoveMessage)
+  * [SummarizationMiddleware](#spoon_ai.middleware.summarization.SummarizationMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.summarization.SummarizationMiddleware.__init__)
+    * [awrap\_model\_call](#spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call)
+    * [get\_stats](#spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats)
+  * [create\_summarization\_middleware](#spoon_ai.middleware.summarization.create_summarization_middleware)
+* [spoon\_ai.middleware.patch\_tool\_calls](#spoon_ai.middleware.patch_tool_calls)
+  * [PatchToolCallsMiddleware](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__)
+    * [before\_agent](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent)
+    * [awrap\_model\_call](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call)
+    * [get\_stats](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats)
+  * [create\_patch\_tool\_calls\_middleware](#spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware)
+* [spoon\_ai.middleware.filesystem](#spoon_ai.middleware.filesystem)
+  * [validate\_path](#spoon_ai.middleware.filesystem.validate_path)
+  * [LsTool](#spoon_ai.middleware.filesystem.LsTool)
+  * [ReadFileTool](#spoon_ai.middleware.filesystem.ReadFileTool)
+  * [WriteFileTool](#spoon_ai.middleware.filesystem.WriteFileTool)
+  * [EditFileTool](#spoon_ai.middleware.filesystem.EditFileTool)
+  * [GlobTool](#spoon_ai.middleware.filesystem.GlobTool)
+  * [GrepTool](#spoon_ai.middleware.filesystem.GrepTool)
+  * [ExecuteTool](#spoon_ai.middleware.filesystem.ExecuteTool)
+  * [get\_filesystem\_tools](#spoon_ai.middleware.filesystem.get_filesystem_tools)
+  * [FilesystemMiddleware](#spoon_ai.middleware.filesystem.FilesystemMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__)
+    * [tools](#spoon_ai.middleware.filesystem.FilesystemMiddleware.tools)
+    * [system\_prompt](#spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt)
+    * [backend](#spoon_ai.middleware.filesystem.FilesystemMiddleware.backend)
+    * [awrap\_model\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call)
+    * [awrap\_tool\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call)
+  * [create\_filesystem\_middleware](#spoon_ai.middleware.filesystem.create_filesystem_middleware)
+  * [create\_sandbox\_backend](#spoon_ai.middleware.filesystem.create_sandbox_backend)
+  * [LocalSandboxBackend](#spoon_ai.middleware.filesystem.LocalSandboxBackend)
+    * [execute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.execute)
+    * [aexecute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute)
 * [spoon\_ai.middleware.prompt\_caching](#spoon_ai.middleware.prompt_caching)
   * [is\_anthropic\_model](#spoon_ai.middleware.prompt_caching.is_anthropic_model)
   * [add\_cache\_control](#spoon_ai.middleware.prompt_caching.add_cache_control)
@@ -88,35 +110,6 @@ title: spoon_ai.middleware
     * [collect\_tools](#spoon_ai.middleware.base.MiddlewarePipeline.collect_tools)
     * [build\_system\_prompt](#spoon_ai.middleware.base.MiddlewarePipeline.build_system_prompt)
   * [create\_middleware\_pipeline](#spoon_ai.middleware.base.create_middleware_pipeline)
-* [spoon\_ai.middleware.patch\_tool\_calls](#spoon_ai.middleware.patch_tool_calls)
-  * [PatchToolCallsMiddleware](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__)
-    * [before\_agent](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent)
-    * [awrap\_model\_call](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call)
-    * [get\_stats](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats)
-  * [create\_patch\_tool\_calls\_middleware](#spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware)
-* [spoon\_ai.middleware.filesystem](#spoon_ai.middleware.filesystem)
-  * [validate\_path](#spoon_ai.middleware.filesystem.validate_path)
-  * [LsTool](#spoon_ai.middleware.filesystem.LsTool)
-  * [ReadFileTool](#spoon_ai.middleware.filesystem.ReadFileTool)
-  * [WriteFileTool](#spoon_ai.middleware.filesystem.WriteFileTool)
-  * [EditFileTool](#spoon_ai.middleware.filesystem.EditFileTool)
-  * [GlobTool](#spoon_ai.middleware.filesystem.GlobTool)
-  * [GrepTool](#spoon_ai.middleware.filesystem.GrepTool)
-  * [ExecuteTool](#spoon_ai.middleware.filesystem.ExecuteTool)
-  * [get\_filesystem\_tools](#spoon_ai.middleware.filesystem.get_filesystem_tools)
-  * [FilesystemMiddleware](#spoon_ai.middleware.filesystem.FilesystemMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__)
-    * [tools](#spoon_ai.middleware.filesystem.FilesystemMiddleware.tools)
-    * [system\_prompt](#spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt)
-    * [backend](#spoon_ai.middleware.filesystem.FilesystemMiddleware.backend)
-    * [awrap\_model\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call)
-    * [awrap\_tool\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call)
-  * [create\_filesystem\_middleware](#spoon_ai.middleware.filesystem.create_filesystem_middleware)
-  * [create\_sandbox\_backend](#spoon_ai.middleware.filesystem.create_sandbox_backend)
-  * [LocalSandboxBackend](#spoon_ai.middleware.filesystem.LocalSandboxBackend)
-    * [execute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.execute)
-    * [aexecute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute)
 * [spoon\_ai.middleware.planning](#spoon_ai.middleware.planning)
   * [PlanStep](#spoon_ai.middleware.planning.PlanStep)
     * [status](#spoon_ai.middleware.planning.PlanStep.status)
@@ -140,18 +133,25 @@ title: spoon_ai.middleware
     * [get\_current\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.get_current_plan)
     * [set\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.set_plan)
   * [create\_planning\_middleware](#spoon_ai.middleware.planning.create_planning_middleware)
-* [spoon\_ai.middleware.summarization](#spoon_ai.middleware.summarization)
-  * [ContextFraction](#spoon_ai.middleware.summarization.ContextFraction)
-  * [ContextTokens](#spoon_ai.middleware.summarization.ContextTokens)
-  * [ContextMessages](#spoon_ai.middleware.summarization.ContextMessages)
-  * [ContextSize](#spoon_ai.middleware.summarization.ContextSize)
-  * [count\_tokens\_approximately](#spoon_ai.middleware.summarization.count_tokens_approximately)
-  * [RemoveMessage](#spoon_ai.middleware.summarization.RemoveMessage)
-  * [SummarizationMiddleware](#spoon_ai.middleware.summarization.SummarizationMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.summarization.SummarizationMiddleware.__init__)
-    * [awrap\_model\_call](#spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call)
-    * [get\_stats](#spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats)
-  * [create\_summarization\_middleware](#spoon_ai.middleware.summarization.create_summarization_middleware)
+* [spoon\_ai.middleware.todolist](#spoon_ai.middleware.todolist)
+  * [TodoStatus](#spoon_ai.middleware.todolist.TodoStatus)
+  * [TodoItem](#spoon_ai.middleware.todolist.TodoItem)
+  * [TodoList](#spoon_ai.middleware.todolist.TodoList)
+    * [format\_display](#spoon_ai.middleware.todolist.TodoList.format_display)
+  * [WriteTodosTool](#spoon_ai.middleware.todolist.WriteTodosTool)
+    * [execute](#spoon_ai.middleware.todolist.WriteTodosTool.execute)
+  * [ReadTodosTool](#spoon_ai.middleware.todolist.ReadTodosTool)
+    * [execute](#spoon_ai.middleware.todolist.ReadTodosTool.execute)
+  * [TodoListMiddleware](#spoon_ai.middleware.todolist.TodoListMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.todolist.TodoListMiddleware.__init__)
+    * [tools](#spoon_ai.middleware.todolist.TodoListMiddleware.tools)
+    * [system\_prompt](#spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt)
+    * [todo\_list](#spoon_ai.middleware.todolist.TodoListMiddleware.todo_list)
+    * [get\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state)
+    * [restore\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state)
+    * [awrap\_model\_call](#spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call)
+    * [before\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.before_agent)
+    * [after\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.after_agent)
 
 <a id="spoon_ai.middleware"></a>
 
@@ -170,128 +170,163 @@ Provides flexible middleware architecture for:
 - Dangling tool call patching
 - Anthropic prompt caching
 
-<a id="spoon_ai.middleware.todolist"></a>
+<a id="spoon_ai.middleware.summarization"></a>
 
-# Module `spoon_ai.middleware.todolist`
+# Module `spoon_ai.middleware.summarization`
 
-TodoList Middleware - Task Planning and Progress Tracking.
+Summarization Middleware - Context Compression for Long Conversations.
 
-Provides todo list tools to agents for structured task management:
-- write_todos: Create/update todo list with tasks
-- read_todos: Read current todo list state
+Automatically summarizes conversation history when token limits are approached,
+preserving recent messages and maintaining context continuity by ensuring
+AI/Tool message pairs remain together.
 
-Compatible with LangChain DeepAgents TodoListMiddleware interface.
+Compatible with LangChain DeepAgents SummarizationMiddleware interface.
 
 Usage:
-    from spoon_ai.middleware.todolist import TodoListMiddleware
+    from spoon_ai.middleware.summarization import SummarizationMiddleware
 
     agent = ToolCallAgent(
-        middleware=[TodoListMiddleware()],
+        middleware=[SummarizationMiddleware(
+            model=llm,
+            trigger=("fraction", 0.85),  # Trigger at 85% of max tokens
+            keep=("messages", 20),       # Keep last 20 messages
+        )],
         ...
     )
 
-<a id="spoon_ai.middleware.todolist.TodoStatus"></a>
+<a id="spoon_ai.middleware.summarization.ContextFraction"></a>
 
-## `TodoStatus` Objects
+#### `ContextFraction`
 
-```python
-class TodoStatus(str, Enum)
-```
+Fraction of model's maximum input tokens.
 
-Status of a todo item.
+**Example**:
 
-<a id="spoon_ai.middleware.todolist.TodoItem"></a>
+  To specify 50% of the model's max input tokens:
+    ```python
+    ("fraction", 0.5)
+    ```
 
-## `TodoItem` Objects
+<a id="spoon_ai.middleware.summarization.ContextTokens"></a>
 
-```python
-@dataclass
-class TodoItem()
-```
+#### `ContextTokens`
 
-A single todo item.
+Absolute number of tokens.
 
-<a id="spoon_ai.middleware.todolist.TodoList"></a>
+**Example**:
 
-## `TodoList` Objects
+  To specify 3000 tokens:
+    ```python
+    ("tokens", 3000)
+    ```
 
-```python
-@dataclass
-class TodoList()
-```
+<a id="spoon_ai.middleware.summarization.ContextMessages"></a>
 
-Container for todo items.
+#### `ContextMessages`
 
-<a id="spoon_ai.middleware.todolist.TodoList.format_display"></a>
+Absolute number of messages.
 
-#### `format_display`
+**Example**:
 
-```python
-def format_display() -> str
-```
+  To specify 50 messages:
+    ```python
+    ("messages", 50)
+    ```
 
-Format todo list for display.
+<a id="spoon_ai.middleware.summarization.ContextSize"></a>
 
-<a id="spoon_ai.middleware.todolist.WriteTodosTool"></a>
+#### `ContextSize`
 
-## `WriteTodosTool` Objects
+Union type for context size specifications.
 
-```python
-class WriteTodosTool(BaseTool)
-```
+Can be either:
+- ContextFraction: A fraction of the model's maximum input tokens.
+- ContextTokens: An absolute number of tokens.
+- ContextMessages: An absolute number of messages.
 
-Tool to create/update todo list.
-
-<a id="spoon_ai.middleware.todolist.WriteTodosTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(todos: List[Dict[str, Any]], **kwargs) -> str
-```
-
-Update the todo list.
-
-<a id="spoon_ai.middleware.todolist.ReadTodosTool"></a>
-
-## `ReadTodosTool` Objects
-
-```python
-class ReadTodosTool(BaseTool)
-```
-
-Tool to read current todo list.
-
-<a id="spoon_ai.middleware.todolist.ReadTodosTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(**kwargs) -> str
-```
-
-Read the current todo list.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware"></a>
-
-## `TodoListMiddleware` Objects
-
-```python
-class TodoListMiddleware(AgentMiddleware)
-```
-
-Middleware for providing todo list tools to an agent.
-
-Provides two tools:
-- write_todos: Create/update todo list
-- read_todos: Read current todo list
+Depending on use with `trigger` or `keep` parameters, this type indicates either
+when to trigger summarization or how much context to retain.
 
 **Example**:
 
     ```python
-    from spoon_ai.middleware.todolist import TodoListMiddleware
+    # ContextFraction
+    context_size: ContextSize = ("fraction", 0.5)
 
-    middleware = TodoListMiddleware()
+    # ContextTokens
+    context_size: ContextSize = ("tokens", 3000)
+
+    # ContextMessages
+    context_size: ContextSize = ("messages", 50)
+    ```
+
+<a id="spoon_ai.middleware.summarization.count_tokens_approximately"></a>
+
+#### `count_tokens_approximately`
+
+```python
+def count_tokens_approximately(messages: Iterable[Message],
+                               chars_per_token: float = 4.0) -> int
+```
+
+Approximate token counter aligned with LangChain semantics.
+
+**Arguments**:
+
+- `messages` - Iterable of messages to count tokens for.
+- `chars_per_token` - Characters per token ratio (default: 4.0).
+  
+
+**Returns**:
+
+  Estimated token count.
+
+<a id="spoon_ai.middleware.summarization.RemoveMessage"></a>
+
+## `RemoveMessage` Objects
+
+```python
+class RemoveMessage()
+```
+
+Marker class indicating a message should be removed.
+
+Compatible with LangChain's RemoveMessage pattern.
+
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware"></a>
+
+## `SummarizationMiddleware` Objects
+
+```python
+class SummarizationMiddleware(AgentMiddleware)
+```
+
+Summarizes conversation history when token limits are approached.
+
+This middleware monitors message token counts and automatically summarizes older
+messages when a threshold is reached, preserving recent messages and maintaining
+context continuity by ensuring AI/Tool message pairs remain together.
+
+Compatible with LangChain DeepAgents SummarizationMiddleware interface.
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.summarization import SummarizationMiddleware
+
+    # Basic usage with fraction trigger
+    middleware = SummarizationMiddleware(
+        model=llm,
+        trigger=("fraction", 0.85),
+        keep=("messages", 20),
+    )
+
+    # With multiple trigger conditions
+    middleware = SummarizationMiddleware(
+        model=llm,
+        trigger=[("fraction", 0.8), ("messages", 100)],
+        keep=("tokens", 3000),
+    )
 
     agent = ToolCallAgent(
         middleware=[middleware],
@@ -299,76 +334,61 @@ Provides two tools:
     )
     ```
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.__init__"></a>
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(system_prompt: Optional[str] = None,
-             auto_inject_prompt: bool = True)
+def __init__(
+        model: Optional[ChatBot] = None,
+        *,
+        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
+        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
+        token_counter: Optional[TokenCounter] = None,
+        summary_prompt: str = DEFAULT_SUMMARY_PROMPT,
+        trim_tokens_to_summarize: Optional[int] = _DEFAULT_TRIM_TOKEN_LIMIT,
+        max_context_tokens: Optional[int] = None,
+        **deprecated_kwargs: Any) -> None
 ```
 
-Initialize TodoList middleware.
+Initialize summarization middleware.
 
 **Arguments**:
 
-- `system_prompt` - Optional custom system prompt override.
-- `auto_inject_prompt` - Whether to auto-inject system prompt (default: True)
+- `model` - The language model to use for generating summaries.
+  If None, uses agent's LLM.
+- `trigger` - One or more thresholds that trigger summarization.
+  Provide a single ContextSize tuple or a list of tuples.
+  Summarization runs when any threshold is met.
+  
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.tools"></a>
+**Examples**:
 
-#### `tools`
+- `-` _"messages", 50_ - Trigger at 50 messages
+- `-` _"tokens", 3000_ - Trigger at 3000 tokens
+- `-` _"fraction", 0.8_ - Trigger at 80% of max input tokens
+  - [("fraction", 0.8), ("messages", 100)]: Multiple conditions
+  
+- `keep` - Context retention policy applied after summarization.
+  Provide a ContextSize tuple to specify how much history to preserve.
+  Defaults to keeping the most recent 20 messages.
+  
 
-```python
-@property
-def tools() -> List[BaseTool]
-```
+**Examples**:
 
-Get todo list tools.
+- `-` _"messages", 20_ - Keep last 20 messages
+- `-` _"tokens", 3000_ - Keep last 3000 tokens worth
+- `-` _"fraction", 0.3_ - Keep last 30% of max input tokens
+  
+- `token_counter` - Function to count tokens in messages.
+  Defaults to model-aware approximate counter.
+- `summary_prompt` - Prompt template for generating summaries.
+- `trim_tokens_to_summarize` - Maximum tokens to keep when preparing
+  messages for summarization. Pass None to skip trimming.
+- `max_context_tokens` - Maximum context tokens for fraction calculations.
+  If None, attempts to get from model profile.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt"></a>
-
-#### `system_prompt`
-
-```python
-@property
-def system_prompt() -> str
-```
-
-Get system prompt for todo list tools.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.todo_list"></a>
-
-#### `todo_list`
-
-```python
-@property
-def todo_list() -> TodoList
-```
-
-Get current todo list.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state"></a>
-
-#### `get_todos_state`
-
-```python
-def get_todos_state() -> Dict[str, Any]
-```
-
-Get todo list as state dict (for checkpointing).
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state"></a>
-
-#### `restore_todos_state`
-
-```python
-def restore_todos_state(state: Dict[str, Any]) -> None
-```
-
-Restore todo list from state dict.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call"></a>
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call"></a>
 
 #### `awrap_model_call`
 
@@ -377,9 +397,123 @@ async def awrap_model_call(request: ModelRequest,
                            handler: Callable) -> ModelResponse
 ```
 
-Inject system prompt for todo list tools.
+Process messages before model call, potentially triggering summarization.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.before_agent"></a>
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, Any]
+```
+
+Get summarization statistics.
+
+<a id="spoon_ai.middleware.summarization.create_summarization_middleware"></a>
+
+#### `create_summarization_middleware`
+
+```python
+def create_summarization_middleware(
+        model: Optional[ChatBot] = None,
+        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
+        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
+        max_context_tokens: Optional[int] = None,
+        **kwargs: Any) -> SummarizationMiddleware
+```
+
+Create a summarization middleware.
+
+**Arguments**:
+
+- `model` - LLM for summarization
+- `trigger` - When to trigger summarization
+- `keep` - What to keep after summarization
+- `max_context_tokens` - Maximum context tokens for fraction calculations
+- `**kwargs` - Additional arguments passed to SummarizationMiddleware
+  
+
+**Returns**:
+
+  Configured SummarizationMiddleware
+
+<a id="spoon_ai.middleware.patch_tool_calls"></a>
+
+# Module `spoon_ai.middleware.patch_tool_calls`
+
+PatchToolCalls Middleware - Fix Dangling Tool Calls.
+
+Patches message history to handle dangling tool calls that occur when:
+- HITL (Human-in-the-Loop) interrupts tool execution
+- Errors cause tool execution to be skipped
+- Agent is resumed from a checkpoint mid-execution
+
+Compatible with LangChain DeepAgents PatchToolCallsMiddleware interface.
+
+Usage:
+    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
+
+    agent = ToolCallAgent(
+        middleware=[PatchToolCallsMiddleware()],
+        ...
+    )
+
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware"></a>
+
+## `PatchToolCallsMiddleware` Objects
+
+```python
+class PatchToolCallsMiddleware(AgentMiddleware)
+```
+
+Middleware to patch dangling tool calls in message history.
+
+A "dangling tool call" occurs when an AI message contains tool_calls
+but there's no corresponding tool response message. This violates
+the OpenAI/Anthropic API requirements and causes errors.
+
+This middleware:
+1. Scans message history for AI messages with tool_calls
+2. Checks if each tool call has a corresponding tool response
+3. Injects synthetic tool response messages for any missing ones
+
+Common causes of dangling tool calls:
+- HITL approval flow rejects or edits a tool call
+- Error during tool execution before response is added
+- Agent resumed from checkpoint mid-execution
+- Network timeout during tool execution
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
+
+    middleware = PatchToolCallsMiddleware()
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(cancelled_message_template: Optional[str] = None,
+             log_patches: bool = True)
+```
+
+Initialize PatchToolCalls middleware.
+
+**Arguments**:
+
+- `cancelled_message_template` - Custom message template for cancelled tools.
+  Must contain &#123;tool_name&#125; and &#123;tool_call_id&#125; placeholders.
+- `log_patches` - Whether to log when patches are applied (default: True)
+
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent"></a>
 
 #### `before_agent`
 
@@ -388,18 +522,398 @@ def before_agent(state: Dict[str, Any],
                  runtime: AgentRuntime) -> Optional[Dict[str, Any]]
 ```
 
-Restore todo list from agent state if available.
+Patch dangling tool calls when agent starts.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.after_agent"></a>
+This handles cases where agent is resumed from a checkpoint
+with incomplete tool execution.
 
-#### `after_agent`
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
 
 ```python
-def after_agent(state: Dict[str, Any],
-                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
 ```
 
-Save todo list to agent state.
+Patch dangling tool calls before model call.
+
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, int]
+```
+
+Get patching statistics.
+
+<a id="spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware"></a>
+
+#### `create_patch_tool_calls_middleware`
+
+```python
+def create_patch_tool_calls_middleware(
+        log_patches: bool = True) -> PatchToolCallsMiddleware
+```
+
+Create a PatchToolCalls middleware.
+
+**Arguments**:
+
+- `log_patches` - Whether to log when patches are applied
+  
+
+**Returns**:
+
+  Configured PatchToolCallsMiddleware
+
+<a id="spoon_ai.middleware.filesystem"></a>
+
+# Module `spoon_ai.middleware.filesystem`
+
+Filesystem Middleware - 7 Built-in Tools for File Operations.
+
+Provides filesystem tools to agents:
+1. ls - List files in directory
+2. read_file - Read file content
+3. write_file - Write new file
+4. edit_file - Edit existing file (string replacement)
+5. glob - Find files by pattern
+6. grep - Search content in files
+7. execute - Run shell commands (if backend supports)
+
+Compatible with LangChain DeepAgents filesystem middleware interface.
+
+Usage:
+    from spoon_ai.middleware.filesystem import FilesystemMiddleware
+    from spoon_ai.backends import create_state_backend
+
+    backend, runtime = create_state_backend()
+    middleware = FilesystemMiddleware(backend=backend)
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+
+<a id="spoon_ai.middleware.filesystem.validate_path"></a>
+
+#### `validate_path`
+
+```python
+def validate_path(path: str,
+                  allowed_prefixes: Optional[List[str]] = None) -> str
+```
+
+Validate and normalize file path for security.
+
+**Arguments**:
+
+- `path` - The path to validate
+- `allowed_prefixes` - Optional list of allowed path prefixes
+  
+
+**Returns**:
+
+  Normalized canonical path starting with /
+  
+
+**Raises**:
+
+- `ValueError` - If path contains traversal sequences or invalid format
+
+<a id="spoon_ai.middleware.filesystem.LsTool"></a>
+
+## `LsTool` Objects
+
+```python
+class LsTool(BaseTool)
+```
+
+List files in a directory.
+
+<a id="spoon_ai.middleware.filesystem.ReadFileTool"></a>
+
+## `ReadFileTool` Objects
+
+```python
+class ReadFileTool(BaseTool)
+```
+
+Read file content.
+
+<a id="spoon_ai.middleware.filesystem.WriteFileTool"></a>
+
+## `WriteFileTool` Objects
+
+```python
+class WriteFileTool(BaseTool)
+```
+
+Write to a new file.
+
+<a id="spoon_ai.middleware.filesystem.EditFileTool"></a>
+
+## `EditFileTool` Objects
+
+```python
+class EditFileTool(BaseTool)
+```
+
+Edit existing file with string replacement.
+
+<a id="spoon_ai.middleware.filesystem.GlobTool"></a>
+
+## `GlobTool` Objects
+
+```python
+class GlobTool(BaseTool)
+```
+
+Find files by glob pattern.
+
+<a id="spoon_ai.middleware.filesystem.GrepTool"></a>
+
+## `GrepTool` Objects
+
+```python
+class GrepTool(BaseTool)
+```
+
+Search for pattern in files.
+
+<a id="spoon_ai.middleware.filesystem.ExecuteTool"></a>
+
+## `ExecuteTool` Objects
+
+```python
+class ExecuteTool(BaseTool)
+```
+
+Execute shell command in sandbox.
+
+<a id="spoon_ai.middleware.filesystem.get_filesystem_tools"></a>
+
+#### `get_filesystem_tools`
+
+```python
+def get_filesystem_tools(backend: BackendProtocol) -> List[BaseTool]
+```
+
+Get all filesystem tools for a backend.
+
+**Arguments**:
+
+- `backend` - Backend to use for file operations
+  
+
+**Returns**:
+
+  List of 7 filesystem tools
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware"></a>
+
+## `FilesystemMiddleware` Objects
+
+```python
+class FilesystemMiddleware(AgentMiddleware)
+```
+
+Middleware for providing filesystem and execution tools to an agent.
+
+Adds 7 filesystem tools to the agent:
+- ls: list files in directory
+- read_file: read file content
+- write_file: write new file
+- edit_file: edit existing file
+- glob: find files by pattern
+- grep: search content in files
+- execute: run shell commands (if backend supports)
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.filesystem import FilesystemMiddleware
+    from spoon_ai.backends import create_state_backend, create_composite_backend
+
+    # With ephemeral storage (default)
+    middleware = FilesystemMiddleware()
+
+    # With custom backend
+    backend, runtime = create_state_backend()
+    middleware = FilesystemMiddleware(backend=backend)
+
+    # With composite backend (mixed storage)
+    composite = create_composite_backend(
+        default=state_backend,
+        routes={"/persistent/": store_backend}
+    )
+    middleware = FilesystemMiddleware(backend=composite)
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(backend: Optional[BackendProtocol] = None,
+             system_prompt: Optional[str] = None,
+             include_execute: bool = True,
+             tool_token_limit: int = TOOL_TOKEN_LIMIT)
+```
+
+Initialize filesystem middleware.
+
+**Arguments**:
+
+- `backend` - Backend for file operations. Defaults to StateBackend.
+- `system_prompt` - Optional custom system prompt override.
+- `include_execute` - Whether to include execute tool (default: True)
+- `tool_token_limit` - Token limit before truncating tool results
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.tools"></a>
+
+#### `tools`
+
+```python
+@property
+def tools() -> List[BaseTool]
+```
+
+Get filesystem tools.
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt"></a>
+
+#### `system_prompt`
+
+```python
+@property
+def system_prompt() -> str
+```
+
+Get system prompt for filesystem tools.
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.backend"></a>
+
+#### `backend`
+
+```python
+@property
+def backend() -> BackendProtocol
+```
+
+Get the backend.
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
+```
+
+Inject system prompt for filesystem tools.
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call"></a>
+
+#### `awrap_tool_call`
+
+```python
+async def awrap_tool_call(request: ToolCallRequest,
+                          handler: Callable) -> ToolCallResult
+```
+
+Handle large tool results by truncating.
+
+<a id="spoon_ai.middleware.filesystem.create_filesystem_middleware"></a>
+
+#### `create_filesystem_middleware`
+
+```python
+def create_filesystem_middleware(
+        backend: Optional[BackendProtocol] = None,
+        include_execute: bool = True) -> FilesystemMiddleware
+```
+
+Create a filesystem middleware.
+
+**Arguments**:
+
+- `backend` - Backend for file operations
+- `include_execute` - Whether to include execute tool
+  
+
+**Returns**:
+
+  FilesystemMiddleware instance
+  
+
+**Example**:
+
+    ```python
+    middleware = create_filesystem_middleware()
+    agent = ToolCallAgent(middleware=[middleware], ...)
+    ```
+
+<a id="spoon_ai.middleware.filesystem.create_sandbox_backend"></a>
+
+#### `create_sandbox_backend`
+
+```python
+def create_sandbox_backend(root_dir: Optional[str] = None,
+                           timeout: int = 30) -> "LocalSandboxBackend"
+```
+
+Create a local sandbox backend that supports command execution.
+
+**Arguments**:
+
+- `root_dir` - Root directory for sandbox
+- `timeout` - Command execution timeout in seconds
+  
+
+**Returns**:
+
+  LocalSandboxBackend instance
+
+<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend"></a>
+
+## `LocalSandboxBackend` Objects
+
+```python
+class LocalSandboxBackend(SandboxBackendProtocol)
+```
+
+Local sandbox backend with command execution support.
+
+Wraps FilesystemBackend and adds execute capability.
+
+<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.execute"></a>
+
+#### `execute`
+
+```python
+def execute(command: str) -> ExecuteResponse
+```
+
+Execute a shell command.
+
+<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute"></a>
+
+#### `aexecute`
+
+```python
+async def aexecute(command: str) -> ExecuteResponse
+```
+
+Async execute a shell command.
 
 <a id="spoon_ai.middleware.prompt_caching"></a>
 
@@ -1496,484 +2010,6 @@ Create middleware pipeline from middleware classes or instances.
   SummarizationMiddleware(),
   ])
 
-<a id="spoon_ai.middleware.patch_tool_calls"></a>
-
-# Module `spoon_ai.middleware.patch_tool_calls`
-
-PatchToolCalls Middleware - Fix Dangling Tool Calls.
-
-Patches message history to handle dangling tool calls that occur when:
-- HITL (Human-in-the-Loop) interrupts tool execution
-- Errors cause tool execution to be skipped
-- Agent is resumed from a checkpoint mid-execution
-
-Compatible with LangChain DeepAgents PatchToolCallsMiddleware interface.
-
-Usage:
-    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
-
-    agent = ToolCallAgent(
-        middleware=[PatchToolCallsMiddleware()],
-        ...
-    )
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware"></a>
-
-## `PatchToolCallsMiddleware` Objects
-
-```python
-class PatchToolCallsMiddleware(AgentMiddleware)
-```
-
-Middleware to patch dangling tool calls in message history.
-
-A "dangling tool call" occurs when an AI message contains tool_calls
-but there's no corresponding tool response message. This violates
-the OpenAI/Anthropic API requirements and causes errors.
-
-This middleware:
-1. Scans message history for AI messages with tool_calls
-2. Checks if each tool call has a corresponding tool response
-3. Injects synthetic tool response messages for any missing ones
-
-Common causes of dangling tool calls:
-- HITL approval flow rejects or edits a tool call
-- Error during tool execution before response is added
-- Agent resumed from checkpoint mid-execution
-- Network timeout during tool execution
-
-**Example**:
-
-    ```python
-    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
-
-    middleware = PatchToolCallsMiddleware()
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(cancelled_message_template: Optional[str] = None,
-             log_patches: bool = True)
-```
-
-Initialize PatchToolCalls middleware.
-
-**Arguments**:
-
-- `cancelled_message_template` - Custom message template for cancelled tools.
-  Must contain &#123;tool_name&#125; and &#123;tool_call_id&#125; placeholders.
-- `log_patches` - Whether to log when patches are applied (default: True)
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent"></a>
-
-#### `before_agent`
-
-```python
-def before_agent(state: Dict[str, Any],
-                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Patch dangling tool calls when agent starts.
-
-This handles cases where agent is resumed from a checkpoint
-with incomplete tool execution.
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Patch dangling tool calls before model call.
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, int]
-```
-
-Get patching statistics.
-
-<a id="spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware"></a>
-
-#### `create_patch_tool_calls_middleware`
-
-```python
-def create_patch_tool_calls_middleware(
-        log_patches: bool = True) -> PatchToolCallsMiddleware
-```
-
-Create a PatchToolCalls middleware.
-
-**Arguments**:
-
-- `log_patches` - Whether to log when patches are applied
-  
-
-**Returns**:
-
-  Configured PatchToolCallsMiddleware
-
-<a id="spoon_ai.middleware.filesystem"></a>
-
-# Module `spoon_ai.middleware.filesystem`
-
-Filesystem Middleware - 7 Built-in Tools for File Operations.
-
-Provides filesystem tools to agents:
-1. ls - List files in directory
-2. read_file - Read file content
-3. write_file - Write new file
-4. edit_file - Edit existing file (string replacement)
-5. glob - Find files by pattern
-6. grep - Search content in files
-7. execute - Run shell commands (if backend supports)
-
-Compatible with LangChain DeepAgents filesystem middleware interface.
-
-Usage:
-    from spoon_ai.middleware.filesystem import FilesystemMiddleware
-    from spoon_ai.backends import create_state_backend
-
-    backend, runtime = create_state_backend()
-    middleware = FilesystemMiddleware(backend=backend)
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-
-<a id="spoon_ai.middleware.filesystem.validate_path"></a>
-
-#### `validate_path`
-
-```python
-def validate_path(path: str,
-                  allowed_prefixes: Optional[List[str]] = None) -> str
-```
-
-Validate and normalize file path for security.
-
-**Arguments**:
-
-- `path` - The path to validate
-- `allowed_prefixes` - Optional list of allowed path prefixes
-  
-
-**Returns**:
-
-  Normalized canonical path starting with /
-  
-
-**Raises**:
-
-- `ValueError` - If path contains traversal sequences or invalid format
-
-<a id="spoon_ai.middleware.filesystem.LsTool"></a>
-
-## `LsTool` Objects
-
-```python
-class LsTool(BaseTool)
-```
-
-List files in a directory.
-
-<a id="spoon_ai.middleware.filesystem.ReadFileTool"></a>
-
-## `ReadFileTool` Objects
-
-```python
-class ReadFileTool(BaseTool)
-```
-
-Read file content.
-
-<a id="spoon_ai.middleware.filesystem.WriteFileTool"></a>
-
-## `WriteFileTool` Objects
-
-```python
-class WriteFileTool(BaseTool)
-```
-
-Write to a new file.
-
-<a id="spoon_ai.middleware.filesystem.EditFileTool"></a>
-
-## `EditFileTool` Objects
-
-```python
-class EditFileTool(BaseTool)
-```
-
-Edit existing file with string replacement.
-
-<a id="spoon_ai.middleware.filesystem.GlobTool"></a>
-
-## `GlobTool` Objects
-
-```python
-class GlobTool(BaseTool)
-```
-
-Find files by glob pattern.
-
-<a id="spoon_ai.middleware.filesystem.GrepTool"></a>
-
-## `GrepTool` Objects
-
-```python
-class GrepTool(BaseTool)
-```
-
-Search for pattern in files.
-
-<a id="spoon_ai.middleware.filesystem.ExecuteTool"></a>
-
-## `ExecuteTool` Objects
-
-```python
-class ExecuteTool(BaseTool)
-```
-
-Execute shell command in sandbox.
-
-<a id="spoon_ai.middleware.filesystem.get_filesystem_tools"></a>
-
-#### `get_filesystem_tools`
-
-```python
-def get_filesystem_tools(backend: BackendProtocol) -> List[BaseTool]
-```
-
-Get all filesystem tools for a backend.
-
-**Arguments**:
-
-- `backend` - Backend to use for file operations
-  
-
-**Returns**:
-
-  List of 7 filesystem tools
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware"></a>
-
-## `FilesystemMiddleware` Objects
-
-```python
-class FilesystemMiddleware(AgentMiddleware)
-```
-
-Middleware for providing filesystem and execution tools to an agent.
-
-Adds 7 filesystem tools to the agent:
-- ls: list files in directory
-- read_file: read file content
-- write_file: write new file
-- edit_file: edit existing file
-- glob: find files by pattern
-- grep: search content in files
-- execute: run shell commands (if backend supports)
-
-**Example**:
-
-    ```python
-    from spoon_ai.middleware.filesystem import FilesystemMiddleware
-    from spoon_ai.backends import create_state_backend, create_composite_backend
-
-    # With ephemeral storage (default)
-    middleware = FilesystemMiddleware()
-
-    # With custom backend
-    backend, runtime = create_state_backend()
-    middleware = FilesystemMiddleware(backend=backend)
-
-    # With composite backend (mixed storage)
-    composite = create_composite_backend(
-        default=state_backend,
-        routes={"/persistent/": store_backend}
-    )
-    middleware = FilesystemMiddleware(backend=composite)
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(backend: Optional[BackendProtocol] = None,
-             system_prompt: Optional[str] = None,
-             include_execute: bool = True,
-             tool_token_limit: int = TOOL_TOKEN_LIMIT)
-```
-
-Initialize filesystem middleware.
-
-**Arguments**:
-
-- `backend` - Backend for file operations. Defaults to StateBackend.
-- `system_prompt` - Optional custom system prompt override.
-- `include_execute` - Whether to include execute tool (default: True)
-- `tool_token_limit` - Token limit before truncating tool results
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.tools"></a>
-
-#### `tools`
-
-```python
-@property
-def tools() -> List[BaseTool]
-```
-
-Get filesystem tools.
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt"></a>
-
-#### `system_prompt`
-
-```python
-@property
-def system_prompt() -> str
-```
-
-Get system prompt for filesystem tools.
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.backend"></a>
-
-#### `backend`
-
-```python
-@property
-def backend() -> BackendProtocol
-```
-
-Get the backend.
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Inject system prompt for filesystem tools.
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call"></a>
-
-#### `awrap_tool_call`
-
-```python
-async def awrap_tool_call(request: ToolCallRequest,
-                          handler: Callable) -> ToolCallResult
-```
-
-Handle large tool results by truncating.
-
-<a id="spoon_ai.middleware.filesystem.create_filesystem_middleware"></a>
-
-#### `create_filesystem_middleware`
-
-```python
-def create_filesystem_middleware(
-        backend: Optional[BackendProtocol] = None,
-        include_execute: bool = True) -> FilesystemMiddleware
-```
-
-Create a filesystem middleware.
-
-**Arguments**:
-
-- `backend` - Backend for file operations
-- `include_execute` - Whether to include execute tool
-  
-
-**Returns**:
-
-  FilesystemMiddleware instance
-  
-
-**Example**:
-
-    ```python
-    middleware = create_filesystem_middleware()
-    agent = ToolCallAgent(middleware=[middleware], ...)
-    ```
-
-<a id="spoon_ai.middleware.filesystem.create_sandbox_backend"></a>
-
-#### `create_sandbox_backend`
-
-```python
-def create_sandbox_backend(root_dir: Optional[str] = None,
-                           timeout: int = 30) -> "LocalSandboxBackend"
-```
-
-Create a local sandbox backend that supports command execution.
-
-**Arguments**:
-
-- `root_dir` - Root directory for sandbox
-- `timeout` - Command execution timeout in seconds
-  
-
-**Returns**:
-
-  LocalSandboxBackend instance
-
-<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend"></a>
-
-## `LocalSandboxBackend` Objects
-
-```python
-class LocalSandboxBackend(SandboxBackendProtocol)
-```
-
-Local sandbox backend with command execution support.
-
-Wraps FilesystemBackend and adds execute capability.
-
-<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.execute"></a>
-
-#### `execute`
-
-```python
-def execute(command: str) -> ExecuteResponse
-```
-
-Execute a shell command.
-
-<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute"></a>
-
-#### `aexecute`
-
-```python
-async def aexecute(command: str) -> ExecuteResponse
-```
-
-Async execute a shell command.
-
 <a id="spoon_ai.middleware.planning"></a>
 
 # Module `spoon_ai.middleware.planning`
@@ -2262,163 +2298,128 @@ Create a planning middleware with common settings.
 
   Configured PlanningMiddleware
 
-<a id="spoon_ai.middleware.summarization"></a>
+<a id="spoon_ai.middleware.todolist"></a>
 
-# Module `spoon_ai.middleware.summarization`
+# Module `spoon_ai.middleware.todolist`
 
-Summarization Middleware - Context Compression for Long Conversations.
+TodoList Middleware - Task Planning and Progress Tracking.
 
-Automatically summarizes conversation history when token limits are approached,
-preserving recent messages and maintaining context continuity by ensuring
-AI/Tool message pairs remain together.
+Provides todo list tools to agents for structured task management:
+- write_todos: Create/update todo list with tasks
+- read_todos: Read current todo list state
 
-Compatible with LangChain DeepAgents SummarizationMiddleware interface.
+Compatible with LangChain DeepAgents TodoListMiddleware interface.
 
 Usage:
-    from spoon_ai.middleware.summarization import SummarizationMiddleware
+    from spoon_ai.middleware.todolist import TodoListMiddleware
 
     agent = ToolCallAgent(
-        middleware=[SummarizationMiddleware(
-            model=llm,
-            trigger=("fraction", 0.85),  # Trigger at 85% of max tokens
-            keep=("messages", 20),       # Keep last 20 messages
-        )],
+        middleware=[TodoListMiddleware()],
         ...
     )
 
-<a id="spoon_ai.middleware.summarization.ContextFraction"></a>
+<a id="spoon_ai.middleware.todolist.TodoStatus"></a>
 
-#### `ContextFraction`
-
-Fraction of model's maximum input tokens.
-
-**Example**:
-
-  To specify 50% of the model's max input tokens:
-    ```python
-    ("fraction", 0.5)
-    ```
-
-<a id="spoon_ai.middleware.summarization.ContextTokens"></a>
-
-#### `ContextTokens`
-
-Absolute number of tokens.
-
-**Example**:
-
-  To specify 3000 tokens:
-    ```python
-    ("tokens", 3000)
-    ```
-
-<a id="spoon_ai.middleware.summarization.ContextMessages"></a>
-
-#### `ContextMessages`
-
-Absolute number of messages.
-
-**Example**:
-
-  To specify 50 messages:
-    ```python
-    ("messages", 50)
-    ```
-
-<a id="spoon_ai.middleware.summarization.ContextSize"></a>
-
-#### `ContextSize`
-
-Union type for context size specifications.
-
-Can be either:
-- ContextFraction: A fraction of the model's maximum input tokens.
-- ContextTokens: An absolute number of tokens.
-- ContextMessages: An absolute number of messages.
-
-Depending on use with `trigger` or `keep` parameters, this type indicates either
-when to trigger summarization or how much context to retain.
-
-**Example**:
-
-    ```python
-    # ContextFraction
-    context_size: ContextSize = ("fraction", 0.5)
-
-    # ContextTokens
-    context_size: ContextSize = ("tokens", 3000)
-
-    # ContextMessages
-    context_size: ContextSize = ("messages", 50)
-    ```
-
-<a id="spoon_ai.middleware.summarization.count_tokens_approximately"></a>
-
-#### `count_tokens_approximately`
+## `TodoStatus` Objects
 
 ```python
-def count_tokens_approximately(messages: Iterable[Message],
-                               chars_per_token: float = 4.0) -> int
+class TodoStatus(str, Enum)
 ```
 
-Approximate token counter aligned with LangChain semantics.
+Status of a todo item.
 
-**Arguments**:
+<a id="spoon_ai.middleware.todolist.TodoItem"></a>
 
-- `messages` - Iterable of messages to count tokens for.
-- `chars_per_token` - Characters per token ratio (default: 4.0).
-  
-
-**Returns**:
-
-  Estimated token count.
-
-<a id="spoon_ai.middleware.summarization.RemoveMessage"></a>
-
-## `RemoveMessage` Objects
+## `TodoItem` Objects
 
 ```python
-class RemoveMessage()
+@dataclass
+class TodoItem()
 ```
 
-Marker class indicating a message should be removed.
+A single todo item.
 
-Compatible with LangChain's RemoveMessage pattern.
+<a id="spoon_ai.middleware.todolist.TodoList"></a>
 
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware"></a>
-
-## `SummarizationMiddleware` Objects
+## `TodoList` Objects
 
 ```python
-class SummarizationMiddleware(AgentMiddleware)
+@dataclass
+class TodoList()
 ```
 
-Summarizes conversation history when token limits are approached.
+Container for todo items.
 
-This middleware monitors message token counts and automatically summarizes older
-messages when a threshold is reached, preserving recent messages and maintaining
-context continuity by ensuring AI/Tool message pairs remain together.
+<a id="spoon_ai.middleware.todolist.TodoList.format_display"></a>
 
-Compatible with LangChain DeepAgents SummarizationMiddleware interface.
+#### `format_display`
+
+```python
+def format_display() -> str
+```
+
+Format todo list for display.
+
+<a id="spoon_ai.middleware.todolist.WriteTodosTool"></a>
+
+## `WriteTodosTool` Objects
+
+```python
+class WriteTodosTool(BaseTool)
+```
+
+Tool to create/update todo list.
+
+<a id="spoon_ai.middleware.todolist.WriteTodosTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(todos: List[Dict[str, Any]], **kwargs) -> str
+```
+
+Update the todo list.
+
+<a id="spoon_ai.middleware.todolist.ReadTodosTool"></a>
+
+## `ReadTodosTool` Objects
+
+```python
+class ReadTodosTool(BaseTool)
+```
+
+Tool to read current todo list.
+
+<a id="spoon_ai.middleware.todolist.ReadTodosTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(**kwargs) -> str
+```
+
+Read the current todo list.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware"></a>
+
+## `TodoListMiddleware` Objects
+
+```python
+class TodoListMiddleware(AgentMiddleware)
+```
+
+Middleware for providing todo list tools to an agent.
+
+Provides two tools:
+- write_todos: Create/update todo list
+- read_todos: Read current todo list
 
 **Example**:
 
     ```python
-    from spoon_ai.middleware.summarization import SummarizationMiddleware
+    from spoon_ai.middleware.todolist import TodoListMiddleware
 
-    # Basic usage with fraction trigger
-    middleware = SummarizationMiddleware(
-        model=llm,
-        trigger=("fraction", 0.85),
-        keep=("messages", 20),
-    )
-
-    # With multiple trigger conditions
-    middleware = SummarizationMiddleware(
-        model=llm,
-        trigger=[("fraction", 0.8), ("messages", 100)],
-        keep=("tokens", 3000),
-    )
+    middleware = TodoListMiddleware()
 
     agent = ToolCallAgent(
         middleware=[middleware],
@@ -2426,61 +2427,76 @@ Compatible with LangChain DeepAgents SummarizationMiddleware interface.
     )
     ```
 
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.__init__"></a>
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(
-        model: Optional[ChatBot] = None,
-        *,
-        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
-        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
-        token_counter: Optional[TokenCounter] = None,
-        summary_prompt: str = DEFAULT_SUMMARY_PROMPT,
-        trim_tokens_to_summarize: Optional[int] = _DEFAULT_TRIM_TOKEN_LIMIT,
-        max_context_tokens: Optional[int] = None,
-        **deprecated_kwargs: Any) -> None
+def __init__(system_prompt: Optional[str] = None,
+             auto_inject_prompt: bool = True)
 ```
 
-Initialize summarization middleware.
+Initialize TodoList middleware.
 
 **Arguments**:
 
-- `model` - The language model to use for generating summaries.
-  If None, uses agent's LLM.
-- `trigger` - One or more thresholds that trigger summarization.
-  Provide a single ContextSize tuple or a list of tuples.
-  Summarization runs when any threshold is met.
-  
+- `system_prompt` - Optional custom system prompt override.
+- `auto_inject_prompt` - Whether to auto-inject system prompt (default: True)
 
-**Examples**:
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.tools"></a>
 
-- `-` _"messages", 50_ - Trigger at 50 messages
-- `-` _"tokens", 3000_ - Trigger at 3000 tokens
-- `-` _"fraction", 0.8_ - Trigger at 80% of max input tokens
-  - [("fraction", 0.8), ("messages", 100)]: Multiple conditions
-  
-- `keep` - Context retention policy applied after summarization.
-  Provide a ContextSize tuple to specify how much history to preserve.
-  Defaults to keeping the most recent 20 messages.
-  
+#### `tools`
 
-**Examples**:
+```python
+@property
+def tools() -> List[BaseTool]
+```
 
-- `-` _"messages", 20_ - Keep last 20 messages
-- `-` _"tokens", 3000_ - Keep last 3000 tokens worth
-- `-` _"fraction", 0.3_ - Keep last 30% of max input tokens
-  
-- `token_counter` - Function to count tokens in messages.
-  Defaults to model-aware approximate counter.
-- `summary_prompt` - Prompt template for generating summaries.
-- `trim_tokens_to_summarize` - Maximum tokens to keep when preparing
-  messages for summarization. Pass None to skip trimming.
-- `max_context_tokens` - Maximum context tokens for fraction calculations.
-  If None, attempts to get from model profile.
+Get todo list tools.
 
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call"></a>
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt"></a>
+
+#### `system_prompt`
+
+```python
+@property
+def system_prompt() -> str
+```
+
+Get system prompt for todo list tools.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.todo_list"></a>
+
+#### `todo_list`
+
+```python
+@property
+def todo_list() -> TodoList
+```
+
+Get current todo list.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state"></a>
+
+#### `get_todos_state`
+
+```python
+def get_todos_state() -> Dict[str, Any]
+```
+
+Get todo list as state dict (for checkpointing).
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state"></a>
+
+#### `restore_todos_state`
+
+```python
+def restore_todos_state(state: Dict[str, Any]) -> None
+```
+
+Restore todo list from state dict.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call"></a>
 
 #### `awrap_model_call`
 
@@ -2489,43 +2505,27 @@ async def awrap_model_call(request: ModelRequest,
                            handler: Callable) -> ModelResponse
 ```
 
-Process messages before model call, potentially triggering summarization.
+Inject system prompt for todo list tools.
 
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats"></a>
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.before_agent"></a>
 
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, Any]
-```
-
-Get summarization statistics.
-
-<a id="spoon_ai.middleware.summarization.create_summarization_middleware"></a>
-
-#### `create_summarization_middleware`
+#### `before_agent`
 
 ```python
-def create_summarization_middleware(
-        model: Optional[ChatBot] = None,
-        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
-        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
-        max_context_tokens: Optional[int] = None,
-        **kwargs: Any) -> SummarizationMiddleware
+def before_agent(state: Dict[str, Any],
+                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
 ```
 
-Create a summarization middleware.
+Restore todo list from agent state if available.
 
-**Arguments**:
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.after_agent"></a>
 
-- `model` - LLM for summarization
-- `trigger` - When to trigger summarization
-- `keep` - What to keep after summarization
-- `max_context_tokens` - Maximum context tokens for fraction calculations
-- `**kwargs` - Additional arguments passed to SummarizationMiddleware
-  
+#### `after_agent`
 
-**Returns**:
+```python
+def after_agent(state: Dict[str, Any],
+                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
 
-  Configured SummarizationMiddleware
+Save todo list to agent state.
 

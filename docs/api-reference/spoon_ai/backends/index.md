@@ -7,6 +7,25 @@ title: spoon_ai.backends
 # Table of Contents
 
 * [spoon\_ai.backends](#spoon_ai.backends)
+* [spoon\_ai.backends.store](#spoon_ai.backends.store)
+  * [BaseStore](#spoon_ai.backends.store.BaseStore)
+    * [get](#spoon_ai.backends.store.BaseStore.get)
+    * [put](#spoon_ai.backends.store.BaseStore.put)
+    * [delete](#spoon_ai.backends.store.BaseStore.delete)
+    * [search](#spoon_ai.backends.store.BaseStore.search)
+  * [InMemoryStore](#spoon_ai.backends.store.InMemoryStore)
+  * [SQLiteStore](#spoon_ai.backends.store.SQLiteStore)
+  * [StoreBackend](#spoon_ai.backends.store.StoreBackend)
+    * [\_\_init\_\_](#spoon_ai.backends.store.StoreBackend.__init__)
+    * [ls\_info](#spoon_ai.backends.store.StoreBackend.ls_info)
+    * [read](#spoon_ai.backends.store.StoreBackend.read)
+    * [write](#spoon_ai.backends.store.StoreBackend.write)
+    * [edit](#spoon_ai.backends.store.StoreBackend.edit)
+    * [grep\_raw](#spoon_ai.backends.store.StoreBackend.grep_raw)
+    * [glob\_info](#spoon_ai.backends.store.StoreBackend.glob_info)
+    * [upload\_files](#spoon_ai.backends.store.StoreBackend.upload_files)
+    * [download\_files](#spoon_ai.backends.store.StoreBackend.download_files)
+  * [create\_store\_backend](#spoon_ai.backends.store.create_store_backend)
 * [spoon\_ai.backends.sandbox](#spoon_ai.backends.sandbox)
   * [BaseSandbox](#spoon_ai.backends.sandbox.BaseSandbox)
     * [execute](#spoon_ai.backends.sandbox.BaseSandbox.execute)
@@ -28,6 +47,28 @@ title: spoon_ai.backends
     * [aglob\_info](#spoon_ai.backends.sandbox.BaseSandbox.aglob_info)
     * [aupload\_files](#spoon_ai.backends.sandbox.BaseSandbox.aupload_files)
     * [adownload\_files](#spoon_ai.backends.sandbox.BaseSandbox.adownload_files)
+* [spoon\_ai.backends.state](#spoon_ai.backends.state)
+  * [StateBackend](#spoon_ai.backends.state.StateBackend)
+    * [\_\_init\_\_](#spoon_ai.backends.state.StateBackend.__init__)
+    * [ls\_info](#spoon_ai.backends.state.StateBackend.ls_info)
+    * [read](#spoon_ai.backends.state.StateBackend.read)
+    * [write](#spoon_ai.backends.state.StateBackend.write)
+    * [edit](#spoon_ai.backends.state.StateBackend.edit)
+    * [grep\_raw](#spoon_ai.backends.state.StateBackend.grep_raw)
+    * [glob\_info](#spoon_ai.backends.state.StateBackend.glob_info)
+  * [create\_state\_backend](#spoon_ai.backends.state.create_state_backend)
+* [spoon\_ai.backends.filesystem](#spoon_ai.backends.filesystem)
+  * [FilesystemBackend](#spoon_ai.backends.filesystem.FilesystemBackend)
+    * [\_\_init\_\_](#spoon_ai.backends.filesystem.FilesystemBackend.__init__)
+    * [ls\_info](#spoon_ai.backends.filesystem.FilesystemBackend.ls_info)
+    * [read](#spoon_ai.backends.filesystem.FilesystemBackend.read)
+    * [write](#spoon_ai.backends.filesystem.FilesystemBackend.write)
+    * [edit](#spoon_ai.backends.filesystem.FilesystemBackend.edit)
+    * [grep\_raw](#spoon_ai.backends.filesystem.FilesystemBackend.grep_raw)
+    * [glob\_info](#spoon_ai.backends.filesystem.FilesystemBackend.glob_info)
+    * [upload\_files](#spoon_ai.backends.filesystem.FilesystemBackend.upload_files)
+    * [download\_files](#spoon_ai.backends.filesystem.FilesystemBackend.download_files)
+  * [create\_filesystem\_backend](#spoon_ai.backends.filesystem.create_filesystem_backend)
 * [spoon\_ai.backends.utils](#spoon_ai.backends.utils)
   * [sanitize\_tool\_call\_id](#spoon_ai.backends.utils.sanitize_tool_call_id)
   * [validate\_path](#spoon_ai.backends.utils.validate_path)
@@ -43,16 +84,6 @@ title: spoon_ai.backends
   * [grep\_matches\_from\_files](#spoon_ai.backends.utils.grep_matches_from_files)
   * [format\_grep\_results](#spoon_ai.backends.utils.format_grep_results)
   * [truncate\_if\_too\_long](#spoon_ai.backends.utils.truncate_if_too_long)
-* [spoon\_ai.backends.state](#spoon_ai.backends.state)
-  * [StateBackend](#spoon_ai.backends.state.StateBackend)
-    * [\_\_init\_\_](#spoon_ai.backends.state.StateBackend.__init__)
-    * [ls\_info](#spoon_ai.backends.state.StateBackend.ls_info)
-    * [read](#spoon_ai.backends.state.StateBackend.read)
-    * [write](#spoon_ai.backends.state.StateBackend.write)
-    * [edit](#spoon_ai.backends.state.StateBackend.edit)
-    * [grep\_raw](#spoon_ai.backends.state.StateBackend.grep_raw)
-    * [glob\_info](#spoon_ai.backends.state.StateBackend.glob_info)
-  * [create\_state\_backend](#spoon_ai.backends.state.create_state_backend)
 * [spoon\_ai.backends.protocol](#spoon_ai.backends.protocol)
   * [FileOperationError](#spoon_ai.backends.protocol.FileOperationError)
   * [FileDownloadResponse](#spoon_ai.backends.protocol.FileDownloadResponse)
@@ -114,37 +145,6 @@ title: spoon_ai.backends
     * [download\_files](#spoon_ai.backends.composite.CompositeBackend.download_files)
     * [adownload\_files](#spoon_ai.backends.composite.CompositeBackend.adownload_files)
   * [create\_composite\_backend](#spoon_ai.backends.composite.create_composite_backend)
-* [spoon\_ai.backends.store](#spoon_ai.backends.store)
-  * [BaseStore](#spoon_ai.backends.store.BaseStore)
-    * [get](#spoon_ai.backends.store.BaseStore.get)
-    * [put](#spoon_ai.backends.store.BaseStore.put)
-    * [delete](#spoon_ai.backends.store.BaseStore.delete)
-    * [search](#spoon_ai.backends.store.BaseStore.search)
-  * [InMemoryStore](#spoon_ai.backends.store.InMemoryStore)
-  * [SQLiteStore](#spoon_ai.backends.store.SQLiteStore)
-  * [StoreBackend](#spoon_ai.backends.store.StoreBackend)
-    * [\_\_init\_\_](#spoon_ai.backends.store.StoreBackend.__init__)
-    * [ls\_info](#spoon_ai.backends.store.StoreBackend.ls_info)
-    * [read](#spoon_ai.backends.store.StoreBackend.read)
-    * [write](#spoon_ai.backends.store.StoreBackend.write)
-    * [edit](#spoon_ai.backends.store.StoreBackend.edit)
-    * [grep\_raw](#spoon_ai.backends.store.StoreBackend.grep_raw)
-    * [glob\_info](#spoon_ai.backends.store.StoreBackend.glob_info)
-    * [upload\_files](#spoon_ai.backends.store.StoreBackend.upload_files)
-    * [download\_files](#spoon_ai.backends.store.StoreBackend.download_files)
-  * [create\_store\_backend](#spoon_ai.backends.store.create_store_backend)
-* [spoon\_ai.backends.filesystem](#spoon_ai.backends.filesystem)
-  * [FilesystemBackend](#spoon_ai.backends.filesystem.FilesystemBackend)
-    * [\_\_init\_\_](#spoon_ai.backends.filesystem.FilesystemBackend.__init__)
-    * [ls\_info](#spoon_ai.backends.filesystem.FilesystemBackend.ls_info)
-    * [read](#spoon_ai.backends.filesystem.FilesystemBackend.read)
-    * [write](#spoon_ai.backends.filesystem.FilesystemBackend.write)
-    * [edit](#spoon_ai.backends.filesystem.FilesystemBackend.edit)
-    * [grep\_raw](#spoon_ai.backends.filesystem.FilesystemBackend.grep_raw)
-    * [glob\_info](#spoon_ai.backends.filesystem.FilesystemBackend.glob_info)
-    * [upload\_files](#spoon_ai.backends.filesystem.FilesystemBackend.upload_files)
-    * [download\_files](#spoon_ai.backends.filesystem.FilesystemBackend.download_files)
-  * [create\_filesystem\_backend](#spoon_ai.backends.filesystem.create_filesystem_backend)
 
 <a id="spoon_ai.backends"></a>
 
@@ -226,6 +226,303 @@ Example Usage:
     sandbox = DockerSandbox("my-container")
     sandbox.write("/app/config.json", '{"key": "value"}')
     content = sandbox.read("/app/config.json")
+    ```
+
+<a id="spoon_ai.backends.store"></a>
+
+# Module `spoon_ai.backends.store`
+
+StoreBackend: Persistent key-value store backend (cross-thread).
+
+Uses a simple key-value store interface for persistent, cross-conversation storage.
+Files persist across all threads and sessions.
+
+<a id="spoon_ai.backends.store.BaseStore"></a>
+
+## `BaseStore` Objects
+
+```python
+class BaseStore(abc.ABC)
+```
+
+Abstract base class for persistent stores.
+
+Implementations can use SQLite, Redis, S3, or any other storage backend.
+
+<a id="spoon_ai.backends.store.BaseStore.get"></a>
+
+#### `get`
+
+```python
+@abc.abstractmethod
+def get(namespace: tuple[str, ...], key: str) -> Optional[dict[str, Any]]
+```
+
+Get a value by key.
+
+**Arguments**:
+
+- `namespace` - Hierarchical namespace tuple.
+- `key` - The key to retrieve.
+  
+
+**Returns**:
+
+  The stored value dict, or None if not found.
+
+<a id="spoon_ai.backends.store.BaseStore.put"></a>
+
+#### `put`
+
+```python
+@abc.abstractmethod
+def put(namespace: tuple[str, ...], key: str, value: dict[str, Any]) -> None
+```
+
+Store a value by key.
+
+**Arguments**:
+
+- `namespace` - Hierarchical namespace tuple.
+- `key` - The key to store under.
+- `value` - The value dict to store.
+
+<a id="spoon_ai.backends.store.BaseStore.delete"></a>
+
+#### `delete`
+
+```python
+@abc.abstractmethod
+def delete(namespace: tuple[str, ...], key: str) -> None
+```
+
+Delete a value by key.
+
+**Arguments**:
+
+- `namespace` - Hierarchical namespace tuple.
+- `key` - The key to delete.
+
+<a id="spoon_ai.backends.store.BaseStore.search"></a>
+
+#### `search`
+
+```python
+@abc.abstractmethod
+def search(namespace: tuple[str, ...],
+           query: Optional[str] = None,
+           filter: Optional[dict[str, Any]] = None,
+           limit: int = 100,
+           offset: int = 0) -> list[dict[str, Any]]
+```
+
+Search for values in a namespace.
+
+**Arguments**:
+
+- `namespace` - Hierarchical namespace tuple.
+- `query` - Optional search query.
+- `filter` - Optional key-value filter.
+- `limit` - Maximum results to return.
+- `offset` - Number of results to skip.
+  
+
+**Returns**:
+
+  List of matching items with 'key' and 'value' fields.
+
+<a id="spoon_ai.backends.store.InMemoryStore"></a>
+
+## `InMemoryStore` Objects
+
+```python
+class InMemoryStore(BaseStore)
+```
+
+Simple in-memory store implementation.
+
+Useful for testing and development. Data is lost when process exits.
+
+<a id="spoon_ai.backends.store.SQLiteStore"></a>
+
+## `SQLiteStore` Objects
+
+```python
+class SQLiteStore(BaseStore)
+```
+
+SQLite-based persistent store.
+
+Data persists across process restarts.
+
+<a id="spoon_ai.backends.store.StoreBackend"></a>
+
+## `StoreBackend` Objects
+
+```python
+class StoreBackend(BackendProtocol)
+```
+
+Backend that stores files in a persistent store (cross-thread).
+
+Uses a key-value store for persistent, cross-conversation storage.
+Files are organized via namespaces and persist across all threads.
+
+**Example**:
+
+    ```python
+    store = SQLiteStore("agent_files.db")
+    backend = StoreBackend(store)
+
+    # Write persists across sessions
+    backend.write("/notes.txt", "Important notes")
+
+    # Read from any thread
+    content = backend.read("/notes.txt")
+    ```
+
+<a id="spoon_ai.backends.store.StoreBackend.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(store: BaseStore,
+             namespace: Optional[tuple[str, ...]] = None,
+             assistant_id: Optional[str] = None)
+```
+
+Initialize StoreBackend.
+
+**Arguments**:
+
+- `store` - BaseStore implementation.
+- `namespace` - Optional namespace tuple. Defaults to ("filesystem",).
+- `assistant_id` - Optional assistant ID for multi-agent isolation.
+
+<a id="spoon_ai.backends.store.StoreBackend.ls_info"></a>
+
+#### `ls_info`
+
+```python
+def ls_info(path: str) -> list[FileInfo]
+```
+
+List files and directories in the specified directory.
+
+<a id="spoon_ai.backends.store.StoreBackend.read"></a>
+
+#### `read`
+
+```python
+def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Read file content with line numbers.
+
+<a id="spoon_ai.backends.store.StoreBackend.write"></a>
+
+#### `write`
+
+```python
+def write(file_path: str, content: str) -> WriteResult
+```
+
+Create a new file with content.
+
+<a id="spoon_ai.backends.store.StoreBackend.edit"></a>
+
+#### `edit`
+
+```python
+def edit(file_path: str,
+         old_string: str,
+         new_string: str,
+         replace_all: bool = False) -> EditResult
+```
+
+Edit a file by replacing string occurrences.
+
+<a id="spoon_ai.backends.store.StoreBackend.grep_raw"></a>
+
+#### `grep_raw`
+
+```python
+def grep_raw(pattern: str,
+             path: Optional[str] = None,
+             glob: Optional[str] = None) -> list[GrepMatch] | str
+```
+
+Search for pattern in files.
+
+<a id="spoon_ai.backends.store.StoreBackend.glob_info"></a>
+
+#### `glob_info`
+
+```python
+def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
+```
+
+Find files matching glob pattern.
+
+<a id="spoon_ai.backends.store.StoreBackend.upload_files"></a>
+
+#### `upload_files`
+
+```python
+def upload_files(files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
+```
+
+Upload multiple files to the store.
+
+<a id="spoon_ai.backends.store.StoreBackend.download_files"></a>
+
+#### `download_files`
+
+```python
+def download_files(paths: list[str]) -> list[FileDownloadResponse]
+```
+
+Download multiple files from the store.
+
+<a id="spoon_ai.backends.store.create_store_backend"></a>
+
+#### `create_store_backend`
+
+```python
+def create_store_backend(store: Optional[BaseStore] = None,
+                         db_path: str = "store.db",
+                         use_sqlite: bool = True,
+                         namespace: Optional[tuple[str, ...]] = None,
+                         assistant_id: Optional[str] = None) -> StoreBackend
+```
+
+Create a StoreBackend.
+
+**Arguments**:
+
+- `store` - Optional BaseStore instance. If not provided, creates one.
+- `db_path` - Path to SQLite database (if using SQLite).
+- `use_sqlite` - If True, use SQLite. Otherwise, use in-memory store.
+- `namespace` - Optional namespace tuple.
+- `assistant_id` - Optional assistant ID for isolation.
+  
+
+**Returns**:
+
+  StoreBackend instance.
+  
+
+**Example**:
+
+    ```python
+    # Use SQLite for persistence
+    backend = create_store_backend(db_path="agent.db")
+
+    # Use in-memory store for testing
+    backend = create_store_backend(use_sqlite=False)
+
+    # With assistant isolation
+    backend = create_store_backend(assistant_id="agent-001")
     ```
 
 <a id="spoon_ai.backends.sandbox"></a>
@@ -538,6 +835,381 @@ async def adownload_files(paths: List[str]) -> List[FileDownloadResponse]
 
 Async version of download_files.
 
+<a id="spoon_ai.backends.state"></a>
+
+# Module `spoon_ai.backends.state`
+
+StateBackend: Store files in agent state (ephemeral).
+
+Files persist within a conversation thread but not across threads.
+State is automatically checkpointed after each agent step.
+
+<a id="spoon_ai.backends.state.StateBackend"></a>
+
+## `StateBackend` Objects
+
+```python
+class StateBackend(BackendProtocol)
+```
+
+Backend that stores files in agent state (ephemeral).
+
+Uses agent's state management and checkpointing. Files persist within
+a conversation thread but not across threads. State is automatically
+checkpointed after each agent step.
+
+**Example**:
+
+    ```python
+    runtime = BackendRuntime(state={"files": {}})
+    backend = StateBackend(runtime)
+
+    # Write a file
+    result = backend.write("/hello.txt", "Hello, World!")
+
+    # Read the file
+    content = backend.read("/hello.txt")
+    ```
+
+<a id="spoon_ai.backends.state.StateBackend.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(runtime: BackendRuntime)
+```
+
+Initialize StateBackend with runtime.
+
+**Arguments**:
+
+- `runtime` - BackendRuntime instance providing state access.
+
+<a id="spoon_ai.backends.state.StateBackend.ls_info"></a>
+
+#### `ls_info`
+
+```python
+def ls_info(path: str) -> list[FileInfo]
+```
+
+List files and directories in the specified directory (non-recursive).
+
+**Arguments**:
+
+- `path` - Absolute path to directory.
+  
+
+**Returns**:
+
+  List of FileInfo dicts for files and directories in the directory.
+
+<a id="spoon_ai.backends.state.StateBackend.read"></a>
+
+#### `read`
+
+```python
+def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Read file content with line numbers.
+
+**Arguments**:
+
+- `file_path` - Absolute file path.
+- `offset` - Line offset to start reading from (0-indexed).
+- `limit` - Maximum number of lines to read.
+  
+
+**Returns**:
+
+  Formatted file content with line numbers, or error message.
+
+<a id="spoon_ai.backends.state.StateBackend.write"></a>
+
+#### `write`
+
+```python
+def write(file_path: str, content: str) -> WriteResult
+```
+
+Create a new file with content.
+
+Returns WriteResult with files_update to update state.
+
+<a id="spoon_ai.backends.state.StateBackend.edit"></a>
+
+#### `edit`
+
+```python
+def edit(file_path: str,
+         old_string: str,
+         new_string: str,
+         replace_all: bool = False) -> EditResult
+```
+
+Edit a file by replacing string occurrences.
+
+Returns EditResult with files_update and occurrences.
+
+<a id="spoon_ai.backends.state.StateBackend.grep_raw"></a>
+
+#### `grep_raw`
+
+```python
+def grep_raw(pattern: str,
+             path: Optional[str] = None,
+             glob: Optional[str] = None) -> list[GrepMatch] | str
+```
+
+Search for pattern in files.
+
+<a id="spoon_ai.backends.state.StateBackend.glob_info"></a>
+
+#### `glob_info`
+
+```python
+def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
+```
+
+Get FileInfo for files matching glob pattern.
+
+<a id="spoon_ai.backends.state.create_state_backend"></a>
+
+#### `create_state_backend`
+
+```python
+def create_state_backend(
+    initial_files: Optional[dict[str, Any]] = None
+) -> tuple[StateBackend, BackendRuntime]
+```
+
+Create a StateBackend with optional initial files.
+
+**Arguments**:
+
+- `initial_files` - Optional dict of file paths to FileData.
+  
+
+**Returns**:
+
+  Tuple of (StateBackend, BackendRuntime).
+  
+
+**Example**:
+
+    ```python
+    backend, runtime = create_state_backend()
+    backend.write("/hello.txt", "Hello!")
+    ```
+
+<a id="spoon_ai.backends.filesystem"></a>
+
+# Module `spoon_ai.backends.filesystem`
+
+FilesystemBackend: Read and write files directly from the filesystem.
+
+Security features:
+- Secure path resolution with root containment when in virtual_mode
+- Prevent symlink-following on file I/O using O_NOFOLLOW when available
+- Max file size enforcement
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend"></a>
+
+## `FilesystemBackend` Objects
+
+```python
+class FilesystemBackend(BackendProtocol)
+```
+
+Backend that reads and writes files directly from the filesystem.
+
+Files are accessed using their actual filesystem paths. Relative paths are
+resolved relative to the current working directory or root_dir.
+
+**Example**:
+
+    ```python
+    # Real filesystem access
+    backend = FilesystemBackend()
+    content = backend.read("/path/to/file.txt")
+
+    # Sandboxed to a directory
+    backend = FilesystemBackend(
+        root_dir="/workspace",
+        virtual_mode=True
+    )
+    # "/file.txt" maps to "/workspace/file.txt"
+    ```
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(root_dir: Optional[str | Path] = None,
+             virtual_mode: bool = False,
+             max_file_size_mb: int = 10) -> None
+```
+
+Initialize filesystem backend.
+
+**Arguments**:
+
+- `root_dir` - Optional root directory. If provided, all paths are
+  resolved relative to this directory.
+- `virtual_mode` - If True, treat paths as virtual absolute paths under
+  root_dir. Disallows path traversal.
+- `max_file_size_mb` - Maximum file size in MB for operations.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.ls_info"></a>
+
+#### `ls_info`
+
+```python
+def ls_info(path: str) -> list[FileInfo]
+```
+
+List files and directories in the specified directory (non-recursive).
+
+**Arguments**:
+
+- `path` - Absolute directory path.
+  
+
+**Returns**:
+
+  List of FileInfo dicts for files and directories.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.read"></a>
+
+#### `read`
+
+```python
+def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Read file content with line numbers.
+
+**Arguments**:
+
+- `file_path` - Absolute or relative file path.
+- `offset` - Line offset to start reading from (0-indexed).
+- `limit` - Maximum number of lines to read.
+  
+
+**Returns**:
+
+  Formatted file content with line numbers, or error message.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.write"></a>
+
+#### `write`
+
+```python
+def write(file_path: str, content: str) -> WriteResult
+```
+
+Create a new file with content.
+
+Returns WriteResult. External storage sets files_update=None.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.edit"></a>
+
+#### `edit`
+
+```python
+def edit(file_path: str,
+         old_string: str,
+         new_string: str,
+         replace_all: bool = False) -> EditResult
+```
+
+Edit a file by replacing string occurrences.
+
+Returns EditResult. External storage sets files_update=None.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.grep_raw"></a>
+
+#### `grep_raw`
+
+```python
+def grep_raw(pattern: str,
+             path: Optional[str] = None,
+             glob: Optional[str] = None) -> list[GrepMatch] | str
+```
+
+Search for pattern in files.
+
+Uses ripgrep if available, falls back to Python search.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.glob_info"></a>
+
+#### `glob_info`
+
+```python
+def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
+```
+
+Find files matching glob pattern.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.upload_files"></a>
+
+#### `upload_files`
+
+```python
+def upload_files(files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
+```
+
+Upload multiple files to the filesystem.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.download_files"></a>
+
+#### `download_files`
+
+```python
+def download_files(paths: list[str]) -> list[FileDownloadResponse]
+```
+
+Download multiple files from the filesystem.
+
+<a id="spoon_ai.backends.filesystem.create_filesystem_backend"></a>
+
+#### `create_filesystem_backend`
+
+```python
+def create_filesystem_backend(root_dir: Optional[str | Path] = None,
+                              virtual_mode: bool = False,
+                              max_file_size_mb: int = 10) -> FilesystemBackend
+```
+
+Create a FilesystemBackend.
+
+**Arguments**:
+
+- `root_dir` - Root directory for file operations.
+- `virtual_mode` - If True, sandbox paths to root_dir.
+- `max_file_size_mb` - Maximum file size for operations.
+  
+
+**Returns**:
+
+  FilesystemBackend instance.
+  
+
+**Example**:
+
+    ```python
+    # Access real filesystem
+    backend = create_filesystem_backend()
+
+    # Sandboxed to workspace
+    backend = create_filesystem_backend(
+        root_dir="/workspace",
+        virtual_mode=True
+    )
+    ```
+
 <a id="spoon_ai.backends.utils"></a>
 
 # Module `spoon_ai.backends.utils`
@@ -830,174 +1502,6 @@ def truncate_if_too_long(result: list[str] | str) -> list[str] | str
 ```
 
 Truncate result if it exceeds token limit.
-
-<a id="spoon_ai.backends.state"></a>
-
-# Module `spoon_ai.backends.state`
-
-StateBackend: Store files in agent state (ephemeral).
-
-Files persist within a conversation thread but not across threads.
-State is automatically checkpointed after each agent step.
-
-<a id="spoon_ai.backends.state.StateBackend"></a>
-
-## `StateBackend` Objects
-
-```python
-class StateBackend(BackendProtocol)
-```
-
-Backend that stores files in agent state (ephemeral).
-
-Uses agent's state management and checkpointing. Files persist within
-a conversation thread but not across threads. State is automatically
-checkpointed after each agent step.
-
-**Example**:
-
-    ```python
-    runtime = BackendRuntime(state={"files": {}})
-    backend = StateBackend(runtime)
-
-    # Write a file
-    result = backend.write("/hello.txt", "Hello, World!")
-
-    # Read the file
-    content = backend.read("/hello.txt")
-    ```
-
-<a id="spoon_ai.backends.state.StateBackend.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(runtime: BackendRuntime)
-```
-
-Initialize StateBackend with runtime.
-
-**Arguments**:
-
-- `runtime` - BackendRuntime instance providing state access.
-
-<a id="spoon_ai.backends.state.StateBackend.ls_info"></a>
-
-#### `ls_info`
-
-```python
-def ls_info(path: str) -> list[FileInfo]
-```
-
-List files and directories in the specified directory (non-recursive).
-
-**Arguments**:
-
-- `path` - Absolute path to directory.
-  
-
-**Returns**:
-
-  List of FileInfo dicts for files and directories in the directory.
-
-<a id="spoon_ai.backends.state.StateBackend.read"></a>
-
-#### `read`
-
-```python
-def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Read file content with line numbers.
-
-**Arguments**:
-
-- `file_path` - Absolute file path.
-- `offset` - Line offset to start reading from (0-indexed).
-- `limit` - Maximum number of lines to read.
-  
-
-**Returns**:
-
-  Formatted file content with line numbers, or error message.
-
-<a id="spoon_ai.backends.state.StateBackend.write"></a>
-
-#### `write`
-
-```python
-def write(file_path: str, content: str) -> WriteResult
-```
-
-Create a new file with content.
-
-Returns WriteResult with files_update to update state.
-
-<a id="spoon_ai.backends.state.StateBackend.edit"></a>
-
-#### `edit`
-
-```python
-def edit(file_path: str,
-         old_string: str,
-         new_string: str,
-         replace_all: bool = False) -> EditResult
-```
-
-Edit a file by replacing string occurrences.
-
-Returns EditResult with files_update and occurrences.
-
-<a id="spoon_ai.backends.state.StateBackend.grep_raw"></a>
-
-#### `grep_raw`
-
-```python
-def grep_raw(pattern: str,
-             path: Optional[str] = None,
-             glob: Optional[str] = None) -> list[GrepMatch] | str
-```
-
-Search for pattern in files.
-
-<a id="spoon_ai.backends.state.StateBackend.glob_info"></a>
-
-#### `glob_info`
-
-```python
-def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
-```
-
-Get FileInfo for files matching glob pattern.
-
-<a id="spoon_ai.backends.state.create_state_backend"></a>
-
-#### `create_state_backend`
-
-```python
-def create_state_backend(
-    initial_files: Optional[dict[str, Any]] = None
-) -> tuple[StateBackend, BackendRuntime]
-```
-
-Create a StateBackend with optional initial files.
-
-**Arguments**:
-
-- `initial_files` - Optional dict of file paths to FileData.
-  
-
-**Returns**:
-
-  Tuple of (StateBackend, BackendRuntime).
-  
-
-**Example**:
-
-    ```python
-    backend, runtime = create_state_backend()
-    backend.write("/hello.txt", "Hello!")
-    ```
 
 <a id="spoon_ai.backends.protocol"></a>
 
@@ -2295,510 +2799,6 @@ Create a CompositeBackend.
             "/db/": store_backend,
             "/files/": fs_backend,
         }
-    )
-    ```
-
-<a id="spoon_ai.backends.store"></a>
-
-# Module `spoon_ai.backends.store`
-
-StoreBackend: Persistent key-value store backend (cross-thread).
-
-Uses a simple key-value store interface for persistent, cross-conversation storage.
-Files persist across all threads and sessions.
-
-<a id="spoon_ai.backends.store.BaseStore"></a>
-
-## `BaseStore` Objects
-
-```python
-class BaseStore(abc.ABC)
-```
-
-Abstract base class for persistent stores.
-
-Implementations can use SQLite, Redis, S3, or any other storage backend.
-
-<a id="spoon_ai.backends.store.BaseStore.get"></a>
-
-#### `get`
-
-```python
-@abc.abstractmethod
-def get(namespace: tuple[str, ...], key: str) -> Optional[dict[str, Any]]
-```
-
-Get a value by key.
-
-**Arguments**:
-
-- `namespace` - Hierarchical namespace tuple.
-- `key` - The key to retrieve.
-  
-
-**Returns**:
-
-  The stored value dict, or None if not found.
-
-<a id="spoon_ai.backends.store.BaseStore.put"></a>
-
-#### `put`
-
-```python
-@abc.abstractmethod
-def put(namespace: tuple[str, ...], key: str, value: dict[str, Any]) -> None
-```
-
-Store a value by key.
-
-**Arguments**:
-
-- `namespace` - Hierarchical namespace tuple.
-- `key` - The key to store under.
-- `value` - The value dict to store.
-
-<a id="spoon_ai.backends.store.BaseStore.delete"></a>
-
-#### `delete`
-
-```python
-@abc.abstractmethod
-def delete(namespace: tuple[str, ...], key: str) -> None
-```
-
-Delete a value by key.
-
-**Arguments**:
-
-- `namespace` - Hierarchical namespace tuple.
-- `key` - The key to delete.
-
-<a id="spoon_ai.backends.store.BaseStore.search"></a>
-
-#### `search`
-
-```python
-@abc.abstractmethod
-def search(namespace: tuple[str, ...],
-           query: Optional[str] = None,
-           filter: Optional[dict[str, Any]] = None,
-           limit: int = 100,
-           offset: int = 0) -> list[dict[str, Any]]
-```
-
-Search for values in a namespace.
-
-**Arguments**:
-
-- `namespace` - Hierarchical namespace tuple.
-- `query` - Optional search query.
-- `filter` - Optional key-value filter.
-- `limit` - Maximum results to return.
-- `offset` - Number of results to skip.
-  
-
-**Returns**:
-
-  List of matching items with 'key' and 'value' fields.
-
-<a id="spoon_ai.backends.store.InMemoryStore"></a>
-
-## `InMemoryStore` Objects
-
-```python
-class InMemoryStore(BaseStore)
-```
-
-Simple in-memory store implementation.
-
-Useful for testing and development. Data is lost when process exits.
-
-<a id="spoon_ai.backends.store.SQLiteStore"></a>
-
-## `SQLiteStore` Objects
-
-```python
-class SQLiteStore(BaseStore)
-```
-
-SQLite-based persistent store.
-
-Data persists across process restarts.
-
-<a id="spoon_ai.backends.store.StoreBackend"></a>
-
-## `StoreBackend` Objects
-
-```python
-class StoreBackend(BackendProtocol)
-```
-
-Backend that stores files in a persistent store (cross-thread).
-
-Uses a key-value store for persistent, cross-conversation storage.
-Files are organized via namespaces and persist across all threads.
-
-**Example**:
-
-    ```python
-    store = SQLiteStore("agent_files.db")
-    backend = StoreBackend(store)
-
-    # Write persists across sessions
-    backend.write("/notes.txt", "Important notes")
-
-    # Read from any thread
-    content = backend.read("/notes.txt")
-    ```
-
-<a id="spoon_ai.backends.store.StoreBackend.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(store: BaseStore,
-             namespace: Optional[tuple[str, ...]] = None,
-             assistant_id: Optional[str] = None)
-```
-
-Initialize StoreBackend.
-
-**Arguments**:
-
-- `store` - BaseStore implementation.
-- `namespace` - Optional namespace tuple. Defaults to ("filesystem",).
-- `assistant_id` - Optional assistant ID for multi-agent isolation.
-
-<a id="spoon_ai.backends.store.StoreBackend.ls_info"></a>
-
-#### `ls_info`
-
-```python
-def ls_info(path: str) -> list[FileInfo]
-```
-
-List files and directories in the specified directory.
-
-<a id="spoon_ai.backends.store.StoreBackend.read"></a>
-
-#### `read`
-
-```python
-def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Read file content with line numbers.
-
-<a id="spoon_ai.backends.store.StoreBackend.write"></a>
-
-#### `write`
-
-```python
-def write(file_path: str, content: str) -> WriteResult
-```
-
-Create a new file with content.
-
-<a id="spoon_ai.backends.store.StoreBackend.edit"></a>
-
-#### `edit`
-
-```python
-def edit(file_path: str,
-         old_string: str,
-         new_string: str,
-         replace_all: bool = False) -> EditResult
-```
-
-Edit a file by replacing string occurrences.
-
-<a id="spoon_ai.backends.store.StoreBackend.grep_raw"></a>
-
-#### `grep_raw`
-
-```python
-def grep_raw(pattern: str,
-             path: Optional[str] = None,
-             glob: Optional[str] = None) -> list[GrepMatch] | str
-```
-
-Search for pattern in files.
-
-<a id="spoon_ai.backends.store.StoreBackend.glob_info"></a>
-
-#### `glob_info`
-
-```python
-def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
-```
-
-Find files matching glob pattern.
-
-<a id="spoon_ai.backends.store.StoreBackend.upload_files"></a>
-
-#### `upload_files`
-
-```python
-def upload_files(files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
-```
-
-Upload multiple files to the store.
-
-<a id="spoon_ai.backends.store.StoreBackend.download_files"></a>
-
-#### `download_files`
-
-```python
-def download_files(paths: list[str]) -> list[FileDownloadResponse]
-```
-
-Download multiple files from the store.
-
-<a id="spoon_ai.backends.store.create_store_backend"></a>
-
-#### `create_store_backend`
-
-```python
-def create_store_backend(store: Optional[BaseStore] = None,
-                         db_path: str = "store.db",
-                         use_sqlite: bool = True,
-                         namespace: Optional[tuple[str, ...]] = None,
-                         assistant_id: Optional[str] = None) -> StoreBackend
-```
-
-Create a StoreBackend.
-
-**Arguments**:
-
-- `store` - Optional BaseStore instance. If not provided, creates one.
-- `db_path` - Path to SQLite database (if using SQLite).
-- `use_sqlite` - If True, use SQLite. Otherwise, use in-memory store.
-- `namespace` - Optional namespace tuple.
-- `assistant_id` - Optional assistant ID for isolation.
-  
-
-**Returns**:
-
-  StoreBackend instance.
-  
-
-**Example**:
-
-    ```python
-    # Use SQLite for persistence
-    backend = create_store_backend(db_path="agent.db")
-
-    # Use in-memory store for testing
-    backend = create_store_backend(use_sqlite=False)
-
-    # With assistant isolation
-    backend = create_store_backend(assistant_id="agent-001")
-    ```
-
-<a id="spoon_ai.backends.filesystem"></a>
-
-# Module `spoon_ai.backends.filesystem`
-
-FilesystemBackend: Read and write files directly from the filesystem.
-
-Security features:
-- Secure path resolution with root containment when in virtual_mode
-- Prevent symlink-following on file I/O using O_NOFOLLOW when available
-- Max file size enforcement
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend"></a>
-
-## `FilesystemBackend` Objects
-
-```python
-class FilesystemBackend(BackendProtocol)
-```
-
-Backend that reads and writes files directly from the filesystem.
-
-Files are accessed using their actual filesystem paths. Relative paths are
-resolved relative to the current working directory or root_dir.
-
-**Example**:
-
-    ```python
-    # Real filesystem access
-    backend = FilesystemBackend()
-    content = backend.read("/path/to/file.txt")
-
-    # Sandboxed to a directory
-    backend = FilesystemBackend(
-        root_dir="/workspace",
-        virtual_mode=True
-    )
-    # "/file.txt" maps to "/workspace/file.txt"
-    ```
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(root_dir: Optional[str | Path] = None,
-             virtual_mode: bool = False,
-             max_file_size_mb: int = 10) -> None
-```
-
-Initialize filesystem backend.
-
-**Arguments**:
-
-- `root_dir` - Optional root directory. If provided, all paths are
-  resolved relative to this directory.
-- `virtual_mode` - If True, treat paths as virtual absolute paths under
-  root_dir. Disallows path traversal.
-- `max_file_size_mb` - Maximum file size in MB for operations.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.ls_info"></a>
-
-#### `ls_info`
-
-```python
-def ls_info(path: str) -> list[FileInfo]
-```
-
-List files and directories in the specified directory (non-recursive).
-
-**Arguments**:
-
-- `path` - Absolute directory path.
-  
-
-**Returns**:
-
-  List of FileInfo dicts for files and directories.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.read"></a>
-
-#### `read`
-
-```python
-def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Read file content with line numbers.
-
-**Arguments**:
-
-- `file_path` - Absolute or relative file path.
-- `offset` - Line offset to start reading from (0-indexed).
-- `limit` - Maximum number of lines to read.
-  
-
-**Returns**:
-
-  Formatted file content with line numbers, or error message.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.write"></a>
-
-#### `write`
-
-```python
-def write(file_path: str, content: str) -> WriteResult
-```
-
-Create a new file with content.
-
-Returns WriteResult. External storage sets files_update=None.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.edit"></a>
-
-#### `edit`
-
-```python
-def edit(file_path: str,
-         old_string: str,
-         new_string: str,
-         replace_all: bool = False) -> EditResult
-```
-
-Edit a file by replacing string occurrences.
-
-Returns EditResult. External storage sets files_update=None.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.grep_raw"></a>
-
-#### `grep_raw`
-
-```python
-def grep_raw(pattern: str,
-             path: Optional[str] = None,
-             glob: Optional[str] = None) -> list[GrepMatch] | str
-```
-
-Search for pattern in files.
-
-Uses ripgrep if available, falls back to Python search.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.glob_info"></a>
-
-#### `glob_info`
-
-```python
-def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
-```
-
-Find files matching glob pattern.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.upload_files"></a>
-
-#### `upload_files`
-
-```python
-def upload_files(files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
-```
-
-Upload multiple files to the filesystem.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.download_files"></a>
-
-#### `download_files`
-
-```python
-def download_files(paths: list[str]) -> list[FileDownloadResponse]
-```
-
-Download multiple files from the filesystem.
-
-<a id="spoon_ai.backends.filesystem.create_filesystem_backend"></a>
-
-#### `create_filesystem_backend`
-
-```python
-def create_filesystem_backend(root_dir: Optional[str | Path] = None,
-                              virtual_mode: bool = False,
-                              max_file_size_mb: int = 10) -> FilesystemBackend
-```
-
-Create a FilesystemBackend.
-
-**Arguments**:
-
-- `root_dir` - Root directory for file operations.
-- `virtual_mode` - If True, sandbox paths to root_dir.
-- `max_file_size_mb` - Maximum file size for operations.
-  
-
-**Returns**:
-
-  FilesystemBackend instance.
-  
-
-**Example**:
-
-    ```python
-    # Access real filesystem
-    backend = create_filesystem_backend()
-
-    # Sandboxed to workspace
-    backend = create_filesystem_backend(
-        root_dir="/workspace",
-        virtual_mode=True
     )
     ```
 

@@ -7,19 +7,29 @@ title: spoon_ai.payments
 # Table of Contents
 
 * [spoon\_ai.payments](#spoon_ai.payments)
+* [spoon\_ai.payments.cli](#spoon_ai.payments.cli)
+* [spoon\_ai.payments.facilitator\_client](#spoon_ai.payments.facilitator_client)
+  * [X402FacilitatorClient](#spoon_ai.payments.facilitator_client.X402FacilitatorClient)
+* [spoon\_ai.payments.exceptions](#spoon_ai.payments.exceptions)
+  * [X402PaymentError](#spoon_ai.payments.exceptions.X402PaymentError)
+  * [X402ConfigurationError](#spoon_ai.payments.exceptions.X402ConfigurationError)
+  * [X402VerificationError](#spoon_ai.payments.exceptions.X402VerificationError)
+  * [X402SettlementError](#spoon_ai.payments.exceptions.X402SettlementError)
 * [spoon\_ai.payments.models](#spoon_ai.payments.models)
   * [X402PaymentRequest](#spoon_ai.payments.models.X402PaymentRequest)
   * [X402VerifyResult](#spoon_ai.payments.models.X402VerifyResult)
   * [X402SettleResult](#spoon_ai.payments.models.X402SettleResult)
   * [X402PaymentOutcome](#spoon_ai.payments.models.X402PaymentOutcome)
   * [X402PaymentReceipt](#spoon_ai.payments.models.X402PaymentReceipt)
-* [spoon\_ai.payments.cli](#spoon_ai.payments.cli)
+* [spoon\_ai.payments.server](#spoon_ai.payments.server)
+  * [create\_paywalled\_router](#spoon_ai.payments.server.create_paywalled_router)
 * [spoon\_ai.payments.x402\_service](#spoon_ai.payments.x402_service)
   * [X402PaymentService](#spoon_ai.payments.x402_service.X402PaymentService)
     * [discover\_resources](#spoon_ai.payments.x402_service.X402PaymentService.discover_resources)
     * [render\_paywall\_html](#spoon_ai.payments.x402_service.X402PaymentService.render_paywall_html)
     * [build\_payment\_header](#spoon_ai.payments.x402_service.X402PaymentService.build_payment_header)
     * [decode\_payment\_response](#spoon_ai.payments.x402_service.X402PaymentService.decode_payment_response)
+* [spoon\_ai.payments.app](#spoon_ai.payments.app)
 * [spoon\_ai.payments.config](#spoon_ai.payments.config)
   * [X402ConfigurationError](#spoon_ai.payments.config.X402ConfigurationError)
   * [X402PaywallBranding](#spoon_ai.payments.config.X402PaywallBranding)
@@ -28,16 +38,6 @@ title: spoon_ai.payments
     * [amount\_in\_atomic\_units](#spoon_ai.payments.config.X402Settings.amount_in_atomic_units)
     * [build\_asset\_extra](#spoon_ai.payments.config.X402Settings.build_asset_extra)
     * [load](#spoon_ai.payments.config.X402Settings.load)
-* [spoon\_ai.payments.facilitator\_client](#spoon_ai.payments.facilitator_client)
-  * [X402FacilitatorClient](#spoon_ai.payments.facilitator_client.X402FacilitatorClient)
-* [spoon\_ai.payments.app](#spoon_ai.payments.app)
-* [spoon\_ai.payments.exceptions](#spoon_ai.payments.exceptions)
-  * [X402PaymentError](#spoon_ai.payments.exceptions.X402PaymentError)
-  * [X402ConfigurationError](#spoon_ai.payments.exceptions.X402ConfigurationError)
-  * [X402VerificationError](#spoon_ai.payments.exceptions.X402VerificationError)
-  * [X402SettlementError](#spoon_ai.payments.exceptions.X402SettlementError)
-* [spoon\_ai.payments.server](#spoon_ai.payments.server)
-  * [create\_paywalled\_router](#spoon_ai.payments.server.create_paywalled_router)
 
 <a id="spoon_ai.payments"></a>
 
@@ -48,6 +48,68 @@ Payment utilities for integrating the SpoonOS core with the x402 payments protoc
 This package wraps the upstream `x402` Python SDK with configuration and service
 abstractions that align to SpoonOS conventions (config.json priority, .env overrides,
 and async-friendly helper utilities).
+
+<a id="spoon_ai.payments.cli"></a>
+
+# Module `spoon_ai.payments.cli`
+
+<a id="spoon_ai.payments.facilitator_client"></a>
+
+# Module `spoon_ai.payments.facilitator_client`
+
+<a id="spoon_ai.payments.facilitator_client.X402FacilitatorClient"></a>
+
+## `X402FacilitatorClient` Objects
+
+```python
+class X402FacilitatorClient()
+```
+
+Thin wrapper over the upstream facilitator client with async header hooks.
+
+<a id="spoon_ai.payments.exceptions"></a>
+
+# Module `spoon_ai.payments.exceptions`
+
+<a id="spoon_ai.payments.exceptions.X402PaymentError"></a>
+
+## `X402PaymentError` Objects
+
+```python
+class X402PaymentError(Exception)
+```
+
+Base exception for x402 payment operations.
+
+<a id="spoon_ai.payments.exceptions.X402ConfigurationError"></a>
+
+## `X402ConfigurationError` Objects
+
+```python
+class X402ConfigurationError(X402PaymentError)
+```
+
+Raised when integration configuration is invalid or incomplete.
+
+<a id="spoon_ai.payments.exceptions.X402VerificationError"></a>
+
+## `X402VerificationError` Objects
+
+```python
+class X402VerificationError(X402PaymentError)
+```
+
+Raised when a payment header fails verification against the facilitator.
+
+<a id="spoon_ai.payments.exceptions.X402SettlementError"></a>
+
+## `X402SettlementError` Objects
+
+```python
+class X402SettlementError(X402PaymentError)
+```
+
+Raised when settlement fails or returns an error response.
 
 <a id="spoon_ai.payments.models"></a>
 
@@ -103,9 +165,34 @@ class X402PaymentReceipt(BaseModel)
 
 Decoded representation of the X-PAYMENT-RESPONSE header.
 
-<a id="spoon_ai.payments.cli"></a>
+<a id="spoon_ai.payments.server"></a>
 
-# Module `spoon_ai.payments.cli`
+# Module `spoon_ai.payments.server`
+
+<a id="spoon_ai.payments.server.create_paywalled_router"></a>
+
+#### `create_paywalled_router`
+
+```python
+def create_paywalled_router(
+    service: Optional[X402PaymentService] = None,
+    agent_factory: AgentFactory = _default_agent_factory,
+    payment_message: str = "Payment required to invoke this agent."
+) -> APIRouter
+```
+
+Build a FastAPI router that protects agent invocations behind an x402 paywall.
+
+**Arguments**:
+
+- `service` - Optional pre-configured payment service.
+- `agent_factory` - Coroutine that returns an initialized agent given its name.
+- `payment_message` - Message displayed when payment is required.
+  
+
+**Returns**:
+
+- `APIRouter` - Router with `/invoke/&#123;agent_name&#125;` endpoint ready to mount.
 
 <a id="spoon_ai.payments.x402_service"></a>
 
@@ -168,6 +255,10 @@ def decode_payment_response(header_value: str) -> X402PaymentReceipt
 ```
 
 Decode an X-PAYMENT-RESPONSE header into a structured receipt.
+
+<a id="spoon_ai.payments.app"></a>
+
+# Module `spoon_ai.payments.app`
 
 <a id="spoon_ai.payments.config"></a>
 
@@ -245,95 +336,4 @@ def load(cls,
 ```
 
 Load settings from config.json with .env fallbacks.
-
-<a id="spoon_ai.payments.facilitator_client"></a>
-
-# Module `spoon_ai.payments.facilitator_client`
-
-<a id="spoon_ai.payments.facilitator_client.X402FacilitatorClient"></a>
-
-## `X402FacilitatorClient` Objects
-
-```python
-class X402FacilitatorClient()
-```
-
-Thin wrapper over the upstream facilitator client with async header hooks.
-
-<a id="spoon_ai.payments.app"></a>
-
-# Module `spoon_ai.payments.app`
-
-<a id="spoon_ai.payments.exceptions"></a>
-
-# Module `spoon_ai.payments.exceptions`
-
-<a id="spoon_ai.payments.exceptions.X402PaymentError"></a>
-
-## `X402PaymentError` Objects
-
-```python
-class X402PaymentError(Exception)
-```
-
-Base exception for x402 payment operations.
-
-<a id="spoon_ai.payments.exceptions.X402ConfigurationError"></a>
-
-## `X402ConfigurationError` Objects
-
-```python
-class X402ConfigurationError(X402PaymentError)
-```
-
-Raised when integration configuration is invalid or incomplete.
-
-<a id="spoon_ai.payments.exceptions.X402VerificationError"></a>
-
-## `X402VerificationError` Objects
-
-```python
-class X402VerificationError(X402PaymentError)
-```
-
-Raised when a payment header fails verification against the facilitator.
-
-<a id="spoon_ai.payments.exceptions.X402SettlementError"></a>
-
-## `X402SettlementError` Objects
-
-```python
-class X402SettlementError(X402PaymentError)
-```
-
-Raised when settlement fails or returns an error response.
-
-<a id="spoon_ai.payments.server"></a>
-
-# Module `spoon_ai.payments.server`
-
-<a id="spoon_ai.payments.server.create_paywalled_router"></a>
-
-#### `create_paywalled_router`
-
-```python
-def create_paywalled_router(
-    service: Optional[X402PaymentService] = None,
-    agent_factory: AgentFactory = _default_agent_factory,
-    payment_message: str = "Payment required to invoke this agent."
-) -> APIRouter
-```
-
-Build a FastAPI router that protects agent invocations behind an x402 paywall.
-
-**Arguments**:
-
-- `service` - Optional pre-configured payment service.
-- `agent_factory` - Coroutine that returns an initialized agent given its name.
-- `payment_message` - Message displayed when payment is required.
-  
-
-**Returns**:
-
-- `APIRouter` - Router with `/invoke/&#123;agent_name&#125;` endpoint ready to mount.
 
