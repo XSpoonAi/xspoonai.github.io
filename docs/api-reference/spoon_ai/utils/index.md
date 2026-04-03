@@ -9,6 +9,7 @@ title: spoon_ai.utils
 * [spoon\_ai.utils](#spoon_ai.utils)
 * [spoon\_ai.utils.streaming](#spoon_ai.utils.streaming)
   * [StreamOutcome](#spoon_ai.utils.streaming.StreamOutcome)
+  * [build\_output\_queue\_event](#spoon_ai.utils.streaming.build_output_queue_event)
 * [spoon\_ai.utils.utils](#spoon_ai.utils.utils)
 * [spoon\_ai.utils.config\_manager](#spoon_ai.utils.config_manager)
   * [ConfigManager](#spoon_ai.utils.config_manager.ConfigManager)
@@ -42,6 +43,20 @@ class StreamOutcome()
 ```
 
 Accumulator for streaming output state.
+
+<a id="spoon_ai.utils.streaming.build_output_queue_event"></a>
+
+#### `build_output_queue_event`
+
+```python
+def build_output_queue_event(
+        *,
+        event_type: str,
+        delta: str = "",
+        metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
+```
+
+Build a backward-compatible output queue event payload.
 
 <a id="spoon_ai.utils.utils"></a>
 

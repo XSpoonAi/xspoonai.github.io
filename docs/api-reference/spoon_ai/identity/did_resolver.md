@@ -10,14 +10,14 @@ title: spoon_ai.identity.did_resolver
   * [DIDResolver](#spoon_ai.identity.did_resolver.DIDResolver)
     * [resolve](#spoon_ai.identity.did_resolver.DIDResolver.resolve)
     * [resolve\_metadata\_only](#spoon_ai.identity.did_resolver.DIDResolver.resolve_metadata_only)
-    * [verify\_did](#spoon_ai.identity.did_resolver.DIDResolver.verify_did)
+    * [verify\_agent](#spoon_ai.identity.did_resolver.DIDResolver.verify_agent)
 
 <a id="spoon_ai.identity.did_resolver"></a>
 
 # Module `spoon_ai.identity.did_resolver`
 
 DID Resolver for SpoonOS Agents
-Implements unified DID resolution with NeoFS-first policy
+Implements unified DID resolution via IdentityRegistry with NeoFS-first policy
 
 <a id="spoon_ai.identity.did_resolver.DIDResolver"></a>
 
@@ -27,22 +27,22 @@ Implements unified DID resolution with NeoFS-first policy
 class DIDResolver()
 ```
 
-Unified DID resolver for SpoonOS agents
-Resolution flow: On-chain anchor → NeoFS (primary) → IPFS (fallback)
+Unified DID resolver for SpoonOS agents.
+Resolution flow: IdentityRegistry (agentId) → NeoFS (primary) → IPFS (fallback)
 
 <a id="spoon_ai.identity.did_resolver.DIDResolver.resolve"></a>
 
 #### `resolve`
 
 ```python
-def resolve(did: str) -> DIDResolutionResult
+def resolve(agent_id: int) -> DIDResolutionResult
 ```
 
-Resolve DID to complete DID document
+Resolve agent identity to complete DID document.
 
 **Arguments**:
 
-- `did` - DID string (did:spoon:agent:&lt;identifier&gt;)
+- `agent_id` - On-chain agent token ID from IdentityRegistry
   
 
 **Returns**:
@@ -54,18 +54,18 @@ Resolve DID to complete DID document
 #### `resolve_metadata_only`
 
 ```python
-def resolve_metadata_only(did: str) -> Dict
+def resolve_metadata_only(agent_id: int) -> Dict
 ```
 
 Resolve only on-chain metadata (fast path)
 
-<a id="spoon_ai.identity.did_resolver.DIDResolver.verify_did"></a>
+<a id="spoon_ai.identity.did_resolver.DIDResolver.verify_agent"></a>
 
-#### `verify_did`
+#### `verify_agent`
 
 ```python
-def verify_did(did: str) -> bool
+def verify_agent(agent_id: int) -> bool
 ```
 
-Verify DID exists and is resolvable
+Verify agent exists and is resolvable
 

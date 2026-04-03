@@ -26,7 +26,7 @@ Ethereum ← → NeoFS/IPFS event indexing
 # Module `spoon_ai.bridge.eth_neofs_indexer`
 
 Ethereum to NeoFS/IPFS Event Indexer
-Listens to ERC-8004 registry events and ensures off-chain storage is synchronized
+Listens to ERC-8004 IdentityRegistry events and ensures off-chain storage is synchronized
 
 <a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer"></a>
 
@@ -36,8 +36,8 @@ Listens to ERC-8004 registry events and ensures off-chain storage is synchronize
 class EthereumNeoFSIndexer()
 ```
 
-Event indexer that syncs Ethereum registry events to NeoFS/IPFS
-Ensures content hash verification and storage consistency
+Event indexer that syncs Ethereum IdentityRegistry events to NeoFS/IPFS.
+Ensures content hash verification and storage consistency.
 
 <a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.register_event_handler"></a>
 
