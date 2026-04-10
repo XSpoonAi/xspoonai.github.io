@@ -7,11 +7,6 @@ title: spoon_ai.identity
 # Table of Contents
 
 * [spoon\_ai.identity](#spoon_ai.identity)
-* [spoon\_ai.identity.erc8004\_abi](#spoon_ai.identity.erc8004_abi)
-* [spoon\_ai.identity.erc8004\_client](#spoon_ai.identity.erc8004_client)
-  * [ERC8004Client](#spoon_ai.identity.erc8004_client.ERC8004Client)
-    * [register\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.register_agent)
-    * [resolve\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent)
 * [spoon\_ai.identity.attestation](#spoon_ai.identity.attestation)
   * [AttestationManager](#spoon_ai.identity.attestation.AttestationManager)
     * [create\_attestation](#spoon_ai.identity.attestation.AttestationManager.create_attestation)
@@ -22,11 +17,16 @@ title: spoon_ai.identity
     * [calculate\_trust\_score](#spoon_ai.identity.attestation.TrustScoreCalculator.calculate_trust_score)
     * [get\_reputation\_breakdown](#spoon_ai.identity.attestation.TrustScoreCalculator.get_reputation_breakdown)
     * [get\_validation\_breakdown](#spoon_ai.identity.attestation.TrustScoreCalculator.get_validation_breakdown)
+* [spoon\_ai.identity.erc8004\_abi](#spoon_ai.identity.erc8004_abi)
 * [spoon\_ai.identity.did\_resolver](#spoon_ai.identity.did_resolver)
   * [DIDResolver](#spoon_ai.identity.did_resolver.DIDResolver)
     * [resolve](#spoon_ai.identity.did_resolver.DIDResolver.resolve)
     * [resolve\_metadata\_only](#spoon_ai.identity.did_resolver.DIDResolver.resolve_metadata_only)
     * [verify\_agent](#spoon_ai.identity.did_resolver.DIDResolver.verify_agent)
+* [spoon\_ai.identity.erc8004\_client](#spoon_ai.identity.erc8004_client)
+  * [ERC8004Client](#spoon_ai.identity.erc8004_client.ERC8004Client)
+    * [register\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.register_agent)
+    * [resolve\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent)
 * [spoon\_ai.identity.storage\_client](#spoon_ai.identity.storage_client)
   * [DIDStorageClient](#spoon_ai.identity.storage_client.DIDStorageClient)
     * [publish\_did\_document](#spoon_ai.identity.storage_client.DIDStorageClient.publish_did_document)
@@ -52,54 +52,6 @@ title: spoon_ai.identity
 
 SpoonOS Agent DID Identity Module
 Implements ERC-8004 compliant decentralized identity for agents
-
-<a id="spoon_ai.identity.erc8004_abi"></a>
-
-# Module `spoon_ai.identity.erc8004_abi`
-
-Shared ERC-8004 ABI fragments (minimal, artifact-free).
-
-These ABIs cover the common calls used by the Python SDK and demos.
-
-<a id="spoon_ai.identity.erc8004_client"></a>
-
-# Module `spoon_ai.identity.erc8004_client`
-
-ERC-8004 Smart Contract Client
-Handles on-chain interactions with agent registries (IdentityRegistry only)
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client"></a>
-
-## `ERC8004Client` Objects
-
-```python
-class ERC8004Client()
-```
-
-Client for interacting with ERC-8004 agent registries
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client.register_agent"></a>
-
-#### `register_agent`
-
-```python
-def register_agent(token_uri: str,
-                   metadata: Optional[List[Tuple[str, bytes]]] = None) -> int
-```
-
-Register agent on IdentityRegistry; returns agentId.
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent"></a>
-
-#### `resolve_agent`
-
-```python
-def resolve_agent(agent_id: int) -> Dict
-```
-
-Resolve agent metadata from IdentityRegistry by agentId.
-
-Returns dict with owner, tokenURI, and common metadata fields.
 
 <a id="spoon_ai.identity.attestation"></a>
 
@@ -245,6 +197,14 @@ def get_validation_breakdown(did: str, limit: int = 10) -> List[Dict]
 
 Get detailed validation submissions
 
+<a id="spoon_ai.identity.erc8004_abi"></a>
+
+# Module `spoon_ai.identity.erc8004_abi`
+
+Shared ERC-8004 ABI fragments (minimal, artifact-free).
+
+These ABIs cover the common calls used by the Python SDK and demos.
+
 <a id="spoon_ai.identity.did_resolver"></a>
 
 # Module `spoon_ai.identity.did_resolver`
@@ -301,6 +261,46 @@ def verify_agent(agent_id: int) -> bool
 ```
 
 Verify agent exists and is resolvable
+
+<a id="spoon_ai.identity.erc8004_client"></a>
+
+# Module `spoon_ai.identity.erc8004_client`
+
+ERC-8004 Smart Contract Client
+Handles on-chain interactions with agent registries (IdentityRegistry only)
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client"></a>
+
+## `ERC8004Client` Objects
+
+```python
+class ERC8004Client()
+```
+
+Client for interacting with ERC-8004 agent registries
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client.register_agent"></a>
+
+#### `register_agent`
+
+```python
+def register_agent(token_uri: str,
+                   metadata: Optional[List[Tuple[str, bytes]]] = None) -> int
+```
+
+Register agent on IdentityRegistry; returns agentId.
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent"></a>
+
+#### `resolve_agent`
+
+```python
+def resolve_agent(agent_id: int) -> Dict
+```
+
+Resolve agent metadata from IdentityRegistry by agentId.
+
+Returns dict with owner, tokenURI, and common metadata fields.
 
 <a id="spoon_ai.identity.storage_client"></a>
 

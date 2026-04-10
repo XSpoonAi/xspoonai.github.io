@@ -7,24 +7,6 @@ title: spoon_ai.llm.providers
 # Table of Contents
 
 * [spoon\_ai.llm.providers](#spoon_ai.llm.providers)
-* [spoon\_ai.llm.providers.openrouter\_provider](#spoon_ai.llm.providers.openrouter_provider)
-  * [OpenRouterProvider](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider)
-    * [get\_additional\_headers](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers)
-    * [get\_metadata](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata)
-* [spoon\_ai.llm.providers.openai\_provider](#spoon_ai.llm.providers.openai_provider)
-  * [OpenAIProvider](#spoon_ai.llm.providers.openai_provider.OpenAIProvider)
-    * [get\_metadata](#spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata)
-* [spoon\_ai.llm.providers.anthropic\_provider](#spoon_ai.llm.providers.anthropic_provider)
-  * [AnthropicProvider](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider)
-    * [initialize](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.initialize)
-    * [get\_cache\_metrics](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_cache_metrics)
-    * [chat](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat)
-    * [chat\_stream](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_stream)
-    * [completion](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.completion)
-    * [chat\_with\_tools](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_with_tools)
-    * [get\_metadata](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_metadata)
-    * [health\_check](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.health_check)
-    * [cleanup](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.cleanup)
 * [spoon\_ai.llm.providers.gemini\_provider](#spoon_ai.llm.providers.gemini_provider)
   * [GeminiProvider](#spoon_ai.llm.providers.gemini_provider.GeminiProvider)
     * [initialize](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.initialize)
@@ -35,9 +17,9 @@ title: spoon_ai.llm.providers
     * [get\_metadata](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.get_metadata)
     * [health\_check](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.health_check)
     * [cleanup](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.cleanup)
-* [spoon\_ai.llm.providers.deepseek\_provider](#spoon_ai.llm.providers.deepseek_provider)
-  * [DeepSeekProvider](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider)
-    * [get\_metadata](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata)
+* [spoon\_ai.llm.providers.openai\_provider](#spoon_ai.llm.providers.openai_provider)
+  * [OpenAIProvider](#spoon_ai.llm.providers.openai_provider.OpenAIProvider)
+    * [get\_metadata](#spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata)
 * [spoon\_ai.llm.providers.openai\_compatible\_provider](#spoon_ai.llm.providers.openai_compatible_provider)
   * [MAX\_INLINE\_FILE\_SIZE](#spoon_ai.llm.providers.openai_compatible_provider.MAX_INLINE_FILE_SIZE)
   * [OpenAICompatibleProvider](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider)
@@ -53,208 +35,32 @@ title: spoon_ai.llm.providers
     * [get\_metadata](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.get_metadata)
     * [health\_check](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.health_check)
     * [cleanup](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.cleanup)
+* [spoon\_ai.llm.providers.openrouter\_provider](#spoon_ai.llm.providers.openrouter_provider)
+  * [OpenRouterProvider](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider)
+    * [get\_additional\_headers](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers)
+    * [get\_metadata](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata)
+* [spoon\_ai.llm.providers.anthropic\_provider](#spoon_ai.llm.providers.anthropic_provider)
+  * [AnthropicProvider](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider)
+    * [initialize](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.initialize)
+    * [get\_cache\_metrics](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_cache_metrics)
+    * [chat](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat)
+    * [chat\_stream](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_stream)
+    * [completion](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.completion)
+    * [chat\_with\_tools](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_with_tools)
+    * [get\_metadata](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_metadata)
+    * [health\_check](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.health_check)
+    * [cleanup](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.cleanup)
 * [spoon\_ai.llm.providers.ollama\_provider](#spoon_ai.llm.providers.ollama_provider)
   * [OllamaProvider](#spoon_ai.llm.providers.ollama_provider.OllamaProvider)
+* [spoon\_ai.llm.providers.deepseek\_provider](#spoon_ai.llm.providers.deepseek_provider)
+  * [DeepSeekProvider](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider)
+    * [get\_metadata](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata)
 
 <a id="spoon_ai.llm.providers"></a>
 
 # Module `spoon_ai.llm.providers`
 
 LLM Provider implementations.
-
-<a id="spoon_ai.llm.providers.openrouter_provider"></a>
-
-# Module `spoon_ai.llm.providers.openrouter_provider`
-
-OpenRouter Provider implementation for the unified LLM interface.
-OpenRouter provides access to multiple LLM models through a unified API compatible with OpenAI.
-
-<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider"></a>
-
-## `OpenRouterProvider` Objects
-
-```python
-@register_provider("openrouter", [
-    ProviderCapability.CHAT,
-    ProviderCapability.COMPLETION,
-    ProviderCapability.TOOLS,
-    ProviderCapability.STREAMING
-])
-class OpenRouterProvider(OpenAICompatibleProvider)
-```
-
-OpenRouter provider implementation using OpenAI-compatible API.
-
-<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers"></a>
-
-#### `get_additional_headers`
-
-```python
-def get_additional_headers(config: Dict[str, Any]) -> Dict[str, str]
-```
-
-Get OpenRouter-specific headers.
-
-<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-def get_metadata() -> ProviderMetadata
-```
-
-Get OpenRouter provider metadata.
-
-<a id="spoon_ai.llm.providers.openai_provider"></a>
-
-# Module `spoon_ai.llm.providers.openai_provider`
-
-OpenAI Provider implementation for the unified LLM interface.
-
-<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider"></a>
-
-## `OpenAIProvider` Objects
-
-```python
-@register_provider("openai", [
-    ProviderCapability.CHAT,
-    ProviderCapability.COMPLETION,
-    ProviderCapability.TOOLS,
-    ProviderCapability.STREAMING
-])
-class OpenAIProvider(OpenAICompatibleProvider)
-```
-
-OpenAI provider implementation.
-
-<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-def get_metadata() -> ProviderMetadata
-```
-
-Get OpenAI provider metadata.
-
-<a id="spoon_ai.llm.providers.anthropic_provider"></a>
-
-# Module `spoon_ai.llm.providers.anthropic_provider`
-
-Anthropic Provider implementation for the unified LLM interface.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider"></a>
-
-## `AnthropicProvider` Objects
-
-```python
-@register_provider("anthropic", [
-    ProviderCapability.CHAT,
-    ProviderCapability.COMPLETION,
-    ProviderCapability.TOOLS,
-    ProviderCapability.STREAMING
-])
-class AnthropicProvider(LLMProviderInterface)
-```
-
-Anthropic provider implementation.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.initialize"></a>
-
-#### `initialize`
-
-```python
-async def initialize(config: Dict[str, Any]) -> None
-```
-
-Initialize the Anthropic provider with configuration.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_cache_metrics"></a>
-
-#### `get_cache_metrics`
-
-```python
-def get_cache_metrics() -> Dict[str, int]
-```
-
-Get current cache performance metrics.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat"></a>
-
-#### `chat`
-
-```python
-async def chat(messages: List[Message], **kwargs) -> LLMResponse
-```
-
-Send chat request to Anthropic.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_stream"></a>
-
-#### `chat_stream`
-
-```python
-async def chat_stream(messages: List[Message],
-                      callbacks: Optional[List] = None,
-                      **kwargs) -> AsyncIterator[LLMResponseChunk]
-```
-
-Send streaming chat request to Anthropic with callback support.
-
-**Yields**:
-
-- `LLMResponseChunk` - Structured streaming response chunks
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.completion"></a>
-
-#### `completion`
-
-```python
-async def completion(prompt: str, **kwargs) -> LLMResponse
-```
-
-Send completion request to Anthropic.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_with_tools"></a>
-
-#### `chat_with_tools`
-
-```python
-async def chat_with_tools(messages: List[Message], tools: List[Dict],
-                          **kwargs) -> LLMResponse
-```
-
-Send chat request with tools to Anthropic.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-def get_metadata() -> ProviderMetadata
-```
-
-Get Anthropic provider metadata.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.health_check"></a>
-
-#### `health_check`
-
-```python
-async def health_check() -> bool
-```
-
-Check if Anthropic provider is healthy.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.cleanup"></a>
-
-#### `cleanup`
-
-```python
-async def cleanup() -> None
-```
-
-Cleanup Anthropic provider resources.
 
 <a id="spoon_ai.llm.providers.gemini_provider"></a>
 
@@ -367,30 +173,29 @@ async def cleanup() -> None
 
 Cleanup Gemini provider resources.
 
-<a id="spoon_ai.llm.providers.deepseek_provider"></a>
+<a id="spoon_ai.llm.providers.openai_provider"></a>
 
-# Module `spoon_ai.llm.providers.deepseek_provider`
+# Module `spoon_ai.llm.providers.openai_provider`
 
-DeepSeek Provider implementation for the unified LLM interface.
-DeepSeek provides access to their models through an OpenAI-compatible API.
+OpenAI Provider implementation for the unified LLM interface.
 
-<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider"></a>
+<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider"></a>
 
-## `DeepSeekProvider` Objects
+## `OpenAIProvider` Objects
 
 ```python
-@register_provider("deepseek", [
+@register_provider("openai", [
     ProviderCapability.CHAT,
     ProviderCapability.COMPLETION,
     ProviderCapability.TOOLS,
     ProviderCapability.STREAMING
 ])
-class DeepSeekProvider(OpenAICompatibleProvider)
+class OpenAIProvider(OpenAICompatibleProvider)
 ```
 
-DeepSeek provider implementation using OpenAI-compatible API.
+OpenAI provider implementation.
 
-<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata"></a>
+<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata"></a>
 
 #### `get_metadata`
 
@@ -398,7 +203,7 @@ DeepSeek provider implementation using OpenAI-compatible API.
 def get_metadata() -> ProviderMetadata
 ```
 
-Get DeepSeek provider metadata.
+Get OpenAI provider metadata.
 
 <a id="spoon_ai.llm.providers.openai_compatible_provider"></a>
 
@@ -550,6 +355,168 @@ async def cleanup() -> None
 
 Cleanup provider resources.
 
+<a id="spoon_ai.llm.providers.openrouter_provider"></a>
+
+# Module `spoon_ai.llm.providers.openrouter_provider`
+
+OpenRouter Provider implementation for the unified LLM interface.
+OpenRouter provides access to multiple LLM models through a unified API compatible with OpenAI.
+
+<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider"></a>
+
+## `OpenRouterProvider` Objects
+
+```python
+@register_provider("openrouter", [
+    ProviderCapability.CHAT,
+    ProviderCapability.COMPLETION,
+    ProviderCapability.TOOLS,
+    ProviderCapability.STREAMING
+])
+class OpenRouterProvider(OpenAICompatibleProvider)
+```
+
+OpenRouter provider implementation using OpenAI-compatible API.
+
+<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers"></a>
+
+#### `get_additional_headers`
+
+```python
+def get_additional_headers(config: Dict[str, Any]) -> Dict[str, str]
+```
+
+Get OpenRouter-specific headers.
+
+<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+def get_metadata() -> ProviderMetadata
+```
+
+Get OpenRouter provider metadata.
+
+<a id="spoon_ai.llm.providers.anthropic_provider"></a>
+
+# Module `spoon_ai.llm.providers.anthropic_provider`
+
+Anthropic Provider implementation for the unified LLM interface.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider"></a>
+
+## `AnthropicProvider` Objects
+
+```python
+@register_provider("anthropic", [
+    ProviderCapability.CHAT,
+    ProviderCapability.COMPLETION,
+    ProviderCapability.TOOLS,
+    ProviderCapability.STREAMING
+])
+class AnthropicProvider(LLMProviderInterface)
+```
+
+Anthropic provider implementation.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.initialize"></a>
+
+#### `initialize`
+
+```python
+async def initialize(config: Dict[str, Any]) -> None
+```
+
+Initialize the Anthropic provider with configuration.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_cache_metrics"></a>
+
+#### `get_cache_metrics`
+
+```python
+def get_cache_metrics() -> Dict[str, int]
+```
+
+Get current cache performance metrics.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat"></a>
+
+#### `chat`
+
+```python
+async def chat(messages: List[Message], **kwargs) -> LLMResponse
+```
+
+Send chat request to Anthropic.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_stream"></a>
+
+#### `chat_stream`
+
+```python
+async def chat_stream(messages: List[Message],
+                      callbacks: Optional[List] = None,
+                      **kwargs) -> AsyncIterator[LLMResponseChunk]
+```
+
+Send streaming chat request to Anthropic with callback support.
+
+**Yields**:
+
+- `LLMResponseChunk` - Structured streaming response chunks
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.completion"></a>
+
+#### `completion`
+
+```python
+async def completion(prompt: str, **kwargs) -> LLMResponse
+```
+
+Send completion request to Anthropic.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_with_tools"></a>
+
+#### `chat_with_tools`
+
+```python
+async def chat_with_tools(messages: List[Message], tools: List[Dict],
+                          **kwargs) -> LLMResponse
+```
+
+Send chat request with tools to Anthropic.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+def get_metadata() -> ProviderMetadata
+```
+
+Get Anthropic provider metadata.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.health_check"></a>
+
+#### `health_check`
+
+```python
+async def health_check() -> bool
+```
+
+Check if Anthropic provider is healthy.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.cleanup"></a>
+
+#### `cleanup`
+
+```python
+async def cleanup() -> None
+```
+
+Cleanup Anthropic provider resources.
+
 <a id="spoon_ai.llm.providers.ollama_provider"></a>
 
 # Module `spoon_ai.llm.providers.ollama_provider`
@@ -583,4 +550,37 @@ class OllamaProvider(LLMProviderInterface)
 ```
 
 Local Ollama provider via HTTP.
+
+<a id="spoon_ai.llm.providers.deepseek_provider"></a>
+
+# Module `spoon_ai.llm.providers.deepseek_provider`
+
+DeepSeek Provider implementation for the unified LLM interface.
+DeepSeek provides access to their models through an OpenAI-compatible API.
+
+<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider"></a>
+
+## `DeepSeekProvider` Objects
+
+```python
+@register_provider("deepseek", [
+    ProviderCapability.CHAT,
+    ProviderCapability.COMPLETION,
+    ProviderCapability.TOOLS,
+    ProviderCapability.STREAMING
+])
+class DeepSeekProvider(OpenAICompatibleProvider)
+```
+
+DeepSeek provider implementation using OpenAI-compatible API.
+
+<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+def get_metadata() -> ProviderMetadata
+```
+
+Get DeepSeek provider metadata.
 

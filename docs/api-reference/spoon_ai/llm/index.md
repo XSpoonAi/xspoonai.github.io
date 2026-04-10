@@ -7,6 +7,61 @@ title: spoon_ai.llm
 # Table of Contents
 
 * [spoon\_ai.llm](#spoon_ai.llm)
+* [spoon\_ai.llm.response\_normalizer](#spoon_ai.llm.response_normalizer)
+  * [ResponseNormalizer](#spoon_ai.llm.response_normalizer.ResponseNormalizer)
+    * [normalize\_response](#spoon_ai.llm.response_normalizer.ResponseNormalizer.normalize_response)
+    * [validate\_response](#spoon_ai.llm.response_normalizer.ResponseNormalizer.validate_response)
+    * [add\_provider\_mapping](#spoon_ai.llm.response_normalizer.ResponseNormalizer.add_provider_mapping)
+    * [get\_supported\_providers](#spoon_ai.llm.response_normalizer.ResponseNormalizer.get_supported_providers)
+  * [get\_response\_normalizer](#spoon_ai.llm.response_normalizer.get_response_normalizer)
+* [spoon\_ai.llm.config](#spoon_ai.llm.config)
+  * [ProviderConfig](#spoon_ai.llm.config.ProviderConfig)
+    * [\_\_post\_init\_\_](#spoon_ai.llm.config.ProviderConfig.__post_init__)
+    * [model\_dump](#spoon_ai.llm.config.ProviderConfig.model_dump)
+  * [ConfigurationManager](#spoon_ai.llm.config.ConfigurationManager)
+    * [\_\_init\_\_](#spoon_ai.llm.config.ConfigurationManager.__init__)
+    * [load\_provider\_config](#spoon_ai.llm.config.ConfigurationManager.load_provider_config)
+    * [validate\_config](#spoon_ai.llm.config.ConfigurationManager.validate_config)
+    * [get\_default\_provider](#spoon_ai.llm.config.ConfigurationManager.get_default_provider)
+    * [get\_fallback\_chain](#spoon_ai.llm.config.ConfigurationManager.get_fallback_chain)
+    * [list\_configured\_providers](#spoon_ai.llm.config.ConfigurationManager.list_configured_providers)
+    * [get\_available\_providers\_by\_priority](#spoon_ai.llm.config.ConfigurationManager.get_available_providers_by_priority)
+    * [get\_provider\_info](#spoon_ai.llm.config.ConfigurationManager.get_provider_info)
+    * [reload\_config](#spoon_ai.llm.config.ConfigurationManager.reload_config)
+* [spoon\_ai.llm.base](#spoon_ai.llm.base)
+  * [LLMBase](#spoon_ai.llm.base.LLMBase)
+    * [\_\_init\_\_](#spoon_ai.llm.base.LLMBase.__init__)
+    * [chat](#spoon_ai.llm.base.LLMBase.chat)
+    * [completion](#spoon_ai.llm.base.LLMBase.completion)
+    * [chat\_with\_tools](#spoon_ai.llm.base.LLMBase.chat_with_tools)
+    * [generate\_image](#spoon_ai.llm.base.LLMBase.generate_image)
+    * [reset\_output\_handler](#spoon_ai.llm.base.LLMBase.reset_output_handler)
+* [spoon\_ai.llm.interface](#spoon_ai.llm.interface)
+  * [ProviderCapability](#spoon_ai.llm.interface.ProviderCapability)
+  * [ProviderMetadata](#spoon_ai.llm.interface.ProviderMetadata)
+  * [LLMResponse](#spoon_ai.llm.interface.LLMResponse)
+  * [LLMProviderInterface](#spoon_ai.llm.interface.LLMProviderInterface)
+    * [initialize](#spoon_ai.llm.interface.LLMProviderInterface.initialize)
+    * [chat](#spoon_ai.llm.interface.LLMProviderInterface.chat)
+    * [chat\_stream](#spoon_ai.llm.interface.LLMProviderInterface.chat_stream)
+    * [completion](#spoon_ai.llm.interface.LLMProviderInterface.completion)
+    * [chat\_with\_tools](#spoon_ai.llm.interface.LLMProviderInterface.chat_with_tools)
+    * [get\_metadata](#spoon_ai.llm.interface.LLMProviderInterface.get_metadata)
+    * [health\_check](#spoon_ai.llm.interface.LLMProviderInterface.health_check)
+    * [cleanup](#spoon_ai.llm.interface.LLMProviderInterface.cleanup)
+* [spoon\_ai.llm.cache](#spoon_ai.llm.cache)
+  * [LLMResponseCache](#spoon_ai.llm.cache.LLMResponseCache)
+    * [\_\_init\_\_](#spoon_ai.llm.cache.LLMResponseCache.__init__)
+    * [get](#spoon_ai.llm.cache.LLMResponseCache.get)
+    * [set](#spoon_ai.llm.cache.LLMResponseCache.set)
+    * [clear](#spoon_ai.llm.cache.LLMResponseCache.clear)
+    * [get\_stats](#spoon_ai.llm.cache.LLMResponseCache.get_stats)
+  * [CachedLLMManager](#spoon_ai.llm.cache.CachedLLMManager)
+    * [\_\_init\_\_](#spoon_ai.llm.cache.CachedLLMManager.__init__)
+    * [chat](#spoon_ai.llm.cache.CachedLLMManager.chat)
+    * [chat\_stream](#spoon_ai.llm.cache.CachedLLMManager.chat_stream)
+    * [clear\_cache](#spoon_ai.llm.cache.CachedLLMManager.clear_cache)
+    * [get\_cache\_stats](#spoon_ai.llm.cache.CachedLLMManager.get_cache_stats)
 * [spoon\_ai.llm.manager](#spoon_ai.llm.manager)
   * [ProviderState](#spoon_ai.llm.manager.ProviderState)
     * [can\_retry\_initialization](#spoon_ai.llm.manager.ProviderState.can_retry_initialization)
@@ -34,6 +89,10 @@ title: spoon_ai.llm
     * [get\_stats](#spoon_ai.llm.manager.LLMManager.get_stats)
   * [get\_llm\_manager](#spoon_ai.llm.manager.get_llm_manager)
   * [set\_llm\_manager](#spoon_ai.llm.manager.set_llm_manager)
+* [spoon\_ai.llm.factory](#spoon_ai.llm.factory)
+  * [LLMFactory](#spoon_ai.llm.factory.LLMFactory)
+    * [register](#spoon_ai.llm.factory.LLMFactory.register)
+    * [create](#spoon_ai.llm.factory.LLMFactory.create)
 * [spoon\_ai.llm.monitoring](#spoon_ai.llm.monitoring)
   * [RequestMetrics](#spoon_ai.llm.monitoring.RequestMetrics)
   * [ProviderStats](#spoon_ai.llm.monitoring.ProviderStats)
@@ -59,38 +118,6 @@ title: spoon_ai.llm
     * [reset\_stats](#spoon_ai.llm.monitoring.MetricsCollector.reset_stats)
   * [get\_debug\_logger](#spoon_ai.llm.monitoring.get_debug_logger)
   * [get\_metrics\_collector](#spoon_ai.llm.monitoring.get_metrics_collector)
-* [spoon\_ai.llm.cache](#spoon_ai.llm.cache)
-  * [LLMResponseCache](#spoon_ai.llm.cache.LLMResponseCache)
-    * [\_\_init\_\_](#spoon_ai.llm.cache.LLMResponseCache.__init__)
-    * [get](#spoon_ai.llm.cache.LLMResponseCache.get)
-    * [set](#spoon_ai.llm.cache.LLMResponseCache.set)
-    * [clear](#spoon_ai.llm.cache.LLMResponseCache.clear)
-    * [get\_stats](#spoon_ai.llm.cache.LLMResponseCache.get_stats)
-  * [CachedLLMManager](#spoon_ai.llm.cache.CachedLLMManager)
-    * [\_\_init\_\_](#spoon_ai.llm.cache.CachedLLMManager.__init__)
-    * [chat](#spoon_ai.llm.cache.CachedLLMManager.chat)
-    * [chat\_stream](#spoon_ai.llm.cache.CachedLLMManager.chat_stream)
-    * [clear\_cache](#spoon_ai.llm.cache.CachedLLMManager.clear_cache)
-    * [get\_cache\_stats](#spoon_ai.llm.cache.CachedLLMManager.get_cache_stats)
-* [spoon\_ai.llm.factory](#spoon_ai.llm.factory)
-  * [LLMFactory](#spoon_ai.llm.factory.LLMFactory)
-    * [register](#spoon_ai.llm.factory.LLMFactory.register)
-    * [create](#spoon_ai.llm.factory.LLMFactory.create)
-* [spoon\_ai.llm.response\_normalizer](#spoon_ai.llm.response_normalizer)
-  * [ResponseNormalizer](#spoon_ai.llm.response_normalizer.ResponseNormalizer)
-    * [normalize\_response](#spoon_ai.llm.response_normalizer.ResponseNormalizer.normalize_response)
-    * [validate\_response](#spoon_ai.llm.response_normalizer.ResponseNormalizer.validate_response)
-    * [add\_provider\_mapping](#spoon_ai.llm.response_normalizer.ResponseNormalizer.add_provider_mapping)
-    * [get\_supported\_providers](#spoon_ai.llm.response_normalizer.ResponseNormalizer.get_supported_providers)
-  * [get\_response\_normalizer](#spoon_ai.llm.response_normalizer.get_response_normalizer)
-* [spoon\_ai.llm.base](#spoon_ai.llm.base)
-  * [LLMBase](#spoon_ai.llm.base.LLMBase)
-    * [\_\_init\_\_](#spoon_ai.llm.base.LLMBase.__init__)
-    * [chat](#spoon_ai.llm.base.LLMBase.chat)
-    * [completion](#spoon_ai.llm.base.LLMBase.completion)
-    * [chat\_with\_tools](#spoon_ai.llm.base.LLMBase.chat_with_tools)
-    * [generate\_image](#spoon_ai.llm.base.LLMBase.generate_image)
-    * [reset\_output\_handler](#spoon_ai.llm.base.LLMBase.reset_output_handler)
 * [spoon\_ai.llm.registry](#spoon_ai.llm.registry)
   * [LLMProviderRegistry](#spoon_ai.llm.registry.LLMProviderRegistry)
     * [register](#spoon_ai.llm.registry.LLMProviderRegistry.register)
@@ -113,39 +140,6 @@ title: spoon_ai.llm
   * [NetworkError](#spoon_ai.llm.errors.NetworkError)
   * [ProviderUnavailableError](#spoon_ai.llm.errors.ProviderUnavailableError)
   * [ValidationError](#spoon_ai.llm.errors.ValidationError)
-* [spoon\_ai.llm.config](#spoon_ai.llm.config)
-  * [ProviderConfig](#spoon_ai.llm.config.ProviderConfig)
-    * [\_\_post\_init\_\_](#spoon_ai.llm.config.ProviderConfig.__post_init__)
-    * [model\_dump](#spoon_ai.llm.config.ProviderConfig.model_dump)
-  * [ConfigurationManager](#spoon_ai.llm.config.ConfigurationManager)
-    * [\_\_init\_\_](#spoon_ai.llm.config.ConfigurationManager.__init__)
-    * [load\_provider\_config](#spoon_ai.llm.config.ConfigurationManager.load_provider_config)
-    * [validate\_config](#spoon_ai.llm.config.ConfigurationManager.validate_config)
-    * [get\_default\_provider](#spoon_ai.llm.config.ConfigurationManager.get_default_provider)
-    * [get\_fallback\_chain](#spoon_ai.llm.config.ConfigurationManager.get_fallback_chain)
-    * [list\_configured\_providers](#spoon_ai.llm.config.ConfigurationManager.list_configured_providers)
-    * [get\_available\_providers\_by\_priority](#spoon_ai.llm.config.ConfigurationManager.get_available_providers_by_priority)
-    * [get\_provider\_info](#spoon_ai.llm.config.ConfigurationManager.get_provider_info)
-    * [reload\_config](#spoon_ai.llm.config.ConfigurationManager.reload_config)
-* [spoon\_ai.llm.providers](#spoon_ai.llm.providers)
-* [spoon\_ai.llm.providers.openrouter\_provider](#spoon_ai.llm.providers.openrouter_provider)
-  * [OpenRouterProvider](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider)
-    * [get\_additional\_headers](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers)
-    * [get\_metadata](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata)
-* [spoon\_ai.llm.providers.openai\_provider](#spoon_ai.llm.providers.openai_provider)
-  * [OpenAIProvider](#spoon_ai.llm.providers.openai_provider.OpenAIProvider)
-    * [get\_metadata](#spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata)
-* [spoon\_ai.llm.providers.anthropic\_provider](#spoon_ai.llm.providers.anthropic_provider)
-  * [AnthropicProvider](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider)
-    * [initialize](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.initialize)
-    * [get\_cache\_metrics](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_cache_metrics)
-    * [chat](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat)
-    * [chat\_stream](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_stream)
-    * [completion](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.completion)
-    * [chat\_with\_tools](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_with_tools)
-    * [get\_metadata](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_metadata)
-    * [health\_check](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.health_check)
-    * [cleanup](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.cleanup)
 * [spoon\_ai.llm.providers.gemini\_provider](#spoon_ai.llm.providers.gemini_provider)
   * [GeminiProvider](#spoon_ai.llm.providers.gemini_provider.GeminiProvider)
     * [initialize](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.initialize)
@@ -156,9 +150,9 @@ title: spoon_ai.llm
     * [get\_metadata](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.get_metadata)
     * [health\_check](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.health_check)
     * [cleanup](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.cleanup)
-* [spoon\_ai.llm.providers.deepseek\_provider](#spoon_ai.llm.providers.deepseek_provider)
-  * [DeepSeekProvider](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider)
-    * [get\_metadata](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata)
+* [spoon\_ai.llm.providers.openai\_provider](#spoon_ai.llm.providers.openai_provider)
+  * [OpenAIProvider](#spoon_ai.llm.providers.openai_provider.OpenAIProvider)
+    * [get\_metadata](#spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata)
 * [spoon\_ai.llm.providers.openai\_compatible\_provider](#spoon_ai.llm.providers.openai_compatible_provider)
   * [MAX\_INLINE\_FILE\_SIZE](#spoon_ai.llm.providers.openai_compatible_provider.MAX_INLINE_FILE_SIZE)
   * [OpenAICompatibleProvider](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider)
@@ -174,21 +168,27 @@ title: spoon_ai.llm
     * [get\_metadata](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.get_metadata)
     * [health\_check](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.health_check)
     * [cleanup](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.cleanup)
+* [spoon\_ai.llm.providers.openrouter\_provider](#spoon_ai.llm.providers.openrouter_provider)
+  * [OpenRouterProvider](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider)
+    * [get\_additional\_headers](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers)
+    * [get\_metadata](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata)
+* [spoon\_ai.llm.providers.anthropic\_provider](#spoon_ai.llm.providers.anthropic_provider)
+  * [AnthropicProvider](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider)
+    * [initialize](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.initialize)
+    * [get\_cache\_metrics](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_cache_metrics)
+    * [chat](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat)
+    * [chat\_stream](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_stream)
+    * [completion](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.completion)
+    * [chat\_with\_tools](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_with_tools)
+    * [get\_metadata](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_metadata)
+    * [health\_check](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.health_check)
+    * [cleanup](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.cleanup)
 * [spoon\_ai.llm.providers.ollama\_provider](#spoon_ai.llm.providers.ollama_provider)
   * [OllamaProvider](#spoon_ai.llm.providers.ollama_provider.OllamaProvider)
-* [spoon\_ai.llm.interface](#spoon_ai.llm.interface)
-  * [ProviderCapability](#spoon_ai.llm.interface.ProviderCapability)
-  * [ProviderMetadata](#spoon_ai.llm.interface.ProviderMetadata)
-  * [LLMResponse](#spoon_ai.llm.interface.LLMResponse)
-  * [LLMProviderInterface](#spoon_ai.llm.interface.LLMProviderInterface)
-    * [initialize](#spoon_ai.llm.interface.LLMProviderInterface.initialize)
-    * [chat](#spoon_ai.llm.interface.LLMProviderInterface.chat)
-    * [chat\_stream](#spoon_ai.llm.interface.LLMProviderInterface.chat_stream)
-    * [completion](#spoon_ai.llm.interface.LLMProviderInterface.completion)
-    * [chat\_with\_tools](#spoon_ai.llm.interface.LLMProviderInterface.chat_with_tools)
-    * [get\_metadata](#spoon_ai.llm.interface.LLMProviderInterface.get_metadata)
-    * [health\_check](#spoon_ai.llm.interface.LLMProviderInterface.health_check)
-    * [cleanup](#spoon_ai.llm.interface.LLMProviderInterface.cleanup)
+* [spoon\_ai.llm.providers.deepseek\_provider](#spoon_ai.llm.providers.deepseek_provider)
+  * [DeepSeekProvider](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider)
+    * [get\_metadata](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata)
+* [spoon\_ai.llm.providers](#spoon_ai.llm.providers)
 
 <a id="spoon_ai.llm"></a>
 
@@ -198,6 +198,858 @@ Unified LLM infrastructure package.
 
 This package provides a unified interface for working with different LLM providers,
 including comprehensive configuration management, monitoring, and error handling.
+
+<a id="spoon_ai.llm.response_normalizer"></a>
+
+# Module `spoon_ai.llm.response_normalizer`
+
+Response normalizer for ensuring consistent response formats across providers.
+
+<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer"></a>
+
+## `ResponseNormalizer` Objects
+
+```python
+class ResponseNormalizer()
+```
+
+Normalizes responses from different providers to ensure consistency.
+
+<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.normalize_response"></a>
+
+#### `normalize_response`
+
+```python
+def normalize_response(response: LLMResponse) -> LLMResponse
+```
+
+Normalize a response from any provider.
+
+**Arguments**:
+
+- `response` - Raw LLM response
+  
+
+**Returns**:
+
+- `LLMResponse` - Normalized response
+  
+
+**Raises**:
+
+- `ValidationError` - If response cannot be normalized
+
+<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.validate_response"></a>
+
+#### `validate_response`
+
+```python
+def validate_response(response: LLMResponse) -> bool
+```
+
+Validate that a response meets minimum requirements.
+
+**Arguments**:
+
+- `response` - Response to validate
+  
+
+**Returns**:
+
+- `bool` - True if response is valid
+  
+
+**Raises**:
+
+- `ValidationError` - If response is invalid
+
+<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.add_provider_mapping"></a>
+
+#### `add_provider_mapping`
+
+```python
+def add_provider_mapping(provider_name: str, normalizer_func) -> None
+```
+
+Add a custom normalizer for a new provider.
+
+**Arguments**:
+
+- `provider_name` - Name of the provider
+- `normalizer_func` - Function that takes and returns LLMResponse
+
+<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.get_supported_providers"></a>
+
+#### `get_supported_providers`
+
+```python
+def get_supported_providers() -> List[str]
+```
+
+Get list of providers with custom normalizers.
+
+**Returns**:
+
+- `List[str]` - List of provider names
+
+<a id="spoon_ai.llm.response_normalizer.get_response_normalizer"></a>
+
+#### `get_response_normalizer`
+
+```python
+def get_response_normalizer() -> ResponseNormalizer
+```
+
+Get global response normalizer instance.
+
+**Returns**:
+
+- `ResponseNormalizer` - Global normalizer instance
+
+<a id="spoon_ai.llm.config"></a>
+
+# Module `spoon_ai.llm.config`
+
+Configuration management for LLM providers using environment variables.
+
+<a id="spoon_ai.llm.config.ProviderConfig"></a>
+
+## `ProviderConfig` Objects
+
+```python
+@dataclass
+class ProviderConfig()
+```
+
+Configuration for a specific LLM provider.
+
+<a id="spoon_ai.llm.config.ProviderConfig.__post_init__"></a>
+
+#### `__post_init__`
+
+```python
+def __post_init__()
+```
+
+Validate configuration after initialization.
+
+<a id="spoon_ai.llm.config.ProviderConfig.model_dump"></a>
+
+#### `model_dump`
+
+```python
+def model_dump() -> dict[str, Any]
+```
+
+Convert the configuration to a dictionary.
+
+**Returns**:
+
+  dict[str, Any]: Configuration as dictionary
+
+<a id="spoon_ai.llm.config.ConfigurationManager"></a>
+
+## `ConfigurationManager` Objects
+
+```python
+class ConfigurationManager()
+```
+
+Manages environment-driven configuration for LLM providers.
+
+<a id="spoon_ai.llm.config.ConfigurationManager.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__() -> None
+```
+
+Initialize configuration manager and load environment variables.
+
+<a id="spoon_ai.llm.config.ConfigurationManager.load_provider_config"></a>
+
+#### `load_provider_config`
+
+```python
+def load_provider_config(provider_name: str) -> ProviderConfig
+```
+
+Load and validate provider configuration.
+
+**Arguments**:
+
+- `provider_name` - Name of the provider
+  
+
+**Returns**:
+
+- `ProviderConfig` - Validated provider configuration
+  
+
+**Raises**:
+
+- `ConfigurationError` - If configuration is invalid or missing
+
+<a id="spoon_ai.llm.config.ConfigurationManager.validate_config"></a>
+
+#### `validate_config`
+
+```python
+def validate_config(config: ProviderConfig) -> bool
+```
+
+Validate provider configuration.
+
+**Arguments**:
+
+- `config` - Provider configuration to validate
+  
+
+**Returns**:
+
+- `bool` - True if configuration is valid
+  
+
+**Raises**:
+
+- `ConfigurationError` - If configuration is invalid
+
+<a id="spoon_ai.llm.config.ConfigurationManager.get_default_provider"></a>
+
+#### `get_default_provider`
+
+```python
+def get_default_provider() -> str
+```
+
+Get default provider from configuration with intelligent selection.
+
+**Returns**:
+
+- `str` - Default provider name
+
+<a id="spoon_ai.llm.config.ConfigurationManager.get_fallback_chain"></a>
+
+#### `get_fallback_chain`
+
+```python
+def get_fallback_chain() -> list[str]
+```
+
+Get fallback chain from configuration.
+
+**Returns**:
+
+- `list[str]` - List of provider names in fallback order
+
+<a id="spoon_ai.llm.config.ConfigurationManager.list_configured_providers"></a>
+
+#### `list_configured_providers`
+
+```python
+def list_configured_providers() -> list[str]
+```
+
+List all configured providers.
+
+**Returns**:
+
+- `list[str]` - List of provider names that have configuration
+
+<a id="spoon_ai.llm.config.ConfigurationManager.get_available_providers_by_priority"></a>
+
+#### `get_available_providers_by_priority`
+
+```python
+def get_available_providers_by_priority() -> list[str]
+```
+
+Get available providers ordered by priority and quality.
+
+**Returns**:
+
+- `list[str]` - List of available provider names in priority order
+
+<a id="spoon_ai.llm.config.ConfigurationManager.get_provider_info"></a>
+
+#### `get_provider_info`
+
+```python
+def get_provider_info() -> dict[str, dict[str, Any]]
+```
+
+Get information about all providers and their availability.
+
+**Returns**:
+
+  dict[str, dict[str, Any]]: Provider information including availability
+
+<a id="spoon_ai.llm.config.ConfigurationManager.reload_config"></a>
+
+#### `reload_config`
+
+```python
+def reload_config() -> None
+```
+
+Reload configuration from file.
+
+<a id="spoon_ai.llm.base"></a>
+
+# Module `spoon_ai.llm.base`
+
+<a id="spoon_ai.llm.base.LLMBase"></a>
+
+## `LLMBase` Objects
+
+```python
+class LLMBase(ABC)
+```
+
+Base abstract class for LLM, defining interfaces that all LLM providers must implement
+
+<a id="spoon_ai.llm.base.LLMBase.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(config_path: str = "config/config.toml",
+             config_name: str = "llm")
+```
+
+Initialize LLM interface
+
+**Arguments**:
+
+- `config_path` - Configuration file path
+- `config_name` - Configuration name
+
+<a id="spoon_ai.llm.base.LLMBase.chat"></a>
+
+#### `chat`
+
+```python
+@abstractmethod
+async def chat(messages: List[Message],
+               system_msgs: Optional[List[Message]] = None,
+               **kwargs) -> LLMResponse
+```
+
+Send chat request to LLM and get response
+
+**Arguments**:
+
+- `messages` - List of messages
+- `system_msgs` - List of system messages
+- `**kwargs` - Other parameters
+  
+
+**Returns**:
+
+- `LLMResponse` - LLM response
+
+<a id="spoon_ai.llm.base.LLMBase.completion"></a>
+
+#### `completion`
+
+```python
+@abstractmethod
+async def completion(prompt: str, **kwargs) -> LLMResponse
+```
+
+Send text completion request to LLM and get response
+
+**Arguments**:
+
+- `prompt` - Prompt text
+- `**kwargs` - Other parameters
+  
+
+**Returns**:
+
+- `LLMResponse` - LLM response
+
+<a id="spoon_ai.llm.base.LLMBase.chat_with_tools"></a>
+
+#### `chat_with_tools`
+
+```python
+@abstractmethod
+async def chat_with_tools(messages: List[Message],
+                          system_msgs: Optional[List[Message]] = None,
+                          tools: Optional[List[Dict]] = None,
+                          tool_choice: Literal["none", "auto",
+                                               "required"] = "auto",
+                          **kwargs) -> LLMResponse
+```
+
+Send chat request that may contain tool calls to LLM and get response
+
+**Arguments**:
+
+- `messages` - List of messages
+- `system_msgs` - List of system messages
+- `tools` - List of tools
+- `tool_choice` - Tool selection mode
+- `**kwargs` - Other parameters
+  
+
+**Returns**:
+
+- `LLMResponse` - LLM response
+
+<a id="spoon_ai.llm.base.LLMBase.generate_image"></a>
+
+#### `generate_image`
+
+```python
+async def generate_image(prompt: str, **kwargs) -> Union[str, List[str]]
+```
+
+Generate image (optional implementation)
+
+**Arguments**:
+
+- `prompt` - Prompt text
+- `**kwargs` - Other parameters
+  
+
+**Returns**:
+
+  Union[str, List[str]]: Image URL or list of URLs
+
+<a id="spoon_ai.llm.base.LLMBase.reset_output_handler"></a>
+
+#### `reset_output_handler`
+
+```python
+def reset_output_handler()
+```
+
+Reset output handler
+
+<a id="spoon_ai.llm.interface"></a>
+
+# Module `spoon_ai.llm.interface`
+
+LLM Provider Interface - Abstract base class defining the unified interface for all LLM providers.
+
+<a id="spoon_ai.llm.interface.ProviderCapability"></a>
+
+## `ProviderCapability` Objects
+
+```python
+class ProviderCapability(Enum)
+```
+
+Enumeration of capabilities that LLM providers can support.
+
+<a id="spoon_ai.llm.interface.ProviderMetadata"></a>
+
+## `ProviderMetadata` Objects
+
+```python
+@dataclass
+class ProviderMetadata()
+```
+
+Metadata describing a provider's capabilities and limits.
+
+<a id="spoon_ai.llm.interface.LLMResponse"></a>
+
+## `LLMResponse` Objects
+
+```python
+@dataclass
+class LLMResponse()
+```
+
+Enhanced LLM response with comprehensive metadata and debugging information.
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface"></a>
+
+## `LLMProviderInterface` Objects
+
+```python
+class LLMProviderInterface(ABC)
+```
+
+Abstract base class defining the unified interface for all LLM providers.
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.initialize"></a>
+
+#### `initialize`
+
+```python
+@abstractmethod
+async def initialize(config: Dict[str, Any]) -> None
+```
+
+Initialize the provider with configuration.
+
+**Arguments**:
+
+- `config` - Provider-specific configuration dictionary
+  
+
+**Raises**:
+
+- `ConfigurationError` - If configuration is invalid
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.chat"></a>
+
+#### `chat`
+
+```python
+@abstractmethod
+async def chat(messages: List[Message], **kwargs) -> LLMResponse
+```
+
+Send chat request to the provider.
+
+**Arguments**:
+
+- `messages` - List of conversation messages
+- `**kwargs` - Additional provider-specific parameters
+  
+
+**Returns**:
+
+- `LLMResponse` - Standardized response object
+  
+
+**Raises**:
+
+- `ProviderError` - If the request fails
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.chat_stream"></a>
+
+#### `chat_stream`
+
+```python
+@abstractmethod
+async def chat_stream(messages: List[Message],
+                      callbacks: Optional[List[BaseCallbackHandler]] = None,
+                      **kwargs) -> AsyncIterator[LLMResponseChunk]
+```
+
+Send streaming chat request to the provider with callback support.
+
+**Arguments**:
+
+- `messages` - List of conversation messages
+- `callbacks` - Optional list of callback handlers for real-time events
+- `**kwargs` - Additional provider-specific parameters
+  
+
+**Yields**:
+
+- `LLMResponseChunk` - Structured streaming response chunks
+  
+
+**Raises**:
+
+- `ProviderError` - If the request fails
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.completion"></a>
+
+#### `completion`
+
+```python
+@abstractmethod
+async def completion(prompt: str, **kwargs) -> LLMResponse
+```
+
+Send completion request to the provider.
+
+**Arguments**:
+
+- `prompt` - Text prompt for completion
+- `**kwargs` - Additional provider-specific parameters
+  
+
+**Returns**:
+
+- `LLMResponse` - Standardized response object
+  
+
+**Raises**:
+
+- `ProviderError` - If the request fails
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.chat_with_tools"></a>
+
+#### `chat_with_tools`
+
+```python
+@abstractmethod
+async def chat_with_tools(messages: List[Message], tools: List[Dict],
+                          **kwargs) -> LLMResponse
+```
+
+Send chat request with tool support.
+
+**Arguments**:
+
+- `messages` - List of conversation messages
+- `tools` - List of available tools
+- `**kwargs` - Additional provider-specific parameters
+  
+
+**Returns**:
+
+- `LLMResponse` - Standardized response object with potential tool calls
+  
+
+**Raises**:
+
+- `ProviderError` - If the request fails
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+@abstractmethod
+def get_metadata() -> ProviderMetadata
+```
+
+Get provider metadata and capabilities.
+
+**Returns**:
+
+- `ProviderMetadata` - Provider information and capabilities
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.health_check"></a>
+
+#### `health_check`
+
+```python
+@abstractmethod
+async def health_check() -> bool
+```
+
+Check if provider is healthy and available.
+
+**Returns**:
+
+- `bool` - True if provider is healthy, False otherwise
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.cleanup"></a>
+
+#### `cleanup`
+
+```python
+@abstractmethod
+async def cleanup() -> None
+```
+
+Cleanup resources and connections.
+
+This method should be called when the provider is no longer needed.
+
+<a id="spoon_ai.llm.cache"></a>
+
+# Module `spoon_ai.llm.cache`
+
+LLM Response Caching - Cache LLM responses to avoid redundant API calls.
+
+<a id="spoon_ai.llm.cache.LLMResponseCache"></a>
+
+## `LLMResponseCache` Objects
+
+```python
+class LLMResponseCache()
+```
+
+Cache for LLM responses to avoid redundant API calls.
+
+<a id="spoon_ai.llm.cache.LLMResponseCache.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(default_ttl: int = 3600, max_size: int = 1000)
+```
+
+Initialize the cache.
+
+**Arguments**:
+
+- `default_ttl` - Default time-to-live in seconds (default: 1 hour)
+- `max_size` - Maximum number of cached entries (default: 1000)
+
+<a id="spoon_ai.llm.cache.LLMResponseCache.get"></a>
+
+#### `get`
+
+```python
+def get(messages: List[Message],
+        provider: Optional[str] = None,
+        **kwargs) -> Optional[LLMResponse]
+```
+
+Get cached response if available.
+
+**Arguments**:
+
+- `messages` - List of conversation messages
+- `provider` - Provider name (optional)
+- `**kwargs` - Additional parameters
+  
+
+**Returns**:
+
+- `Optional[LLMResponse]` - Cached response if found and not expired, None otherwise
+
+<a id="spoon_ai.llm.cache.LLMResponseCache.set"></a>
+
+#### `set`
+
+```python
+def set(messages: List[Message],
+        response: LLMResponse,
+        provider: Optional[str] = None,
+        ttl: Optional[int] = None,
+        **kwargs) -> None
+```
+
+Store response in cache.
+
+**Arguments**:
+
+- `messages` - List of conversation messages
+- `response` - LLM response to cache
+- `provider` - Provider name (optional)
+- `ttl` - Time-to-live in seconds (optional, uses default if not provided)
+- `**kwargs` - Additional parameters
+
+<a id="spoon_ai.llm.cache.LLMResponseCache.clear"></a>
+
+#### `clear`
+
+```python
+def clear() -> None
+```
+
+Clear all cached entries.
+
+<a id="spoon_ai.llm.cache.LLMResponseCache.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, Any]
+```
+
+Get cache statistics.
+
+**Returns**:
+
+  Dict[str, Any]: Cache statistics including size, max_size, etc.
+
+<a id="spoon_ai.llm.cache.CachedLLMManager"></a>
+
+## `CachedLLMManager` Objects
+
+```python
+class CachedLLMManager()
+```
+
+Wrapper around LLMManager that adds response caching.
+
+<a id="spoon_ai.llm.cache.CachedLLMManager.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(llm_manager: LLMManager,
+             cache: Optional[LLMResponseCache] = None)
+```
+
+Initialize cached LLM manager.
+
+**Arguments**:
+
+- `llm_manager` - The underlying LLMManager instance
+- `cache` - Optional cache instance (creates new one if not provided)
+
+<a id="spoon_ai.llm.cache.CachedLLMManager.chat"></a>
+
+#### `chat`
+
+```python
+async def chat(messages: List[Message],
+               provider: Optional[str] = None,
+               use_cache: bool = True,
+               cache_ttl: Optional[int] = None,
+               **kwargs) -> LLMResponse
+```
+
+Send chat request with caching support.
+
+**Arguments**:
+
+- `messages` - List of conversation messages
+- `provider` - Specific provider to use (optional)
+- `use_cache` - Whether to use cache (default: True)
+- `cache_ttl` - Custom TTL for this request (optional)
+- `**kwargs` - Additional parameters
+  
+
+**Returns**:
+
+- `LLMResponse` - LLM response (from cache or API)
+
+<a id="spoon_ai.llm.cache.CachedLLMManager.chat_stream"></a>
+
+#### `chat_stream`
+
+```python
+async def chat_stream(messages: List[Message],
+                      provider: Optional[str] = None,
+                      callbacks: Optional[List] = None,
+                      **kwargs)
+```
+
+Send streaming chat request (caching not supported for streaming).
+
+**Arguments**:
+
+- `messages` - List of conversation messages
+- `provider` - Specific provider to use (optional)
+- `callbacks` - Optional callback handlers
+- `**kwargs` - Additional parameters
+  
+
+**Yields**:
+
+- `LLMResponseChunk` - Streaming response chunks
+
+<a id="spoon_ai.llm.cache.CachedLLMManager.clear_cache"></a>
+
+#### `clear_cache`
+
+```python
+def clear_cache() -> None
+```
+
+Clear the response cache.
+
+<a id="spoon_ai.llm.cache.CachedLLMManager.get_cache_stats"></a>
+
+#### `get_cache_stats`
+
+```python
+def get_cache_stats() -> Dict[str, Any]
+```
+
+Get cache statistics.
+
+**Returns**:
+
+  Dict[str, Any]: Cache statistics
 
 <a id="spoon_ai.llm.manager"></a>
 
@@ -587,6 +1439,70 @@ Set global LLM manager instance.
 
 - `manager` - Manager instance to set as global
 
+<a id="spoon_ai.llm.factory"></a>
+
+# Module `spoon_ai.llm.factory`
+
+<a id="spoon_ai.llm.factory.LLMFactory"></a>
+
+## `LLMFactory` Objects
+
+```python
+class LLMFactory()
+```
+
+LLM factory class, used to create different LLM instances
+
+<a id="spoon_ai.llm.factory.LLMFactory.register"></a>
+
+#### `register`
+
+```python
+@classmethod
+def register(cls, provider_name: str)
+```
+
+Register LLM provider
+
+**Arguments**:
+
+- `provider_name` - Provider name
+  
+
+**Returns**:
+
+  Decorator function
+
+<a id="spoon_ai.llm.factory.LLMFactory.create"></a>
+
+#### `create`
+
+```python
+@classmethod
+def create(cls,
+           provider: Optional[str] = None,
+           config_path: str = "config/config.toml",
+           config_name: str = "llm") -> LLMBase
+```
+
+Create LLM instance
+
+**Arguments**:
+
+- `provider` - Provider name, if None, read from configuration file
+- `config_path` - Configuration file path
+- `config_name` - Configuration name
+  
+
+**Returns**:
+
+- `LLMBase` - LLM instance
+  
+
+**Raises**:
+
+- `ValueError` - If provider does not exist
+
 <a id="spoon_ai.llm.monitoring"></a>
 
 # Module `spoon_ai.llm.monitoring`
@@ -958,513 +1874,6 @@ Get global metrics collector instance.
 
 - `MetricsCollector` - Global metrics collector
 
-<a id="spoon_ai.llm.cache"></a>
-
-# Module `spoon_ai.llm.cache`
-
-LLM Response Caching - Cache LLM responses to avoid redundant API calls.
-
-<a id="spoon_ai.llm.cache.LLMResponseCache"></a>
-
-## `LLMResponseCache` Objects
-
-```python
-class LLMResponseCache()
-```
-
-Cache for LLM responses to avoid redundant API calls.
-
-<a id="spoon_ai.llm.cache.LLMResponseCache.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(default_ttl: int = 3600, max_size: int = 1000)
-```
-
-Initialize the cache.
-
-**Arguments**:
-
-- `default_ttl` - Default time-to-live in seconds (default: 1 hour)
-- `max_size` - Maximum number of cached entries (default: 1000)
-
-<a id="spoon_ai.llm.cache.LLMResponseCache.get"></a>
-
-#### `get`
-
-```python
-def get(messages: List[Message],
-        provider: Optional[str] = None,
-        **kwargs) -> Optional[LLMResponse]
-```
-
-Get cached response if available.
-
-**Arguments**:
-
-- `messages` - List of conversation messages
-- `provider` - Provider name (optional)
-- `**kwargs` - Additional parameters
-  
-
-**Returns**:
-
-- `Optional[LLMResponse]` - Cached response if found and not expired, None otherwise
-
-<a id="spoon_ai.llm.cache.LLMResponseCache.set"></a>
-
-#### `set`
-
-```python
-def set(messages: List[Message],
-        response: LLMResponse,
-        provider: Optional[str] = None,
-        ttl: Optional[int] = None,
-        **kwargs) -> None
-```
-
-Store response in cache.
-
-**Arguments**:
-
-- `messages` - List of conversation messages
-- `response` - LLM response to cache
-- `provider` - Provider name (optional)
-- `ttl` - Time-to-live in seconds (optional, uses default if not provided)
-- `**kwargs` - Additional parameters
-
-<a id="spoon_ai.llm.cache.LLMResponseCache.clear"></a>
-
-#### `clear`
-
-```python
-def clear() -> None
-```
-
-Clear all cached entries.
-
-<a id="spoon_ai.llm.cache.LLMResponseCache.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, Any]
-```
-
-Get cache statistics.
-
-**Returns**:
-
-  Dict[str, Any]: Cache statistics including size, max_size, etc.
-
-<a id="spoon_ai.llm.cache.CachedLLMManager"></a>
-
-## `CachedLLMManager` Objects
-
-```python
-class CachedLLMManager()
-```
-
-Wrapper around LLMManager that adds response caching.
-
-<a id="spoon_ai.llm.cache.CachedLLMManager.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(llm_manager: LLMManager,
-             cache: Optional[LLMResponseCache] = None)
-```
-
-Initialize cached LLM manager.
-
-**Arguments**:
-
-- `llm_manager` - The underlying LLMManager instance
-- `cache` - Optional cache instance (creates new one if not provided)
-
-<a id="spoon_ai.llm.cache.CachedLLMManager.chat"></a>
-
-#### `chat`
-
-```python
-async def chat(messages: List[Message],
-               provider: Optional[str] = None,
-               use_cache: bool = True,
-               cache_ttl: Optional[int] = None,
-               **kwargs) -> LLMResponse
-```
-
-Send chat request with caching support.
-
-**Arguments**:
-
-- `messages` - List of conversation messages
-- `provider` - Specific provider to use (optional)
-- `use_cache` - Whether to use cache (default: True)
-- `cache_ttl` - Custom TTL for this request (optional)
-- `**kwargs` - Additional parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response (from cache or API)
-
-<a id="spoon_ai.llm.cache.CachedLLMManager.chat_stream"></a>
-
-#### `chat_stream`
-
-```python
-async def chat_stream(messages: List[Message],
-                      provider: Optional[str] = None,
-                      callbacks: Optional[List] = None,
-                      **kwargs)
-```
-
-Send streaming chat request (caching not supported for streaming).
-
-**Arguments**:
-
-- `messages` - List of conversation messages
-- `provider` - Specific provider to use (optional)
-- `callbacks` - Optional callback handlers
-- `**kwargs` - Additional parameters
-  
-
-**Yields**:
-
-- `LLMResponseChunk` - Streaming response chunks
-
-<a id="spoon_ai.llm.cache.CachedLLMManager.clear_cache"></a>
-
-#### `clear_cache`
-
-```python
-def clear_cache() -> None
-```
-
-Clear the response cache.
-
-<a id="spoon_ai.llm.cache.CachedLLMManager.get_cache_stats"></a>
-
-#### `get_cache_stats`
-
-```python
-def get_cache_stats() -> Dict[str, Any]
-```
-
-Get cache statistics.
-
-**Returns**:
-
-  Dict[str, Any]: Cache statistics
-
-<a id="spoon_ai.llm.factory"></a>
-
-# Module `spoon_ai.llm.factory`
-
-<a id="spoon_ai.llm.factory.LLMFactory"></a>
-
-## `LLMFactory` Objects
-
-```python
-class LLMFactory()
-```
-
-LLM factory class, used to create different LLM instances
-
-<a id="spoon_ai.llm.factory.LLMFactory.register"></a>
-
-#### `register`
-
-```python
-@classmethod
-def register(cls, provider_name: str)
-```
-
-Register LLM provider
-
-**Arguments**:
-
-- `provider_name` - Provider name
-  
-
-**Returns**:
-
-  Decorator function
-
-<a id="spoon_ai.llm.factory.LLMFactory.create"></a>
-
-#### `create`
-
-```python
-@classmethod
-def create(cls,
-           provider: Optional[str] = None,
-           config_path: str = "config/config.toml",
-           config_name: str = "llm") -> LLMBase
-```
-
-Create LLM instance
-
-**Arguments**:
-
-- `provider` - Provider name, if None, read from configuration file
-- `config_path` - Configuration file path
-- `config_name` - Configuration name
-  
-
-**Returns**:
-
-- `LLMBase` - LLM instance
-  
-
-**Raises**:
-
-- `ValueError` - If provider does not exist
-
-<a id="spoon_ai.llm.response_normalizer"></a>
-
-# Module `spoon_ai.llm.response_normalizer`
-
-Response normalizer for ensuring consistent response formats across providers.
-
-<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer"></a>
-
-## `ResponseNormalizer` Objects
-
-```python
-class ResponseNormalizer()
-```
-
-Normalizes responses from different providers to ensure consistency.
-
-<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.normalize_response"></a>
-
-#### `normalize_response`
-
-```python
-def normalize_response(response: LLMResponse) -> LLMResponse
-```
-
-Normalize a response from any provider.
-
-**Arguments**:
-
-- `response` - Raw LLM response
-  
-
-**Returns**:
-
-- `LLMResponse` - Normalized response
-  
-
-**Raises**:
-
-- `ValidationError` - If response cannot be normalized
-
-<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.validate_response"></a>
-
-#### `validate_response`
-
-```python
-def validate_response(response: LLMResponse) -> bool
-```
-
-Validate that a response meets minimum requirements.
-
-**Arguments**:
-
-- `response` - Response to validate
-  
-
-**Returns**:
-
-- `bool` - True if response is valid
-  
-
-**Raises**:
-
-- `ValidationError` - If response is invalid
-
-<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.add_provider_mapping"></a>
-
-#### `add_provider_mapping`
-
-```python
-def add_provider_mapping(provider_name: str, normalizer_func) -> None
-```
-
-Add a custom normalizer for a new provider.
-
-**Arguments**:
-
-- `provider_name` - Name of the provider
-- `normalizer_func` - Function that takes and returns LLMResponse
-
-<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.get_supported_providers"></a>
-
-#### `get_supported_providers`
-
-```python
-def get_supported_providers() -> List[str]
-```
-
-Get list of providers with custom normalizers.
-
-**Returns**:
-
-- `List[str]` - List of provider names
-
-<a id="spoon_ai.llm.response_normalizer.get_response_normalizer"></a>
-
-#### `get_response_normalizer`
-
-```python
-def get_response_normalizer() -> ResponseNormalizer
-```
-
-Get global response normalizer instance.
-
-**Returns**:
-
-- `ResponseNormalizer` - Global normalizer instance
-
-<a id="spoon_ai.llm.base"></a>
-
-# Module `spoon_ai.llm.base`
-
-<a id="spoon_ai.llm.base.LLMBase"></a>
-
-## `LLMBase` Objects
-
-```python
-class LLMBase(ABC)
-```
-
-Base abstract class for LLM, defining interfaces that all LLM providers must implement
-
-<a id="spoon_ai.llm.base.LLMBase.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(config_path: str = "config/config.toml",
-             config_name: str = "llm")
-```
-
-Initialize LLM interface
-
-**Arguments**:
-
-- `config_path` - Configuration file path
-- `config_name` - Configuration name
-
-<a id="spoon_ai.llm.base.LLMBase.chat"></a>
-
-#### `chat`
-
-```python
-@abstractmethod
-async def chat(messages: List[Message],
-               system_msgs: Optional[List[Message]] = None,
-               **kwargs) -> LLMResponse
-```
-
-Send chat request to LLM and get response
-
-**Arguments**:
-
-- `messages` - List of messages
-- `system_msgs` - List of system messages
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response
-
-<a id="spoon_ai.llm.base.LLMBase.completion"></a>
-
-#### `completion`
-
-```python
-@abstractmethod
-async def completion(prompt: str, **kwargs) -> LLMResponse
-```
-
-Send text completion request to LLM and get response
-
-**Arguments**:
-
-- `prompt` - Prompt text
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response
-
-<a id="spoon_ai.llm.base.LLMBase.chat_with_tools"></a>
-
-#### `chat_with_tools`
-
-```python
-@abstractmethod
-async def chat_with_tools(messages: List[Message],
-                          system_msgs: Optional[List[Message]] = None,
-                          tools: Optional[List[Dict]] = None,
-                          tool_choice: Literal["none", "auto",
-                                               "required"] = "auto",
-                          **kwargs) -> LLMResponse
-```
-
-Send chat request that may contain tool calls to LLM and get response
-
-**Arguments**:
-
-- `messages` - List of messages
-- `system_msgs` - List of system messages
-- `tools` - List of tools
-- `tool_choice` - Tool selection mode
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - LLM response
-
-<a id="spoon_ai.llm.base.LLMBase.generate_image"></a>
-
-#### `generate_image`
-
-```python
-async def generate_image(prompt: str, **kwargs) -> Union[str, List[str]]
-```
-
-Generate image (optional implementation)
-
-**Arguments**:
-
-- `prompt` - Prompt text
-- `**kwargs` - Other parameters
-  
-
-**Returns**:
-
-  Union[str, List[str]]: Image URL or list of URLs
-
-<a id="spoon_ai.llm.base.LLMBase.reset_output_handler"></a>
-
-#### `reset_output_handler`
-
-```python
-def reset_output_handler()
-```
-
-Reset output handler
-
 <a id="spoon_ai.llm.registry"></a>
 
 # Module `spoon_ai.llm.registry`
@@ -1750,395 +2159,6 @@ class ValidationError(LLMError)
 
 Input validation error.
 
-<a id="spoon_ai.llm.config"></a>
-
-# Module `spoon_ai.llm.config`
-
-Configuration management for LLM providers using environment variables.
-
-<a id="spoon_ai.llm.config.ProviderConfig"></a>
-
-## `ProviderConfig` Objects
-
-```python
-@dataclass
-class ProviderConfig()
-```
-
-Configuration for a specific LLM provider.
-
-<a id="spoon_ai.llm.config.ProviderConfig.__post_init__"></a>
-
-#### `__post_init__`
-
-```python
-def __post_init__()
-```
-
-Validate configuration after initialization.
-
-<a id="spoon_ai.llm.config.ProviderConfig.model_dump"></a>
-
-#### `model_dump`
-
-```python
-def model_dump() -> dict[str, Any]
-```
-
-Convert the configuration to a dictionary.
-
-**Returns**:
-
-  dict[str, Any]: Configuration as dictionary
-
-<a id="spoon_ai.llm.config.ConfigurationManager"></a>
-
-## `ConfigurationManager` Objects
-
-```python
-class ConfigurationManager()
-```
-
-Manages environment-driven configuration for LLM providers.
-
-<a id="spoon_ai.llm.config.ConfigurationManager.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__() -> None
-```
-
-Initialize configuration manager and load environment variables.
-
-<a id="spoon_ai.llm.config.ConfigurationManager.load_provider_config"></a>
-
-#### `load_provider_config`
-
-```python
-def load_provider_config(provider_name: str) -> ProviderConfig
-```
-
-Load and validate provider configuration.
-
-**Arguments**:
-
-- `provider_name` - Name of the provider
-  
-
-**Returns**:
-
-- `ProviderConfig` - Validated provider configuration
-  
-
-**Raises**:
-
-- `ConfigurationError` - If configuration is invalid or missing
-
-<a id="spoon_ai.llm.config.ConfigurationManager.validate_config"></a>
-
-#### `validate_config`
-
-```python
-def validate_config(config: ProviderConfig) -> bool
-```
-
-Validate provider configuration.
-
-**Arguments**:
-
-- `config` - Provider configuration to validate
-  
-
-**Returns**:
-
-- `bool` - True if configuration is valid
-  
-
-**Raises**:
-
-- `ConfigurationError` - If configuration is invalid
-
-<a id="spoon_ai.llm.config.ConfigurationManager.get_default_provider"></a>
-
-#### `get_default_provider`
-
-```python
-def get_default_provider() -> str
-```
-
-Get default provider from configuration with intelligent selection.
-
-**Returns**:
-
-- `str` - Default provider name
-
-<a id="spoon_ai.llm.config.ConfigurationManager.get_fallback_chain"></a>
-
-#### `get_fallback_chain`
-
-```python
-def get_fallback_chain() -> list[str]
-```
-
-Get fallback chain from configuration.
-
-**Returns**:
-
-- `list[str]` - List of provider names in fallback order
-
-<a id="spoon_ai.llm.config.ConfigurationManager.list_configured_providers"></a>
-
-#### `list_configured_providers`
-
-```python
-def list_configured_providers() -> list[str]
-```
-
-List all configured providers.
-
-**Returns**:
-
-- `list[str]` - List of provider names that have configuration
-
-<a id="spoon_ai.llm.config.ConfigurationManager.get_available_providers_by_priority"></a>
-
-#### `get_available_providers_by_priority`
-
-```python
-def get_available_providers_by_priority() -> list[str]
-```
-
-Get available providers ordered by priority and quality.
-
-**Returns**:
-
-- `list[str]` - List of available provider names in priority order
-
-<a id="spoon_ai.llm.config.ConfigurationManager.get_provider_info"></a>
-
-#### `get_provider_info`
-
-```python
-def get_provider_info() -> dict[str, dict[str, Any]]
-```
-
-Get information about all providers and their availability.
-
-**Returns**:
-
-  dict[str, dict[str, Any]]: Provider information including availability
-
-<a id="spoon_ai.llm.config.ConfigurationManager.reload_config"></a>
-
-#### `reload_config`
-
-```python
-def reload_config() -> None
-```
-
-Reload configuration from file.
-
-<a id="spoon_ai.llm.providers"></a>
-
-# Module `spoon_ai.llm.providers`
-
-LLM Provider implementations.
-
-<a id="spoon_ai.llm.providers.openrouter_provider"></a>
-
-# Module `spoon_ai.llm.providers.openrouter_provider`
-
-OpenRouter Provider implementation for the unified LLM interface.
-OpenRouter provides access to multiple LLM models through a unified API compatible with OpenAI.
-
-<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider"></a>
-
-## `OpenRouterProvider` Objects
-
-```python
-@register_provider("openrouter", [
-    ProviderCapability.CHAT,
-    ProviderCapability.COMPLETION,
-    ProviderCapability.TOOLS,
-    ProviderCapability.STREAMING
-])
-class OpenRouterProvider(OpenAICompatibleProvider)
-```
-
-OpenRouter provider implementation using OpenAI-compatible API.
-
-<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers"></a>
-
-#### `get_additional_headers`
-
-```python
-def get_additional_headers(config: Dict[str, Any]) -> Dict[str, str]
-```
-
-Get OpenRouter-specific headers.
-
-<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-def get_metadata() -> ProviderMetadata
-```
-
-Get OpenRouter provider metadata.
-
-<a id="spoon_ai.llm.providers.openai_provider"></a>
-
-# Module `spoon_ai.llm.providers.openai_provider`
-
-OpenAI Provider implementation for the unified LLM interface.
-
-<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider"></a>
-
-## `OpenAIProvider` Objects
-
-```python
-@register_provider("openai", [
-    ProviderCapability.CHAT,
-    ProviderCapability.COMPLETION,
-    ProviderCapability.TOOLS,
-    ProviderCapability.STREAMING
-])
-class OpenAIProvider(OpenAICompatibleProvider)
-```
-
-OpenAI provider implementation.
-
-<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-def get_metadata() -> ProviderMetadata
-```
-
-Get OpenAI provider metadata.
-
-<a id="spoon_ai.llm.providers.anthropic_provider"></a>
-
-# Module `spoon_ai.llm.providers.anthropic_provider`
-
-Anthropic Provider implementation for the unified LLM interface.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider"></a>
-
-## `AnthropicProvider` Objects
-
-```python
-@register_provider("anthropic", [
-    ProviderCapability.CHAT,
-    ProviderCapability.COMPLETION,
-    ProviderCapability.TOOLS,
-    ProviderCapability.STREAMING
-])
-class AnthropicProvider(LLMProviderInterface)
-```
-
-Anthropic provider implementation.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.initialize"></a>
-
-#### `initialize`
-
-```python
-async def initialize(config: Dict[str, Any]) -> None
-```
-
-Initialize the Anthropic provider with configuration.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_cache_metrics"></a>
-
-#### `get_cache_metrics`
-
-```python
-def get_cache_metrics() -> Dict[str, int]
-```
-
-Get current cache performance metrics.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat"></a>
-
-#### `chat`
-
-```python
-async def chat(messages: List[Message], **kwargs) -> LLMResponse
-```
-
-Send chat request to Anthropic.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_stream"></a>
-
-#### `chat_stream`
-
-```python
-async def chat_stream(messages: List[Message],
-                      callbacks: Optional[List] = None,
-                      **kwargs) -> AsyncIterator[LLMResponseChunk]
-```
-
-Send streaming chat request to Anthropic with callback support.
-
-**Yields**:
-
-- `LLMResponseChunk` - Structured streaming response chunks
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.completion"></a>
-
-#### `completion`
-
-```python
-async def completion(prompt: str, **kwargs) -> LLMResponse
-```
-
-Send completion request to Anthropic.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_with_tools"></a>
-
-#### `chat_with_tools`
-
-```python
-async def chat_with_tools(messages: List[Message], tools: List[Dict],
-                          **kwargs) -> LLMResponse
-```
-
-Send chat request with tools to Anthropic.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-def get_metadata() -> ProviderMetadata
-```
-
-Get Anthropic provider metadata.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.health_check"></a>
-
-#### `health_check`
-
-```python
-async def health_check() -> bool
-```
-
-Check if Anthropic provider is healthy.
-
-<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.cleanup"></a>
-
-#### `cleanup`
-
-```python
-async def cleanup() -> None
-```
-
-Cleanup Anthropic provider resources.
-
 <a id="spoon_ai.llm.providers.gemini_provider"></a>
 
 # Module `spoon_ai.llm.providers.gemini_provider`
@@ -2250,30 +2270,29 @@ async def cleanup() -> None
 
 Cleanup Gemini provider resources.
 
-<a id="spoon_ai.llm.providers.deepseek_provider"></a>
+<a id="spoon_ai.llm.providers.openai_provider"></a>
 
-# Module `spoon_ai.llm.providers.deepseek_provider`
+# Module `spoon_ai.llm.providers.openai_provider`
 
-DeepSeek Provider implementation for the unified LLM interface.
-DeepSeek provides access to their models through an OpenAI-compatible API.
+OpenAI Provider implementation for the unified LLM interface.
 
-<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider"></a>
+<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider"></a>
 
-## `DeepSeekProvider` Objects
+## `OpenAIProvider` Objects
 
 ```python
-@register_provider("deepseek", [
+@register_provider("openai", [
     ProviderCapability.CHAT,
     ProviderCapability.COMPLETION,
     ProviderCapability.TOOLS,
     ProviderCapability.STREAMING
 ])
-class DeepSeekProvider(OpenAICompatibleProvider)
+class OpenAIProvider(OpenAICompatibleProvider)
 ```
 
-DeepSeek provider implementation using OpenAI-compatible API.
+OpenAI provider implementation.
 
-<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata"></a>
+<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata"></a>
 
 #### `get_metadata`
 
@@ -2281,7 +2300,7 @@ DeepSeek provider implementation using OpenAI-compatible API.
 def get_metadata() -> ProviderMetadata
 ```
 
-Get DeepSeek provider metadata.
+Get OpenAI provider metadata.
 
 <a id="spoon_ai.llm.providers.openai_compatible_provider"></a>
 
@@ -2433,6 +2452,168 @@ async def cleanup() -> None
 
 Cleanup provider resources.
 
+<a id="spoon_ai.llm.providers.openrouter_provider"></a>
+
+# Module `spoon_ai.llm.providers.openrouter_provider`
+
+OpenRouter Provider implementation for the unified LLM interface.
+OpenRouter provides access to multiple LLM models through a unified API compatible with OpenAI.
+
+<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider"></a>
+
+## `OpenRouterProvider` Objects
+
+```python
+@register_provider("openrouter", [
+    ProviderCapability.CHAT,
+    ProviderCapability.COMPLETION,
+    ProviderCapability.TOOLS,
+    ProviderCapability.STREAMING
+])
+class OpenRouterProvider(OpenAICompatibleProvider)
+```
+
+OpenRouter provider implementation using OpenAI-compatible API.
+
+<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers"></a>
+
+#### `get_additional_headers`
+
+```python
+def get_additional_headers(config: Dict[str, Any]) -> Dict[str, str]
+```
+
+Get OpenRouter-specific headers.
+
+<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+def get_metadata() -> ProviderMetadata
+```
+
+Get OpenRouter provider metadata.
+
+<a id="spoon_ai.llm.providers.anthropic_provider"></a>
+
+# Module `spoon_ai.llm.providers.anthropic_provider`
+
+Anthropic Provider implementation for the unified LLM interface.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider"></a>
+
+## `AnthropicProvider` Objects
+
+```python
+@register_provider("anthropic", [
+    ProviderCapability.CHAT,
+    ProviderCapability.COMPLETION,
+    ProviderCapability.TOOLS,
+    ProviderCapability.STREAMING
+])
+class AnthropicProvider(LLMProviderInterface)
+```
+
+Anthropic provider implementation.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.initialize"></a>
+
+#### `initialize`
+
+```python
+async def initialize(config: Dict[str, Any]) -> None
+```
+
+Initialize the Anthropic provider with configuration.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_cache_metrics"></a>
+
+#### `get_cache_metrics`
+
+```python
+def get_cache_metrics() -> Dict[str, int]
+```
+
+Get current cache performance metrics.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat"></a>
+
+#### `chat`
+
+```python
+async def chat(messages: List[Message], **kwargs) -> LLMResponse
+```
+
+Send chat request to Anthropic.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_stream"></a>
+
+#### `chat_stream`
+
+```python
+async def chat_stream(messages: List[Message],
+                      callbacks: Optional[List] = None,
+                      **kwargs) -> AsyncIterator[LLMResponseChunk]
+```
+
+Send streaming chat request to Anthropic with callback support.
+
+**Yields**:
+
+- `LLMResponseChunk` - Structured streaming response chunks
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.completion"></a>
+
+#### `completion`
+
+```python
+async def completion(prompt: str, **kwargs) -> LLMResponse
+```
+
+Send completion request to Anthropic.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.chat_with_tools"></a>
+
+#### `chat_with_tools`
+
+```python
+async def chat_with_tools(messages: List[Message], tools: List[Dict],
+                          **kwargs) -> LLMResponse
+```
+
+Send chat request with tools to Anthropic.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+def get_metadata() -> ProviderMetadata
+```
+
+Get Anthropic provider metadata.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.health_check"></a>
+
+#### `health_check`
+
+```python
+async def health_check() -> bool
+```
+
+Check if Anthropic provider is healthy.
+
+<a id="spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.cleanup"></a>
+
+#### `cleanup`
+
+```python
+async def cleanup() -> None
+```
+
+Cleanup Anthropic provider resources.
+
 <a id="spoon_ai.llm.providers.ollama_provider"></a>
 
 # Module `spoon_ai.llm.providers.ollama_provider`
@@ -2467,223 +2648,42 @@ class OllamaProvider(LLMProviderInterface)
 
 Local Ollama provider via HTTP.
 
-<a id="spoon_ai.llm.interface"></a>
+<a id="spoon_ai.llm.providers.deepseek_provider"></a>
 
-# Module `spoon_ai.llm.interface`
+# Module `spoon_ai.llm.providers.deepseek_provider`
 
-LLM Provider Interface - Abstract base class defining the unified interface for all LLM providers.
+DeepSeek Provider implementation for the unified LLM interface.
+DeepSeek provides access to their models through an OpenAI-compatible API.
 
-<a id="spoon_ai.llm.interface.ProviderCapability"></a>
+<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider"></a>
 
-## `ProviderCapability` Objects
-
-```python
-class ProviderCapability(Enum)
-```
-
-Enumeration of capabilities that LLM providers can support.
-
-<a id="spoon_ai.llm.interface.ProviderMetadata"></a>
-
-## `ProviderMetadata` Objects
+## `DeepSeekProvider` Objects
 
 ```python
-@dataclass
-class ProviderMetadata()
+@register_provider("deepseek", [
+    ProviderCapability.CHAT,
+    ProviderCapability.COMPLETION,
+    ProviderCapability.TOOLS,
+    ProviderCapability.STREAMING
+])
+class DeepSeekProvider(OpenAICompatibleProvider)
 ```
 
-Metadata describing a provider's capabilities and limits.
+DeepSeek provider implementation using OpenAI-compatible API.
 
-<a id="spoon_ai.llm.interface.LLMResponse"></a>
-
-## `LLMResponse` Objects
-
-```python
-@dataclass
-class LLMResponse()
-```
-
-Enhanced LLM response with comprehensive metadata and debugging information.
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface"></a>
-
-## `LLMProviderInterface` Objects
-
-```python
-class LLMProviderInterface(ABC)
-```
-
-Abstract base class defining the unified interface for all LLM providers.
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.initialize"></a>
-
-#### `initialize`
-
-```python
-@abstractmethod
-async def initialize(config: Dict[str, Any]) -> None
-```
-
-Initialize the provider with configuration.
-
-**Arguments**:
-
-- `config` - Provider-specific configuration dictionary
-  
-
-**Raises**:
-
-- `ConfigurationError` - If configuration is invalid
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.chat"></a>
-
-#### `chat`
-
-```python
-@abstractmethod
-async def chat(messages: List[Message], **kwargs) -> LLMResponse
-```
-
-Send chat request to the provider.
-
-**Arguments**:
-
-- `messages` - List of conversation messages
-- `**kwargs` - Additional provider-specific parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - Standardized response object
-  
-
-**Raises**:
-
-- `ProviderError` - If the request fails
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.chat_stream"></a>
-
-#### `chat_stream`
-
-```python
-@abstractmethod
-async def chat_stream(messages: List[Message],
-                      callbacks: Optional[List[BaseCallbackHandler]] = None,
-                      **kwargs) -> AsyncIterator[LLMResponseChunk]
-```
-
-Send streaming chat request to the provider with callback support.
-
-**Arguments**:
-
-- `messages` - List of conversation messages
-- `callbacks` - Optional list of callback handlers for real-time events
-- `**kwargs` - Additional provider-specific parameters
-  
-
-**Yields**:
-
-- `LLMResponseChunk` - Structured streaming response chunks
-  
-
-**Raises**:
-
-- `ProviderError` - If the request fails
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.completion"></a>
-
-#### `completion`
-
-```python
-@abstractmethod
-async def completion(prompt: str, **kwargs) -> LLMResponse
-```
-
-Send completion request to the provider.
-
-**Arguments**:
-
-- `prompt` - Text prompt for completion
-- `**kwargs` - Additional provider-specific parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - Standardized response object
-  
-
-**Raises**:
-
-- `ProviderError` - If the request fails
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.chat_with_tools"></a>
-
-#### `chat_with_tools`
-
-```python
-@abstractmethod
-async def chat_with_tools(messages: List[Message], tools: List[Dict],
-                          **kwargs) -> LLMResponse
-```
-
-Send chat request with tool support.
-
-**Arguments**:
-
-- `messages` - List of conversation messages
-- `tools` - List of available tools
-- `**kwargs` - Additional provider-specific parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - Standardized response object with potential tool calls
-  
-
-**Raises**:
-
-- `ProviderError` - If the request fails
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.get_metadata"></a>
+<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata"></a>
 
 #### `get_metadata`
 
 ```python
-@abstractmethod
 def get_metadata() -> ProviderMetadata
 ```
 
-Get provider metadata and capabilities.
+Get DeepSeek provider metadata.
 
-**Returns**:
+<a id="spoon_ai.llm.providers"></a>
 
-- `ProviderMetadata` - Provider information and capabilities
+# Module `spoon_ai.llm.providers`
 
-<a id="spoon_ai.llm.interface.LLMProviderInterface.health_check"></a>
-
-#### `health_check`
-
-```python
-@abstractmethod
-async def health_check() -> bool
-```
-
-Check if provider is healthy and available.
-
-**Returns**:
-
-- `bool` - True if provider is healthy, False otherwise
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.cleanup"></a>
-
-#### `cleanup`
-
-```python
-@abstractmethod
-async def cleanup() -> None
-```
-
-Cleanup resources and connections.
-
-This method should be called when the provider is no longer needed.
+LLM Provider implementations.
 

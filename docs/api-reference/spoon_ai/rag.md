@@ -7,20 +7,14 @@ title: spoon_ai.rag
 # Table of Contents
 
 * [spoon\_ai.rag](#spoon_ai.rag)
-* [spoon\_ai.rag.retriever](#spoon_ai.rag.retriever)
-* [spoon\_ai.rag.vectorstores.qdrant\_store](#spoon_ai.rag.vectorstores.qdrant_store)
-* [spoon\_ai.rag.vectorstores](#spoon_ai.rag.vectorstores)
-* [spoon\_ai.rag.vectorstores.chroma\_store](#spoon_ai.rag.vectorstores.chroma_store)
-* [spoon\_ai.rag.vectorstores.base](#spoon_ai.rag.vectorstores.base)
-  * [VectorStore](#spoon_ai.rag.vectorstores.base.VectorStore)
-    * [query](#spoon_ai.rag.vectorstores.base.VectorStore.query)
-* [spoon\_ai.rag.vectorstores.registry](#spoon_ai.rag.vectorstores.registry)
-  * [get\_vector\_store](#spoon_ai.rag.vectorstores.registry.get_vector_store)
-* [spoon\_ai.rag.vectorstores.pinecone\_store](#spoon_ai.rag.vectorstores.pinecone_store)
-* [spoon\_ai.rag.vectorstores.faiss\_store](#spoon_ai.rag.vectorstores.faiss_store)
-  * [FaissVectorStore](#spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore)
-* [spoon\_ai.rag.index](#spoon_ai.rag.index)
-* [spoon\_ai.rag.parser](#spoon_ai.rag.parser)
+* [spoon\_ai.rag.config](#spoon_ai.rag.config)
+  * [ensure\_dotenv](#spoon_ai.rag.config.ensure_dotenv)
+  * [RagConfig](#spoon_ai.rag.config.RagConfig)
+    * [backend](#spoon_ai.rag.config.RagConfig.backend)
+    * [embeddings\_model](#spoon_ai.rag.config.RagConfig.embeddings_model)
+    * [retrieval\_overfetch\_factor](#spoon_ai.rag.config.RagConfig.retrieval_overfetch_factor)
+    * [rrf\_k](#spoon_ai.rag.config.RagConfig.rrf_k)
+    * [openai\_embeddings\_model](#spoon_ai.rag.config.RagConfig.openai_embeddings_model)
 * [spoon\_ai.rag.parser.unstructured\_parser](#spoon_ai.rag.parser.unstructured_parser)
   * [ParsedDocument](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument)
     * [filename](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filename)
@@ -32,117 +26,95 @@ title: spoon_ai.rag
     * [parse\_file](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_file)
     * [parse\_directory](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_directory)
     * [parse](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse)
+* [spoon\_ai.rag.parser](#spoon_ai.rag.parser)
 * [spoon\_ai.rag.chunk](#spoon_ai.rag.chunk)
   * [recursive\_chunk](#spoon_ai.rag.chunk.recursive_chunk)
   * [simple\_chunk](#spoon_ai.rag.chunk.simple_chunk)
   * [paragraph\_chunk](#spoon_ai.rag.chunk.paragraph_chunk)
   * [chunk\_text](#spoon_ai.rag.chunk.chunk_text)
+* [spoon\_ai.rag.index](#spoon_ai.rag.index)
+* [spoon\_ai.rag.qa](#spoon_ai.rag.qa)
 * [spoon\_ai.rag.embeddings](#spoon_ai.rag.embeddings)
   * [HashEmbeddingClient](#spoon_ai.rag.embeddings.HashEmbeddingClient)
   * [get\_embedding\_client](#spoon_ai.rag.embeddings.get_embedding_client)
-* [spoon\_ai.rag.config](#spoon_ai.rag.config)
-  * [ensure\_dotenv](#spoon_ai.rag.config.ensure_dotenv)
-  * [RagConfig](#spoon_ai.rag.config.RagConfig)
-    * [backend](#spoon_ai.rag.config.RagConfig.backend)
-    * [embeddings\_model](#spoon_ai.rag.config.RagConfig.embeddings_model)
-    * [retrieval\_overfetch\_factor](#spoon_ai.rag.config.RagConfig.retrieval_overfetch_factor)
-    * [rrf\_k](#spoon_ai.rag.config.RagConfig.rrf_k)
-    * [openai\_embeddings\_model](#spoon_ai.rag.config.RagConfig.openai_embeddings_model)
-* [spoon\_ai.rag.qa](#spoon_ai.rag.qa)
+* [spoon\_ai.rag.retriever](#spoon_ai.rag.retriever)
+* [spoon\_ai.rag.vectorstores.base](#spoon_ai.rag.vectorstores.base)
+  * [VectorStore](#spoon_ai.rag.vectorstores.base.VectorStore)
+    * [query](#spoon_ai.rag.vectorstores.base.VectorStore.query)
+* [spoon\_ai.rag.vectorstores.chroma\_store](#spoon_ai.rag.vectorstores.chroma_store)
+* [spoon\_ai.rag.vectorstores.qdrant\_store](#spoon_ai.rag.vectorstores.qdrant_store)
+* [spoon\_ai.rag.vectorstores.pinecone\_store](#spoon_ai.rag.vectorstores.pinecone_store)
+* [spoon\_ai.rag.vectorstores.registry](#spoon_ai.rag.vectorstores.registry)
+  * [get\_vector\_store](#spoon_ai.rag.vectorstores.registry.get_vector_store)
+* [spoon\_ai.rag.vectorstores.faiss\_store](#spoon_ai.rag.vectorstores.faiss_store)
+  * [FaissVectorStore](#spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore)
+* [spoon\_ai.rag.vectorstores](#spoon_ai.rag.vectorstores)
 
 <a id="spoon_ai.rag"></a>
 
 # Module `spoon_ai.rag`
 
-<a id="spoon_ai.rag.retriever"></a>
+<a id="spoon_ai.rag.config"></a>
 
-# Module `spoon_ai.rag.retriever`
+# Module `spoon_ai.rag.config`
 
-<a id="spoon_ai.rag.vectorstores.qdrant_store"></a>
+<a id="spoon_ai.rag.config.ensure_dotenv"></a>
 
-# Module `spoon_ai.rag.vectorstores.qdrant_store`
-
-<a id="spoon_ai.rag.vectorstores"></a>
-
-# Module `spoon_ai.rag.vectorstores`
-
-<a id="spoon_ai.rag.vectorstores.chroma_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.chroma_store`
-
-<a id="spoon_ai.rag.vectorstores.base"></a>
-
-# Module `spoon_ai.rag.vectorstores.base`
-
-<a id="spoon_ai.rag.vectorstores.base.VectorStore"></a>
-
-## `VectorStore` Objects
+#### `ensure_dotenv`
 
 ```python
-class VectorStore(ABC)
+def ensure_dotenv() -> None
 ```
 
-<a id="spoon_ai.rag.vectorstores.base.VectorStore.query"></a>
+Load .env file once if python-dotenv is available.
 
-#### `query`
+Does NOT override existing environment variables (e.g. those injected by
+CI/CD).  Call this explicitly before reading env-based config rather than
+relying on import-time side effects.
+
+<a id="spoon_ai.rag.config.RagConfig"></a>
+
+## `RagConfig` Objects
 
 ```python
-@abstractmethod
-def query(
-        *,
-        collection: str,
-        query_embeddings: List[List[float]],
-        top_k: int = 5,
-        filter: Optional[Dict] = None) -> List[List[Tuple[str, float, Dict]]]
+@dataclass
+class RagConfig()
 ```
 
-Return per-query list of (id, score, metadata). Higher score is better.
+<a id="spoon_ai.rag.config.RagConfig.backend"></a>
 
-<a id="spoon_ai.rag.vectorstores.registry"></a>
+#### `backend`
 
-# Module `spoon_ai.rag.vectorstores.registry`
+faiss|pinecone|qdrant|chroma
 
-<a id="spoon_ai.rag.vectorstores.registry.get_vector_store"></a>
+<a id="spoon_ai.rag.config.RagConfig.embeddings_model"></a>
 
-#### `get_vector_store`
+#### `embeddings_model`
+
+Generic model name for all embedding providers
+
+<a id="spoon_ai.rag.config.RagConfig.retrieval_overfetch_factor"></a>
+
+#### `retrieval_overfetch_factor`
+
+overfetch multiplier: max(top_k * factor, 20)
+
+<a id="spoon_ai.rag.config.RagConfig.rrf_k"></a>
+
+#### `rrf_k`
+
+RRF smoothing constant
+
+<a id="spoon_ai.rag.config.RagConfig.openai_embeddings_model"></a>
+
+#### `openai_embeddings_model`
 
 ```python
-def get_vector_store(backend: Optional[str] = None) -> VectorStore
+@property
+def openai_embeddings_model() -> str
 ```
 
-Return a vector store by backend name.
-
-Backends:
-- faiss: local/offline (mapped to in-memory cosine store)
-- pinecone: cloud Pinecone (requires PINECONE_API_KEY)
-- qdrant: local/cloud Qdrant (requires qdrant-client, default http://localhost:6333)
-- chroma: local Chroma (requires chromadb)
-
-<a id="spoon_ai.rag.vectorstores.pinecone_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.pinecone_store`
-
-<a id="spoon_ai.rag.vectorstores.faiss_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.faiss_store`
-
-<a id="spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore"></a>
-
-## `FaissVectorStore` Objects
-
-```python
-class FaissVectorStore(VectorStore)
-```
-
-FAISS-backed local vector store (cosine via inner product + L2 norm).
-
-<a id="spoon_ai.rag.index"></a>
-
-# Module `spoon_ai.rag.index`
-
-<a id="spoon_ai.rag.parser"></a>
-
-# Module `spoon_ai.rag.parser`
+Deprecated: use 'embeddings_model' instead. Kept for backward compatibility.
 
 <a id="spoon_ai.rag.parser.unstructured_parser"></a>
 
@@ -291,6 +263,10 @@ Parse documents from multiple sources (URLs, directories, files).
 
   List of ParsedDocument
 
+<a id="spoon_ai.rag.parser"></a>
+
+# Module `spoon_ai.rag.parser`
+
 <a id="spoon_ai.rag.chunk"></a>
 
 # Module `spoon_ai.rag.chunk`
@@ -399,6 +375,14 @@ Chunk text using specified method.
 
   List of chunk texts
 
+<a id="spoon_ai.rag.index"></a>
+
+# Module `spoon_ai.rag.index`
+
+<a id="spoon_ai.rag.qa"></a>
+
+# Module `spoon_ai.rag.qa`
+
 <a id="spoon_ai.rag.embeddings"></a>
 
 # Module `spoon_ai.rag.embeddings`
@@ -437,69 +421,85 @@ Provider selection rules:
 - provider is "openai_compatible": use OpenAI-compatible embeddings via RAG_EMBEDDINGS_* env vars.
 - otherwise: deterministic hash embeddings (offline).
 
-<a id="spoon_ai.rag.config"></a>
+<a id="spoon_ai.rag.retriever"></a>
 
-# Module `spoon_ai.rag.config`
+# Module `spoon_ai.rag.retriever`
 
-<a id="spoon_ai.rag.config.ensure_dotenv"></a>
+<a id="spoon_ai.rag.vectorstores.base"></a>
 
-#### `ensure_dotenv`
+# Module `spoon_ai.rag.vectorstores.base`
 
-```python
-def ensure_dotenv() -> None
-```
+<a id="spoon_ai.rag.vectorstores.base.VectorStore"></a>
 
-Load .env file once if python-dotenv is available.
-
-Does NOT override existing environment variables (e.g. those injected by
-CI/CD).  Call this explicitly before reading env-based config rather than
-relying on import-time side effects.
-
-<a id="spoon_ai.rag.config.RagConfig"></a>
-
-## `RagConfig` Objects
+## `VectorStore` Objects
 
 ```python
-@dataclass
-class RagConfig()
+class VectorStore(ABC)
 ```
 
-<a id="spoon_ai.rag.config.RagConfig.backend"></a>
+<a id="spoon_ai.rag.vectorstores.base.VectorStore.query"></a>
 
-#### `backend`
-
-faiss|pinecone|qdrant|chroma
-
-<a id="spoon_ai.rag.config.RagConfig.embeddings_model"></a>
-
-#### `embeddings_model`
-
-Generic model name for all embedding providers
-
-<a id="spoon_ai.rag.config.RagConfig.retrieval_overfetch_factor"></a>
-
-#### `retrieval_overfetch_factor`
-
-overfetch multiplier: max(top_k * factor, 20)
-
-<a id="spoon_ai.rag.config.RagConfig.rrf_k"></a>
-
-#### `rrf_k`
-
-RRF smoothing constant
-
-<a id="spoon_ai.rag.config.RagConfig.openai_embeddings_model"></a>
-
-#### `openai_embeddings_model`
+#### `query`
 
 ```python
-@property
-def openai_embeddings_model() -> str
+@abstractmethod
+def query(
+        *,
+        collection: str,
+        query_embeddings: List[List[float]],
+        top_k: int = 5,
+        filter: Optional[Dict] = None) -> List[List[Tuple[str, float, Dict]]]
 ```
 
-Deprecated: use 'embeddings_model' instead. Kept for backward compatibility.
+Return per-query list of (id, score, metadata). Higher score is better.
 
-<a id="spoon_ai.rag.qa"></a>
+<a id="spoon_ai.rag.vectorstores.chroma_store"></a>
 
-# Module `spoon_ai.rag.qa`
+# Module `spoon_ai.rag.vectorstores.chroma_store`
+
+<a id="spoon_ai.rag.vectorstores.qdrant_store"></a>
+
+# Module `spoon_ai.rag.vectorstores.qdrant_store`
+
+<a id="spoon_ai.rag.vectorstores.pinecone_store"></a>
+
+# Module `spoon_ai.rag.vectorstores.pinecone_store`
+
+<a id="spoon_ai.rag.vectorstores.registry"></a>
+
+# Module `spoon_ai.rag.vectorstores.registry`
+
+<a id="spoon_ai.rag.vectorstores.registry.get_vector_store"></a>
+
+#### `get_vector_store`
+
+```python
+def get_vector_store(backend: Optional[str] = None) -> VectorStore
+```
+
+Return a vector store by backend name.
+
+Backends:
+- faiss: local/offline (mapped to in-memory cosine store)
+- pinecone: cloud Pinecone (requires PINECONE_API_KEY)
+- qdrant: local/cloud Qdrant (requires qdrant-client, default http://localhost:6333)
+- chroma: local Chroma (requires chromadb)
+
+<a id="spoon_ai.rag.vectorstores.faiss_store"></a>
+
+# Module `spoon_ai.rag.vectorstores.faiss_store`
+
+<a id="spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore"></a>
+
+## `FaissVectorStore` Objects
+
+```python
+class FaissVectorStore(VectorStore)
+```
+
+FAISS-backed local vector store (cosine via inner product + L2 norm).
+
+<a id="spoon_ai.rag.vectorstores"></a>
+
+# Module `spoon_ai.rag.vectorstores`
 

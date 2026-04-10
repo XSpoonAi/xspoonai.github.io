@@ -10,8 +10,6 @@ title: spoon_ai.neofs
 * [spoon\_ai.neofs.utils](#spoon_ai.neofs.utils)
   * [SignatureError](#spoon_ai.neofs.utils.SignatureError)
   * [sign\_bearer\_token](#spoon_ai.neofs.utils.sign_bearer_token)
-* [spoon\_ai.neofs.models](#spoon_ai.neofs.models)
-  * [NetworkInfo](#spoon_ai.neofs.models.NetworkInfo)
 * [spoon\_ai.neofs.client](#spoon_ai.neofs.client)
   * [NeoFSClient](#spoon_ai.neofs.client.NeoFSClient)
     * [set\_container\_eacl](#spoon_ai.neofs.client.NeoFSClient.set_container_eacl)
@@ -23,6 +21,8 @@ title: spoon_ai.neofs
     * [search\_objects](#spoon_ai.neofs.client.NeoFSClient.search_objects)
   * [NeoFSException](#spoon_ai.neofs.client.NeoFSException)
   * [NeoFSAPIException](#spoon_ai.neofs.client.NeoFSAPIException)
+* [spoon\_ai.neofs.models](#spoon_ai.neofs.models)
+  * [NetworkInfo](#spoon_ai.neofs.models.NetworkInfo)
 
 <a id="spoon_ai.neofs"></a>
 
@@ -62,22 +62,6 @@ Returns (signature_hex, compressed_pubkey_hex)
     X-Bearer-Signature = &lt;DER signature hex&gt; + &lt;16B salt hex&gt;
     X-Bearer-Signature-Key = &lt;compressed public key hex&gt;
     URL needs to append ?walletConnect=true
-
-<a id="spoon_ai.neofs.models"></a>
-
-# Module `spoon_ai.neofs.models`
-
-Pydantic models describing NeoFS REST API payloads.
-
-<a id="spoon_ai.neofs.models.NetworkInfo"></a>
-
-## `NetworkInfo` Objects
-
-```python
-class NetworkInfo(BaseModel)
-```
-
-Describes network configuration fees reported by the gateway.
 
 <a id="spoon_ai.neofs.client"></a>
 
@@ -221,4 +205,20 @@ class NeoFSAPIException(NeoFSException)
 ```
 
 Raised when the API returns an error.
+
+<a id="spoon_ai.neofs.models"></a>
+
+# Module `spoon_ai.neofs.models`
+
+Pydantic models describing NeoFS REST API payloads.
+
+<a id="spoon_ai.neofs.models.NetworkInfo"></a>
+
+## `NetworkInfo` Objects
+
+```python
+class NetworkInfo(BaseModel)
+```
+
+Describes network configuration fees reported by the gateway.
 

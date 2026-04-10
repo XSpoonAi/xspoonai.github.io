@@ -7,6 +7,7 @@ title: spoon_ai.wallet
 # Table of Contents
 
 * [spoon\_ai.wallet](#spoon_ai.wallet)
+* [spoon\_ai.wallet.encrypt\_key](#spoon_ai.wallet.encrypt_key)
 * [spoon\_ai.wallet.vault](#spoon_ai.wallet.vault)
   * [SecretVault](#spoon_ai.wallet.vault.SecretVault)
     * [\_\_new\_\_](#spoon_ai.wallet.vault.SecretVault.__new__)
@@ -25,11 +26,18 @@ title: spoon_ai.wallet
   * [encrypt\_private\_key](#spoon_ai.wallet.security.encrypt_private_key)
   * [decrypt\_private\_key](#spoon_ai.wallet.security.decrypt_private_key)
   * [decrypt\_and\_store](#spoon_ai.wallet.security.decrypt_and_store)
-* [spoon\_ai.wallet.encrypt\_key](#spoon_ai.wallet.encrypt_key)
 
 <a id="spoon_ai.wallet"></a>
 
 # Module `spoon_ai.wallet`
+
+<a id="spoon_ai.wallet.encrypt_key"></a>
+
+# Module `spoon_ai.wallet.encrypt_key`
+
+Interactive helper to produce ENC:v2 payloads for PRIVATE_KEY (or any secret).
+
+Uses AES-256-GCM encryption with Argon2id key derivation.
 
 <a id="spoon_ai.wallet.vault"></a>
 
@@ -394,12 +402,4 @@ this function:
   
   # On shutdown:
   vault.wipe_all()
-
-<a id="spoon_ai.wallet.encrypt_key"></a>
-
-# Module `spoon_ai.wallet.encrypt_key`
-
-Interactive helper to produce ENC:v2 payloads for PRIVATE_KEY (or any secret).
-
-Uses AES-256-GCM encryption with Argon2id key derivation.
 

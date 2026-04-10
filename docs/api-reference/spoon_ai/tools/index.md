@@ -7,32 +7,9 @@ title: spoon_ai.tools
 # Table of Contents
 
 * [spoon\_ai.tools](#spoon_ai.tools)
-* [spoon\_ai.tools.mcp\_tool](#spoon_ai.tools.mcp_tool)
-  * [MCPTool](#spoon_ai.tools.mcp_tool.MCPTool)
-    * [call\_mcp\_tool](#spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool)
-    * [expand\_server\_tools](#spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools)
-    * [list\_available\_tools](#spoon_ai.tools.mcp_tool.MCPTool.list_available_tools)
-* [spoon\_ai.tools.neofs\_tools](#spoon_ai.tools.neofs_tools)
-  * [get\_shared\_neofs\_client](#spoon_ai.tools.neofs_tools.get_shared_neofs_client)
-  * [CreateBearerTokenTool](#spoon_ai.tools.neofs_tools.CreateBearerTokenTool)
-  * [CreateContainerTool](#spoon_ai.tools.neofs_tools.CreateContainerTool)
-  * [UploadObjectTool](#spoon_ai.tools.neofs_tools.UploadObjectTool)
-  * [DownloadObjectByIdTool](#spoon_ai.tools.neofs_tools.DownloadObjectByIdTool)
-  * [GetObjectHeaderByIdTool](#spoon_ai.tools.neofs_tools.GetObjectHeaderByIdTool)
-  * [DownloadObjectByAttributeTool](#spoon_ai.tools.neofs_tools.DownloadObjectByAttributeTool)
-  * [GetObjectHeaderByAttributeTool](#spoon_ai.tools.neofs_tools.GetObjectHeaderByAttributeTool)
-  * [DeleteObjectTool](#spoon_ai.tools.neofs_tools.DeleteObjectTool)
-  * [SearchObjectsTool](#spoon_ai.tools.neofs_tools.SearchObjectsTool)
-  * [SetContainerEaclTool](#spoon_ai.tools.neofs_tools.SetContainerEaclTool)
-  * [GetContainerEaclTool](#spoon_ai.tools.neofs_tools.GetContainerEaclTool)
-  * [ListContainersTool](#spoon_ai.tools.neofs_tools.ListContainersTool)
-  * [GetContainerInfoTool](#spoon_ai.tools.neofs_tools.GetContainerInfoTool)
-  * [DeleteContainerTool](#spoon_ai.tools.neofs_tools.DeleteContainerTool)
-  * [GetNetworkInfoTool](#spoon_ai.tools.neofs_tools.GetNetworkInfoTool)
-  * [GetBalanceTool](#spoon_ai.tools.neofs_tools.GetBalanceTool)
-* [spoon\_ai.tools.tool\_manager](#spoon_ai.tools.tool_manager)
-  * [ToolManager](#spoon_ai.tools.tool_manager.ToolManager)
-    * [reindex](#spoon_ai.tools.tool_manager.ToolManager.reindex)
+* [spoon\_ai.tools.base](#spoon_ai.tools.base)
+  * [reset\_secrets\_initialization](#spoon_ai.tools.base.reset_secrets_initialization)
+  * [ToolFailure](#spoon_ai.tools.base.ToolFailure)
 * [spoon\_ai.tools.rag\_tools](#spoon_ai.tools.rag_tools)
 * [spoon\_ai.tools.turnkey\_tools](#spoon_ai.tools.turnkey_tools)
   * [TurnkeyBaseTool](#spoon_ai.tools.turnkey_tools.TurnkeyBaseTool)
@@ -70,12 +47,35 @@ title: spoon_ai.tools
   * [CompleteTransactionWorkflowTool](#spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool)
     * [execute](#spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool.execute)
   * [get\_turnkey\_tools](#spoon_ai.tools.turnkey_tools.get_turnkey_tools)
+* [spoon\_ai.tools.mcp\_tool](#spoon_ai.tools.mcp_tool)
+  * [MCPTool](#spoon_ai.tools.mcp_tool.MCPTool)
+    * [call\_mcp\_tool](#spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool)
+    * [expand\_server\_tools](#spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools)
+    * [list\_available\_tools](#spoon_ai.tools.mcp_tool.MCPTool.list_available_tools)
+* [spoon\_ai.tools.tool\_manager](#spoon_ai.tools.tool_manager)
+  * [ToolManager](#spoon_ai.tools.tool_manager.ToolManager)
+    * [reindex](#spoon_ai.tools.tool_manager.ToolManager.reindex)
+* [spoon\_ai.tools.neofs\_tools](#spoon_ai.tools.neofs_tools)
+  * [get\_shared\_neofs\_client](#spoon_ai.tools.neofs_tools.get_shared_neofs_client)
+  * [CreateBearerTokenTool](#spoon_ai.tools.neofs_tools.CreateBearerTokenTool)
+  * [CreateContainerTool](#spoon_ai.tools.neofs_tools.CreateContainerTool)
+  * [UploadObjectTool](#spoon_ai.tools.neofs_tools.UploadObjectTool)
+  * [DownloadObjectByIdTool](#spoon_ai.tools.neofs_tools.DownloadObjectByIdTool)
+  * [GetObjectHeaderByIdTool](#spoon_ai.tools.neofs_tools.GetObjectHeaderByIdTool)
+  * [DownloadObjectByAttributeTool](#spoon_ai.tools.neofs_tools.DownloadObjectByAttributeTool)
+  * [GetObjectHeaderByAttributeTool](#spoon_ai.tools.neofs_tools.GetObjectHeaderByAttributeTool)
+  * [DeleteObjectTool](#spoon_ai.tools.neofs_tools.DeleteObjectTool)
+  * [SearchObjectsTool](#spoon_ai.tools.neofs_tools.SearchObjectsTool)
+  * [SetContainerEaclTool](#spoon_ai.tools.neofs_tools.SetContainerEaclTool)
+  * [GetContainerEaclTool](#spoon_ai.tools.neofs_tools.GetContainerEaclTool)
+  * [ListContainersTool](#spoon_ai.tools.neofs_tools.ListContainersTool)
+  * [GetContainerInfoTool](#spoon_ai.tools.neofs_tools.GetContainerInfoTool)
+  * [DeleteContainerTool](#spoon_ai.tools.neofs_tools.DeleteContainerTool)
+  * [GetNetworkInfoTool](#spoon_ai.tools.neofs_tools.GetNetworkInfoTool)
+  * [GetBalanceTool](#spoon_ai.tools.neofs_tools.GetBalanceTool)
 * [spoon\_ai.tools.x402\_payment](#spoon_ai.tools.x402_payment)
   * [X402PaymentHeaderTool](#spoon_ai.tools.x402_payment.X402PaymentHeaderTool)
   * [X402PaywalledRequestTool](#spoon_ai.tools.x402_payment.X402PaywalledRequestTool)
-* [spoon\_ai.tools.base](#spoon_ai.tools.base)
-  * [reset\_secrets\_initialization](#spoon_ai.tools.base.reset_secrets_initialization)
-  * [ToolFailure](#spoon_ai.tools.base.ToolFailure)
 * [spoon\_ai.tools.hitl](#spoon_ai.tools.hitl)
   * [InterruptOnConfig](#spoon_ai.tools.hitl.InterruptOnConfig)
   * [ApprovalDecision](#spoon_ai.tools.hitl.ApprovalDecision)
@@ -131,261 +131,29 @@ title: spoon_ai.tools
 
 # Module `spoon_ai.tools`
 
-<a id="spoon_ai.tools.mcp_tool"></a>
+<a id="spoon_ai.tools.base"></a>
 
-# Module `spoon_ai.tools.mcp_tool`
+# Module `spoon_ai.tools.base`
 
-<a id="spoon_ai.tools.mcp_tool.MCPTool"></a>
+<a id="spoon_ai.tools.base.reset_secrets_initialization"></a>
 
-## `MCPTool` Objects
-
-```python
-class MCPTool(BaseTool, MCPClientMixin)
-```
-
-<a id="spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool"></a>
-
-#### `call_mcp_tool`
+#### `reset_secrets_initialization`
 
 ```python
-async def call_mcp_tool(tool_name: str, **kwargs)
+def reset_secrets_initialization() -> None
 ```
 
-Override the mixin method to add tool-specific error handling.
+Reset the initialization flag. Useful for testing.
 
-<a id="spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools"></a>
+<a id="spoon_ai.tools.base.ToolFailure"></a>
 
-#### `expand_server_tools`
+## `ToolFailure` Objects
 
 ```python
-async def expand_server_tools() -> List["MCPTool"]
+class ToolFailure(Exception)
 ```
 
-Expand this single MCPTool (one-per-server) into one MCPTool per
-real server tool.  Each returned tool shares the same MCP transport
-config and delegates execution to ``call_mcp_tool(real_name)``.
-
-If the server is unreachable or returns no tools, an empty list is
-returned (callers should keep the original proxy as fallback).
-
-**Returns**:
-
-  List of MCPTool instances, one per discovered server tool.
-
-<a id="spoon_ai.tools.mcp_tool.MCPTool.list_available_tools"></a>
-
-#### `list_available_tools`
-
-```python
-async def list_available_tools() -> list
-```
-
-List available tools from the MCP server.
-
-<a id="spoon_ai.tools.neofs_tools"></a>
-
-# Module `spoon_ai.tools.neofs_tools`
-
-NeoFS Tools for spoon_ai framework
-
-Simple wrappers around NeoFS client methods.
-Tools do NOT auto-create bearer tokens - Agent manages tokens.
-All parameters map directly to client method parameters.
-
-<a id="spoon_ai.tools.neofs_tools.get_shared_neofs_client"></a>
-
-#### `get_shared_neofs_client`
-
-```python
-def get_shared_neofs_client() -> NeoFSClient
-```
-
-Get shared NeoFSClient instance for all NeoFS tools.
-
-Returns the same client instance across all tool calls to ensure
-bearer token authentication works correctly.
-
-<a id="spoon_ai.tools.neofs_tools.CreateBearerTokenTool"></a>
-
-## `CreateBearerTokenTool` Objects
-
-```python
-class CreateBearerTokenTool(BaseTool)
-```
-
-Create a bearer token for NeoFS operations
-
-<a id="spoon_ai.tools.neofs_tools.CreateContainerTool"></a>
-
-## `CreateContainerTool` Objects
-
-```python
-class CreateContainerTool(BaseTool)
-```
-
-Create a NeoFS container
-
-<a id="spoon_ai.tools.neofs_tools.UploadObjectTool"></a>
-
-## `UploadObjectTool` Objects
-
-```python
-class UploadObjectTool(BaseTool)
-```
-
-Upload object to container
-
-<a id="spoon_ai.tools.neofs_tools.DownloadObjectByIdTool"></a>
-
-## `DownloadObjectByIdTool` Objects
-
-```python
-class DownloadObjectByIdTool(BaseTool)
-```
-
-Download object by ID
-
-<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByIdTool"></a>
-
-## `GetObjectHeaderByIdTool` Objects
-
-```python
-class GetObjectHeaderByIdTool(BaseTool)
-```
-
-Get object header by ID
-
-<a id="spoon_ai.tools.neofs_tools.DownloadObjectByAttributeTool"></a>
-
-## `DownloadObjectByAttributeTool` Objects
-
-```python
-class DownloadObjectByAttributeTool(BaseTool)
-```
-
-Download object by attribute
-
-<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByAttributeTool"></a>
-
-## `GetObjectHeaderByAttributeTool` Objects
-
-```python
-class GetObjectHeaderByAttributeTool(BaseTool)
-```
-
-Get object header by attribute
-
-<a id="spoon_ai.tools.neofs_tools.DeleteObjectTool"></a>
-
-## `DeleteObjectTool` Objects
-
-```python
-class DeleteObjectTool(BaseTool)
-```
-
-Delete an object
-
-<a id="spoon_ai.tools.neofs_tools.SearchObjectsTool"></a>
-
-## `SearchObjectsTool` Objects
-
-```python
-class SearchObjectsTool(BaseTool)
-```
-
-Search objects in container
-
-<a id="spoon_ai.tools.neofs_tools.SetContainerEaclTool"></a>
-
-## `SetContainerEaclTool` Objects
-
-```python
-class SetContainerEaclTool(BaseTool)
-```
-
-Set eACL for container
-
-<a id="spoon_ai.tools.neofs_tools.GetContainerEaclTool"></a>
-
-## `GetContainerEaclTool` Objects
-
-```python
-class GetContainerEaclTool(BaseTool)
-```
-
-Get eACL for container
-
-<a id="spoon_ai.tools.neofs_tools.ListContainersTool"></a>
-
-## `ListContainersTool` Objects
-
-```python
-class ListContainersTool(BaseTool)
-```
-
-List all containers
-
-<a id="spoon_ai.tools.neofs_tools.GetContainerInfoTool"></a>
-
-## `GetContainerInfoTool` Objects
-
-```python
-class GetContainerInfoTool(BaseTool)
-```
-
-Get container info
-
-<a id="spoon_ai.tools.neofs_tools.DeleteContainerTool"></a>
-
-## `DeleteContainerTool` Objects
-
-```python
-class DeleteContainerTool(BaseTool)
-```
-
-Delete container
-
-<a id="spoon_ai.tools.neofs_tools.GetNetworkInfoTool"></a>
-
-## `GetNetworkInfoTool` Objects
-
-```python
-class GetNetworkInfoTool(BaseTool)
-```
-
-Get network info
-
-<a id="spoon_ai.tools.neofs_tools.GetBalanceTool"></a>
-
-## `GetBalanceTool` Objects
-
-```python
-class GetBalanceTool(BaseTool)
-```
-
-Get balance for an address
-
-<a id="spoon_ai.tools.tool_manager"></a>
-
-# Module `spoon_ai.tools.tool_manager`
-
-<a id="spoon_ai.tools.tool_manager.ToolManager"></a>
-
-## `ToolManager` Objects
-
-```python
-class ToolManager()
-```
-
-<a id="spoon_ai.tools.tool_manager.ToolManager.reindex"></a>
-
-#### `reindex`
-
-```python
-def reindex() -> None
-```
-
-Rebuild the internal name-&gt;tool mapping. Useful if tools have been renamed dynamically.
+Exception to indicate a tool execution failure.
 
 <a id="spoon_ai.tools.rag_tools"></a>
 
@@ -790,6 +558,262 @@ def get_turnkey_tools() -> List[BaseTool]
 
 Get all Turnkey tools
 
+<a id="spoon_ai.tools.mcp_tool"></a>
+
+# Module `spoon_ai.tools.mcp_tool`
+
+<a id="spoon_ai.tools.mcp_tool.MCPTool"></a>
+
+## `MCPTool` Objects
+
+```python
+class MCPTool(BaseTool, MCPClientMixin)
+```
+
+<a id="spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool"></a>
+
+#### `call_mcp_tool`
+
+```python
+async def call_mcp_tool(tool_name: str, **kwargs)
+```
+
+Override the mixin method to add tool-specific error handling.
+
+<a id="spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools"></a>
+
+#### `expand_server_tools`
+
+```python
+async def expand_server_tools() -> List["MCPTool"]
+```
+
+Expand this single MCPTool (one-per-server) into one MCPTool per
+real server tool.  Each returned tool shares the same MCP transport
+config and delegates execution to ``call_mcp_tool(real_name)``.
+
+If the server is unreachable or returns no tools, an empty list is
+returned (callers should keep the original proxy as fallback).
+
+**Returns**:
+
+  List of MCPTool instances, one per discovered server tool.
+
+<a id="spoon_ai.tools.mcp_tool.MCPTool.list_available_tools"></a>
+
+#### `list_available_tools`
+
+```python
+async def list_available_tools() -> list
+```
+
+List available tools from the MCP server.
+
+<a id="spoon_ai.tools.tool_manager"></a>
+
+# Module `spoon_ai.tools.tool_manager`
+
+<a id="spoon_ai.tools.tool_manager.ToolManager"></a>
+
+## `ToolManager` Objects
+
+```python
+class ToolManager()
+```
+
+<a id="spoon_ai.tools.tool_manager.ToolManager.reindex"></a>
+
+#### `reindex`
+
+```python
+def reindex() -> None
+```
+
+Rebuild the internal name-&gt;tool mapping. Useful if tools have been renamed dynamically.
+
+<a id="spoon_ai.tools.neofs_tools"></a>
+
+# Module `spoon_ai.tools.neofs_tools`
+
+NeoFS Tools for spoon_ai framework
+
+Simple wrappers around NeoFS client methods.
+Tools do NOT auto-create bearer tokens - Agent manages tokens.
+All parameters map directly to client method parameters.
+
+<a id="spoon_ai.tools.neofs_tools.get_shared_neofs_client"></a>
+
+#### `get_shared_neofs_client`
+
+```python
+def get_shared_neofs_client() -> NeoFSClient
+```
+
+Get shared NeoFSClient instance for all NeoFS tools.
+
+Returns the same client instance across all tool calls to ensure
+bearer token authentication works correctly.
+
+<a id="spoon_ai.tools.neofs_tools.CreateBearerTokenTool"></a>
+
+## `CreateBearerTokenTool` Objects
+
+```python
+class CreateBearerTokenTool(BaseTool)
+```
+
+Create a bearer token for NeoFS operations
+
+<a id="spoon_ai.tools.neofs_tools.CreateContainerTool"></a>
+
+## `CreateContainerTool` Objects
+
+```python
+class CreateContainerTool(BaseTool)
+```
+
+Create a NeoFS container
+
+<a id="spoon_ai.tools.neofs_tools.UploadObjectTool"></a>
+
+## `UploadObjectTool` Objects
+
+```python
+class UploadObjectTool(BaseTool)
+```
+
+Upload object to container
+
+<a id="spoon_ai.tools.neofs_tools.DownloadObjectByIdTool"></a>
+
+## `DownloadObjectByIdTool` Objects
+
+```python
+class DownloadObjectByIdTool(BaseTool)
+```
+
+Download object by ID
+
+<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByIdTool"></a>
+
+## `GetObjectHeaderByIdTool` Objects
+
+```python
+class GetObjectHeaderByIdTool(BaseTool)
+```
+
+Get object header by ID
+
+<a id="spoon_ai.tools.neofs_tools.DownloadObjectByAttributeTool"></a>
+
+## `DownloadObjectByAttributeTool` Objects
+
+```python
+class DownloadObjectByAttributeTool(BaseTool)
+```
+
+Download object by attribute
+
+<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByAttributeTool"></a>
+
+## `GetObjectHeaderByAttributeTool` Objects
+
+```python
+class GetObjectHeaderByAttributeTool(BaseTool)
+```
+
+Get object header by attribute
+
+<a id="spoon_ai.tools.neofs_tools.DeleteObjectTool"></a>
+
+## `DeleteObjectTool` Objects
+
+```python
+class DeleteObjectTool(BaseTool)
+```
+
+Delete an object
+
+<a id="spoon_ai.tools.neofs_tools.SearchObjectsTool"></a>
+
+## `SearchObjectsTool` Objects
+
+```python
+class SearchObjectsTool(BaseTool)
+```
+
+Search objects in container
+
+<a id="spoon_ai.tools.neofs_tools.SetContainerEaclTool"></a>
+
+## `SetContainerEaclTool` Objects
+
+```python
+class SetContainerEaclTool(BaseTool)
+```
+
+Set eACL for container
+
+<a id="spoon_ai.tools.neofs_tools.GetContainerEaclTool"></a>
+
+## `GetContainerEaclTool` Objects
+
+```python
+class GetContainerEaclTool(BaseTool)
+```
+
+Get eACL for container
+
+<a id="spoon_ai.tools.neofs_tools.ListContainersTool"></a>
+
+## `ListContainersTool` Objects
+
+```python
+class ListContainersTool(BaseTool)
+```
+
+List all containers
+
+<a id="spoon_ai.tools.neofs_tools.GetContainerInfoTool"></a>
+
+## `GetContainerInfoTool` Objects
+
+```python
+class GetContainerInfoTool(BaseTool)
+```
+
+Get container info
+
+<a id="spoon_ai.tools.neofs_tools.DeleteContainerTool"></a>
+
+## `DeleteContainerTool` Objects
+
+```python
+class DeleteContainerTool(BaseTool)
+```
+
+Delete container
+
+<a id="spoon_ai.tools.neofs_tools.GetNetworkInfoTool"></a>
+
+## `GetNetworkInfoTool` Objects
+
+```python
+class GetNetworkInfoTool(BaseTool)
+```
+
+Get network info
+
+<a id="spoon_ai.tools.neofs_tools.GetBalanceTool"></a>
+
+## `GetBalanceTool` Objects
+
+```python
+class GetBalanceTool(BaseTool)
+```
+
+Get balance for an address
+
 <a id="spoon_ai.tools.x402_payment"></a>
 
 # Module `spoon_ai.tools.x402_payment`
@@ -813,30 +837,6 @@ class X402PaywalledRequestTool(BaseTool)
 ```
 
 Fetch a paywalled resource, handling the x402 402 negotiation automatically.
-
-<a id="spoon_ai.tools.base"></a>
-
-# Module `spoon_ai.tools.base`
-
-<a id="spoon_ai.tools.base.reset_secrets_initialization"></a>
-
-#### `reset_secrets_initialization`
-
-```python
-def reset_secrets_initialization() -> None
-```
-
-Reset the initialization flag. Useful for testing.
-
-<a id="spoon_ai.tools.base.ToolFailure"></a>
-
-## `ToolFailure` Objects
-
-```python
-class ToolFailure(Exception)
-```
-
-Exception to indicate a tool execution failure.
 
 <a id="spoon_ai.tools.hitl"></a>
 
