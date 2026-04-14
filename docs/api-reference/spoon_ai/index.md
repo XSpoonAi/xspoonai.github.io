@@ -4432,7 +4432,8 @@ type: ignore
 
 ```python
 async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None) -> str
+              timeout: Optional[float] = None,
+              thinking: bool = False) -> str
 ```
 
 This ensures:
@@ -4446,7 +4447,7 @@ This ensures:
 #### `step`
 
 ```python
-async def step() -> str
+async def step(thinking: bool = False) -> str
 ```
 
 Override the step method to handle finish_reason termination properly.
@@ -5496,7 +5497,8 @@ Initialize async components and subscribe to topics
 
 ```python
 async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None) -> str
+              timeout: Optional[float] = None,
+              thinking: bool = False) -> str
 ```
 
 Ensure prompts reflect current tools before running.
@@ -5736,7 +5738,8 @@ Initializes both SpoonReactAI and skill system components.
 
 ```python
 async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None) -> str
+              timeout: Optional[float] = None,
+              thinking: bool = False) -> str
 ```
 
 Execute agent with per-turn auto skill activation.
