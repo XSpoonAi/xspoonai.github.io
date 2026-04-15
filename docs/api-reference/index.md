@@ -49,6 +49,7 @@ Generated from spoon_ai sources. Each module below has its own page.
 - [spoon_ai.llm.factory](./spoon_ai/llm/factory.md)
 - [spoon_ai.llm.interface](./spoon_ai/llm/interface.md)
 - [spoon_ai.llm.manager](./spoon_ai/llm/manager.md)
+- [spoon_ai.llm.message_utils](./spoon_ai/llm/message_utils.md)
 - [spoon_ai.llm.monitoring](./spoon_ai/llm/monitoring.md)
 - [spoon_ai.llm.providers](./spoon_ai/llm/providers/)
 - [spoon_ai.llm.providers.anthropic_provider](./spoon_ai/llm/providers/anthropic_provider.md)
