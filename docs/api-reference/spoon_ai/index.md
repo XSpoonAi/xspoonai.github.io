@@ -669,6 +669,7 @@ title: spoon_ai
     * [verify\_agent](#spoon_ai.identity.did_resolver.DIDResolver.verify_agent)
 * [spoon\_ai.identity.erc8004\_client](#spoon_ai.identity.erc8004_client)
   * [ERC8004Client](#spoon_ai.identity.erc8004_client.ERC8004Client)
+    * [get\_agent\_id\_for\_address](#spoon_ai.identity.erc8004_client.ERC8004Client.get_agent_id_for_address)
     * [register\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.register_agent)
     * [resolve\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent)
 * [spoon\_ai.identity.storage\_client](#spoon_ai.identity.storage_client)
@@ -4435,7 +4436,8 @@ type: ignore
 ```python
 async def run(request: Optional[str] = None,
               timeout: Optional[float] = None,
-              thinking: bool = False) -> str
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
 ```
 
 This ensures:
@@ -4449,7 +4451,8 @@ This ensures:
 #### `step`
 
 ```python
-async def step(thinking: bool = False) -> str
+async def step(thinking: bool = False,
+               reasoning_effort: Optional[str] = None) -> str
 ```
 
 Override the step method to handle finish_reason termination properly.
@@ -10542,6 +10545,18 @@ class ERC8004Client()
 ```
 
 Client for interacting with ERC-8004 agent registries
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client.get_agent_id_for_address"></a>
+
+#### `get_agent_id_for_address`
+
+```python
+def get_agent_id_for_address(address: str) -> int
+```
+
+Look up the agent ID (ERC-721 token) owned by *address*.
+
+Returns 0 if the address has no registered agent identity.
 
 <a id="spoon_ai.identity.erc8004_client.ERC8004Client.register_agent"></a>
 

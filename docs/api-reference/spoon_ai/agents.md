@@ -640,7 +640,8 @@ type: ignore
 ```python
 async def run(request: Optional[str] = None,
               timeout: Optional[float] = None,
-              thinking: bool = False) -> str
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
 ```
 
 This ensures:
@@ -654,7 +655,8 @@ This ensures:
 #### `step`
 
 ```python
-async def step(thinking: bool = False) -> str
+async def step(thinking: bool = False,
+               reasoning_effort: Optional[str] = None) -> str
 ```
 
 Override the step method to handle finish_reason termination properly.
