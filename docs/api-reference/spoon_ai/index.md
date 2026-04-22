@@ -5503,7 +5503,8 @@ Initialize async components and subscribe to topics
 ```python
 async def run(request: Optional[str] = None,
               timeout: Optional[float] = None,
-              thinking: bool = False) -> str
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
 ```
 
 Ensure prompts reflect current tools before running.
@@ -5744,7 +5745,8 @@ Initializes both SpoonReactAI and skill system components.
 ```python
 async def run(request: Optional[str] = None,
               timeout: Optional[float] = None,
-              thinking: bool = False) -> str
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
 ```
 
 Execute agent with per-turn auto skill activation.
