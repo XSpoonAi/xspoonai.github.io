@@ -7,33 +7,16 @@ title: spoon_ai.graph
 # Table of Contents
 
 * [spoon\_ai.graph](#spoon_ai.graph)
-* [spoon\_ai.graph.agent](#spoon_ai.graph.agent)
-  * [Memory](#spoon_ai.graph.agent.Memory)
-    * [clear](#spoon_ai.graph.agent.Memory.clear)
-    * [add\_message](#spoon_ai.graph.agent.Memory.add_message)
-    * [get\_messages](#spoon_ai.graph.agent.Memory.get_messages)
-    * [get\_recent\_messages](#spoon_ai.graph.agent.Memory.get_recent_messages)
-    * [search\_messages](#spoon_ai.graph.agent.Memory.search_messages)
-    * [get\_statistics](#spoon_ai.graph.agent.Memory.get_statistics)
-    * [set\_metadata](#spoon_ai.graph.agent.Memory.set_metadata)
-    * [get\_metadata](#spoon_ai.graph.agent.Memory.get_metadata)
-  * [MockMemory](#spoon_ai.graph.agent.MockMemory)
-  * [GraphAgent](#spoon_ai.graph.agent.GraphAgent)
-    * [search\_memory](#spoon_ai.graph.agent.GraphAgent.search_memory)
-    * [get\_recent\_memory](#spoon_ai.graph.agent.GraphAgent.get_recent_memory)
-    * [get\_memory\_statistics](#spoon_ai.graph.agent.GraphAgent.get_memory_statistics)
-    * [set\_memory\_metadata](#spoon_ai.graph.agent.GraphAgent.set_memory_metadata)
-    * [get\_memory\_metadata](#spoon_ai.graph.agent.GraphAgent.get_memory_metadata)
-    * [save\_session](#spoon_ai.graph.agent.GraphAgent.save_session)
-    * [load\_session](#spoon_ai.graph.agent.GraphAgent.load_session)
-* [spoon\_ai.graph.config](#spoon_ai.graph.config)
-  * [RouterConfig](#spoon_ai.graph.config.RouterConfig)
-  * [ParallelRetryPolicy](#spoon_ai.graph.config.ParallelRetryPolicy)
-  * [ParallelGroupConfig](#spoon_ai.graph.config.ParallelGroupConfig)
-    * [quorum](#spoon_ai.graph.config.ParallelGroupConfig.quorum)
-    * [error\_strategy](#spoon_ai.graph.config.ParallelGroupConfig.error_strategy)
-  * [GraphConfig](#spoon_ai.graph.config.GraphConfig)
+* [spoon\_ai.graph.checkpointer](#spoon_ai.graph.checkpointer)
+  * [InMemoryCheckpointer](#spoon_ai.graph.checkpointer.InMemoryCheckpointer)
+    * [iter\_checkpoint\_history](#spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history)
 * [spoon\_ai.graph.types](#spoon_ai.graph.types)
+* [spoon\_ai.graph.mcp\_integration](#spoon_ai.graph.mcp_integration)
+  * [MCPToolSpec](#spoon_ai.graph.mcp_integration.MCPToolSpec)
+  * [MCPConfigManager](#spoon_ai.graph.mcp_integration.MCPConfigManager)
+  * [MCPToolDiscoveryEngine](#spoon_ai.graph.mcp_integration.MCPToolDiscoveryEngine)
+  * [MCPIntegrationManager](#spoon_ai.graph.mcp_integration.MCPIntegrationManager)
+* [spoon\_ai.graph.decorators](#spoon_ai.graph.decorators)
 * [spoon\_ai.graph.builder](#spoon_ai.graph.builder)
   * [Intent](#spoon_ai.graph.builder.Intent)
   * [IntentAnalyzer](#spoon_ai.graph.builder.IntentAnalyzer)
@@ -48,9 +31,7 @@ title: spoon_ai.graph
   * [NodePlugin](#spoon_ai.graph.builder.NodePlugin)
   * [NodePluginSystem](#spoon_ai.graph.builder.NodePluginSystem)
   * [HighLevelGraphAPI](#spoon_ai.graph.builder.HighLevelGraphAPI)
-* [spoon\_ai.graph.checkpointer](#spoon_ai.graph.checkpointer)
-  * [InMemoryCheckpointer](#spoon_ai.graph.checkpointer.InMemoryCheckpointer)
-    * [iter\_checkpoint\_history](#spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history)
+* [spoon\_ai.graph.exceptions](#spoon_ai.graph.exceptions)
 * [spoon\_ai.graph.reducers](#spoon_ai.graph.reducers)
 * [spoon\_ai.graph.cache](#spoon_ai.graph.cache)
   * [compute\_cache\_key](#spoon_ai.graph.cache.compute_cache_key)
@@ -80,11 +61,32 @@ title: spoon_ai.graph
     * [get\_stats](#spoon_ai.graph.cache.SQLiteCache.get_stats)
   * [create\_memory\_cache](#spoon_ai.graph.cache.create_memory_cache)
   * [create\_sqlite\_cache](#spoon_ai.graph.cache.create_sqlite_cache)
-* [spoon\_ai.graph.mcp\_integration](#spoon_ai.graph.mcp_integration)
-  * [MCPToolSpec](#spoon_ai.graph.mcp_integration.MCPToolSpec)
-  * [MCPConfigManager](#spoon_ai.graph.mcp_integration.MCPConfigManager)
-  * [MCPToolDiscoveryEngine](#spoon_ai.graph.mcp_integration.MCPToolDiscoveryEngine)
-  * [MCPIntegrationManager](#spoon_ai.graph.mcp_integration.MCPIntegrationManager)
+* [spoon\_ai.graph.config](#spoon_ai.graph.config)
+  * [RouterConfig](#spoon_ai.graph.config.RouterConfig)
+  * [ParallelRetryPolicy](#spoon_ai.graph.config.ParallelRetryPolicy)
+  * [ParallelGroupConfig](#spoon_ai.graph.config.ParallelGroupConfig)
+    * [quorum](#spoon_ai.graph.config.ParallelGroupConfig.quorum)
+    * [error\_strategy](#spoon_ai.graph.config.ParallelGroupConfig.error_strategy)
+  * [GraphConfig](#spoon_ai.graph.config.GraphConfig)
+* [spoon\_ai.graph.agent](#spoon_ai.graph.agent)
+  * [Memory](#spoon_ai.graph.agent.Memory)
+    * [clear](#spoon_ai.graph.agent.Memory.clear)
+    * [add\_message](#spoon_ai.graph.agent.Memory.add_message)
+    * [get\_messages](#spoon_ai.graph.agent.Memory.get_messages)
+    * [get\_recent\_messages](#spoon_ai.graph.agent.Memory.get_recent_messages)
+    * [search\_messages](#spoon_ai.graph.agent.Memory.search_messages)
+    * [get\_statistics](#spoon_ai.graph.agent.Memory.get_statistics)
+    * [set\_metadata](#spoon_ai.graph.agent.Memory.set_metadata)
+    * [get\_metadata](#spoon_ai.graph.agent.Memory.get_metadata)
+  * [MockMemory](#spoon_ai.graph.agent.MockMemory)
+  * [GraphAgent](#spoon_ai.graph.agent.GraphAgent)
+    * [search\_memory](#spoon_ai.graph.agent.GraphAgent.search_memory)
+    * [get\_recent\_memory](#spoon_ai.graph.agent.GraphAgent.get_recent_memory)
+    * [get\_memory\_statistics](#spoon_ai.graph.agent.GraphAgent.get_memory_statistics)
+    * [set\_memory\_metadata](#spoon_ai.graph.agent.GraphAgent.set_memory_metadata)
+    * [get\_memory\_metadata](#spoon_ai.graph.agent.GraphAgent.get_memory_metadata)
+    * [save\_session](#spoon_ai.graph.agent.GraphAgent.save_session)
+    * [load\_session](#spoon_ai.graph.agent.GraphAgent.load_session)
 * [spoon\_ai.graph.engine](#spoon_ai.graph.engine)
   * [create\_multimodal\_message](#spoon_ai.graph.engine.create_multimodal_message)
   * [create\_vision\_user\_message](#spoon_ai.graph.engine.create_vision_user_message)
@@ -122,8 +124,6 @@ title: spoon_ai.graph
     * [get\_graph](#spoon_ai.graph.engine.StateGraph.get_graph)
   * [CompiledGraph](#spoon_ai.graph.engine.CompiledGraph)
     * [get\_execution\_metrics](#spoon_ai.graph.engine.CompiledGraph.get_execution_metrics)
-* [spoon\_ai.graph.decorators](#spoon_ai.graph.decorators)
-* [spoon\_ai.graph.exceptions](#spoon_ai.graph.exceptions)
 
 <a id="spoon_ai.graph"></a>
 
@@ -133,257 +133,93 @@ spoon_ai.graph package
 
 Public facade for the graph engine. Import from here.
 
-<a id="spoon_ai.graph.agent"></a>
+<a id="spoon_ai.graph.checkpointer"></a>
 
-# Module `spoon_ai.graph.agent`
+# Module `spoon_ai.graph.checkpointer`
 
-GraphAgent implementation for the graph package.
+In-memory checkpointer for the graph package.
 
-<a id="spoon_ai.graph.agent.Memory"></a>
+<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer"></a>
 
-## `Memory` Objects
-
-```python
-class Memory()
-```
-
-Memory implementation with persistent storage
-
-<a id="spoon_ai.graph.agent.Memory.clear"></a>
-
-#### `clear`
+## `InMemoryCheckpointer` Objects
 
 ```python
-def clear()
+class InMemoryCheckpointer()
 ```
 
-Clear all messages and reset memory
+<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history"></a>
 
-<a id="spoon_ai.graph.agent.Memory.add_message"></a>
-
-#### `add_message`
+#### `iter_checkpoint_history`
 
 ```python
-def add_message(msg)
+def iter_checkpoint_history(
+        config: Dict[str, Any]) -> Iterable[CheckpointTuple]
 ```
 
-Add a message to memory
-
-<a id="spoon_ai.graph.agent.Memory.get_messages"></a>
-
-#### `get_messages`
-
-```python
-def get_messages(limit: Optional[int] = None) -> List[Dict[str, Any]]
-```
-
-Get messages from memory
-
-<a id="spoon_ai.graph.agent.Memory.get_recent_messages"></a>
-
-#### `get_recent_messages`
-
-```python
-def get_recent_messages(hours: int = 24) -> List[Dict[str, Any]]
-```
-
-Get messages from the last N hours
-
-<a id="spoon_ai.graph.agent.Memory.search_messages"></a>
-
-#### `search_messages`
-
-```python
-def search_messages(query: str, limit: int = 10) -> List[Dict[str, Any]]
-```
-
-Search messages containing the query
-
-<a id="spoon_ai.graph.agent.Memory.get_statistics"></a>
-
-#### `get_statistics`
-
-```python
-def get_statistics() -> Dict[str, Any]
-```
-
-Get memory statistics
-
-<a id="spoon_ai.graph.agent.Memory.set_metadata"></a>
-
-#### `set_metadata`
-
-```python
-def set_metadata(key: str, value: Any)
-```
-
-Set metadata
-
-<a id="spoon_ai.graph.agent.Memory.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-def get_metadata(key: str, default: Any = None) -> Any
-```
-
-Get metadata
-
-<a id="spoon_ai.graph.agent.MockMemory"></a>
-
-## `MockMemory` Objects
-
-```python
-class MockMemory(Memory)
-```
-
-Alias for backward compatibility - now uses persistent memory
-
-<a id="spoon_ai.graph.agent.GraphAgent"></a>
-
-## `GraphAgent` Objects
-
-```python
-class GraphAgent()
-```
-
-<a id="spoon_ai.graph.agent.GraphAgent.search_memory"></a>
-
-#### `search_memory`
-
-```python
-def search_memory(query: str, limit: int = 10) -> List[Dict[str, Any]]
-```
-
-Search memory for messages containing the query
-
-<a id="spoon_ai.graph.agent.GraphAgent.get_recent_memory"></a>
-
-#### `get_recent_memory`
-
-```python
-def get_recent_memory(hours: int = 24) -> List[Dict[str, Any]]
-```
-
-Get recent messages from memory
-
-<a id="spoon_ai.graph.agent.GraphAgent.get_memory_statistics"></a>
-
-#### `get_memory_statistics`
-
-```python
-def get_memory_statistics() -> Dict[str, Any]
-```
-
-Get memory statistics
-
-<a id="spoon_ai.graph.agent.GraphAgent.set_memory_metadata"></a>
-
-#### `set_memory_metadata`
-
-```python
-def set_memory_metadata(key: str, value: Any)
-```
-
-Set memory metadata
-
-<a id="spoon_ai.graph.agent.GraphAgent.get_memory_metadata"></a>
-
-#### `get_memory_metadata`
-
-```python
-def get_memory_metadata(key: str, default: Any = None) -> Any
-```
-
-Get memory metadata
-
-<a id="spoon_ai.graph.agent.GraphAgent.save_session"></a>
-
-#### `save_session`
-
-```python
-def save_session()
-```
-
-Manually save current session
-
-<a id="spoon_ai.graph.agent.GraphAgent.load_session"></a>
-
-#### `load_session`
-
-```python
-def load_session(session_id: str)
-```
-
-Load a specific session
-
-<a id="spoon_ai.graph.config"></a>
-
-# Module `spoon_ai.graph.config`
-
-Configuration primitives for the SpoonAI graph engine.
-
-<a id="spoon_ai.graph.config.RouterConfig"></a>
-
-## `RouterConfig` Objects
-
-```python
-@dataclass
-class RouterConfig()
-```
-
-Controls how the graph chooses the next node after each execution step.
-
-<a id="spoon_ai.graph.config.ParallelRetryPolicy"></a>
-
-## `ParallelRetryPolicy` Objects
-
-```python
-@dataclass
-class ParallelRetryPolicy()
-```
-
-Retry policy for individual nodes inside a parallel group.
-
-<a id="spoon_ai.graph.config.ParallelGroupConfig"></a>
-
-## `ParallelGroupConfig` Objects
-
-```python
-@dataclass
-class ParallelGroupConfig()
-```
-
-Controls how a parallel group executes and aggregates results.
-
-<a id="spoon_ai.graph.config.ParallelGroupConfig.quorum"></a>
-
-#### `quorum`
-
-floats in (0, 1] treated as ratio, ints as absolute
-
-<a id="spoon_ai.graph.config.ParallelGroupConfig.error_strategy"></a>
-
-#### `error_strategy`
-
-fail_fast, collect_errors, ignore_errors
-
-<a id="spoon_ai.graph.config.GraphConfig"></a>
-
-## `GraphConfig` Objects
-
-```python
-@dataclass
-class GraphConfig()
-```
-
-Top-level configuration applied to an entire graph instance.
+Return checkpoint tuples for the specified thread, newest last.
 
 <a id="spoon_ai.graph.types"></a>
 
 # Module `spoon_ai.graph.types`
 
 Typed structures for the graph package.
+
+<a id="spoon_ai.graph.mcp_integration"></a>
+
+# Module `spoon_ai.graph.mcp_integration`
+
+Utility classes for intelligent MCP tool discovery and configuration.
+
+Core graph components no longer hard-code external tools; instead, user code
+registers tool specifications and optional transport/configuration details via
+these helpers.
+
+<a id="spoon_ai.graph.mcp_integration.MCPToolSpec"></a>
+
+## `MCPToolSpec` Objects
+
+```python
+@dataclass
+class MCPToolSpec()
+```
+
+Specification describing a desired MCP tool.
+
+<a id="spoon_ai.graph.mcp_integration.MCPConfigManager"></a>
+
+## `MCPConfigManager` Objects
+
+```python
+class MCPConfigManager()
+```
+
+Centralised configuration loader for MCP tools.
+
+<a id="spoon_ai.graph.mcp_integration.MCPToolDiscoveryEngine"></a>
+
+## `MCPToolDiscoveryEngine` Objects
+
+```python
+class MCPToolDiscoveryEngine()
+```
+
+Discover MCP tools based on registered intent mappings.
+
+<a id="spoon_ai.graph.mcp_integration.MCPIntegrationManager"></a>
+
+## `MCPIntegrationManager` Objects
+
+```python
+class MCPIntegrationManager()
+```
+
+High level coordinator for MCP tool usage within graphs.
+
+<a id="spoon_ai.graph.decorators"></a>
+
+# Module `spoon_ai.graph.decorators`
+
+Decorators and executor for the graph package.
 
 <a id="spoon_ai.graph.builder"></a>
 
@@ -526,30 +362,11 @@ class HighLevelGraphAPI()
 
 Convenience facade for building graphs per query.
 
-<a id="spoon_ai.graph.checkpointer"></a>
+<a id="spoon_ai.graph.exceptions"></a>
 
-# Module `spoon_ai.graph.checkpointer`
+# Module `spoon_ai.graph.exceptions`
 
-In-memory checkpointer for the graph package.
-
-<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer"></a>
-
-## `InMemoryCheckpointer` Objects
-
-```python
-class InMemoryCheckpointer()
-```
-
-<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history"></a>
-
-#### `iter_checkpoint_history`
-
-```python
-def iter_checkpoint_history(
-        config: Dict[str, Any]) -> Iterable[CheckpointTuple]
-```
-
-Return checkpoint tuples for the specified thread, newest last.
+Graph engine exception definitions (public within graph package).
 
 <a id="spoon_ai.graph.reducers"></a>
 
@@ -977,56 +794,251 @@ Create a SQLite cache.
 
   Configured SQLiteCache
 
-<a id="spoon_ai.graph.mcp_integration"></a>
+<a id="spoon_ai.graph.config"></a>
 
-# Module `spoon_ai.graph.mcp_integration`
+# Module `spoon_ai.graph.config`
 
-Utility classes for intelligent MCP tool discovery and configuration.
+Configuration primitives for the SpoonAI graph engine.
 
-Core graph components no longer hard-code external tools; instead, user code
-registers tool specifications and optional transport/configuration details via
-these helpers.
+<a id="spoon_ai.graph.config.RouterConfig"></a>
 
-<a id="spoon_ai.graph.mcp_integration.MCPToolSpec"></a>
-
-## `MCPToolSpec` Objects
+## `RouterConfig` Objects
 
 ```python
 @dataclass
-class MCPToolSpec()
+class RouterConfig()
 ```
 
-Specification describing a desired MCP tool.
+Controls how the graph chooses the next node after each execution step.
 
-<a id="spoon_ai.graph.mcp_integration.MCPConfigManager"></a>
+<a id="spoon_ai.graph.config.ParallelRetryPolicy"></a>
 
-## `MCPConfigManager` Objects
+## `ParallelRetryPolicy` Objects
 
 ```python
-class MCPConfigManager()
+@dataclass
+class ParallelRetryPolicy()
 ```
 
-Centralised configuration loader for MCP tools.
+Retry policy for individual nodes inside a parallel group.
 
-<a id="spoon_ai.graph.mcp_integration.MCPToolDiscoveryEngine"></a>
+<a id="spoon_ai.graph.config.ParallelGroupConfig"></a>
 
-## `MCPToolDiscoveryEngine` Objects
+## `ParallelGroupConfig` Objects
 
 ```python
-class MCPToolDiscoveryEngine()
+@dataclass
+class ParallelGroupConfig()
 ```
 
-Discover MCP tools based on registered intent mappings.
+Controls how a parallel group executes and aggregates results.
 
-<a id="spoon_ai.graph.mcp_integration.MCPIntegrationManager"></a>
+<a id="spoon_ai.graph.config.ParallelGroupConfig.quorum"></a>
 
-## `MCPIntegrationManager` Objects
+#### `quorum`
+
+floats in (0, 1] treated as ratio, ints as absolute
+
+<a id="spoon_ai.graph.config.ParallelGroupConfig.error_strategy"></a>
+
+#### `error_strategy`
+
+fail_fast, collect_errors, ignore_errors
+
+<a id="spoon_ai.graph.config.GraphConfig"></a>
+
+## `GraphConfig` Objects
 
 ```python
-class MCPIntegrationManager()
+@dataclass
+class GraphConfig()
 ```
 
-High level coordinator for MCP tool usage within graphs.
+Top-level configuration applied to an entire graph instance.
+
+<a id="spoon_ai.graph.agent"></a>
+
+# Module `spoon_ai.graph.agent`
+
+GraphAgent implementation for the graph package.
+
+<a id="spoon_ai.graph.agent.Memory"></a>
+
+## `Memory` Objects
+
+```python
+class Memory()
+```
+
+Memory implementation with persistent storage
+
+<a id="spoon_ai.graph.agent.Memory.clear"></a>
+
+#### `clear`
+
+```python
+def clear()
+```
+
+Clear all messages and reset memory
+
+<a id="spoon_ai.graph.agent.Memory.add_message"></a>
+
+#### `add_message`
+
+```python
+def add_message(msg)
+```
+
+Add a message to memory
+
+<a id="spoon_ai.graph.agent.Memory.get_messages"></a>
+
+#### `get_messages`
+
+```python
+def get_messages(limit: Optional[int] = None) -> List[Dict[str, Any]]
+```
+
+Get messages from memory
+
+<a id="spoon_ai.graph.agent.Memory.get_recent_messages"></a>
+
+#### `get_recent_messages`
+
+```python
+def get_recent_messages(hours: int = 24) -> List[Dict[str, Any]]
+```
+
+Get messages from the last N hours
+
+<a id="spoon_ai.graph.agent.Memory.search_messages"></a>
+
+#### `search_messages`
+
+```python
+def search_messages(query: str, limit: int = 10) -> List[Dict[str, Any]]
+```
+
+Search messages containing the query
+
+<a id="spoon_ai.graph.agent.Memory.get_statistics"></a>
+
+#### `get_statistics`
+
+```python
+def get_statistics() -> Dict[str, Any]
+```
+
+Get memory statistics
+
+<a id="spoon_ai.graph.agent.Memory.set_metadata"></a>
+
+#### `set_metadata`
+
+```python
+def set_metadata(key: str, value: Any)
+```
+
+Set metadata
+
+<a id="spoon_ai.graph.agent.Memory.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+def get_metadata(key: str, default: Any = None) -> Any
+```
+
+Get metadata
+
+<a id="spoon_ai.graph.agent.MockMemory"></a>
+
+## `MockMemory` Objects
+
+```python
+class MockMemory(Memory)
+```
+
+Alias for backward compatibility - now uses persistent memory
+
+<a id="spoon_ai.graph.agent.GraphAgent"></a>
+
+## `GraphAgent` Objects
+
+```python
+class GraphAgent()
+```
+
+<a id="spoon_ai.graph.agent.GraphAgent.search_memory"></a>
+
+#### `search_memory`
+
+```python
+def search_memory(query: str, limit: int = 10) -> List[Dict[str, Any]]
+```
+
+Search memory for messages containing the query
+
+<a id="spoon_ai.graph.agent.GraphAgent.get_recent_memory"></a>
+
+#### `get_recent_memory`
+
+```python
+def get_recent_memory(hours: int = 24) -> List[Dict[str, Any]]
+```
+
+Get recent messages from memory
+
+<a id="spoon_ai.graph.agent.GraphAgent.get_memory_statistics"></a>
+
+#### `get_memory_statistics`
+
+```python
+def get_memory_statistics() -> Dict[str, Any]
+```
+
+Get memory statistics
+
+<a id="spoon_ai.graph.agent.GraphAgent.set_memory_metadata"></a>
+
+#### `set_memory_metadata`
+
+```python
+def set_memory_metadata(key: str, value: Any)
+```
+
+Set memory metadata
+
+<a id="spoon_ai.graph.agent.GraphAgent.get_memory_metadata"></a>
+
+#### `get_memory_metadata`
+
+```python
+def get_memory_metadata(key: str, default: Any = None) -> Any
+```
+
+Get memory metadata
+
+<a id="spoon_ai.graph.agent.GraphAgent.save_session"></a>
+
+#### `save_session`
+
+```python
+def save_session()
+```
+
+Manually save current session
+
+<a id="spoon_ai.graph.agent.GraphAgent.load_session"></a>
+
+#### `load_session`
+
+```python
+def load_session(session_id: str)
+```
+
+Load a specific session
 
 <a id="spoon_ai.graph.engine"></a>
 
@@ -1554,16 +1566,4 @@ def get_execution_metrics() -> Dict[str, Any]
 ```
 
 Get aggregated execution metrics
-
-<a id="spoon_ai.graph.decorators"></a>
-
-# Module `spoon_ai.graph.decorators`
-
-Decorators and executor for the graph package.
-
-<a id="spoon_ai.graph.exceptions"></a>
-
-# Module `spoon_ai.graph.exceptions`
-
-Graph engine exception definitions (public within graph package).
 

@@ -7,6 +7,16 @@ title: spoon_ai.identity
 # Table of Contents
 
 * [spoon\_ai.identity](#spoon_ai.identity)
+* [spoon\_ai.identity.did\_resolver](#spoon_ai.identity.did_resolver)
+  * [DIDResolver](#spoon_ai.identity.did_resolver.DIDResolver)
+    * [resolve](#spoon_ai.identity.did_resolver.DIDResolver.resolve)
+    * [resolve\_metadata\_only](#spoon_ai.identity.did_resolver.DIDResolver.resolve_metadata_only)
+    * [verify\_agent](#spoon_ai.identity.did_resolver.DIDResolver.verify_agent)
+* [spoon\_ai.identity.erc8004\_client](#spoon_ai.identity.erc8004_client)
+  * [ERC8004Client](#spoon_ai.identity.erc8004_client.ERC8004Client)
+    * [get\_agent\_id\_for\_address](#spoon_ai.identity.erc8004_client.ERC8004Client.get_agent_id_for_address)
+    * [register\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.register_agent)
+    * [resolve\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent)
 * [spoon\_ai.identity.attestation](#spoon_ai.identity.attestation)
   * [AttestationManager](#spoon_ai.identity.attestation.AttestationManager)
     * [create\_attestation](#spoon_ai.identity.attestation.AttestationManager.create_attestation)
@@ -18,22 +28,6 @@ title: spoon_ai.identity
     * [get\_reputation\_breakdown](#spoon_ai.identity.attestation.TrustScoreCalculator.get_reputation_breakdown)
     * [get\_validation\_breakdown](#spoon_ai.identity.attestation.TrustScoreCalculator.get_validation_breakdown)
 * [spoon\_ai.identity.erc8004\_abi](#spoon_ai.identity.erc8004_abi)
-* [spoon\_ai.identity.did\_resolver](#spoon_ai.identity.did_resolver)
-  * [DIDResolver](#spoon_ai.identity.did_resolver.DIDResolver)
-    * [resolve](#spoon_ai.identity.did_resolver.DIDResolver.resolve)
-    * [resolve\_metadata\_only](#spoon_ai.identity.did_resolver.DIDResolver.resolve_metadata_only)
-    * [verify\_agent](#spoon_ai.identity.did_resolver.DIDResolver.verify_agent)
-* [spoon\_ai.identity.erc8004\_client](#spoon_ai.identity.erc8004_client)
-  * [ERC8004Client](#spoon_ai.identity.erc8004_client.ERC8004Client)
-    * [get\_agent\_id\_for\_address](#spoon_ai.identity.erc8004_client.ERC8004Client.get_agent_id_for_address)
-    * [register\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.register_agent)
-    * [resolve\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent)
-* [spoon\_ai.identity.storage\_client](#spoon_ai.identity.storage_client)
-  * [DIDStorageClient](#spoon_ai.identity.storage_client.DIDStorageClient)
-    * [publish\_did\_document](#spoon_ai.identity.storage_client.DIDStorageClient.publish_did_document)
-    * [fetch\_did\_document](#spoon_ai.identity.storage_client.DIDStorageClient.fetch_did_document)
-    * [publish\_credential](#spoon_ai.identity.storage_client.DIDStorageClient.publish_credential)
-    * [close](#spoon_ai.identity.storage_client.DIDStorageClient.close)
 * [spoon\_ai.identity.did\_models](#spoon_ai.identity.did_models)
   * [VerificationMethodType](#spoon_ai.identity.did_models.VerificationMethodType)
   * [ServiceType](#spoon_ai.identity.did_models.ServiceType)
@@ -46,6 +40,12 @@ title: spoon_ai.identity
     * [to\_did\_document](#spoon_ai.identity.did_models.AgentDID.to_did_document)
     * [to\_agent\_card](#spoon_ai.identity.did_models.AgentDID.to_agent_card)
   * [DIDResolutionResult](#spoon_ai.identity.did_models.DIDResolutionResult)
+* [spoon\_ai.identity.storage\_client](#spoon_ai.identity.storage_client)
+  * [DIDStorageClient](#spoon_ai.identity.storage_client.DIDStorageClient)
+    * [publish\_did\_document](#spoon_ai.identity.storage_client.DIDStorageClient.publish_did_document)
+    * [fetch\_did\_document](#spoon_ai.identity.storage_client.DIDStorageClient.fetch_did_document)
+    * [publish\_credential](#spoon_ai.identity.storage_client.DIDStorageClient.publish_credential)
+    * [close](#spoon_ai.identity.storage_client.DIDStorageClient.close)
 
 <a id="spoon_ai.identity"></a>
 
@@ -53,6 +53,115 @@ title: spoon_ai.identity
 
 SpoonOS Agent DID Identity Module
 Implements ERC-8004 compliant decentralized identity for agents
+
+<a id="spoon_ai.identity.did_resolver"></a>
+
+# Module `spoon_ai.identity.did_resolver`
+
+DID Resolver for SpoonOS Agents
+Implements unified DID resolution via IdentityRegistry with NeoFS-first policy
+
+<a id="spoon_ai.identity.did_resolver.DIDResolver"></a>
+
+## `DIDResolver` Objects
+
+```python
+class DIDResolver()
+```
+
+Unified DID resolver for SpoonOS agents.
+Resolution flow: IdentityRegistry (agentId) → NeoFS (primary) → IPFS (fallback)
+
+<a id="spoon_ai.identity.did_resolver.DIDResolver.resolve"></a>
+
+#### `resolve`
+
+```python
+def resolve(agent_id: int) -> DIDResolutionResult
+```
+
+Resolve agent identity to complete DID document.
+
+**Arguments**:
+
+- `agent_id` - On-chain agent token ID from IdentityRegistry
+  
+
+**Returns**:
+
+  DIDResolutionResult with document and metadata
+
+<a id="spoon_ai.identity.did_resolver.DIDResolver.resolve_metadata_only"></a>
+
+#### `resolve_metadata_only`
+
+```python
+def resolve_metadata_only(agent_id: int) -> Dict
+```
+
+Resolve only on-chain metadata (fast path)
+
+<a id="spoon_ai.identity.did_resolver.DIDResolver.verify_agent"></a>
+
+#### `verify_agent`
+
+```python
+def verify_agent(agent_id: int) -> bool
+```
+
+Verify agent exists and is resolvable
+
+<a id="spoon_ai.identity.erc8004_client"></a>
+
+# Module `spoon_ai.identity.erc8004_client`
+
+ERC-8004 Smart Contract Client
+Handles on-chain interactions with agent registries (IdentityRegistry only)
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client"></a>
+
+## `ERC8004Client` Objects
+
+```python
+class ERC8004Client()
+```
+
+Client for interacting with ERC-8004 agent registries
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client.get_agent_id_for_address"></a>
+
+#### `get_agent_id_for_address`
+
+```python
+def get_agent_id_for_address(address: str) -> int
+```
+
+Look up the agent ID (ERC-721 token) owned by *address*.
+
+Returns 0 if the address has no registered agent identity.
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client.register_agent"></a>
+
+#### `register_agent`
+
+```python
+def register_agent(token_uri: str,
+                   metadata: Optional[List[Tuple[str, bytes]]] = None) -> int
+```
+
+Register agent on IdentityRegistry; returns agentId.
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent"></a>
+
+#### `resolve_agent`
+
+```python
+def resolve_agent(agent_id: int) -> Dict
+```
+
+Resolve agent metadata from IdentityRegistry by agentId.
+
+Returns dict with owner, tokenURI, and common metadata fields.
 
 <a id="spoon_ai.identity.attestation"></a>
 
@@ -206,175 +315,6 @@ Shared ERC-8004 ABI fragments (minimal, artifact-free).
 
 These ABIs cover the common calls used by the Python SDK and demos.
 
-<a id="spoon_ai.identity.did_resolver"></a>
-
-# Module `spoon_ai.identity.did_resolver`
-
-DID Resolver for SpoonOS Agents
-Implements unified DID resolution via IdentityRegistry with NeoFS-first policy
-
-<a id="spoon_ai.identity.did_resolver.DIDResolver"></a>
-
-## `DIDResolver` Objects
-
-```python
-class DIDResolver()
-```
-
-Unified DID resolver for SpoonOS agents.
-Resolution flow: IdentityRegistry (agentId) → NeoFS (primary) → IPFS (fallback)
-
-<a id="spoon_ai.identity.did_resolver.DIDResolver.resolve"></a>
-
-#### `resolve`
-
-```python
-def resolve(agent_id: int) -> DIDResolutionResult
-```
-
-Resolve agent identity to complete DID document.
-
-**Arguments**:
-
-- `agent_id` - On-chain agent token ID from IdentityRegistry
-  
-
-**Returns**:
-
-  DIDResolutionResult with document and metadata
-
-<a id="spoon_ai.identity.did_resolver.DIDResolver.resolve_metadata_only"></a>
-
-#### `resolve_metadata_only`
-
-```python
-def resolve_metadata_only(agent_id: int) -> Dict
-```
-
-Resolve only on-chain metadata (fast path)
-
-<a id="spoon_ai.identity.did_resolver.DIDResolver.verify_agent"></a>
-
-#### `verify_agent`
-
-```python
-def verify_agent(agent_id: int) -> bool
-```
-
-Verify agent exists and is resolvable
-
-<a id="spoon_ai.identity.erc8004_client"></a>
-
-# Module `spoon_ai.identity.erc8004_client`
-
-ERC-8004 Smart Contract Client
-Handles on-chain interactions with agent registries (IdentityRegistry only)
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client"></a>
-
-## `ERC8004Client` Objects
-
-```python
-class ERC8004Client()
-```
-
-Client for interacting with ERC-8004 agent registries
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client.get_agent_id_for_address"></a>
-
-#### `get_agent_id_for_address`
-
-```python
-def get_agent_id_for_address(address: str) -> int
-```
-
-Look up the agent ID (ERC-721 token) owned by *address*.
-
-Returns 0 if the address has no registered agent identity.
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client.register_agent"></a>
-
-#### `register_agent`
-
-```python
-def register_agent(token_uri: str,
-                   metadata: Optional[List[Tuple[str, bytes]]] = None) -> int
-```
-
-Register agent on IdentityRegistry; returns agentId.
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent"></a>
-
-#### `resolve_agent`
-
-```python
-def resolve_agent(agent_id: int) -> Dict
-```
-
-Resolve agent metadata from IdentityRegistry by agentId.
-
-Returns dict with owner, tokenURI, and common metadata fields.
-
-<a id="spoon_ai.identity.storage_client"></a>
-
-# Module `spoon_ai.identity.storage_client`
-
-Storage clients for DID documents and agent cards
-Supports NeoFS (primary) and IPFS (backup replication)
-
-<a id="spoon_ai.identity.storage_client.DIDStorageClient"></a>
-
-## `DIDStorageClient` Objects
-
-```python
-class DIDStorageClient()
-```
-
-Unified storage client for DID documents
-NeoFS primary with IPFS replication
-
-<a id="spoon_ai.identity.storage_client.DIDStorageClient.publish_did_document"></a>
-
-#### `publish_did_document`
-
-```python
-def publish_did_document(agent_id: str, did_document: Dict,
-                         agent_card: Dict) -> Tuple[str, str]
-```
-
-Publish DID document and agent card to storage
-Returns (didDocURI, agentCardURI)
-
-<a id="spoon_ai.identity.storage_client.DIDStorageClient.fetch_did_document"></a>
-
-#### `fetch_did_document`
-
-```python
-def fetch_did_document(uri: str) -> Dict
-```
-
-Fetch DID document from URI (NeoFS or IPFS)
-
-<a id="spoon_ai.identity.storage_client.DIDStorageClient.publish_credential"></a>
-
-#### `publish_credential`
-
-```python
-def publish_credential(agent_id: str, credential: Dict) -> str
-```
-
-Publish verifiable credential
-
-<a id="spoon_ai.identity.storage_client.DIDStorageClient.close"></a>
-
-#### `close`
-
-```python
-def close()
-```
-
-Close HTTP clients
-
 <a id="spoon_ai.identity.did_models"></a>
 
 # Module `spoon_ai.identity.did_models`
@@ -492,4 +432,64 @@ class DIDResolutionResult(BaseModel)
 ```
 
 Result of DID resolution
+
+<a id="spoon_ai.identity.storage_client"></a>
+
+# Module `spoon_ai.identity.storage_client`
+
+Storage clients for DID documents and agent cards
+Supports NeoFS (primary) and IPFS (backup replication)
+
+<a id="spoon_ai.identity.storage_client.DIDStorageClient"></a>
+
+## `DIDStorageClient` Objects
+
+```python
+class DIDStorageClient()
+```
+
+Unified storage client for DID documents
+NeoFS primary with IPFS replication
+
+<a id="spoon_ai.identity.storage_client.DIDStorageClient.publish_did_document"></a>
+
+#### `publish_did_document`
+
+```python
+def publish_did_document(agent_id: str, did_document: Dict,
+                         agent_card: Dict) -> Tuple[str, str]
+```
+
+Publish DID document and agent card to storage
+Returns (didDocURI, agentCardURI)
+
+<a id="spoon_ai.identity.storage_client.DIDStorageClient.fetch_did_document"></a>
+
+#### `fetch_did_document`
+
+```python
+def fetch_did_document(uri: str) -> Dict
+```
+
+Fetch DID document from URI (NeoFS or IPFS)
+
+<a id="spoon_ai.identity.storage_client.DIDStorageClient.publish_credential"></a>
+
+#### `publish_credential`
+
+```python
+def publish_credential(agent_id: str, credential: Dict) -> str
+```
+
+Publish verifiable credential
+
+<a id="spoon_ai.identity.storage_client.DIDStorageClient.close"></a>
+
+#### `close`
+
+```python
+def close()
+```
+
+Close HTTP clients
 

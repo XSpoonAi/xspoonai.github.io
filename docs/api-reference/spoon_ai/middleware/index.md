@@ -7,25 +7,41 @@ title: spoon_ai.middleware
 # Table of Contents
 
 * [spoon\_ai.middleware](#spoon_ai.middleware)
-* [spoon\_ai.middleware.todolist](#spoon_ai.middleware.todolist)
-  * [TodoStatus](#spoon_ai.middleware.todolist.TodoStatus)
-  * [TodoItem](#spoon_ai.middleware.todolist.TodoItem)
-  * [TodoList](#spoon_ai.middleware.todolist.TodoList)
-    * [format\_display](#spoon_ai.middleware.todolist.TodoList.format_display)
-  * [WriteTodosTool](#spoon_ai.middleware.todolist.WriteTodosTool)
-    * [execute](#spoon_ai.middleware.todolist.WriteTodosTool.execute)
-  * [ReadTodosTool](#spoon_ai.middleware.todolist.ReadTodosTool)
-    * [execute](#spoon_ai.middleware.todolist.ReadTodosTool.execute)
-  * [TodoListMiddleware](#spoon_ai.middleware.todolist.TodoListMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.todolist.TodoListMiddleware.__init__)
-    * [tools](#spoon_ai.middleware.todolist.TodoListMiddleware.tools)
-    * [system\_prompt](#spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt)
-    * [todo\_list](#spoon_ai.middleware.todolist.TodoListMiddleware.todo_list)
-    * [get\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state)
-    * [restore\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state)
-    * [awrap\_model\_call](#spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call)
-    * [before\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.before_agent)
-    * [after\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.after_agent)
+* [spoon\_ai.middleware.planning](#spoon_ai.middleware.planning)
+  * [PlanStep](#spoon_ai.middleware.planning.PlanStep)
+    * [status](#spoon_ai.middleware.planning.PlanStep.status)
+    * [mark\_started](#spoon_ai.middleware.planning.PlanStep.mark_started)
+    * [mark\_completed](#spoon_ai.middleware.planning.PlanStep.mark_completed)
+    * [mark\_skipped](#spoon_ai.middleware.planning.PlanStep.mark_skipped)
+  * [Plan](#spoon_ai.middleware.planning.Plan)
+    * [add\_step](#spoon_ai.middleware.planning.Plan.add_step)
+    * [get\_current\_step](#spoon_ai.middleware.planning.Plan.get_current_step)
+    * [advance](#spoon_ai.middleware.planning.Plan.advance)
+    * [is\_complete](#spoon_ai.middleware.planning.Plan.is_complete)
+    * [get\_progress](#spoon_ai.middleware.planning.Plan.get_progress)
+    * [to\_string](#spoon_ai.middleware.planning.Plan.to_string)
+  * [PlanningMiddleware](#spoon_ai.middleware.planning.PlanningMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.planning.PlanningMiddleware.__init__)
+    * [before\_agent](#spoon_ai.middleware.planning.PlanningMiddleware.before_agent)
+    * [on\_plan\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_plan_phase)
+    * [awrap\_model\_call](#spoon_ai.middleware.planning.PlanningMiddleware.awrap_model_call)
+    * [on\_reflect\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_reflect_phase)
+    * [on\_finish\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_finish_phase)
+    * [get\_current\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.get_current_plan)
+    * [set\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.set_plan)
+  * [create\_planning\_middleware](#spoon_ai.middleware.planning.create_planning_middleware)
+* [spoon\_ai.middleware.summarization](#spoon_ai.middleware.summarization)
+  * [ContextFraction](#spoon_ai.middleware.summarization.ContextFraction)
+  * [ContextTokens](#spoon_ai.middleware.summarization.ContextTokens)
+  * [ContextMessages](#spoon_ai.middleware.summarization.ContextMessages)
+  * [ContextSize](#spoon_ai.middleware.summarization.ContextSize)
+  * [count\_tokens\_approximately](#spoon_ai.middleware.summarization.count_tokens_approximately)
+  * [RemoveMessage](#spoon_ai.middleware.summarization.RemoveMessage)
+  * [SummarizationMiddleware](#spoon_ai.middleware.summarization.SummarizationMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.summarization.SummarizationMiddleware.__init__)
+    * [awrap\_model\_call](#spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call)
+    * [get\_stats](#spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats)
+  * [create\_summarization\_middleware](#spoon_ai.middleware.summarization.create_summarization_middleware)
 * [spoon\_ai.middleware.base](#spoon_ai.middleware.base)
   * [AgentPhase](#spoon_ai.middleware.base.AgentPhase)
     * [PLAN](#spoon_ai.middleware.base.AgentPhase.PLAN)
@@ -79,25 +95,6 @@ title: spoon_ai.middleware
     * [collect\_tools](#spoon_ai.middleware.base.MiddlewarePipeline.collect_tools)
     * [build\_system\_prompt](#spoon_ai.middleware.base.MiddlewarePipeline.build_system_prompt)
   * [create\_middleware\_pipeline](#spoon_ai.middleware.base.create_middleware_pipeline)
-* [spoon\_ai.middleware.summarization](#spoon_ai.middleware.summarization)
-  * [ContextFraction](#spoon_ai.middleware.summarization.ContextFraction)
-  * [ContextTokens](#spoon_ai.middleware.summarization.ContextTokens)
-  * [ContextMessages](#spoon_ai.middleware.summarization.ContextMessages)
-  * [ContextSize](#spoon_ai.middleware.summarization.ContextSize)
-  * [count\_tokens\_approximately](#spoon_ai.middleware.summarization.count_tokens_approximately)
-  * [RemoveMessage](#spoon_ai.middleware.summarization.RemoveMessage)
-  * [SummarizationMiddleware](#spoon_ai.middleware.summarization.SummarizationMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.summarization.SummarizationMiddleware.__init__)
-    * [awrap\_model\_call](#spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call)
-    * [get\_stats](#spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats)
-  * [create\_summarization\_middleware](#spoon_ai.middleware.summarization.create_summarization_middleware)
-* [spoon\_ai.middleware.patch\_tool\_calls](#spoon_ai.middleware.patch_tool_calls)
-  * [PatchToolCallsMiddleware](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__)
-    * [before\_agent](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent)
-    * [awrap\_model\_call](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call)
-    * [get\_stats](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats)
-  * [create\_patch\_tool\_calls\_middleware](#spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware)
 * [spoon\_ai.middleware.prompt\_caching](#spoon_ai.middleware.prompt_caching)
   * [is\_anthropic\_model](#spoon_ai.middleware.prompt_caching.is_anthropic_model)
   * [add\_cache\_control](#spoon_ai.middleware.prompt_caching.add_cache_control)
@@ -107,6 +104,32 @@ title: spoon_ai.middleware
     * [awrap\_model\_call](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.awrap_model_call)
     * [get\_stats](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.get_stats)
   * [create\_prompt\_caching\_middleware](#spoon_ai.middleware.prompt_caching.create_prompt_caching_middleware)
+* [spoon\_ai.middleware.todolist](#spoon_ai.middleware.todolist)
+  * [TodoStatus](#spoon_ai.middleware.todolist.TodoStatus)
+  * [TodoItem](#spoon_ai.middleware.todolist.TodoItem)
+  * [TodoList](#spoon_ai.middleware.todolist.TodoList)
+    * [format\_display](#spoon_ai.middleware.todolist.TodoList.format_display)
+  * [WriteTodosTool](#spoon_ai.middleware.todolist.WriteTodosTool)
+    * [execute](#spoon_ai.middleware.todolist.WriteTodosTool.execute)
+  * [ReadTodosTool](#spoon_ai.middleware.todolist.ReadTodosTool)
+    * [execute](#spoon_ai.middleware.todolist.ReadTodosTool.execute)
+  * [TodoListMiddleware](#spoon_ai.middleware.todolist.TodoListMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.todolist.TodoListMiddleware.__init__)
+    * [tools](#spoon_ai.middleware.todolist.TodoListMiddleware.tools)
+    * [system\_prompt](#spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt)
+    * [todo\_list](#spoon_ai.middleware.todolist.TodoListMiddleware.todo_list)
+    * [get\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state)
+    * [restore\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state)
+    * [awrap\_model\_call](#spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call)
+    * [before\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.before_agent)
+    * [after\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.after_agent)
+* [spoon\_ai.middleware.patch\_tool\_calls](#spoon_ai.middleware.patch_tool_calls)
+  * [PatchToolCallsMiddleware](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__)
+    * [before\_agent](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent)
+    * [awrap\_model\_call](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call)
+    * [get\_stats](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats)
+  * [create\_patch\_tool\_calls\_middleware](#spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware)
 * [spoon\_ai.middleware.filesystem](#spoon_ai.middleware.filesystem)
   * [validate\_path](#spoon_ai.middleware.filesystem.validate_path)
   * [LsTool](#spoon_ai.middleware.filesystem.LsTool)
@@ -129,29 +152,6 @@ title: spoon_ai.middleware
   * [LocalSandboxBackend](#spoon_ai.middleware.filesystem.LocalSandboxBackend)
     * [execute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.execute)
     * [aexecute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute)
-* [spoon\_ai.middleware.planning](#spoon_ai.middleware.planning)
-  * [PlanStep](#spoon_ai.middleware.planning.PlanStep)
-    * [status](#spoon_ai.middleware.planning.PlanStep.status)
-    * [mark\_started](#spoon_ai.middleware.planning.PlanStep.mark_started)
-    * [mark\_completed](#spoon_ai.middleware.planning.PlanStep.mark_completed)
-    * [mark\_skipped](#spoon_ai.middleware.planning.PlanStep.mark_skipped)
-  * [Plan](#spoon_ai.middleware.planning.Plan)
-    * [add\_step](#spoon_ai.middleware.planning.Plan.add_step)
-    * [get\_current\_step](#spoon_ai.middleware.planning.Plan.get_current_step)
-    * [advance](#spoon_ai.middleware.planning.Plan.advance)
-    * [is\_complete](#spoon_ai.middleware.planning.Plan.is_complete)
-    * [get\_progress](#spoon_ai.middleware.planning.Plan.get_progress)
-    * [to\_string](#spoon_ai.middleware.planning.Plan.to_string)
-  * [PlanningMiddleware](#spoon_ai.middleware.planning.PlanningMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.planning.PlanningMiddleware.__init__)
-    * [before\_agent](#spoon_ai.middleware.planning.PlanningMiddleware.before_agent)
-    * [on\_plan\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_plan_phase)
-    * [awrap\_model\_call](#spoon_ai.middleware.planning.PlanningMiddleware.awrap_model_call)
-    * [on\_reflect\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_reflect_phase)
-    * [on\_finish\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_finish_phase)
-    * [get\_current\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.get_current_plan)
-    * [set\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.set_plan)
-  * [create\_planning\_middleware](#spoon_ai.middleware.planning.create_planning_middleware)
 
 <a id="spoon_ai.middleware"></a>
 
@@ -170,216 +170,186 @@ Provides flexible middleware architecture for:
 - Dangling tool call patching
 - Anthropic prompt caching
 
-<a id="spoon_ai.middleware.todolist"></a>
+<a id="spoon_ai.middleware.planning"></a>
 
-# Module `spoon_ai.middleware.todolist`
+# Module `spoon_ai.middleware.planning`
 
-TodoList Middleware - Task Planning and Progress Tracking.
+Planning Middleware for Deep Agents
 
-Provides todo list tools to agents for structured task management:
-- write_todos: Create/update todo list with tasks
-- read_todos: Read current todo list state
-
-Compatible with LangChain DeepAgents TodoListMiddleware interface.
+Provides automatic planning capabilities for agents:
+- Auto-plan generation at the start of tasks
+- Plan tracking and execution
+- Integration with Plan-Act-Reflect loop
 
 Usage:
-    from spoon_ai.middleware.todolist import TodoListMiddleware
-
     agent = ToolCallAgent(
-        middleware=[TodoListMiddleware()],
-        ...
+        middleware=[PlanningMiddleware(auto_plan=True)],
+        enable_plan_phase=True,
     )
 
-<a id="spoon_ai.middleware.todolist.TodoStatus"></a>
+<a id="spoon_ai.middleware.planning.PlanStep"></a>
 
-## `TodoStatus` Objects
-
-```python
-class TodoStatus(str, Enum)
-```
-
-Status of a todo item.
-
-<a id="spoon_ai.middleware.todolist.TodoItem"></a>
-
-## `TodoItem` Objects
+## `PlanStep` Objects
 
 ```python
 @dataclass
-class TodoItem()
+class PlanStep()
 ```
 
-A single todo item.
+A single step in a plan.
 
-<a id="spoon_ai.middleware.todolist.TodoList"></a>
+<a id="spoon_ai.middleware.planning.PlanStep.status"></a>
 
-## `TodoList` Objects
+#### `status`
+
+pending, in_progress, completed, skipped
+
+<a id="spoon_ai.middleware.planning.PlanStep.mark_started"></a>
+
+#### `mark_started`
+
+```python
+def mark_started() -> None
+```
+
+Mark step as started.
+
+<a id="spoon_ai.middleware.planning.PlanStep.mark_completed"></a>
+
+#### `mark_completed`
+
+```python
+def mark_completed(result: Optional[str] = None) -> None
+```
+
+Mark step as completed.
+
+<a id="spoon_ai.middleware.planning.PlanStep.mark_skipped"></a>
+
+#### `mark_skipped`
+
+```python
+def mark_skipped(reason: Optional[str] = None) -> None
+```
+
+Mark step as skipped.
+
+<a id="spoon_ai.middleware.planning.Plan"></a>
+
+## `Plan` Objects
 
 ```python
 @dataclass
-class TodoList()
+class Plan()
 ```
 
-Container for todo items.
+A plan for completing a task.
 
-<a id="spoon_ai.middleware.todolist.TodoList.format_display"></a>
+<a id="spoon_ai.middleware.planning.Plan.add_step"></a>
 
-#### `format_display`
+#### `add_step`
 
 ```python
-def format_display() -> str
+def add_step(description: str) -> PlanStep
 ```
 
-Format todo list for display.
+Add a step to the plan.
 
-<a id="spoon_ai.middleware.todolist.WriteTodosTool"></a>
+<a id="spoon_ai.middleware.planning.Plan.get_current_step"></a>
 
-## `WriteTodosTool` Objects
+#### `get_current_step`
 
 ```python
-class WriteTodosTool(BaseTool)
+def get_current_step() -> Optional[PlanStep]
 ```
 
-Tool to create/update todo list.
+Get the current step.
 
-<a id="spoon_ai.middleware.todolist.WriteTodosTool.execute"></a>
+<a id="spoon_ai.middleware.planning.Plan.advance"></a>
 
-#### `execute`
+#### `advance`
 
 ```python
-async def execute(todos: List[Dict[str, Any]], **kwargs) -> str
+def advance() -> bool
 ```
 
-Update the todo list.
+Advance to the next step. Returns True if there are more steps.
 
-<a id="spoon_ai.middleware.todolist.ReadTodosTool"></a>
+<a id="spoon_ai.middleware.planning.Plan.is_complete"></a>
 
-## `ReadTodosTool` Objects
+#### `is_complete`
 
 ```python
-class ReadTodosTool(BaseTool)
+def is_complete() -> bool
 ```
 
-Tool to read current todo list.
+Check if plan is complete.
 
-<a id="spoon_ai.middleware.todolist.ReadTodosTool.execute"></a>
+<a id="spoon_ai.middleware.planning.Plan.get_progress"></a>
 
-#### `execute`
+#### `get_progress`
 
 ```python
-async def execute(**kwargs) -> str
+def get_progress() -> str
 ```
 
-Read the current todo list.
+Get progress summary.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware"></a>
+<a id="spoon_ai.middleware.planning.Plan.to_string"></a>
 
-## `TodoListMiddleware` Objects
+#### `to_string`
 
 ```python
-class TodoListMiddleware(AgentMiddleware)
+def to_string() -> str
 ```
 
-Middleware for providing todo list tools to an agent.
+Convert plan to string representation.
 
-Provides two tools:
-- write_todos: Create/update todo list
-- read_todos: Read current todo list
+<a id="spoon_ai.middleware.planning.PlanningMiddleware"></a>
 
-**Example**:
+## `PlanningMiddleware` Objects
 
-    ```python
-    from spoon_ai.middleware.todolist import TodoListMiddleware
+```python
+class PlanningMiddleware(AgentMiddleware)
+```
 
-    middleware = TodoListMiddleware()
+Middleware that provides automatic planning capabilities.
+
+This middleware can automatically generate a plan at the start of a task
+and track plan execution progress.
+
+Features:
+- Auto-plan generation based on task description
+- Plan step tracking
+- Integration with agent's enable_plan_phase
+
+Usage:
+    middleware = PlanningMiddleware(auto_plan=True)
 
     agent = ToolCallAgent(
         middleware=[middleware],
-        ...
+        enable_plan_phase=True,
     )
-    ```
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.__init__"></a>
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(system_prompt: Optional[str] = None,
-             auto_inject_prompt: bool = True)
+def __init__(auto_plan: bool = False,
+             max_steps: int = 10,
+             plan_prompt: Optional[str] = None)
 ```
 
-Initialize TodoList middleware.
+Initialize planning middleware.
 
 **Arguments**:
 
-- `system_prompt` - Optional custom system prompt override.
-- `auto_inject_prompt` - Whether to auto-inject system prompt (default: True)
+- `auto_plan` - If True, automatically generate a plan at task start
+- `max_steps` - Maximum number of steps in auto-generated plans
+- `plan_prompt` - Custom prompt for plan generation
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.tools"></a>
-
-#### `tools`
-
-```python
-@property
-def tools() -> List[BaseTool]
-```
-
-Get todo list tools.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt"></a>
-
-#### `system_prompt`
-
-```python
-@property
-def system_prompt() -> str
-```
-
-Get system prompt for todo list tools.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.todo_list"></a>
-
-#### `todo_list`
-
-```python
-@property
-def todo_list() -> TodoList
-```
-
-Get current todo list.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state"></a>
-
-#### `get_todos_state`
-
-```python
-def get_todos_state() -> Dict[str, Any]
-```
-
-Get todo list as state dict (for checkpointing).
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state"></a>
-
-#### `restore_todos_state`
-
-```python
-def restore_todos_state(state: Dict[str, Any]) -> None
-```
-
-Restore todo list from state dict.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Inject system prompt for todo list tools.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.before_agent"></a>
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.before_agent"></a>
 
 #### `before_agent`
 
@@ -388,18 +358,372 @@ def before_agent(state: Dict[str, Any],
                  runtime: AgentRuntime) -> Optional[Dict[str, Any]]
 ```
 
-Restore todo list from agent state if available.
+Initialize planning state before agent runs.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.after_agent"></a>
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_plan_phase"></a>
 
-#### `after_agent`
+#### `on_plan_phase`
 
 ```python
-def after_agent(state: Dict[str, Any],
-                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+def on_plan_phase(runtime: AgentRuntime,
+                  phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
 ```
 
-Save todo list to agent state.
+Handle the plan phase of the agent loop.
+
+This is called when enable_plan_phase=True on the agent.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(
+        request: ModelRequest,
+        handler: Callable[[ModelRequest], ModelResponse]) -> ModelResponse
+```
+
+Wrap model calls to inject planning context.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_reflect_phase"></a>
+
+#### `on_reflect_phase`
+
+```python
+def on_reflect_phase(runtime: AgentRuntime,
+                     phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
+```
+
+Handle the reflect phase to update plan progress.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_finish_phase"></a>
+
+#### `on_finish_phase`
+
+```python
+def on_finish_phase(runtime: AgentRuntime,
+                    phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
+```
+
+Handle the finish phase.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.get_current_plan"></a>
+
+#### `get_current_plan`
+
+```python
+def get_current_plan() -> Optional[Plan]
+```
+
+Get the current plan.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.set_plan"></a>
+
+#### `set_plan`
+
+```python
+def set_plan(goal: str, steps: List[str]) -> Plan
+```
+
+Manually set a plan.
+
+**Arguments**:
+
+- `goal` - The goal of the plan
+- `steps` - List of step descriptions
+  
+
+**Returns**:
+
+  The created Plan object
+
+<a id="spoon_ai.middleware.planning.create_planning_middleware"></a>
+
+#### `create_planning_middleware`
+
+```python
+def create_planning_middleware(auto_plan: bool = True,
+                               max_steps: int = 10) -> PlanningMiddleware
+```
+
+Create a planning middleware with common settings.
+
+**Arguments**:
+
+- `auto_plan` - Enable automatic plan generation
+- `max_steps` - Maximum steps in auto-generated plans
+  
+
+**Returns**:
+
+  Configured PlanningMiddleware
+
+<a id="spoon_ai.middleware.summarization"></a>
+
+# Module `spoon_ai.middleware.summarization`
+
+Summarization Middleware - Context Compression for Long Conversations.
+
+Automatically summarizes conversation history when token limits are approached,
+preserving recent messages and maintaining context continuity by ensuring
+AI/Tool message pairs remain together.
+
+Compatible with LangChain DeepAgents SummarizationMiddleware interface.
+
+Usage:
+    from spoon_ai.middleware.summarization import SummarizationMiddleware
+
+    agent = ToolCallAgent(
+        middleware=[SummarizationMiddleware(
+            model=llm,
+            trigger=("fraction", 0.85),  # Trigger at 85% of max tokens
+            keep=("messages", 20),       # Keep last 20 messages
+        )],
+        ...
+    )
+
+<a id="spoon_ai.middleware.summarization.ContextFraction"></a>
+
+#### `ContextFraction`
+
+Fraction of model's maximum input tokens.
+
+**Example**:
+
+  To specify 50% of the model's max input tokens:
+    ```python
+    ("fraction", 0.5)
+    ```
+
+<a id="spoon_ai.middleware.summarization.ContextTokens"></a>
+
+#### `ContextTokens`
+
+Absolute number of tokens.
+
+**Example**:
+
+  To specify 3000 tokens:
+    ```python
+    ("tokens", 3000)
+    ```
+
+<a id="spoon_ai.middleware.summarization.ContextMessages"></a>
+
+#### `ContextMessages`
+
+Absolute number of messages.
+
+**Example**:
+
+  To specify 50 messages:
+    ```python
+    ("messages", 50)
+    ```
+
+<a id="spoon_ai.middleware.summarization.ContextSize"></a>
+
+#### `ContextSize`
+
+Union type for context size specifications.
+
+Can be either:
+- ContextFraction: A fraction of the model's maximum input tokens.
+- ContextTokens: An absolute number of tokens.
+- ContextMessages: An absolute number of messages.
+
+Depending on use with `trigger` or `keep` parameters, this type indicates either
+when to trigger summarization or how much context to retain.
+
+**Example**:
+
+    ```python
+    # ContextFraction
+    context_size: ContextSize = ("fraction", 0.5)
+
+    # ContextTokens
+    context_size: ContextSize = ("tokens", 3000)
+
+    # ContextMessages
+    context_size: ContextSize = ("messages", 50)
+    ```
+
+<a id="spoon_ai.middleware.summarization.count_tokens_approximately"></a>
+
+#### `count_tokens_approximately`
+
+```python
+def count_tokens_approximately(messages: Iterable[Message],
+                               chars_per_token: float = 4.0) -> int
+```
+
+Approximate token counter aligned with LangChain semantics.
+
+**Arguments**:
+
+- `messages` - Iterable of messages to count tokens for.
+- `chars_per_token` - Characters per token ratio (default: 4.0).
+  
+
+**Returns**:
+
+  Estimated token count.
+
+<a id="spoon_ai.middleware.summarization.RemoveMessage"></a>
+
+## `RemoveMessage` Objects
+
+```python
+class RemoveMessage()
+```
+
+Marker class indicating a message should be removed.
+
+Compatible with LangChain's RemoveMessage pattern.
+
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware"></a>
+
+## `SummarizationMiddleware` Objects
+
+```python
+class SummarizationMiddleware(AgentMiddleware)
+```
+
+Summarizes conversation history when token limits are approached.
+
+This middleware monitors message token counts and automatically summarizes older
+messages when a threshold is reached, preserving recent messages and maintaining
+context continuity by ensuring AI/Tool message pairs remain together.
+
+Compatible with LangChain DeepAgents SummarizationMiddleware interface.
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.summarization import SummarizationMiddleware
+
+    # Basic usage with fraction trigger
+    middleware = SummarizationMiddleware(
+        model=llm,
+        trigger=("fraction", 0.85),
+        keep=("messages", 20),
+    )
+
+    # With multiple trigger conditions
+    middleware = SummarizationMiddleware(
+        model=llm,
+        trigger=[("fraction", 0.8), ("messages", 100)],
+        keep=("tokens", 3000),
+    )
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(
+        model: Optional[ChatBot] = None,
+        *,
+        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
+        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
+        token_counter: Optional[TokenCounter] = None,
+        summary_prompt: str = DEFAULT_SUMMARY_PROMPT,
+        trim_tokens_to_summarize: Optional[int] = _DEFAULT_TRIM_TOKEN_LIMIT,
+        max_context_tokens: Optional[int] = None,
+        **deprecated_kwargs: Any) -> None
+```
+
+Initialize summarization middleware.
+
+**Arguments**:
+
+- `model` - The language model to use for generating summaries.
+  If None, uses agent's LLM.
+- `trigger` - One or more thresholds that trigger summarization.
+  Provide a single ContextSize tuple or a list of tuples.
+  Summarization runs when any threshold is met.
+  
+
+**Examples**:
+
+- `-` _"messages", 50_ - Trigger at 50 messages
+- `-` _"tokens", 3000_ - Trigger at 3000 tokens
+- `-` _"fraction", 0.8_ - Trigger at 80% of max input tokens
+  - [("fraction", 0.8), ("messages", 100)]: Multiple conditions
+  
+- `keep` - Context retention policy applied after summarization.
+  Provide a ContextSize tuple to specify how much history to preserve.
+  Defaults to keeping the most recent 20 messages.
+  
+
+**Examples**:
+
+- `-` _"messages", 20_ - Keep last 20 messages
+- `-` _"tokens", 3000_ - Keep last 3000 tokens worth
+- `-` _"fraction", 0.3_ - Keep last 30% of max input tokens
+  
+- `token_counter` - Function to count tokens in messages.
+  Defaults to model-aware approximate counter.
+- `summary_prompt` - Prompt template for generating summaries.
+- `trim_tokens_to_summarize` - Maximum tokens to keep when preparing
+  messages for summarization. Pass None to skip trimming.
+- `max_context_tokens` - Maximum context tokens for fraction calculations.
+  If None, attempts to get from model profile.
+
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
+```
+
+Process messages before model call, potentially triggering summarization.
+
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, Any]
+```
+
+Get summarization statistics.
+
+<a id="spoon_ai.middleware.summarization.create_summarization_middleware"></a>
+
+#### `create_summarization_middleware`
+
+```python
+def create_summarization_middleware(
+        model: Optional[ChatBot] = None,
+        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
+        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
+        max_context_tokens: Optional[int] = None,
+        **kwargs: Any) -> SummarizationMiddleware
+```
+
+Create a summarization middleware.
+
+**Arguments**:
+
+- `model` - LLM for summarization
+- `trigger` - When to trigger summarization
+- `keep` - What to keep after summarization
+- `max_context_tokens` - Maximum context tokens for fraction calculations
+- `**kwargs` - Additional arguments passed to SummarizationMiddleware
+  
+
+**Returns**:
+
+  Configured SummarizationMiddleware
 
 <a id="spoon_ai.middleware.base"></a>
 
@@ -1299,404 +1623,6 @@ Create middleware pipeline from middleware classes or instances.
   SummarizationMiddleware(),
   ])
 
-<a id="spoon_ai.middleware.summarization"></a>
-
-# Module `spoon_ai.middleware.summarization`
-
-Summarization Middleware - Context Compression for Long Conversations.
-
-Automatically summarizes conversation history when token limits are approached,
-preserving recent messages and maintaining context continuity by ensuring
-AI/Tool message pairs remain together.
-
-Compatible with LangChain DeepAgents SummarizationMiddleware interface.
-
-Usage:
-    from spoon_ai.middleware.summarization import SummarizationMiddleware
-
-    agent = ToolCallAgent(
-        middleware=[SummarizationMiddleware(
-            model=llm,
-            trigger=("fraction", 0.85),  # Trigger at 85% of max tokens
-            keep=("messages", 20),       # Keep last 20 messages
-        )],
-        ...
-    )
-
-<a id="spoon_ai.middleware.summarization.ContextFraction"></a>
-
-#### `ContextFraction`
-
-Fraction of model's maximum input tokens.
-
-**Example**:
-
-  To specify 50% of the model's max input tokens:
-    ```python
-    ("fraction", 0.5)
-    ```
-
-<a id="spoon_ai.middleware.summarization.ContextTokens"></a>
-
-#### `ContextTokens`
-
-Absolute number of tokens.
-
-**Example**:
-
-  To specify 3000 tokens:
-    ```python
-    ("tokens", 3000)
-    ```
-
-<a id="spoon_ai.middleware.summarization.ContextMessages"></a>
-
-#### `ContextMessages`
-
-Absolute number of messages.
-
-**Example**:
-
-  To specify 50 messages:
-    ```python
-    ("messages", 50)
-    ```
-
-<a id="spoon_ai.middleware.summarization.ContextSize"></a>
-
-#### `ContextSize`
-
-Union type for context size specifications.
-
-Can be either:
-- ContextFraction: A fraction of the model's maximum input tokens.
-- ContextTokens: An absolute number of tokens.
-- ContextMessages: An absolute number of messages.
-
-Depending on use with `trigger` or `keep` parameters, this type indicates either
-when to trigger summarization or how much context to retain.
-
-**Example**:
-
-    ```python
-    # ContextFraction
-    context_size: ContextSize = ("fraction", 0.5)
-
-    # ContextTokens
-    context_size: ContextSize = ("tokens", 3000)
-
-    # ContextMessages
-    context_size: ContextSize = ("messages", 50)
-    ```
-
-<a id="spoon_ai.middleware.summarization.count_tokens_approximately"></a>
-
-#### `count_tokens_approximately`
-
-```python
-def count_tokens_approximately(messages: Iterable[Message],
-                               chars_per_token: float = 4.0) -> int
-```
-
-Approximate token counter aligned with LangChain semantics.
-
-**Arguments**:
-
-- `messages` - Iterable of messages to count tokens for.
-- `chars_per_token` - Characters per token ratio (default: 4.0).
-  
-
-**Returns**:
-
-  Estimated token count.
-
-<a id="spoon_ai.middleware.summarization.RemoveMessage"></a>
-
-## `RemoveMessage` Objects
-
-```python
-class RemoveMessage()
-```
-
-Marker class indicating a message should be removed.
-
-Compatible with LangChain's RemoveMessage pattern.
-
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware"></a>
-
-## `SummarizationMiddleware` Objects
-
-```python
-class SummarizationMiddleware(AgentMiddleware)
-```
-
-Summarizes conversation history when token limits are approached.
-
-This middleware monitors message token counts and automatically summarizes older
-messages when a threshold is reached, preserving recent messages and maintaining
-context continuity by ensuring AI/Tool message pairs remain together.
-
-Compatible with LangChain DeepAgents SummarizationMiddleware interface.
-
-**Example**:
-
-    ```python
-    from spoon_ai.middleware.summarization import SummarizationMiddleware
-
-    # Basic usage with fraction trigger
-    middleware = SummarizationMiddleware(
-        model=llm,
-        trigger=("fraction", 0.85),
-        keep=("messages", 20),
-    )
-
-    # With multiple trigger conditions
-    middleware = SummarizationMiddleware(
-        model=llm,
-        trigger=[("fraction", 0.8), ("messages", 100)],
-        keep=("tokens", 3000),
-    )
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(
-        model: Optional[ChatBot] = None,
-        *,
-        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
-        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
-        token_counter: Optional[TokenCounter] = None,
-        summary_prompt: str = DEFAULT_SUMMARY_PROMPT,
-        trim_tokens_to_summarize: Optional[int] = _DEFAULT_TRIM_TOKEN_LIMIT,
-        max_context_tokens: Optional[int] = None,
-        **deprecated_kwargs: Any) -> None
-```
-
-Initialize summarization middleware.
-
-**Arguments**:
-
-- `model` - The language model to use for generating summaries.
-  If None, uses agent's LLM.
-- `trigger` - One or more thresholds that trigger summarization.
-  Provide a single ContextSize tuple or a list of tuples.
-  Summarization runs when any threshold is met.
-  
-
-**Examples**:
-
-- `-` _"messages", 50_ - Trigger at 50 messages
-- `-` _"tokens", 3000_ - Trigger at 3000 tokens
-- `-` _"fraction", 0.8_ - Trigger at 80% of max input tokens
-  - [("fraction", 0.8), ("messages", 100)]: Multiple conditions
-  
-- `keep` - Context retention policy applied after summarization.
-  Provide a ContextSize tuple to specify how much history to preserve.
-  Defaults to keeping the most recent 20 messages.
-  
-
-**Examples**:
-
-- `-` _"messages", 20_ - Keep last 20 messages
-- `-` _"tokens", 3000_ - Keep last 3000 tokens worth
-- `-` _"fraction", 0.3_ - Keep last 30% of max input tokens
-  
-- `token_counter` - Function to count tokens in messages.
-  Defaults to model-aware approximate counter.
-- `summary_prompt` - Prompt template for generating summaries.
-- `trim_tokens_to_summarize` - Maximum tokens to keep when preparing
-  messages for summarization. Pass None to skip trimming.
-- `max_context_tokens` - Maximum context tokens for fraction calculations.
-  If None, attempts to get from model profile.
-
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Process messages before model call, potentially triggering summarization.
-
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, Any]
-```
-
-Get summarization statistics.
-
-<a id="spoon_ai.middleware.summarization.create_summarization_middleware"></a>
-
-#### `create_summarization_middleware`
-
-```python
-def create_summarization_middleware(
-        model: Optional[ChatBot] = None,
-        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
-        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
-        max_context_tokens: Optional[int] = None,
-        **kwargs: Any) -> SummarizationMiddleware
-```
-
-Create a summarization middleware.
-
-**Arguments**:
-
-- `model` - LLM for summarization
-- `trigger` - When to trigger summarization
-- `keep` - What to keep after summarization
-- `max_context_tokens` - Maximum context tokens for fraction calculations
-- `**kwargs` - Additional arguments passed to SummarizationMiddleware
-  
-
-**Returns**:
-
-  Configured SummarizationMiddleware
-
-<a id="spoon_ai.middleware.patch_tool_calls"></a>
-
-# Module `spoon_ai.middleware.patch_tool_calls`
-
-PatchToolCalls Middleware - Fix Dangling Tool Calls.
-
-Patches message history to handle dangling tool calls that occur when:
-- HITL (Human-in-the-Loop) interrupts tool execution
-- Errors cause tool execution to be skipped
-- Agent is resumed from a checkpoint mid-execution
-
-Compatible with LangChain DeepAgents PatchToolCallsMiddleware interface.
-
-Usage:
-    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
-
-    agent = ToolCallAgent(
-        middleware=[PatchToolCallsMiddleware()],
-        ...
-    )
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware"></a>
-
-## `PatchToolCallsMiddleware` Objects
-
-```python
-class PatchToolCallsMiddleware(AgentMiddleware)
-```
-
-Middleware to patch dangling tool calls in message history.
-
-A "dangling tool call" occurs when an AI message contains tool_calls
-but there's no corresponding tool response message. This violates
-the OpenAI/Anthropic API requirements and causes errors.
-
-This middleware:
-1. Scans message history for AI messages with tool_calls
-2. Checks if each tool call has a corresponding tool response
-3. Injects synthetic tool response messages for any missing ones
-
-Common causes of dangling tool calls:
-- HITL approval flow rejects or edits a tool call
-- Error during tool execution before response is added
-- Agent resumed from checkpoint mid-execution
-- Network timeout during tool execution
-
-**Example**:
-
-    ```python
-    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
-
-    middleware = PatchToolCallsMiddleware()
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(cancelled_message_template: Optional[str] = None,
-             log_patches: bool = True)
-```
-
-Initialize PatchToolCalls middleware.
-
-**Arguments**:
-
-- `cancelled_message_template` - Custom message template for cancelled tools.
-  Must contain &#123;tool_name&#125; and &#123;tool_call_id&#125; placeholders.
-- `log_patches` - Whether to log when patches are applied (default: True)
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent"></a>
-
-#### `before_agent`
-
-```python
-def before_agent(state: Dict[str, Any],
-                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Patch dangling tool calls when agent starts.
-
-This handles cases where agent is resumed from a checkpoint
-with incomplete tool execution.
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Patch dangling tool calls before model call.
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, int]
-```
-
-Get patching statistics.
-
-<a id="spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware"></a>
-
-#### `create_patch_tool_calls_middleware`
-
-```python
-def create_patch_tool_calls_middleware(
-        log_patches: bool = True) -> PatchToolCallsMiddleware
-```
-
-Create a PatchToolCalls middleware.
-
-**Arguments**:
-
-- `log_patches` - Whether to log when patches are applied
-  
-
-**Returns**:
-
-  Configured PatchToolCallsMiddleware
-
 <a id="spoon_ai.middleware.prompt_caching"></a>
 
 # Module `spoon_ai.middleware.prompt_caching`
@@ -1893,6 +1819,368 @@ Create an Anthropic prompt caching middleware.
 **Returns**:
 
   Configured AnthropicPromptCachingMiddleware
+
+<a id="spoon_ai.middleware.todolist"></a>
+
+# Module `spoon_ai.middleware.todolist`
+
+TodoList Middleware - Task Planning and Progress Tracking.
+
+Provides todo list tools to agents for structured task management:
+- write_todos: Create/update todo list with tasks
+- read_todos: Read current todo list state
+
+Compatible with LangChain DeepAgents TodoListMiddleware interface.
+
+Usage:
+    from spoon_ai.middleware.todolist import TodoListMiddleware
+
+    agent = ToolCallAgent(
+        middleware=[TodoListMiddleware()],
+        ...
+    )
+
+<a id="spoon_ai.middleware.todolist.TodoStatus"></a>
+
+## `TodoStatus` Objects
+
+```python
+class TodoStatus(str, Enum)
+```
+
+Status of a todo item.
+
+<a id="spoon_ai.middleware.todolist.TodoItem"></a>
+
+## `TodoItem` Objects
+
+```python
+@dataclass
+class TodoItem()
+```
+
+A single todo item.
+
+<a id="spoon_ai.middleware.todolist.TodoList"></a>
+
+## `TodoList` Objects
+
+```python
+@dataclass
+class TodoList()
+```
+
+Container for todo items.
+
+<a id="spoon_ai.middleware.todolist.TodoList.format_display"></a>
+
+#### `format_display`
+
+```python
+def format_display() -> str
+```
+
+Format todo list for display.
+
+<a id="spoon_ai.middleware.todolist.WriteTodosTool"></a>
+
+## `WriteTodosTool` Objects
+
+```python
+class WriteTodosTool(BaseTool)
+```
+
+Tool to create/update todo list.
+
+<a id="spoon_ai.middleware.todolist.WriteTodosTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(todos: List[Dict[str, Any]], **kwargs) -> str
+```
+
+Update the todo list.
+
+<a id="spoon_ai.middleware.todolist.ReadTodosTool"></a>
+
+## `ReadTodosTool` Objects
+
+```python
+class ReadTodosTool(BaseTool)
+```
+
+Tool to read current todo list.
+
+<a id="spoon_ai.middleware.todolist.ReadTodosTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(**kwargs) -> str
+```
+
+Read the current todo list.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware"></a>
+
+## `TodoListMiddleware` Objects
+
+```python
+class TodoListMiddleware(AgentMiddleware)
+```
+
+Middleware for providing todo list tools to an agent.
+
+Provides two tools:
+- write_todos: Create/update todo list
+- read_todos: Read current todo list
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.todolist import TodoListMiddleware
+
+    middleware = TodoListMiddleware()
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(system_prompt: Optional[str] = None,
+             auto_inject_prompt: bool = True)
+```
+
+Initialize TodoList middleware.
+
+**Arguments**:
+
+- `system_prompt` - Optional custom system prompt override.
+- `auto_inject_prompt` - Whether to auto-inject system prompt (default: True)
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.tools"></a>
+
+#### `tools`
+
+```python
+@property
+def tools() -> List[BaseTool]
+```
+
+Get todo list tools.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt"></a>
+
+#### `system_prompt`
+
+```python
+@property
+def system_prompt() -> str
+```
+
+Get system prompt for todo list tools.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.todo_list"></a>
+
+#### `todo_list`
+
+```python
+@property
+def todo_list() -> TodoList
+```
+
+Get current todo list.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state"></a>
+
+#### `get_todos_state`
+
+```python
+def get_todos_state() -> Dict[str, Any]
+```
+
+Get todo list as state dict (for checkpointing).
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state"></a>
+
+#### `restore_todos_state`
+
+```python
+def restore_todos_state(state: Dict[str, Any]) -> None
+```
+
+Restore todo list from state dict.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
+```
+
+Inject system prompt for todo list tools.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.before_agent"></a>
+
+#### `before_agent`
+
+```python
+def before_agent(state: Dict[str, Any],
+                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Restore todo list from agent state if available.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.after_agent"></a>
+
+#### `after_agent`
+
+```python
+def after_agent(state: Dict[str, Any],
+                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Save todo list to agent state.
+
+<a id="spoon_ai.middleware.patch_tool_calls"></a>
+
+# Module `spoon_ai.middleware.patch_tool_calls`
+
+PatchToolCalls Middleware - Fix Dangling Tool Calls.
+
+Patches message history to handle dangling tool calls that occur when:
+- HITL (Human-in-the-Loop) interrupts tool execution
+- Errors cause tool execution to be skipped
+- Agent is resumed from a checkpoint mid-execution
+
+Compatible with LangChain DeepAgents PatchToolCallsMiddleware interface.
+
+Usage:
+    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
+
+    agent = ToolCallAgent(
+        middleware=[PatchToolCallsMiddleware()],
+        ...
+    )
+
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware"></a>
+
+## `PatchToolCallsMiddleware` Objects
+
+```python
+class PatchToolCallsMiddleware(AgentMiddleware)
+```
+
+Middleware to patch dangling tool calls in message history.
+
+A "dangling tool call" occurs when an AI message contains tool_calls
+but there's no corresponding tool response message. This violates
+the OpenAI/Anthropic API requirements and causes errors.
+
+This middleware:
+1. Scans message history for AI messages with tool_calls
+2. Checks if each tool call has a corresponding tool response
+3. Injects synthetic tool response messages for any missing ones
+
+Common causes of dangling tool calls:
+- HITL approval flow rejects or edits a tool call
+- Error during tool execution before response is added
+- Agent resumed from checkpoint mid-execution
+- Network timeout during tool execution
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
+
+    middleware = PatchToolCallsMiddleware()
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(cancelled_message_template: Optional[str] = None,
+             log_patches: bool = True)
+```
+
+Initialize PatchToolCalls middleware.
+
+**Arguments**:
+
+- `cancelled_message_template` - Custom message template for cancelled tools.
+  Must contain &#123;tool_name&#125; and &#123;tool_call_id&#125; placeholders.
+- `log_patches` - Whether to log when patches are applied (default: True)
+
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent"></a>
+
+#### `before_agent`
+
+```python
+def before_agent(state: Dict[str, Any],
+                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Patch dangling tool calls when agent starts.
+
+This handles cases where agent is resumed from a checkpoint
+with incomplete tool execution.
+
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
+```
+
+Patch dangling tool calls before model call.
+
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, int]
+```
+
+Get patching statistics.
+
+<a id="spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware"></a>
+
+#### `create_patch_tool_calls_middleware`
+
+```python
+def create_patch_tool_calls_middleware(
+        log_patches: bool = True) -> PatchToolCallsMiddleware
+```
+
+Create a PatchToolCalls middleware.
+
+**Arguments**:
+
+- `log_patches` - Whether to log when patches are applied
+  
+
+**Returns**:
+
+  Configured PatchToolCallsMiddleware
 
 <a id="spoon_ai.middleware.filesystem"></a>
 
@@ -2240,292 +2528,4 @@ async def aexecute(command: str) -> ExecuteResponse
 ```
 
 Async execute a shell command.
-
-<a id="spoon_ai.middleware.planning"></a>
-
-# Module `spoon_ai.middleware.planning`
-
-Planning Middleware for Deep Agents
-
-Provides automatic planning capabilities for agents:
-- Auto-plan generation at the start of tasks
-- Plan tracking and execution
-- Integration with Plan-Act-Reflect loop
-
-Usage:
-    agent = ToolCallAgent(
-        middleware=[PlanningMiddleware(auto_plan=True)],
-        enable_plan_phase=True,
-    )
-
-<a id="spoon_ai.middleware.planning.PlanStep"></a>
-
-## `PlanStep` Objects
-
-```python
-@dataclass
-class PlanStep()
-```
-
-A single step in a plan.
-
-<a id="spoon_ai.middleware.planning.PlanStep.status"></a>
-
-#### `status`
-
-pending, in_progress, completed, skipped
-
-<a id="spoon_ai.middleware.planning.PlanStep.mark_started"></a>
-
-#### `mark_started`
-
-```python
-def mark_started() -> None
-```
-
-Mark step as started.
-
-<a id="spoon_ai.middleware.planning.PlanStep.mark_completed"></a>
-
-#### `mark_completed`
-
-```python
-def mark_completed(result: Optional[str] = None) -> None
-```
-
-Mark step as completed.
-
-<a id="spoon_ai.middleware.planning.PlanStep.mark_skipped"></a>
-
-#### `mark_skipped`
-
-```python
-def mark_skipped(reason: Optional[str] = None) -> None
-```
-
-Mark step as skipped.
-
-<a id="spoon_ai.middleware.planning.Plan"></a>
-
-## `Plan` Objects
-
-```python
-@dataclass
-class Plan()
-```
-
-A plan for completing a task.
-
-<a id="spoon_ai.middleware.planning.Plan.add_step"></a>
-
-#### `add_step`
-
-```python
-def add_step(description: str) -> PlanStep
-```
-
-Add a step to the plan.
-
-<a id="spoon_ai.middleware.planning.Plan.get_current_step"></a>
-
-#### `get_current_step`
-
-```python
-def get_current_step() -> Optional[PlanStep]
-```
-
-Get the current step.
-
-<a id="spoon_ai.middleware.planning.Plan.advance"></a>
-
-#### `advance`
-
-```python
-def advance() -> bool
-```
-
-Advance to the next step. Returns True if there are more steps.
-
-<a id="spoon_ai.middleware.planning.Plan.is_complete"></a>
-
-#### `is_complete`
-
-```python
-def is_complete() -> bool
-```
-
-Check if plan is complete.
-
-<a id="spoon_ai.middleware.planning.Plan.get_progress"></a>
-
-#### `get_progress`
-
-```python
-def get_progress() -> str
-```
-
-Get progress summary.
-
-<a id="spoon_ai.middleware.planning.Plan.to_string"></a>
-
-#### `to_string`
-
-```python
-def to_string() -> str
-```
-
-Convert plan to string representation.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware"></a>
-
-## `PlanningMiddleware` Objects
-
-```python
-class PlanningMiddleware(AgentMiddleware)
-```
-
-Middleware that provides automatic planning capabilities.
-
-This middleware can automatically generate a plan at the start of a task
-and track plan execution progress.
-
-Features:
-- Auto-plan generation based on task description
-- Plan step tracking
-- Integration with agent's enable_plan_phase
-
-Usage:
-    middleware = PlanningMiddleware(auto_plan=True)
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        enable_plan_phase=True,
-    )
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(auto_plan: bool = False,
-             max_steps: int = 10,
-             plan_prompt: Optional[str] = None)
-```
-
-Initialize planning middleware.
-
-**Arguments**:
-
-- `auto_plan` - If True, automatically generate a plan at task start
-- `max_steps` - Maximum number of steps in auto-generated plans
-- `plan_prompt` - Custom prompt for plan generation
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.before_agent"></a>
-
-#### `before_agent`
-
-```python
-def before_agent(state: Dict[str, Any],
-                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Initialize planning state before agent runs.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_plan_phase"></a>
-
-#### `on_plan_phase`
-
-```python
-def on_plan_phase(runtime: AgentRuntime,
-                  phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
-```
-
-Handle the plan phase of the agent loop.
-
-This is called when enable_plan_phase=True on the agent.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(
-        request: ModelRequest,
-        handler: Callable[[ModelRequest], ModelResponse]) -> ModelResponse
-```
-
-Wrap model calls to inject planning context.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_reflect_phase"></a>
-
-#### `on_reflect_phase`
-
-```python
-def on_reflect_phase(runtime: AgentRuntime,
-                     phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
-```
-
-Handle the reflect phase to update plan progress.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_finish_phase"></a>
-
-#### `on_finish_phase`
-
-```python
-def on_finish_phase(runtime: AgentRuntime,
-                    phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
-```
-
-Handle the finish phase.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.get_current_plan"></a>
-
-#### `get_current_plan`
-
-```python
-def get_current_plan() -> Optional[Plan]
-```
-
-Get the current plan.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.set_plan"></a>
-
-#### `set_plan`
-
-```python
-def set_plan(goal: str, steps: List[str]) -> Plan
-```
-
-Manually set a plan.
-
-**Arguments**:
-
-- `goal` - The goal of the plan
-- `steps` - List of step descriptions
-  
-
-**Returns**:
-
-  The created Plan object
-
-<a id="spoon_ai.middleware.planning.create_planning_middleware"></a>
-
-#### `create_planning_middleware`
-
-```python
-def create_planning_middleware(auto_plan: bool = True,
-                               max_steps: int = 10) -> PlanningMiddleware
-```
-
-Create a planning middleware with common settings.
-
-**Arguments**:
-
-- `auto_plan` - Enable automatic plan generation
-- `max_steps` - Maximum steps in auto-generated plans
-  
-
-**Returns**:
-
-  Configured PlanningMiddleware
 

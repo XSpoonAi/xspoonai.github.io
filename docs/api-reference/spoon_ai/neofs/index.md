@@ -7,9 +7,8 @@ title: spoon_ai.neofs
 # Table of Contents
 
 * [spoon\_ai.neofs](#spoon_ai.neofs)
-* [spoon\_ai.neofs.utils](#spoon_ai.neofs.utils)
-  * [SignatureError](#spoon_ai.neofs.utils.SignatureError)
-  * [sign\_bearer\_token](#spoon_ai.neofs.utils.sign_bearer_token)
+* [spoon\_ai.neofs.models](#spoon_ai.neofs.models)
+  * [NetworkInfo](#spoon_ai.neofs.models.NetworkInfo)
 * [spoon\_ai.neofs.client](#spoon_ai.neofs.client)
   * [NeoFSClient](#spoon_ai.neofs.client.NeoFSClient)
     * [set\_container\_eacl](#spoon_ai.neofs.client.NeoFSClient.set_container_eacl)
@@ -21,8 +20,9 @@ title: spoon_ai.neofs
     * [search\_objects](#spoon_ai.neofs.client.NeoFSClient.search_objects)
   * [NeoFSException](#spoon_ai.neofs.client.NeoFSException)
   * [NeoFSAPIException](#spoon_ai.neofs.client.NeoFSAPIException)
-* [spoon\_ai.neofs.models](#spoon_ai.neofs.models)
-  * [NetworkInfo](#spoon_ai.neofs.models.NetworkInfo)
+* [spoon\_ai.neofs.utils](#spoon_ai.neofs.utils)
+  * [SignatureError](#spoon_ai.neofs.utils.SignatureError)
+  * [sign\_bearer\_token](#spoon_ai.neofs.utils.sign_bearer_token)
 
 <a id="spoon_ai.neofs"></a>
 
@@ -30,38 +30,21 @@ title: spoon_ai.neofs
 
 NeoFS integration for Spoon Core.
 
-<a id="spoon_ai.neofs.utils"></a>
+<a id="spoon_ai.neofs.models"></a>
 
-# Module `spoon_ai.neofs.utils`
+# Module `spoon_ai.neofs.models`
 
-<a id="spoon_ai.neofs.utils.SignatureError"></a>
+Pydantic models describing NeoFS REST API payloads.
 
-## `SignatureError` Objects
+<a id="spoon_ai.neofs.models.NetworkInfo"></a>
 
-```python
-class SignatureError(Exception)
-```
-
-Raised when signature payload construction fails.
-
-<a id="spoon_ai.neofs.utils.sign_bearer_token"></a>
-
-#### `sign_bearer_token`
+## `NetworkInfo` Objects
 
 ```python
-def sign_bearer_token(bearer_token: str,
-                      private_key_wif: str,
-                      *,
-                      wallet_connect: bool = True) -> tuple[str, str]
+class NetworkInfo(BaseModel)
 ```
 
-Returns (signature_hex, compressed_pubkey_hex)
-
-- wallet_connect=True:
-    msg = WC format (with prefix/len/salt/postfix), hash=SHA-256
-    X-Bearer-Signature = &lt;DER signature hex&gt; + &lt;16B salt hex&gt;
-    X-Bearer-Signature-Key = &lt;compressed public key hex&gt;
-    URL needs to append ?walletConnect=true
+Describes network configuration fees reported by the gateway.
 
 <a id="spoon_ai.neofs.client"></a>
 
@@ -206,19 +189,36 @@ class NeoFSAPIException(NeoFSException)
 
 Raised when the API returns an error.
 
-<a id="spoon_ai.neofs.models"></a>
+<a id="spoon_ai.neofs.utils"></a>
 
-# Module `spoon_ai.neofs.models`
+# Module `spoon_ai.neofs.utils`
 
-Pydantic models describing NeoFS REST API payloads.
+<a id="spoon_ai.neofs.utils.SignatureError"></a>
 
-<a id="spoon_ai.neofs.models.NetworkInfo"></a>
-
-## `NetworkInfo` Objects
+## `SignatureError` Objects
 
 ```python
-class NetworkInfo(BaseModel)
+class SignatureError(Exception)
 ```
 
-Describes network configuration fees reported by the gateway.
+Raised when signature payload construction fails.
+
+<a id="spoon_ai.neofs.utils.sign_bearer_token"></a>
+
+#### `sign_bearer_token`
+
+```python
+def sign_bearer_token(bearer_token: str,
+                      private_key_wif: str,
+                      *,
+                      wallet_connect: bool = True) -> tuple[str, str]
+```
+
+Returns (signature_hex, compressed_pubkey_hex)
+
+- wallet_connect=True:
+    msg = WC format (with prefix/len/salt/postfix), hash=SHA-256
+    X-Bearer-Signature = &lt;DER signature hex&gt; + &lt;16B salt hex&gt;
+    X-Bearer-Signature-Key = &lt;compressed public key hex&gt;
+    URL needs to append ?walletConnect=true
 
