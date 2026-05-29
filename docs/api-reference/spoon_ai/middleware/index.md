@@ -7,29 +7,34 @@ title: spoon_ai.middleware
 # Table of Contents
 
 * [spoon\_ai.middleware](#spoon_ai.middleware)
-* [spoon\_ai.middleware.planning](#spoon_ai.middleware.planning)
-  * [PlanStep](#spoon_ai.middleware.planning.PlanStep)
-    * [status](#spoon_ai.middleware.planning.PlanStep.status)
-    * [mark\_started](#spoon_ai.middleware.planning.PlanStep.mark_started)
-    * [mark\_completed](#spoon_ai.middleware.planning.PlanStep.mark_completed)
-    * [mark\_skipped](#spoon_ai.middleware.planning.PlanStep.mark_skipped)
-  * [Plan](#spoon_ai.middleware.planning.Plan)
-    * [add\_step](#spoon_ai.middleware.planning.Plan.add_step)
-    * [get\_current\_step](#spoon_ai.middleware.planning.Plan.get_current_step)
-    * [advance](#spoon_ai.middleware.planning.Plan.advance)
-    * [is\_complete](#spoon_ai.middleware.planning.Plan.is_complete)
-    * [get\_progress](#spoon_ai.middleware.planning.Plan.get_progress)
-    * [to\_string](#spoon_ai.middleware.planning.Plan.to_string)
-  * [PlanningMiddleware](#spoon_ai.middleware.planning.PlanningMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.planning.PlanningMiddleware.__init__)
-    * [before\_agent](#spoon_ai.middleware.planning.PlanningMiddleware.before_agent)
-    * [on\_plan\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_plan_phase)
-    * [awrap\_model\_call](#spoon_ai.middleware.planning.PlanningMiddleware.awrap_model_call)
-    * [on\_reflect\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_reflect_phase)
-    * [on\_finish\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_finish_phase)
-    * [get\_current\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.get_current_plan)
-    * [set\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.set_plan)
-  * [create\_planning\_middleware](#spoon_ai.middleware.planning.create_planning_middleware)
+* [spoon\_ai.middleware.prompt\_caching](#spoon_ai.middleware.prompt_caching)
+  * [is\_anthropic\_model](#spoon_ai.middleware.prompt_caching.is_anthropic_model)
+  * [add\_cache\_control](#spoon_ai.middleware.prompt_caching.add_cache_control)
+  * [should\_cache\_content](#spoon_ai.middleware.prompt_caching.should_cache_content)
+  * [AnthropicPromptCachingMiddleware](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.__init__)
+    * [awrap\_model\_call](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.awrap_model_call)
+    * [get\_stats](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.get_stats)
+  * [create\_prompt\_caching\_middleware](#spoon_ai.middleware.prompt_caching.create_prompt_caching_middleware)
+* [spoon\_ai.middleware.todolist](#spoon_ai.middleware.todolist)
+  * [TodoStatus](#spoon_ai.middleware.todolist.TodoStatus)
+  * [TodoItem](#spoon_ai.middleware.todolist.TodoItem)
+  * [TodoList](#spoon_ai.middleware.todolist.TodoList)
+    * [format\_display](#spoon_ai.middleware.todolist.TodoList.format_display)
+  * [WriteTodosTool](#spoon_ai.middleware.todolist.WriteTodosTool)
+    * [execute](#spoon_ai.middleware.todolist.WriteTodosTool.execute)
+  * [ReadTodosTool](#spoon_ai.middleware.todolist.ReadTodosTool)
+    * [execute](#spoon_ai.middleware.todolist.ReadTodosTool.execute)
+  * [TodoListMiddleware](#spoon_ai.middleware.todolist.TodoListMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.todolist.TodoListMiddleware.__init__)
+    * [tools](#spoon_ai.middleware.todolist.TodoListMiddleware.tools)
+    * [system\_prompt](#spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt)
+    * [todo\_list](#spoon_ai.middleware.todolist.TodoListMiddleware.todo_list)
+    * [get\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state)
+    * [restore\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state)
+    * [awrap\_model\_call](#spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call)
+    * [before\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.before_agent)
+    * [after\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.after_agent)
 * [spoon\_ai.middleware.summarization](#spoon_ai.middleware.summarization)
   * [ContextFraction](#spoon_ai.middleware.summarization.ContextFraction)
   * [ContextTokens](#spoon_ai.middleware.summarization.ContextTokens)
@@ -95,34 +100,6 @@ title: spoon_ai.middleware
     * [collect\_tools](#spoon_ai.middleware.base.MiddlewarePipeline.collect_tools)
     * [build\_system\_prompt](#spoon_ai.middleware.base.MiddlewarePipeline.build_system_prompt)
   * [create\_middleware\_pipeline](#spoon_ai.middleware.base.create_middleware_pipeline)
-* [spoon\_ai.middleware.prompt\_caching](#spoon_ai.middleware.prompt_caching)
-  * [is\_anthropic\_model](#spoon_ai.middleware.prompt_caching.is_anthropic_model)
-  * [add\_cache\_control](#spoon_ai.middleware.prompt_caching.add_cache_control)
-  * [should\_cache\_content](#spoon_ai.middleware.prompt_caching.should_cache_content)
-  * [AnthropicPromptCachingMiddleware](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.__init__)
-    * [awrap\_model\_call](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.awrap_model_call)
-    * [get\_stats](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.get_stats)
-  * [create\_prompt\_caching\_middleware](#spoon_ai.middleware.prompt_caching.create_prompt_caching_middleware)
-* [spoon\_ai.middleware.todolist](#spoon_ai.middleware.todolist)
-  * [TodoStatus](#spoon_ai.middleware.todolist.TodoStatus)
-  * [TodoItem](#spoon_ai.middleware.todolist.TodoItem)
-  * [TodoList](#spoon_ai.middleware.todolist.TodoList)
-    * [format\_display](#spoon_ai.middleware.todolist.TodoList.format_display)
-  * [WriteTodosTool](#spoon_ai.middleware.todolist.WriteTodosTool)
-    * [execute](#spoon_ai.middleware.todolist.WriteTodosTool.execute)
-  * [ReadTodosTool](#spoon_ai.middleware.todolist.ReadTodosTool)
-    * [execute](#spoon_ai.middleware.todolist.ReadTodosTool.execute)
-  * [TodoListMiddleware](#spoon_ai.middleware.todolist.TodoListMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.todolist.TodoListMiddleware.__init__)
-    * [tools](#spoon_ai.middleware.todolist.TodoListMiddleware.tools)
-    * [system\_prompt](#spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt)
-    * [todo\_list](#spoon_ai.middleware.todolist.TodoListMiddleware.todo_list)
-    * [get\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state)
-    * [restore\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state)
-    * [awrap\_model\_call](#spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call)
-    * [before\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.before_agent)
-    * [after\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.after_agent)
 * [spoon\_ai.middleware.patch\_tool\_calls](#spoon_ai.middleware.patch_tool_calls)
   * [PatchToolCallsMiddleware](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware)
     * [\_\_init\_\_](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__)
@@ -152,6 +129,29 @@ title: spoon_ai.middleware
   * [LocalSandboxBackend](#spoon_ai.middleware.filesystem.LocalSandboxBackend)
     * [execute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.execute)
     * [aexecute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute)
+* [spoon\_ai.middleware.planning](#spoon_ai.middleware.planning)
+  * [PlanStep](#spoon_ai.middleware.planning.PlanStep)
+    * [status](#spoon_ai.middleware.planning.PlanStep.status)
+    * [mark\_started](#spoon_ai.middleware.planning.PlanStep.mark_started)
+    * [mark\_completed](#spoon_ai.middleware.planning.PlanStep.mark_completed)
+    * [mark\_skipped](#spoon_ai.middleware.planning.PlanStep.mark_skipped)
+  * [Plan](#spoon_ai.middleware.planning.Plan)
+    * [add\_step](#spoon_ai.middleware.planning.Plan.add_step)
+    * [get\_current\_step](#spoon_ai.middleware.planning.Plan.get_current_step)
+    * [advance](#spoon_ai.middleware.planning.Plan.advance)
+    * [is\_complete](#spoon_ai.middleware.planning.Plan.is_complete)
+    * [get\_progress](#spoon_ai.middleware.planning.Plan.get_progress)
+    * [to\_string](#spoon_ai.middleware.planning.Plan.to_string)
+  * [PlanningMiddleware](#spoon_ai.middleware.planning.PlanningMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.planning.PlanningMiddleware.__init__)
+    * [before\_agent](#spoon_ai.middleware.planning.PlanningMiddleware.before_agent)
+    * [on\_plan\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_plan_phase)
+    * [awrap\_model\_call](#spoon_ai.middleware.planning.PlanningMiddleware.awrap_model_call)
+    * [on\_reflect\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_reflect_phase)
+    * [on\_finish\_phase](#spoon_ai.middleware.planning.PlanningMiddleware.on_finish_phase)
+    * [get\_current\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.get_current_plan)
+    * [set\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.set_plan)
+  * [create\_planning\_middleware](#spoon_ai.middleware.planning.create_planning_middleware)
 
 <a id="spoon_ai.middleware"></a>
 
@@ -170,186 +170,413 @@ Provides flexible middleware architecture for:
 - Dangling tool call patching
 - Anthropic prompt caching
 
-<a id="spoon_ai.middleware.planning"></a>
+<a id="spoon_ai.middleware.prompt_caching"></a>
 
-# Module `spoon_ai.middleware.planning`
+# Module `spoon_ai.middleware.prompt_caching`
 
-Planning Middleware for Deep Agents
+Anthropic Prompt Caching Middleware.
 
-Provides automatic planning capabilities for agents:
-- Auto-plan generation at the start of tasks
-- Plan tracking and execution
-- Integration with Plan-Act-Reflect loop
+Adds cache_control markers to system prompts and messages for Anthropic models,
+enabling prompt caching to reduce costs and latency for repeated content.
+
+How Anthropic Prompt Caching Works:
+- Content marked with cache_control: &#123;"type": "ephemeral"&#125; is cached for ~5 minutes
+- Subsequent requests within the cache window reuse the cached content
+- This reduces input token costs and speeds up responses
+- Only works with Claude models (claude-3-*, claude-2-*, etc.)
+
+Compatible with LangChain DeepAgents AnthropicPromptCachingMiddleware interface.
 
 Usage:
+    from spoon_ai.middleware.prompt_caching import AnthropicPromptCachingMiddleware
+
     agent = ToolCallAgent(
-        middleware=[PlanningMiddleware(auto_plan=True)],
-        enable_plan_phase=True,
+        middleware=[AnthropicPromptCachingMiddleware()],
+        ...
     )
 
-<a id="spoon_ai.middleware.planning.PlanStep"></a>
+<a id="spoon_ai.middleware.prompt_caching.is_anthropic_model"></a>
 
-## `PlanStep` Objects
-
-```python
-@dataclass
-class PlanStep()
-```
-
-A single step in a plan.
-
-<a id="spoon_ai.middleware.planning.PlanStep.status"></a>
-
-#### `status`
-
-pending, in_progress, completed, skipped
-
-<a id="spoon_ai.middleware.planning.PlanStep.mark_started"></a>
-
-#### `mark_started`
+#### `is_anthropic_model`
 
 ```python
-def mark_started() -> None
+def is_anthropic_model(model_name: Optional[str]) -> bool
 ```
 
-Mark step as started.
+Check if a model name indicates an Anthropic Claude model.
 
-<a id="spoon_ai.middleware.planning.PlanStep.mark_completed"></a>
+**Arguments**:
 
-#### `mark_completed`
+- `model_name` - Model identifier string
+  
+
+**Returns**:
+
+  True if this is an Anthropic model that supports caching
+
+<a id="spoon_ai.middleware.prompt_caching.add_cache_control"></a>
+
+#### `add_cache_control`
 
 ```python
-def mark_completed(result: Optional[str] = None) -> None
+def add_cache_control(content: Any) -> Any
 ```
 
-Mark step as completed.
+Add cache_control marker to content.
 
-<a id="spoon_ai.middleware.planning.PlanStep.mark_skipped"></a>
+Anthropic expects content to be a list of content blocks, where each
+block can have a cache_control field.
 
-#### `mark_skipped`
+**Arguments**:
+
+- `content` - Content to add cache control to (string or list of blocks)
+  
+
+**Returns**:
+
+  Content with cache_control added
+
+<a id="spoon_ai.middleware.prompt_caching.should_cache_content"></a>
+
+#### `should_cache_content`
 
 ```python
-def mark_skipped(reason: Optional[str] = None) -> None
+def should_cache_content(content: Any) -> bool
 ```
 
-Mark step as skipped.
+Determine if content is worth caching based on length.
 
-<a id="spoon_ai.middleware.planning.Plan"></a>
+**Arguments**:
 
-## `Plan` Objects
+- `content` - Content to evaluate
+  
+
+**Returns**:
+
+  True if content should be cached
+
+<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware"></a>
+
+## `AnthropicPromptCachingMiddleware` Objects
 
 ```python
-@dataclass
-class Plan()
+class AnthropicPromptCachingMiddleware(AgentMiddleware)
 ```
 
-A plan for completing a task.
+Middleware that adds cache control markers for Anthropic prompt caching.
 
-<a id="spoon_ai.middleware.planning.Plan.add_step"></a>
+When using Anthropic Claude models, this middleware:
+1. Adds cache_control to system prompts (if long enough)
+2. Optionally adds cache_control to tool definitions
+3. Skips caching for non-Anthropic models
 
-#### `add_step`
+Benefits:
+- Reduces input token costs for repeated content
+- Speeds up response time for cached prompts
+- Automatic cache invalidation after ~5 minutes
 
-```python
-def add_step(description: str) -> PlanStep
-```
+**Example**:
 
-Add a step to the plan.
+    ```python
+    from spoon_ai.middleware.prompt_caching import AnthropicPromptCachingMiddleware
 
-<a id="spoon_ai.middleware.planning.Plan.get_current_step"></a>
+    # Basic usage - caches system prompt
+    middleware = AnthropicPromptCachingMiddleware()
 
-#### `get_current_step`
-
-```python
-def get_current_step() -> Optional[PlanStep]
-```
-
-Get the current step.
-
-<a id="spoon_ai.middleware.planning.Plan.advance"></a>
-
-#### `advance`
-
-```python
-def advance() -> bool
-```
-
-Advance to the next step. Returns True if there are more steps.
-
-<a id="spoon_ai.middleware.planning.Plan.is_complete"></a>
-
-#### `is_complete`
-
-```python
-def is_complete() -> bool
-```
-
-Check if plan is complete.
-
-<a id="spoon_ai.middleware.planning.Plan.get_progress"></a>
-
-#### `get_progress`
-
-```python
-def get_progress() -> str
-```
-
-Get progress summary.
-
-<a id="spoon_ai.middleware.planning.Plan.to_string"></a>
-
-#### `to_string`
-
-```python
-def to_string() -> str
-```
-
-Convert plan to string representation.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware"></a>
-
-## `PlanningMiddleware` Objects
-
-```python
-class PlanningMiddleware(AgentMiddleware)
-```
-
-Middleware that provides automatic planning capabilities.
-
-This middleware can automatically generate a plan at the start of a task
-and track plan execution progress.
-
-Features:
-- Auto-plan generation based on task description
-- Plan step tracking
-- Integration with agent's enable_plan_phase
-
-Usage:
-    middleware = PlanningMiddleware(auto_plan=True)
+    # With options
+    middleware = AnthropicPromptCachingMiddleware(
+        cache_system_prompt=True,
+        cache_tools=True,
+        min_cache_length=1024,
+        unsupported_model_behavior="ignore",  # or "warn"
+    )
 
     agent = ToolCallAgent(
         middleware=[middleware],
-        enable_plan_phase=True,
+        ...
     )
+    ```
 
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.__init__"></a>
+<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(auto_plan: bool = False,
-             max_steps: int = 10,
-             plan_prompt: Optional[str] = None)
+def __init__(cache_system_prompt: bool = True,
+             cache_tools: bool = True,
+             min_cache_length: int = MIN_CACHE_LENGTH,
+             unsupported_model_behavior: Literal["ignore", "warn"] = "ignore")
 ```
 
-Initialize planning middleware.
+Initialize Anthropic prompt caching middleware.
 
 **Arguments**:
 
-- `auto_plan` - If True, automatically generate a plan at task start
-- `max_steps` - Maximum number of steps in auto-generated plans
-- `plan_prompt` - Custom prompt for plan generation
+- `cache_system_prompt` - Whether to cache the system prompt (default: True)
+- `cache_tools` - Whether to cache tool definitions (default: True)
+- `min_cache_length` - Minimum content length to cache (default: 1024 chars)
+- `unsupported_model_behavior` - What to do for non-Anthropic models:
+  - "ignore": Silently skip caching
+  - "warn": Log a warning and skip caching
 
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.before_agent"></a>
+<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
+```
+
+Add cache control markers before model call.
+
+<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, int]
+```
+
+Get caching statistics.
+
+<a id="spoon_ai.middleware.prompt_caching.create_prompt_caching_middleware"></a>
+
+#### `create_prompt_caching_middleware`
+
+```python
+def create_prompt_caching_middleware(
+    cache_system_prompt: bool = True,
+    cache_tools: bool = True,
+    min_cache_length: int = MIN_CACHE_LENGTH,
+    unsupported_model_behavior: Literal["ignore", "warn"] = "ignore"
+) -> AnthropicPromptCachingMiddleware
+```
+
+Create an Anthropic prompt caching middleware.
+
+**Arguments**:
+
+- `cache_system_prompt` - Whether to cache system prompts
+- `cache_tools` - Whether to cache tool definitions
+- `min_cache_length` - Minimum content length to cache
+- `unsupported_model_behavior` - How to handle non-Anthropic models
+  
+
+**Returns**:
+
+  Configured AnthropicPromptCachingMiddleware
+
+<a id="spoon_ai.middleware.todolist"></a>
+
+# Module `spoon_ai.middleware.todolist`
+
+TodoList Middleware - Task Planning and Progress Tracking.
+
+Provides todo list tools to agents for structured task management:
+- write_todos: Create/update todo list with tasks
+- read_todos: Read current todo list state
+
+Compatible with LangChain DeepAgents TodoListMiddleware interface.
+
+Usage:
+    from spoon_ai.middleware.todolist import TodoListMiddleware
+
+    agent = ToolCallAgent(
+        middleware=[TodoListMiddleware()],
+        ...
+    )
+
+<a id="spoon_ai.middleware.todolist.TodoStatus"></a>
+
+## `TodoStatus` Objects
+
+```python
+class TodoStatus(str, Enum)
+```
+
+Status of a todo item.
+
+<a id="spoon_ai.middleware.todolist.TodoItem"></a>
+
+## `TodoItem` Objects
+
+```python
+@dataclass
+class TodoItem()
+```
+
+A single todo item.
+
+<a id="spoon_ai.middleware.todolist.TodoList"></a>
+
+## `TodoList` Objects
+
+```python
+@dataclass
+class TodoList()
+```
+
+Container for todo items.
+
+<a id="spoon_ai.middleware.todolist.TodoList.format_display"></a>
+
+#### `format_display`
+
+```python
+def format_display() -> str
+```
+
+Format todo list for display.
+
+<a id="spoon_ai.middleware.todolist.WriteTodosTool"></a>
+
+## `WriteTodosTool` Objects
+
+```python
+class WriteTodosTool(BaseTool)
+```
+
+Tool to create/update todo list.
+
+<a id="spoon_ai.middleware.todolist.WriteTodosTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(todos: List[Dict[str, Any]], **kwargs) -> str
+```
+
+Update the todo list.
+
+<a id="spoon_ai.middleware.todolist.ReadTodosTool"></a>
+
+## `ReadTodosTool` Objects
+
+```python
+class ReadTodosTool(BaseTool)
+```
+
+Tool to read current todo list.
+
+<a id="spoon_ai.middleware.todolist.ReadTodosTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(**kwargs) -> str
+```
+
+Read the current todo list.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware"></a>
+
+## `TodoListMiddleware` Objects
+
+```python
+class TodoListMiddleware(AgentMiddleware)
+```
+
+Middleware for providing todo list tools to an agent.
+
+Provides two tools:
+- write_todos: Create/update todo list
+- read_todos: Read current todo list
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.todolist import TodoListMiddleware
+
+    middleware = TodoListMiddleware()
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(system_prompt: Optional[str] = None,
+             auto_inject_prompt: bool = True)
+```
+
+Initialize TodoList middleware.
+
+**Arguments**:
+
+- `system_prompt` - Optional custom system prompt override.
+- `auto_inject_prompt` - Whether to auto-inject system prompt (default: True)
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.tools"></a>
+
+#### `tools`
+
+```python
+@property
+def tools() -> List[BaseTool]
+```
+
+Get todo list tools.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt"></a>
+
+#### `system_prompt`
+
+```python
+@property
+def system_prompt() -> str
+```
+
+Get system prompt for todo list tools.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.todo_list"></a>
+
+#### `todo_list`
+
+```python
+@property
+def todo_list() -> TodoList
+```
+
+Get current todo list.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state"></a>
+
+#### `get_todos_state`
+
+```python
+def get_todos_state() -> Dict[str, Any]
+```
+
+Get todo list as state dict (for checkpointing).
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state"></a>
+
+#### `restore_todos_state`
+
+```python
+def restore_todos_state(state: Dict[str, Any]) -> None
+```
+
+Restore todo list from state dict.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
+```
+
+Inject system prompt for todo list tools.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.before_agent"></a>
 
 #### `before_agent`
 
@@ -358,105 +585,18 @@ def before_agent(state: Dict[str, Any],
                  runtime: AgentRuntime) -> Optional[Dict[str, Any]]
 ```
 
-Initialize planning state before agent runs.
+Restore todo list from agent state if available.
 
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_plan_phase"></a>
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.after_agent"></a>
 
-#### `on_plan_phase`
-
-```python
-def on_plan_phase(runtime: AgentRuntime,
-                  phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
-```
-
-Handle the plan phase of the agent loop.
-
-This is called when enable_plan_phase=True on the agent.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
+#### `after_agent`
 
 ```python
-async def awrap_model_call(
-        request: ModelRequest,
-        handler: Callable[[ModelRequest], ModelResponse]) -> ModelResponse
+def after_agent(state: Dict[str, Any],
+                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
 ```
 
-Wrap model calls to inject planning context.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_reflect_phase"></a>
-
-#### `on_reflect_phase`
-
-```python
-def on_reflect_phase(runtime: AgentRuntime,
-                     phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
-```
-
-Handle the reflect phase to update plan progress.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_finish_phase"></a>
-
-#### `on_finish_phase`
-
-```python
-def on_finish_phase(runtime: AgentRuntime,
-                    phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
-```
-
-Handle the finish phase.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.get_current_plan"></a>
-
-#### `get_current_plan`
-
-```python
-def get_current_plan() -> Optional[Plan]
-```
-
-Get the current plan.
-
-<a id="spoon_ai.middleware.planning.PlanningMiddleware.set_plan"></a>
-
-#### `set_plan`
-
-```python
-def set_plan(goal: str, steps: List[str]) -> Plan
-```
-
-Manually set a plan.
-
-**Arguments**:
-
-- `goal` - The goal of the plan
-- `steps` - List of step descriptions
-  
-
-**Returns**:
-
-  The created Plan object
-
-<a id="spoon_ai.middleware.planning.create_planning_middleware"></a>
-
-#### `create_planning_middleware`
-
-```python
-def create_planning_middleware(auto_plan: bool = True,
-                               max_steps: int = 10) -> PlanningMiddleware
-```
-
-Create a planning middleware with common settings.
-
-**Arguments**:
-
-- `auto_plan` - Enable automatic plan generation
-- `max_steps` - Maximum steps in auto-generated plans
-  
-
-**Returns**:
-
-  Configured PlanningMiddleware
+Save todo list to agent state.
 
 <a id="spoon_ai.middleware.summarization"></a>
 
@@ -1623,434 +1763,6 @@ Create middleware pipeline from middleware classes or instances.
   SummarizationMiddleware(),
   ])
 
-<a id="spoon_ai.middleware.prompt_caching"></a>
-
-# Module `spoon_ai.middleware.prompt_caching`
-
-Anthropic Prompt Caching Middleware.
-
-Adds cache_control markers to system prompts and messages for Anthropic models,
-enabling prompt caching to reduce costs and latency for repeated content.
-
-How Anthropic Prompt Caching Works:
-- Content marked with cache_control: &#123;"type": "ephemeral"&#125; is cached for ~5 minutes
-- Subsequent requests within the cache window reuse the cached content
-- This reduces input token costs and speeds up responses
-- Only works with Claude models (claude-3-*, claude-2-*, etc.)
-
-Compatible with LangChain DeepAgents AnthropicPromptCachingMiddleware interface.
-
-Usage:
-    from spoon_ai.middleware.prompt_caching import AnthropicPromptCachingMiddleware
-
-    agent = ToolCallAgent(
-        middleware=[AnthropicPromptCachingMiddleware()],
-        ...
-    )
-
-<a id="spoon_ai.middleware.prompt_caching.is_anthropic_model"></a>
-
-#### `is_anthropic_model`
-
-```python
-def is_anthropic_model(model_name: Optional[str]) -> bool
-```
-
-Check if a model name indicates an Anthropic Claude model.
-
-**Arguments**:
-
-- `model_name` - Model identifier string
-  
-
-**Returns**:
-
-  True if this is an Anthropic model that supports caching
-
-<a id="spoon_ai.middleware.prompt_caching.add_cache_control"></a>
-
-#### `add_cache_control`
-
-```python
-def add_cache_control(content: Any) -> Any
-```
-
-Add cache_control marker to content.
-
-Anthropic expects content to be a list of content blocks, where each
-block can have a cache_control field.
-
-**Arguments**:
-
-- `content` - Content to add cache control to (string or list of blocks)
-  
-
-**Returns**:
-
-  Content with cache_control added
-
-<a id="spoon_ai.middleware.prompt_caching.should_cache_content"></a>
-
-#### `should_cache_content`
-
-```python
-def should_cache_content(content: Any) -> bool
-```
-
-Determine if content is worth caching based on length.
-
-**Arguments**:
-
-- `content` - Content to evaluate
-  
-
-**Returns**:
-
-  True if content should be cached
-
-<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware"></a>
-
-## `AnthropicPromptCachingMiddleware` Objects
-
-```python
-class AnthropicPromptCachingMiddleware(AgentMiddleware)
-```
-
-Middleware that adds cache control markers for Anthropic prompt caching.
-
-When using Anthropic Claude models, this middleware:
-1. Adds cache_control to system prompts (if long enough)
-2. Optionally adds cache_control to tool definitions
-3. Skips caching for non-Anthropic models
-
-Benefits:
-- Reduces input token costs for repeated content
-- Speeds up response time for cached prompts
-- Automatic cache invalidation after ~5 minutes
-
-**Example**:
-
-    ```python
-    from spoon_ai.middleware.prompt_caching import AnthropicPromptCachingMiddleware
-
-    # Basic usage - caches system prompt
-    middleware = AnthropicPromptCachingMiddleware()
-
-    # With options
-    middleware = AnthropicPromptCachingMiddleware(
-        cache_system_prompt=True,
-        cache_tools=True,
-        min_cache_length=1024,
-        unsupported_model_behavior="ignore",  # or "warn"
-    )
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(cache_system_prompt: bool = True,
-             cache_tools: bool = True,
-             min_cache_length: int = MIN_CACHE_LENGTH,
-             unsupported_model_behavior: Literal["ignore", "warn"] = "ignore")
-```
-
-Initialize Anthropic prompt caching middleware.
-
-**Arguments**:
-
-- `cache_system_prompt` - Whether to cache the system prompt (default: True)
-- `cache_tools` - Whether to cache tool definitions (default: True)
-- `min_cache_length` - Minimum content length to cache (default: 1024 chars)
-- `unsupported_model_behavior` - What to do for non-Anthropic models:
-  - "ignore": Silently skip caching
-  - "warn": Log a warning and skip caching
-
-<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Add cache control markers before model call.
-
-<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, int]
-```
-
-Get caching statistics.
-
-<a id="spoon_ai.middleware.prompt_caching.create_prompt_caching_middleware"></a>
-
-#### `create_prompt_caching_middleware`
-
-```python
-def create_prompt_caching_middleware(
-    cache_system_prompt: bool = True,
-    cache_tools: bool = True,
-    min_cache_length: int = MIN_CACHE_LENGTH,
-    unsupported_model_behavior: Literal["ignore", "warn"] = "ignore"
-) -> AnthropicPromptCachingMiddleware
-```
-
-Create an Anthropic prompt caching middleware.
-
-**Arguments**:
-
-- `cache_system_prompt` - Whether to cache system prompts
-- `cache_tools` - Whether to cache tool definitions
-- `min_cache_length` - Minimum content length to cache
-- `unsupported_model_behavior` - How to handle non-Anthropic models
-  
-
-**Returns**:
-
-  Configured AnthropicPromptCachingMiddleware
-
-<a id="spoon_ai.middleware.todolist"></a>
-
-# Module `spoon_ai.middleware.todolist`
-
-TodoList Middleware - Task Planning and Progress Tracking.
-
-Provides todo list tools to agents for structured task management:
-- write_todos: Create/update todo list with tasks
-- read_todos: Read current todo list state
-
-Compatible with LangChain DeepAgents TodoListMiddleware interface.
-
-Usage:
-    from spoon_ai.middleware.todolist import TodoListMiddleware
-
-    agent = ToolCallAgent(
-        middleware=[TodoListMiddleware()],
-        ...
-    )
-
-<a id="spoon_ai.middleware.todolist.TodoStatus"></a>
-
-## `TodoStatus` Objects
-
-```python
-class TodoStatus(str, Enum)
-```
-
-Status of a todo item.
-
-<a id="spoon_ai.middleware.todolist.TodoItem"></a>
-
-## `TodoItem` Objects
-
-```python
-@dataclass
-class TodoItem()
-```
-
-A single todo item.
-
-<a id="spoon_ai.middleware.todolist.TodoList"></a>
-
-## `TodoList` Objects
-
-```python
-@dataclass
-class TodoList()
-```
-
-Container for todo items.
-
-<a id="spoon_ai.middleware.todolist.TodoList.format_display"></a>
-
-#### `format_display`
-
-```python
-def format_display() -> str
-```
-
-Format todo list for display.
-
-<a id="spoon_ai.middleware.todolist.WriteTodosTool"></a>
-
-## `WriteTodosTool` Objects
-
-```python
-class WriteTodosTool(BaseTool)
-```
-
-Tool to create/update todo list.
-
-<a id="spoon_ai.middleware.todolist.WriteTodosTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(todos: List[Dict[str, Any]], **kwargs) -> str
-```
-
-Update the todo list.
-
-<a id="spoon_ai.middleware.todolist.ReadTodosTool"></a>
-
-## `ReadTodosTool` Objects
-
-```python
-class ReadTodosTool(BaseTool)
-```
-
-Tool to read current todo list.
-
-<a id="spoon_ai.middleware.todolist.ReadTodosTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(**kwargs) -> str
-```
-
-Read the current todo list.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware"></a>
-
-## `TodoListMiddleware` Objects
-
-```python
-class TodoListMiddleware(AgentMiddleware)
-```
-
-Middleware for providing todo list tools to an agent.
-
-Provides two tools:
-- write_todos: Create/update todo list
-- read_todos: Read current todo list
-
-**Example**:
-
-    ```python
-    from spoon_ai.middleware.todolist import TodoListMiddleware
-
-    middleware = TodoListMiddleware()
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(system_prompt: Optional[str] = None,
-             auto_inject_prompt: bool = True)
-```
-
-Initialize TodoList middleware.
-
-**Arguments**:
-
-- `system_prompt` - Optional custom system prompt override.
-- `auto_inject_prompt` - Whether to auto-inject system prompt (default: True)
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.tools"></a>
-
-#### `tools`
-
-```python
-@property
-def tools() -> List[BaseTool]
-```
-
-Get todo list tools.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt"></a>
-
-#### `system_prompt`
-
-```python
-@property
-def system_prompt() -> str
-```
-
-Get system prompt for todo list tools.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.todo_list"></a>
-
-#### `todo_list`
-
-```python
-@property
-def todo_list() -> TodoList
-```
-
-Get current todo list.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state"></a>
-
-#### `get_todos_state`
-
-```python
-def get_todos_state() -> Dict[str, Any]
-```
-
-Get todo list as state dict (for checkpointing).
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state"></a>
-
-#### `restore_todos_state`
-
-```python
-def restore_todos_state(state: Dict[str, Any]) -> None
-```
-
-Restore todo list from state dict.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Inject system prompt for todo list tools.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.before_agent"></a>
-
-#### `before_agent`
-
-```python
-def before_agent(state: Dict[str, Any],
-                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Restore todo list from agent state if available.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.after_agent"></a>
-
-#### `after_agent`
-
-```python
-def after_agent(state: Dict[str, Any],
-                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Save todo list to agent state.
-
 <a id="spoon_ai.middleware.patch_tool_calls"></a>
 
 # Module `spoon_ai.middleware.patch_tool_calls`
@@ -2528,4 +2240,292 @@ async def aexecute(command: str) -> ExecuteResponse
 ```
 
 Async execute a shell command.
+
+<a id="spoon_ai.middleware.planning"></a>
+
+# Module `spoon_ai.middleware.planning`
+
+Planning Middleware for Deep Agents
+
+Provides automatic planning capabilities for agents:
+- Auto-plan generation at the start of tasks
+- Plan tracking and execution
+- Integration with Plan-Act-Reflect loop
+
+Usage:
+    agent = ToolCallAgent(
+        middleware=[PlanningMiddleware(auto_plan=True)],
+        enable_plan_phase=True,
+    )
+
+<a id="spoon_ai.middleware.planning.PlanStep"></a>
+
+## `PlanStep` Objects
+
+```python
+@dataclass
+class PlanStep()
+```
+
+A single step in a plan.
+
+<a id="spoon_ai.middleware.planning.PlanStep.status"></a>
+
+#### `status`
+
+pending, in_progress, completed, skipped
+
+<a id="spoon_ai.middleware.planning.PlanStep.mark_started"></a>
+
+#### `mark_started`
+
+```python
+def mark_started() -> None
+```
+
+Mark step as started.
+
+<a id="spoon_ai.middleware.planning.PlanStep.mark_completed"></a>
+
+#### `mark_completed`
+
+```python
+def mark_completed(result: Optional[str] = None) -> None
+```
+
+Mark step as completed.
+
+<a id="spoon_ai.middleware.planning.PlanStep.mark_skipped"></a>
+
+#### `mark_skipped`
+
+```python
+def mark_skipped(reason: Optional[str] = None) -> None
+```
+
+Mark step as skipped.
+
+<a id="spoon_ai.middleware.planning.Plan"></a>
+
+## `Plan` Objects
+
+```python
+@dataclass
+class Plan()
+```
+
+A plan for completing a task.
+
+<a id="spoon_ai.middleware.planning.Plan.add_step"></a>
+
+#### `add_step`
+
+```python
+def add_step(description: str) -> PlanStep
+```
+
+Add a step to the plan.
+
+<a id="spoon_ai.middleware.planning.Plan.get_current_step"></a>
+
+#### `get_current_step`
+
+```python
+def get_current_step() -> Optional[PlanStep]
+```
+
+Get the current step.
+
+<a id="spoon_ai.middleware.planning.Plan.advance"></a>
+
+#### `advance`
+
+```python
+def advance() -> bool
+```
+
+Advance to the next step. Returns True if there are more steps.
+
+<a id="spoon_ai.middleware.planning.Plan.is_complete"></a>
+
+#### `is_complete`
+
+```python
+def is_complete() -> bool
+```
+
+Check if plan is complete.
+
+<a id="spoon_ai.middleware.planning.Plan.get_progress"></a>
+
+#### `get_progress`
+
+```python
+def get_progress() -> str
+```
+
+Get progress summary.
+
+<a id="spoon_ai.middleware.planning.Plan.to_string"></a>
+
+#### `to_string`
+
+```python
+def to_string() -> str
+```
+
+Convert plan to string representation.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware"></a>
+
+## `PlanningMiddleware` Objects
+
+```python
+class PlanningMiddleware(AgentMiddleware)
+```
+
+Middleware that provides automatic planning capabilities.
+
+This middleware can automatically generate a plan at the start of a task
+and track plan execution progress.
+
+Features:
+- Auto-plan generation based on task description
+- Plan step tracking
+- Integration with agent's enable_plan_phase
+
+Usage:
+    middleware = PlanningMiddleware(auto_plan=True)
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        enable_plan_phase=True,
+    )
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(auto_plan: bool = False,
+             max_steps: int = 10,
+             plan_prompt: Optional[str] = None)
+```
+
+Initialize planning middleware.
+
+**Arguments**:
+
+- `auto_plan` - If True, automatically generate a plan at task start
+- `max_steps` - Maximum number of steps in auto-generated plans
+- `plan_prompt` - Custom prompt for plan generation
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.before_agent"></a>
+
+#### `before_agent`
+
+```python
+def before_agent(state: Dict[str, Any],
+                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Initialize planning state before agent runs.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_plan_phase"></a>
+
+#### `on_plan_phase`
+
+```python
+def on_plan_phase(runtime: AgentRuntime,
+                  phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
+```
+
+Handle the plan phase of the agent loop.
+
+This is called when enable_plan_phase=True on the agent.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(
+        request: ModelRequest,
+        handler: Callable[[ModelRequest], ModelResponse]) -> ModelResponse
+```
+
+Wrap model calls to inject planning context.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_reflect_phase"></a>
+
+#### `on_reflect_phase`
+
+```python
+def on_reflect_phase(runtime: AgentRuntime,
+                     phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
+```
+
+Handle the reflect phase to update plan progress.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.on_finish_phase"></a>
+
+#### `on_finish_phase`
+
+```python
+def on_finish_phase(runtime: AgentRuntime,
+                    phase_data: Dict[str, Any]) -> Optional[Dict[str, Any]]
+```
+
+Handle the finish phase.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.get_current_plan"></a>
+
+#### `get_current_plan`
+
+```python
+def get_current_plan() -> Optional[Plan]
+```
+
+Get the current plan.
+
+<a id="spoon_ai.middleware.planning.PlanningMiddleware.set_plan"></a>
+
+#### `set_plan`
+
+```python
+def set_plan(goal: str, steps: List[str]) -> Plan
+```
+
+Manually set a plan.
+
+**Arguments**:
+
+- `goal` - The goal of the plan
+- `steps` - List of step descriptions
+  
+
+**Returns**:
+
+  The created Plan object
+
+<a id="spoon_ai.middleware.planning.create_planning_middleware"></a>
+
+#### `create_planning_middleware`
+
+```python
+def create_planning_middleware(auto_plan: bool = True,
+                               max_steps: int = 10) -> PlanningMiddleware
+```
+
+Create a planning middleware with common settings.
+
+**Arguments**:
+
+- `auto_plan` - Enable automatic plan generation
+- `max_steps` - Maximum steps in auto-generated plans
+  
+
+**Returns**:
+
+  Configured PlanningMiddleware
 
