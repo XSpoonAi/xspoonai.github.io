@@ -7,6 +7,14 @@ title: spoon_ai.callbacks
 # Table of Contents
 
 * [spoon\_ai.callbacks](#spoon_ai.callbacks)
+* [spoon\_ai.callbacks.manager](#spoon_ai.callbacks.manager)
+  * [CallbackManager](#spoon_ai.callbacks.manager.CallbackManager)
+* [spoon\_ai.callbacks.stream\_event](#spoon_ai.callbacks.stream_event)
+  * [StreamEventCallbackHandler](#spoon_ai.callbacks.stream_event.StreamEventCallbackHandler)
+* [spoon\_ai.callbacks.streaming\_stdout](#spoon_ai.callbacks.streaming_stdout)
+  * [StreamingStdOutCallbackHandler](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler)
+    * [on\_llm\_new\_token](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_new_token)
+    * [on\_llm\_end](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_end)
 * [spoon\_ai.callbacks.skill\_callback](#spoon_ai.callbacks.skill_callback)
   * [SkillCallbackHandler](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler)
     * [on\_skill\_start](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_start)
@@ -17,6 +25,8 @@ title: spoon_ai.callbacks
   * [MetricsSkillCallback](#spoon_ai.callbacks.skill_callback.MetricsSkillCallback)
     * [get\_metrics](#spoon_ai.callbacks.skill_callback.MetricsSkillCallback.get_metrics)
     * [reset](#spoon_ai.callbacks.skill_callback.MetricsSkillCallback.reset)
+* [spoon\_ai.callbacks.statistics](#spoon_ai.callbacks.statistics)
+  * [StreamingStatisticsCallback](#spoon_ai.callbacks.statistics.StreamingStatisticsCallback)
 * [spoon\_ai.callbacks.base](#spoon_ai.callbacks.base)
   * [RetrieverManagerMixin](#spoon_ai.callbacks.base.RetrieverManagerMixin)
     * [on\_retriever\_start](#spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_start)
@@ -48,16 +58,6 @@ title: spoon_ai.callbacks
     * [ignore\_retriever](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_retriever)
     * [ignore\_prompt](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_prompt)
   * [AsyncCallbackHandler](#spoon_ai.callbacks.base.AsyncCallbackHandler)
-* [spoon\_ai.callbacks.stream\_event](#spoon_ai.callbacks.stream_event)
-  * [StreamEventCallbackHandler](#spoon_ai.callbacks.stream_event.StreamEventCallbackHandler)
-* [spoon\_ai.callbacks.manager](#spoon_ai.callbacks.manager)
-  * [CallbackManager](#spoon_ai.callbacks.manager.CallbackManager)
-* [spoon\_ai.callbacks.streaming\_stdout](#spoon_ai.callbacks.streaming_stdout)
-  * [StreamingStdOutCallbackHandler](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler)
-    * [on\_llm\_new\_token](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_new_token)
-    * [on\_llm\_end](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_end)
-* [spoon\_ai.callbacks.statistics](#spoon_ai.callbacks.statistics)
-  * [StreamingStatisticsCallback](#spoon_ai.callbacks.statistics.StreamingStatisticsCallback)
 
 <a id="spoon_ai.callbacks"></a>
 
@@ -68,6 +68,78 @@ Callback system for streaming and event handling in Spoon AI.
 This module provides a comprehensive callback system similar to LangChain's callbacks,
 enabling real-time monitoring and event handling for LLM calls, agent execution,
 tool invocation, and graph workflows.
+
+<a id="spoon_ai.callbacks.manager"></a>
+
+# Module `spoon_ai.callbacks.manager`
+
+<a id="spoon_ai.callbacks.manager.CallbackManager"></a>
+
+## `CallbackManager` Objects
+
+```python
+class CallbackManager()
+```
+
+Lightweight dispatcher for callback handlers.
+
+<a id="spoon_ai.callbacks.stream_event"></a>
+
+# Module `spoon_ai.callbacks.stream_event`
+
+<a id="spoon_ai.callbacks.stream_event.StreamEventCallbackHandler"></a>
+
+## `StreamEventCallbackHandler` Objects
+
+```python
+class StreamEventCallbackHandler(BaseCallbackHandler)
+```
+
+Translate callback invocations into standardized stream events.
+
+<a id="spoon_ai.callbacks.streaming_stdout"></a>
+
+# Module `spoon_ai.callbacks.streaming_stdout`
+
+<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler"></a>
+
+## `StreamingStdOutCallbackHandler` Objects
+
+```python
+class StreamingStdOutCallbackHandler(BaseCallbackHandler)
+```
+
+Callback handler that streams tokens to standard output.
+
+<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_new_token"></a>
+
+#### `on_llm_new_token`
+
+```python
+def on_llm_new_token(token: str, **kwargs: Any) -> None
+```
+
+Print token to stdout immediately.
+
+**Arguments**:
+
+- `token` - The new token to print
+- `**kwargs` - Additional context (ignored)
+
+<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_end"></a>
+
+#### `on_llm_end`
+
+```python
+def on_llm_end(response: Any, **kwargs: Any) -> None
+```
+
+Print newline after LLM completes.
+
+**Arguments**:
+
+- `response` - The complete LLM response (ignored)
+- `**kwargs` - Additional context (ignored)
 
 <a id="spoon_ai.callbacks.skill_callback"></a>
 
@@ -238,6 +310,24 @@ def reset() -> None
 ```
 
 Reset all metrics.
+
+<a id="spoon_ai.callbacks.statistics"></a>
+
+# Module `spoon_ai.callbacks.statistics`
+
+<a id="spoon_ai.callbacks.statistics.StreamingStatisticsCallback"></a>
+
+## `StreamingStatisticsCallback` Objects
+
+```python
+class StreamingStatisticsCallback(BaseCallbackHandler, LLMManagerMixin)
+```
+
+Collect simple throughput statistics during streaming runs.
+
+By default, the callback prints summary metrics when the LLM finishes.
+Consumers can provide a custom ``print_fn`` to redirect output, or disable
+printing entirely and read the public attributes after execution.
 
 <a id="spoon_ai.callbacks.base"></a>
 
@@ -553,94 +643,4 @@ class AsyncCallbackHandler(BaseCallbackHandler)
 ```
 
 Async version of the callback handler base class.
-
-<a id="spoon_ai.callbacks.stream_event"></a>
-
-# Module `spoon_ai.callbacks.stream_event`
-
-<a id="spoon_ai.callbacks.stream_event.StreamEventCallbackHandler"></a>
-
-## `StreamEventCallbackHandler` Objects
-
-```python
-class StreamEventCallbackHandler(BaseCallbackHandler)
-```
-
-Translate callback invocations into standardized stream events.
-
-<a id="spoon_ai.callbacks.manager"></a>
-
-# Module `spoon_ai.callbacks.manager`
-
-<a id="spoon_ai.callbacks.manager.CallbackManager"></a>
-
-## `CallbackManager` Objects
-
-```python
-class CallbackManager()
-```
-
-Lightweight dispatcher for callback handlers.
-
-<a id="spoon_ai.callbacks.streaming_stdout"></a>
-
-# Module `spoon_ai.callbacks.streaming_stdout`
-
-<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler"></a>
-
-## `StreamingStdOutCallbackHandler` Objects
-
-```python
-class StreamingStdOutCallbackHandler(BaseCallbackHandler)
-```
-
-Callback handler that streams tokens to standard output.
-
-<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_new_token"></a>
-
-#### `on_llm_new_token`
-
-```python
-def on_llm_new_token(token: str, **kwargs: Any) -> None
-```
-
-Print token to stdout immediately.
-
-**Arguments**:
-
-- `token` - The new token to print
-- `**kwargs` - Additional context (ignored)
-
-<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_end"></a>
-
-#### `on_llm_end`
-
-```python
-def on_llm_end(response: Any, **kwargs: Any) -> None
-```
-
-Print newline after LLM completes.
-
-**Arguments**:
-
-- `response` - The complete LLM response (ignored)
-- `**kwargs` - Additional context (ignored)
-
-<a id="spoon_ai.callbacks.statistics"></a>
-
-# Module `spoon_ai.callbacks.statistics`
-
-<a id="spoon_ai.callbacks.statistics.StreamingStatisticsCallback"></a>
-
-## `StreamingStatisticsCallback` Objects
-
-```python
-class StreamingStatisticsCallback(BaseCallbackHandler, LLMManagerMixin)
-```
-
-Collect simple throughput statistics during streaming runs.
-
-By default, the callback prints summary metrics when the LLM finishes.
-Consumers can provide a custom ``print_fn`` to redirect output, or disable
-printing entirely and read the public attributes after execution.
 

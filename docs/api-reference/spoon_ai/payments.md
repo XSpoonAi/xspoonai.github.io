@@ -7,21 +7,11 @@ title: spoon_ai.payments
 # Table of Contents
 
 * [spoon\_ai.payments](#spoon_ai.payments)
-* [spoon\_ai.payments.app](#spoon_ai.payments.app)
-* [spoon\_ai.payments.facilitator\_client](#spoon_ai.payments.facilitator_client)
-  * [X402FacilitatorClient](#spoon_ai.payments.facilitator_client.X402FacilitatorClient)
 * [spoon\_ai.payments.exceptions](#spoon_ai.payments.exceptions)
   * [X402PaymentError](#spoon_ai.payments.exceptions.X402PaymentError)
   * [X402ConfigurationError](#spoon_ai.payments.exceptions.X402ConfigurationError)
   * [X402VerificationError](#spoon_ai.payments.exceptions.X402VerificationError)
   * [X402SettlementError](#spoon_ai.payments.exceptions.X402SettlementError)
-* [spoon\_ai.payments.models](#spoon_ai.payments.models)
-  * [X402PaymentRequest](#spoon_ai.payments.models.X402PaymentRequest)
-  * [X402VerifyResult](#spoon_ai.payments.models.X402VerifyResult)
-  * [X402SettleResult](#spoon_ai.payments.models.X402SettleResult)
-  * [X402PaymentOutcome](#spoon_ai.payments.models.X402PaymentOutcome)
-  * [X402PaymentReceipt](#spoon_ai.payments.models.X402PaymentReceipt)
-* [spoon\_ai.payments.cli](#spoon_ai.payments.cli)
 * [spoon\_ai.payments.config](#spoon_ai.payments.config)
   * [X402ConfigurationError](#spoon_ai.payments.config.X402ConfigurationError)
   * [X402PaywallBranding](#spoon_ai.payments.config.X402PaywallBranding)
@@ -30,6 +20,13 @@ title: spoon_ai.payments
     * [amount\_in\_atomic\_units](#spoon_ai.payments.config.X402Settings.amount_in_atomic_units)
     * [build\_asset\_extra](#spoon_ai.payments.config.X402Settings.build_asset_extra)
     * [load](#spoon_ai.payments.config.X402Settings.load)
+* [spoon\_ai.payments.models](#spoon_ai.payments.models)
+  * [X402PaymentRequest](#spoon_ai.payments.models.X402PaymentRequest)
+  * [X402VerifyResult](#spoon_ai.payments.models.X402VerifyResult)
+  * [X402SettleResult](#spoon_ai.payments.models.X402SettleResult)
+  * [X402PaymentOutcome](#spoon_ai.payments.models.X402PaymentOutcome)
+  * [X402PaymentReceipt](#spoon_ai.payments.models.X402PaymentReceipt)
+* [spoon\_ai.payments.app](#spoon_ai.payments.app)
 * [spoon\_ai.payments.x402\_service](#spoon_ai.payments.x402_service)
   * [X402PaymentService](#spoon_ai.payments.x402_service.X402PaymentService)
     * [discover\_resources](#spoon_ai.payments.x402_service.X402PaymentService.discover_resources)
@@ -38,6 +35,9 @@ title: spoon_ai.payments
     * [decode\_payment\_response](#spoon_ai.payments.x402_service.X402PaymentService.decode_payment_response)
 * [spoon\_ai.payments.server](#spoon_ai.payments.server)
   * [create\_paywalled\_router](#spoon_ai.payments.server.create_paywalled_router)
+* [spoon\_ai.payments.facilitator\_client](#spoon_ai.payments.facilitator_client)
+  * [X402FacilitatorClient](#spoon_ai.payments.facilitator_client.X402FacilitatorClient)
+* [spoon\_ai.payments.cli](#spoon_ai.payments.cli)
 
 <a id="spoon_ai.payments"></a>
 
@@ -48,24 +48,6 @@ Payment utilities for integrating the SpoonOS core with the x402 payments protoc
 This package wraps the upstream `x402` Python SDK with configuration and service
 abstractions that align to SpoonOS conventions (config.json priority, .env overrides,
 and async-friendly helper utilities).
-
-<a id="spoon_ai.payments.app"></a>
-
-# Module `spoon_ai.payments.app`
-
-<a id="spoon_ai.payments.facilitator_client"></a>
-
-# Module `spoon_ai.payments.facilitator_client`
-
-<a id="spoon_ai.payments.facilitator_client.X402FacilitatorClient"></a>
-
-## `X402FacilitatorClient` Objects
-
-```python
-class X402FacilitatorClient()
-```
-
-Thin wrapper over the upstream facilitator client with async header hooks.
 
 <a id="spoon_ai.payments.exceptions"></a>
 
@@ -110,64 +92,6 @@ class X402SettlementError(X402PaymentError)
 ```
 
 Raised when settlement fails or returns an error response.
-
-<a id="spoon_ai.payments.models"></a>
-
-# Module `spoon_ai.payments.models`
-
-<a id="spoon_ai.payments.models.X402PaymentRequest"></a>
-
-## `X402PaymentRequest` Objects
-
-```python
-class X402PaymentRequest(BaseModel)
-```
-
-Describes a payment requirement that should be issued for a resource.
-
-<a id="spoon_ai.payments.models.X402VerifyResult"></a>
-
-## `X402VerifyResult` Objects
-
-```python
-class X402VerifyResult(BaseModel)
-```
-
-Captures the facilitator verification response.
-
-<a id="spoon_ai.payments.models.X402SettleResult"></a>
-
-## `X402SettleResult` Objects
-
-```python
-class X402SettleResult(BaseModel)
-```
-
-Captures settlement details.
-
-<a id="spoon_ai.payments.models.X402PaymentOutcome"></a>
-
-## `X402PaymentOutcome` Objects
-
-```python
-class X402PaymentOutcome(BaseModel)
-```
-
-Aggregates verification and settlement outcomes.
-
-<a id="spoon_ai.payments.models.X402PaymentReceipt"></a>
-
-## `X402PaymentReceipt` Objects
-
-```python
-class X402PaymentReceipt(BaseModel)
-```
-
-Decoded representation of the X-PAYMENT-RESPONSE header.
-
-<a id="spoon_ai.payments.cli"></a>
-
-# Module `spoon_ai.payments.cli`
 
 <a id="spoon_ai.payments.config"></a>
 
@@ -245,6 +169,64 @@ def load(cls,
 ```
 
 Load settings from config.json with .env fallbacks.
+
+<a id="spoon_ai.payments.models"></a>
+
+# Module `spoon_ai.payments.models`
+
+<a id="spoon_ai.payments.models.X402PaymentRequest"></a>
+
+## `X402PaymentRequest` Objects
+
+```python
+class X402PaymentRequest(BaseModel)
+```
+
+Describes a payment requirement that should be issued for a resource.
+
+<a id="spoon_ai.payments.models.X402VerifyResult"></a>
+
+## `X402VerifyResult` Objects
+
+```python
+class X402VerifyResult(BaseModel)
+```
+
+Captures the facilitator verification response.
+
+<a id="spoon_ai.payments.models.X402SettleResult"></a>
+
+## `X402SettleResult` Objects
+
+```python
+class X402SettleResult(BaseModel)
+```
+
+Captures settlement details.
+
+<a id="spoon_ai.payments.models.X402PaymentOutcome"></a>
+
+## `X402PaymentOutcome` Objects
+
+```python
+class X402PaymentOutcome(BaseModel)
+```
+
+Aggregates verification and settlement outcomes.
+
+<a id="spoon_ai.payments.models.X402PaymentReceipt"></a>
+
+## `X402PaymentReceipt` Objects
+
+```python
+class X402PaymentReceipt(BaseModel)
+```
+
+Decoded representation of the X-PAYMENT-RESPONSE header.
+
+<a id="spoon_ai.payments.app"></a>
+
+# Module `spoon_ai.payments.app`
 
 <a id="spoon_ai.payments.x402_service"></a>
 
@@ -336,4 +318,22 @@ Build a FastAPI router that protects agent invocations behind an x402 paywall.
 **Returns**:
 
 - `APIRouter` - Router with `/invoke/&#123;agent_name&#125;` endpoint ready to mount.
+
+<a id="spoon_ai.payments.facilitator_client"></a>
+
+# Module `spoon_ai.payments.facilitator_client`
+
+<a id="spoon_ai.payments.facilitator_client.X402FacilitatorClient"></a>
+
+## `X402FacilitatorClient` Objects
+
+```python
+class X402FacilitatorClient()
+```
+
+Thin wrapper over the upstream facilitator client with async header hooks.
+
+<a id="spoon_ai.payments.cli"></a>
+
+# Module `spoon_ai.payments.cli`
 

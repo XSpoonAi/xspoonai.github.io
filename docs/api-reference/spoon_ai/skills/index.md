@@ -7,20 +7,6 @@ title: spoon_ai.skills
 # Table of Contents
 
 * [spoon\_ai.skills](#spoon_ai.skills)
-* [spoon\_ai.skills.loader](#spoon_ai.skills.loader)
-  * [SkillLoader](#spoon_ai.skills.loader.SkillLoader)
-    * [\_\_init\_\_](#spoon_ai.skills.loader.SkillLoader.__init__)
-    * [paths](#spoon_ai.skills.loader.SkillLoader.paths)
-    * [add\_path](#spoon_ai.skills.loader.SkillLoader.add_path)
-    * [discover](#spoon_ai.skills.loader.SkillLoader.discover)
-    * [parse](#spoon_ai.skills.loader.SkillLoader.parse)
-    * [load\_tools](#spoon_ai.skills.loader.SkillLoader.load_tools)
-    * [load](#spoon_ai.skills.loader.SkillLoader.load)
-    * [load\_all](#spoon_ai.skills.loader.SkillLoader.load_all)
-    * [get\_skill](#spoon_ai.skills.loader.SkillLoader.get_skill)
-    * [get\_tools](#spoon_ai.skills.loader.SkillLoader.get_tools)
-    * [clear\_cache](#spoon_ai.skills.loader.SkillLoader.clear_cache)
-    * [reload](#spoon_ai.skills.loader.SkillLoader.reload)
 * [spoon\_ai.skills.manager](#spoon_ai.skills.manager)
   * [SkillManager](#spoon_ai.skills.manager.SkillManager)
     * [\_\_init\_\_](#spoon_ai.skills.manager.SkillManager.__init__)
@@ -67,12 +53,6 @@ title: spoon_ai.skills
     * [name](#spoon_ai.skills.models.Skill.name)
     * [description](#spoon_ai.skills.models.Skill.description)
     * [get\_prompt\_injection](#spoon_ai.skills.models.Skill.get_prompt_injection)
-* [spoon\_ai.skills.script\_tool](#spoon_ai.skills.script_tool)
-  * [ScriptTool](#spoon_ai.skills.script_tool.ScriptTool)
-    * [\_\_init\_\_](#spoon_ai.skills.script_tool.ScriptTool.__init__)
-    * [execute](#spoon_ai.skills.script_tool.ScriptTool.execute)
-    * [to\_param](#spoon_ai.skills.script_tool.ScriptTool.to_param)
-  * [create\_script\_tools](#spoon_ai.skills.script_tool.create_script_tools)
 * [spoon\_ai.skills.executor](#spoon_ai.skills.executor)
   * [MAX\_OUTPUT\_SIZE](#spoon_ai.skills.executor.MAX_OUTPUT_SIZE)
   * [ScriptExecutionError](#spoon_ai.skills.executor.ScriptExecutionError)
@@ -86,6 +66,20 @@ title: spoon_ai.skills
   * [get\_executor](#spoon_ai.skills.executor.get_executor)
   * [configure\_executor](#spoon_ai.skills.executor.configure_executor)
   * [set\_scripts\_enabled](#spoon_ai.skills.executor.set_scripts_enabled)
+* [spoon\_ai.skills.loader](#spoon_ai.skills.loader)
+  * [SkillLoader](#spoon_ai.skills.loader.SkillLoader)
+    * [\_\_init\_\_](#spoon_ai.skills.loader.SkillLoader.__init__)
+    * [paths](#spoon_ai.skills.loader.SkillLoader.paths)
+    * [add\_path](#spoon_ai.skills.loader.SkillLoader.add_path)
+    * [discover](#spoon_ai.skills.loader.SkillLoader.discover)
+    * [parse](#spoon_ai.skills.loader.SkillLoader.parse)
+    * [load\_tools](#spoon_ai.skills.loader.SkillLoader.load_tools)
+    * [load](#spoon_ai.skills.loader.SkillLoader.load)
+    * [load\_all](#spoon_ai.skills.loader.SkillLoader.load_all)
+    * [get\_skill](#spoon_ai.skills.loader.SkillLoader.get_skill)
+    * [get\_tools](#spoon_ai.skills.loader.SkillLoader.get_tools)
+    * [clear\_cache](#spoon_ai.skills.loader.SkillLoader.clear_cache)
+    * [reload](#spoon_ai.skills.loader.SkillLoader.reload)
 * [spoon\_ai.skills.registry](#spoon_ai.skills.registry)
   * [SkillRegistry](#spoon_ai.skills.registry.SkillRegistry)
     * [register](#spoon_ai.skills.registry.SkillRegistry.register)
@@ -99,6 +93,12 @@ title: spoon_ai.skills
     * [find\_by\_intent](#spoon_ai.skills.registry.SkillRegistry.find_by_intent)
     * [find\_all\_matching](#spoon_ai.skills.registry.SkillRegistry.find_all_matching)
     * [get\_intent\_categories](#spoon_ai.skills.registry.SkillRegistry.get_intent_categories)
+* [spoon\_ai.skills.script\_tool](#spoon_ai.skills.script_tool)
+  * [ScriptTool](#spoon_ai.skills.script_tool.ScriptTool)
+    * [\_\_init\_\_](#spoon_ai.skills.script_tool.ScriptTool.__init__)
+    * [execute](#spoon_ai.skills.script_tool.ScriptTool.execute)
+    * [to\_param](#spoon_ai.skills.script_tool.ScriptTool.to_param)
+  * [create\_script\_tools](#spoon_ai.skills.script_tool.create_script_tools)
 
 <a id="spoon_ai.skills"></a>
 
@@ -137,222 +137,6 @@ Usage:
 
     # Find matching skills for user input
     matches = await manager.find_matching_skills("research quantum computing")
-
-<a id="spoon_ai.skills.loader"></a>
-
-# Module `spoon_ai.skills.loader`
-
-Skill loader for parsing SKILL.md files.
-
-Discovers and loads skills from multiple paths:
-1. ~/.spoon/skills/ - Global user skills
-2. ./skills/ - Project-local skills
-3. Additional user-specified paths
-
-Note: No built-in skills are included by default.
-Use additional_paths to specify skill directories.
-
-<a id="spoon_ai.skills.loader.SkillLoader"></a>
-
-## `SkillLoader` Objects
-
-```python
-class SkillLoader()
-```
-
-Loads skills from SKILL.md files with optional Python tool modules.
-
-SKILL.md Format:
----
-name: my-skill
-description: What this skill does
-version: 1.0.0
-triggers:
-  - type: keyword
-    keywords: [analyze, review]
----
-
-__Skill Instructions__
-
-
-Markdown content here...
-
-<a id="spoon_ai.skills.loader.SkillLoader.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(additional_paths: Optional[List[Path]] = None,
-             include_default_paths: bool = True)
-```
-
-Initialize loader with skill search paths.
-
-**Arguments**:
-
-- `additional_paths` - Additional directories to search for skills
-
-<a id="spoon_ai.skills.loader.SkillLoader.paths"></a>
-
-#### `paths`
-
-```python
-@property
-def paths() -> List[Path]
-```
-
-Get configured skill paths.
-
-<a id="spoon_ai.skills.loader.SkillLoader.add_path"></a>
-
-#### `add_path`
-
-```python
-def add_path(path: Path) -> None
-```
-
-Add a path to search for skills.
-
-<a id="spoon_ai.skills.loader.SkillLoader.discover"></a>
-
-#### `discover`
-
-```python
-def discover() -> List[Path]
-```
-
-Discover all SKILL.md files in configured paths.
-
-**Returns**:
-
-  List of paths to SKILL.md files
-
-<a id="spoon_ai.skills.loader.SkillLoader.parse"></a>
-
-#### `parse`
-
-```python
-def parse(file_path: Path) -> Tuple[SkillMetadata, str]
-```
-
-Parse a SKILL.md file into metadata and instructions.
-
-**Arguments**:
-
-- `file_path` - Path to SKILL.md file
-  
-
-**Returns**:
-
-  Tuple of (SkillMetadata, instructions_markdown)
-  
-
-**Raises**:
-
-- `ValueError` - If file format is invalid
-
-<a id="spoon_ai.skills.loader.SkillLoader.load_tools"></a>
-
-#### `load_tools`
-
-```python
-def load_tools(skill_dir: Path) -> List[BaseTool]
-```
-
-Load Python tools from a skill directory.
-
-Looks for tools.py containing BaseTool subclasses.
-
-**Arguments**:
-
-- `skill_dir` - Directory containing the skill
-  
-
-**Returns**:
-
-  List of loaded tool instances
-
-<a id="spoon_ai.skills.loader.SkillLoader.load"></a>
-
-#### `load`
-
-```python
-def load(file_path: Path) -> Skill
-```
-
-Load a complete skill from SKILL.md and optional modules.
-
-**Arguments**:
-
-- `file_path` - Path to SKILL.md file
-  
-
-**Returns**:
-
-  Loaded Skill instance
-
-<a id="spoon_ai.skills.loader.SkillLoader.load_all"></a>
-
-#### `load_all`
-
-```python
-def load_all() -> Dict[str, Skill]
-```
-
-Discover and load all skills from configured paths.
-
-**Returns**:
-
-  Dictionary mapping skill names to Skill instances
-
-<a id="spoon_ai.skills.loader.SkillLoader.get_skill"></a>
-
-#### `get_skill`
-
-```python
-def get_skill(name: str) -> Optional[Skill]
-```
-
-Get a loaded skill by name.
-
-<a id="spoon_ai.skills.loader.SkillLoader.get_tools"></a>
-
-#### `get_tools`
-
-```python
-def get_tools(skill_name: str) -> List[BaseTool]
-```
-
-Get loaded tools for a skill.
-
-<a id="spoon_ai.skills.loader.SkillLoader.clear_cache"></a>
-
-#### `clear_cache`
-
-```python
-def clear_cache() -> None
-```
-
-Clear all cached skills and tools.
-
-<a id="spoon_ai.skills.loader.SkillLoader.reload"></a>
-
-#### `reload`
-
-```python
-def reload(name: str) -> Optional[Skill]
-```
-
-Reload a specific skill from disk.
-
-**Arguments**:
-
-- `name` - Skill name to reload
-  
-
-**Returns**:
-
-  Reloaded Skill or None if not found
 
 <a id="spoon_ai.skills.manager"></a>
 
@@ -991,108 +775,6 @@ Generate prompt content to inject into agent's system prompt.
 
   Formatted skill instructions with metadata
 
-<a id="spoon_ai.skills.script_tool"></a>
-
-# Module `spoon_ai.skills.script_tool`
-
-Script-based tool for agent integration.
-
-Wraps SkillScript as a BaseTool that agents can call.
-AI decides how to use scripts - users only control whether scripts are allowed.
-
-<a id="spoon_ai.skills.script_tool.ScriptTool"></a>
-
-## `ScriptTool` Objects
-
-```python
-class ScriptTool(BaseTool)
-```
-
-Tool wrapper for skill scripts.
-
-Exposes a SkillScript as a callable tool that agents can invoke.
-When the script defines an ``input_schema``, the tool parameters are
-derived from that schema so the LLM receives a structured contract.
-Otherwise a generic ``input`` string parameter is used for backward
-compatibility.
-
-<a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(script: SkillScript,
-             skill_name: str,
-             working_directory: Optional[str] = None)
-```
-
-Create a tool from a script definition.
-
-**Arguments**:
-
-- `script` - SkillScript to wrap
-- `skill_name` - Parent skill name
-- `working_directory` - Base working directory
-
-<a id="spoon_ai.skills.script_tool.ScriptTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(input: Optional[str] = None, **kwargs) -> str
-```
-
-Execute the script.
-
-When the script declares an ``input_schema``, the LLM's structured
-kwargs are serialized to JSON and piped to stdin.  For legacy scripts
-that only declare a generic ``input`` string, the raw value is passed
-through as-is.
-
-**Arguments**:
-
-- `input` - Optional input text (legacy path)
-- `**kwargs` - Structured arguments matching input_schema
-  
-
-**Returns**:
-
-  Script output as string
-
-<a id="spoon_ai.skills.script_tool.ScriptTool.to_param"></a>
-
-#### `to_param`
-
-```python
-def to_param() -> dict
-```
-
-Generate OpenAI-compatible function definition.
-
-<a id="spoon_ai.skills.script_tool.create_script_tools"></a>
-
-#### `create_script_tools`
-
-```python
-def create_script_tools(
-        skill_name: str,
-        scripts: List[SkillScript],
-        working_directory: Optional[str] = None) -> List[ScriptTool]
-```
-
-Create ScriptTool instances from script definitions.
-
-**Arguments**:
-
-- `skill_name` - Parent skill name
-- `scripts` - List of script definitions
-- `working_directory` - Base working directory (fallback if script has none)
-  
-
-**Returns**:
-
-  List of ScriptTool instances
-
 <a id="spoon_ai.skills.executor"></a>
 
 # Module `spoon_ai.skills.executor`
@@ -1251,6 +933,222 @@ def set_scripts_enabled(enabled: bool) -> None
 ```
 
 Enable or disable script execution globally.
+
+<a id="spoon_ai.skills.loader"></a>
+
+# Module `spoon_ai.skills.loader`
+
+Skill loader for parsing SKILL.md files.
+
+Discovers and loads skills from multiple paths:
+1. ~/.spoon/skills/ - Global user skills
+2. ./skills/ - Project-local skills
+3. Additional user-specified paths
+
+Note: No built-in skills are included by default.
+Use additional_paths to specify skill directories.
+
+<a id="spoon_ai.skills.loader.SkillLoader"></a>
+
+## `SkillLoader` Objects
+
+```python
+class SkillLoader()
+```
+
+Loads skills from SKILL.md files with optional Python tool modules.
+
+SKILL.md Format:
+---
+name: my-skill
+description: What this skill does
+version: 1.0.0
+triggers:
+  - type: keyword
+    keywords: [analyze, review]
+---
+
+__Skill Instructions__
+
+
+Markdown content here...
+
+<a id="spoon_ai.skills.loader.SkillLoader.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(additional_paths: Optional[List[Path]] = None,
+             include_default_paths: bool = True)
+```
+
+Initialize loader with skill search paths.
+
+**Arguments**:
+
+- `additional_paths` - Additional directories to search for skills
+
+<a id="spoon_ai.skills.loader.SkillLoader.paths"></a>
+
+#### `paths`
+
+```python
+@property
+def paths() -> List[Path]
+```
+
+Get configured skill paths.
+
+<a id="spoon_ai.skills.loader.SkillLoader.add_path"></a>
+
+#### `add_path`
+
+```python
+def add_path(path: Path) -> None
+```
+
+Add a path to search for skills.
+
+<a id="spoon_ai.skills.loader.SkillLoader.discover"></a>
+
+#### `discover`
+
+```python
+def discover() -> List[Path]
+```
+
+Discover all SKILL.md files in configured paths.
+
+**Returns**:
+
+  List of paths to SKILL.md files
+
+<a id="spoon_ai.skills.loader.SkillLoader.parse"></a>
+
+#### `parse`
+
+```python
+def parse(file_path: Path) -> Tuple[SkillMetadata, str]
+```
+
+Parse a SKILL.md file into metadata and instructions.
+
+**Arguments**:
+
+- `file_path` - Path to SKILL.md file
+  
+
+**Returns**:
+
+  Tuple of (SkillMetadata, instructions_markdown)
+  
+
+**Raises**:
+
+- `ValueError` - If file format is invalid
+
+<a id="spoon_ai.skills.loader.SkillLoader.load_tools"></a>
+
+#### `load_tools`
+
+```python
+def load_tools(skill_dir: Path) -> List[BaseTool]
+```
+
+Load Python tools from a skill directory.
+
+Looks for tools.py containing BaseTool subclasses.
+
+**Arguments**:
+
+- `skill_dir` - Directory containing the skill
+  
+
+**Returns**:
+
+  List of loaded tool instances
+
+<a id="spoon_ai.skills.loader.SkillLoader.load"></a>
+
+#### `load`
+
+```python
+def load(file_path: Path) -> Skill
+```
+
+Load a complete skill from SKILL.md and optional modules.
+
+**Arguments**:
+
+- `file_path` - Path to SKILL.md file
+  
+
+**Returns**:
+
+  Loaded Skill instance
+
+<a id="spoon_ai.skills.loader.SkillLoader.load_all"></a>
+
+#### `load_all`
+
+```python
+def load_all() -> Dict[str, Skill]
+```
+
+Discover and load all skills from configured paths.
+
+**Returns**:
+
+  Dictionary mapping skill names to Skill instances
+
+<a id="spoon_ai.skills.loader.SkillLoader.get_skill"></a>
+
+#### `get_skill`
+
+```python
+def get_skill(name: str) -> Optional[Skill]
+```
+
+Get a loaded skill by name.
+
+<a id="spoon_ai.skills.loader.SkillLoader.get_tools"></a>
+
+#### `get_tools`
+
+```python
+def get_tools(skill_name: str) -> List[BaseTool]
+```
+
+Get loaded tools for a skill.
+
+<a id="spoon_ai.skills.loader.SkillLoader.clear_cache"></a>
+
+#### `clear_cache`
+
+```python
+def clear_cache() -> None
+```
+
+Clear all cached skills and tools.
+
+<a id="spoon_ai.skills.loader.SkillLoader.reload"></a>
+
+#### `reload`
+
+```python
+def reload(name: str) -> Optional[Skill]
+```
+
+Reload a specific skill from disk.
+
+**Arguments**:
+
+- `name` - Skill name to reload
+  
+
+**Returns**:
+
+  Reloaded Skill or None if not found
 
 <a id="spoon_ai.skills.registry"></a>
 
@@ -1456,4 +1354,106 @@ def get_intent_categories() -> List[str]
 ```
 
 Get all registered intent categories.
+
+<a id="spoon_ai.skills.script_tool"></a>
+
+# Module `spoon_ai.skills.script_tool`
+
+Script-based tool for agent integration.
+
+Wraps SkillScript as a BaseTool that agents can call.
+AI decides how to use scripts - users only control whether scripts are allowed.
+
+<a id="spoon_ai.skills.script_tool.ScriptTool"></a>
+
+## `ScriptTool` Objects
+
+```python
+class ScriptTool(BaseTool)
+```
+
+Tool wrapper for skill scripts.
+
+Exposes a SkillScript as a callable tool that agents can invoke.
+When the script defines an ``input_schema``, the tool parameters are
+derived from that schema so the LLM receives a structured contract.
+Otherwise a generic ``input`` string parameter is used for backward
+compatibility.
+
+<a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(script: SkillScript,
+             skill_name: str,
+             working_directory: Optional[str] = None)
+```
+
+Create a tool from a script definition.
+
+**Arguments**:
+
+- `script` - SkillScript to wrap
+- `skill_name` - Parent skill name
+- `working_directory` - Base working directory
+
+<a id="spoon_ai.skills.script_tool.ScriptTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(input: Optional[str] = None, **kwargs) -> str
+```
+
+Execute the script.
+
+When the script declares an ``input_schema``, the LLM's structured
+kwargs are serialized to JSON and piped to stdin.  For legacy scripts
+that only declare a generic ``input`` string, the raw value is passed
+through as-is.
+
+**Arguments**:
+
+- `input` - Optional input text (legacy path)
+- `**kwargs` - Structured arguments matching input_schema
+  
+
+**Returns**:
+
+  Script output as string
+
+<a id="spoon_ai.skills.script_tool.ScriptTool.to_param"></a>
+
+#### `to_param`
+
+```python
+def to_param() -> dict
+```
+
+Generate OpenAI-compatible function definition.
+
+<a id="spoon_ai.skills.script_tool.create_script_tools"></a>
+
+#### `create_script_tools`
+
+```python
+def create_script_tools(
+        skill_name: str,
+        scripts: List[SkillScript],
+        working_directory: Optional[str] = None) -> List[ScriptTool]
+```
+
+Create ScriptTool instances from script definitions.
+
+**Arguments**:
+
+- `skill_name` - Parent skill name
+- `scripts` - List of script definitions
+- `working_directory` - Base working directory (fallback if script has none)
+  
+
+**Returns**:
+
+  List of ScriptTool instances
 
