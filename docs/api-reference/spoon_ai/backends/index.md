@@ -26,6 +26,40 @@ title: spoon_ai.backends
     * [upload\_files](#spoon_ai.backends.store.StoreBackend.upload_files)
     * [download\_files](#spoon_ai.backends.store.StoreBackend.download_files)
   * [create\_store\_backend](#spoon_ai.backends.store.create_store_backend)
+* [spoon\_ai.backends.composite](#spoon_ai.backends.composite)
+  * [CompositeBackend](#spoon_ai.backends.composite.CompositeBackend)
+    * [\_\_init\_\_](#spoon_ai.backends.composite.CompositeBackend.__init__)
+    * [ls\_info](#spoon_ai.backends.composite.CompositeBackend.ls_info)
+    * [als\_info](#spoon_ai.backends.composite.CompositeBackend.als_info)
+    * [read](#spoon_ai.backends.composite.CompositeBackend.read)
+    * [aread](#spoon_ai.backends.composite.CompositeBackend.aread)
+    * [write](#spoon_ai.backends.composite.CompositeBackend.write)
+    * [awrite](#spoon_ai.backends.composite.CompositeBackend.awrite)
+    * [edit](#spoon_ai.backends.composite.CompositeBackend.edit)
+    * [aedit](#spoon_ai.backends.composite.CompositeBackend.aedit)
+    * [grep\_raw](#spoon_ai.backends.composite.CompositeBackend.grep_raw)
+    * [agrep\_raw](#spoon_ai.backends.composite.CompositeBackend.agrep_raw)
+    * [glob\_info](#spoon_ai.backends.composite.CompositeBackend.glob_info)
+    * [aglob\_info](#spoon_ai.backends.composite.CompositeBackend.aglob_info)
+    * [execute](#spoon_ai.backends.composite.CompositeBackend.execute)
+    * [aexecute](#spoon_ai.backends.composite.CompositeBackend.aexecute)
+    * [upload\_files](#spoon_ai.backends.composite.CompositeBackend.upload_files)
+    * [aupload\_files](#spoon_ai.backends.composite.CompositeBackend.aupload_files)
+    * [download\_files](#spoon_ai.backends.composite.CompositeBackend.download_files)
+    * [adownload\_files](#spoon_ai.backends.composite.CompositeBackend.adownload_files)
+  * [create\_composite\_backend](#spoon_ai.backends.composite.create_composite_backend)
+* [spoon\_ai.backends.filesystem](#spoon_ai.backends.filesystem)
+  * [FilesystemBackend](#spoon_ai.backends.filesystem.FilesystemBackend)
+    * [\_\_init\_\_](#spoon_ai.backends.filesystem.FilesystemBackend.__init__)
+    * [ls\_info](#spoon_ai.backends.filesystem.FilesystemBackend.ls_info)
+    * [read](#spoon_ai.backends.filesystem.FilesystemBackend.read)
+    * [write](#spoon_ai.backends.filesystem.FilesystemBackend.write)
+    * [edit](#spoon_ai.backends.filesystem.FilesystemBackend.edit)
+    * [grep\_raw](#spoon_ai.backends.filesystem.FilesystemBackend.grep_raw)
+    * [glob\_info](#spoon_ai.backends.filesystem.FilesystemBackend.glob_info)
+    * [upload\_files](#spoon_ai.backends.filesystem.FilesystemBackend.upload_files)
+    * [download\_files](#spoon_ai.backends.filesystem.FilesystemBackend.download_files)
+  * [create\_filesystem\_backend](#spoon_ai.backends.filesystem.create_filesystem_backend)
 * [spoon\_ai.backends.state](#spoon_ai.backends.state)
   * [StateBackend](#spoon_ai.backends.state.StateBackend)
     * [\_\_init\_\_](#spoon_ai.backends.state.StateBackend.__init__)
@@ -36,6 +70,27 @@ title: spoon_ai.backends
     * [grep\_raw](#spoon_ai.backends.state.StateBackend.grep_raw)
     * [glob\_info](#spoon_ai.backends.state.StateBackend.glob_info)
   * [create\_state\_backend](#spoon_ai.backends.state.create_state_backend)
+* [spoon\_ai.backends.sandbox](#spoon_ai.backends.sandbox)
+  * [BaseSandbox](#spoon_ai.backends.sandbox.BaseSandbox)
+    * [execute](#spoon_ai.backends.sandbox.BaseSandbox.execute)
+    * [aexecute](#spoon_ai.backends.sandbox.BaseSandbox.aexecute)
+    * [id](#spoon_ai.backends.sandbox.BaseSandbox.id)
+    * [ls\_info](#spoon_ai.backends.sandbox.BaseSandbox.ls_info)
+    * [read](#spoon_ai.backends.sandbox.BaseSandbox.read)
+    * [write](#spoon_ai.backends.sandbox.BaseSandbox.write)
+    * [edit](#spoon_ai.backends.sandbox.BaseSandbox.edit)
+    * [grep\_raw](#spoon_ai.backends.sandbox.BaseSandbox.grep_raw)
+    * [glob\_info](#spoon_ai.backends.sandbox.BaseSandbox.glob_info)
+    * [upload\_files](#spoon_ai.backends.sandbox.BaseSandbox.upload_files)
+    * [download\_files](#spoon_ai.backends.sandbox.BaseSandbox.download_files)
+    * [als\_info](#spoon_ai.backends.sandbox.BaseSandbox.als_info)
+    * [aread](#spoon_ai.backends.sandbox.BaseSandbox.aread)
+    * [awrite](#spoon_ai.backends.sandbox.BaseSandbox.awrite)
+    * [aedit](#spoon_ai.backends.sandbox.BaseSandbox.aedit)
+    * [agrep\_raw](#spoon_ai.backends.sandbox.BaseSandbox.agrep_raw)
+    * [aglob\_info](#spoon_ai.backends.sandbox.BaseSandbox.aglob_info)
+    * [aupload\_files](#spoon_ai.backends.sandbox.BaseSandbox.aupload_files)
+    * [adownload\_files](#spoon_ai.backends.sandbox.BaseSandbox.adownload_files)
 * [spoon\_ai.backends.utils](#spoon_ai.backends.utils)
   * [sanitize\_tool\_call\_id](#spoon_ai.backends.utils.sanitize_tool_call_id)
   * [validate\_path](#spoon_ai.backends.utils.validate_path)
@@ -90,61 +145,6 @@ title: spoon_ai.backends
     * [id](#spoon_ai.backends.protocol.SandboxBackendProtocol.id)
   * [BackendFactory](#spoon_ai.backends.protocol.BackendFactory)
   * [BACKEND\_TYPES](#spoon_ai.backends.protocol.BACKEND_TYPES)
-* [spoon\_ai.backends.sandbox](#spoon_ai.backends.sandbox)
-  * [BaseSandbox](#spoon_ai.backends.sandbox.BaseSandbox)
-    * [execute](#spoon_ai.backends.sandbox.BaseSandbox.execute)
-    * [aexecute](#spoon_ai.backends.sandbox.BaseSandbox.aexecute)
-    * [id](#spoon_ai.backends.sandbox.BaseSandbox.id)
-    * [ls\_info](#spoon_ai.backends.sandbox.BaseSandbox.ls_info)
-    * [read](#spoon_ai.backends.sandbox.BaseSandbox.read)
-    * [write](#spoon_ai.backends.sandbox.BaseSandbox.write)
-    * [edit](#spoon_ai.backends.sandbox.BaseSandbox.edit)
-    * [grep\_raw](#spoon_ai.backends.sandbox.BaseSandbox.grep_raw)
-    * [glob\_info](#spoon_ai.backends.sandbox.BaseSandbox.glob_info)
-    * [upload\_files](#spoon_ai.backends.sandbox.BaseSandbox.upload_files)
-    * [download\_files](#spoon_ai.backends.sandbox.BaseSandbox.download_files)
-    * [als\_info](#spoon_ai.backends.sandbox.BaseSandbox.als_info)
-    * [aread](#spoon_ai.backends.sandbox.BaseSandbox.aread)
-    * [awrite](#spoon_ai.backends.sandbox.BaseSandbox.awrite)
-    * [aedit](#spoon_ai.backends.sandbox.BaseSandbox.aedit)
-    * [agrep\_raw](#spoon_ai.backends.sandbox.BaseSandbox.agrep_raw)
-    * [aglob\_info](#spoon_ai.backends.sandbox.BaseSandbox.aglob_info)
-    * [aupload\_files](#spoon_ai.backends.sandbox.BaseSandbox.aupload_files)
-    * [adownload\_files](#spoon_ai.backends.sandbox.BaseSandbox.adownload_files)
-* [spoon\_ai.backends.filesystem](#spoon_ai.backends.filesystem)
-  * [FilesystemBackend](#spoon_ai.backends.filesystem.FilesystemBackend)
-    * [\_\_init\_\_](#spoon_ai.backends.filesystem.FilesystemBackend.__init__)
-    * [ls\_info](#spoon_ai.backends.filesystem.FilesystemBackend.ls_info)
-    * [read](#spoon_ai.backends.filesystem.FilesystemBackend.read)
-    * [write](#spoon_ai.backends.filesystem.FilesystemBackend.write)
-    * [edit](#spoon_ai.backends.filesystem.FilesystemBackend.edit)
-    * [grep\_raw](#spoon_ai.backends.filesystem.FilesystemBackend.grep_raw)
-    * [glob\_info](#spoon_ai.backends.filesystem.FilesystemBackend.glob_info)
-    * [upload\_files](#spoon_ai.backends.filesystem.FilesystemBackend.upload_files)
-    * [download\_files](#spoon_ai.backends.filesystem.FilesystemBackend.download_files)
-  * [create\_filesystem\_backend](#spoon_ai.backends.filesystem.create_filesystem_backend)
-* [spoon\_ai.backends.composite](#spoon_ai.backends.composite)
-  * [CompositeBackend](#spoon_ai.backends.composite.CompositeBackend)
-    * [\_\_init\_\_](#spoon_ai.backends.composite.CompositeBackend.__init__)
-    * [ls\_info](#spoon_ai.backends.composite.CompositeBackend.ls_info)
-    * [als\_info](#spoon_ai.backends.composite.CompositeBackend.als_info)
-    * [read](#spoon_ai.backends.composite.CompositeBackend.read)
-    * [aread](#spoon_ai.backends.composite.CompositeBackend.aread)
-    * [write](#spoon_ai.backends.composite.CompositeBackend.write)
-    * [awrite](#spoon_ai.backends.composite.CompositeBackend.awrite)
-    * [edit](#spoon_ai.backends.composite.CompositeBackend.edit)
-    * [aedit](#spoon_ai.backends.composite.CompositeBackend.aedit)
-    * [grep\_raw](#spoon_ai.backends.composite.CompositeBackend.grep_raw)
-    * [agrep\_raw](#spoon_ai.backends.composite.CompositeBackend.agrep_raw)
-    * [glob\_info](#spoon_ai.backends.composite.CompositeBackend.glob_info)
-    * [aglob\_info](#spoon_ai.backends.composite.CompositeBackend.aglob_info)
-    * [execute](#spoon_ai.backends.composite.CompositeBackend.execute)
-    * [aexecute](#spoon_ai.backends.composite.CompositeBackend.aexecute)
-    * [upload\_files](#spoon_ai.backends.composite.CompositeBackend.upload_files)
-    * [aupload\_files](#spoon_ai.backends.composite.CompositeBackend.aupload_files)
-    * [download\_files](#spoon_ai.backends.composite.CompositeBackend.download_files)
-    * [adownload\_files](#spoon_ai.backends.composite.CompositeBackend.adownload_files)
-  * [create\_composite\_backend](#spoon_ai.backends.composite.create_composite_backend)
 
 <a id="spoon_ai.backends"></a>
 
@@ -525,6 +525,515 @@ Create a StoreBackend.
     backend = create_store_backend(assistant_id="agent-001")
     ```
 
+<a id="spoon_ai.backends.composite"></a>
+
+# Module `spoon_ai.backends.composite`
+
+CompositeBackend: Route operations to different backends based on path prefix.
+
+Enables mixing multiple storage backends, e.g.:
+- /ephemeral/* -&gt; StateBackend (in-memory)
+- /persistent/* -&gt; StoreBackend (database)
+- /local/* -&gt; FilesystemBackend (filesystem)
+
+<a id="spoon_ai.backends.composite.CompositeBackend"></a>
+
+## `CompositeBackend` Objects
+
+```python
+class CompositeBackend()
+```
+
+Route file operations to different backends based on path prefix.
+
+The CompositeBackend dispatches operations to specialized backends based
+on path prefixes. This allows mixing ephemeral, persistent, and filesystem
+storage in a single agent.
+
+**Example**:
+
+    ```python
+    from spoon_ai.backends import (
+        CompositeBackend,
+        StateBackend,
+        StoreBackend,
+        FilesystemBackend,
+        BackendRuntime,
+    )
+
+    # Create backends
+    runtime = BackendRuntime(state={"files": {}})
+    state_backend = StateBackend(runtime)
+    store_backend = StoreBackend(SQLiteStore("agent.db"))
+    fs_backend = FilesystemBackend(root_dir="/workspace", virtual_mode=True)
+
+    # Create composite with routes
+    backend = CompositeBackend(
+        default=state_backend,
+        routes={
+            "/persistent/": store_backend,
+            "/local/": fs_backend,
+        }
+    )
+
+    # Operations route automatically
+    backend.write("/temp.txt", "Ephemeral")      # -> state_backend
+    backend.write("/persistent/note.txt", "DB")  # -> store_backend
+    backend.write("/local/code.py", "File")      # -> fs_backend
+    ```
+
+<a id="spoon_ai.backends.composite.CompositeBackend.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(default: BackendProtocol, routes: dict[str,
+                                                    BackendProtocol]) -> None
+```
+
+Initialize CompositeBackend.
+
+**Arguments**:
+
+- `default` - Default backend for unmatched paths.
+- `routes` - Dict mapping path prefixes to backends.
+  Prefixes should end with '/' (e.g., "/persistent/").
+
+<a id="spoon_ai.backends.composite.CompositeBackend.ls_info"></a>
+
+#### `ls_info`
+
+```python
+def ls_info(path: str) -> list[FileInfo]
+```
+
+List files and directories in the specified directory.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.als_info"></a>
+
+#### `als_info`
+
+```python
+async def als_info(path: str) -> list[FileInfo]
+```
+
+Async version of ls_info.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.read"></a>
+
+#### `read`
+
+```python
+def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Read file content, routing to appropriate backend.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.aread"></a>
+
+#### `aread`
+
+```python
+async def aread(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Async version of read.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.write"></a>
+
+#### `write`
+
+```python
+def write(file_path: str, content: str) -> WriteResult
+```
+
+Create a new file, routing to appropriate backend.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.awrite"></a>
+
+#### `awrite`
+
+```python
+async def awrite(file_path: str, content: str) -> WriteResult
+```
+
+Async version of write.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.edit"></a>
+
+#### `edit`
+
+```python
+def edit(file_path: str,
+         old_string: str,
+         new_string: str,
+         replace_all: bool = False) -> EditResult
+```
+
+Edit a file, routing to appropriate backend.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.aedit"></a>
+
+#### `aedit`
+
+```python
+async def aedit(file_path: str,
+                old_string: str,
+                new_string: str,
+                replace_all: bool = False) -> EditResult
+```
+
+Async version of edit.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.grep_raw"></a>
+
+#### `grep_raw`
+
+```python
+def grep_raw(pattern: str,
+             path: Optional[str] = None,
+             glob: Optional[str] = None) -> list[GrepMatch] | str
+```
+
+Search for pattern in files.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.agrep_raw"></a>
+
+#### `agrep_raw`
+
+```python
+async def agrep_raw(pattern: str,
+                    path: Optional[str] = None,
+                    glob: Optional[str] = None) -> list[GrepMatch] | str
+```
+
+Async version of grep_raw.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.glob_info"></a>
+
+#### `glob_info`
+
+```python
+def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
+```
+
+Find files matching glob pattern.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.aglob_info"></a>
+
+#### `aglob_info`
+
+```python
+async def aglob_info(pattern: str, path: str = "/") -> list[FileInfo]
+```
+
+Async version of glob_info.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.execute"></a>
+
+#### `execute`
+
+```python
+def execute(command: str) -> ExecuteResponse
+```
+
+Execute a command via the default backend.
+
+Only works if default backend implements SandboxBackendProtocol.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.aexecute"></a>
+
+#### `aexecute`
+
+```python
+async def aexecute(command: str) -> ExecuteResponse
+```
+
+Async version of execute.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.upload_files"></a>
+
+#### `upload_files`
+
+```python
+def upload_files(files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
+```
+
+Upload multiple files, batching by backend.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.aupload_files"></a>
+
+#### `aupload_files`
+
+```python
+async def aupload_files(
+        files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
+```
+
+Async version of upload_files.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.download_files"></a>
+
+#### `download_files`
+
+```python
+def download_files(paths: list[str]) -> list[FileDownloadResponse]
+```
+
+Download multiple files, batching by backend.
+
+<a id="spoon_ai.backends.composite.CompositeBackend.adownload_files"></a>
+
+#### `adownload_files`
+
+```python
+async def adownload_files(paths: list[str]) -> list[FileDownloadResponse]
+```
+
+Async version of download_files.
+
+<a id="spoon_ai.backends.composite.create_composite_backend"></a>
+
+#### `create_composite_backend`
+
+```python
+def create_composite_backend(
+        default: BackendProtocol,
+        routes: dict[str, BackendProtocol]) -> CompositeBackend
+```
+
+Create a CompositeBackend.
+
+**Arguments**:
+
+- `default` - Default backend for unmatched paths.
+- `routes` - Dict mapping path prefixes to backends.
+  
+
+**Returns**:
+
+  CompositeBackend instance.
+  
+
+**Example**:
+
+    ```python
+    backend = create_composite_backend(
+        default=state_backend,
+        routes={
+            "/db/": store_backend,
+            "/files/": fs_backend,
+        }
+    )
+    ```
+
+<a id="spoon_ai.backends.filesystem"></a>
+
+# Module `spoon_ai.backends.filesystem`
+
+FilesystemBackend: Read and write files directly from the filesystem.
+
+Security features:
+- Secure path resolution with root containment when in virtual_mode
+- Prevent symlink-following on file I/O using O_NOFOLLOW when available
+- Max file size enforcement
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend"></a>
+
+## `FilesystemBackend` Objects
+
+```python
+class FilesystemBackend(BackendProtocol)
+```
+
+Backend that reads and writes files directly from the filesystem.
+
+Files are accessed using their actual filesystem paths. Relative paths are
+resolved relative to the current working directory or root_dir.
+
+**Example**:
+
+    ```python
+    # Real filesystem access
+    backend = FilesystemBackend()
+    content = backend.read("/path/to/file.txt")
+
+    # Sandboxed to a directory
+    backend = FilesystemBackend(
+        root_dir="/workspace",
+        virtual_mode=True
+    )
+    # "/file.txt" maps to "/workspace/file.txt"
+    ```
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(root_dir: Optional[str | Path] = None,
+             virtual_mode: bool = False,
+             max_file_size_mb: int = 10) -> None
+```
+
+Initialize filesystem backend.
+
+**Arguments**:
+
+- `root_dir` - Optional root directory. If provided, all paths are
+  resolved relative to this directory.
+- `virtual_mode` - If True, treat paths as virtual absolute paths under
+  root_dir. Disallows path traversal.
+- `max_file_size_mb` - Maximum file size in MB for operations.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.ls_info"></a>
+
+#### `ls_info`
+
+```python
+def ls_info(path: str) -> list[FileInfo]
+```
+
+List files and directories in the specified directory (non-recursive).
+
+**Arguments**:
+
+- `path` - Absolute directory path.
+  
+
+**Returns**:
+
+  List of FileInfo dicts for files and directories.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.read"></a>
+
+#### `read`
+
+```python
+def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Read file content with line numbers.
+
+**Arguments**:
+
+- `file_path` - Absolute or relative file path.
+- `offset` - Line offset to start reading from (0-indexed).
+- `limit` - Maximum number of lines to read.
+  
+
+**Returns**:
+
+  Formatted file content with line numbers, or error message.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.write"></a>
+
+#### `write`
+
+```python
+def write(file_path: str, content: str) -> WriteResult
+```
+
+Create a new file with content.
+
+Returns WriteResult. External storage sets files_update=None.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.edit"></a>
+
+#### `edit`
+
+```python
+def edit(file_path: str,
+         old_string: str,
+         new_string: str,
+         replace_all: bool = False) -> EditResult
+```
+
+Edit a file by replacing string occurrences.
+
+Returns EditResult. External storage sets files_update=None.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.grep_raw"></a>
+
+#### `grep_raw`
+
+```python
+def grep_raw(pattern: str,
+             path: Optional[str] = None,
+             glob: Optional[str] = None) -> list[GrepMatch] | str
+```
+
+Search for pattern in files.
+
+Uses ripgrep if available, falls back to Python search.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.glob_info"></a>
+
+#### `glob_info`
+
+```python
+def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
+```
+
+Find files matching glob pattern.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.upload_files"></a>
+
+#### `upload_files`
+
+```python
+def upload_files(files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
+```
+
+Upload multiple files to the filesystem.
+
+<a id="spoon_ai.backends.filesystem.FilesystemBackend.download_files"></a>
+
+#### `download_files`
+
+```python
+def download_files(paths: list[str]) -> list[FileDownloadResponse]
+```
+
+Download multiple files from the filesystem.
+
+<a id="spoon_ai.backends.filesystem.create_filesystem_backend"></a>
+
+#### `create_filesystem_backend`
+
+```python
+def create_filesystem_backend(root_dir: Optional[str | Path] = None,
+                              virtual_mode: bool = False,
+                              max_file_size_mb: int = 10) -> FilesystemBackend
+```
+
+Create a FilesystemBackend.
+
+**Arguments**:
+
+- `root_dir` - Root directory for file operations.
+- `virtual_mode` - If True, sandbox paths to root_dir.
+- `max_file_size_mb` - Maximum file size for operations.
+  
+
+**Returns**:
+
+  FilesystemBackend instance.
+  
+
+**Example**:
+
+    ```python
+    # Access real filesystem
+    backend = create_filesystem_backend()
+
+    # Sandboxed to workspace
+    backend = create_filesystem_backend(
+        root_dir="/workspace",
+        virtual_mode=True
+    )
+    ```
+
 <a id="spoon_ai.backends.state"></a>
 
 # Module `spoon_ai.backends.state`
@@ -692,6 +1201,316 @@ Create a StateBackend with optional initial files.
     backend, runtime = create_state_backend()
     backend.write("/hello.txt", "Hello!")
     ```
+
+<a id="spoon_ai.backends.sandbox"></a>
+
+# Module `spoon_ai.backends.sandbox`
+
+Base sandbox implementation with execute() as the only required abstract method.
+
+This module provides a base class that implements all SandboxBackendProtocol
+methods using shell commands executed via execute(). Concrete implementations
+only need to implement the execute() method.
+
+This design allows for remote sandboxes (Docker, Modal, Daytona, etc.) where
+you just implement execute() to run commands remotely.
+
+Compatible with LangChain DeepAgents BaseSandbox interface.
+
+Usage:
+    # For local execution
+    class LocalSandbox(BaseSandbox):
+        def execute(self, command: str) -&gt; ExecuteResponse:
+            # Run locally
+            result = subprocess.run(command, shell=True, ...)
+            return ExecuteResponse(output=result.stdout, exit_code=result.returncode)
+
+    # For remote execution (Docker, Modal, etc.)
+    class DockerSandbox(BaseSandbox):
+        def execute(self, command: str) -&gt; ExecuteResponse:
+            # Run in Docker container
+            result = docker_client.containers.run(self.image, command, ...)
+            return ExecuteResponse(output=result, exit_code=0)
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox"></a>
+
+## `BaseSandbox` Objects
+
+```python
+class BaseSandbox(SandboxBackendProtocol, ABC)
+```
+
+Base sandbox implementation with execute() as abstract method.
+
+This class provides default implementations for all protocol methods
+using shell commands. Subclasses only need to implement:
+- execute(): Run a shell command and return output
+- id: Unique identifier property
+- upload_files(): Upload files to sandbox (optional, has default)
+- download_files(): Download files from sandbox (optional, has default)
+
+The default implementations use Python commands executed via execute()
+to perform file operations, making this suitable for remote sandboxes
+where you only have shell access.
+
+**Example**:
+
+    ```python
+    class DockerSandbox(BaseSandbox):
+        def __init__(self, container_id: str):
+            self._container_id = container_id
+
+        @property
+        def id(self) -> str:
+            return f"docker-{self._container_id}"
+
+        def execute(self, command: str) -> ExecuteResponse:
+            result = docker_exec(self._container_id, command)
+            return ExecuteResponse(
+                output=result.output,
+                exit_code=result.exit_code
+            )
+    ```
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.execute"></a>
+
+#### `execute`
+
+```python
+@abstractmethod
+def execute(command: str) -> ExecuteResponse
+```
+
+Execute a command in the sandbox and return ExecuteResponse.
+
+This is the core method that subclasses must implement.
+All other file operations are built on top of this.
+
+**Arguments**:
+
+- `command` - Full shell command string to execute.
+  
+
+**Returns**:
+
+  ExecuteResponse with combined output, exit code, and truncation flag.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.aexecute"></a>
+
+#### `aexecute`
+
+```python
+async def aexecute(command: str) -> ExecuteResponse
+```
+
+Async version of execute.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.id"></a>
+
+#### `id`
+
+```python
+@property
+@abstractmethod
+def id() -> str
+```
+
+Unique identifier for the sandbox backend.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.ls_info"></a>
+
+#### `ls_info`
+
+```python
+def ls_info(path: str) -> List[FileInfo]
+```
+
+List directory contents using shell command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.read"></a>
+
+#### `read`
+
+```python
+def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Read file content with line numbers using shell command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.write"></a>
+
+#### `write`
+
+```python
+def write(file_path: str, content: str) -> WriteResult
+```
+
+Create a new file using shell command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.edit"></a>
+
+#### `edit`
+
+```python
+def edit(file_path: str,
+         old_string: str,
+         new_string: str,
+         replace_all: bool = False) -> EditResult
+```
+
+Edit a file by replacing string occurrences using shell command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.grep_raw"></a>
+
+#### `grep_raw`
+
+```python
+def grep_raw(pattern: str,
+             path: Optional[str] = None,
+             glob: Optional[str] = None) -> List[GrepMatch]
+```
+
+Search for pattern in files using grep command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.glob_info"></a>
+
+#### `glob_info`
+
+```python
+def glob_info(pattern: str, path: str = "/") -> List[FileInfo]
+```
+
+Find files matching pattern using glob command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.upload_files"></a>
+
+#### `upload_files`
+
+```python
+def upload_files(files: List[Tuple[str, bytes]]) -> List[FileUploadResponse]
+```
+
+Upload multiple files to the sandbox.
+
+Default implementation uses base64 encoding via execute().
+Override for more efficient implementations.
+
+**Arguments**:
+
+- `files` - List of (path, content) tuples
+  
+
+**Returns**:
+
+  List of FileUploadResponse for each file
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.download_files"></a>
+
+#### `download_files`
+
+```python
+def download_files(paths: List[str]) -> List[FileDownloadResponse]
+```
+
+Download multiple files from the sandbox.
+
+Default implementation uses base64 encoding via execute().
+Override for more efficient implementations.
+
+**Arguments**:
+
+- `paths` - List of file paths to download
+  
+
+**Returns**:
+
+  List of FileDownloadResponse for each file
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.als_info"></a>
+
+#### `als_info`
+
+```python
+async def als_info(path: str) -> List[FileInfo]
+```
+
+Async version of ls_info.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.aread"></a>
+
+#### `aread`
+
+```python
+async def aread(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Async version of read.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.awrite"></a>
+
+#### `awrite`
+
+```python
+async def awrite(file_path: str, content: str) -> WriteResult
+```
+
+Async version of write.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.aedit"></a>
+
+#### `aedit`
+
+```python
+async def aedit(file_path: str,
+                old_string: str,
+                new_string: str,
+                replace_all: bool = False) -> EditResult
+```
+
+Async version of edit.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.agrep_raw"></a>
+
+#### `agrep_raw`
+
+```python
+async def agrep_raw(pattern: str,
+                    path: Optional[str] = None,
+                    glob: Optional[str] = None) -> List[GrepMatch]
+```
+
+Async version of grep_raw.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.aglob_info"></a>
+
+#### `aglob_info`
+
+```python
+async def aglob_info(pattern: str, path: str = "/") -> List[FileInfo]
+```
+
+Async version of glob_info.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.aupload_files"></a>
+
+#### `aupload_files`
+
+```python
+async def aupload_files(
+        files: List[Tuple[str, bytes]]) -> List[FileUploadResponse]
+```
+
+Async version of upload_files.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.adownload_files"></a>
+
+#### `adownload_files`
+
+```python
+async def adownload_files(paths: List[str]) -> List[FileDownloadResponse]
+```
+
+Async version of download_files.
 
 <a id="spoon_ai.backends.utils"></a>
 
@@ -1982,823 +2801,4 @@ Union type for backend specification.
 Can be either:
 - A BackendProtocol instance (pre-created backend)
 - A BackendFactory callable (creates backend from runtime)
-
-<a id="spoon_ai.backends.sandbox"></a>
-
-# Module `spoon_ai.backends.sandbox`
-
-Base sandbox implementation with execute() as the only required abstract method.
-
-This module provides a base class that implements all SandboxBackendProtocol
-methods using shell commands executed via execute(). Concrete implementations
-only need to implement the execute() method.
-
-This design allows for remote sandboxes (Docker, Modal, Daytona, etc.) where
-you just implement execute() to run commands remotely.
-
-Compatible with LangChain DeepAgents BaseSandbox interface.
-
-Usage:
-    # For local execution
-    class LocalSandbox(BaseSandbox):
-        def execute(self, command: str) -&gt; ExecuteResponse:
-            # Run locally
-            result = subprocess.run(command, shell=True, ...)
-            return ExecuteResponse(output=result.stdout, exit_code=result.returncode)
-
-    # For remote execution (Docker, Modal, etc.)
-    class DockerSandbox(BaseSandbox):
-        def execute(self, command: str) -&gt; ExecuteResponse:
-            # Run in Docker container
-            result = docker_client.containers.run(self.image, command, ...)
-            return ExecuteResponse(output=result, exit_code=0)
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox"></a>
-
-## `BaseSandbox` Objects
-
-```python
-class BaseSandbox(SandboxBackendProtocol, ABC)
-```
-
-Base sandbox implementation with execute() as abstract method.
-
-This class provides default implementations for all protocol methods
-using shell commands. Subclasses only need to implement:
-- execute(): Run a shell command and return output
-- id: Unique identifier property
-- upload_files(): Upload files to sandbox (optional, has default)
-- download_files(): Download files from sandbox (optional, has default)
-
-The default implementations use Python commands executed via execute()
-to perform file operations, making this suitable for remote sandboxes
-where you only have shell access.
-
-**Example**:
-
-    ```python
-    class DockerSandbox(BaseSandbox):
-        def __init__(self, container_id: str):
-            self._container_id = container_id
-
-        @property
-        def id(self) -> str:
-            return f"docker-{self._container_id}"
-
-        def execute(self, command: str) -> ExecuteResponse:
-            result = docker_exec(self._container_id, command)
-            return ExecuteResponse(
-                output=result.output,
-                exit_code=result.exit_code
-            )
-    ```
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.execute"></a>
-
-#### `execute`
-
-```python
-@abstractmethod
-def execute(command: str) -> ExecuteResponse
-```
-
-Execute a command in the sandbox and return ExecuteResponse.
-
-This is the core method that subclasses must implement.
-All other file operations are built on top of this.
-
-**Arguments**:
-
-- `command` - Full shell command string to execute.
-  
-
-**Returns**:
-
-  ExecuteResponse with combined output, exit code, and truncation flag.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.aexecute"></a>
-
-#### `aexecute`
-
-```python
-async def aexecute(command: str) -> ExecuteResponse
-```
-
-Async version of execute.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.id"></a>
-
-#### `id`
-
-```python
-@property
-@abstractmethod
-def id() -> str
-```
-
-Unique identifier for the sandbox backend.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.ls_info"></a>
-
-#### `ls_info`
-
-```python
-def ls_info(path: str) -> List[FileInfo]
-```
-
-List directory contents using shell command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.read"></a>
-
-#### `read`
-
-```python
-def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Read file content with line numbers using shell command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.write"></a>
-
-#### `write`
-
-```python
-def write(file_path: str, content: str) -> WriteResult
-```
-
-Create a new file using shell command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.edit"></a>
-
-#### `edit`
-
-```python
-def edit(file_path: str,
-         old_string: str,
-         new_string: str,
-         replace_all: bool = False) -> EditResult
-```
-
-Edit a file by replacing string occurrences using shell command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.grep_raw"></a>
-
-#### `grep_raw`
-
-```python
-def grep_raw(pattern: str,
-             path: Optional[str] = None,
-             glob: Optional[str] = None) -> List[GrepMatch]
-```
-
-Search for pattern in files using grep command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.glob_info"></a>
-
-#### `glob_info`
-
-```python
-def glob_info(pattern: str, path: str = "/") -> List[FileInfo]
-```
-
-Find files matching pattern using glob command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.upload_files"></a>
-
-#### `upload_files`
-
-```python
-def upload_files(files: List[Tuple[str, bytes]]) -> List[FileUploadResponse]
-```
-
-Upload multiple files to the sandbox.
-
-Default implementation uses base64 encoding via execute().
-Override for more efficient implementations.
-
-**Arguments**:
-
-- `files` - List of (path, content) tuples
-  
-
-**Returns**:
-
-  List of FileUploadResponse for each file
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.download_files"></a>
-
-#### `download_files`
-
-```python
-def download_files(paths: List[str]) -> List[FileDownloadResponse]
-```
-
-Download multiple files from the sandbox.
-
-Default implementation uses base64 encoding via execute().
-Override for more efficient implementations.
-
-**Arguments**:
-
-- `paths` - List of file paths to download
-  
-
-**Returns**:
-
-  List of FileDownloadResponse for each file
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.als_info"></a>
-
-#### `als_info`
-
-```python
-async def als_info(path: str) -> List[FileInfo]
-```
-
-Async version of ls_info.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.aread"></a>
-
-#### `aread`
-
-```python
-async def aread(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Async version of read.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.awrite"></a>
-
-#### `awrite`
-
-```python
-async def awrite(file_path: str, content: str) -> WriteResult
-```
-
-Async version of write.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.aedit"></a>
-
-#### `aedit`
-
-```python
-async def aedit(file_path: str,
-                old_string: str,
-                new_string: str,
-                replace_all: bool = False) -> EditResult
-```
-
-Async version of edit.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.agrep_raw"></a>
-
-#### `agrep_raw`
-
-```python
-async def agrep_raw(pattern: str,
-                    path: Optional[str] = None,
-                    glob: Optional[str] = None) -> List[GrepMatch]
-```
-
-Async version of grep_raw.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.aglob_info"></a>
-
-#### `aglob_info`
-
-```python
-async def aglob_info(pattern: str, path: str = "/") -> List[FileInfo]
-```
-
-Async version of glob_info.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.aupload_files"></a>
-
-#### `aupload_files`
-
-```python
-async def aupload_files(
-        files: List[Tuple[str, bytes]]) -> List[FileUploadResponse]
-```
-
-Async version of upload_files.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.adownload_files"></a>
-
-#### `adownload_files`
-
-```python
-async def adownload_files(paths: List[str]) -> List[FileDownloadResponse]
-```
-
-Async version of download_files.
-
-<a id="spoon_ai.backends.filesystem"></a>
-
-# Module `spoon_ai.backends.filesystem`
-
-FilesystemBackend: Read and write files directly from the filesystem.
-
-Security features:
-- Secure path resolution with root containment when in virtual_mode
-- Prevent symlink-following on file I/O using O_NOFOLLOW when available
-- Max file size enforcement
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend"></a>
-
-## `FilesystemBackend` Objects
-
-```python
-class FilesystemBackend(BackendProtocol)
-```
-
-Backend that reads and writes files directly from the filesystem.
-
-Files are accessed using their actual filesystem paths. Relative paths are
-resolved relative to the current working directory or root_dir.
-
-**Example**:
-
-    ```python
-    # Real filesystem access
-    backend = FilesystemBackend()
-    content = backend.read("/path/to/file.txt")
-
-    # Sandboxed to a directory
-    backend = FilesystemBackend(
-        root_dir="/workspace",
-        virtual_mode=True
-    )
-    # "/file.txt" maps to "/workspace/file.txt"
-    ```
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(root_dir: Optional[str | Path] = None,
-             virtual_mode: bool = False,
-             max_file_size_mb: int = 10) -> None
-```
-
-Initialize filesystem backend.
-
-**Arguments**:
-
-- `root_dir` - Optional root directory. If provided, all paths are
-  resolved relative to this directory.
-- `virtual_mode` - If True, treat paths as virtual absolute paths under
-  root_dir. Disallows path traversal.
-- `max_file_size_mb` - Maximum file size in MB for operations.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.ls_info"></a>
-
-#### `ls_info`
-
-```python
-def ls_info(path: str) -> list[FileInfo]
-```
-
-List files and directories in the specified directory (non-recursive).
-
-**Arguments**:
-
-- `path` - Absolute directory path.
-  
-
-**Returns**:
-
-  List of FileInfo dicts for files and directories.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.read"></a>
-
-#### `read`
-
-```python
-def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Read file content with line numbers.
-
-**Arguments**:
-
-- `file_path` - Absolute or relative file path.
-- `offset` - Line offset to start reading from (0-indexed).
-- `limit` - Maximum number of lines to read.
-  
-
-**Returns**:
-
-  Formatted file content with line numbers, or error message.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.write"></a>
-
-#### `write`
-
-```python
-def write(file_path: str, content: str) -> WriteResult
-```
-
-Create a new file with content.
-
-Returns WriteResult. External storage sets files_update=None.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.edit"></a>
-
-#### `edit`
-
-```python
-def edit(file_path: str,
-         old_string: str,
-         new_string: str,
-         replace_all: bool = False) -> EditResult
-```
-
-Edit a file by replacing string occurrences.
-
-Returns EditResult. External storage sets files_update=None.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.grep_raw"></a>
-
-#### `grep_raw`
-
-```python
-def grep_raw(pattern: str,
-             path: Optional[str] = None,
-             glob: Optional[str] = None) -> list[GrepMatch] | str
-```
-
-Search for pattern in files.
-
-Uses ripgrep if available, falls back to Python search.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.glob_info"></a>
-
-#### `glob_info`
-
-```python
-def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
-```
-
-Find files matching glob pattern.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.upload_files"></a>
-
-#### `upload_files`
-
-```python
-def upload_files(files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
-```
-
-Upload multiple files to the filesystem.
-
-<a id="spoon_ai.backends.filesystem.FilesystemBackend.download_files"></a>
-
-#### `download_files`
-
-```python
-def download_files(paths: list[str]) -> list[FileDownloadResponse]
-```
-
-Download multiple files from the filesystem.
-
-<a id="spoon_ai.backends.filesystem.create_filesystem_backend"></a>
-
-#### `create_filesystem_backend`
-
-```python
-def create_filesystem_backend(root_dir: Optional[str | Path] = None,
-                              virtual_mode: bool = False,
-                              max_file_size_mb: int = 10) -> FilesystemBackend
-```
-
-Create a FilesystemBackend.
-
-**Arguments**:
-
-- `root_dir` - Root directory for file operations.
-- `virtual_mode` - If True, sandbox paths to root_dir.
-- `max_file_size_mb` - Maximum file size for operations.
-  
-
-**Returns**:
-
-  FilesystemBackend instance.
-  
-
-**Example**:
-
-    ```python
-    # Access real filesystem
-    backend = create_filesystem_backend()
-
-    # Sandboxed to workspace
-    backend = create_filesystem_backend(
-        root_dir="/workspace",
-        virtual_mode=True
-    )
-    ```
-
-<a id="spoon_ai.backends.composite"></a>
-
-# Module `spoon_ai.backends.composite`
-
-CompositeBackend: Route operations to different backends based on path prefix.
-
-Enables mixing multiple storage backends, e.g.:
-- /ephemeral/* -&gt; StateBackend (in-memory)
-- /persistent/* -&gt; StoreBackend (database)
-- /local/* -&gt; FilesystemBackend (filesystem)
-
-<a id="spoon_ai.backends.composite.CompositeBackend"></a>
-
-## `CompositeBackend` Objects
-
-```python
-class CompositeBackend()
-```
-
-Route file operations to different backends based on path prefix.
-
-The CompositeBackend dispatches operations to specialized backends based
-on path prefixes. This allows mixing ephemeral, persistent, and filesystem
-storage in a single agent.
-
-**Example**:
-
-    ```python
-    from spoon_ai.backends import (
-        CompositeBackend,
-        StateBackend,
-        StoreBackend,
-        FilesystemBackend,
-        BackendRuntime,
-    )
-
-    # Create backends
-    runtime = BackendRuntime(state={"files": {}})
-    state_backend = StateBackend(runtime)
-    store_backend = StoreBackend(SQLiteStore("agent.db"))
-    fs_backend = FilesystemBackend(root_dir="/workspace", virtual_mode=True)
-
-    # Create composite with routes
-    backend = CompositeBackend(
-        default=state_backend,
-        routes={
-            "/persistent/": store_backend,
-            "/local/": fs_backend,
-        }
-    )
-
-    # Operations route automatically
-    backend.write("/temp.txt", "Ephemeral")      # -> state_backend
-    backend.write("/persistent/note.txt", "DB")  # -> store_backend
-    backend.write("/local/code.py", "File")      # -> fs_backend
-    ```
-
-<a id="spoon_ai.backends.composite.CompositeBackend.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(default: BackendProtocol, routes: dict[str,
-                                                    BackendProtocol]) -> None
-```
-
-Initialize CompositeBackend.
-
-**Arguments**:
-
-- `default` - Default backend for unmatched paths.
-- `routes` - Dict mapping path prefixes to backends.
-  Prefixes should end with '/' (e.g., "/persistent/").
-
-<a id="spoon_ai.backends.composite.CompositeBackend.ls_info"></a>
-
-#### `ls_info`
-
-```python
-def ls_info(path: str) -> list[FileInfo]
-```
-
-List files and directories in the specified directory.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.als_info"></a>
-
-#### `als_info`
-
-```python
-async def als_info(path: str) -> list[FileInfo]
-```
-
-Async version of ls_info.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.read"></a>
-
-#### `read`
-
-```python
-def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Read file content, routing to appropriate backend.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.aread"></a>
-
-#### `aread`
-
-```python
-async def aread(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Async version of read.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.write"></a>
-
-#### `write`
-
-```python
-def write(file_path: str, content: str) -> WriteResult
-```
-
-Create a new file, routing to appropriate backend.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.awrite"></a>
-
-#### `awrite`
-
-```python
-async def awrite(file_path: str, content: str) -> WriteResult
-```
-
-Async version of write.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.edit"></a>
-
-#### `edit`
-
-```python
-def edit(file_path: str,
-         old_string: str,
-         new_string: str,
-         replace_all: bool = False) -> EditResult
-```
-
-Edit a file, routing to appropriate backend.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.aedit"></a>
-
-#### `aedit`
-
-```python
-async def aedit(file_path: str,
-                old_string: str,
-                new_string: str,
-                replace_all: bool = False) -> EditResult
-```
-
-Async version of edit.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.grep_raw"></a>
-
-#### `grep_raw`
-
-```python
-def grep_raw(pattern: str,
-             path: Optional[str] = None,
-             glob: Optional[str] = None) -> list[GrepMatch] | str
-```
-
-Search for pattern in files.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.agrep_raw"></a>
-
-#### `agrep_raw`
-
-```python
-async def agrep_raw(pattern: str,
-                    path: Optional[str] = None,
-                    glob: Optional[str] = None) -> list[GrepMatch] | str
-```
-
-Async version of grep_raw.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.glob_info"></a>
-
-#### `glob_info`
-
-```python
-def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
-```
-
-Find files matching glob pattern.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.aglob_info"></a>
-
-#### `aglob_info`
-
-```python
-async def aglob_info(pattern: str, path: str = "/") -> list[FileInfo]
-```
-
-Async version of glob_info.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.execute"></a>
-
-#### `execute`
-
-```python
-def execute(command: str) -> ExecuteResponse
-```
-
-Execute a command via the default backend.
-
-Only works if default backend implements SandboxBackendProtocol.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.aexecute"></a>
-
-#### `aexecute`
-
-```python
-async def aexecute(command: str) -> ExecuteResponse
-```
-
-Async version of execute.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.upload_files"></a>
-
-#### `upload_files`
-
-```python
-def upload_files(files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
-```
-
-Upload multiple files, batching by backend.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.aupload_files"></a>
-
-#### `aupload_files`
-
-```python
-async def aupload_files(
-        files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
-```
-
-Async version of upload_files.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.download_files"></a>
-
-#### `download_files`
-
-```python
-def download_files(paths: list[str]) -> list[FileDownloadResponse]
-```
-
-Download multiple files, batching by backend.
-
-<a id="spoon_ai.backends.composite.CompositeBackend.adownload_files"></a>
-
-#### `adownload_files`
-
-```python
-async def adownload_files(paths: list[str]) -> list[FileDownloadResponse]
-```
-
-Async version of download_files.
-
-<a id="spoon_ai.backends.composite.create_composite_backend"></a>
-
-#### `create_composite_backend`
-
-```python
-def create_composite_backend(
-        default: BackendProtocol,
-        routes: dict[str, BackendProtocol]) -> CompositeBackend
-```
-
-Create a CompositeBackend.
-
-**Arguments**:
-
-- `default` - Default backend for unmatched paths.
-- `routes` - Dict mapping path prefixes to backends.
-  
-
-**Returns**:
-
-  CompositeBackend instance.
-  
-
-**Example**:
-
-    ```python
-    backend = create_composite_backend(
-        default=state_backend,
-        routes={
-            "/db/": store_backend,
-            "/files/": fs_backend,
-        }
-    )
-    ```
 
