@@ -7,31 +7,20 @@ title: spoon_ai.rag
 # Table of Contents
 
 * [spoon\_ai.rag](#spoon_ai.rag)
-* [spoon\_ai.rag.parser.unstructured\_parser](#spoon_ai.rag.parser.unstructured_parser)
-  * [ParsedDocument](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument)
-    * [filename](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filename)
-    * [filepath](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filepath)
-    * [elements](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument.elements)
-  * [UnstructuredParser](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser)
-    * [\_\_init\_\_](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.__init__)
-    * [parse\_url](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_url)
-    * [parse\_file](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_file)
-    * [parse\_directory](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_directory)
-    * [parse](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse)
-* [spoon\_ai.rag.parser](#spoon_ai.rag.parser)
-* [spoon\_ai.rag.retriever](#spoon_ai.rag.retriever)
-* [spoon\_ai.rag.qa](#spoon_ai.rag.qa)
+* [spoon\_ai.rag.embeddings](#spoon_ai.rag.embeddings)
+  * [HashEmbeddingClient](#spoon_ai.rag.embeddings.HashEmbeddingClient)
+  * [get\_embedding\_client](#spoon_ai.rag.embeddings.get_embedding_client)
+* [spoon\_ai.rag.vectorstores.faiss\_store](#spoon_ai.rag.vectorstores.faiss_store)
+  * [FaissVectorStore](#spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore)
+* [spoon\_ai.rag.vectorstores](#spoon_ai.rag.vectorstores)
+* [spoon\_ai.rag.vectorstores.registry](#spoon_ai.rag.vectorstores.registry)
+  * [get\_vector\_store](#spoon_ai.rag.vectorstores.registry.get_vector_store)
+* [spoon\_ai.rag.vectorstores.pinecone\_store](#spoon_ai.rag.vectorstores.pinecone_store)
+* [spoon\_ai.rag.vectorstores.qdrant\_store](#spoon_ai.rag.vectorstores.qdrant_store)
+* [spoon\_ai.rag.vectorstores.chroma\_store](#spoon_ai.rag.vectorstores.chroma_store)
 * [spoon\_ai.rag.vectorstores.base](#spoon_ai.rag.vectorstores.base)
   * [VectorStore](#spoon_ai.rag.vectorstores.base.VectorStore)
     * [query](#spoon_ai.rag.vectorstores.base.VectorStore.query)
-* [spoon\_ai.rag.vectorstores.chroma\_store](#spoon_ai.rag.vectorstores.chroma_store)
-* [spoon\_ai.rag.vectorstores.pinecone\_store](#spoon_ai.rag.vectorstores.pinecone_store)
-* [spoon\_ai.rag.vectorstores.faiss\_store](#spoon_ai.rag.vectorstores.faiss_store)
-  * [FaissVectorStore](#spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore)
-* [spoon\_ai.rag.vectorstores.qdrant\_store](#spoon_ai.rag.vectorstores.qdrant_store)
-* [spoon\_ai.rag.vectorstores.registry](#spoon_ai.rag.vectorstores.registry)
-  * [get\_vector\_store](#spoon_ai.rag.vectorstores.registry.get_vector_store)
-* [spoon\_ai.rag.vectorstores](#spoon_ai.rag.vectorstores)
 * [spoon\_ai.rag.chunk](#spoon_ai.rag.chunk)
   * [recursive\_chunk](#spoon_ai.rag.chunk.recursive_chunk)
   * [simple\_chunk](#spoon_ai.rag.chunk.simple_chunk)
@@ -46,172 +35,112 @@ title: spoon_ai.rag
     * [rrf\_k](#spoon_ai.rag.config.RagConfig.rrf_k)
     * [openai\_embeddings\_model](#spoon_ai.rag.config.RagConfig.openai_embeddings_model)
 * [spoon\_ai.rag.index](#spoon_ai.rag.index)
-* [spoon\_ai.rag.embeddings](#spoon_ai.rag.embeddings)
-  * [HashEmbeddingClient](#spoon_ai.rag.embeddings.HashEmbeddingClient)
-  * [get\_embedding\_client](#spoon_ai.rag.embeddings.get_embedding_client)
+* [spoon\_ai.rag.qa](#spoon_ai.rag.qa)
+* [spoon\_ai.rag.parser](#spoon_ai.rag.parser)
+* [spoon\_ai.rag.parser.unstructured\_parser](#spoon_ai.rag.parser.unstructured_parser)
+  * [ParsedDocument](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument)
+    * [filename](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filename)
+    * [filepath](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filepath)
+    * [elements](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument.elements)
+  * [UnstructuredParser](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser)
+    * [\_\_init\_\_](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.__init__)
+    * [parse\_url](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_url)
+    * [parse\_file](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_file)
+    * [parse\_directory](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_directory)
+    * [parse](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse)
+* [spoon\_ai.rag.retriever](#spoon_ai.rag.retriever)
 
 <a id="spoon_ai.rag"></a>
 
 # Module `spoon_ai.rag`
 
-<a id="spoon_ai.rag.parser.unstructured_parser"></a>
+<a id="spoon_ai.rag.embeddings"></a>
 
-# Module `spoon_ai.rag.parser.unstructured_parser`
+# Module `spoon_ai.rag.embeddings`
 
-Unstructured-based document parser for RAG system.
+<a id="spoon_ai.rag.embeddings.HashEmbeddingClient"></a>
 
-Supports loading documents from:
-- URLs (http/https)
-- Directory paths (recursive)
-- Single file paths
-
-<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument"></a>
-
-## `ParsedDocument` Objects
+## `HashEmbeddingClient` Objects
 
 ```python
-@dataclass
-class ParsedDocument()
+class HashEmbeddingClient(EmbeddingClient)
 ```
 
-Represents a parsed document with its elements.
+Deterministic offline embedding via hashing.
 
-<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filename"></a>
+Produces fixed-length vectors in [0,1] normalized range. Not semantically meaningful
+but stable for tests and offline demos.
 
-#### `filename`
+<a id="spoon_ai.rag.embeddings.get_embedding_client"></a>
 
-Original filename (e.g., "README.md")
-
-<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filepath"></a>
-
-#### `filepath`
-
-Full file path or URL
-
-<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument.elements"></a>
-
-#### `elements`
-
-unstructured parsed elements
-
-<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser"></a>
-
-## `UnstructuredParser` Objects
+#### `get_embedding_client`
 
 ```python
-class UnstructuredParser()
+def get_embedding_client(
+        provider: Optional[str],
+        *,
+        openai_api_key: Optional[str] = None,
+        openai_model: str = "text-embedding-3-small") -> EmbeddingClient
 ```
 
-Parser using unstructured library for document parsing.
+Create an embedding client.
 
-<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.__init__"></a>
+Provider selection rules:
+- provider is None/"auto": pick the first configured embeddings provider using a dedicated
+  priority order (OpenAI &gt; OpenRouter &gt; Gemini).
+- provider is "openai" / "openrouter" / "gemini" / "ollama": force that provider (uses core env config when applicable).
+- provider is "openai_compatible": use OpenAI-compatible embeddings via RAG_EMBEDDINGS_* env vars.
+- otherwise: deterministic hash embeddings (offline).
 
-#### `__init__`
+<a id="spoon_ai.rag.vectorstores.faiss_store"></a>
+
+# Module `spoon_ai.rag.vectorstores.faiss_store`
+
+<a id="spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore"></a>
+
+## `FaissVectorStore` Objects
 
 ```python
-def __init__(ignore_dirs: Optional[set] = None)
+class FaissVectorStore(VectorStore)
 ```
 
-Initialize the parser.
+FAISS-backed local vector store (cosine via inner product + L2 norm).
 
-**Arguments**:
+<a id="spoon_ai.rag.vectorstores"></a>
 
-- `ignore_dirs` - Set of directory names to ignore when traversing
+# Module `spoon_ai.rag.vectorstores`
 
-<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_url"></a>
+<a id="spoon_ai.rag.vectorstores.registry"></a>
 
-#### `parse_url`
+# Module `spoon_ai.rag.vectorstores.registry`
+
+<a id="spoon_ai.rag.vectorstores.registry.get_vector_store"></a>
+
+#### `get_vector_store`
 
 ```python
-def parse_url(url: str) -> Optional[ParsedDocument]
+def get_vector_store(backend: Optional[str] = None) -> VectorStore
 ```
 
-Parse a document from URL.
+Return a vector store by backend name.
 
-Supports:
-- GitHub URLs (auto-converts to raw)
-- Plain text/code files (direct download)
-- HTML pages (uses Jina Reader or unstructured)
+Backends:
+- faiss: local/offline (mapped to in-memory cosine store)
+- pinecone: cloud Pinecone (requires PINECONE_API_KEY)
+- qdrant: local/cloud Qdrant (requires qdrant-client, default http://localhost:6333)
+- chroma: local Chroma (requires chromadb)
 
-**Arguments**:
+<a id="spoon_ai.rag.vectorstores.pinecone_store"></a>
 
-- `url` - URL to fetch and parse
-  
+# Module `spoon_ai.rag.vectorstores.pinecone_store`
 
-**Returns**:
+<a id="spoon_ai.rag.vectorstores.qdrant_store"></a>
 
-  ParsedDocument or None if parsing fails
+# Module `spoon_ai.rag.vectorstores.qdrant_store`
 
-<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_file"></a>
+<a id="spoon_ai.rag.vectorstores.chroma_store"></a>
 
-#### `parse_file`
-
-```python
-def parse_file(path: Path) -> Optional[ParsedDocument]
-```
-
-Parse a single file using unstructured partition.
-
-**Arguments**:
-
-- `path` - Path to the file
-  
-
-**Returns**:
-
-  ParsedDocument or None if parsing fails
-
-<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_directory"></a>
-
-#### `parse_directory`
-
-```python
-def parse_directory(dir_path: Path) -> List[ParsedDocument]
-```
-
-Parse all files in a directory recursively.
-
-Skips directories in self.ignore_dirs.
-
-**Arguments**:
-
-- `dir_path` - Directory path to traverse
-  
-
-**Returns**:
-
-  List of ParsedDocument
-
-<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse"></a>
-
-#### `parse`
-
-```python
-def parse(paths_or_urls: Iterable[str]) -> List[ParsedDocument]
-```
-
-Parse documents from multiple sources (URLs, directories, files).
-
-**Arguments**:
-
-- `paths_or_urls` - Iterable of URLs, directory paths, or file paths
-  
-
-**Returns**:
-
-  List of ParsedDocument
-
-<a id="spoon_ai.rag.parser"></a>
-
-# Module `spoon_ai.rag.parser`
-
-<a id="spoon_ai.rag.retriever"></a>
-
-# Module `spoon_ai.rag.retriever`
-
-<a id="spoon_ai.rag.qa"></a>
-
-# Module `spoon_ai.rag.qa`
+# Module `spoon_ai.rag.vectorstores.chroma_store`
 
 <a id="spoon_ai.rag.vectorstores.base"></a>
 
@@ -240,56 +169,6 @@ def query(
 ```
 
 Return per-query list of (id, score, metadata). Higher score is better.
-
-<a id="spoon_ai.rag.vectorstores.chroma_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.chroma_store`
-
-<a id="spoon_ai.rag.vectorstores.pinecone_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.pinecone_store`
-
-<a id="spoon_ai.rag.vectorstores.faiss_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.faiss_store`
-
-<a id="spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore"></a>
-
-## `FaissVectorStore` Objects
-
-```python
-class FaissVectorStore(VectorStore)
-```
-
-FAISS-backed local vector store (cosine via inner product + L2 norm).
-
-<a id="spoon_ai.rag.vectorstores.qdrant_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.qdrant_store`
-
-<a id="spoon_ai.rag.vectorstores.registry"></a>
-
-# Module `spoon_ai.rag.vectorstores.registry`
-
-<a id="spoon_ai.rag.vectorstores.registry.get_vector_store"></a>
-
-#### `get_vector_store`
-
-```python
-def get_vector_store(backend: Optional[str] = None) -> VectorStore
-```
-
-Return a vector store by backend name.
-
-Backends:
-- faiss: local/offline (mapped to in-memory cosine store)
-- pinecone: cloud Pinecone (requires PINECONE_API_KEY)
-- qdrant: local/cloud Qdrant (requires qdrant-client, default http://localhost:6333)
-- chroma: local Chroma (requires chromadb)
-
-<a id="spoon_ai.rag.vectorstores"></a>
-
-# Module `spoon_ai.rag.vectorstores`
 
 <a id="spoon_ai.rag.chunk"></a>
 
@@ -465,41 +344,162 @@ Deprecated: use 'embeddings_model' instead. Kept for backward compatibility.
 
 # Module `spoon_ai.rag.index`
 
-<a id="spoon_ai.rag.embeddings"></a>
+<a id="spoon_ai.rag.qa"></a>
 
-# Module `spoon_ai.rag.embeddings`
+# Module `spoon_ai.rag.qa`
 
-<a id="spoon_ai.rag.embeddings.HashEmbeddingClient"></a>
+<a id="spoon_ai.rag.parser"></a>
 
-## `HashEmbeddingClient` Objects
+# Module `spoon_ai.rag.parser`
+
+<a id="spoon_ai.rag.parser.unstructured_parser"></a>
+
+# Module `spoon_ai.rag.parser.unstructured_parser`
+
+Unstructured-based document parser for RAG system.
+
+Supports loading documents from:
+- URLs (http/https)
+- Directory paths (recursive)
+- Single file paths
+
+<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument"></a>
+
+## `ParsedDocument` Objects
 
 ```python
-class HashEmbeddingClient(EmbeddingClient)
+@dataclass
+class ParsedDocument()
 ```
 
-Deterministic offline embedding via hashing.
+Represents a parsed document with its elements.
 
-Produces fixed-length vectors in [0,1] normalized range. Not semantically meaningful
-but stable for tests and offline demos.
+<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filename"></a>
 
-<a id="spoon_ai.rag.embeddings.get_embedding_client"></a>
+#### `filename`
 
-#### `get_embedding_client`
+Original filename (e.g., "README.md")
+
+<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument.filepath"></a>
+
+#### `filepath`
+
+Full file path or URL
+
+<a id="spoon_ai.rag.parser.unstructured_parser.ParsedDocument.elements"></a>
+
+#### `elements`
+
+unstructured parsed elements
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser"></a>
+
+## `UnstructuredParser` Objects
 
 ```python
-def get_embedding_client(
-        provider: Optional[str],
-        *,
-        openai_api_key: Optional[str] = None,
-        openai_model: str = "text-embedding-3-small") -> EmbeddingClient
+class UnstructuredParser()
 ```
 
-Create an embedding client.
+Parser using unstructured library for document parsing.
 
-Provider selection rules:
-- provider is None/"auto": pick the first configured embeddings provider using a dedicated
-  priority order (OpenAI &gt; OpenRouter &gt; Gemini).
-- provider is "openai" / "openrouter" / "gemini" / "ollama": force that provider (uses core env config when applicable).
-- provider is "openai_compatible": use OpenAI-compatible embeddings via RAG_EMBEDDINGS_* env vars.
-- otherwise: deterministic hash embeddings (offline).
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(ignore_dirs: Optional[set] = None)
+```
+
+Initialize the parser.
+
+**Arguments**:
+
+- `ignore_dirs` - Set of directory names to ignore when traversing
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_url"></a>
+
+#### `parse_url`
+
+```python
+def parse_url(url: str) -> Optional[ParsedDocument]
+```
+
+Parse a document from URL.
+
+Supports:
+- GitHub URLs (auto-converts to raw)
+- Plain text/code files (direct download)
+- HTML pages (uses Jina Reader or unstructured)
+
+**Arguments**:
+
+- `url` - URL to fetch and parse
+  
+
+**Returns**:
+
+  ParsedDocument or None if parsing fails
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_file"></a>
+
+#### `parse_file`
+
+```python
+def parse_file(path: Path) -> Optional[ParsedDocument]
+```
+
+Parse a single file using unstructured partition.
+
+**Arguments**:
+
+- `path` - Path to the file
+  
+
+**Returns**:
+
+  ParsedDocument or None if parsing fails
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_directory"></a>
+
+#### `parse_directory`
+
+```python
+def parse_directory(dir_path: Path) -> List[ParsedDocument]
+```
+
+Parse all files in a directory recursively.
+
+Skips directories in self.ignore_dirs.
+
+**Arguments**:
+
+- `dir_path` - Directory path to traverse
+  
+
+**Returns**:
+
+  List of ParsedDocument
+
+<a id="spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse"></a>
+
+#### `parse`
+
+```python
+def parse(paths_or_urls: Iterable[str]) -> List[ParsedDocument]
+```
+
+Parse documents from multiple sources (URLs, directories, files).
+
+**Arguments**:
+
+- `paths_or_urls` - Iterable of URLs, directory paths, or file paths
+  
+
+**Returns**:
+
+  List of ParsedDocument
+
+<a id="spoon_ai.rag.retriever"></a>
+
+# Module `spoon_ai.rag.retriever`
 

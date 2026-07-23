@@ -7,19 +7,6 @@ title: spoon_ai.skills
 # Table of Contents
 
 * [spoon\_ai.skills](#spoon_ai.skills)
-* [spoon\_ai.skills.executor](#spoon_ai.skills.executor)
-  * [MAX\_OUTPUT\_SIZE](#spoon_ai.skills.executor.MAX_OUTPUT_SIZE)
-  * [ScriptExecutionError](#spoon_ai.skills.executor.ScriptExecutionError)
-  * [ScriptExecutor](#spoon_ai.skills.executor.ScriptExecutor)
-    * [\_\_init\_\_](#spoon_ai.skills.executor.ScriptExecutor.__init__)
-    * [is\_available](#spoon_ai.skills.executor.ScriptExecutor.is_available)
-    * [get\_interpreter](#spoon_ai.skills.executor.ScriptExecutor.get_interpreter)
-    * [execute](#spoon_ai.skills.executor.ScriptExecutor.execute)
-    * [get\_stats](#spoon_ai.skills.executor.ScriptExecutor.get_stats)
-    * [set\_enabled](#spoon_ai.skills.executor.ScriptExecutor.set_enabled)
-  * [get\_executor](#spoon_ai.skills.executor.get_executor)
-  * [configure\_executor](#spoon_ai.skills.executor.configure_executor)
-  * [set\_scripts\_enabled](#spoon_ai.skills.executor.set_scripts_enabled)
 * [spoon\_ai.skills.manager](#spoon_ai.skills.manager)
   * [SkillManager](#spoon_ai.skills.manager.SkillManager)
     * [\_\_init\_\_](#spoon_ai.skills.manager.SkillManager.__init__)
@@ -45,19 +32,19 @@ title: spoon_ai.skills
     * [get\_script\_tools](#spoon_ai.skills.manager.SkillManager.get_script_tools)
     * [get\_skill\_info](#spoon_ai.skills.manager.SkillManager.get_skill_info)
     * [get\_stats](#spoon_ai.skills.manager.SkillManager.get_stats)
-* [spoon\_ai.skills.registry](#spoon_ai.skills.registry)
-  * [SkillRegistry](#spoon_ai.skills.registry.SkillRegistry)
-    * [register](#spoon_ai.skills.registry.SkillRegistry.register)
-    * [unregister](#spoon_ai.skills.registry.SkillRegistry.unregister)
-    * [get](#spoon_ai.skills.registry.SkillRegistry.get)
-    * [list\_names](#spoon_ai.skills.registry.SkillRegistry.list_names)
-    * [list\_skills](#spoon_ai.skills.registry.SkillRegistry.list_skills)
-    * [find\_by\_tag](#spoon_ai.skills.registry.SkillRegistry.find_by_tag)
-    * [find\_by\_keyword](#spoon_ai.skills.registry.SkillRegistry.find_by_keyword)
-    * [find\_by\_pattern](#spoon_ai.skills.registry.SkillRegistry.find_by_pattern)
-    * [find\_by\_intent](#spoon_ai.skills.registry.SkillRegistry.find_by_intent)
-    * [find\_all\_matching](#spoon_ai.skills.registry.SkillRegistry.find_all_matching)
-    * [get\_intent\_categories](#spoon_ai.skills.registry.SkillRegistry.get_intent_categories)
+* [spoon\_ai.skills.executor](#spoon_ai.skills.executor)
+  * [MAX\_OUTPUT\_SIZE](#spoon_ai.skills.executor.MAX_OUTPUT_SIZE)
+  * [ScriptExecutionError](#spoon_ai.skills.executor.ScriptExecutionError)
+  * [ScriptExecutor](#spoon_ai.skills.executor.ScriptExecutor)
+    * [\_\_init\_\_](#spoon_ai.skills.executor.ScriptExecutor.__init__)
+    * [is\_available](#spoon_ai.skills.executor.ScriptExecutor.is_available)
+    * [get\_interpreter](#spoon_ai.skills.executor.ScriptExecutor.get_interpreter)
+    * [execute](#spoon_ai.skills.executor.ScriptExecutor.execute)
+    * [get\_stats](#spoon_ai.skills.executor.ScriptExecutor.get_stats)
+    * [set\_enabled](#spoon_ai.skills.executor.ScriptExecutor.set_enabled)
+  * [get\_executor](#spoon_ai.skills.executor.get_executor)
+  * [configure\_executor](#spoon_ai.skills.executor.configure_executor)
+  * [set\_scripts\_enabled](#spoon_ai.skills.executor.set_scripts_enabled)
 * [spoon\_ai.skills.loader](#spoon_ai.skills.loader)
   * [SkillLoader](#spoon_ai.skills.loader.SkillLoader)
     * [\_\_init\_\_](#spoon_ai.skills.loader.SkillLoader.__init__)
@@ -72,6 +59,19 @@ title: spoon_ai.skills
     * [get\_tools](#spoon_ai.skills.loader.SkillLoader.get_tools)
     * [clear\_cache](#spoon_ai.skills.loader.SkillLoader.clear_cache)
     * [reload](#spoon_ai.skills.loader.SkillLoader.reload)
+* [spoon\_ai.skills.registry](#spoon_ai.skills.registry)
+  * [SkillRegistry](#spoon_ai.skills.registry.SkillRegistry)
+    * [register](#spoon_ai.skills.registry.SkillRegistry.register)
+    * [unregister](#spoon_ai.skills.registry.SkillRegistry.unregister)
+    * [get](#spoon_ai.skills.registry.SkillRegistry.get)
+    * [list\_names](#spoon_ai.skills.registry.SkillRegistry.list_names)
+    * [list\_skills](#spoon_ai.skills.registry.SkillRegistry.list_skills)
+    * [find\_by\_tag](#spoon_ai.skills.registry.SkillRegistry.find_by_tag)
+    * [find\_by\_keyword](#spoon_ai.skills.registry.SkillRegistry.find_by_keyword)
+    * [find\_by\_pattern](#spoon_ai.skills.registry.SkillRegistry.find_by_pattern)
+    * [find\_by\_intent](#spoon_ai.skills.registry.SkillRegistry.find_by_intent)
+    * [find\_all\_matching](#spoon_ai.skills.registry.SkillRegistry.find_all_matching)
+    * [get\_intent\_categories](#spoon_ai.skills.registry.SkillRegistry.get_intent_categories)
 * [spoon\_ai.skills.script\_tool](#spoon_ai.skills.script_tool)
   * [ScriptTool](#spoon_ai.skills.script_tool.ScriptTool)
     * [\_\_init\_\_](#spoon_ai.skills.script_tool.ScriptTool.__init__)
@@ -137,165 +137,6 @@ Usage:
 
     # Find matching skills for user input
     matches = await manager.find_matching_skills("research quantum computing")
-
-<a id="spoon_ai.skills.executor"></a>
-
-# Module `spoon_ai.skills.executor`
-
-Script execution engine for skills.
-
-Provides async subprocess management for executing skill scripts.
-AI decides how to call scripts - users only control whether scripts are allowed.
-
-<a id="spoon_ai.skills.executor.MAX_OUTPUT_SIZE"></a>
-
-#### `MAX_OUTPUT_SIZE`
-
-5MB
-
-<a id="spoon_ai.skills.executor.ScriptExecutionError"></a>
-
-## `ScriptExecutionError` Objects
-
-```python
-class ScriptExecutionError(Exception)
-```
-
-Raised when script execution fails.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor"></a>
-
-## `ScriptExecutor` Objects
-
-```python
-class ScriptExecutor()
-```
-
-Async script executor for skill scripts.
-
-Features:
-- Async subprocess execution with timeout
-- Support for Python, shell, bash scripts
-- Environment variable passthrough
-- Output capture and size limiting
-- Global enable/disable control
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(enabled: bool = True,
-             default_timeout: int = DEFAULT_TIMEOUT,
-             max_output_size: int = MAX_OUTPUT_SIZE,
-             env_passthrough: Optional[List[str]] = None)
-```
-
-Initialize script executor.
-
-**Arguments**:
-
-- `enabled` - Whether script execution is allowed
-- `default_timeout` - Default timeout in seconds
-- `max_output_size` - Max output capture size in bytes
-- `env_passthrough` - Environment variables to pass through
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.is_available"></a>
-
-#### `is_available`
-
-```python
-def is_available(script_type: ScriptType) -> bool
-```
-
-Check if a script type can be executed.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.get_interpreter"></a>
-
-#### `get_interpreter`
-
-```python
-def get_interpreter(script_type: ScriptType) -> Optional[str]
-```
-
-Get interpreter path for a script type.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(script: SkillScript,
-                  input_text: Optional[str] = None,
-                  working_directory: Optional[str] = None,
-                  extra_env: Optional[Dict[str, str]] = None,
-                  timeout: Optional[int] = None) -> ScriptResult
-```
-
-Execute a script asynchronously.
-
-**Arguments**:
-
-- `script` - Script to execute
-- `input_text` - Optional text to pass to script via stdin
-- `working_directory` - Working directory for execution
-- `extra_env` - Additional environment variables
-- `timeout` - Timeout override (uses script.timeout or default)
-  
-
-**Returns**:
-
-  ScriptResult with output and status
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, int]
-```
-
-Get execution statistics.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.set_enabled"></a>
-
-#### `set_enabled`
-
-```python
-def set_enabled(enabled: bool) -> None
-```
-
-Enable or disable script execution.
-
-<a id="spoon_ai.skills.executor.get_executor"></a>
-
-#### `get_executor`
-
-```python
-def get_executor() -> ScriptExecutor
-```
-
-Get or create the global script executor.
-
-<a id="spoon_ai.skills.executor.configure_executor"></a>
-
-#### `configure_executor`
-
-```python
-def configure_executor(**kwargs) -> ScriptExecutor
-```
-
-Configure and return the global executor.
-
-<a id="spoon_ai.skills.executor.set_scripts_enabled"></a>
-
-#### `set_scripts_enabled`
-
-```python
-def set_scripts_enabled(enabled: bool) -> None
-```
-
-Enable or disable script execution globally.
 
 <a id="spoon_ai.skills.manager"></a>
 
@@ -690,210 +531,164 @@ def get_stats() -> Dict[str, Any]
 
 Get statistics about the skill system.
 
-<a id="spoon_ai.skills.registry"></a>
+<a id="spoon_ai.skills.executor"></a>
 
-# Module `spoon_ai.skills.registry`
+# Module `spoon_ai.skills.executor`
 
-Thread-safe skill registry with indexing.
+Script execution engine for skills.
 
-Follows NodePluginSystem pattern from graph/builder.py.
+Provides async subprocess management for executing skill scripts.
+AI decides how to call scripts - users only control whether scripts are allowed.
 
-<a id="spoon_ai.skills.registry.SkillRegistry"></a>
+<a id="spoon_ai.skills.executor.MAX_OUTPUT_SIZE"></a>
 
-## `SkillRegistry` Objects
+#### `MAX_OUTPUT_SIZE`
 
-```python
-class SkillRegistry()
-```
+5MB
 
-Thread-safe registry for skills with fast trigger matching.
+<a id="spoon_ai.skills.executor.ScriptExecutionError"></a>
 
-Maintains indexes for:
-- Tags: O(1) lookup by tag
-- Keywords: O(1) lookup by keyword
-- Intents: O(1) lookup by intent category
-- Patterns: Compiled regex patterns for matching
-
-<a id="spoon_ai.skills.registry.SkillRegistry.register"></a>
-
-#### `register`
+## `ScriptExecutionError` Objects
 
 ```python
-def register(skill: Skill) -> None
+class ScriptExecutionError(Exception)
 ```
 
-Register a skill and update indexes.
+Raised when script execution fails.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor"></a>
+
+## `ScriptExecutor` Objects
+
+```python
+class ScriptExecutor()
+```
+
+Async script executor for skill scripts.
+
+Features:
+- Async subprocess execution with timeout
+- Support for Python, shell, bash scripts
+- Environment variable passthrough
+- Output capture and size limiting
+- Global enable/disable control
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(enabled: bool = True,
+             default_timeout: int = DEFAULT_TIMEOUT,
+             max_output_size: int = MAX_OUTPUT_SIZE,
+             env_passthrough: Optional[List[str]] = None)
+```
+
+Initialize script executor.
 
 **Arguments**:
 
-- `skill` - Skill to register
+- `enabled` - Whether script execution is allowed
+- `default_timeout` - Default timeout in seconds
+- `max_output_size` - Max output capture size in bytes
+- `env_passthrough` - Environment variables to pass through
 
-<a id="spoon_ai.skills.registry.SkillRegistry.unregister"></a>
+<a id="spoon_ai.skills.executor.ScriptExecutor.is_available"></a>
 
-#### `unregister`
+#### `is_available`
 
 ```python
-def unregister(name: str) -> bool
+def is_available(script_type: ScriptType) -> bool
 ```
 
-Remove a skill from the registry.
+Check if a script type can be executed.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.get_interpreter"></a>
+
+#### `get_interpreter`
+
+```python
+def get_interpreter(script_type: ScriptType) -> Optional[str]
+```
+
+Get interpreter path for a script type.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(script: SkillScript,
+                  input_text: Optional[str] = None,
+                  working_directory: Optional[str] = None,
+                  extra_env: Optional[Dict[str, str]] = None,
+                  timeout: Optional[int] = None) -> ScriptResult
+```
+
+Execute a script asynchronously.
 
 **Arguments**:
 
-- `name` - Skill name to remove
+- `script` - Script to execute
+- `input_text` - Optional text to pass to script via stdin
+- `working_directory` - Working directory for execution
+- `extra_env` - Additional environment variables
+- `timeout` - Timeout override (uses script.timeout or default)
   
 
 **Returns**:
 
-  True if removed, False if not found
+  ScriptResult with output and status
 
-<a id="spoon_ai.skills.registry.SkillRegistry.get"></a>
+<a id="spoon_ai.skills.executor.ScriptExecutor.get_stats"></a>
 
-#### `get`
-
-```python
-def get(name: str) -> Optional[Skill]
-```
-
-Get a skill by name.
-
-**Arguments**:
-
-- `name` - Skill name
-  
-
-**Returns**:
-
-  Skill or None if not found
-
-<a id="spoon_ai.skills.registry.SkillRegistry.list_names"></a>
-
-#### `list_names`
+#### `get_stats`
 
 ```python
-def list_names() -> List[str]
+def get_stats() -> Dict[str, int]
 ```
 
-Get all registered skill names.
+Get execution statistics.
 
-<a id="spoon_ai.skills.registry.SkillRegistry.list_skills"></a>
+<a id="spoon_ai.skills.executor.ScriptExecutor.set_enabled"></a>
 
-#### `list_skills`
+#### `set_enabled`
 
 ```python
-def list_skills() -> List[Skill]
+def set_enabled(enabled: bool) -> None
 ```
 
-Get all registered skills.
+Enable or disable script execution.
 
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_tag"></a>
+<a id="spoon_ai.skills.executor.get_executor"></a>
 
-#### `find_by_tag`
+#### `get_executor`
 
 ```python
-def find_by_tag(tag: str) -> List[Skill]
+def get_executor() -> ScriptExecutor
 ```
 
-Find skills by tag.
+Get or create the global script executor.
 
-**Arguments**:
+<a id="spoon_ai.skills.executor.configure_executor"></a>
 
-- `tag` - Tag to search for
-  
-
-**Returns**:
-
-  List of matching skills
-
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_keyword"></a>
-
-#### `find_by_keyword`
+#### `configure_executor`
 
 ```python
-def find_by_keyword(text: str) -> List[Skill]
+def configure_executor(**kwargs) -> ScriptExecutor
 ```
 
-Find skills by keyword matching.
+Configure and return the global executor.
 
-Extracts words from text and matches against keyword index.
+<a id="spoon_ai.skills.executor.set_scripts_enabled"></a>
 
-**Arguments**:
-
-- `text` - Text to match keywords against
-  
-
-**Returns**:
-
-  List of matching skills (deduplicated)
-
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_pattern"></a>
-
-#### `find_by_pattern`
+#### `set_scripts_enabled`
 
 ```python
-def find_by_pattern(text: str) -> List[Skill]
+def set_scripts_enabled(enabled: bool) -> None
 ```
 
-Find skills by regex pattern matching.
-
-**Arguments**:
-
-- `text` - Text to match patterns against
-  
-
-**Returns**:
-
-  List of matching skills
-
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_intent"></a>
-
-#### `find_by_intent`
-
-```python
-def find_by_intent(intent_category: str) -> List[Skill]
-```
-
-Find skills by intent category.
-
-**Arguments**:
-
-- `intent_category` - Intent category to match
-  
-
-**Returns**:
-
-  List of matching skills
-
-<a id="spoon_ai.skills.registry.SkillRegistry.find_all_matching"></a>
-
-#### `find_all_matching`
-
-```python
-def find_all_matching(text: str) -> List[Skill]
-```
-
-Find all skills matching by keywords or patterns.
-
-Combines keyword and pattern matching, sorted by trigger priority.
-
-**Arguments**:
-
-- `text` - Text to match against
-  
-
-**Returns**:
-
-  List of matching skills, sorted by priority (highest first)
-
-<a id="spoon_ai.skills.registry.SkillRegistry.get_intent_categories"></a>
-
-#### `get_intent_categories`
-
-```python
-def get_intent_categories() -> List[str]
-```
-
-Get all registered intent categories.
+Enable or disable script execution globally.
 
 <a id="spoon_ai.skills.loader"></a>
 
@@ -1110,6 +905,211 @@ Reload a specific skill from disk.
 **Returns**:
 
   Reloaded Skill or None if not found
+
+<a id="spoon_ai.skills.registry"></a>
+
+# Module `spoon_ai.skills.registry`
+
+Thread-safe skill registry with indexing.
+
+Follows NodePluginSystem pattern from graph/builder.py.
+
+<a id="spoon_ai.skills.registry.SkillRegistry"></a>
+
+## `SkillRegistry` Objects
+
+```python
+class SkillRegistry()
+```
+
+Thread-safe registry for skills with fast trigger matching.
+
+Maintains indexes for:
+- Tags: O(1) lookup by tag
+- Keywords: O(1) lookup by keyword
+- Intents: O(1) lookup by intent category
+- Patterns: Compiled regex patterns for matching
+
+<a id="spoon_ai.skills.registry.SkillRegistry.register"></a>
+
+#### `register`
+
+```python
+def register(skill: Skill) -> None
+```
+
+Register a skill and update indexes.
+
+**Arguments**:
+
+- `skill` - Skill to register
+
+<a id="spoon_ai.skills.registry.SkillRegistry.unregister"></a>
+
+#### `unregister`
+
+```python
+def unregister(name: str) -> bool
+```
+
+Remove a skill from the registry.
+
+**Arguments**:
+
+- `name` - Skill name to remove
+  
+
+**Returns**:
+
+  True if removed, False if not found
+
+<a id="spoon_ai.skills.registry.SkillRegistry.get"></a>
+
+#### `get`
+
+```python
+def get(name: str) -> Optional[Skill]
+```
+
+Get a skill by name.
+
+**Arguments**:
+
+- `name` - Skill name
+  
+
+**Returns**:
+
+  Skill or None if not found
+
+<a id="spoon_ai.skills.registry.SkillRegistry.list_names"></a>
+
+#### `list_names`
+
+```python
+def list_names() -> List[str]
+```
+
+Get all registered skill names.
+
+<a id="spoon_ai.skills.registry.SkillRegistry.list_skills"></a>
+
+#### `list_skills`
+
+```python
+def list_skills() -> List[Skill]
+```
+
+Get all registered skills.
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_tag"></a>
+
+#### `find_by_tag`
+
+```python
+def find_by_tag(tag: str) -> List[Skill]
+```
+
+Find skills by tag.
+
+**Arguments**:
+
+- `tag` - Tag to search for
+  
+
+**Returns**:
+
+  List of matching skills
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_keyword"></a>
+
+#### `find_by_keyword`
+
+```python
+def find_by_keyword(text: str) -> List[Skill]
+```
+
+Find skills by keyword matching.
+
+Extracts words from text and matches against keyword index.
+
+**Arguments**:
+
+- `text` - Text to match keywords against
+  
+
+**Returns**:
+
+  List of matching skills (deduplicated)
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_pattern"></a>
+
+#### `find_by_pattern`
+
+```python
+def find_by_pattern(text: str) -> List[Skill]
+```
+
+Find skills by regex pattern matching.
+
+**Arguments**:
+
+- `text` - Text to match patterns against
+  
+
+**Returns**:
+
+  List of matching skills
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_intent"></a>
+
+#### `find_by_intent`
+
+```python
+def find_by_intent(intent_category: str) -> List[Skill]
+```
+
+Find skills by intent category.
+
+**Arguments**:
+
+- `intent_category` - Intent category to match
+  
+
+**Returns**:
+
+  List of matching skills
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_all_matching"></a>
+
+#### `find_all_matching`
+
+```python
+def find_all_matching(text: str) -> List[Skill]
+```
+
+Find all skills matching by keywords or patterns.
+
+Combines keyword and pattern matching, sorted by trigger priority.
+
+**Arguments**:
+
+- `text` - Text to match against
+  
+
+**Returns**:
+
+  List of matching skills, sorted by priority (highest first)
+
+<a id="spoon_ai.skills.registry.SkillRegistry.get_intent_categories"></a>
+
+#### `get_intent_categories`
+
+```python
+def get_intent_categories() -> List[str]
+```
+
+Get all registered intent categories.
 
 <a id="spoon_ai.skills.script_tool"></a>
 
