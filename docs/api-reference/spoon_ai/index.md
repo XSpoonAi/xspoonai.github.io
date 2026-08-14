@@ -7,266 +7,8 @@ title: spoon_ai
 # Table of Contents
 
 * [spoon\_ai](#spoon_ai)
-* [spoon\_ai.schema](#spoon_ai.schema)
-  * [Function](#spoon_ai.schema.Function)
-    * [get\_arguments\_dict](#spoon_ai.schema.Function.get_arguments_dict)
-    * [create](#spoon_ai.schema.Function.create)
-  * [AgentState](#spoon_ai.schema.AgentState)
-  * [ToolChoice](#spoon_ai.schema.ToolChoice)
-  * [Role](#spoon_ai.schema.Role)
-  * [ROLE\_TYPE](#spoon_ai.schema.ROLE_TYPE)
-  * [ContentType](#spoon_ai.schema.ContentType)
-    * [IMAGE](#spoon_ai.schema.ContentType.IMAGE)
-    * [IMAGE\_URL](#spoon_ai.schema.ContentType.IMAGE_URL)
-    * [DOCUMENT](#spoon_ai.schema.ContentType.DOCUMENT)
-    * [FILE](#spoon_ai.schema.ContentType.FILE)
-    * [AUDIO](#spoon_ai.schema.ContentType.AUDIO)
-  * [ImageMediaType](#spoon_ai.schema.ImageMediaType)
-  * [ImageSource](#spoon_ai.schema.ImageSource)
-  * [ImageUrlSource](#spoon_ai.schema.ImageUrlSource)
-  * [TextContent](#spoon_ai.schema.TextContent)
-  * [ImageContent](#spoon_ai.schema.ImageContent)
-  * [ImageUrlContent](#spoon_ai.schema.ImageUrlContent)
-  * [FileContent](#spoon_ai.schema.FileContent)
-  * [DocumentSource](#spoon_ai.schema.DocumentSource)
-  * [DocumentContent](#spoon_ai.schema.DocumentContent)
-  * [Message](#spoon_ai.schema.Message)
-    * [role](#spoon_ai.schema.Message.role)
-    * [is\_multimodal](#spoon_ai.schema.Message.is_multimodal)
-    * [text\_content](#spoon_ai.schema.Message.text_content)
-    * [has\_images](#spoon_ai.schema.Message.has_images)
-    * [has\_documents](#spoon_ai.schema.Message.has_documents)
-    * [create\_text](#spoon_ai.schema.Message.create_text)
-    * [create\_multimodal](#spoon_ai.schema.Message.create_multimodal)
-    * [create\_with\_image\_url](#spoon_ai.schema.Message.create_with_image_url)
-    * [create\_with\_base64\_image](#spoon_ai.schema.Message.create_with_base64_image)
-    * [create\_with\_pdf](#spoon_ai.schema.Message.create_with_pdf)
-    * [create\_with\_document](#spoon_ai.schema.Message.create_with_document)
-  * [SystemMessage](#spoon_ai.schema.SystemMessage)
-    * [role](#spoon_ai.schema.SystemMessage.role)
-  * [TOOL\_CHOICE\_TYPE](#spoon_ai.schema.TOOL_CHOICE_TYPE)
-  * [LLMConfig](#spoon_ai.schema.LLMConfig)
-  * [LLMResponse](#spoon_ai.schema.LLMResponse)
-    * [text](#spoon_ai.schema.LLMResponse.text)
-  * [LLMResponseChunk](#spoon_ai.schema.LLMResponseChunk)
-* [spoon\_ai.utils.streaming](#spoon_ai.utils.streaming)
-  * [StreamOutcome](#spoon_ai.utils.streaming.StreamOutcome)
-  * [build\_output\_queue\_event](#spoon_ai.utils.streaming.build_output_queue_event)
-* [spoon\_ai.utils.config](#spoon_ai.utils.config)
-* [spoon\_ai.utils](#spoon_ai.utils)
-* [spoon\_ai.utils.config\_manager](#spoon_ai.utils.config_manager)
-  * [ConfigManager](#spoon_ai.utils.config_manager.ConfigManager)
-    * [\_\_init\_\_](#spoon_ai.utils.config_manager.ConfigManager.__init__)
-    * [refresh](#spoon_ai.utils.config_manager.ConfigManager.refresh)
-    * [get](#spoon_ai.utils.config_manager.ConfigManager.get)
-    * [set](#spoon_ai.utils.config_manager.ConfigManager.set)
-    * [list\_config](#spoon_ai.utils.config_manager.ConfigManager.list_config)
-    * [get\_api\_key](#spoon_ai.utils.config_manager.ConfigManager.get_api_key)
-    * [set\_api\_key](#spoon_ai.utils.config_manager.ConfigManager.set_api_key)
-    * [get\_model\_name](#spoon_ai.utils.config_manager.ConfigManager.get_model_name)
-    * [get\_base\_url](#spoon_ai.utils.config_manager.ConfigManager.get_base_url)
-    * [get\_llm\_provider](#spoon_ai.utils.config_manager.ConfigManager.get_llm_provider)
-* [spoon\_ai.utils.utils](#spoon_ai.utils.utils)
-* [spoon\_ai.turnkey](#spoon_ai.turnkey)
-* [spoon\_ai.turnkey.client](#spoon_ai.turnkey.client)
-  * [Turnkey](#spoon_ai.turnkey.client.Turnkey)
-    * [\_\_init\_\_](#spoon_ai.turnkey.client.Turnkey.__init__)
-    * [whoami](#spoon_ai.turnkey.client.Turnkey.whoami)
-    * [import\_private\_key](#spoon_ai.turnkey.client.Turnkey.import_private_key)
-    * [sign\_evm\_transaction](#spoon_ai.turnkey.client.Turnkey.sign_evm_transaction)
-    * [sign\_typed\_data](#spoon_ai.turnkey.client.Turnkey.sign_typed_data)
-    * [sign\_message](#spoon_ai.turnkey.client.Turnkey.sign_message)
-    * [get\_activity](#spoon_ai.turnkey.client.Turnkey.get_activity)
-    * [list\_activities](#spoon_ai.turnkey.client.Turnkey.list_activities)
-    * [get\_policy\_evaluations](#spoon_ai.turnkey.client.Turnkey.get_policy_evaluations)
-    * [get\_private\_key](#spoon_ai.turnkey.client.Turnkey.get_private_key)
-    * [create\_wallet](#spoon_ai.turnkey.client.Turnkey.create_wallet)
-    * [create\_wallet\_accounts](#spoon_ai.turnkey.client.Turnkey.create_wallet_accounts)
-    * [get\_wallet](#spoon_ai.turnkey.client.Turnkey.get_wallet)
-    * [get\_wallet\_account](#spoon_ai.turnkey.client.Turnkey.get_wallet_account)
-    * [list\_wallets](#spoon_ai.turnkey.client.Turnkey.list_wallets)
-    * [list\_wallet\_accounts](#spoon_ai.turnkey.client.Turnkey.list_wallet_accounts)
-    * [init\_import\_wallet](#spoon_ai.turnkey.client.Turnkey.init_import_wallet)
-    * [encrypt\_wallet](#spoon_ai.turnkey.client.Turnkey.encrypt_wallet)
-    * [encrypt\_private\_key](#spoon_ai.turnkey.client.Turnkey.encrypt_private_key)
-    * [init\_import\_private\_key](#spoon_ai.turnkey.client.Turnkey.init_import_private_key)
-    * [import\_wallet](#spoon_ai.turnkey.client.Turnkey.import_wallet)
-* [spoon\_ai.graph.types](#spoon_ai.graph.types)
-* [spoon\_ai.graph.agent](#spoon_ai.graph.agent)
-  * [Memory](#spoon_ai.graph.agent.Memory)
-    * [clear](#spoon_ai.graph.agent.Memory.clear)
-    * [add\_message](#spoon_ai.graph.agent.Memory.add_message)
-    * [get\_messages](#spoon_ai.graph.agent.Memory.get_messages)
-    * [get\_recent\_messages](#spoon_ai.graph.agent.Memory.get_recent_messages)
-    * [search\_messages](#spoon_ai.graph.agent.Memory.search_messages)
-    * [get\_statistics](#spoon_ai.graph.agent.Memory.get_statistics)
-    * [set\_metadata](#spoon_ai.graph.agent.Memory.set_metadata)
-    * [get\_metadata](#spoon_ai.graph.agent.Memory.get_metadata)
-  * [MockMemory](#spoon_ai.graph.agent.MockMemory)
-  * [GraphAgent](#spoon_ai.graph.agent.GraphAgent)
-    * [search\_memory](#spoon_ai.graph.agent.GraphAgent.search_memory)
-    * [get\_recent\_memory](#spoon_ai.graph.agent.GraphAgent.get_recent_memory)
-    * [get\_memory\_statistics](#spoon_ai.graph.agent.GraphAgent.get_memory_statistics)
-    * [set\_memory\_metadata](#spoon_ai.graph.agent.GraphAgent.set_memory_metadata)
-    * [get\_memory\_metadata](#spoon_ai.graph.agent.GraphAgent.get_memory_metadata)
-    * [save\_session](#spoon_ai.graph.agent.GraphAgent.save_session)
-    * [load\_session](#spoon_ai.graph.agent.GraphAgent.load_session)
-* [spoon\_ai.graph.engine](#spoon_ai.graph.engine)
-  * [create\_multimodal\_message](#spoon_ai.graph.engine.create_multimodal_message)
-  * [create\_vision\_user\_message](#spoon_ai.graph.engine.create_vision_user_message)
-  * [create\_pdf\_message](#spoon_ai.graph.engine.create_pdf_message)
-  * [create\_document\_message](#spoon_ai.graph.engine.create_document_message)
-  * [BaseNode](#spoon_ai.graph.engine.BaseNode)
-    * [\_\_call\_\_](#spoon_ai.graph.engine.BaseNode.__call__)
-  * [RunnableNode](#spoon_ai.graph.engine.RunnableNode)
-    * [\_\_call\_\_](#spoon_ai.graph.engine.RunnableNode.__call__)
-  * [ToolNode](#spoon_ai.graph.engine.ToolNode)
-    * [\_\_call\_\_](#spoon_ai.graph.engine.ToolNode.__call__)
-  * [ConditionNode](#spoon_ai.graph.engine.ConditionNode)
-    * [\_\_call\_\_](#spoon_ai.graph.engine.ConditionNode.__call__)
-  * [interrupt](#spoon_ai.graph.engine.interrupt)
-  * [RouteRule](#spoon_ai.graph.engine.RouteRule)
-    * [matches](#spoon_ai.graph.engine.RouteRule.matches)
-  * [RunningSummary](#spoon_ai.graph.engine.RunningSummary)
-  * [SummarizationNode](#spoon_ai.graph.engine.SummarizationNode)
-  * [StateGraph](#spoon_ai.graph.engine.StateGraph)
-    * [add\_node](#spoon_ai.graph.engine.StateGraph.add_node)
-    * [add\_edge](#spoon_ai.graph.engine.StateGraph.add_edge)
-    * [add\_conditional\_edges](#spoon_ai.graph.engine.StateGraph.add_conditional_edges)
-    * [set\_entry\_point](#spoon_ai.graph.engine.StateGraph.set_entry_point)
-    * [add\_tool\_node](#spoon_ai.graph.engine.StateGraph.add_tool_node)
-    * [add\_conditional\_node](#spoon_ai.graph.engine.StateGraph.add_conditional_node)
-    * [add\_parallel\_group](#spoon_ai.graph.engine.StateGraph.add_parallel_group)
-    * [add\_routing\_rule](#spoon_ai.graph.engine.StateGraph.add_routing_rule)
-    * [get\_state](#spoon_ai.graph.engine.StateGraph.get_state)
-    * [get\_state\_history](#spoon_ai.graph.engine.StateGraph.get_state_history)
-    * [add\_pattern\_routing](#spoon_ai.graph.engine.StateGraph.add_pattern_routing)
-    * [set\_intelligent\_router](#spoon_ai.graph.engine.StateGraph.set_intelligent_router)
-    * [set\_llm\_router](#spoon_ai.graph.engine.StateGraph.set_llm_router)
-    * [enable\_llm\_routing](#spoon_ai.graph.engine.StateGraph.enable_llm_routing)
-    * [compile](#spoon_ai.graph.engine.StateGraph.compile)
-    * [get\_graph](#spoon_ai.graph.engine.StateGraph.get_graph)
-  * [CompiledGraph](#spoon_ai.graph.engine.CompiledGraph)
-    * [get\_execution\_metrics](#spoon_ai.graph.engine.CompiledGraph.get_execution_metrics)
-* [spoon\_ai.graph.builder](#spoon_ai.graph.builder)
-  * [Intent](#spoon_ai.graph.builder.Intent)
-  * [IntentAnalyzer](#spoon_ai.graph.builder.IntentAnalyzer)
-  * [AdaptiveStateBuilder](#spoon_ai.graph.builder.AdaptiveStateBuilder)
-  * [ParameterInferenceEngine](#spoon_ai.graph.builder.ParameterInferenceEngine)
-  * [NodeSpec](#spoon_ai.graph.builder.NodeSpec)
-  * [EdgeSpec](#spoon_ai.graph.builder.EdgeSpec)
-    * [end](#spoon_ai.graph.builder.EdgeSpec.end)
-  * [ParallelGroupSpec](#spoon_ai.graph.builder.ParallelGroupSpec)
-  * [GraphTemplate](#spoon_ai.graph.builder.GraphTemplate)
-  * [DeclarativeGraphBuilder](#spoon_ai.graph.builder.DeclarativeGraphBuilder)
-  * [NodePlugin](#spoon_ai.graph.builder.NodePlugin)
-  * [NodePluginSystem](#spoon_ai.graph.builder.NodePluginSystem)
-  * [HighLevelGraphAPI](#spoon_ai.graph.builder.HighLevelGraphAPI)
-* [spoon\_ai.graph.config](#spoon_ai.graph.config)
-  * [RouterConfig](#spoon_ai.graph.config.RouterConfig)
-  * [ParallelRetryPolicy](#spoon_ai.graph.config.ParallelRetryPolicy)
-  * [ParallelGroupConfig](#spoon_ai.graph.config.ParallelGroupConfig)
-    * [quorum](#spoon_ai.graph.config.ParallelGroupConfig.quorum)
-    * [error\_strategy](#spoon_ai.graph.config.ParallelGroupConfig.error_strategy)
-  * [GraphConfig](#spoon_ai.graph.config.GraphConfig)
-* [spoon\_ai.graph.mcp\_integration](#spoon_ai.graph.mcp_integration)
-  * [MCPToolSpec](#spoon_ai.graph.mcp_integration.MCPToolSpec)
-  * [MCPConfigManager](#spoon_ai.graph.mcp_integration.MCPConfigManager)
-  * [MCPToolDiscoveryEngine](#spoon_ai.graph.mcp_integration.MCPToolDiscoveryEngine)
-  * [MCPIntegrationManager](#spoon_ai.graph.mcp_integration.MCPIntegrationManager)
-* [spoon\_ai.graph](#spoon_ai.graph)
-* [spoon\_ai.graph.exceptions](#spoon_ai.graph.exceptions)
-* [spoon\_ai.graph.decorators](#spoon_ai.graph.decorators)
-* [spoon\_ai.graph.cache](#spoon_ai.graph.cache)
-  * [compute\_cache\_key](#spoon_ai.graph.cache.compute_cache_key)
-  * [CacheEntry](#spoon_ai.graph.cache.CacheEntry)
-    * [is\_expired](#spoon_ai.graph.cache.CacheEntry.is_expired)
-    * [to\_dict](#spoon_ai.graph.cache.CacheEntry.to_dict)
-    * [from\_dict](#spoon_ai.graph.cache.CacheEntry.from_dict)
-  * [BaseCache](#spoon_ai.graph.cache.BaseCache)
-    * [get](#spoon_ai.graph.cache.BaseCache.get)
-    * [set](#spoon_ai.graph.cache.BaseCache.set)
-    * [delete](#spoon_ai.graph.cache.BaseCache.delete)
-    * [clear](#spoon_ai.graph.cache.BaseCache.clear)
-    * [get\_or\_compute](#spoon_ai.graph.cache.BaseCache.get_or_compute)
-  * [InMemoryCache](#spoon_ai.graph.cache.InMemoryCache)
-    * [\_\_init\_\_](#spoon_ai.graph.cache.InMemoryCache.__init__)
-    * [get](#spoon_ai.graph.cache.InMemoryCache.get)
-    * [set](#spoon_ai.graph.cache.InMemoryCache.set)
-    * [delete](#spoon_ai.graph.cache.InMemoryCache.delete)
-    * [clear](#spoon_ai.graph.cache.InMemoryCache.clear)
-    * [get\_stats](#spoon_ai.graph.cache.InMemoryCache.get_stats)
-  * [SQLiteCache](#spoon_ai.graph.cache.SQLiteCache)
-    * [\_\_init\_\_](#spoon_ai.graph.cache.SQLiteCache.__init__)
-    * [get](#spoon_ai.graph.cache.SQLiteCache.get)
-    * [set](#spoon_ai.graph.cache.SQLiteCache.set)
-    * [delete](#spoon_ai.graph.cache.SQLiteCache.delete)
-    * [clear](#spoon_ai.graph.cache.SQLiteCache.clear)
-    * [get\_stats](#spoon_ai.graph.cache.SQLiteCache.get_stats)
-  * [create\_memory\_cache](#spoon_ai.graph.cache.create_memory_cache)
-  * [create\_sqlite\_cache](#spoon_ai.graph.cache.create_sqlite_cache)
-* [spoon\_ai.graph.checkpointer](#spoon_ai.graph.checkpointer)
-  * [InMemoryCheckpointer](#spoon_ai.graph.checkpointer.InMemoryCheckpointer)
-    * [iter\_checkpoint\_history](#spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history)
-* [spoon\_ai.graph.reducers](#spoon_ai.graph.reducers)
-* [spoon\_ai.identity.did\_models](#spoon_ai.identity.did_models)
-  * [VerificationMethodType](#spoon_ai.identity.did_models.VerificationMethodType)
-  * [ServiceType](#spoon_ai.identity.did_models.ServiceType)
-  * [VerificationMethod](#spoon_ai.identity.did_models.VerificationMethod)
-  * [ServiceEndpoint](#spoon_ai.identity.did_models.ServiceEndpoint)
-  * [ReputationScore](#spoon_ai.identity.did_models.ReputationScore)
-  * [Attestation](#spoon_ai.identity.did_models.Attestation)
-  * [AgentCard](#spoon_ai.identity.did_models.AgentCard)
-  * [AgentDID](#spoon_ai.identity.did_models.AgentDID)
-    * [to\_did\_document](#spoon_ai.identity.did_models.AgentDID.to_did_document)
-    * [to\_agent\_card](#spoon_ai.identity.did_models.AgentDID.to_agent_card)
-  * [DIDResolutionResult](#spoon_ai.identity.did_models.DIDResolutionResult)
-* [spoon\_ai.identity.storage\_client](#spoon_ai.identity.storage_client)
-  * [DIDStorageClient](#spoon_ai.identity.storage_client.DIDStorageClient)
-    * [publish\_did\_document](#spoon_ai.identity.storage_client.DIDStorageClient.publish_did_document)
-    * [fetch\_did\_document](#spoon_ai.identity.storage_client.DIDStorageClient.fetch_did_document)
-    * [publish\_credential](#spoon_ai.identity.storage_client.DIDStorageClient.publish_credential)
-    * [close](#spoon_ai.identity.storage_client.DIDStorageClient.close)
-* [spoon\_ai.identity](#spoon_ai.identity)
-* [spoon\_ai.identity.attestation](#spoon_ai.identity.attestation)
-  * [AttestationManager](#spoon_ai.identity.attestation.AttestationManager)
-    * [create\_attestation](#spoon_ai.identity.attestation.AttestationManager.create_attestation)
-    * [verify\_attestation](#spoon_ai.identity.attestation.AttestationManager.verify_attestation)
-    * [submit\_reputation\_on\_chain](#spoon_ai.identity.attestation.AttestationManager.submit_reputation_on_chain)
-    * [submit\_validation\_on\_chain](#spoon_ai.identity.attestation.AttestationManager.submit_validation_on_chain)
-  * [TrustScoreCalculator](#spoon_ai.identity.attestation.TrustScoreCalculator)
-    * [calculate\_trust\_score](#spoon_ai.identity.attestation.TrustScoreCalculator.calculate_trust_score)
-    * [get\_reputation\_breakdown](#spoon_ai.identity.attestation.TrustScoreCalculator.get_reputation_breakdown)
-    * [get\_validation\_breakdown](#spoon_ai.identity.attestation.TrustScoreCalculator.get_validation_breakdown)
-* [spoon\_ai.identity.erc8004\_abi](#spoon_ai.identity.erc8004_abi)
-* [spoon\_ai.identity.did\_resolver](#spoon_ai.identity.did_resolver)
-  * [DIDResolver](#spoon_ai.identity.did_resolver.DIDResolver)
-    * [resolve](#spoon_ai.identity.did_resolver.DIDResolver.resolve)
-    * [resolve\_metadata\_only](#spoon_ai.identity.did_resolver.DIDResolver.resolve_metadata_only)
-    * [verify\_agent](#spoon_ai.identity.did_resolver.DIDResolver.verify_agent)
-* [spoon\_ai.identity.erc8004\_client](#spoon_ai.identity.erc8004_client)
-  * [ERC8004Client](#spoon_ai.identity.erc8004_client.ERC8004Client)
-    * [get\_agent\_id\_for\_address](#spoon_ai.identity.erc8004_client.ERC8004Client.get_agent_id_for_address)
-    * [register\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.register_agent)
-    * [resolve\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent)
-* [spoon\_ai.llm.message\_utils](#spoon_ai.llm.message_utils)
-  * [drop\_orphaned\_tool\_messages](#spoon_ai.llm.message_utils.drop_orphaned_tool_messages)
-* [spoon\_ai.llm.response\_normalizer](#spoon_ai.llm.response_normalizer)
-  * [ResponseNormalizer](#spoon_ai.llm.response_normalizer.ResponseNormalizer)
-    * [normalize\_response](#spoon_ai.llm.response_normalizer.ResponseNormalizer.normalize_response)
-    * [validate\_response](#spoon_ai.llm.response_normalizer.ResponseNormalizer.validate_response)
-    * [add\_provider\_mapping](#spoon_ai.llm.response_normalizer.ResponseNormalizer.add_provider_mapping)
-    * [get\_supported\_providers](#spoon_ai.llm.response_normalizer.ResponseNormalizer.get_supported_providers)
-  * [get\_response\_normalizer](#spoon_ai.llm.response_normalizer.get_response_normalizer)
-* [spoon\_ai.llm.providers.openai\_provider](#spoon_ai.llm.providers.openai_provider)
-  * [OpenAIProvider](#spoon_ai.llm.providers.openai_provider.OpenAIProvider)
-    * [get\_metadata](#spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata)
-* [spoon\_ai.llm.providers.ollama\_provider](#spoon_ai.llm.providers.ollama_provider)
-  * [OllamaProvider](#spoon_ai.llm.providers.ollama_provider.OllamaProvider)
-* [spoon\_ai.llm.providers.openrouter\_provider](#spoon_ai.llm.providers.openrouter_provider)
-  * [OpenRouterProvider](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider)
-    * [get\_additional\_headers](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers)
-    * [get\_metadata](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata)
+* [spoon\_ai.llm](#spoon_ai.llm)
+* [spoon\_ai.llm.providers](#spoon_ai.llm.providers)
 * [spoon\_ai.llm.providers.gemini\_provider](#spoon_ai.llm.providers.gemini_provider)
   * [GeminiProvider](#spoon_ai.llm.providers.gemini_provider.GeminiProvider)
     * [initialize](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.initialize)
@@ -277,6 +19,13 @@ title: spoon_ai
     * [get\_metadata](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.get_metadata)
     * [health\_check](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.health_check)
     * [cleanup](#spoon_ai.llm.providers.gemini_provider.GeminiProvider.cleanup)
+* [spoon\_ai.llm.providers.deepseek\_provider](#spoon_ai.llm.providers.deepseek_provider)
+  * [DeepSeekProvider](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider)
+    * [get\_metadata](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata)
+* [spoon\_ai.llm.providers.openrouter\_provider](#spoon_ai.llm.providers.openrouter_provider)
+  * [OpenRouterProvider](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider)
+    * [get\_additional\_headers](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers)
+    * [get\_metadata](#spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata)
 * [spoon\_ai.llm.providers.openai\_compatible\_provider](#spoon_ai.llm.providers.openai_compatible_provider)
   * [MAX\_INLINE\_FILE\_SIZE](#spoon_ai.llm.providers.openai_compatible_provider.MAX_INLINE_FILE_SIZE)
   * [OpenAICompatibleProvider](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider)
@@ -292,10 +41,11 @@ title: spoon_ai
     * [get\_metadata](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.get_metadata)
     * [health\_check](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.health_check)
     * [cleanup](#spoon_ai.llm.providers.openai_compatible_provider.OpenAICompatibleProvider.cleanup)
-* [spoon\_ai.llm.providers](#spoon_ai.llm.providers)
-* [spoon\_ai.llm.providers.deepseek\_provider](#spoon_ai.llm.providers.deepseek_provider)
-  * [DeepSeekProvider](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider)
-    * [get\_metadata](#spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata)
+* [spoon\_ai.llm.providers.openai\_provider](#spoon_ai.llm.providers.openai_provider)
+  * [OpenAIProvider](#spoon_ai.llm.providers.openai_provider.OpenAIProvider)
+    * [get\_metadata](#spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata)
+* [spoon\_ai.llm.providers.ollama\_provider](#spoon_ai.llm.providers.ollama_provider)
+  * [OllamaProvider](#spoon_ai.llm.providers.ollama_provider.OllamaProvider)
 * [spoon\_ai.llm.providers.anthropic\_provider](#spoon_ai.llm.providers.anthropic_provider)
   * [AnthropicProvider](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider)
     * [initialize](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.initialize)
@@ -307,6 +57,13 @@ title: spoon_ai
     * [get\_metadata](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.get_metadata)
     * [health\_check](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.health_check)
     * [cleanup](#spoon_ai.llm.providers.anthropic_provider.AnthropicProvider.cleanup)
+* [spoon\_ai.llm.response\_normalizer](#spoon_ai.llm.response_normalizer)
+  * [ResponseNormalizer](#spoon_ai.llm.response_normalizer.ResponseNormalizer)
+    * [normalize\_response](#spoon_ai.llm.response_normalizer.ResponseNormalizer.normalize_response)
+    * [validate\_response](#spoon_ai.llm.response_normalizer.ResponseNormalizer.validate_response)
+    * [add\_provider\_mapping](#spoon_ai.llm.response_normalizer.ResponseNormalizer.add_provider_mapping)
+    * [get\_supported\_providers](#spoon_ai.llm.response_normalizer.ResponseNormalizer.get_supported_providers)
+  * [get\_response\_normalizer](#spoon_ai.llm.response_normalizer.get_response_normalizer)
 * [spoon\_ai.llm.manager](#spoon_ai.llm.manager)
   * [ProviderState](#spoon_ai.llm.manager.ProviderState)
     * [can\_retry\_initialization](#spoon_ai.llm.manager.ProviderState.can_retry_initialization)
@@ -359,7 +116,6 @@ title: spoon_ai
     * [get\_available\_providers\_by\_priority](#spoon_ai.llm.config.ConfigurationManager.get_available_providers_by_priority)
     * [get\_provider\_info](#spoon_ai.llm.config.ConfigurationManager.get_provider_info)
     * [reload\_config](#spoon_ai.llm.config.ConfigurationManager.reload_config)
-* [spoon\_ai.llm](#spoon_ai.llm)
 * [spoon\_ai.llm.registry](#spoon_ai.llm.registry)
   * [LLMProviderRegistry](#spoon_ai.llm.registry.LLMProviderRegistry)
     * [register](#spoon_ai.llm.registry.LLMProviderRegistry.register)
@@ -371,23 +127,6 @@ title: spoon_ai
     * [clear](#spoon_ai.llm.registry.LLMProviderRegistry.clear)
   * [register\_provider](#spoon_ai.llm.registry.register_provider)
   * [get\_global\_registry](#spoon_ai.llm.registry.get_global_registry)
-* [spoon\_ai.llm.interface](#spoon_ai.llm.interface)
-  * [ProviderCapability](#spoon_ai.llm.interface.ProviderCapability)
-  * [ProviderMetadata](#spoon_ai.llm.interface.ProviderMetadata)
-  * [LLMResponse](#spoon_ai.llm.interface.LLMResponse)
-  * [LLMProviderInterface](#spoon_ai.llm.interface.LLMProviderInterface)
-    * [initialize](#spoon_ai.llm.interface.LLMProviderInterface.initialize)
-    * [chat](#spoon_ai.llm.interface.LLMProviderInterface.chat)
-    * [chat\_stream](#spoon_ai.llm.interface.LLMProviderInterface.chat_stream)
-    * [completion](#spoon_ai.llm.interface.LLMProviderInterface.completion)
-    * [chat\_with\_tools](#spoon_ai.llm.interface.LLMProviderInterface.chat_with_tools)
-    * [get\_metadata](#spoon_ai.llm.interface.LLMProviderInterface.get_metadata)
-    * [health\_check](#spoon_ai.llm.interface.LLMProviderInterface.health_check)
-    * [cleanup](#spoon_ai.llm.interface.LLMProviderInterface.cleanup)
-* [spoon\_ai.llm.factory](#spoon_ai.llm.factory)
-  * [LLMFactory](#spoon_ai.llm.factory.LLMFactory)
-    * [register](#spoon_ai.llm.factory.LLMFactory.register)
-    * [create](#spoon_ai.llm.factory.LLMFactory.create)
 * [spoon\_ai.llm.monitoring](#spoon_ai.llm.monitoring)
   * [RequestMetrics](#spoon_ai.llm.monitoring.RequestMetrics)
   * [ProviderStats](#spoon_ai.llm.monitoring.ProviderStats)
@@ -413,6 +152,19 @@ title: spoon_ai
     * [reset\_stats](#spoon_ai.llm.monitoring.MetricsCollector.reset_stats)
   * [get\_debug\_logger](#spoon_ai.llm.monitoring.get_debug_logger)
   * [get\_metrics\_collector](#spoon_ai.llm.monitoring.get_metrics_collector)
+* [spoon\_ai.llm.interface](#spoon_ai.llm.interface)
+  * [ProviderCapability](#spoon_ai.llm.interface.ProviderCapability)
+  * [ProviderMetadata](#spoon_ai.llm.interface.ProviderMetadata)
+  * [LLMResponse](#spoon_ai.llm.interface.LLMResponse)
+  * [LLMProviderInterface](#spoon_ai.llm.interface.LLMProviderInterface)
+    * [initialize](#spoon_ai.llm.interface.LLMProviderInterface.initialize)
+    * [chat](#spoon_ai.llm.interface.LLMProviderInterface.chat)
+    * [chat\_stream](#spoon_ai.llm.interface.LLMProviderInterface.chat_stream)
+    * [completion](#spoon_ai.llm.interface.LLMProviderInterface.completion)
+    * [chat\_with\_tools](#spoon_ai.llm.interface.LLMProviderInterface.chat_with_tools)
+    * [get\_metadata](#spoon_ai.llm.interface.LLMProviderInterface.get_metadata)
+    * [health\_check](#spoon_ai.llm.interface.LLMProviderInterface.health_check)
+    * [cleanup](#spoon_ai.llm.interface.LLMProviderInterface.cleanup)
 * [spoon\_ai.llm.cache](#spoon_ai.llm.cache)
   * [LLMResponseCache](#spoon_ai.llm.cache.LLMResponseCache)
     * [\_\_init\_\_](#spoon_ai.llm.cache.LLMResponseCache.__init__)
@@ -426,6 +178,12 @@ title: spoon_ai
     * [chat\_stream](#spoon_ai.llm.cache.CachedLLMManager.chat_stream)
     * [clear\_cache](#spoon_ai.llm.cache.CachedLLMManager.clear_cache)
     * [get\_cache\_stats](#spoon_ai.llm.cache.CachedLLMManager.get_cache_stats)
+* [spoon\_ai.llm.factory](#spoon_ai.llm.factory)
+  * [LLMFactory](#spoon_ai.llm.factory.LLMFactory)
+    * [register](#spoon_ai.llm.factory.LLMFactory.register)
+    * [create](#spoon_ai.llm.factory.LLMFactory.create)
+* [spoon\_ai.llm.message\_utils](#spoon_ai.llm.message_utils)
+  * [drop\_orphaned\_tool\_messages](#spoon_ai.llm.message_utils.drop_orphaned_tool_messages)
 * [spoon\_ai.llm.base](#spoon_ai.llm.base)
   * [LLMBase](#spoon_ai.llm.base.LLMBase)
     * [\_\_init\_\_](#spoon_ai.llm.base.LLMBase.__init__)
@@ -434,58 +192,178 @@ title: spoon_ai
     * [chat\_with\_tools](#spoon_ai.llm.base.LLMBase.chat_with_tools)
     * [generate\_image](#spoon_ai.llm.base.LLMBase.generate_image)
     * [reset\_output\_handler](#spoon_ai.llm.base.LLMBase.reset_output_handler)
-* [spoon\_ai.callbacks.manager](#spoon_ai.callbacks.manager)
-  * [CallbackManager](#spoon_ai.callbacks.manager.CallbackManager)
-* [spoon\_ai.callbacks.skill\_callback](#spoon_ai.callbacks.skill_callback)
-  * [SkillCallbackHandler](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler)
-    * [on\_skill\_start](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_start)
-    * [on\_skill\_end](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_end)
-    * [on\_skill\_error](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_error)
-    * [on\_skill\_match](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_match)
-  * [LoggingSkillCallback](#spoon_ai.callbacks.skill_callback.LoggingSkillCallback)
-  * [MetricsSkillCallback](#spoon_ai.callbacks.skill_callback.MetricsSkillCallback)
-    * [get\_metrics](#spoon_ai.callbacks.skill_callback.MetricsSkillCallback.get_metrics)
-    * [reset](#spoon_ai.callbacks.skill_callback.MetricsSkillCallback.reset)
-* [spoon\_ai.callbacks.streaming\_stdout](#spoon_ai.callbacks.streaming_stdout)
-  * [StreamingStdOutCallbackHandler](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler)
-    * [on\_llm\_new\_token](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_new_token)
-    * [on\_llm\_end](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_end)
-* [spoon\_ai.callbacks](#spoon_ai.callbacks)
-* [spoon\_ai.callbacks.stream\_event](#spoon_ai.callbacks.stream_event)
-  * [StreamEventCallbackHandler](#spoon_ai.callbacks.stream_event.StreamEventCallbackHandler)
-* [spoon\_ai.callbacks.statistics](#spoon_ai.callbacks.statistics)
-  * [StreamingStatisticsCallback](#spoon_ai.callbacks.statistics.StreamingStatisticsCallback)
-* [spoon\_ai.callbacks.base](#spoon_ai.callbacks.base)
-  * [RetrieverManagerMixin](#spoon_ai.callbacks.base.RetrieverManagerMixin)
-    * [on\_retriever\_start](#spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_start)
-    * [on\_retriever\_end](#spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_end)
-    * [on\_retriever\_error](#spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_error)
-  * [LLMManagerMixin](#spoon_ai.callbacks.base.LLMManagerMixin)
-    * [on\_llm\_start](#spoon_ai.callbacks.base.LLMManagerMixin.on_llm_start)
-    * [on\_llm\_new\_token](#spoon_ai.callbacks.base.LLMManagerMixin.on_llm_new_token)
-    * [on\_llm\_end](#spoon_ai.callbacks.base.LLMManagerMixin.on_llm_end)
-    * [on\_llm\_error](#spoon_ai.callbacks.base.LLMManagerMixin.on_llm_error)
-  * [ChainManagerMixin](#spoon_ai.callbacks.base.ChainManagerMixin)
-    * [on\_chain\_start](#spoon_ai.callbacks.base.ChainManagerMixin.on_chain_start)
-    * [on\_chain\_end](#spoon_ai.callbacks.base.ChainManagerMixin.on_chain_end)
-    * [on\_chain\_error](#spoon_ai.callbacks.base.ChainManagerMixin.on_chain_error)
-  * [ToolManagerMixin](#spoon_ai.callbacks.base.ToolManagerMixin)
-    * [on\_tool\_start](#spoon_ai.callbacks.base.ToolManagerMixin.on_tool_start)
-    * [on\_tool\_end](#spoon_ai.callbacks.base.ToolManagerMixin.on_tool_end)
-    * [on\_tool\_error](#spoon_ai.callbacks.base.ToolManagerMixin.on_tool_error)
-  * [PromptManagerMixin](#spoon_ai.callbacks.base.PromptManagerMixin)
-    * [on\_prompt\_start](#spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_start)
-    * [on\_prompt\_end](#spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_end)
-    * [on\_prompt\_error](#spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_error)
-  * [BaseCallbackHandler](#spoon_ai.callbacks.base.BaseCallbackHandler)
-    * [raise\_error](#spoon_ai.callbacks.base.BaseCallbackHandler.raise_error)
-    * [run\_inline](#spoon_ai.callbacks.base.BaseCallbackHandler.run_inline)
-    * [ignore\_llm](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_llm)
-    * [ignore\_chain](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_chain)
-    * [ignore\_tool](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_tool)
-    * [ignore\_retriever](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_retriever)
-    * [ignore\_prompt](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_prompt)
-  * [AsyncCallbackHandler](#spoon_ai.callbacks.base.AsyncCallbackHandler)
+* [spoon\_ai.schema](#spoon_ai.schema)
+  * [Function](#spoon_ai.schema.Function)
+    * [get\_arguments\_dict](#spoon_ai.schema.Function.get_arguments_dict)
+    * [create](#spoon_ai.schema.Function.create)
+  * [AgentState](#spoon_ai.schema.AgentState)
+  * [ToolChoice](#spoon_ai.schema.ToolChoice)
+  * [Role](#spoon_ai.schema.Role)
+  * [ROLE\_TYPE](#spoon_ai.schema.ROLE_TYPE)
+  * [ContentType](#spoon_ai.schema.ContentType)
+    * [IMAGE](#spoon_ai.schema.ContentType.IMAGE)
+    * [IMAGE\_URL](#spoon_ai.schema.ContentType.IMAGE_URL)
+    * [DOCUMENT](#spoon_ai.schema.ContentType.DOCUMENT)
+    * [FILE](#spoon_ai.schema.ContentType.FILE)
+    * [AUDIO](#spoon_ai.schema.ContentType.AUDIO)
+  * [ImageMediaType](#spoon_ai.schema.ImageMediaType)
+  * [ImageSource](#spoon_ai.schema.ImageSource)
+  * [ImageUrlSource](#spoon_ai.schema.ImageUrlSource)
+  * [TextContent](#spoon_ai.schema.TextContent)
+  * [ImageContent](#spoon_ai.schema.ImageContent)
+  * [ImageUrlContent](#spoon_ai.schema.ImageUrlContent)
+  * [FileContent](#spoon_ai.schema.FileContent)
+  * [DocumentSource](#spoon_ai.schema.DocumentSource)
+  * [DocumentContent](#spoon_ai.schema.DocumentContent)
+  * [Message](#spoon_ai.schema.Message)
+    * [role](#spoon_ai.schema.Message.role)
+    * [is\_multimodal](#spoon_ai.schema.Message.is_multimodal)
+    * [text\_content](#spoon_ai.schema.Message.text_content)
+    * [has\_images](#spoon_ai.schema.Message.has_images)
+    * [has\_documents](#spoon_ai.schema.Message.has_documents)
+    * [create\_text](#spoon_ai.schema.Message.create_text)
+    * [create\_multimodal](#spoon_ai.schema.Message.create_multimodal)
+    * [create\_with\_image\_url](#spoon_ai.schema.Message.create_with_image_url)
+    * [create\_with\_base64\_image](#spoon_ai.schema.Message.create_with_base64_image)
+    * [create\_with\_pdf](#spoon_ai.schema.Message.create_with_pdf)
+    * [create\_with\_document](#spoon_ai.schema.Message.create_with_document)
+  * [SystemMessage](#spoon_ai.schema.SystemMessage)
+    * [role](#spoon_ai.schema.SystemMessage.role)
+  * [TOOL\_CHOICE\_TYPE](#spoon_ai.schema.TOOL_CHOICE_TYPE)
+  * [LLMConfig](#spoon_ai.schema.LLMConfig)
+  * [LLMResponse](#spoon_ai.schema.LLMResponse)
+    * [text](#spoon_ai.schema.LLMResponse.text)
+  * [LLMResponseChunk](#spoon_ai.schema.LLMResponseChunk)
+* [spoon\_ai.agents](#spoon_ai.agents)
+* [spoon\_ai.agents.spoon\_react\_skill](#spoon_ai.agents.spoon_react_skill)
+  * [SpoonReactSkill](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill)
+    * [\_\_init\_\_](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__)
+    * [run](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.run)
+    * [initialize](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize)
+    * [add\_skill\_path](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path)
+    * [discover\_skills](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills)
+* [spoon\_ai.agents.skill\_mixin](#spoon_ai.agents.skill_mixin)
+  * [SkillEnabledMixin](#spoon_ai.agents.skill_mixin.SkillEnabledMixin)
+    * [activate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill)
+    * [deactivate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill)
+    * [auto\_activate\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills)
+    * [list\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills)
+    * [list\_active\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills)
+    * [get\_skill\_info](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info)
+    * [is\_skill\_active](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active)
+    * [deactivate\_all\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills)
+    * [get\_skill\_stats](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats)
+* [spoon\_ai.agents.custom\_agent](#spoon_ai.agents.custom_agent)
+  * [CustomAgent](#spoon_ai.agents.custom_agent.CustomAgent)
+    * [add\_tool](#spoon_ai.agents.custom_agent.CustomAgent.add_tool)
+    * [add\_tools](#spoon_ai.agents.custom_agent.CustomAgent.add_tools)
+    * [remove\_tool](#spoon_ai.agents.custom_agent.CustomAgent.remove_tool)
+    * [list\_tools](#spoon_ai.agents.custom_agent.CustomAgent.list_tools)
+    * [get\_tool\_info](#spoon_ai.agents.custom_agent.CustomAgent.get_tool_info)
+    * [validate\_tools](#spoon_ai.agents.custom_agent.CustomAgent.validate_tools)
+    * [run](#spoon_ai.agents.custom_agent.CustomAgent.run)
+    * [clear](#spoon_ai.agents.custom_agent.CustomAgent.clear)
+* [spoon\_ai.agents.mcp\_client\_mixin](#spoon_ai.agents.mcp_client_mixin)
+  * [MCPClientMixin](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin)
+    * [get\_session](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session)
+    * [list\_mcp\_tools](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.list_mcp_tools)
+    * [call\_mcp\_tool](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.call_mcp_tool)
+    * [send\_mcp\_message](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.send_mcp_message)
+    * [cleanup](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.cleanup)
+    * [get\_session\_stats](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session_stats)
+* [spoon\_ai.agents.spoon\_react](#spoon_ai.agents.spoon_react)
+  * [create\_configured\_chatbot](#spoon_ai.agents.spoon_react.create_configured_chatbot)
+  * [SpoonReactAI](#spoon_ai.agents.spoon_react.SpoonReactAI)
+    * [\_\_init\_\_](#spoon_ai.agents.spoon_react.SpoonReactAI.__init__)
+    * [connect](#spoon_ai.agents.spoon_react.SpoonReactAI.connect)
+    * [initialize](#spoon_ai.agents.spoon_react.SpoonReactAI.initialize)
+    * [run](#spoon_ai.agents.spoon_react.SpoonReactAI.run)
+* [spoon\_ai.agents.graph\_agent](#spoon_ai.agents.graph_agent)
+  * [GraphAgent](#spoon_ai.agents.graph_agent.GraphAgent)
+    * [\_\_init\_\_](#spoon_ai.agents.graph_agent.GraphAgent.__init__)
+    * [validate\_graph](#spoon_ai.agents.graph_agent.GraphAgent.validate_graph)
+    * [run](#spoon_ai.agents.graph_agent.GraphAgent.run)
+    * [step](#spoon_ai.agents.graph_agent.GraphAgent.step)
+    * [get\_execution\_history](#spoon_ai.agents.graph_agent.GraphAgent.get_execution_history)
+    * [get\_execution\_metadata](#spoon_ai.agents.graph_agent.GraphAgent.get_execution_metadata)
+    * [clear\_state](#spoon_ai.agents.graph_agent.GraphAgent.clear_state)
+    * [update\_initial\_state](#spoon_ai.agents.graph_agent.GraphAgent.update_initial_state)
+    * [set\_preserve\_state](#spoon_ai.agents.graph_agent.GraphAgent.set_preserve_state)
+* [spoon\_ai.agents.subagents](#spoon_ai.agents.subagents)
+  * [Command](#spoon_ai.agents.subagents.Command)
+    * [update](#spoon_ai.agents.subagents.Command.update)
+    * [goto](#spoon_ai.agents.subagents.Command.goto)
+    * [resume](#spoon_ai.agents.subagents.Command.resume)
+    * [is\_resume](#spoon_ai.agents.subagents.Command.is_resume)
+    * [get\_decisions](#spoon_ai.agents.subagents.Command.get_decisions)
+  * [SubAgentSpec](#spoon_ai.agents.subagents.SubAgentSpec)
+    * [description](#spoon_ai.agents.subagents.SubAgentSpec.description)
+  * [CompiledSubAgent](#spoon_ai.agents.subagents.CompiledSubAgent)
+    * [runnable](#spoon_ai.agents.subagents.CompiledSubAgent.runnable)
+  * [SubAgentManager](#spoon_ai.agents.subagents.SubAgentManager)
+    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentManager.__init__)
+    * [get\_subagent](#spoon_ai.agents.subagents.SubAgentManager.get_subagent)
+    * [delegate\_task](#spoon_ai.agents.subagents.SubAgentManager.delegate_task)
+    * [create\_task\_tool](#spoon_ai.agents.subagents.SubAgentManager.create_task_tool)
+  * [SubAgentMiddleware](#spoon_ai.agents.subagents.SubAgentMiddleware)
+    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentMiddleware.__init__)
+    * [before\_agent](#spoon_ai.agents.subagents.SubAgentMiddleware.before_agent)
+  * [add\_subagent\_support](#spoon_ai.agents.subagents.add_subagent_support)
+  * [create\_general\_purpose\_subagent](#spoon_ai.agents.subagents.create_general_purpose_subagent)
+  * [create\_compiled\_subagent](#spoon_ai.agents.subagents.create_compiled_subagent)
+* [spoon\_ai.agents.rag](#spoon_ai.agents.rag)
+  * [RetrievalMixin](#spoon_ai.agents.rag.RetrievalMixin)
+    * [initialize\_retrieval\_client](#spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client)
+    * [add\_documents](#spoon_ai.agents.rag.RetrievalMixin.add_documents)
+    * [retrieve\_relevant\_documents](#spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents)
+    * [get\_context\_from\_query](#spoon_ai.agents.rag.RetrievalMixin.get_context_from_query)
+* [spoon\_ai.agents.monitor](#spoon_ai.agents.monitor)
+* [spoon\_ai.agents.toolcall](#spoon_ai.agents.toolcall)
+  * [ToolCallAgent](#spoon_ai.agents.toolcall.ToolCallAgent)
+    * [tool\_choices](#spoon_ai.agents.toolcall.ToolCallAgent.tool_choices)
+    * [mcp\_tools\_cache\_ttl](#spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl)
+    * [run](#spoon_ai.agents.toolcall.ToolCallAgent.run)
+    * [step](#spoon_ai.agents.toolcall.ToolCallAgent.step)
+    * [execute\_tool](#spoon_ai.agents.toolcall.ToolCallAgent.execute_tool)
+* [spoon\_ai.agents.react](#spoon_ai.agents.react)
+* [spoon\_ai.agents.spoon\_react\_mcp](#spoon_ai.agents.spoon_react_mcp)
+  * [SpoonReactMCP](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP)
+    * [list\_mcp\_tools](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools)
+* [spoon\_ai.agents.base](#spoon_ai.agents.base)
+  * [ThreadSafeOutputQueue](#spoon_ai.agents.base.ThreadSafeOutputQueue)
+    * [put\_nowait](#spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait)
+    * [get](#spoon_ai.agents.base.ThreadSafeOutputQueue.get)
+  * [BaseAgent](#spoon_ai.agents.base.BaseAgent)
+    * [add\_message](#spoon_ai.agents.base.BaseAgent.add_message)
+    * [add\_message\_with\_image](#spoon_ai.agents.base.BaseAgent.add_message_with_image)
+    * [add\_message\_with\_pdf](#spoon_ai.agents.base.BaseAgent.add_message_with_pdf)
+    * [add\_message\_with\_document](#spoon_ai.agents.base.BaseAgent.add_message_with_document)
+    * [add\_message\_with\_pdf\_file](#spoon_ai.agents.base.BaseAgent.add_message_with_pdf_file)
+    * [add\_message\_with\_image\_file](#spoon_ai.agents.base.BaseAgent.add_message_with_image_file)
+    * [add\_message\_with\_file](#spoon_ai.agents.base.BaseAgent.add_message_with_file)
+    * [state\_context](#spoon_ai.agents.base.BaseAgent.state_context)
+    * [run](#spoon_ai.agents.base.BaseAgent.run)
+    * [step](#spoon_ai.agents.base.BaseAgent.step)
+    * [is\_stuck](#spoon_ai.agents.base.BaseAgent.is_stuck)
+    * [handle\_stuck\_state](#spoon_ai.agents.base.BaseAgent.handle_stuck_state)
+    * [estimate\_token\_count](#spoon_ai.agents.base.BaseAgent.estimate_token_count)
+    * [should\_trigger\_reflection](#spoon_ai.agents.base.BaseAgent.should_trigger_reflection)
+    * [add\_documents](#spoon_ai.agents.base.BaseAgent.add_documents)
+    * [save\_chat\_history](#spoon_ai.agents.base.BaseAgent.save_chat_history)
+    * [stream](#spoon_ai.agents.base.BaseAgent.stream)
+    * [process\_mcp\_message](#spoon_ai.agents.base.BaseAgent.process_mcp_message)
+    * [shutdown](#spoon_ai.agents.base.BaseAgent.shutdown)
+    * [get\_agent\_state](#spoon_ai.agents.base.BaseAgent.get_agent_state)
+    * [set\_agent\_state](#spoon_ai.agents.base.BaseAgent.set_agent_state)
+    * [update\_agent\_state](#spoon_ai.agents.base.BaseAgent.update_agent_state)
+    * [get\_diagnostics](#spoon_ai.agents.base.BaseAgent.get_diagnostics)
+* [spoon\_ai.bridge](#spoon_ai.bridge)
+* [spoon\_ai.bridge.eth\_neofs\_indexer](#spoon_ai.bridge.eth_neofs_indexer)
+  * [EthereumNeoFSIndexer](#spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer)
+    * [register\_event\_handler](#spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.register_event_handler)
+    * [start\_indexing](#spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.start_indexing)
+    * [stop\_indexing](#spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.stop_indexing)
+    * [get\_indexer\_status](#spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.get_indexer_status)
 * [spoon\_ai.chat](#spoon_ai.chat)
   * [ShortTermMemoryConfig](#spoon_ai.chat.ShortTermMemoryConfig)
     * [enabled](#spoon_ai.chat.ShortTermMemoryConfig.enabled)
@@ -515,25 +393,7 @@ title: spoon_ai
     * [astream](#spoon_ai.chat.ChatBot.astream)
     * [astream\_events](#spoon_ai.chat.ChatBot.astream_events)
     * [astream\_log](#spoon_ai.chat.ChatBot.astream_log)
-* [spoon\_ai.middleware.summarization](#spoon_ai.middleware.summarization)
-  * [ContextFraction](#spoon_ai.middleware.summarization.ContextFraction)
-  * [ContextTokens](#spoon_ai.middleware.summarization.ContextTokens)
-  * [ContextMessages](#spoon_ai.middleware.summarization.ContextMessages)
-  * [ContextSize](#spoon_ai.middleware.summarization.ContextSize)
-  * [count\_tokens\_approximately](#spoon_ai.middleware.summarization.count_tokens_approximately)
-  * [RemoveMessage](#spoon_ai.middleware.summarization.RemoveMessage)
-  * [SummarizationMiddleware](#spoon_ai.middleware.summarization.SummarizationMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.summarization.SummarizationMiddleware.__init__)
-    * [awrap\_model\_call](#spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call)
-    * [get\_stats](#spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats)
-  * [create\_summarization\_middleware](#spoon_ai.middleware.summarization.create_summarization_middleware)
-* [spoon\_ai.middleware.patch\_tool\_calls](#spoon_ai.middleware.patch_tool_calls)
-  * [PatchToolCallsMiddleware](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__)
-    * [before\_agent](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent)
-    * [awrap\_model\_call](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call)
-    * [get\_stats](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats)
-  * [create\_patch\_tool\_calls\_middleware](#spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware)
+* [spoon\_ai.middleware](#spoon_ai.middleware)
 * [spoon\_ai.middleware.planning](#spoon_ai.middleware.planning)
   * [PlanStep](#spoon_ai.middleware.planning.PlanStep)
     * [status](#spoon_ai.middleware.planning.PlanStep.status)
@@ -566,26 +426,47 @@ title: spoon_ai
     * [awrap\_model\_call](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.awrap_model_call)
     * [get\_stats](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.get_stats)
   * [create\_prompt\_caching\_middleware](#spoon_ai.middleware.prompt_caching.create_prompt_caching_middleware)
-* [spoon\_ai.middleware](#spoon_ai.middleware)
-* [spoon\_ai.middleware.todolist](#spoon_ai.middleware.todolist)
-  * [TodoStatus](#spoon_ai.middleware.todolist.TodoStatus)
-  * [TodoItem](#spoon_ai.middleware.todolist.TodoItem)
-  * [TodoList](#spoon_ai.middleware.todolist.TodoList)
-    * [format\_display](#spoon_ai.middleware.todolist.TodoList.format_display)
-  * [WriteTodosTool](#spoon_ai.middleware.todolist.WriteTodosTool)
-    * [execute](#spoon_ai.middleware.todolist.WriteTodosTool.execute)
-  * [ReadTodosTool](#spoon_ai.middleware.todolist.ReadTodosTool)
-    * [execute](#spoon_ai.middleware.todolist.ReadTodosTool.execute)
-  * [TodoListMiddleware](#spoon_ai.middleware.todolist.TodoListMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.todolist.TodoListMiddleware.__init__)
-    * [tools](#spoon_ai.middleware.todolist.TodoListMiddleware.tools)
-    * [system\_prompt](#spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt)
-    * [todo\_list](#spoon_ai.middleware.todolist.TodoListMiddleware.todo_list)
-    * [get\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state)
-    * [restore\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state)
-    * [awrap\_model\_call](#spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call)
-    * [before\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.before_agent)
-    * [after\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.after_agent)
+* [spoon\_ai.middleware.patch\_tool\_calls](#spoon_ai.middleware.patch_tool_calls)
+  * [PatchToolCallsMiddleware](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__)
+    * [before\_agent](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent)
+    * [awrap\_model\_call](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call)
+    * [get\_stats](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats)
+  * [create\_patch\_tool\_calls\_middleware](#spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware)
+* [spoon\_ai.middleware.filesystem](#spoon_ai.middleware.filesystem)
+  * [validate\_path](#spoon_ai.middleware.filesystem.validate_path)
+  * [LsTool](#spoon_ai.middleware.filesystem.LsTool)
+  * [ReadFileTool](#spoon_ai.middleware.filesystem.ReadFileTool)
+  * [WriteFileTool](#spoon_ai.middleware.filesystem.WriteFileTool)
+  * [EditFileTool](#spoon_ai.middleware.filesystem.EditFileTool)
+  * [GlobTool](#spoon_ai.middleware.filesystem.GlobTool)
+  * [GrepTool](#spoon_ai.middleware.filesystem.GrepTool)
+  * [ExecuteTool](#spoon_ai.middleware.filesystem.ExecuteTool)
+  * [get\_filesystem\_tools](#spoon_ai.middleware.filesystem.get_filesystem_tools)
+  * [FilesystemMiddleware](#spoon_ai.middleware.filesystem.FilesystemMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__)
+    * [tools](#spoon_ai.middleware.filesystem.FilesystemMiddleware.tools)
+    * [system\_prompt](#spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt)
+    * [backend](#spoon_ai.middleware.filesystem.FilesystemMiddleware.backend)
+    * [awrap\_model\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call)
+    * [awrap\_tool\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call)
+  * [create\_filesystem\_middleware](#spoon_ai.middleware.filesystem.create_filesystem_middleware)
+  * [create\_sandbox\_backend](#spoon_ai.middleware.filesystem.create_sandbox_backend)
+  * [LocalSandboxBackend](#spoon_ai.middleware.filesystem.LocalSandboxBackend)
+    * [execute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.execute)
+    * [aexecute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute)
+* [spoon\_ai.middleware.summarization](#spoon_ai.middleware.summarization)
+  * [ContextFraction](#spoon_ai.middleware.summarization.ContextFraction)
+  * [ContextTokens](#spoon_ai.middleware.summarization.ContextTokens)
+  * [ContextMessages](#spoon_ai.middleware.summarization.ContextMessages)
+  * [ContextSize](#spoon_ai.middleware.summarization.ContextSize)
+  * [count\_tokens\_approximately](#spoon_ai.middleware.summarization.count_tokens_approximately)
+  * [RemoveMessage](#spoon_ai.middleware.summarization.RemoveMessage)
+  * [SummarizationMiddleware](#spoon_ai.middleware.summarization.SummarizationMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.summarization.SummarizationMiddleware.__init__)
+    * [awrap\_model\_call](#spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call)
+    * [get\_stats](#spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats)
+  * [create\_summarization\_middleware](#spoon_ai.middleware.summarization.create_summarization_middleware)
 * [spoon\_ai.middleware.base](#spoon_ai.middleware.base)
   * [AgentPhase](#spoon_ai.middleware.base.AgentPhase)
     * [PLAN](#spoon_ai.middleware.base.AgentPhase.PLAN)
@@ -639,285 +520,168 @@ title: spoon_ai
     * [collect\_tools](#spoon_ai.middleware.base.MiddlewarePipeline.collect_tools)
     * [build\_system\_prompt](#spoon_ai.middleware.base.MiddlewarePipeline.build_system_prompt)
   * [create\_middleware\_pipeline](#spoon_ai.middleware.base.create_middleware_pipeline)
-* [spoon\_ai.middleware.filesystem](#spoon_ai.middleware.filesystem)
-  * [validate\_path](#spoon_ai.middleware.filesystem.validate_path)
-  * [LsTool](#spoon_ai.middleware.filesystem.LsTool)
-  * [ReadFileTool](#spoon_ai.middleware.filesystem.ReadFileTool)
-  * [WriteFileTool](#spoon_ai.middleware.filesystem.WriteFileTool)
-  * [EditFileTool](#spoon_ai.middleware.filesystem.EditFileTool)
-  * [GlobTool](#spoon_ai.middleware.filesystem.GlobTool)
-  * [GrepTool](#spoon_ai.middleware.filesystem.GrepTool)
-  * [ExecuteTool](#spoon_ai.middleware.filesystem.ExecuteTool)
-  * [get\_filesystem\_tools](#spoon_ai.middleware.filesystem.get_filesystem_tools)
-  * [FilesystemMiddleware](#spoon_ai.middleware.filesystem.FilesystemMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__)
-    * [tools](#spoon_ai.middleware.filesystem.FilesystemMiddleware.tools)
-    * [system\_prompt](#spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt)
-    * [backend](#spoon_ai.middleware.filesystem.FilesystemMiddleware.backend)
-    * [awrap\_model\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call)
-    * [awrap\_tool\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call)
-  * [create\_filesystem\_middleware](#spoon_ai.middleware.filesystem.create_filesystem_middleware)
-  * [create\_sandbox\_backend](#spoon_ai.middleware.filesystem.create_sandbox_backend)
-  * [LocalSandboxBackend](#spoon_ai.middleware.filesystem.LocalSandboxBackend)
-    * [execute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.execute)
-    * [aexecute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute)
-* [spoon\_ai.security](#spoon_ai.security)
-  * [init\_security](#spoon_ai.security.init_security)
-  * [decrypted\_secrets](#spoon_ai.security.decrypted_secrets)
-  * [async\_decrypted\_secrets](#spoon_ai.security.async_decrypted_secrets)
-  * [decrypted\_environ](#spoon_ai.security.decrypted_environ)
-  * [async\_decrypted\_environ](#spoon_ai.security.async_decrypted_environ)
-* [spoon\_ai.skills.manager](#spoon_ai.skills.manager)
-  * [SkillManager](#spoon_ai.skills.manager.SkillManager)
-    * [\_\_init\_\_](#spoon_ai.skills.manager.SkillManager.__init__)
-    * [discover](#spoon_ai.skills.manager.SkillManager.discover)
-    * [add\_skill\_path](#spoon_ai.skills.manager.SkillManager.add_skill_path)
-    * [register](#spoon_ai.skills.manager.SkillManager.register)
-    * [unregister](#spoon_ai.skills.manager.SkillManager.unregister)
-    * [get](#spoon_ai.skills.manager.SkillManager.get)
-    * [list](#spoon_ai.skills.manager.SkillManager.list)
-    * [list\_skills](#spoon_ai.skills.manager.SkillManager.list_skills)
-    * [match\_triggers](#spoon_ai.skills.manager.SkillManager.match_triggers)
-    * [match\_intent](#spoon_ai.skills.manager.SkillManager.match_intent)
-    * [find\_matching\_skills](#spoon_ai.skills.manager.SkillManager.find_matching_skills)
-    * [activate](#spoon_ai.skills.manager.SkillManager.activate)
-    * [deactivate](#spoon_ai.skills.manager.SkillManager.deactivate)
-    * [deactivate\_all](#spoon_ai.skills.manager.SkillManager.deactivate_all)
-    * [get\_active\_context](#spoon_ai.skills.manager.SkillManager.get_active_context)
-    * [get\_active\_tools](#spoon_ai.skills.manager.SkillManager.get_active_tools)
-    * [get\_active\_skill\_names](#spoon_ai.skills.manager.SkillManager.get_active_skill_names)
-    * [is\_active](#spoon_ai.skills.manager.SkillManager.is_active)
-    * [execute\_script](#spoon_ai.skills.manager.SkillManager.execute_script)
-    * [set\_scripts\_enabled](#spoon_ai.skills.manager.SkillManager.set_scripts_enabled)
-    * [get\_script\_tools](#spoon_ai.skills.manager.SkillManager.get_script_tools)
-    * [get\_skill\_info](#spoon_ai.skills.manager.SkillManager.get_skill_info)
-    * [get\_stats](#spoon_ai.skills.manager.SkillManager.get_stats)
-* [spoon\_ai.skills.executor](#spoon_ai.skills.executor)
-  * [MAX\_OUTPUT\_SIZE](#spoon_ai.skills.executor.MAX_OUTPUT_SIZE)
-  * [ScriptExecutionError](#spoon_ai.skills.executor.ScriptExecutionError)
-  * [ScriptExecutor](#spoon_ai.skills.executor.ScriptExecutor)
-    * [\_\_init\_\_](#spoon_ai.skills.executor.ScriptExecutor.__init__)
-    * [is\_available](#spoon_ai.skills.executor.ScriptExecutor.is_available)
-    * [get\_interpreter](#spoon_ai.skills.executor.ScriptExecutor.get_interpreter)
-    * [execute](#spoon_ai.skills.executor.ScriptExecutor.execute)
-    * [get\_stats](#spoon_ai.skills.executor.ScriptExecutor.get_stats)
-    * [set\_enabled](#spoon_ai.skills.executor.ScriptExecutor.set_enabled)
-  * [get\_executor](#spoon_ai.skills.executor.get_executor)
-  * [configure\_executor](#spoon_ai.skills.executor.configure_executor)
-  * [set\_scripts\_enabled](#spoon_ai.skills.executor.set_scripts_enabled)
-* [spoon\_ai.skills.loader](#spoon_ai.skills.loader)
-  * [SkillLoader](#spoon_ai.skills.loader.SkillLoader)
-    * [\_\_init\_\_](#spoon_ai.skills.loader.SkillLoader.__init__)
-    * [paths](#spoon_ai.skills.loader.SkillLoader.paths)
-    * [add\_path](#spoon_ai.skills.loader.SkillLoader.add_path)
-    * [discover](#spoon_ai.skills.loader.SkillLoader.discover)
-    * [parse](#spoon_ai.skills.loader.SkillLoader.parse)
-    * [load\_tools](#spoon_ai.skills.loader.SkillLoader.load_tools)
-    * [load](#spoon_ai.skills.loader.SkillLoader.load)
-    * [load\_all](#spoon_ai.skills.loader.SkillLoader.load_all)
-    * [get\_skill](#spoon_ai.skills.loader.SkillLoader.get_skill)
-    * [get\_tools](#spoon_ai.skills.loader.SkillLoader.get_tools)
-    * [clear\_cache](#spoon_ai.skills.loader.SkillLoader.clear_cache)
-    * [reload](#spoon_ai.skills.loader.SkillLoader.reload)
-* [spoon\_ai.skills](#spoon_ai.skills)
-* [spoon\_ai.skills.registry](#spoon_ai.skills.registry)
-  * [SkillRegistry](#spoon_ai.skills.registry.SkillRegistry)
-    * [register](#spoon_ai.skills.registry.SkillRegistry.register)
-    * [unregister](#spoon_ai.skills.registry.SkillRegistry.unregister)
-    * [get](#spoon_ai.skills.registry.SkillRegistry.get)
-    * [list\_names](#spoon_ai.skills.registry.SkillRegistry.list_names)
-    * [list\_skills](#spoon_ai.skills.registry.SkillRegistry.list_skills)
-    * [find\_by\_tag](#spoon_ai.skills.registry.SkillRegistry.find_by_tag)
-    * [find\_by\_keyword](#spoon_ai.skills.registry.SkillRegistry.find_by_keyword)
-    * [find\_by\_pattern](#spoon_ai.skills.registry.SkillRegistry.find_by_pattern)
-    * [find\_by\_intent](#spoon_ai.skills.registry.SkillRegistry.find_by_intent)
-    * [find\_all\_matching](#spoon_ai.skills.registry.SkillRegistry.find_all_matching)
-    * [get\_intent\_categories](#spoon_ai.skills.registry.SkillRegistry.get_intent_categories)
-* [spoon\_ai.skills.script\_tool](#spoon_ai.skills.script_tool)
-  * [ScriptTool](#spoon_ai.skills.script_tool.ScriptTool)
-    * [\_\_init\_\_](#spoon_ai.skills.script_tool.ScriptTool.__init__)
-    * [execute](#spoon_ai.skills.script_tool.ScriptTool.execute)
-    * [to\_param](#spoon_ai.skills.script_tool.ScriptTool.to_param)
-  * [create\_script\_tools](#spoon_ai.skills.script_tool.create_script_tools)
-* [spoon\_ai.skills.models](#spoon_ai.skills.models)
-  * [SkillState](#spoon_ai.skills.models.SkillState)
-  * [ScriptType](#spoon_ai.skills.models.ScriptType)
-  * [SkillScript](#spoon_ai.skills.models.SkillScript)
-    * [validate\_source](#spoon_ai.skills.models.SkillScript.validate_source)
-  * [ScriptConfig](#spoon_ai.skills.models.ScriptConfig)
-    * [get\_script](#spoon_ai.skills.models.ScriptConfig.get_script)
-    * [get\_activation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_activation_scripts)
-    * [get\_deactivation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts)
-  * [ScriptResult](#spoon_ai.skills.models.ScriptResult)
-    * [to\_string](#spoon_ai.skills.models.ScriptResult.to_string)
-  * [SkillTrigger](#spoon_ai.skills.models.SkillTrigger)
-  * [SkillParameter](#spoon_ai.skills.models.SkillParameter)
-  * [SkillPrerequisite](#spoon_ai.skills.models.SkillPrerequisite)
-  * [SkillMetadata](#spoon_ai.skills.models.SkillMetadata)
-    * [has\_scripts](#spoon_ai.skills.models.SkillMetadata.has_scripts)
-    * [scripts\_enabled](#spoon_ai.skills.models.SkillMetadata.scripts_enabled)
-  * [Skill](#spoon_ai.skills.models.Skill)
-    * [name](#spoon_ai.skills.models.Skill.name)
-    * [description](#spoon_ai.skills.models.Skill.description)
-    * [get\_prompt\_injection](#spoon_ai.skills.models.Skill.get_prompt_injection)
-* [spoon\_ai.prompts.toolcall](#spoon_ai.prompts.toolcall)
-* [spoon\_ai.prompts](#spoon_ai.prompts)
-* [spoon\_ai.prompts.spoon\_react](#spoon_ai.prompts.spoon_react)
-* [spoon\_ai.bridge.eth\_neofs\_indexer](#spoon_ai.bridge.eth_neofs_indexer)
-  * [EthereumNeoFSIndexer](#spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer)
-    * [register\_event\_handler](#spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.register_event_handler)
-    * [start\_indexing](#spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.start_indexing)
-    * [stop\_indexing](#spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.stop_indexing)
-    * [get\_indexer\_status](#spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.get_indexer_status)
-* [spoon\_ai.bridge](#spoon_ai.bridge)
-* [spoon\_ai.backends.protocol](#spoon_ai.backends.protocol)
-  * [FileOperationError](#spoon_ai.backends.protocol.FileOperationError)
-  * [FileDownloadResponse](#spoon_ai.backends.protocol.FileDownloadResponse)
-  * [FileUploadResponse](#spoon_ai.backends.protocol.FileUploadResponse)
-  * [FileInfo](#spoon_ai.backends.protocol.FileInfo)
-  * [GrepMatch](#spoon_ai.backends.protocol.GrepMatch)
-  * [WriteResult](#spoon_ai.backends.protocol.WriteResult)
-  * [EditResult](#spoon_ai.backends.protocol.EditResult)
-  * [ExecuteResponse](#spoon_ai.backends.protocol.ExecuteResponse)
-    * [output](#spoon_ai.backends.protocol.ExecuteResponse.output)
-    * [exit\_code](#spoon_ai.backends.protocol.ExecuteResponse.exit_code)
-    * [truncated](#spoon_ai.backends.protocol.ExecuteResponse.truncated)
-  * [BackendRuntime](#spoon_ai.backends.protocol.BackendRuntime)
-    * [store](#spoon_ai.backends.protocol.BackendRuntime.store)
-    * [get\_state](#spoon_ai.backends.protocol.BackendRuntime.get_state)
-    * [set\_state](#spoon_ai.backends.protocol.BackendRuntime.set_state)
-  * [BackendProtocol](#spoon_ai.backends.protocol.BackendProtocol)
-    * [ls\_info](#spoon_ai.backends.protocol.BackendProtocol.ls_info)
-    * [als\_info](#spoon_ai.backends.protocol.BackendProtocol.als_info)
-    * [read](#spoon_ai.backends.protocol.BackendProtocol.read)
-    * [aread](#spoon_ai.backends.protocol.BackendProtocol.aread)
-    * [write](#spoon_ai.backends.protocol.BackendProtocol.write)
-    * [awrite](#spoon_ai.backends.protocol.BackendProtocol.awrite)
-    * [edit](#spoon_ai.backends.protocol.BackendProtocol.edit)
-    * [aedit](#spoon_ai.backends.protocol.BackendProtocol.aedit)
-    * [grep\_raw](#spoon_ai.backends.protocol.BackendProtocol.grep_raw)
-    * [agrep\_raw](#spoon_ai.backends.protocol.BackendProtocol.agrep_raw)
-    * [glob\_info](#spoon_ai.backends.protocol.BackendProtocol.glob_info)
-    * [aglob\_info](#spoon_ai.backends.protocol.BackendProtocol.aglob_info)
-    * [upload\_files](#spoon_ai.backends.protocol.BackendProtocol.upload_files)
-    * [aupload\_files](#spoon_ai.backends.protocol.BackendProtocol.aupload_files)
-    * [download\_files](#spoon_ai.backends.protocol.BackendProtocol.download_files)
-    * [adownload\_files](#spoon_ai.backends.protocol.BackendProtocol.adownload_files)
-  * [SandboxBackendProtocol](#spoon_ai.backends.protocol.SandboxBackendProtocol)
-    * [execute](#spoon_ai.backends.protocol.SandboxBackendProtocol.execute)
-    * [aexecute](#spoon_ai.backends.protocol.SandboxBackendProtocol.aexecute)
-    * [id](#spoon_ai.backends.protocol.SandboxBackendProtocol.id)
-  * [BackendFactory](#spoon_ai.backends.protocol.BackendFactory)
-  * [BACKEND\_TYPES](#spoon_ai.backends.protocol.BACKEND_TYPES)
-* [spoon\_ai.backends.state](#spoon_ai.backends.state)
-  * [StateBackend](#spoon_ai.backends.state.StateBackend)
-    * [\_\_init\_\_](#spoon_ai.backends.state.StateBackend.__init__)
-    * [ls\_info](#spoon_ai.backends.state.StateBackend.ls_info)
-    * [read](#spoon_ai.backends.state.StateBackend.read)
-    * [write](#spoon_ai.backends.state.StateBackend.write)
-    * [edit](#spoon_ai.backends.state.StateBackend.edit)
-    * [grep\_raw](#spoon_ai.backends.state.StateBackend.grep_raw)
-    * [glob\_info](#spoon_ai.backends.state.StateBackend.glob_info)
-  * [create\_state\_backend](#spoon_ai.backends.state.create_state_backend)
-* [spoon\_ai.backends.sandbox](#spoon_ai.backends.sandbox)
-  * [BaseSandbox](#spoon_ai.backends.sandbox.BaseSandbox)
-    * [execute](#spoon_ai.backends.sandbox.BaseSandbox.execute)
-    * [aexecute](#spoon_ai.backends.sandbox.BaseSandbox.aexecute)
-    * [id](#spoon_ai.backends.sandbox.BaseSandbox.id)
-    * [ls\_info](#spoon_ai.backends.sandbox.BaseSandbox.ls_info)
-    * [read](#spoon_ai.backends.sandbox.BaseSandbox.read)
-    * [write](#spoon_ai.backends.sandbox.BaseSandbox.write)
-    * [edit](#spoon_ai.backends.sandbox.BaseSandbox.edit)
-    * [grep\_raw](#spoon_ai.backends.sandbox.BaseSandbox.grep_raw)
-    * [glob\_info](#spoon_ai.backends.sandbox.BaseSandbox.glob_info)
-    * [upload\_files](#spoon_ai.backends.sandbox.BaseSandbox.upload_files)
-    * [download\_files](#spoon_ai.backends.sandbox.BaseSandbox.download_files)
-    * [als\_info](#spoon_ai.backends.sandbox.BaseSandbox.als_info)
-    * [aread](#spoon_ai.backends.sandbox.BaseSandbox.aread)
-    * [awrite](#spoon_ai.backends.sandbox.BaseSandbox.awrite)
-    * [aedit](#spoon_ai.backends.sandbox.BaseSandbox.aedit)
-    * [agrep\_raw](#spoon_ai.backends.sandbox.BaseSandbox.agrep_raw)
-    * [aglob\_info](#spoon_ai.backends.sandbox.BaseSandbox.aglob_info)
-    * [aupload\_files](#spoon_ai.backends.sandbox.BaseSandbox.aupload_files)
-    * [adownload\_files](#spoon_ai.backends.sandbox.BaseSandbox.adownload_files)
-* [spoon\_ai.backends](#spoon_ai.backends)
-* [spoon\_ai.backends.store](#spoon_ai.backends.store)
-  * [BaseStore](#spoon_ai.backends.store.BaseStore)
-    * [get](#spoon_ai.backends.store.BaseStore.get)
-    * [put](#spoon_ai.backends.store.BaseStore.put)
-    * [delete](#spoon_ai.backends.store.BaseStore.delete)
-    * [search](#spoon_ai.backends.store.BaseStore.search)
-  * [InMemoryStore](#spoon_ai.backends.store.InMemoryStore)
-  * [SQLiteStore](#spoon_ai.backends.store.SQLiteStore)
-  * [StoreBackend](#spoon_ai.backends.store.StoreBackend)
-    * [\_\_init\_\_](#spoon_ai.backends.store.StoreBackend.__init__)
-    * [ls\_info](#spoon_ai.backends.store.StoreBackend.ls_info)
-    * [read](#spoon_ai.backends.store.StoreBackend.read)
-    * [write](#spoon_ai.backends.store.StoreBackend.write)
-    * [edit](#spoon_ai.backends.store.StoreBackend.edit)
-    * [grep\_raw](#spoon_ai.backends.store.StoreBackend.grep_raw)
-    * [glob\_info](#spoon_ai.backends.store.StoreBackend.glob_info)
-    * [upload\_files](#spoon_ai.backends.store.StoreBackend.upload_files)
-    * [download\_files](#spoon_ai.backends.store.StoreBackend.download_files)
-  * [create\_store\_backend](#spoon_ai.backends.store.create_store_backend)
-* [spoon\_ai.backends.composite](#spoon_ai.backends.composite)
-  * [CompositeBackend](#spoon_ai.backends.composite.CompositeBackend)
-    * [\_\_init\_\_](#spoon_ai.backends.composite.CompositeBackend.__init__)
-    * [ls\_info](#spoon_ai.backends.composite.CompositeBackend.ls_info)
-    * [als\_info](#spoon_ai.backends.composite.CompositeBackend.als_info)
-    * [read](#spoon_ai.backends.composite.CompositeBackend.read)
-    * [aread](#spoon_ai.backends.composite.CompositeBackend.aread)
-    * [write](#spoon_ai.backends.composite.CompositeBackend.write)
-    * [awrite](#spoon_ai.backends.composite.CompositeBackend.awrite)
-    * [edit](#spoon_ai.backends.composite.CompositeBackend.edit)
-    * [aedit](#spoon_ai.backends.composite.CompositeBackend.aedit)
-    * [grep\_raw](#spoon_ai.backends.composite.CompositeBackend.grep_raw)
-    * [agrep\_raw](#spoon_ai.backends.composite.CompositeBackend.agrep_raw)
-    * [glob\_info](#spoon_ai.backends.composite.CompositeBackend.glob_info)
-    * [aglob\_info](#spoon_ai.backends.composite.CompositeBackend.aglob_info)
-    * [execute](#spoon_ai.backends.composite.CompositeBackend.execute)
-    * [aexecute](#spoon_ai.backends.composite.CompositeBackend.aexecute)
-    * [upload\_files](#spoon_ai.backends.composite.CompositeBackend.upload_files)
-    * [aupload\_files](#spoon_ai.backends.composite.CompositeBackend.aupload_files)
-    * [download\_files](#spoon_ai.backends.composite.CompositeBackend.download_files)
-    * [adownload\_files](#spoon_ai.backends.composite.CompositeBackend.adownload_files)
-  * [create\_composite\_backend](#spoon_ai.backends.composite.create_composite_backend)
-* [spoon\_ai.backends.filesystem](#spoon_ai.backends.filesystem)
-  * [FilesystemBackend](#spoon_ai.backends.filesystem.FilesystemBackend)
-    * [\_\_init\_\_](#spoon_ai.backends.filesystem.FilesystemBackend.__init__)
-    * [ls\_info](#spoon_ai.backends.filesystem.FilesystemBackend.ls_info)
-    * [read](#spoon_ai.backends.filesystem.FilesystemBackend.read)
-    * [write](#spoon_ai.backends.filesystem.FilesystemBackend.write)
-    * [edit](#spoon_ai.backends.filesystem.FilesystemBackend.edit)
-    * [grep\_raw](#spoon_ai.backends.filesystem.FilesystemBackend.grep_raw)
-    * [glob\_info](#spoon_ai.backends.filesystem.FilesystemBackend.glob_info)
-    * [upload\_files](#spoon_ai.backends.filesystem.FilesystemBackend.upload_files)
-    * [download\_files](#spoon_ai.backends.filesystem.FilesystemBackend.download_files)
-  * [create\_filesystem\_backend](#spoon_ai.backends.filesystem.create_filesystem_backend)
-* [spoon\_ai.backends.utils](#spoon_ai.backends.utils)
-  * [sanitize\_tool\_call\_id](#spoon_ai.backends.utils.sanitize_tool_call_id)
-  * [validate\_path](#spoon_ai.backends.utils.validate_path)
-  * [format\_content\_with\_line\_numbers](#spoon_ai.backends.utils.format_content_with_line_numbers)
-  * [check\_empty\_content](#spoon_ai.backends.utils.check_empty_content)
-  * [file\_data\_to\_string](#spoon_ai.backends.utils.file_data_to_string)
-  * [create\_file\_data](#spoon_ai.backends.utils.create_file_data)
-  * [update\_file\_data](#spoon_ai.backends.utils.update_file_data)
-  * [format\_read\_response](#spoon_ai.backends.utils.format_read_response)
-  * [perform\_string\_replacement](#spoon_ai.backends.utils.perform_string_replacement)
-  * [glob\_match](#spoon_ai.backends.utils.glob_match)
-  * [glob\_search\_files](#spoon_ai.backends.utils.glob_search_files)
-  * [grep\_matches\_from\_files](#spoon_ai.backends.utils.grep_matches_from_files)
-  * [format\_grep\_results](#spoon_ai.backends.utils.format_grep_results)
-  * [truncate\_if\_too\_long](#spoon_ai.backends.utils.truncate_if_too_long)
+* [spoon\_ai.middleware.todolist](#spoon_ai.middleware.todolist)
+  * [TodoStatus](#spoon_ai.middleware.todolist.TodoStatus)
+  * [TodoItem](#spoon_ai.middleware.todolist.TodoItem)
+  * [TodoList](#spoon_ai.middleware.todolist.TodoList)
+    * [format\_display](#spoon_ai.middleware.todolist.TodoList.format_display)
+  * [WriteTodosTool](#spoon_ai.middleware.todolist.WriteTodosTool)
+    * [execute](#spoon_ai.middleware.todolist.WriteTodosTool.execute)
+  * [ReadTodosTool](#spoon_ai.middleware.todolist.ReadTodosTool)
+    * [execute](#spoon_ai.middleware.todolist.ReadTodosTool.execute)
+  * [TodoListMiddleware](#spoon_ai.middleware.todolist.TodoListMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.todolist.TodoListMiddleware.__init__)
+    * [tools](#spoon_ai.middleware.todolist.TodoListMiddleware.tools)
+    * [system\_prompt](#spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt)
+    * [todo\_list](#spoon_ai.middleware.todolist.TodoListMiddleware.todo_list)
+    * [get\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state)
+    * [restore\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state)
+    * [awrap\_model\_call](#spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call)
+    * [before\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.before_agent)
+    * [after\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.after_agent)
+* [spoon\_ai.graph](#spoon_ai.graph)
+* [spoon\_ai.graph.reducers](#spoon_ai.graph.reducers)
+* [spoon\_ai.graph.decorators](#spoon_ai.graph.decorators)
+* [spoon\_ai.graph.exceptions](#spoon_ai.graph.exceptions)
+* [spoon\_ai.graph.agent](#spoon_ai.graph.agent)
+  * [Memory](#spoon_ai.graph.agent.Memory)
+    * [clear](#spoon_ai.graph.agent.Memory.clear)
+    * [add\_message](#spoon_ai.graph.agent.Memory.add_message)
+    * [get\_messages](#spoon_ai.graph.agent.Memory.get_messages)
+    * [get\_recent\_messages](#spoon_ai.graph.agent.Memory.get_recent_messages)
+    * [search\_messages](#spoon_ai.graph.agent.Memory.search_messages)
+    * [get\_statistics](#spoon_ai.graph.agent.Memory.get_statistics)
+    * [set\_metadata](#spoon_ai.graph.agent.Memory.set_metadata)
+    * [get\_metadata](#spoon_ai.graph.agent.Memory.get_metadata)
+  * [MockMemory](#spoon_ai.graph.agent.MockMemory)
+  * [GraphAgent](#spoon_ai.graph.agent.GraphAgent)
+    * [search\_memory](#spoon_ai.graph.agent.GraphAgent.search_memory)
+    * [get\_recent\_memory](#spoon_ai.graph.agent.GraphAgent.get_recent_memory)
+    * [get\_memory\_statistics](#spoon_ai.graph.agent.GraphAgent.get_memory_statistics)
+    * [set\_memory\_metadata](#spoon_ai.graph.agent.GraphAgent.set_memory_metadata)
+    * [get\_memory\_metadata](#spoon_ai.graph.agent.GraphAgent.get_memory_metadata)
+    * [save\_session](#spoon_ai.graph.agent.GraphAgent.save_session)
+    * [load\_session](#spoon_ai.graph.agent.GraphAgent.load_session)
+* [spoon\_ai.graph.config](#spoon_ai.graph.config)
+  * [RouterConfig](#spoon_ai.graph.config.RouterConfig)
+  * [ParallelRetryPolicy](#spoon_ai.graph.config.ParallelRetryPolicy)
+  * [ParallelGroupConfig](#spoon_ai.graph.config.ParallelGroupConfig)
+    * [quorum](#spoon_ai.graph.config.ParallelGroupConfig.quorum)
+    * [error\_strategy](#spoon_ai.graph.config.ParallelGroupConfig.error_strategy)
+  * [GraphConfig](#spoon_ai.graph.config.GraphConfig)
+* [spoon\_ai.graph.mcp\_integration](#spoon_ai.graph.mcp_integration)
+  * [MCPToolSpec](#spoon_ai.graph.mcp_integration.MCPToolSpec)
+  * [MCPConfigManager](#spoon_ai.graph.mcp_integration.MCPConfigManager)
+  * [MCPToolDiscoveryEngine](#spoon_ai.graph.mcp_integration.MCPToolDiscoveryEngine)
+  * [MCPIntegrationManager](#spoon_ai.graph.mcp_integration.MCPIntegrationManager)
+* [spoon\_ai.graph.builder](#spoon_ai.graph.builder)
+  * [Intent](#spoon_ai.graph.builder.Intent)
+  * [IntentAnalyzer](#spoon_ai.graph.builder.IntentAnalyzer)
+  * [AdaptiveStateBuilder](#spoon_ai.graph.builder.AdaptiveStateBuilder)
+  * [ParameterInferenceEngine](#spoon_ai.graph.builder.ParameterInferenceEngine)
+  * [NodeSpec](#spoon_ai.graph.builder.NodeSpec)
+  * [EdgeSpec](#spoon_ai.graph.builder.EdgeSpec)
+    * [end](#spoon_ai.graph.builder.EdgeSpec.end)
+  * [ParallelGroupSpec](#spoon_ai.graph.builder.ParallelGroupSpec)
+  * [GraphTemplate](#spoon_ai.graph.builder.GraphTemplate)
+  * [DeclarativeGraphBuilder](#spoon_ai.graph.builder.DeclarativeGraphBuilder)
+  * [NodePlugin](#spoon_ai.graph.builder.NodePlugin)
+  * [NodePluginSystem](#spoon_ai.graph.builder.NodePluginSystem)
+  * [HighLevelGraphAPI](#spoon_ai.graph.builder.HighLevelGraphAPI)
+* [spoon\_ai.graph.checkpointer](#spoon_ai.graph.checkpointer)
+  * [InMemoryCheckpointer](#spoon_ai.graph.checkpointer.InMemoryCheckpointer)
+    * [iter\_checkpoint\_history](#spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history)
+* [spoon\_ai.graph.types](#spoon_ai.graph.types)
+* [spoon\_ai.graph.engine](#spoon_ai.graph.engine)
+  * [create\_multimodal\_message](#spoon_ai.graph.engine.create_multimodal_message)
+  * [create\_vision\_user\_message](#spoon_ai.graph.engine.create_vision_user_message)
+  * [create\_pdf\_message](#spoon_ai.graph.engine.create_pdf_message)
+  * [create\_document\_message](#spoon_ai.graph.engine.create_document_message)
+  * [BaseNode](#spoon_ai.graph.engine.BaseNode)
+    * [\_\_call\_\_](#spoon_ai.graph.engine.BaseNode.__call__)
+  * [RunnableNode](#spoon_ai.graph.engine.RunnableNode)
+    * [\_\_call\_\_](#spoon_ai.graph.engine.RunnableNode.__call__)
+  * [ToolNode](#spoon_ai.graph.engine.ToolNode)
+    * [\_\_call\_\_](#spoon_ai.graph.engine.ToolNode.__call__)
+  * [ConditionNode](#spoon_ai.graph.engine.ConditionNode)
+    * [\_\_call\_\_](#spoon_ai.graph.engine.ConditionNode.__call__)
+  * [interrupt](#spoon_ai.graph.engine.interrupt)
+  * [RouteRule](#spoon_ai.graph.engine.RouteRule)
+    * [matches](#spoon_ai.graph.engine.RouteRule.matches)
+  * [RunningSummary](#spoon_ai.graph.engine.RunningSummary)
+  * [SummarizationNode](#spoon_ai.graph.engine.SummarizationNode)
+  * [StateGraph](#spoon_ai.graph.engine.StateGraph)
+    * [add\_node](#spoon_ai.graph.engine.StateGraph.add_node)
+    * [add\_edge](#spoon_ai.graph.engine.StateGraph.add_edge)
+    * [add\_conditional\_edges](#spoon_ai.graph.engine.StateGraph.add_conditional_edges)
+    * [set\_entry\_point](#spoon_ai.graph.engine.StateGraph.set_entry_point)
+    * [add\_tool\_node](#spoon_ai.graph.engine.StateGraph.add_tool_node)
+    * [add\_conditional\_node](#spoon_ai.graph.engine.StateGraph.add_conditional_node)
+    * [add\_parallel\_group](#spoon_ai.graph.engine.StateGraph.add_parallel_group)
+    * [add\_routing\_rule](#spoon_ai.graph.engine.StateGraph.add_routing_rule)
+    * [get\_state](#spoon_ai.graph.engine.StateGraph.get_state)
+    * [get\_state\_history](#spoon_ai.graph.engine.StateGraph.get_state_history)
+    * [add\_pattern\_routing](#spoon_ai.graph.engine.StateGraph.add_pattern_routing)
+    * [set\_intelligent\_router](#spoon_ai.graph.engine.StateGraph.set_intelligent_router)
+    * [set\_llm\_router](#spoon_ai.graph.engine.StateGraph.set_llm_router)
+    * [enable\_llm\_routing](#spoon_ai.graph.engine.StateGraph.enable_llm_routing)
+    * [compile](#spoon_ai.graph.engine.StateGraph.compile)
+    * [get\_graph](#spoon_ai.graph.engine.StateGraph.get_graph)
+  * [CompiledGraph](#spoon_ai.graph.engine.CompiledGraph)
+    * [get\_execution\_metrics](#spoon_ai.graph.engine.CompiledGraph.get_execution_metrics)
+* [spoon\_ai.graph.cache](#spoon_ai.graph.cache)
+  * [compute\_cache\_key](#spoon_ai.graph.cache.compute_cache_key)
+  * [CacheEntry](#spoon_ai.graph.cache.CacheEntry)
+    * [is\_expired](#spoon_ai.graph.cache.CacheEntry.is_expired)
+    * [to\_dict](#spoon_ai.graph.cache.CacheEntry.to_dict)
+    * [from\_dict](#spoon_ai.graph.cache.CacheEntry.from_dict)
+  * [BaseCache](#spoon_ai.graph.cache.BaseCache)
+    * [get](#spoon_ai.graph.cache.BaseCache.get)
+    * [set](#spoon_ai.graph.cache.BaseCache.set)
+    * [delete](#spoon_ai.graph.cache.BaseCache.delete)
+    * [clear](#spoon_ai.graph.cache.BaseCache.clear)
+    * [get\_or\_compute](#spoon_ai.graph.cache.BaseCache.get_or_compute)
+  * [InMemoryCache](#spoon_ai.graph.cache.InMemoryCache)
+    * [\_\_init\_\_](#spoon_ai.graph.cache.InMemoryCache.__init__)
+    * [get](#spoon_ai.graph.cache.InMemoryCache.get)
+    * [set](#spoon_ai.graph.cache.InMemoryCache.set)
+    * [delete](#spoon_ai.graph.cache.InMemoryCache.delete)
+    * [clear](#spoon_ai.graph.cache.InMemoryCache.clear)
+    * [get\_stats](#spoon_ai.graph.cache.InMemoryCache.get_stats)
+  * [SQLiteCache](#spoon_ai.graph.cache.SQLiteCache)
+    * [\_\_init\_\_](#spoon_ai.graph.cache.SQLiteCache.__init__)
+    * [get](#spoon_ai.graph.cache.SQLiteCache.get)
+    * [set](#spoon_ai.graph.cache.SQLiteCache.set)
+    * [delete](#spoon_ai.graph.cache.SQLiteCache.delete)
+    * [clear](#spoon_ai.graph.cache.SQLiteCache.clear)
+    * [get\_stats](#spoon_ai.graph.cache.SQLiteCache.get_stats)
+  * [create\_memory\_cache](#spoon_ai.graph.cache.create_memory_cache)
+  * [create\_sqlite\_cache](#spoon_ai.graph.cache.create_sqlite_cache)
+* [spoon\_ai.neofs](#spoon_ai.neofs)
+* [spoon\_ai.neofs.utils](#spoon_ai.neofs.utils)
+  * [SignatureError](#spoon_ai.neofs.utils.SignatureError)
+  * [sign\_bearer\_token](#spoon_ai.neofs.utils.sign_bearer_token)
+* [spoon\_ai.neofs.models](#spoon_ai.neofs.models)
+  * [NetworkInfo](#spoon_ai.neofs.models.NetworkInfo)
+* [spoon\_ai.neofs.client](#spoon_ai.neofs.client)
+  * [NeoFSClient](#spoon_ai.neofs.client.NeoFSClient)
+    * [set\_container\_eacl](#spoon_ai.neofs.client.NeoFSClient.set_container_eacl)
+    * [download\_object\_by\_id](#spoon_ai.neofs.client.NeoFSClient.download_object_by_id)
+    * [get\_object\_header\_by\_id](#spoon_ai.neofs.client.NeoFSClient.get_object_header_by_id)
+    * [download\_object\_by\_attribute](#spoon_ai.neofs.client.NeoFSClient.download_object_by_attribute)
+    * [get\_object\_header\_by\_attribute](#spoon_ai.neofs.client.NeoFSClient.get_object_header_by_attribute)
+    * [delete\_object](#spoon_ai.neofs.client.NeoFSClient.delete_object)
+    * [search\_objects](#spoon_ai.neofs.client.NeoFSClient.search_objects)
+  * [NeoFSException](#spoon_ai.neofs.client.NeoFSException)
+  * [NeoFSAPIException](#spoon_ai.neofs.client.NeoFSAPIException)
 * [spoon\_ai.memory](#spoon_ai.memory)
-* [spoon\_ai.memory.short\_term\_manager](#spoon_ai.memory.short_term_manager)
-  * [TrimStrategy](#spoon_ai.memory.short_term_manager.TrimStrategy)
-    * [FROM\_START](#spoon_ai.memory.short_term_manager.TrimStrategy.FROM_START)
-    * [FROM\_END](#spoon_ai.memory.short_term_manager.TrimStrategy.FROM_END)
-  * [MessageTokenCounter](#spoon_ai.memory.short_term_manager.MessageTokenCounter)
-  * [ShortTermMemoryManager](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager)
-    * [trim\_messages](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager.trim_messages)
-    * [summarize\_messages](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager.summarize_messages)
+* [spoon\_ai.memory.mem0\_client](#spoon_ai.memory.mem0_client)
+  * [SpoonMem0](#spoon_ai.memory.mem0_client.SpoonMem0)
+    * [add\_text](#spoon_ai.memory.mem0_client.SpoonMem0.add_text)
+    * [get\_all\_memory](#spoon_ai.memory.mem0_client.SpoonMem0.get_all_memory)
+* [spoon\_ai.memory.utils](#spoon_ai.memory.utils)
+  * [extract\_memories](#spoon_ai.memory.utils.extract_memories)
+  * [extract\_first\_memory\_id](#spoon_ai.memory.utils.extract_first_memory_id)
 * [spoon\_ai.memory.checkpointer](#spoon_ai.memory.checkpointer)
   * [Checkpoint](#spoon_ai.memory.checkpointer.Checkpoint)
     * [messages](#spoon_ai.memory.checkpointer.Checkpoint.messages)
@@ -957,139 +721,112 @@ title: spoon_ai
   * [create\_memory\_checkpointer](#spoon_ai.memory.checkpointer.create_memory_checkpointer)
 * [spoon\_ai.memory.remove\_message](#spoon_ai.memory.remove_message)
   * [RemoveMessage](#spoon_ai.memory.remove_message.RemoveMessage)
-* [spoon\_ai.memory.mem0\_client](#spoon_ai.memory.mem0_client)
-  * [SpoonMem0](#spoon_ai.memory.mem0_client.SpoonMem0)
-    * [add\_text](#spoon_ai.memory.mem0_client.SpoonMem0.add_text)
-    * [get\_all\_memory](#spoon_ai.memory.mem0_client.SpoonMem0.get_all_memory)
-* [spoon\_ai.memory.utils](#spoon_ai.memory.utils)
-  * [extract\_memories](#spoon_ai.memory.utils.extract_memories)
-  * [extract\_first\_memory\_id](#spoon_ai.memory.utils.extract_first_memory_id)
-* [spoon\_ai.agents.spoon\_react\_skill](#spoon_ai.agents.spoon_react_skill)
-  * [SpoonReactSkill](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill)
-    * [\_\_init\_\_](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__)
-    * [run](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.run)
-    * [initialize](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize)
-    * [add\_skill\_path](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path)
-    * [discover\_skills](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills)
-* [spoon\_ai.agents.rag](#spoon_ai.agents.rag)
-  * [RetrievalMixin](#spoon_ai.agents.rag.RetrievalMixin)
-    * [initialize\_retrieval\_client](#spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client)
-    * [add\_documents](#spoon_ai.agents.rag.RetrievalMixin.add_documents)
-    * [retrieve\_relevant\_documents](#spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents)
-    * [get\_context\_from\_query](#spoon_ai.agents.rag.RetrievalMixin.get_context_from_query)
-* [spoon\_ai.agents.react](#spoon_ai.agents.react)
-* [spoon\_ai.agents.toolcall](#spoon_ai.agents.toolcall)
-  * [ToolCallAgent](#spoon_ai.agents.toolcall.ToolCallAgent)
-    * [tool\_choices](#spoon_ai.agents.toolcall.ToolCallAgent.tool_choices)
-    * [mcp\_tools\_cache\_ttl](#spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl)
-    * [run](#spoon_ai.agents.toolcall.ToolCallAgent.run)
-    * [step](#spoon_ai.agents.toolcall.ToolCallAgent.step)
-    * [execute\_tool](#spoon_ai.agents.toolcall.ToolCallAgent.execute_tool)
-* [spoon\_ai.agents.spoon\_react\_mcp](#spoon_ai.agents.spoon_react_mcp)
-  * [SpoonReactMCP](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP)
-    * [list\_mcp\_tools](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools)
-* [spoon\_ai.agents.custom\_agent](#spoon_ai.agents.custom_agent)
-  * [CustomAgent](#spoon_ai.agents.custom_agent.CustomAgent)
-    * [add\_tool](#spoon_ai.agents.custom_agent.CustomAgent.add_tool)
-    * [add\_tools](#spoon_ai.agents.custom_agent.CustomAgent.add_tools)
-    * [remove\_tool](#spoon_ai.agents.custom_agent.CustomAgent.remove_tool)
-    * [list\_tools](#spoon_ai.agents.custom_agent.CustomAgent.list_tools)
-    * [get\_tool\_info](#spoon_ai.agents.custom_agent.CustomAgent.get_tool_info)
-    * [validate\_tools](#spoon_ai.agents.custom_agent.CustomAgent.validate_tools)
-    * [run](#spoon_ai.agents.custom_agent.CustomAgent.run)
-    * [clear](#spoon_ai.agents.custom_agent.CustomAgent.clear)
-* [spoon\_ai.agents](#spoon_ai.agents)
-* [spoon\_ai.agents.skill\_mixin](#spoon_ai.agents.skill_mixin)
-  * [SkillEnabledMixin](#spoon_ai.agents.skill_mixin.SkillEnabledMixin)
-    * [activate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill)
-    * [deactivate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill)
-    * [auto\_activate\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills)
-    * [list\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills)
-    * [list\_active\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills)
-    * [get\_skill\_info](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info)
-    * [is\_skill\_active](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active)
-    * [deactivate\_all\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills)
-    * [get\_skill\_stats](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats)
-* [spoon\_ai.agents.spoon\_react](#spoon_ai.agents.spoon_react)
-  * [create\_configured\_chatbot](#spoon_ai.agents.spoon_react.create_configured_chatbot)
-  * [SpoonReactAI](#spoon_ai.agents.spoon_react.SpoonReactAI)
-    * [\_\_init\_\_](#spoon_ai.agents.spoon_react.SpoonReactAI.__init__)
-    * [connect](#spoon_ai.agents.spoon_react.SpoonReactAI.connect)
-    * [initialize](#spoon_ai.agents.spoon_react.SpoonReactAI.initialize)
-    * [run](#spoon_ai.agents.spoon_react.SpoonReactAI.run)
-* [spoon\_ai.agents.monitor](#spoon_ai.agents.monitor)
-* [spoon\_ai.agents.mcp\_client\_mixin](#spoon_ai.agents.mcp_client_mixin)
-  * [MCPClientMixin](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin)
-    * [get\_session](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session)
-    * [list\_mcp\_tools](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.list_mcp_tools)
-    * [call\_mcp\_tool](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.call_mcp_tool)
-    * [send\_mcp\_message](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.send_mcp_message)
-    * [cleanup](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.cleanup)
-    * [get\_session\_stats](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session_stats)
-* [spoon\_ai.agents.subagents](#spoon_ai.agents.subagents)
-  * [Command](#spoon_ai.agents.subagents.Command)
-    * [update](#spoon_ai.agents.subagents.Command.update)
-    * [goto](#spoon_ai.agents.subagents.Command.goto)
-    * [resume](#spoon_ai.agents.subagents.Command.resume)
-    * [is\_resume](#spoon_ai.agents.subagents.Command.is_resume)
-    * [get\_decisions](#spoon_ai.agents.subagents.Command.get_decisions)
-  * [SubAgentSpec](#spoon_ai.agents.subagents.SubAgentSpec)
-    * [description](#spoon_ai.agents.subagents.SubAgentSpec.description)
-  * [CompiledSubAgent](#spoon_ai.agents.subagents.CompiledSubAgent)
-    * [runnable](#spoon_ai.agents.subagents.CompiledSubAgent.runnable)
-  * [SubAgentManager](#spoon_ai.agents.subagents.SubAgentManager)
-    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentManager.__init__)
-    * [get\_subagent](#spoon_ai.agents.subagents.SubAgentManager.get_subagent)
-    * [delegate\_task](#spoon_ai.agents.subagents.SubAgentManager.delegate_task)
-    * [create\_task\_tool](#spoon_ai.agents.subagents.SubAgentManager.create_task_tool)
-  * [SubAgentMiddleware](#spoon_ai.agents.subagents.SubAgentMiddleware)
-    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentMiddleware.__init__)
-    * [before\_agent](#spoon_ai.agents.subagents.SubAgentMiddleware.before_agent)
-  * [add\_subagent\_support](#spoon_ai.agents.subagents.add_subagent_support)
-  * [create\_general\_purpose\_subagent](#spoon_ai.agents.subagents.create_general_purpose_subagent)
-  * [create\_compiled\_subagent](#spoon_ai.agents.subagents.create_compiled_subagent)
-* [spoon\_ai.agents.base](#spoon_ai.agents.base)
-  * [ThreadSafeOutputQueue](#spoon_ai.agents.base.ThreadSafeOutputQueue)
-    * [put\_nowait](#spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait)
-    * [get](#spoon_ai.agents.base.ThreadSafeOutputQueue.get)
-  * [BaseAgent](#spoon_ai.agents.base.BaseAgent)
-    * [add\_message](#spoon_ai.agents.base.BaseAgent.add_message)
-    * [add\_message\_with\_image](#spoon_ai.agents.base.BaseAgent.add_message_with_image)
-    * [add\_message\_with\_pdf](#spoon_ai.agents.base.BaseAgent.add_message_with_pdf)
-    * [add\_message\_with\_document](#spoon_ai.agents.base.BaseAgent.add_message_with_document)
-    * [add\_message\_with\_pdf\_file](#spoon_ai.agents.base.BaseAgent.add_message_with_pdf_file)
-    * [add\_message\_with\_image\_file](#spoon_ai.agents.base.BaseAgent.add_message_with_image_file)
-    * [add\_message\_with\_file](#spoon_ai.agents.base.BaseAgent.add_message_with_file)
-    * [state\_context](#spoon_ai.agents.base.BaseAgent.state_context)
-    * [run](#spoon_ai.agents.base.BaseAgent.run)
-    * [step](#spoon_ai.agents.base.BaseAgent.step)
-    * [is\_stuck](#spoon_ai.agents.base.BaseAgent.is_stuck)
-    * [handle\_stuck\_state](#spoon_ai.agents.base.BaseAgent.handle_stuck_state)
-    * [estimate\_token\_count](#spoon_ai.agents.base.BaseAgent.estimate_token_count)
-    * [should\_trigger\_reflection](#spoon_ai.agents.base.BaseAgent.should_trigger_reflection)
-    * [add\_documents](#spoon_ai.agents.base.BaseAgent.add_documents)
-    * [save\_chat\_history](#spoon_ai.agents.base.BaseAgent.save_chat_history)
-    * [stream](#spoon_ai.agents.base.BaseAgent.stream)
-    * [process\_mcp\_message](#spoon_ai.agents.base.BaseAgent.process_mcp_message)
-    * [shutdown](#spoon_ai.agents.base.BaseAgent.shutdown)
-    * [get\_agent\_state](#spoon_ai.agents.base.BaseAgent.get_agent_state)
-    * [set\_agent\_state](#spoon_ai.agents.base.BaseAgent.set_agent_state)
-    * [update\_agent\_state](#spoon_ai.agents.base.BaseAgent.update_agent_state)
-    * [get\_diagnostics](#spoon_ai.agents.base.BaseAgent.get_diagnostics)
-* [spoon\_ai.agents.graph\_agent](#spoon_ai.agents.graph_agent)
-  * [GraphAgent](#spoon_ai.agents.graph_agent.GraphAgent)
-    * [\_\_init\_\_](#spoon_ai.agents.graph_agent.GraphAgent.__init__)
-    * [validate\_graph](#spoon_ai.agents.graph_agent.GraphAgent.validate_graph)
-    * [run](#spoon_ai.agents.graph_agent.GraphAgent.run)
-    * [step](#spoon_ai.agents.graph_agent.GraphAgent.step)
-    * [get\_execution\_history](#spoon_ai.agents.graph_agent.GraphAgent.get_execution_history)
-    * [get\_execution\_metadata](#spoon_ai.agents.graph_agent.GraphAgent.get_execution_metadata)
-    * [clear\_state](#spoon_ai.agents.graph_agent.GraphAgent.clear_state)
-    * [update\_initial\_state](#spoon_ai.agents.graph_agent.GraphAgent.update_initial_state)
-    * [set\_preserve\_state](#spoon_ai.agents.graph_agent.GraphAgent.set_preserve_state)
-* [spoon\_ai.tools.x402\_payment](#spoon_ai.tools.x402_payment)
-  * [X402PaymentHeaderTool](#spoon_ai.tools.x402_payment.X402PaymentHeaderTool)
-  * [X402PaywalledRequestTool](#spoon_ai.tools.x402_payment.X402PaywalledRequestTool)
+* [spoon\_ai.memory.short\_term\_manager](#spoon_ai.memory.short_term_manager)
+  * [TrimStrategy](#spoon_ai.memory.short_term_manager.TrimStrategy)
+    * [FROM\_START](#spoon_ai.memory.short_term_manager.TrimStrategy.FROM_START)
+    * [FROM\_END](#spoon_ai.memory.short_term_manager.TrimStrategy.FROM_END)
+  * [MessageTokenCounter](#spoon_ai.memory.short_term_manager.MessageTokenCounter)
+  * [ShortTermMemoryManager](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager)
+    * [trim\_messages](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager.trim_messages)
+    * [summarize\_messages](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager.summarize_messages)
+* [spoon\_ai.callbacks](#spoon_ai.callbacks)
+* [spoon\_ai.callbacks.streaming\_stdout](#spoon_ai.callbacks.streaming_stdout)
+  * [StreamingStdOutCallbackHandler](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler)
+    * [on\_llm\_new\_token](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_new_token)
+    * [on\_llm\_end](#spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_end)
+* [spoon\_ai.callbacks.manager](#spoon_ai.callbacks.manager)
+  * [CallbackManager](#spoon_ai.callbacks.manager.CallbackManager)
+* [spoon\_ai.callbacks.statistics](#spoon_ai.callbacks.statistics)
+  * [StreamingStatisticsCallback](#spoon_ai.callbacks.statistics.StreamingStatisticsCallback)
+* [spoon\_ai.callbacks.skill\_callback](#spoon_ai.callbacks.skill_callback)
+  * [SkillCallbackHandler](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler)
+    * [on\_skill\_start](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_start)
+    * [on\_skill\_end](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_end)
+    * [on\_skill\_error](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_error)
+    * [on\_skill\_match](#spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_match)
+  * [LoggingSkillCallback](#spoon_ai.callbacks.skill_callback.LoggingSkillCallback)
+  * [MetricsSkillCallback](#spoon_ai.callbacks.skill_callback.MetricsSkillCallback)
+    * [get\_metrics](#spoon_ai.callbacks.skill_callback.MetricsSkillCallback.get_metrics)
+    * [reset](#spoon_ai.callbacks.skill_callback.MetricsSkillCallback.reset)
+* [spoon\_ai.callbacks.stream\_event](#spoon_ai.callbacks.stream_event)
+  * [StreamEventCallbackHandler](#spoon_ai.callbacks.stream_event.StreamEventCallbackHandler)
+* [spoon\_ai.callbacks.base](#spoon_ai.callbacks.base)
+  * [RetrieverManagerMixin](#spoon_ai.callbacks.base.RetrieverManagerMixin)
+    * [on\_retriever\_start](#spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_start)
+    * [on\_retriever\_end](#spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_end)
+    * [on\_retriever\_error](#spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_error)
+  * [LLMManagerMixin](#spoon_ai.callbacks.base.LLMManagerMixin)
+    * [on\_llm\_start](#spoon_ai.callbacks.base.LLMManagerMixin.on_llm_start)
+    * [on\_llm\_new\_token](#spoon_ai.callbacks.base.LLMManagerMixin.on_llm_new_token)
+    * [on\_llm\_end](#spoon_ai.callbacks.base.LLMManagerMixin.on_llm_end)
+    * [on\_llm\_error](#spoon_ai.callbacks.base.LLMManagerMixin.on_llm_error)
+  * [ChainManagerMixin](#spoon_ai.callbacks.base.ChainManagerMixin)
+    * [on\_chain\_start](#spoon_ai.callbacks.base.ChainManagerMixin.on_chain_start)
+    * [on\_chain\_end](#spoon_ai.callbacks.base.ChainManagerMixin.on_chain_end)
+    * [on\_chain\_error](#spoon_ai.callbacks.base.ChainManagerMixin.on_chain_error)
+  * [ToolManagerMixin](#spoon_ai.callbacks.base.ToolManagerMixin)
+    * [on\_tool\_start](#spoon_ai.callbacks.base.ToolManagerMixin.on_tool_start)
+    * [on\_tool\_end](#spoon_ai.callbacks.base.ToolManagerMixin.on_tool_end)
+    * [on\_tool\_error](#spoon_ai.callbacks.base.ToolManagerMixin.on_tool_error)
+  * [PromptManagerMixin](#spoon_ai.callbacks.base.PromptManagerMixin)
+    * [on\_prompt\_start](#spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_start)
+    * [on\_prompt\_end](#spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_end)
+    * [on\_prompt\_error](#spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_error)
+  * [BaseCallbackHandler](#spoon_ai.callbacks.base.BaseCallbackHandler)
+    * [raise\_error](#spoon_ai.callbacks.base.BaseCallbackHandler.raise_error)
+    * [run\_inline](#spoon_ai.callbacks.base.BaseCallbackHandler.run_inline)
+    * [ignore\_llm](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_llm)
+    * [ignore\_chain](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_chain)
+    * [ignore\_tool](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_tool)
+    * [ignore\_retriever](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_retriever)
+    * [ignore\_prompt](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_prompt)
+  * [AsyncCallbackHandler](#spoon_ai.callbacks.base.AsyncCallbackHandler)
+* [spoon\_ai.identity](#spoon_ai.identity)
+* [spoon\_ai.identity.storage\_client](#spoon_ai.identity.storage_client)
+  * [DIDStorageClient](#spoon_ai.identity.storage_client.DIDStorageClient)
+    * [publish\_did\_document](#spoon_ai.identity.storage_client.DIDStorageClient.publish_did_document)
+    * [fetch\_did\_document](#spoon_ai.identity.storage_client.DIDStorageClient.fetch_did_document)
+    * [publish\_credential](#spoon_ai.identity.storage_client.DIDStorageClient.publish_credential)
+    * [close](#spoon_ai.identity.storage_client.DIDStorageClient.close)
+* [spoon\_ai.identity.attestation](#spoon_ai.identity.attestation)
+  * [AttestationManager](#spoon_ai.identity.attestation.AttestationManager)
+    * [create\_attestation](#spoon_ai.identity.attestation.AttestationManager.create_attestation)
+    * [verify\_attestation](#spoon_ai.identity.attestation.AttestationManager.verify_attestation)
+    * [submit\_reputation\_on\_chain](#spoon_ai.identity.attestation.AttestationManager.submit_reputation_on_chain)
+    * [submit\_validation\_on\_chain](#spoon_ai.identity.attestation.AttestationManager.submit_validation_on_chain)
+  * [TrustScoreCalculator](#spoon_ai.identity.attestation.TrustScoreCalculator)
+    * [calculate\_trust\_score](#spoon_ai.identity.attestation.TrustScoreCalculator.calculate_trust_score)
+    * [get\_reputation\_breakdown](#spoon_ai.identity.attestation.TrustScoreCalculator.get_reputation_breakdown)
+    * [get\_validation\_breakdown](#spoon_ai.identity.attestation.TrustScoreCalculator.get_validation_breakdown)
+* [spoon\_ai.identity.did\_resolver](#spoon_ai.identity.did_resolver)
+  * [DIDResolver](#spoon_ai.identity.did_resolver.DIDResolver)
+    * [resolve](#spoon_ai.identity.did_resolver.DIDResolver.resolve)
+    * [resolve\_metadata\_only](#spoon_ai.identity.did_resolver.DIDResolver.resolve_metadata_only)
+    * [verify\_agent](#spoon_ai.identity.did_resolver.DIDResolver.verify_agent)
+* [spoon\_ai.identity.erc8004\_client](#spoon_ai.identity.erc8004_client)
+  * [ERC8004Client](#spoon_ai.identity.erc8004_client.ERC8004Client)
+    * [get\_agent\_id\_for\_address](#spoon_ai.identity.erc8004_client.ERC8004Client.get_agent_id_for_address)
+    * [register\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.register_agent)
+    * [resolve\_agent](#spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent)
+* [spoon\_ai.identity.erc8004\_abi](#spoon_ai.identity.erc8004_abi)
+* [spoon\_ai.identity.did\_models](#spoon_ai.identity.did_models)
+  * [VerificationMethodType](#spoon_ai.identity.did_models.VerificationMethodType)
+  * [ServiceType](#spoon_ai.identity.did_models.ServiceType)
+  * [VerificationMethod](#spoon_ai.identity.did_models.VerificationMethod)
+  * [ServiceEndpoint](#spoon_ai.identity.did_models.ServiceEndpoint)
+  * [ReputationScore](#spoon_ai.identity.did_models.ReputationScore)
+  * [Attestation](#spoon_ai.identity.did_models.Attestation)
+  * [AgentCard](#spoon_ai.identity.did_models.AgentCard)
+  * [AgentDID](#spoon_ai.identity.did_models.AgentDID)
+    * [to\_did\_document](#spoon_ai.identity.did_models.AgentDID.to_did_document)
+    * [to\_agent\_card](#spoon_ai.identity.did_models.AgentDID.to_agent_card)
+  * [DIDResolutionResult](#spoon_ai.identity.did_models.DIDResolutionResult)
+* [spoon\_ai.tools](#spoon_ai.tools)
+* [spoon\_ai.tools.mcp\_tool](#spoon_ai.tools.mcp_tool)
+  * [MCPTool](#spoon_ai.tools.mcp_tool.MCPTool)
+    * [call\_mcp\_tool](#spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool)
+    * [expand\_server\_tools](#spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools)
+    * [list\_available\_tools](#spoon_ai.tools.mcp_tool.MCPTool.list_available_tools)
 * [spoon\_ai.tools.neofs\_tools](#spoon_ai.tools.neofs_tools)
   * [get\_shared\_neofs\_client](#spoon_ai.tools.neofs_tools.get_shared_neofs_client)
   * [CreateBearerTokenTool](#spoon_ai.tools.neofs_tools.CreateBearerTokenTool)
@@ -1108,6 +845,9 @@ title: spoon_ai
   * [DeleteContainerTool](#spoon_ai.tools.neofs_tools.DeleteContainerTool)
   * [GetNetworkInfoTool](#spoon_ai.tools.neofs_tools.GetNetworkInfoTool)
   * [GetBalanceTool](#spoon_ai.tools.neofs_tools.GetBalanceTool)
+* [spoon\_ai.tools.x402\_payment](#spoon_ai.tools.x402_payment)
+  * [X402PaymentHeaderTool](#spoon_ai.tools.x402_payment.X402PaymentHeaderTool)
+  * [X402PaywalledRequestTool](#spoon_ai.tools.x402_payment.X402PaywalledRequestTool)
 * [spoon\_ai.tools.tool\_manager](#spoon_ai.tools.tool_manager)
   * [ToolManager](#spoon_ai.tools.tool_manager.ToolManager)
     * [reindex](#spoon_ai.tools.tool_manager.ToolManager.reindex)
@@ -1162,12 +902,6 @@ title: spoon_ai
   * [create\_hitl\_middleware](#spoon_ai.tools.hitl.create_hitl_middleware)
   * [format\_tool\_call\_description](#spoon_ai.tools.hitl.format_tool_call_description)
 * [spoon\_ai.tools.rag\_tools](#spoon_ai.tools.rag_tools)
-* [spoon\_ai.tools](#spoon_ai.tools)
-* [spoon\_ai.tools.mcp\_tool](#spoon_ai.tools.mcp_tool)
-  * [MCPTool](#spoon_ai.tools.mcp_tool.MCPTool)
-    * [call\_mcp\_tool](#spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool)
-    * [expand\_server\_tools](#spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools)
-    * [list\_available\_tools](#spoon_ai.tools.mcp_tool.MCPTool.list_available_tools)
 * [spoon\_ai.tools.turnkey\_tools](#spoon_ai.tools.turnkey_tools)
   * [TurnkeyBaseTool](#spoon_ai.tools.turnkey_tools.TurnkeyBaseTool)
     * [client](#spoon_ai.tools.turnkey_tools.TurnkeyBaseTool.client)
@@ -1207,36 +941,194 @@ title: spoon_ai
 * [spoon\_ai.tools.base](#spoon_ai.tools.base)
   * [reset\_secrets\_initialization](#spoon_ai.tools.base.reset_secrets_initialization)
   * [ToolFailure](#spoon_ai.tools.base.ToolFailure)
-* [spoon\_ai.rag.embeddings](#spoon_ai.rag.embeddings)
-  * [HashEmbeddingClient](#spoon_ai.rag.embeddings.HashEmbeddingClient)
-  * [get\_embedding\_client](#spoon_ai.rag.embeddings.get_embedding_client)
-* [spoon\_ai.rag.vectorstores.faiss\_store](#spoon_ai.rag.vectorstores.faiss_store)
-  * [FaissVectorStore](#spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore)
-* [spoon\_ai.rag.vectorstores](#spoon_ai.rag.vectorstores)
-* [spoon\_ai.rag.vectorstores.registry](#spoon_ai.rag.vectorstores.registry)
-  * [get\_vector\_store](#spoon_ai.rag.vectorstores.registry.get_vector_store)
-* [spoon\_ai.rag.vectorstores.pinecone\_store](#spoon_ai.rag.vectorstores.pinecone_store)
-* [spoon\_ai.rag.vectorstores.qdrant\_store](#spoon_ai.rag.vectorstores.qdrant_store)
-* [spoon\_ai.rag.vectorstores.chroma\_store](#spoon_ai.rag.vectorstores.chroma_store)
-* [spoon\_ai.rag.vectorstores.base](#spoon_ai.rag.vectorstores.base)
-  * [VectorStore](#spoon_ai.rag.vectorstores.base.VectorStore)
-    * [query](#spoon_ai.rag.vectorstores.base.VectorStore.query)
-* [spoon\_ai.rag.chunk](#spoon_ai.rag.chunk)
-  * [recursive\_chunk](#spoon_ai.rag.chunk.recursive_chunk)
-  * [simple\_chunk](#spoon_ai.rag.chunk.simple_chunk)
-  * [paragraph\_chunk](#spoon_ai.rag.chunk.paragraph_chunk)
-  * [chunk\_text](#spoon_ai.rag.chunk.chunk_text)
-* [spoon\_ai.rag.config](#spoon_ai.rag.config)
-  * [ensure\_dotenv](#spoon_ai.rag.config.ensure_dotenv)
-  * [RagConfig](#spoon_ai.rag.config.RagConfig)
-    * [backend](#spoon_ai.rag.config.RagConfig.backend)
-    * [embeddings\_model](#spoon_ai.rag.config.RagConfig.embeddings_model)
-    * [retrieval\_overfetch\_factor](#spoon_ai.rag.config.RagConfig.retrieval_overfetch_factor)
-    * [rrf\_k](#spoon_ai.rag.config.RagConfig.rrf_k)
-    * [openai\_embeddings\_model](#spoon_ai.rag.config.RagConfig.openai_embeddings_model)
+* [spoon\_ai.utils](#spoon_ai.utils)
+* [spoon\_ai.utils.utils](#spoon_ai.utils.utils)
+* [spoon\_ai.utils.streaming](#spoon_ai.utils.streaming)
+  * [StreamOutcome](#spoon_ai.utils.streaming.StreamOutcome)
+  * [build\_output\_queue\_event](#spoon_ai.utils.streaming.build_output_queue_event)
+* [spoon\_ai.utils.config](#spoon_ai.utils.config)
+* [spoon\_ai.utils.config\_manager](#spoon_ai.utils.config_manager)
+  * [ConfigManager](#spoon_ai.utils.config_manager.ConfigManager)
+    * [\_\_init\_\_](#spoon_ai.utils.config_manager.ConfigManager.__init__)
+    * [refresh](#spoon_ai.utils.config_manager.ConfigManager.refresh)
+    * [get](#spoon_ai.utils.config_manager.ConfigManager.get)
+    * [set](#spoon_ai.utils.config_manager.ConfigManager.set)
+    * [list\_config](#spoon_ai.utils.config_manager.ConfigManager.list_config)
+    * [get\_api\_key](#spoon_ai.utils.config_manager.ConfigManager.get_api_key)
+    * [set\_api\_key](#spoon_ai.utils.config_manager.ConfigManager.set_api_key)
+    * [get\_model\_name](#spoon_ai.utils.config_manager.ConfigManager.get_model_name)
+    * [get\_base\_url](#spoon_ai.utils.config_manager.ConfigManager.get_base_url)
+    * [get\_llm\_provider](#spoon_ai.utils.config_manager.ConfigManager.get_llm_provider)
+* [spoon\_ai.backends](#spoon_ai.backends)
+* [spoon\_ai.backends.sandbox](#spoon_ai.backends.sandbox)
+  * [BaseSandbox](#spoon_ai.backends.sandbox.BaseSandbox)
+    * [execute](#spoon_ai.backends.sandbox.BaseSandbox.execute)
+    * [aexecute](#spoon_ai.backends.sandbox.BaseSandbox.aexecute)
+    * [id](#spoon_ai.backends.sandbox.BaseSandbox.id)
+    * [ls\_info](#spoon_ai.backends.sandbox.BaseSandbox.ls_info)
+    * [read](#spoon_ai.backends.sandbox.BaseSandbox.read)
+    * [write](#spoon_ai.backends.sandbox.BaseSandbox.write)
+    * [edit](#spoon_ai.backends.sandbox.BaseSandbox.edit)
+    * [grep\_raw](#spoon_ai.backends.sandbox.BaseSandbox.grep_raw)
+    * [glob\_info](#spoon_ai.backends.sandbox.BaseSandbox.glob_info)
+    * [upload\_files](#spoon_ai.backends.sandbox.BaseSandbox.upload_files)
+    * [download\_files](#spoon_ai.backends.sandbox.BaseSandbox.download_files)
+    * [als\_info](#spoon_ai.backends.sandbox.BaseSandbox.als_info)
+    * [aread](#spoon_ai.backends.sandbox.BaseSandbox.aread)
+    * [awrite](#spoon_ai.backends.sandbox.BaseSandbox.awrite)
+    * [aedit](#spoon_ai.backends.sandbox.BaseSandbox.aedit)
+    * [agrep\_raw](#spoon_ai.backends.sandbox.BaseSandbox.agrep_raw)
+    * [aglob\_info](#spoon_ai.backends.sandbox.BaseSandbox.aglob_info)
+    * [aupload\_files](#spoon_ai.backends.sandbox.BaseSandbox.aupload_files)
+    * [adownload\_files](#spoon_ai.backends.sandbox.BaseSandbox.adownload_files)
+* [spoon\_ai.backends.utils](#spoon_ai.backends.utils)
+  * [sanitize\_tool\_call\_id](#spoon_ai.backends.utils.sanitize_tool_call_id)
+  * [validate\_path](#spoon_ai.backends.utils.validate_path)
+  * [format\_content\_with\_line\_numbers](#spoon_ai.backends.utils.format_content_with_line_numbers)
+  * [check\_empty\_content](#spoon_ai.backends.utils.check_empty_content)
+  * [file\_data\_to\_string](#spoon_ai.backends.utils.file_data_to_string)
+  * [create\_file\_data](#spoon_ai.backends.utils.create_file_data)
+  * [update\_file\_data](#spoon_ai.backends.utils.update_file_data)
+  * [format\_read\_response](#spoon_ai.backends.utils.format_read_response)
+  * [perform\_string\_replacement](#spoon_ai.backends.utils.perform_string_replacement)
+  * [glob\_match](#spoon_ai.backends.utils.glob_match)
+  * [glob\_search\_files](#spoon_ai.backends.utils.glob_search_files)
+  * [grep\_matches\_from\_files](#spoon_ai.backends.utils.grep_matches_from_files)
+  * [format\_grep\_results](#spoon_ai.backends.utils.format_grep_results)
+  * [truncate\_if\_too\_long](#spoon_ai.backends.utils.truncate_if_too_long)
+* [spoon\_ai.backends.store](#spoon_ai.backends.store)
+  * [BaseStore](#spoon_ai.backends.store.BaseStore)
+    * [get](#spoon_ai.backends.store.BaseStore.get)
+    * [put](#spoon_ai.backends.store.BaseStore.put)
+    * [delete](#spoon_ai.backends.store.BaseStore.delete)
+    * [search](#spoon_ai.backends.store.BaseStore.search)
+  * [InMemoryStore](#spoon_ai.backends.store.InMemoryStore)
+  * [SQLiteStore](#spoon_ai.backends.store.SQLiteStore)
+  * [StoreBackend](#spoon_ai.backends.store.StoreBackend)
+    * [\_\_init\_\_](#spoon_ai.backends.store.StoreBackend.__init__)
+    * [ls\_info](#spoon_ai.backends.store.StoreBackend.ls_info)
+    * [read](#spoon_ai.backends.store.StoreBackend.read)
+    * [write](#spoon_ai.backends.store.StoreBackend.write)
+    * [edit](#spoon_ai.backends.store.StoreBackend.edit)
+    * [grep\_raw](#spoon_ai.backends.store.StoreBackend.grep_raw)
+    * [glob\_info](#spoon_ai.backends.store.StoreBackend.glob_info)
+    * [upload\_files](#spoon_ai.backends.store.StoreBackend.upload_files)
+    * [download\_files](#spoon_ai.backends.store.StoreBackend.download_files)
+  * [create\_store\_backend](#spoon_ai.backends.store.create_store_backend)
+* [spoon\_ai.backends.state](#spoon_ai.backends.state)
+  * [StateBackend](#spoon_ai.backends.state.StateBackend)
+    * [\_\_init\_\_](#spoon_ai.backends.state.StateBackend.__init__)
+    * [ls\_info](#spoon_ai.backends.state.StateBackend.ls_info)
+    * [read](#spoon_ai.backends.state.StateBackend.read)
+    * [write](#spoon_ai.backends.state.StateBackend.write)
+    * [edit](#spoon_ai.backends.state.StateBackend.edit)
+    * [grep\_raw](#spoon_ai.backends.state.StateBackend.grep_raw)
+    * [glob\_info](#spoon_ai.backends.state.StateBackend.glob_info)
+  * [create\_state\_backend](#spoon_ai.backends.state.create_state_backend)
+* [spoon\_ai.backends.protocol](#spoon_ai.backends.protocol)
+  * [FileOperationError](#spoon_ai.backends.protocol.FileOperationError)
+  * [FileDownloadResponse](#spoon_ai.backends.protocol.FileDownloadResponse)
+  * [FileUploadResponse](#spoon_ai.backends.protocol.FileUploadResponse)
+  * [FileInfo](#spoon_ai.backends.protocol.FileInfo)
+  * [GrepMatch](#spoon_ai.backends.protocol.GrepMatch)
+  * [WriteResult](#spoon_ai.backends.protocol.WriteResult)
+  * [EditResult](#spoon_ai.backends.protocol.EditResult)
+  * [ExecuteResponse](#spoon_ai.backends.protocol.ExecuteResponse)
+    * [output](#spoon_ai.backends.protocol.ExecuteResponse.output)
+    * [exit\_code](#spoon_ai.backends.protocol.ExecuteResponse.exit_code)
+    * [truncated](#spoon_ai.backends.protocol.ExecuteResponse.truncated)
+  * [BackendRuntime](#spoon_ai.backends.protocol.BackendRuntime)
+    * [store](#spoon_ai.backends.protocol.BackendRuntime.store)
+    * [get\_state](#spoon_ai.backends.protocol.BackendRuntime.get_state)
+    * [set\_state](#spoon_ai.backends.protocol.BackendRuntime.set_state)
+  * [BackendProtocol](#spoon_ai.backends.protocol.BackendProtocol)
+    * [ls\_info](#spoon_ai.backends.protocol.BackendProtocol.ls_info)
+    * [als\_info](#spoon_ai.backends.protocol.BackendProtocol.als_info)
+    * [read](#spoon_ai.backends.protocol.BackendProtocol.read)
+    * [aread](#spoon_ai.backends.protocol.BackendProtocol.aread)
+    * [write](#spoon_ai.backends.protocol.BackendProtocol.write)
+    * [awrite](#spoon_ai.backends.protocol.BackendProtocol.awrite)
+    * [edit](#spoon_ai.backends.protocol.BackendProtocol.edit)
+    * [aedit](#spoon_ai.backends.protocol.BackendProtocol.aedit)
+    * [grep\_raw](#spoon_ai.backends.protocol.BackendProtocol.grep_raw)
+    * [agrep\_raw](#spoon_ai.backends.protocol.BackendProtocol.agrep_raw)
+    * [glob\_info](#spoon_ai.backends.protocol.BackendProtocol.glob_info)
+    * [aglob\_info](#spoon_ai.backends.protocol.BackendProtocol.aglob_info)
+    * [upload\_files](#spoon_ai.backends.protocol.BackendProtocol.upload_files)
+    * [aupload\_files](#spoon_ai.backends.protocol.BackendProtocol.aupload_files)
+    * [download\_files](#spoon_ai.backends.protocol.BackendProtocol.download_files)
+    * [adownload\_files](#spoon_ai.backends.protocol.BackendProtocol.adownload_files)
+  * [SandboxBackendProtocol](#spoon_ai.backends.protocol.SandboxBackendProtocol)
+    * [execute](#spoon_ai.backends.protocol.SandboxBackendProtocol.execute)
+    * [aexecute](#spoon_ai.backends.protocol.SandboxBackendProtocol.aexecute)
+    * [id](#spoon_ai.backends.protocol.SandboxBackendProtocol.id)
+  * [BackendFactory](#spoon_ai.backends.protocol.BackendFactory)
+  * [BACKEND\_TYPES](#spoon_ai.backends.protocol.BACKEND_TYPES)
+* [spoon\_ai.backends.composite](#spoon_ai.backends.composite)
+  * [CompositeBackend](#spoon_ai.backends.composite.CompositeBackend)
+    * [\_\_init\_\_](#spoon_ai.backends.composite.CompositeBackend.__init__)
+    * [ls\_info](#spoon_ai.backends.composite.CompositeBackend.ls_info)
+    * [als\_info](#spoon_ai.backends.composite.CompositeBackend.als_info)
+    * [read](#spoon_ai.backends.composite.CompositeBackend.read)
+    * [aread](#spoon_ai.backends.composite.CompositeBackend.aread)
+    * [write](#spoon_ai.backends.composite.CompositeBackend.write)
+    * [awrite](#spoon_ai.backends.composite.CompositeBackend.awrite)
+    * [edit](#spoon_ai.backends.composite.CompositeBackend.edit)
+    * [aedit](#spoon_ai.backends.composite.CompositeBackend.aedit)
+    * [grep\_raw](#spoon_ai.backends.composite.CompositeBackend.grep_raw)
+    * [agrep\_raw](#spoon_ai.backends.composite.CompositeBackend.agrep_raw)
+    * [glob\_info](#spoon_ai.backends.composite.CompositeBackend.glob_info)
+    * [aglob\_info](#spoon_ai.backends.composite.CompositeBackend.aglob_info)
+    * [execute](#spoon_ai.backends.composite.CompositeBackend.execute)
+    * [aexecute](#spoon_ai.backends.composite.CompositeBackend.aexecute)
+    * [upload\_files](#spoon_ai.backends.composite.CompositeBackend.upload_files)
+    * [aupload\_files](#spoon_ai.backends.composite.CompositeBackend.aupload_files)
+    * [download\_files](#spoon_ai.backends.composite.CompositeBackend.download_files)
+    * [adownload\_files](#spoon_ai.backends.composite.CompositeBackend.adownload_files)
+  * [create\_composite\_backend](#spoon_ai.backends.composite.create_composite_backend)
+* [spoon\_ai.backends.filesystem](#spoon_ai.backends.filesystem)
+  * [FilesystemBackend](#spoon_ai.backends.filesystem.FilesystemBackend)
+    * [\_\_init\_\_](#spoon_ai.backends.filesystem.FilesystemBackend.__init__)
+    * [ls\_info](#spoon_ai.backends.filesystem.FilesystemBackend.ls_info)
+    * [read](#spoon_ai.backends.filesystem.FilesystemBackend.read)
+    * [write](#spoon_ai.backends.filesystem.FilesystemBackend.write)
+    * [edit](#spoon_ai.backends.filesystem.FilesystemBackend.edit)
+    * [grep\_raw](#spoon_ai.backends.filesystem.FilesystemBackend.grep_raw)
+    * [glob\_info](#spoon_ai.backends.filesystem.FilesystemBackend.glob_info)
+    * [upload\_files](#spoon_ai.backends.filesystem.FilesystemBackend.upload_files)
+    * [download\_files](#spoon_ai.backends.filesystem.FilesystemBackend.download_files)
+  * [create\_filesystem\_backend](#spoon_ai.backends.filesystem.create_filesystem_backend)
+* [spoon\_ai.security](#spoon_ai.security)
+  * [init\_security](#spoon_ai.security.init_security)
+  * [decrypted\_secrets](#spoon_ai.security.decrypted_secrets)
+  * [async\_decrypted\_secrets](#spoon_ai.security.async_decrypted_secrets)
+  * [decrypted\_environ](#spoon_ai.security.decrypted_environ)
+  * [async\_decrypted\_environ](#spoon_ai.security.async_decrypted_environ)
+* [spoon\_ai.turnkey](#spoon_ai.turnkey)
+* [spoon\_ai.turnkey.client](#spoon_ai.turnkey.client)
+  * [Turnkey](#spoon_ai.turnkey.client.Turnkey)
+    * [\_\_init\_\_](#spoon_ai.turnkey.client.Turnkey.__init__)
+    * [whoami](#spoon_ai.turnkey.client.Turnkey.whoami)
+    * [import\_private\_key](#spoon_ai.turnkey.client.Turnkey.import_private_key)
+    * [sign\_evm\_transaction](#spoon_ai.turnkey.client.Turnkey.sign_evm_transaction)
+    * [sign\_typed\_data](#spoon_ai.turnkey.client.Turnkey.sign_typed_data)
+    * [sign\_message](#spoon_ai.turnkey.client.Turnkey.sign_message)
+    * [get\_activity](#spoon_ai.turnkey.client.Turnkey.get_activity)
+    * [list\_activities](#spoon_ai.turnkey.client.Turnkey.list_activities)
+    * [get\_policy\_evaluations](#spoon_ai.turnkey.client.Turnkey.get_policy_evaluations)
+    * [get\_private\_key](#spoon_ai.turnkey.client.Turnkey.get_private_key)
+    * [create\_wallet](#spoon_ai.turnkey.client.Turnkey.create_wallet)
+    * [create\_wallet\_accounts](#spoon_ai.turnkey.client.Turnkey.create_wallet_accounts)
+    * [get\_wallet](#spoon_ai.turnkey.client.Turnkey.get_wallet)
+    * [get\_wallet\_account](#spoon_ai.turnkey.client.Turnkey.get_wallet_account)
+    * [list\_wallets](#spoon_ai.turnkey.client.Turnkey.list_wallets)
+    * [list\_wallet\_accounts](#spoon_ai.turnkey.client.Turnkey.list_wallet_accounts)
+    * [init\_import\_wallet](#spoon_ai.turnkey.client.Turnkey.init_import_wallet)
+    * [encrypt\_wallet](#spoon_ai.turnkey.client.Turnkey.encrypt_wallet)
+    * [encrypt\_private\_key](#spoon_ai.turnkey.client.Turnkey.encrypt_private_key)
+    * [init\_import\_private\_key](#spoon_ai.turnkey.client.Turnkey.init_import_private_key)
+    * [import\_wallet](#spoon_ai.turnkey.client.Turnkey.import_wallet)
 * [spoon\_ai.rag](#spoon_ai.rag)
-* [spoon\_ai.rag.index](#spoon_ai.rag.index)
-* [spoon\_ai.rag.qa](#spoon_ai.rag.qa)
 * [spoon\_ai.rag.parser](#spoon_ai.rag.parser)
 * [spoon\_ai.rag.parser.unstructured\_parser](#spoon_ai.rag.parser.unstructured_parser)
   * [ParsedDocument](#spoon_ai.rag.parser.unstructured_parser.ParsedDocument)
@@ -1249,39 +1141,38 @@ title: spoon_ai
     * [parse\_file](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_file)
     * [parse\_directory](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse_directory)
     * [parse](#spoon_ai.rag.parser.unstructured_parser.UnstructuredParser.parse)
+* [spoon\_ai.rag.index](#spoon_ai.rag.index)
 * [spoon\_ai.rag.retriever](#spoon_ai.rag.retriever)
-* [spoon\_ai.runnables.events](#spoon_ai.runnables.events)
-  * [StreamEventBuilder](#spoon_ai.runnables.events.StreamEventBuilder)
-    * [chain\_start](#spoon_ai.runnables.events.StreamEventBuilder.chain_start)
-    * [chain\_stream](#spoon_ai.runnables.events.StreamEventBuilder.chain_stream)
-    * [chain\_end](#spoon_ai.runnables.events.StreamEventBuilder.chain_end)
-    * [chain\_error](#spoon_ai.runnables.events.StreamEventBuilder.chain_error)
-    * [llm\_stream](#spoon_ai.runnables.events.StreamEventBuilder.llm_stream)
-* [spoon\_ai.runnables](#spoon_ai.runnables)
-* [spoon\_ai.runnables.base](#spoon_ai.runnables.base)
-  * [log\_patches\_from\_events](#spoon_ai.runnables.base.log_patches_from_events)
-  * [Runnable](#spoon_ai.runnables.base.Runnable)
-    * [astream\_log](#spoon_ai.runnables.base.Runnable.astream_log)
-    * [astream\_events](#spoon_ai.runnables.base.Runnable.astream_events)
-* [spoon\_ai.neofs](#spoon_ai.neofs)
-* [spoon\_ai.neofs.client](#spoon_ai.neofs.client)
-  * [NeoFSClient](#spoon_ai.neofs.client.NeoFSClient)
-    * [set\_container\_eacl](#spoon_ai.neofs.client.NeoFSClient.set_container_eacl)
-    * [download\_object\_by\_id](#spoon_ai.neofs.client.NeoFSClient.download_object_by_id)
-    * [get\_object\_header\_by\_id](#spoon_ai.neofs.client.NeoFSClient.get_object_header_by_id)
-    * [download\_object\_by\_attribute](#spoon_ai.neofs.client.NeoFSClient.download_object_by_attribute)
-    * [get\_object\_header\_by\_attribute](#spoon_ai.neofs.client.NeoFSClient.get_object_header_by_attribute)
-    * [delete\_object](#spoon_ai.neofs.client.NeoFSClient.delete_object)
-    * [search\_objects](#spoon_ai.neofs.client.NeoFSClient.search_objects)
-  * [NeoFSException](#spoon_ai.neofs.client.NeoFSException)
-  * [NeoFSAPIException](#spoon_ai.neofs.client.NeoFSAPIException)
-* [spoon\_ai.neofs.models](#spoon_ai.neofs.models)
-  * [NetworkInfo](#spoon_ai.neofs.models.NetworkInfo)
-* [spoon\_ai.neofs.utils](#spoon_ai.neofs.utils)
-  * [SignatureError](#spoon_ai.neofs.utils.SignatureError)
-  * [sign\_bearer\_token](#spoon_ai.neofs.utils.sign_bearer_token)
-* [spoon\_ai.wallet.encrypt\_key](#spoon_ai.wallet.encrypt_key)
+* [spoon\_ai.rag.config](#spoon_ai.rag.config)
+  * [ensure\_dotenv](#spoon_ai.rag.config.ensure_dotenv)
+  * [RagConfig](#spoon_ai.rag.config.RagConfig)
+    * [backend](#spoon_ai.rag.config.RagConfig.backend)
+    * [embeddings\_model](#spoon_ai.rag.config.RagConfig.embeddings_model)
+    * [retrieval\_overfetch\_factor](#spoon_ai.rag.config.RagConfig.retrieval_overfetch_factor)
+    * [rrf\_k](#spoon_ai.rag.config.RagConfig.rrf_k)
+    * [openai\_embeddings\_model](#spoon_ai.rag.config.RagConfig.openai_embeddings_model)
+* [spoon\_ai.rag.qa](#spoon_ai.rag.qa)
+* [spoon\_ai.rag.chunk](#spoon_ai.rag.chunk)
+  * [recursive\_chunk](#spoon_ai.rag.chunk.recursive_chunk)
+  * [simple\_chunk](#spoon_ai.rag.chunk.simple_chunk)
+  * [paragraph\_chunk](#spoon_ai.rag.chunk.paragraph_chunk)
+  * [chunk\_text](#spoon_ai.rag.chunk.chunk_text)
+* [spoon\_ai.rag.embeddings](#spoon_ai.rag.embeddings)
+  * [HashEmbeddingClient](#spoon_ai.rag.embeddings.HashEmbeddingClient)
+  * [get\_embedding\_client](#spoon_ai.rag.embeddings.get_embedding_client)
+* [spoon\_ai.rag.vectorstores](#spoon_ai.rag.vectorstores)
+* [spoon\_ai.rag.vectorstores.pinecone\_store](#spoon_ai.rag.vectorstores.pinecone_store)
+* [spoon\_ai.rag.vectorstores.registry](#spoon_ai.rag.vectorstores.registry)
+  * [get\_vector\_store](#spoon_ai.rag.vectorstores.registry.get_vector_store)
+* [spoon\_ai.rag.vectorstores.chroma\_store](#spoon_ai.rag.vectorstores.chroma_store)
+* [spoon\_ai.rag.vectorstores.faiss\_store](#spoon_ai.rag.vectorstores.faiss_store)
+  * [FaissVectorStore](#spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore)
+* [spoon\_ai.rag.vectorstores.qdrant\_store](#spoon_ai.rag.vectorstores.qdrant_store)
+* [spoon\_ai.rag.vectorstores.base](#spoon_ai.rag.vectorstores.base)
+  * [VectorStore](#spoon_ai.rag.vectorstores.base.VectorStore)
+    * [query](#spoon_ai.rag.vectorstores.base.VectorStore.query)
 * [spoon\_ai.wallet](#spoon_ai.wallet)
+* [spoon\_ai.wallet.encrypt\_key](#spoon_ai.wallet.encrypt_key)
 * [spoon\_ai.wallet.security](#spoon_ai.wallet.security)
   * [ENCRYPTED\_PREFIX\_V2](#spoon_ai.wallet.security.ENCRYPTED_PREFIX_V2)
   * [ENCRYPTED\_PREFIX](#spoon_ai.wallet.security.ENCRYPTED_PREFIX)
@@ -1300,21 +1191,123 @@ title: spoon_ai
     * [wipe](#spoon_ai.wallet.vault.SecretVault.wipe)
     * [wipe\_all](#spoon_ai.wallet.vault.SecretVault.wipe_all)
   * [get\_vault](#spoon_ai.wallet.vault.get_vault)
-* [spoon\_ai.payments.app](#spoon_ai.payments.app)
-* [spoon\_ai.payments.server](#spoon_ai.payments.server)
-  * [create\_paywalled\_router](#spoon_ai.payments.server.create_paywalled_router)
-* [spoon\_ai.payments.config](#spoon_ai.payments.config)
-  * [X402ConfigurationError](#spoon_ai.payments.config.X402ConfigurationError)
-  * [X402PaywallBranding](#spoon_ai.payments.config.X402PaywallBranding)
-  * [X402ClientConfig](#spoon_ai.payments.config.X402ClientConfig)
-  * [X402Settings](#spoon_ai.payments.config.X402Settings)
-    * [amount\_in\_atomic\_units](#spoon_ai.payments.config.X402Settings.amount_in_atomic_units)
-    * [build\_asset\_extra](#spoon_ai.payments.config.X402Settings.build_asset_extra)
-    * [load](#spoon_ai.payments.config.X402Settings.load)
+* [spoon\_ai.prompts](#spoon_ai.prompts)
+* [spoon\_ai.prompts.spoon\_react](#spoon_ai.prompts.spoon_react)
+* [spoon\_ai.prompts.toolcall](#spoon_ai.prompts.toolcall)
+* [spoon\_ai.runnables](#spoon_ai.runnables)
+* [spoon\_ai.runnables.events](#spoon_ai.runnables.events)
+  * [StreamEventBuilder](#spoon_ai.runnables.events.StreamEventBuilder)
+    * [chain\_start](#spoon_ai.runnables.events.StreamEventBuilder.chain_start)
+    * [chain\_stream](#spoon_ai.runnables.events.StreamEventBuilder.chain_stream)
+    * [chain\_end](#spoon_ai.runnables.events.StreamEventBuilder.chain_end)
+    * [chain\_error](#spoon_ai.runnables.events.StreamEventBuilder.chain_error)
+    * [llm\_stream](#spoon_ai.runnables.events.StreamEventBuilder.llm_stream)
+* [spoon\_ai.runnables.base](#spoon_ai.runnables.base)
+  * [log\_patches\_from\_events](#spoon_ai.runnables.base.log_patches_from_events)
+  * [Runnable](#spoon_ai.runnables.base.Runnable)
+    * [astream\_log](#spoon_ai.runnables.base.Runnable.astream_log)
+    * [astream\_events](#spoon_ai.runnables.base.Runnable.astream_events)
+* [spoon\_ai.skills](#spoon_ai.skills)
+* [spoon\_ai.skills.script\_tool](#spoon_ai.skills.script_tool)
+  * [ScriptTool](#spoon_ai.skills.script_tool.ScriptTool)
+    * [\_\_init\_\_](#spoon_ai.skills.script_tool.ScriptTool.__init__)
+    * [execute](#spoon_ai.skills.script_tool.ScriptTool.execute)
+    * [to\_param](#spoon_ai.skills.script_tool.ScriptTool.to_param)
+  * [create\_script\_tools](#spoon_ai.skills.script_tool.create_script_tools)
+* [spoon\_ai.skills.models](#spoon_ai.skills.models)
+  * [SkillState](#spoon_ai.skills.models.SkillState)
+  * [ScriptType](#spoon_ai.skills.models.ScriptType)
+  * [SkillScript](#spoon_ai.skills.models.SkillScript)
+    * [validate\_source](#spoon_ai.skills.models.SkillScript.validate_source)
+  * [ScriptConfig](#spoon_ai.skills.models.ScriptConfig)
+    * [get\_script](#spoon_ai.skills.models.ScriptConfig.get_script)
+    * [get\_activation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_activation_scripts)
+    * [get\_deactivation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts)
+  * [ScriptResult](#spoon_ai.skills.models.ScriptResult)
+    * [to\_string](#spoon_ai.skills.models.ScriptResult.to_string)
+  * [SkillTrigger](#spoon_ai.skills.models.SkillTrigger)
+  * [SkillParameter](#spoon_ai.skills.models.SkillParameter)
+  * [SkillPrerequisite](#spoon_ai.skills.models.SkillPrerequisite)
+  * [SkillMetadata](#spoon_ai.skills.models.SkillMetadata)
+    * [has\_scripts](#spoon_ai.skills.models.SkillMetadata.has_scripts)
+    * [scripts\_enabled](#spoon_ai.skills.models.SkillMetadata.scripts_enabled)
+  * [Skill](#spoon_ai.skills.models.Skill)
+    * [name](#spoon_ai.skills.models.Skill.name)
+    * [description](#spoon_ai.skills.models.Skill.description)
+    * [get\_prompt\_injection](#spoon_ai.skills.models.Skill.get_prompt_injection)
+* [spoon\_ai.skills.manager](#spoon_ai.skills.manager)
+  * [SkillManager](#spoon_ai.skills.manager.SkillManager)
+    * [\_\_init\_\_](#spoon_ai.skills.manager.SkillManager.__init__)
+    * [discover](#spoon_ai.skills.manager.SkillManager.discover)
+    * [add\_skill\_path](#spoon_ai.skills.manager.SkillManager.add_skill_path)
+    * [register](#spoon_ai.skills.manager.SkillManager.register)
+    * [unregister](#spoon_ai.skills.manager.SkillManager.unregister)
+    * [get](#spoon_ai.skills.manager.SkillManager.get)
+    * [list](#spoon_ai.skills.manager.SkillManager.list)
+    * [list\_skills](#spoon_ai.skills.manager.SkillManager.list_skills)
+    * [match\_triggers](#spoon_ai.skills.manager.SkillManager.match_triggers)
+    * [match\_intent](#spoon_ai.skills.manager.SkillManager.match_intent)
+    * [find\_matching\_skills](#spoon_ai.skills.manager.SkillManager.find_matching_skills)
+    * [activate](#spoon_ai.skills.manager.SkillManager.activate)
+    * [deactivate](#spoon_ai.skills.manager.SkillManager.deactivate)
+    * [deactivate\_all](#spoon_ai.skills.manager.SkillManager.deactivate_all)
+    * [get\_active\_context](#spoon_ai.skills.manager.SkillManager.get_active_context)
+    * [get\_active\_tools](#spoon_ai.skills.manager.SkillManager.get_active_tools)
+    * [get\_active\_skill\_names](#spoon_ai.skills.manager.SkillManager.get_active_skill_names)
+    * [is\_active](#spoon_ai.skills.manager.SkillManager.is_active)
+    * [execute\_script](#spoon_ai.skills.manager.SkillManager.execute_script)
+    * [set\_scripts\_enabled](#spoon_ai.skills.manager.SkillManager.set_scripts_enabled)
+    * [get\_script\_tools](#spoon_ai.skills.manager.SkillManager.get_script_tools)
+    * [get\_skill\_info](#spoon_ai.skills.manager.SkillManager.get_skill_info)
+    * [get\_stats](#spoon_ai.skills.manager.SkillManager.get_stats)
+* [spoon\_ai.skills.registry](#spoon_ai.skills.registry)
+  * [SkillRegistry](#spoon_ai.skills.registry.SkillRegistry)
+    * [register](#spoon_ai.skills.registry.SkillRegistry.register)
+    * [unregister](#spoon_ai.skills.registry.SkillRegistry.unregister)
+    * [get](#spoon_ai.skills.registry.SkillRegistry.get)
+    * [list\_names](#spoon_ai.skills.registry.SkillRegistry.list_names)
+    * [list\_skills](#spoon_ai.skills.registry.SkillRegistry.list_skills)
+    * [find\_by\_tag](#spoon_ai.skills.registry.SkillRegistry.find_by_tag)
+    * [find\_by\_keyword](#spoon_ai.skills.registry.SkillRegistry.find_by_keyword)
+    * [find\_by\_pattern](#spoon_ai.skills.registry.SkillRegistry.find_by_pattern)
+    * [find\_by\_intent](#spoon_ai.skills.registry.SkillRegistry.find_by_intent)
+    * [find\_all\_matching](#spoon_ai.skills.registry.SkillRegistry.find_all_matching)
+    * [get\_intent\_categories](#spoon_ai.skills.registry.SkillRegistry.get_intent_categories)
+* [spoon\_ai.skills.executor](#spoon_ai.skills.executor)
+  * [MAX\_OUTPUT\_SIZE](#spoon_ai.skills.executor.MAX_OUTPUT_SIZE)
+  * [ScriptExecutionError](#spoon_ai.skills.executor.ScriptExecutionError)
+  * [ScriptExecutor](#spoon_ai.skills.executor.ScriptExecutor)
+    * [\_\_init\_\_](#spoon_ai.skills.executor.ScriptExecutor.__init__)
+    * [is\_available](#spoon_ai.skills.executor.ScriptExecutor.is_available)
+    * [get\_interpreter](#spoon_ai.skills.executor.ScriptExecutor.get_interpreter)
+    * [execute](#spoon_ai.skills.executor.ScriptExecutor.execute)
+    * [get\_stats](#spoon_ai.skills.executor.ScriptExecutor.get_stats)
+    * [set\_enabled](#spoon_ai.skills.executor.ScriptExecutor.set_enabled)
+  * [get\_executor](#spoon_ai.skills.executor.get_executor)
+  * [configure\_executor](#spoon_ai.skills.executor.configure_executor)
+  * [set\_scripts\_enabled](#spoon_ai.skills.executor.set_scripts_enabled)
+* [spoon\_ai.skills.loader](#spoon_ai.skills.loader)
+  * [SkillLoader](#spoon_ai.skills.loader.SkillLoader)
+    * [\_\_init\_\_](#spoon_ai.skills.loader.SkillLoader.__init__)
+    * [paths](#spoon_ai.skills.loader.SkillLoader.paths)
+    * [add\_path](#spoon_ai.skills.loader.SkillLoader.add_path)
+    * [discover](#spoon_ai.skills.loader.SkillLoader.discover)
+    * [parse](#spoon_ai.skills.loader.SkillLoader.parse)
+    * [load\_tools](#spoon_ai.skills.loader.SkillLoader.load_tools)
+    * [load](#spoon_ai.skills.loader.SkillLoader.load)
+    * [load\_all](#spoon_ai.skills.loader.SkillLoader.load_all)
+    * [get\_skill](#spoon_ai.skills.loader.SkillLoader.get_skill)
+    * [get\_tools](#spoon_ai.skills.loader.SkillLoader.get_tools)
+    * [clear\_cache](#spoon_ai.skills.loader.SkillLoader.clear_cache)
+    * [reload](#spoon_ai.skills.loader.SkillLoader.reload)
 * [spoon\_ai.payments](#spoon_ai.payments)
-* [spoon\_ai.payments.facilitator\_client](#spoon_ai.payments.facilitator_client)
-  * [X402FacilitatorClient](#spoon_ai.payments.facilitator_client.X402FacilitatorClient)
-* [spoon\_ai.payments.cli](#spoon_ai.payments.cli)
+* [spoon\_ai.payments.app](#spoon_ai.payments.app)
+* [spoon\_ai.payments.x402\_service](#spoon_ai.payments.x402_service)
+  * [X402PaymentService](#spoon_ai.payments.x402_service.X402PaymentService)
+    * [discover\_resources](#spoon_ai.payments.x402_service.X402PaymentService.discover_resources)
+    * [render\_paywall\_html](#spoon_ai.payments.x402_service.X402PaymentService.render_paywall_html)
+    * [build\_payment\_header](#spoon_ai.payments.x402_service.X402PaymentService.build_payment_header)
+    * [decode\_payment\_response](#spoon_ai.payments.x402_service.X402PaymentService.decode_payment_response)
 * [spoon\_ai.payments.exceptions](#spoon_ai.payments.exceptions)
   * [X402PaymentError](#spoon_ai.payments.exceptions.X402PaymentError)
   * [X402ConfigurationError](#spoon_ai.payments.exceptions.X402ConfigurationError)
@@ -1326,3314 +1319,38 @@ title: spoon_ai
   * [X402SettleResult](#spoon_ai.payments.models.X402SettleResult)
   * [X402PaymentOutcome](#spoon_ai.payments.models.X402PaymentOutcome)
   * [X402PaymentReceipt](#spoon_ai.payments.models.X402PaymentReceipt)
-* [spoon\_ai.payments.x402\_service](#spoon_ai.payments.x402_service)
-  * [X402PaymentService](#spoon_ai.payments.x402_service.X402PaymentService)
-    * [discover\_resources](#spoon_ai.payments.x402_service.X402PaymentService.discover_resources)
-    * [render\_paywall\_html](#spoon_ai.payments.x402_service.X402PaymentService.render_paywall_html)
-    * [build\_payment\_header](#spoon_ai.payments.x402_service.X402PaymentService.build_payment_header)
-    * [decode\_payment\_response](#spoon_ai.payments.x402_service.X402PaymentService.decode_payment_response)
+* [spoon\_ai.payments.config](#spoon_ai.payments.config)
+  * [X402ConfigurationError](#spoon_ai.payments.config.X402ConfigurationError)
+  * [X402PaywallBranding](#spoon_ai.payments.config.X402PaywallBranding)
+  * [X402ClientConfig](#spoon_ai.payments.config.X402ClientConfig)
+  * [X402Settings](#spoon_ai.payments.config.X402Settings)
+    * [amount\_in\_atomic\_units](#spoon_ai.payments.config.X402Settings.amount_in_atomic_units)
+    * [build\_asset\_extra](#spoon_ai.payments.config.X402Settings.build_asset_extra)
+    * [load](#spoon_ai.payments.config.X402Settings.load)
+* [spoon\_ai.payments.cli](#spoon_ai.payments.cli)
+* [spoon\_ai.payments.facilitator\_client](#spoon_ai.payments.facilitator_client)
+  * [X402FacilitatorClient](#spoon_ai.payments.facilitator_client.X402FacilitatorClient)
+* [spoon\_ai.payments.server](#spoon_ai.payments.server)
+  * [create\_paywalled\_router](#spoon_ai.payments.server.create_paywalled_router)
 
 <a id="spoon_ai"></a>
 
 # Module `spoon_ai`
 
-<a id="spoon_ai.schema"></a>
+<a id="spoon_ai.llm"></a>
 
-# Module `spoon_ai.schema`
+# Module `spoon_ai.llm`
 
-<a id="spoon_ai.schema.Function"></a>
+Unified LLM infrastructure package.
 
-## `Function` Objects
+This package provides a unified interface for working with different LLM providers,
+including comprehensive configuration management, monitoring, and error handling.
 
-```python
-class Function(BaseModel)
-```
+<a id="spoon_ai.llm.providers"></a>
 
-<a id="spoon_ai.schema.Function.get_arguments_dict"></a>
+# Module `spoon_ai.llm.providers`
 
-#### `get_arguments_dict`
-
-```python
-def get_arguments_dict() -> dict
-```
-
-Parse arguments string to dictionary.
-
-**Returns**:
-
-- `dict` - Parsed arguments as dictionary
-
-<a id="spoon_ai.schema.Function.create"></a>
-
-#### `create`
-
-```python
-@classmethod
-def create(cls, name: str, arguments: Union[str, dict]) -> "Function"
-```
-
-Create Function with arguments as string or dict.
-
-**Arguments**:
-
-- `name` - Function name
-- `arguments` - Function arguments as string or dict
-  
-
-**Returns**:
-
-- `Function` - Function instance with arguments as JSON string
-
-<a id="spoon_ai.schema.AgentState"></a>
-
-## `AgentState` Objects
-
-```python
-class AgentState(str, Enum)
-```
-
-The state of the agent.
-
-<a id="spoon_ai.schema.ToolChoice"></a>
-
-## `ToolChoice` Objects
-
-```python
-class ToolChoice(str, Enum)
-```
-
-Tool choice options
-
-<a id="spoon_ai.schema.Role"></a>
-
-## `Role` Objects
-
-```python
-class Role(str, Enum)
-```
-
-Message role options
-
-<a id="spoon_ai.schema.ROLE_TYPE"></a>
-
-#### `ROLE_TYPE`
-
-type: ignore
-
-<a id="spoon_ai.schema.ContentType"></a>
-
-## `ContentType` Objects
-
-```python
-class ContentType(str, Enum)
-```
-
-Types of content blocks for multimodal messages
-
-<a id="spoon_ai.schema.ContentType.IMAGE"></a>
-
-#### `IMAGE`
-
-Base64 encoded image data
-
-<a id="spoon_ai.schema.ContentType.IMAGE_URL"></a>
-
-#### `IMAGE_URL`
-
-URL reference to image
-
-<a id="spoon_ai.schema.ContentType.DOCUMENT"></a>
-
-#### `DOCUMENT`
-
-PDF and other documents (base64)
-
-<a id="spoon_ai.schema.ContentType.FILE"></a>
-
-#### `FILE`
-
-File attachment (path-based)
-
-<a id="spoon_ai.schema.ContentType.AUDIO"></a>
-
-#### `AUDIO`
-
-Audio content (future)
-
-<a id="spoon_ai.schema.ImageMediaType"></a>
-
-## `ImageMediaType` Objects
-
-```python
-class ImageMediaType(str, Enum)
-```
-
-Supported image media types
-
-<a id="spoon_ai.schema.ImageSource"></a>
-
-## `ImageSource` Objects
-
-```python
-class ImageSource(BaseModel)
-```
-
-Source for base64-encoded image content (Anthropic style)
-
-<a id="spoon_ai.schema.ImageUrlSource"></a>
-
-## `ImageUrlSource` Objects
-
-```python
-class ImageUrlSource(BaseModel)
-```
-
-Source for URL-based image content (OpenAI style)
-
-<a id="spoon_ai.schema.TextContent"></a>
-
-## `TextContent` Objects
-
-```python
-class TextContent(BaseModel)
-```
-
-Text content block
-
-<a id="spoon_ai.schema.ImageContent"></a>
-
-## `ImageContent` Objects
-
-```python
-class ImageContent(BaseModel)
-```
-
-Image content block with base64 data (Anthropic-compatible)
-
-<a id="spoon_ai.schema.ImageUrlContent"></a>
-
-## `ImageUrlContent` Objects
-
-```python
-class ImageUrlContent(BaseModel)
-```
-
-Image content block with URL reference (OpenAI-compatible)
-
-<a id="spoon_ai.schema.FileContent"></a>
-
-## `FileContent` Objects
-
-```python
-class FileContent(BaseModel)
-```
-
-File content block (path-based, for local file references)
-
-<a id="spoon_ai.schema.DocumentSource"></a>
-
-## `DocumentSource` Objects
-
-```python
-class DocumentSource(BaseModel)
-```
-
-Source for base64-encoded document content (PDF, etc.)
-
-<a id="spoon_ai.schema.DocumentContent"></a>
-
-## `DocumentContent` Objects
-
-```python
-class DocumentContent(BaseModel)
-```
-
-Document content block for PDFs and other documents (Anthropic/Gemini compatible)
-
-Supported by:
-- Anthropic Claude: Native PDF support via base64
-- Gemini: Native PDF support via inline_data
-- OpenAI: NOT supported (will be converted to text placeholder)
-
-<a id="spoon_ai.schema.Message"></a>
-
-## `Message` Objects
-
-```python
-class Message(BaseModel)
-```
-
-Represents a chat message in the conversation.
-
-Supports both text-only and multimodal content:
-- Simple text: content="Hello world"
-- Multimodal: content=[TextContent(...), ImageUrlContent(...)]
-
-<a id="spoon_ai.schema.Message.role"></a>
-
-#### `role`
-
-type: ignore
-
-<a id="spoon_ai.schema.Message.is_multimodal"></a>
-
-#### `is_multimodal`
-
-```python
-@property
-def is_multimodal() -> bool
-```
-
-Check if this message contains multimodal content.
-
-<a id="spoon_ai.schema.Message.text_content"></a>
-
-#### `text_content`
-
-```python
-@property
-def text_content() -> str
-```
-
-Extract text content from message (for backward compatibility).
-
-**Returns**:
-
-- `str` - Combined text content from all text blocks, or empty string
-
-<a id="spoon_ai.schema.Message.has_images"></a>
-
-#### `has_images`
-
-```python
-@property
-def has_images() -> bool
-```
-
-Check if message contains any image content.
-
-<a id="spoon_ai.schema.Message.has_documents"></a>
-
-#### `has_documents`
-
-```python
-@property
-def has_documents() -> bool
-```
-
-Check if message contains any document content (PDF, etc.).
-
-<a id="spoon_ai.schema.Message.create_text"></a>
-
-#### `create_text`
-
-```python
-@classmethod
-def create_text(cls, role: str, text: str, **kwargs) -> "Message"
-```
-
-Create a simple text message.
-
-**Arguments**:
-
-- `role` - Message role (user, assistant, system, tool)
-- `text` - Text content
-- `**kwargs` - Additional message fields
-  
-
-**Returns**:
-
-- `Message` - Text message instance
-
-<a id="spoon_ai.schema.Message.create_multimodal"></a>
-
-#### `create_multimodal`
-
-```python
-@classmethod
-def create_multimodal(cls, role: str, content_blocks: List[ContentBlock],
-                      **kwargs) -> "Message"
-```
-
-Create a multimodal message with mixed content types.
-
-**Arguments**:
-
-- `role` - Message role (user, assistant, system, tool)
-- `content_blocks` - List of content blocks (TextContent, ImageContent, etc.)
-- `**kwargs` - Additional message fields
-  
-
-**Returns**:
-
-- `Message` - Multimodal message instance
-
-<a id="spoon_ai.schema.Message.create_with_image_url"></a>
-
-#### `create_with_image_url`
-
-```python
-@classmethod
-def create_with_image_url(cls,
-                          role: str,
-                          text: str,
-                          image_url: str,
-                          detail: Literal["auto", "low", "high"] = "auto",
-                          **kwargs) -> "Message"
-```
-
-Create a message with text and an image URL.
-
-**Arguments**:
-
-- `role` - Message role
-- `text` - Text content
-- `image_url` - URL of the image
-- `detail` - Image detail level (auto, low, high)
-- `**kwargs` - Additional message fields
-  
-
-**Returns**:
-
-- `Message` - Multimodal message with text and image URL
-
-<a id="spoon_ai.schema.Message.create_with_base64_image"></a>
-
-#### `create_with_base64_image`
-
-```python
-@classmethod
-def create_with_base64_image(cls,
-                             role: str,
-                             text: str,
-                             image_data: str,
-                             media_type: str = "image/png",
-                             **kwargs) -> "Message"
-```
-
-Create a message with text and a base64-encoded image.
-
-**Arguments**:
-
-- `role` - Message role
-- `text` - Text content
-- `image_data` - Base64-encoded image data
-- `media_type` - Image MIME type (image/jpeg, image/png, etc.)
-- `**kwargs` - Additional message fields
-  
-
-**Returns**:
-
-- `Message` - Multimodal message with text and base64 image
-
-<a id="spoon_ai.schema.Message.create_with_pdf"></a>
-
-#### `create_with_pdf`
-
-```python
-@classmethod
-def create_with_pdf(cls,
-                    role: str,
-                    text: str,
-                    pdf_data: str,
-                    filename: Optional[str] = None,
-                    **kwargs) -> "Message"
-```
-
-Create a message with text and a base64-encoded PDF document.
-
-Supported by Anthropic Claude and Gemini. OpenAI does not support PDFs.
-
-**Arguments**:
-
-- `role` - Message role
-- `text` - Text content / question about the PDF
-- `pdf_data` - Base64-encoded PDF data
-- `filename` - Optional filename for display
-- `**kwargs` - Additional message fields
-  
-
-**Returns**:
-
-- `Message` - Multimodal message with text and PDF document
-
-<a id="spoon_ai.schema.Message.create_with_document"></a>
-
-#### `create_with_document`
-
-```python
-@classmethod
-def create_with_document(cls,
-                         role: str,
-                         text: str,
-                         document_data: str,
-                         media_type: str = "application/pdf",
-                         filename: Optional[str] = None,
-                         **kwargs) -> "Message"
-```
-
-Create a message with text and a base64-encoded document.
-
-Supported document types vary by provider:
-- Anthropic: PDF
-- Gemini: PDF, and many other formats
-- OpenAI: NOT supported (will show placeholder)
-
-**Arguments**:
-
-- `role` - Message role
-- `text` - Text content / question about the document
-- `document_data` - Base64-encoded document data
-- `media_type` - Document MIME type (default: application/pdf)
-- `filename` - Optional filename for display
-- `**kwargs` - Additional message fields
-  
-
-**Returns**:
-
-- `Message` - Multimodal message with text and document
-
-<a id="spoon_ai.schema.SystemMessage"></a>
-
-## `SystemMessage` Objects
-
-```python
-class SystemMessage(Message)
-```
-
-<a id="spoon_ai.schema.SystemMessage.role"></a>
-
-#### `role`
-
-type: ignore
-
-<a id="spoon_ai.schema.TOOL_CHOICE_TYPE"></a>
-
-#### `TOOL_CHOICE_TYPE`
-
-type: ignore
-
-<a id="spoon_ai.schema.LLMConfig"></a>
-
-## `LLMConfig` Objects
-
-```python
-class LLMConfig(BaseModel)
-```
-
-Configuration for LLM providers
-
-<a id="spoon_ai.schema.LLMResponse"></a>
-
-## `LLMResponse` Objects
-
-```python
-class LLMResponse(BaseModel)
-```
-
-Unified LLM response model
-
-<a id="spoon_ai.schema.LLMResponse.text"></a>
-
-#### `text`
-
-Original text response
-
-<a id="spoon_ai.schema.LLMResponseChunk"></a>
-
-## `LLMResponseChunk` Objects
-
-```python
-class LLMResponseChunk(BaseModel)
-```
-
-Enhanced LLM streaming response chunk.
-
-<a id="spoon_ai.utils.streaming"></a>
-
-# Module `spoon_ai.utils.streaming`
-
-<a id="spoon_ai.utils.streaming.StreamOutcome"></a>
-
-## `StreamOutcome` Objects
-
-```python
-@dataclass
-class StreamOutcome()
-```
-
-Accumulator for streaming output state.
-
-<a id="spoon_ai.utils.streaming.build_output_queue_event"></a>
-
-#### `build_output_queue_event`
-
-```python
-def build_output_queue_event(
-        *,
-        event_type: str,
-        delta: str = "",
-        metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
-```
-
-Build a backward-compatible output queue event payload.
-
-<a id="spoon_ai.utils.config"></a>
-
-# Module `spoon_ai.utils.config`
-
-<a id="spoon_ai.utils"></a>
-
-# Module `spoon_ai.utils`
-
-<a id="spoon_ai.utils.config_manager"></a>
-
-# Module `spoon_ai.utils.config_manager`
-
-<a id="spoon_ai.utils.config_manager.ConfigManager"></a>
-
-## `ConfigManager` Objects
-
-```python
-class ConfigManager()
-```
-
-Environment-based configuration helper for core usage.
-
-<a id="spoon_ai.utils.config_manager.ConfigManager.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__() -> None
-```
-
-Initialize manager with environment-backed cache.
-
-<a id="spoon_ai.utils.config_manager.ConfigManager.refresh"></a>
-
-#### `refresh`
-
-```python
-def refresh() -> None
-```
-
-Reload configuration snapshot from environment variables.
-
-<a id="spoon_ai.utils.config_manager.ConfigManager.get"></a>
-
-#### `get`
-
-```python
-def get(key: str, default: Any = None) -> Any
-```
-
-Get configuration item from environment snapshot.
-
-<a id="spoon_ai.utils.config_manager.ConfigManager.set"></a>
-
-#### `set`
-
-```python
-def set(key: str, value: Any) -> None
-```
-
-Set configuration item by exporting to environment variables.
-
-<a id="spoon_ai.utils.config_manager.ConfigManager.list_config"></a>
-
-#### `list_config`
-
-```python
-def list_config() -> Dict[str, Any]
-```
-
-List configuration snapshot without persisting secrets.
-
-<a id="spoon_ai.utils.config_manager.ConfigManager.get_api_key"></a>
-
-#### `get_api_key`
-
-```python
-def get_api_key(provider: str) -> Optional[str]
-```
-
-Get API key for specified provider with environment priority.
-
-<a id="spoon_ai.utils.config_manager.ConfigManager.set_api_key"></a>
-
-#### `set_api_key`
-
-```python
-def set_api_key(provider: str, api_key: str) -> None
-```
-
-Set API key by exporting to environment variables.
-
-<a id="spoon_ai.utils.config_manager.ConfigManager.get_model_name"></a>
-
-#### `get_model_name`
-
-```python
-def get_model_name() -> Optional[str]
-```
-
-Get model name override from environment.
-
-<a id="spoon_ai.utils.config_manager.ConfigManager.get_base_url"></a>
-
-#### `get_base_url`
-
-```python
-def get_base_url() -> Optional[str]
-```
-
-Get base URL override from environment.
-
-<a id="spoon_ai.utils.config_manager.ConfigManager.get_llm_provider"></a>
-
-#### `get_llm_provider`
-
-```python
-def get_llm_provider() -> Optional[str]
-```
-
-Determine LLM provider from environment variables.
-
-<a id="spoon_ai.utils.utils"></a>
-
-# Module `spoon_ai.utils.utils`
-
-<a id="spoon_ai.turnkey"></a>
-
-# Module `spoon_ai.turnkey`
-
-Turnkey client integration for SpoonAI.
-
-Provides `Turnkey` for secure signing via Turnkey API.
-
-<a id="spoon_ai.turnkey.client"></a>
-
-# Module `spoon_ai.turnkey.client`
-
-<a id="spoon_ai.turnkey.client.Turnkey"></a>
-
-## `Turnkey` Objects
-
-```python
-class Turnkey()
-```
-
-Turnkey API client class for managing blockchain private keys and wallet operations.
-
-<a id="spoon_ai.turnkey.client.Turnkey.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(base_url=None,
-             api_public_key=None,
-             api_private_key=None,
-             org_id=None)
-```
-
-Initialize Turnkey client.
-
-**Arguments**:
-
-- `base_url` _str_ - Turnkey API base URL (defaults from .env or default value).
-- `api_public_key` _str_ - Turnkey API public key.
-- `api_private_key` _str_ - Turnkey API private key.
-- `org_id` _str_ - Turnkey organization ID.
-  
-
-**Raises**:
-
-- `ValueError` - If required configuration parameters are missing.
-
-<a id="spoon_ai.turnkey.client.Turnkey.whoami"></a>
-
-#### `whoami`
-
-```python
-def whoami()
-```
-
-Call whoami API to get organization information.
-
-**Returns**:
-
-- `dict` - JSON response containing organization information.
-
-<a id="spoon_ai.turnkey.client.Turnkey.import_private_key"></a>
-
-#### `import_private_key`
-
-```python
-def import_private_key(user_id,
-                       private_key_name,
-                       encrypted_bundle,
-                       curve="CURVE_SECP256K1",
-                       address_formats=["ADDRESS_FORMAT_ETHEREUM"])
-```
-
-Import private key to Turnkey.
-
-**Arguments**:
-
-- `user_id` _str_ - User ID.
-- `private_key_name` _str_ - Private key name.
-- `encrypted_bundle` _str_ - Encrypted private key bundle.
-- `curve` _str_ - Elliptic curve type, defaults to CURVE_SECP256K1.
-- `address_formats` _list_ - Address format list, defaults to ["ADDRESS_FORMAT_ETHEREUM"].
-  
-
-**Returns**:
-
-- `dict` - JSON response containing imported private key information.
-
-<a id="spoon_ai.turnkey.client.Turnkey.sign_evm_transaction"></a>
-
-#### `sign_evm_transaction`
-
-```python
-def sign_evm_transaction(sign_with, unsigned_tx)
-```
-
-Sign EVM transaction using Turnkey.
-
-**Arguments**:
-
-- `sign_with` _str_ - Signing identity (wallet account address / private key address / private key ID).
-- `unsigned_tx` _str_ - Raw unsigned transaction (hex string).
-  
-
-**Returns**:
-
-- `dict` - JSON response containing signing result, see signTransactionResult.signedTransaction.
-  
-  Reference:
-  https://docs.turnkey.com/api-reference/activities/sign-transaction
-
-<a id="spoon_ai.turnkey.client.Turnkey.sign_typed_data"></a>
-
-#### `sign_typed_data`
-
-```python
-def sign_typed_data(sign_with, typed_data)
-```
-
-Sign EIP-712 structured data.
-
-**Arguments**:
-
-- `sign_with` _str_ - Signing identity (wallet account address / private key address / private key ID).
-- `typed_data` _dict|str_ - EIP-712 structure (domain/types/message) or its JSON string.
-  
-
-**Returns**:
-
-- `dict` - Activity response, result contains r/s/v.
-  
-
-**Notes**:
-
-  - encoding uses PAYLOAD_ENCODING_EIP712
-  - hashFunction uses HASH_FUNCTION_NOT_APPLICABLE (server completes EIP-712 spec hashing)
-
-<a id="spoon_ai.turnkey.client.Turnkey.sign_message"></a>
-
-#### `sign_message`
-
-```python
-def sign_message(sign_with, message, use_keccak256=True)
-```
-
-Sign arbitrary message (defaults to KECCAK256 following Ethereum convention).
-
-**Arguments**:
-
-- `sign_with` _str_ - Signing identity (wallet account address / private key address / private key ID).
-- `message` _str|bytes_ - Text to be signed; bytes will be decoded as UTF-8.
-- `use_keccak256` _bool_ - Whether to use KECCAK256 as hash function (default True).
-  
-
-**Returns**:
-
-- `dict` - Activity response, result contains r/s/v.
-
-<a id="spoon_ai.turnkey.client.Turnkey.get_activity"></a>
-
-#### `get_activity`
-
-```python
-def get_activity(activity_id)
-```
-
-Query Activity details.
-
-**Arguments**:
-
-- `activity_id` _str_ - Activity ID.
-  
-
-**Returns**:
-
-- `dict` - Activity details.
-  
-  Reference:
-  https://docs.turnkey.com/api-reference/queries/get-activity
-
-<a id="spoon_ai.turnkey.client.Turnkey.list_activities"></a>
-
-#### `list_activities`
-
-```python
-def list_activities(limit=None,
-                    before=None,
-                    after=None,
-                    filter_by_status=None,
-                    filter_by_type=None)
-```
-
-List activities within organization (paginated).
-
-**Arguments**:
-
-- `limit` _str|None_ - Number per page.
-- `before` _str|None_ - Pagination cursor (before).
-- `after` _str|None_ - Pagination cursor (after).
-- `filter_by_status` _list|None_ - Filter by activity status (e.g., ['ACTIVITY_STATUS_COMPLETED']).
-- `filter_by_type` _list|None_ - Filter by activity type (e.g., ['ACTIVITY_TYPE_SIGN_TRANSACTION_V2']).
-  
-
-**Returns**:
-
-- `dict` - Activity list.
-  
-  Reference:
-  https://docs.turnkey.com/api-reference/queries/list-activities
-
-<a id="spoon_ai.turnkey.client.Turnkey.get_policy_evaluations"></a>
-
-#### `get_policy_evaluations`
-
-```python
-def get_policy_evaluations(activity_id)
-```
-
-Query policy evaluation results for an Activity (if available).
-
-**Arguments**:
-
-- `activity_id` _str_ - Activity ID.
-  
-
-**Returns**:
-
-- `dict` - Policy evaluation details.
-  
-  Reference:
-  https://docs.turnkey.com/api-reference/queries/get-policy-evaluations
-
-<a id="spoon_ai.turnkey.client.Turnkey.get_private_key"></a>
-
-#### `get_private_key`
-
-```python
-def get_private_key(private_key_id)
-```
-
-Query information for specified private key.
-
-**Arguments**:
-
-- `private_key_id` _str_ - Private key ID.
-  
-
-**Returns**:
-
-- `dict` - JSON response containing private key information.
-
-<a id="spoon_ai.turnkey.client.Turnkey.create_wallet"></a>
-
-#### `create_wallet`
-
-```python
-def create_wallet(wallet_name, accounts, mnemonic_length=24)
-```
-
-Create new wallet.
-
-**Arguments**:
-
-- `wallet_name` _str_ - Wallet name.
-- `accounts` _list_ - Account configuration list, each account contains curve, pathFormat, path, addressFormat.
-- `mnemonic_length` _int_ - Mnemonic length (default 24).
-  
-
-**Returns**:
-
-- `dict` - JSON response containing new wallet information.
-
-<a id="spoon_ai.turnkey.client.Turnkey.create_wallet_accounts"></a>
-
-#### `create_wallet_accounts`
-
-```python
-def create_wallet_accounts(wallet_id, accounts)
-```
-
-Add accounts to existing wallet.
-
-**Arguments**:
-
-- `wallet_id` _str_ - Wallet ID.
-- `accounts` _list_ - New account configuration list, each account contains curve, pathFormat, path, addressFormat.
-  
-
-**Returns**:
-
-- `dict` - JSON response containing new account information.
-
-<a id="spoon_ai.turnkey.client.Turnkey.get_wallet"></a>
-
-#### `get_wallet`
-
-```python
-def get_wallet(wallet_id)
-```
-
-Query information for specified wallet.
-
-**Arguments**:
-
-- `wallet_id` _str_ - Wallet ID.
-  
-
-**Returns**:
-
-- `dict` - JSON response containing wallet information.
-
-<a id="spoon_ai.turnkey.client.Turnkey.get_wallet_account"></a>
-
-#### `get_wallet_account`
-
-```python
-def get_wallet_account(wallet_id, address=None, path=None)
-```
-
-Query information for specified wallet account.
-
-**Arguments**:
-
-- `wallet_id` _str_ - Wallet ID.
-- `address` _str, optional_ - Account address.
-- `path` _str, optional_ - Account path (e.g., m/44'/60'/0'/0/0).
-  
-
-**Returns**:
-
-- `dict` - JSON response containing account information.
-  
-
-**Raises**:
-
-- `ValueError` - If neither address nor path is provided.
-
-<a id="spoon_ai.turnkey.client.Turnkey.list_wallets"></a>
-
-#### `list_wallets`
-
-```python
-def list_wallets()
-```
-
-List all wallets in the organization.
-
-**Returns**:
-
-- `dict` - JSON response containing wallet list.
-
-<a id="spoon_ai.turnkey.client.Turnkey.list_wallet_accounts"></a>
-
-#### `list_wallet_accounts`
-
-```python
-def list_wallet_accounts(wallet_id, limit=None, before=None, after=None)
-```
-
-List account list for specified wallet.
-
-**Arguments**:
-
-- `wallet_id` _str_ - Wallet ID.
-- `limit` _str, optional_ - Number of accounts returned per page.
-- `before` _str, optional_ - Pagination cursor, returns accounts before this ID.
-- `after` _str, optional_ - Pagination cursor, returns accounts after this ID.
-  
-
-**Returns**:
-
-- `dict` - JSON response containing account list.
-
-<a id="spoon_ai.turnkey.client.Turnkey.init_import_wallet"></a>
-
-#### `init_import_wallet`
-
-```python
-def init_import_wallet(user_id)
-```
-
-Initialize wallet import process, generate import_bundle.
-
-**Arguments**:
-
-- `user_id` _str_ - User ID.
-  
-
-**Returns**:
-
-- `dict` - JSON response containing import_bundle.
-
-<a id="spoon_ai.turnkey.client.Turnkey.encrypt_wallet"></a>
-
-#### `encrypt_wallet`
-
-```python
-def encrypt_wallet(mnemonic,
-                   user_id,
-                   import_bundle,
-                   encryption_key_name="demo-encryption-key")
-```
-
-Encrypt mnemonic using Turnkey CLI, generate encrypted_bundle.
-
-**Arguments**:
-
-- `mnemonic` _str_ - Mnemonic phrase (12/15/18/21/24 words).
-- `user_id` _str_ - User ID.
-- `import_bundle` _str_ - import_bundle obtained from init_import_wallet.
-- `encryption_key_name` _str_ - Encryption key name, defaults to demo-encryption-key.
-  
-
-**Returns**:
-
-- `str` - Encrypted encrypted_bundle.
-  
-
-**Raises**:
-
-- `RuntimeError` - If CLI command fails or turnkey CLI is not installed.
-
-<a id="spoon_ai.turnkey.client.Turnkey.encrypt_private_key"></a>
-
-#### `encrypt_private_key`
-
-```python
-def encrypt_private_key(private_key,
-                        user_id,
-                        import_bundle,
-                        key_format="hexadecimal",
-                        encryption_key_name="demo-encryption-key")
-```
-
-Encrypt private key using Turnkey CLI, generate encrypted_bundle, equivalent to:
-`turnkey encrypt --import-bundle-input "./import_bundle.txt" --plaintext-input /dev/fd/3 --key-format "hexadecimal" --encrypted-bundle-output "./encrypted_bundle.txt"`
-
-**Arguments**:
-
-- `private_key` _str_ - Private key string (hexadecimal or Solana format).
-- `user_id` _str_ - User ID.
-- `import_bundle` _str_ - import_bundle obtained from init_import_private_key.
-- `key_format` _str_ - Private key format, defaults to "hexadecimal" (supports "hexadecimal", "solana").
-- `encryption_key_name` _str_ - Encryption key name, defaults to "demo-encryption-key".
-  
-
-**Returns**:
-
-- `str` - Encrypted encrypted_bundle (Base64 encoded string).
-  
-
-**Raises**:
-
-- `ValueError` - If private_key, user_id, import_bundle is empty or key_format is invalid.
-- `RuntimeError` - If CLI command fails or turnkey CLI is not installed.
-
-<a id="spoon_ai.turnkey.client.Turnkey.init_import_private_key"></a>
-
-#### `init_import_private_key`
-
-```python
-def init_import_private_key(user_id)
-```
-
-Initialize private key import process, generate import_bundle.
-
-**Arguments**:
-
-- `user_id` _str_ - User ID.
-  
-
-**Returns**:
-
-- `dict` - JSON response containing import_bundle.
-
-<a id="spoon_ai.turnkey.client.Turnkey.import_wallet"></a>
-
-#### `import_wallet`
-
-```python
-def import_wallet(user_id, wallet_name, encrypted_bundle, accounts=None)
-```
-
-Import wallet to Turnkey.
-
-**Arguments**:
-
-- `user_id` _str_ - User ID.
-- `wallet_name` _str_ - Wallet name.
-- `encrypted_bundle` _str_ - Encrypted mnemonic bundle.
-- `accounts` _list, optional_ - Account configuration list, each account contains curve, pathFormat, path, addressFormat.
-  
-
-**Returns**:
-
-- `dict` - JSON response containing imported wallet information.
-
-<a id="spoon_ai.graph.types"></a>
-
-# Module `spoon_ai.graph.types`
-
-Typed structures for the graph package.
-
-<a id="spoon_ai.graph.agent"></a>
-
-# Module `spoon_ai.graph.agent`
-
-GraphAgent implementation for the graph package.
-
-<a id="spoon_ai.graph.agent.Memory"></a>
-
-## `Memory` Objects
-
-```python
-class Memory()
-```
-
-Memory implementation with persistent storage
-
-<a id="spoon_ai.graph.agent.Memory.clear"></a>
-
-#### `clear`
-
-```python
-def clear()
-```
-
-Clear all messages and reset memory
-
-<a id="spoon_ai.graph.agent.Memory.add_message"></a>
-
-#### `add_message`
-
-```python
-def add_message(msg)
-```
-
-Add a message to memory
-
-<a id="spoon_ai.graph.agent.Memory.get_messages"></a>
-
-#### `get_messages`
-
-```python
-def get_messages(limit: Optional[int] = None) -> List[Dict[str, Any]]
-```
-
-Get messages from memory
-
-<a id="spoon_ai.graph.agent.Memory.get_recent_messages"></a>
-
-#### `get_recent_messages`
-
-```python
-def get_recent_messages(hours: int = 24) -> List[Dict[str, Any]]
-```
-
-Get messages from the last N hours
-
-<a id="spoon_ai.graph.agent.Memory.search_messages"></a>
-
-#### `search_messages`
-
-```python
-def search_messages(query: str, limit: int = 10) -> List[Dict[str, Any]]
-```
-
-Search messages containing the query
-
-<a id="spoon_ai.graph.agent.Memory.get_statistics"></a>
-
-#### `get_statistics`
-
-```python
-def get_statistics() -> Dict[str, Any]
-```
-
-Get memory statistics
-
-<a id="spoon_ai.graph.agent.Memory.set_metadata"></a>
-
-#### `set_metadata`
-
-```python
-def set_metadata(key: str, value: Any)
-```
-
-Set metadata
-
-<a id="spoon_ai.graph.agent.Memory.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-def get_metadata(key: str, default: Any = None) -> Any
-```
-
-Get metadata
-
-<a id="spoon_ai.graph.agent.MockMemory"></a>
-
-## `MockMemory` Objects
-
-```python
-class MockMemory(Memory)
-```
-
-Alias for backward compatibility - now uses persistent memory
-
-<a id="spoon_ai.graph.agent.GraphAgent"></a>
-
-## `GraphAgent` Objects
-
-```python
-class GraphAgent()
-```
-
-<a id="spoon_ai.graph.agent.GraphAgent.search_memory"></a>
-
-#### `search_memory`
-
-```python
-def search_memory(query: str, limit: int = 10) -> List[Dict[str, Any]]
-```
-
-Search memory for messages containing the query
-
-<a id="spoon_ai.graph.agent.GraphAgent.get_recent_memory"></a>
-
-#### `get_recent_memory`
-
-```python
-def get_recent_memory(hours: int = 24) -> List[Dict[str, Any]]
-```
-
-Get recent messages from memory
-
-<a id="spoon_ai.graph.agent.GraphAgent.get_memory_statistics"></a>
-
-#### `get_memory_statistics`
-
-```python
-def get_memory_statistics() -> Dict[str, Any]
-```
-
-Get memory statistics
-
-<a id="spoon_ai.graph.agent.GraphAgent.set_memory_metadata"></a>
-
-#### `set_memory_metadata`
-
-```python
-def set_memory_metadata(key: str, value: Any)
-```
-
-Set memory metadata
-
-<a id="spoon_ai.graph.agent.GraphAgent.get_memory_metadata"></a>
-
-#### `get_memory_metadata`
-
-```python
-def get_memory_metadata(key: str, default: Any = None) -> Any
-```
-
-Get memory metadata
-
-<a id="spoon_ai.graph.agent.GraphAgent.save_session"></a>
-
-#### `save_session`
-
-```python
-def save_session()
-```
-
-Manually save current session
-
-<a id="spoon_ai.graph.agent.GraphAgent.load_session"></a>
-
-#### `load_session`
-
-```python
-def load_session(session_id: str)
-```
-
-Load a specific session
-
-<a id="spoon_ai.graph.engine"></a>
-
-# Module `spoon_ai.graph.engine`
-
-Graph engine: StateGraph, CompiledGraph, and interrupt API implementation.
-
-<a id="spoon_ai.graph.engine.create_multimodal_message"></a>
-
-#### `create_multimodal_message`
-
-```python
-def create_multimodal_message(
-        role: str,
-        text: str,
-        image_url: Optional[str] = None,
-        image_data: Optional[str] = None,
-        image_media_type: str = "image/png",
-        detail: Literal["auto", "low", "high"] = "auto") -> Message
-```
-
-Create a multimodal message for use in graph state.
-
-Supports both URL-based and base64-encoded images.
-
-**Arguments**:
-
-- `role` - Message role (user, assistant, system)
-- `text` - Text content
-- `image_url` - URL of the image (including data URLs)
-- `image_data` - Base64-encoded image data (alternative to image_url)
-- `image_media_type` - MIME type for base64 images
-- `detail` - Image detail level (auto, low, high)
-  
-
-**Returns**:
-
-- `Message` - A multimodal message ready for graph state
-  
-
-**Example**:
-
-    ```python
-    # In a graph node function
-    async def analyze_image(state: State) -> dict:
-        msg = create_multimodal_message(
-            "user",
-            "Analyze this chart",
-            image_url="https://example.com/chart.png"
-        )
-        return {"messages": [msg]}
-    ```
-
-<a id="spoon_ai.graph.engine.create_vision_user_message"></a>
-
-#### `create_vision_user_message`
-
-```python
-def create_vision_user_message(text: str, images: List[Dict[str,
-                                                            str]]) -> Message
-```
-
-Create a user message with multiple images.
-
-**Arguments**:
-
-- `text` - Text prompt
-- `images` - List of image specs, each with either:
-  - &#123;"url": "https://..."&#125; for URL-based images
-  - &#123;"data": "&lt;base64&gt;", "media_type": "image/png"&#125; for base64 images
-  
-
-**Returns**:
-
-- `Message` - A multimodal message with multiple images
-  
-
-**Example**:
-
-    ```python
-    msg = create_vision_user_message(
-        "Compare these two charts",
-        images=[
-            {"url": "https://example.com/chart1.png"},
-            {"url": "https://example.com/chart2.png"}
-        ]
-    )
-    ```
-
-<a id="spoon_ai.graph.engine.create_pdf_message"></a>
-
-#### `create_pdf_message`
-
-```python
-def create_pdf_message(role: str,
-                       text: str,
-                       pdf_data: str,
-                       filename: Optional[str] = None) -> Message
-```
-
-Create a message with a PDF document for use in graph state.
-
-**Arguments**:
-
-- `role` - Message role (user, assistant, system)
-- `text` - Text content
-- `pdf_data` - Base64-encoded PDF data
-- `filename` - Optional filename for the PDF
-  
-
-**Returns**:
-
-- `Message` - A multimodal message with PDF ready for graph state
-  
-
-**Example**:
-
-    ```python
-    # In a graph node function
-    async def analyze_document(state: State) -> dict:
-        msg = create_pdf_message(
-            "user",
-            "Summarize this whitepaper",
-            pdf_data="<base64_encoded_pdf>",
-            filename="bitcoin.pdf"
-        )
-        return {"messages": [msg]}
-    ```
-
-<a id="spoon_ai.graph.engine.create_document_message"></a>
-
-#### `create_document_message`
-
-```python
-def create_document_message(role: str,
-                            text: str,
-                            document_data: str,
-                            media_type: str = "application/pdf",
-                            filename: Optional[str] = None) -> Message
-```
-
-Create a message with a document for use in graph state.
-
-Supports various document types including PDF, text files, etc.
-
-**Arguments**:
-
-- `role` - Message role (user, assistant, system)
-- `text` - Text content
-- `document_data` - Base64-encoded document data
-- `media_type` - MIME type of the document (default: application/pdf)
-- `filename` - Optional filename for the document
-  
-
-**Returns**:
-
-- `Message` - A multimodal message with document ready for graph state
-  
-
-**Example**:
-
-    ```python
-    # In a graph node function
-    async def process_report(state: State) -> dict:
-        msg = create_document_message(
-            "user",
-            "Extract key metrics from this report",
-            document_data="<base64_encoded_data>",
-            media_type="application/pdf",
-            filename="annual_report.pdf"
-        )
-        return {"messages": [msg]}
-    ```
-
-<a id="spoon_ai.graph.engine.BaseNode"></a>
-
-## `BaseNode` Objects
-
-```python
-class BaseNode(ABC, Generic[State])
-```
-
-Base class for all graph nodes
-
-<a id="spoon_ai.graph.engine.BaseNode.__call__"></a>
-
-#### `__call__`
-
-```python
-@abstractmethod
-async def __call__(state: State,
-                   config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
-```
-
-Execute the node logic
-
-<a id="spoon_ai.graph.engine.RunnableNode"></a>
-
-## `RunnableNode` Objects
-
-```python
-class RunnableNode(BaseNode[State])
-```
-
-Runnable node that wraps a function
-
-<a id="spoon_ai.graph.engine.RunnableNode.__call__"></a>
-
-#### `__call__`
-
-```python
-async def __call__(state: State,
-                   config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
-```
-
-Execute the wrapped function
-
-<a id="spoon_ai.graph.engine.ToolNode"></a>
-
-## `ToolNode` Objects
-
-```python
-class ToolNode(BaseNode[State])
-```
-
-Tool node for executing tools
-
-<a id="spoon_ai.graph.engine.ToolNode.__call__"></a>
-
-#### `__call__`
-
-```python
-async def __call__(state: State,
-                   config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
-```
-
-Execute tools based on state
-
-<a id="spoon_ai.graph.engine.ConditionNode"></a>
-
-## `ConditionNode` Objects
-
-```python
-class ConditionNode(BaseNode[State])
-```
-
-Conditional node for routing decisions
-
-<a id="spoon_ai.graph.engine.ConditionNode.__call__"></a>
-
-#### `__call__`
-
-```python
-async def __call__(state: State,
-                   config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
-```
-
-Execute condition and return routing decision
-
-<a id="spoon_ai.graph.engine.interrupt"></a>
-
-#### `interrupt`
-
-```python
-def interrupt(data: Dict[str, Any]) -> Any
-```
-
-Interrupt execution and wait for human input.
-
-<a id="spoon_ai.graph.engine.RouteRule"></a>
-
-## `RouteRule` Objects
-
-```python
-class RouteRule()
-```
-
-Advanced routing rule for automatic path selection
-
-<a id="spoon_ai.graph.engine.RouteRule.matches"></a>
-
-#### `matches`
-
-```python
-def matches(state: Dict[str, Any], query: str = "") -> bool
-```
-
-Check if this rule matches the current state/query
-
-<a id="spoon_ai.graph.engine.RunningSummary"></a>
-
-## `RunningSummary` Objects
-
-```python
-@dataclass
-class RunningSummary()
-```
-
-Rolling conversation summary used by the summarisation node.
-
-<a id="spoon_ai.graph.engine.SummarizationNode"></a>
-
-## `SummarizationNode` Objects
-
-```python
-class SummarizationNode(BaseNode[Dict[str, Any]])
-```
-
-Node that summarises conversation history before model invocation.
-
-<a id="spoon_ai.graph.engine.StateGraph"></a>
-
-## `StateGraph` Objects
-
-```python
-class StateGraph(Generic[State])
-```
-
-<a id="spoon_ai.graph.engine.StateGraph.add_node"></a>
-
-#### `add_node`
-
-```python
-def add_node(
-        node_name: str, node: Union[BaseNode[State],
-                                    Callable[[State], Any]]) -> "StateGraph"
-```
-
-Add a node to the graph
-
-<a id="spoon_ai.graph.engine.StateGraph.add_edge"></a>
-
-#### `add_edge`
-
-```python
-def add_edge(
-        start_node: str,
-        end_node: str,
-        condition: Optional[Callable[[State], bool]] = None) -> "StateGraph"
-```
-
-Add an edge. When condition is provided, edge becomes conditional.
-
-<a id="spoon_ai.graph.engine.StateGraph.add_conditional_edges"></a>
-
-#### `add_conditional_edges`
-
-```python
-def add_conditional_edges(start_node: str, condition: Callable[[State], str],
-                          path_map: Dict[str, str]) -> "StateGraph"
-```
-
-Add conditional edges
-
-<a id="spoon_ai.graph.engine.StateGraph.set_entry_point"></a>
-
-#### `set_entry_point`
-
-```python
-def set_entry_point(node_name: str) -> "StateGraph"
-```
-
-Set the entry point
-
-<a id="spoon_ai.graph.engine.StateGraph.add_tool_node"></a>
-
-#### `add_tool_node`
-
-```python
-def add_tool_node(tools: List[Any], name: str = "tools") -> "StateGraph"
-```
-
-Add a tool node
-
-<a id="spoon_ai.graph.engine.StateGraph.add_conditional_node"></a>
-
-#### `add_conditional_node`
-
-```python
-def add_conditional_node(condition_func: Callable[[State], str],
-                         name: str = "condition") -> "StateGraph"
-```
-
-Add a conditional node
-
-<a id="spoon_ai.graph.engine.StateGraph.add_parallel_group"></a>
-
-#### `add_parallel_group`
-
-```python
-def add_parallel_group(
-    group_name: str,
-    nodes: List[str],
-    config: Optional[Union[Dict[str, Any], ParallelGroupConfig]] = None
-) -> "StateGraph"
-```
-
-Add a parallel execution group
-
-<a id="spoon_ai.graph.engine.StateGraph.add_routing_rule"></a>
-
-#### `add_routing_rule`
-
-```python
-def add_routing_rule(source_node: str,
-                     condition: Union[str, Callable[[State, str], bool]],
-                     target_node: str,
-                     priority: int = 0) -> "StateGraph"
-```
-
-Add an intelligent routing rule
-
-<a id="spoon_ai.graph.engine.StateGraph.get_state"></a>
-
-#### `get_state`
-
-```python
-def get_state(
-        config: Optional[Dict[str, Any]] = None) -> Optional[StateSnapshot]
-```
-
-Fetch the latest (or specified) checkpoint snapshot for a thread.
-
-<a id="spoon_ai.graph.engine.StateGraph.get_state_history"></a>
-
-#### `get_state_history`
-
-```python
-def get_state_history(
-        config: Optional[Dict[str, Any]] = None) -> Iterable[StateSnapshot]
-```
-
-Return all checkpoints for the given thread, ordered by creation time.
-
-<a id="spoon_ai.graph.engine.StateGraph.add_pattern_routing"></a>
-
-#### `add_pattern_routing`
-
-```python
-def add_pattern_routing(source_node: str,
-                        pattern: str,
-                        target_node: str,
-                        priority: int = 0) -> "StateGraph"
-```
-
-Add pattern-based routing rule
-
-<a id="spoon_ai.graph.engine.StateGraph.set_intelligent_router"></a>
-
-#### `set_intelligent_router`
-
-```python
-def set_intelligent_router(
-        router_func: Callable[[Dict[str, Any], str], str]) -> "StateGraph"
-```
-
-Set the intelligent router function
-
-<a id="spoon_ai.graph.engine.StateGraph.set_llm_router"></a>
-
-#### `set_llm_router`
-
-```python
-def set_llm_router(router_func: Optional[Callable[[Dict[str, Any], str],
-                                                  str]] = None,
-                   config: Optional[Dict[str, Any]] = None) -> "StateGraph"
-```
-
-Set the LLM-powered router function
-
-**Arguments**:
-
-- `router_func` - Custom LLM router function. If None, uses default LLM router.
-- `config` - Configuration for LLM router (model, temperature, max_tokens, etc.)
-
-<a id="spoon_ai.graph.engine.StateGraph.enable_llm_routing"></a>
-
-#### `enable_llm_routing`
-
-```python
-def enable_llm_routing(
-        config: Optional[Dict[str, Any]] = None) -> "StateGraph"
-```
-
-Enable LLM-powered natural language routing
-
-This automatically sets up LLM routing for the graph entry point.
-
-<a id="spoon_ai.graph.engine.StateGraph.compile"></a>
-
-#### `compile`
-
-```python
-def compile(checkpointer: Optional[Any] = None) -> "CompiledGraph"
-```
-
-Compile the graph
-
-<a id="spoon_ai.graph.engine.StateGraph.get_graph"></a>
-
-#### `get_graph`
-
-```python
-def get_graph() -> Dict[str, Any]
-```
-
-Get graph structure for visualization/debugging
-
-<a id="spoon_ai.graph.engine.CompiledGraph"></a>
-
-## `CompiledGraph` Objects
-
-```python
-class CompiledGraph(Generic[State])
-```
-
-Compiled graph for execution
-
-<a id="spoon_ai.graph.engine.CompiledGraph.get_execution_metrics"></a>
-
-#### `get_execution_metrics`
-
-```python
-def get_execution_metrics() -> Dict[str, Any]
-```
-
-Get aggregated execution metrics
-
-<a id="spoon_ai.graph.builder"></a>
-
-# Module `spoon_ai.graph.builder`
-
-Declarative builders and helpers for SpoonAI graphs.
-
-<a id="spoon_ai.graph.builder.Intent"></a>
-
-## `Intent` Objects
-
-```python
-@dataclass
-class Intent()
-```
-
-Result of intent analysis.
-
-<a id="spoon_ai.graph.builder.IntentAnalyzer"></a>
-
-## `IntentAnalyzer` Objects
-
-```python
-class IntentAnalyzer()
-```
-
-LLM-powered intent analyzer.
-
-Core stays generic; concrete prompts/parsers are supplied by callers.
-
-<a id="spoon_ai.graph.builder.AdaptiveStateBuilder"></a>
-
-## `AdaptiveStateBuilder` Objects
-
-```python
-class AdaptiveStateBuilder()
-```
-
-Construct initial graph state using query intent and optional parameters.
-
-<a id="spoon_ai.graph.builder.ParameterInferenceEngine"></a>
-
-## `ParameterInferenceEngine` Objects
-
-```python
-class ParameterInferenceEngine()
-```
-
-LLM delegator for parameter extraction.
-
-Core keeps this generic; applications provide formatting/parsing via options.
-
-<a id="spoon_ai.graph.builder.NodeSpec"></a>
-
-## `NodeSpec` Objects
-
-```python
-@dataclass
-class NodeSpec()
-```
-
-Declarative node specification.
-
-<a id="spoon_ai.graph.builder.EdgeSpec"></a>
-
-## `EdgeSpec` Objects
-
-```python
-@dataclass
-class EdgeSpec()
-```
-
-Declarative edge specification.
-
-<a id="spoon_ai.graph.builder.EdgeSpec.end"></a>
-
-#### `end`
-
-target name or callable router
-
-<a id="spoon_ai.graph.builder.ParallelGroupSpec"></a>
-
-## `ParallelGroupSpec` Objects
-
-```python
-@dataclass
-class ParallelGroupSpec()
-```
-
-Parallel group specification.
-
-<a id="spoon_ai.graph.builder.GraphTemplate"></a>
-
-## `GraphTemplate` Objects
-
-```python
-@dataclass
-class GraphTemplate()
-```
-
-Complete declarative template for a graph.
-
-<a id="spoon_ai.graph.builder.DeclarativeGraphBuilder"></a>
-
-## `DeclarativeGraphBuilder` Objects
-
-```python
-class DeclarativeGraphBuilder()
-```
-
-Build StateGraph instances from declarative templates.
-
-<a id="spoon_ai.graph.builder.NodePlugin"></a>
-
-## `NodePlugin` Objects
-
-```python
-class NodePlugin()
-```
-
-Pluggable node provider.
-
-<a id="spoon_ai.graph.builder.NodePluginSystem"></a>
-
-## `NodePluginSystem` Objects
-
-```python
-class NodePluginSystem()
-```
-
-Registry and discovery for node plugins.
-
-<a id="spoon_ai.graph.builder.HighLevelGraphAPI"></a>
-
-## `HighLevelGraphAPI` Objects
-
-```python
-class HighLevelGraphAPI()
-```
-
-Convenience facade for building graphs per query.
-
-<a id="spoon_ai.graph.config"></a>
-
-# Module `spoon_ai.graph.config`
-
-Configuration primitives for the SpoonAI graph engine.
-
-<a id="spoon_ai.graph.config.RouterConfig"></a>
-
-## `RouterConfig` Objects
-
-```python
-@dataclass
-class RouterConfig()
-```
-
-Controls how the graph chooses the next node after each execution step.
-
-<a id="spoon_ai.graph.config.ParallelRetryPolicy"></a>
-
-## `ParallelRetryPolicy` Objects
-
-```python
-@dataclass
-class ParallelRetryPolicy()
-```
-
-Retry policy for individual nodes inside a parallel group.
-
-<a id="spoon_ai.graph.config.ParallelGroupConfig"></a>
-
-## `ParallelGroupConfig` Objects
-
-```python
-@dataclass
-class ParallelGroupConfig()
-```
-
-Controls how a parallel group executes and aggregates results.
-
-<a id="spoon_ai.graph.config.ParallelGroupConfig.quorum"></a>
-
-#### `quorum`
-
-floats in (0, 1] treated as ratio, ints as absolute
-
-<a id="spoon_ai.graph.config.ParallelGroupConfig.error_strategy"></a>
-
-#### `error_strategy`
-
-fail_fast, collect_errors, ignore_errors
-
-<a id="spoon_ai.graph.config.GraphConfig"></a>
-
-## `GraphConfig` Objects
-
-```python
-@dataclass
-class GraphConfig()
-```
-
-Top-level configuration applied to an entire graph instance.
-
-<a id="spoon_ai.graph.mcp_integration"></a>
-
-# Module `spoon_ai.graph.mcp_integration`
-
-Utility classes for intelligent MCP tool discovery and configuration.
-
-Core graph components no longer hard-code external tools; instead, user code
-registers tool specifications and optional transport/configuration details via
-these helpers.
-
-<a id="spoon_ai.graph.mcp_integration.MCPToolSpec"></a>
-
-## `MCPToolSpec` Objects
-
-```python
-@dataclass
-class MCPToolSpec()
-```
-
-Specification describing a desired MCP tool.
-
-<a id="spoon_ai.graph.mcp_integration.MCPConfigManager"></a>
-
-## `MCPConfigManager` Objects
-
-```python
-class MCPConfigManager()
-```
-
-Centralised configuration loader for MCP tools.
-
-<a id="spoon_ai.graph.mcp_integration.MCPToolDiscoveryEngine"></a>
-
-## `MCPToolDiscoveryEngine` Objects
-
-```python
-class MCPToolDiscoveryEngine()
-```
-
-Discover MCP tools based on registered intent mappings.
-
-<a id="spoon_ai.graph.mcp_integration.MCPIntegrationManager"></a>
-
-## `MCPIntegrationManager` Objects
-
-```python
-class MCPIntegrationManager()
-```
-
-High level coordinator for MCP tool usage within graphs.
-
-<a id="spoon_ai.graph"></a>
-
-# Module `spoon_ai.graph`
-
-spoon_ai.graph package
-
-Public facade for the graph engine. Import from here.
-
-<a id="spoon_ai.graph.exceptions"></a>
-
-# Module `spoon_ai.graph.exceptions`
-
-Graph engine exception definitions (public within graph package).
-
-<a id="spoon_ai.graph.decorators"></a>
-
-# Module `spoon_ai.graph.decorators`
-
-Decorators and executor for the graph package.
-
-<a id="spoon_ai.graph.cache"></a>
-
-# Module `spoon_ai.graph.cache`
-
-Cache System for Graph Workflows.
-
-Provides caching for node outputs in graph workflows to avoid redundant
-computation and speed up execution.
-
-Types of caching:
-1. Node-level caching - caches node outputs based on inputs
-2. In-memory and persistent (SQLite) backends
-
-Compatible with LangGraph BaseCache interface.
-
-Usage:
-    from spoon_ai.graph.cache import InMemoryCache, SQLiteCache
-
-    # In-memory cache (for testing/short sessions)
-    cache = InMemoryCache()
-
-    # SQLite cache (persistent across sessions)
-    cache = SQLiteCache("cache.db")
-
-    # Use with graph
-    graph = StateGraph(...)
-    compiled = graph.compile(cache=cache)
-
-<a id="spoon_ai.graph.cache.compute_cache_key"></a>
-
-#### `compute_cache_key`
-
-```python
-def compute_cache_key(node_name: str,
-                      inputs: Dict[str, Any],
-                      config: Optional[Dict[str, Any]] = None) -> str
-```
-
-Compute a cache key from node name and inputs.
-
-**Arguments**:
-
-- `node_name` - Name of the node
-- `inputs` - Input values to the node
-- `config` - Optional configuration
-  
-
-**Returns**:
-
-  SHA256 hash as cache key
-
-<a id="spoon_ai.graph.cache.CacheEntry"></a>
-
-## `CacheEntry` Objects
-
-```python
-class CacheEntry()
-```
-
-A cached value with metadata.
-
-<a id="spoon_ai.graph.cache.CacheEntry.is_expired"></a>
-
-#### `is_expired`
-
-```python
-def is_expired() -> bool
-```
-
-Check if cache entry has expired.
-
-<a id="spoon_ai.graph.cache.CacheEntry.to_dict"></a>
-
-#### `to_dict`
-
-```python
-def to_dict() -> Dict[str, Any]
-```
-
-Serialize to dictionary.
-
-<a id="spoon_ai.graph.cache.CacheEntry.from_dict"></a>
-
-#### `from_dict`
-
-```python
-@classmethod
-def from_dict(cls, data: Dict[str, Any]) -> "CacheEntry"
-```
-
-Deserialize from dictionary.
-
-<a id="spoon_ai.graph.cache.BaseCache"></a>
-
-## `BaseCache` Objects
-
-```python
-class BaseCache(ABC)
-```
-
-Abstract base class for graph caches.
-
-Compatible with LangGraph BaseCache interface.
-
-<a id="spoon_ai.graph.cache.BaseCache.get"></a>
-
-#### `get`
-
-```python
-@abstractmethod
-def get(key: str) -> Optional[Any]
-```
-
-Get a cached value by key.
-
-**Arguments**:
-
-- `key` - Cache key
-  
-
-**Returns**:
-
-  Cached value or None if not found/expired
-
-<a id="spoon_ai.graph.cache.BaseCache.set"></a>
-
-#### `set`
-
-```python
-@abstractmethod
-def set(key: str,
-        value: Any,
-        node_name: str = "",
-        ttl_seconds: Optional[int] = None,
-        metadata: Optional[Dict[str, Any]] = None) -> None
-```
-
-Set a cached value.
-
-**Arguments**:
-
-- `key` - Cache key
-- `value` - Value to cache
-- `node_name` - Name of the node that produced this value
-- `ttl_seconds` - Time-to-live in seconds (None = no expiry)
-- `metadata` - Optional metadata
-
-<a id="spoon_ai.graph.cache.BaseCache.delete"></a>
-
-#### `delete`
-
-```python
-@abstractmethod
-def delete(key: str) -> bool
-```
-
-Delete a cached value.
-
-**Arguments**:
-
-- `key` - Cache key
-  
-
-**Returns**:
-
-  True if deleted, False if not found
-
-<a id="spoon_ai.graph.cache.BaseCache.clear"></a>
-
-#### `clear`
-
-```python
-@abstractmethod
-def clear() -> None
-```
-
-Clear all cached values.
-
-<a id="spoon_ai.graph.cache.BaseCache.get_or_compute"></a>
-
-#### `get_or_compute`
-
-```python
-def get_or_compute(key: str,
-                   compute_fn: callable,
-                   node_name: str = "",
-                   ttl_seconds: Optional[int] = None) -> Tuple[Any, bool]
-```
-
-Get cached value or compute and cache it.
-
-**Arguments**:
-
-- `key` - Cache key
-- `compute_fn` - Function to compute value if not cached
-- `node_name` - Name of the node
-- `ttl_seconds` - Time-to-live for cached value
-  
-
-**Returns**:
-
-  Tuple of (value, was_cached)
-
-<a id="spoon_ai.graph.cache.InMemoryCache"></a>
-
-## `InMemoryCache` Objects
-
-```python
-class InMemoryCache(BaseCache)
-```
-
-In-memory cache implementation.
-
-Fast but not persistent across sessions. Suitable for:
-- Testing
-- Short-running workflows
-- When persistence is not needed
-
-<a id="spoon_ai.graph.cache.InMemoryCache.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(max_entries: int = 1000,
-             default_ttl_seconds: Optional[int] = None)
-```
-
-Initialize in-memory cache.
-
-**Arguments**:
-
-- `max_entries` - Maximum number of entries to keep
-- `default_ttl_seconds` - Default TTL for entries (None = no expiry)
-
-<a id="spoon_ai.graph.cache.InMemoryCache.get"></a>
-
-#### `get`
-
-```python
-def get(key: str) -> Optional[Any]
-```
-
-Get cached value.
-
-<a id="spoon_ai.graph.cache.InMemoryCache.set"></a>
-
-#### `set`
-
-```python
-def set(key: str,
-        value: Any,
-        node_name: str = "",
-        ttl_seconds: Optional[int] = None,
-        metadata: Optional[Dict[str, Any]] = None) -> None
-```
-
-Set cached value.
-
-<a id="spoon_ai.graph.cache.InMemoryCache.delete"></a>
-
-#### `delete`
-
-```python
-def delete(key: str) -> bool
-```
-
-Delete cached value.
-
-<a id="spoon_ai.graph.cache.InMemoryCache.clear"></a>
-
-#### `clear`
-
-```python
-def clear() -> None
-```
-
-Clear all cached values.
-
-<a id="spoon_ai.graph.cache.InMemoryCache.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, Any]
-```
-
-Get cache statistics.
-
-<a id="spoon_ai.graph.cache.SQLiteCache"></a>
-
-## `SQLiteCache` Objects
-
-```python
-class SQLiteCache(BaseCache)
-```
-
-SQLite-based persistent cache.
-
-Persistent across sessions. Suitable for:
-- Production use
-- Long-running workflows
-- When you want to reuse cached results
-
-<a id="spoon_ai.graph.cache.SQLiteCache.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(db_path: str = "graph_cache.db",
-             default_ttl_seconds: Optional[int] = None,
-             max_entries: Optional[int] = None)
-```
-
-Initialize SQLite cache.
-
-**Arguments**:
-
-- `db_path` - Path to SQLite database file
-- `default_ttl_seconds` - Default TTL for entries (None = no expiry)
-- `max_entries` - Maximum entries to keep (None = unlimited)
-
-<a id="spoon_ai.graph.cache.SQLiteCache.get"></a>
-
-#### `get`
-
-```python
-def get(key: str) -> Optional[Any]
-```
-
-Get cached value.
-
-<a id="spoon_ai.graph.cache.SQLiteCache.set"></a>
-
-#### `set`
-
-```python
-def set(key: str,
-        value: Any,
-        node_name: str = "",
-        ttl_seconds: Optional[int] = None,
-        metadata: Optional[Dict[str, Any]] = None) -> None
-```
-
-Set cached value.
-
-<a id="spoon_ai.graph.cache.SQLiteCache.delete"></a>
-
-#### `delete`
-
-```python
-def delete(key: str) -> bool
-```
-
-Delete cached value.
-
-<a id="spoon_ai.graph.cache.SQLiteCache.clear"></a>
-
-#### `clear`
-
-```python
-def clear() -> None
-```
-
-Clear all cached values.
-
-<a id="spoon_ai.graph.cache.SQLiteCache.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, Any]
-```
-
-Get cache statistics.
-
-<a id="spoon_ai.graph.cache.create_memory_cache"></a>
-
-#### `create_memory_cache`
-
-```python
-def create_memory_cache(
-        max_entries: int = 1000,
-        default_ttl_seconds: Optional[int] = None) -> InMemoryCache
-```
-
-Create an in-memory cache.
-
-**Arguments**:
-
-- `max_entries` - Maximum entries to keep
-- `default_ttl_seconds` - Default TTL
-  
-
-**Returns**:
-
-  Configured InMemoryCache
-
-<a id="spoon_ai.graph.cache.create_sqlite_cache"></a>
-
-#### `create_sqlite_cache`
-
-```python
-def create_sqlite_cache(db_path: str = "graph_cache.db",
-                        default_ttl_seconds: Optional[int] = None,
-                        max_entries: Optional[int] = None) -> SQLiteCache
-```
-
-Create a SQLite cache.
-
-**Arguments**:
-
-- `db_path` - Path to database file
-- `default_ttl_seconds` - Default TTL
-- `max_entries` - Maximum entries
-  
-
-**Returns**:
-
-  Configured SQLiteCache
-
-<a id="spoon_ai.graph.checkpointer"></a>
-
-# Module `spoon_ai.graph.checkpointer`
-
-In-memory checkpointer for the graph package.
-
-<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer"></a>
-
-## `InMemoryCheckpointer` Objects
-
-```python
-class InMemoryCheckpointer()
-```
-
-<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history"></a>
-
-#### `iter_checkpoint_history`
-
-```python
-def iter_checkpoint_history(
-        config: Dict[str, Any]) -> Iterable[CheckpointTuple]
-```
-
-Return checkpoint tuples for the specified thread, newest last.
-
-<a id="spoon_ai.graph.reducers"></a>
-
-# Module `spoon_ai.graph.reducers`
-
-Reducers and validators for the graph package.
-
-<a id="spoon_ai.identity.did_models"></a>
-
-# Module `spoon_ai.identity.did_models`
-
-DID Data Models for SpoonOS Agents
-Following W3C DID Core specification and ERC-8004 standard
-
-<a id="spoon_ai.identity.did_models.VerificationMethodType"></a>
-
-## `VerificationMethodType` Objects
-
-```python
-class VerificationMethodType(str, Enum)
-```
-
-Supported verification method types
-
-<a id="spoon_ai.identity.did_models.ServiceType"></a>
-
-## `ServiceType` Objects
-
-```python
-class ServiceType(str, Enum)
-```
-
-Agent service endpoint types
-
-<a id="spoon_ai.identity.did_models.VerificationMethod"></a>
-
-## `VerificationMethod` Objects
-
-```python
-class VerificationMethod(BaseModel)
-```
-
-Cryptographic verification method for DID authentication
-
-<a id="spoon_ai.identity.did_models.ServiceEndpoint"></a>
-
-## `ServiceEndpoint` Objects
-
-```python
-class ServiceEndpoint(BaseModel)
-```
-
-Service endpoint for agent interaction
-
-<a id="spoon_ai.identity.did_models.ReputationScore"></a>
-
-## `ReputationScore` Objects
-
-```python
-class ReputationScore(BaseModel)
-```
-
-Aggregated reputation score
-
-<a id="spoon_ai.identity.did_models.Attestation"></a>
-
-## `Attestation` Objects
-
-```python
-class Attestation(BaseModel)
-```
-
-Verifiable attestation about an agent
-
-<a id="spoon_ai.identity.did_models.AgentCard"></a>
-
-## `AgentCard` Objects
-
-```python
-class AgentCard(BaseModel)
-```
-
-Agent Card following Google's A2A protocol
-Provides human-readable agent information
-
-<a id="spoon_ai.identity.did_models.AgentDID"></a>
-
-## `AgentDID` Objects
-
-```python
-class AgentDID(BaseModel)
-```
-
-Complete W3C DID Document for SpoonOS Agent
-
-<a id="spoon_ai.identity.did_models.AgentDID.to_did_document"></a>
-
-#### `to_did_document`
-
-```python
-def to_did_document() -> Dict[str, Any]
-```
-
-Export as standard W3C DID Document
-
-<a id="spoon_ai.identity.did_models.AgentDID.to_agent_card"></a>
-
-#### `to_agent_card`
-
-```python
-def to_agent_card() -> Dict[str, Any]
-```
-
-Export agent card separately
-
-<a id="spoon_ai.identity.did_models.DIDResolutionResult"></a>
-
-## `DIDResolutionResult` Objects
-
-```python
-class DIDResolutionResult(BaseModel)
-```
-
-Result of DID resolution
-
-<a id="spoon_ai.identity.storage_client"></a>
-
-# Module `spoon_ai.identity.storage_client`
-
-Storage clients for DID documents and agent cards
-Supports NeoFS (primary) and IPFS (backup replication)
-
-<a id="spoon_ai.identity.storage_client.DIDStorageClient"></a>
-
-## `DIDStorageClient` Objects
-
-```python
-class DIDStorageClient()
-```
-
-Unified storage client for DID documents
-NeoFS primary with IPFS replication
-
-<a id="spoon_ai.identity.storage_client.DIDStorageClient.publish_did_document"></a>
-
-#### `publish_did_document`
-
-```python
-def publish_did_document(agent_id: str, did_document: Dict,
-                         agent_card: Dict) -> Tuple[str, str]
-```
-
-Publish DID document and agent card to storage
-Returns (didDocURI, agentCardURI)
-
-<a id="spoon_ai.identity.storage_client.DIDStorageClient.fetch_did_document"></a>
-
-#### `fetch_did_document`
-
-```python
-def fetch_did_document(uri: str) -> Dict
-```
-
-Fetch DID document from URI (NeoFS or IPFS)
-
-<a id="spoon_ai.identity.storage_client.DIDStorageClient.publish_credential"></a>
-
-#### `publish_credential`
-
-```python
-def publish_credential(agent_id: str, credential: Dict) -> str
-```
-
-Publish verifiable credential
-
-<a id="spoon_ai.identity.storage_client.DIDStorageClient.close"></a>
-
-#### `close`
-
-```python
-def close()
-```
-
-Close HTTP clients
-
-<a id="spoon_ai.identity"></a>
-
-# Module `spoon_ai.identity`
-
-SpoonOS Agent DID Identity Module
-Implements ERC-8004 compliant decentralized identity for agents
-
-<a id="spoon_ai.identity.attestation"></a>
-
-# Module `spoon_ai.identity.attestation`
-
-Attestation and Trust Score Management
-Handles verifiable credentials and reputation calculations
-
-<a id="spoon_ai.identity.attestation.AttestationManager"></a>
-
-## `AttestationManager` Objects
-
-```python
-class AttestationManager()
-```
-
-Manages verifiable attestations for agents
-
-<a id="spoon_ai.identity.attestation.AttestationManager.create_attestation"></a>
-
-#### `create_attestation`
-
-```python
-def create_attestation(issuer_did: str,
-                       subject_did: str,
-                       claim: Dict,
-                       evidence: Optional[str] = None) -> Attestation
-```
-
-Create a verifiable attestation
-
-**Arguments**:
-
-- `issuer_did` - DID of the attestation issuer
-- `subject_did` - DID of the agent being attested
-- `claim` - Attestation claim data
-- `evidence` - Optional supporting evidence
-  
-
-**Returns**:
-
-  Signed Attestation object
-
-<a id="spoon_ai.identity.attestation.AttestationManager.verify_attestation"></a>
-
-#### `verify_attestation`
-
-```python
-def verify_attestation(attestation: Attestation) -> bool
-```
-
-Verify attestation signature
-
-<a id="spoon_ai.identity.attestation.AttestationManager.submit_reputation_on_chain"></a>
-
-#### `submit_reputation_on_chain`
-
-```python
-def submit_reputation_on_chain(subject_did: str, score: int,
-                               evidence: str) -> str
-```
-
-Submit reputation score to on-chain registry
-
-**Arguments**:
-
-- `subject_did` - DID of agent being rated
-- `score` - Score between -100 and 100
-- `evidence` - Evidence for the score
-  
-
-**Returns**:
-
-  Transaction hash
-
-<a id="spoon_ai.identity.attestation.AttestationManager.submit_validation_on_chain"></a>
-
-#### `submit_validation_on_chain`
-
-```python
-def submit_validation_on_chain(subject_did: str, is_valid: bool,
-                               reason: str) -> str
-```
-
-Submit validation for an agent
-
-**Arguments**:
-
-- `subject_did` - DID of agent being validated
-- `is_valid` - Whether agent is valid
-- `reason` - Reason for validation decision
-  
-
-**Returns**:
-
-  Transaction hash
-
-<a id="spoon_ai.identity.attestation.TrustScoreCalculator"></a>
-
-## `TrustScoreCalculator` Objects
-
-```python
-class TrustScoreCalculator()
-```
-
-Calculates trust scores for agents
-
-<a id="spoon_ai.identity.attestation.TrustScoreCalculator.calculate_trust_score"></a>
-
-#### `calculate_trust_score`
-
-```python
-def calculate_trust_score(did: str) -> Dict
-```
-
-Calculate comprehensive trust score
-
-**Returns**:
-
-  Dict with trust score components:
-  - reputation_score: -100 to 100
-  - validation_status: bool
-  - trust_level: "high" | "medium" | "low" | "untrusted"
-  - confidence: 0 to 1
-
-<a id="spoon_ai.identity.attestation.TrustScoreCalculator.get_reputation_breakdown"></a>
-
-#### `get_reputation_breakdown`
-
-```python
-def get_reputation_breakdown(did: str, limit: int = 10) -> List[Dict]
-```
-
-Get detailed reputation submissions
-
-<a id="spoon_ai.identity.attestation.TrustScoreCalculator.get_validation_breakdown"></a>
-
-#### `get_validation_breakdown`
-
-```python
-def get_validation_breakdown(did: str, limit: int = 10) -> List[Dict]
-```
-
-Get detailed validation submissions
-
-<a id="spoon_ai.identity.erc8004_abi"></a>
-
-# Module `spoon_ai.identity.erc8004_abi`
-
-Shared ERC-8004 ABI fragments (minimal, artifact-free).
-
-These ABIs cover the common calls used by the Python SDK and demos.
-
-<a id="spoon_ai.identity.did_resolver"></a>
-
-# Module `spoon_ai.identity.did_resolver`
-
-DID Resolver for SpoonOS Agents
-Implements unified DID resolution via IdentityRegistry with NeoFS-first policy
-
-<a id="spoon_ai.identity.did_resolver.DIDResolver"></a>
-
-## `DIDResolver` Objects
-
-```python
-class DIDResolver()
-```
-
-Unified DID resolver for SpoonOS agents.
-Resolution flow: IdentityRegistry (agentId) → NeoFS (primary) → IPFS (fallback)
-
-<a id="spoon_ai.identity.did_resolver.DIDResolver.resolve"></a>
-
-#### `resolve`
-
-```python
-def resolve(agent_id: int) -> DIDResolutionResult
-```
-
-Resolve agent identity to complete DID document.
-
-**Arguments**:
-
-- `agent_id` - On-chain agent token ID from IdentityRegistry
-  
-
-**Returns**:
-
-  DIDResolutionResult with document and metadata
-
-<a id="spoon_ai.identity.did_resolver.DIDResolver.resolve_metadata_only"></a>
-
-#### `resolve_metadata_only`
-
-```python
-def resolve_metadata_only(agent_id: int) -> Dict
-```
-
-Resolve only on-chain metadata (fast path)
-
-<a id="spoon_ai.identity.did_resolver.DIDResolver.verify_agent"></a>
-
-#### `verify_agent`
-
-```python
-def verify_agent(agent_id: int) -> bool
-```
-
-Verify agent exists and is resolvable
-
-<a id="spoon_ai.identity.erc8004_client"></a>
-
-# Module `spoon_ai.identity.erc8004_client`
-
-ERC-8004 Smart Contract Client
-Handles on-chain interactions with agent registries (IdentityRegistry only)
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client"></a>
-
-## `ERC8004Client` Objects
-
-```python
-class ERC8004Client()
-```
-
-Client for interacting with ERC-8004 agent registries
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client.get_agent_id_for_address"></a>
-
-#### `get_agent_id_for_address`
-
-```python
-def get_agent_id_for_address(address: str) -> int
-```
-
-Look up the agent ID (ERC-721 token) owned by *address*.
-
-Returns 0 if the address has no registered agent identity.
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client.register_agent"></a>
-
-#### `register_agent`
-
-```python
-def register_agent(token_uri: str,
-                   metadata: Optional[List[Tuple[str, bytes]]] = None) -> int
-```
-
-Register agent on IdentityRegistry; returns agentId.
-
-<a id="spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent"></a>
-
-#### `resolve_agent`
-
-```python
-def resolve_agent(agent_id: int) -> Dict
-```
-
-Resolve agent metadata from IdentityRegistry by agentId.
-
-Returns dict with owner, tokenURI, and common metadata fields.
-
-<a id="spoon_ai.llm.message_utils"></a>
-
-# Module `spoon_ai.llm.message_utils`
-
-Shared utilities for sanitising Message sequences before provider conversion.
-
-Every provider that sends tool-role messages to an API should call
-``drop_orphaned_tool_messages`` **before** provider-specific conversion so
-that malformed / orphaned tool messages never reach the remote API.
-
-<a id="spoon_ai.llm.message_utils.drop_orphaned_tool_messages"></a>
-
-#### `drop_orphaned_tool_messages`
-
-```python
-def drop_orphaned_tool_messages(messages: List[Message]) -> List[Message]
-```
-
-Return *messages* with orphaned tool messages removed.
-
-A tool message is considered **orphaned** (and dropped) when any of the
-following is true:
-
-1. It has no ``tool_call_id`` at all.
-2. There is no preceding assistant message that contains ``tool_calls``.
-3. Its ``tool_call_id`` does not match any ``tool_calls[].id`` in the
-   nearest preceding assistant message that carries tool calls.
-
-The function preserves the original ordering of all non-orphaned messages.
-
-<a id="spoon_ai.llm.response_normalizer"></a>
-
-# Module `spoon_ai.llm.response_normalizer`
-
-Response normalizer for ensuring consistent response formats across providers.
-
-<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer"></a>
-
-## `ResponseNormalizer` Objects
-
-```python
-class ResponseNormalizer()
-```
-
-Normalizes responses from different providers to ensure consistency.
-
-<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.normalize_response"></a>
-
-#### `normalize_response`
-
-```python
-def normalize_response(response: LLMResponse) -> LLMResponse
-```
-
-Normalize a response from any provider.
-
-**Arguments**:
-
-- `response` - Raw LLM response
-  
-
-**Returns**:
-
-- `LLMResponse` - Normalized response
-  
-
-**Raises**:
-
-- `ValidationError` - If response cannot be normalized
-
-<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.validate_response"></a>
-
-#### `validate_response`
-
-```python
-def validate_response(response: LLMResponse) -> bool
-```
-
-Validate that a response meets minimum requirements.
-
-**Arguments**:
-
-- `response` - Response to validate
-  
-
-**Returns**:
-
-- `bool` - True if response is valid
-  
-
-**Raises**:
-
-- `ValidationError` - If response is invalid
-
-<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.add_provider_mapping"></a>
-
-#### `add_provider_mapping`
-
-```python
-def add_provider_mapping(provider_name: str, normalizer_func) -> None
-```
-
-Add a custom normalizer for a new provider.
-
-**Arguments**:
-
-- `provider_name` - Name of the provider
-- `normalizer_func` - Function that takes and returns LLMResponse
-
-<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.get_supported_providers"></a>
-
-#### `get_supported_providers`
-
-```python
-def get_supported_providers() -> List[str]
-```
-
-Get list of providers with custom normalizers.
-
-**Returns**:
-
-- `List[str]` - List of provider names
-
-<a id="spoon_ai.llm.response_normalizer.get_response_normalizer"></a>
-
-#### `get_response_normalizer`
-
-```python
-def get_response_normalizer() -> ResponseNormalizer
-```
-
-Get global response normalizer instance.
-
-**Returns**:
-
-- `ResponseNormalizer` - Global normalizer instance
-
-<a id="spoon_ai.llm.providers.openai_provider"></a>
-
-# Module `spoon_ai.llm.providers.openai_provider`
-
-OpenAI Provider implementation for the unified LLM interface.
-
-<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider"></a>
-
-## `OpenAIProvider` Objects
-
-```python
-@register_provider("openai", [
-    ProviderCapability.CHAT,
-    ProviderCapability.COMPLETION,
-    ProviderCapability.TOOLS,
-    ProviderCapability.STREAMING
-])
-class OpenAIProvider(OpenAICompatibleProvider)
-```
-
-OpenAI provider implementation.
-
-<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-def get_metadata() -> ProviderMetadata
-```
-
-Get OpenAI provider metadata.
-
-<a id="spoon_ai.llm.providers.ollama_provider"></a>
-
-# Module `spoon_ai.llm.providers.ollama_provider`
-
-Ollama Provider implementation for the unified LLM interface.
-
-Ollama runs locally and exposes an HTTP API (default: http://localhost:11434).
-This provider supports chat, completion, and streaming.
-
-**Notes**:
-
-  - Ollama does not require an API key; the configuration layer may still provide
-  a placeholder api_key value for consistency.
-  - Tool calling is supported via /api/chat (tools + tool_calls).
-
-<a id="spoon_ai.llm.providers.ollama_provider.OllamaProvider"></a>
-
-## `OllamaProvider` Objects
-
-```python
-@register_provider(
-    "ollama",
-    [
-        ProviderCapability.CHAT,
-        ProviderCapability.COMPLETION,
-        ProviderCapability.TOOLS,
-        ProviderCapability.STREAMING,
-    ],
-)
-class OllamaProvider(LLMProviderInterface)
-```
-
-Local Ollama provider via HTTP.
-
-<a id="spoon_ai.llm.providers.openrouter_provider"></a>
-
-# Module `spoon_ai.llm.providers.openrouter_provider`
-
-OpenRouter Provider implementation for the unified LLM interface.
-OpenRouter provides access to multiple LLM models through a unified API compatible with OpenAI.
-
-<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider"></a>
-
-## `OpenRouterProvider` Objects
-
-```python
-@register_provider("openrouter", [
-    ProviderCapability.CHAT,
-    ProviderCapability.COMPLETION,
-    ProviderCapability.TOOLS,
-    ProviderCapability.STREAMING
-])
-class OpenRouterProvider(OpenAICompatibleProvider)
-```
-
-OpenRouter provider implementation using OpenAI-compatible API.
-
-<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers"></a>
-
-#### `get_additional_headers`
-
-```python
-def get_additional_headers(config: Dict[str, Any]) -> Dict[str, str]
-```
-
-Get OpenRouter-specific headers.
-
-<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-def get_metadata() -> ProviderMetadata
-```
-
-Get OpenRouter provider metadata.
+LLM Provider implementations.
 
 <a id="spoon_ai.llm.providers.gemini_provider"></a>
 
@@ -4745,6 +1462,82 @@ async def cleanup() -> None
 ```
 
 Cleanup Gemini provider resources.
+
+<a id="spoon_ai.llm.providers.deepseek_provider"></a>
+
+# Module `spoon_ai.llm.providers.deepseek_provider`
+
+DeepSeek Provider implementation for the unified LLM interface.
+DeepSeek provides access to their models through an OpenAI-compatible API.
+
+<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider"></a>
+
+## `DeepSeekProvider` Objects
+
+```python
+@register_provider("deepseek", [
+    ProviderCapability.CHAT,
+    ProviderCapability.COMPLETION,
+    ProviderCapability.TOOLS,
+    ProviderCapability.STREAMING
+])
+class DeepSeekProvider(OpenAICompatibleProvider)
+```
+
+DeepSeek provider implementation using OpenAI-compatible API.
+
+<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+def get_metadata() -> ProviderMetadata
+```
+
+Get DeepSeek provider metadata.
+
+<a id="spoon_ai.llm.providers.openrouter_provider"></a>
+
+# Module `spoon_ai.llm.providers.openrouter_provider`
+
+OpenRouter Provider implementation for the unified LLM interface.
+OpenRouter provides access to multiple LLM models through a unified API compatible with OpenAI.
+
+<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider"></a>
+
+## `OpenRouterProvider` Objects
+
+```python
+@register_provider("openrouter", [
+    ProviderCapability.CHAT,
+    ProviderCapability.COMPLETION,
+    ProviderCapability.TOOLS,
+    ProviderCapability.STREAMING
+])
+class OpenRouterProvider(OpenAICompatibleProvider)
+```
+
+OpenRouter provider implementation using OpenAI-compatible API.
+
+<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_additional_headers"></a>
+
+#### `get_additional_headers`
+
+```python
+def get_additional_headers(config: Dict[str, Any]) -> Dict[str, str]
+```
+
+Get OpenRouter-specific headers.
+
+<a id="spoon_ai.llm.providers.openrouter_provider.OpenRouterProvider.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+def get_metadata() -> ProviderMetadata
+```
+
+Get OpenRouter provider metadata.
 
 <a id="spoon_ai.llm.providers.openai_compatible_provider"></a>
 
@@ -4896,36 +1689,29 @@ async def cleanup() -> None
 
 Cleanup provider resources.
 
-<a id="spoon_ai.llm.providers"></a>
+<a id="spoon_ai.llm.providers.openai_provider"></a>
 
-# Module `spoon_ai.llm.providers`
+# Module `spoon_ai.llm.providers.openai_provider`
 
-LLM Provider implementations.
+OpenAI Provider implementation for the unified LLM interface.
 
-<a id="spoon_ai.llm.providers.deepseek_provider"></a>
+<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider"></a>
 
-# Module `spoon_ai.llm.providers.deepseek_provider`
-
-DeepSeek Provider implementation for the unified LLM interface.
-DeepSeek provides access to their models through an OpenAI-compatible API.
-
-<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider"></a>
-
-## `DeepSeekProvider` Objects
+## `OpenAIProvider` Objects
 
 ```python
-@register_provider("deepseek", [
+@register_provider("openai", [
     ProviderCapability.CHAT,
     ProviderCapability.COMPLETION,
     ProviderCapability.TOOLS,
     ProviderCapability.STREAMING
 ])
-class DeepSeekProvider(OpenAICompatibleProvider)
+class OpenAIProvider(OpenAICompatibleProvider)
 ```
 
-DeepSeek provider implementation using OpenAI-compatible API.
+OpenAI provider implementation.
 
-<a id="spoon_ai.llm.providers.deepseek_provider.DeepSeekProvider.get_metadata"></a>
+<a id="spoon_ai.llm.providers.openai_provider.OpenAIProvider.get_metadata"></a>
 
 #### `get_metadata`
 
@@ -4933,7 +1719,41 @@ DeepSeek provider implementation using OpenAI-compatible API.
 def get_metadata() -> ProviderMetadata
 ```
 
-Get DeepSeek provider metadata.
+Get OpenAI provider metadata.
+
+<a id="spoon_ai.llm.providers.ollama_provider"></a>
+
+# Module `spoon_ai.llm.providers.ollama_provider`
+
+Ollama Provider implementation for the unified LLM interface.
+
+Ollama runs locally and exposes an HTTP API (default: http://localhost:11434).
+This provider supports chat, completion, and streaming.
+
+**Notes**:
+
+  - Ollama does not require an API key; the configuration layer may still provide
+  a placeholder api_key value for consistency.
+  - Tool calling is supported via /api/chat (tools + tool_calls).
+
+<a id="spoon_ai.llm.providers.ollama_provider.OllamaProvider"></a>
+
+## `OllamaProvider` Objects
+
+```python
+@register_provider(
+    "ollama",
+    [
+        ProviderCapability.CHAT,
+        ProviderCapability.COMPLETION,
+        ProviderCapability.TOOLS,
+        ProviderCapability.STREAMING,
+    ],
+)
+class OllamaProvider(LLMProviderInterface)
+```
+
+Local Ollama provider via HTTP.
 
 <a id="spoon_ai.llm.providers.anthropic_provider"></a>
 
@@ -5053,6 +1873,113 @@ async def cleanup() -> None
 ```
 
 Cleanup Anthropic provider resources.
+
+<a id="spoon_ai.llm.response_normalizer"></a>
+
+# Module `spoon_ai.llm.response_normalizer`
+
+Response normalizer for ensuring consistent response formats across providers.
+
+<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer"></a>
+
+## `ResponseNormalizer` Objects
+
+```python
+class ResponseNormalizer()
+```
+
+Normalizes responses from different providers to ensure consistency.
+
+<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.normalize_response"></a>
+
+#### `normalize_response`
+
+```python
+def normalize_response(response: LLMResponse) -> LLMResponse
+```
+
+Normalize a response from any provider.
+
+**Arguments**:
+
+- `response` - Raw LLM response
+  
+
+**Returns**:
+
+- `LLMResponse` - Normalized response
+  
+
+**Raises**:
+
+- `ValidationError` - If response cannot be normalized
+
+<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.validate_response"></a>
+
+#### `validate_response`
+
+```python
+def validate_response(response: LLMResponse) -> bool
+```
+
+Validate that a response meets minimum requirements.
+
+**Arguments**:
+
+- `response` - Response to validate
+  
+
+**Returns**:
+
+- `bool` - True if response is valid
+  
+
+**Raises**:
+
+- `ValidationError` - If response is invalid
+
+<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.add_provider_mapping"></a>
+
+#### `add_provider_mapping`
+
+```python
+def add_provider_mapping(provider_name: str, normalizer_func) -> None
+```
+
+Add a custom normalizer for a new provider.
+
+**Arguments**:
+
+- `provider_name` - Name of the provider
+- `normalizer_func` - Function that takes and returns LLMResponse
+
+<a id="spoon_ai.llm.response_normalizer.ResponseNormalizer.get_supported_providers"></a>
+
+#### `get_supported_providers`
+
+```python
+def get_supported_providers() -> List[str]
+```
+
+Get list of providers with custom normalizers.
+
+**Returns**:
+
+- `List[str]` - List of provider names
+
+<a id="spoon_ai.llm.response_normalizer.get_response_normalizer"></a>
+
+#### `get_response_normalizer`
+
+```python
+def get_response_normalizer() -> ResponseNormalizer
+```
+
+Get global response normalizer instance.
+
+**Returns**:
+
+- `ResponseNormalizer` - Global normalizer instance
 
 <a id="spoon_ai.llm.manager"></a>
 
@@ -5737,15 +2664,6 @@ def reload_config() -> None
 
 Reload configuration from file.
 
-<a id="spoon_ai.llm"></a>
-
-# Module `spoon_ai.llm`
-
-Unified LLM infrastructure package.
-
-This package provides a unified interface for working with different LLM providers,
-including comprehensive configuration management, monitoring, and error handling.
-
 <a id="spoon_ai.llm.registry"></a>
 
 # Module `spoon_ai.llm.registry`
@@ -5924,290 +2842,6 @@ Get the global provider registry instance.
 **Returns**:
 
 - `LLMProviderRegistry` - Global registry instance
-
-<a id="spoon_ai.llm.interface"></a>
-
-# Module `spoon_ai.llm.interface`
-
-LLM Provider Interface - Abstract base class defining the unified interface for all LLM providers.
-
-<a id="spoon_ai.llm.interface.ProviderCapability"></a>
-
-## `ProviderCapability` Objects
-
-```python
-class ProviderCapability(Enum)
-```
-
-Enumeration of capabilities that LLM providers can support.
-
-<a id="spoon_ai.llm.interface.ProviderMetadata"></a>
-
-## `ProviderMetadata` Objects
-
-```python
-@dataclass
-class ProviderMetadata()
-```
-
-Metadata describing a provider's capabilities and limits.
-
-<a id="spoon_ai.llm.interface.LLMResponse"></a>
-
-## `LLMResponse` Objects
-
-```python
-@dataclass
-class LLMResponse()
-```
-
-Enhanced LLM response with comprehensive metadata and debugging information.
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface"></a>
-
-## `LLMProviderInterface` Objects
-
-```python
-class LLMProviderInterface(ABC)
-```
-
-Abstract base class defining the unified interface for all LLM providers.
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.initialize"></a>
-
-#### `initialize`
-
-```python
-@abstractmethod
-async def initialize(config: Dict[str, Any]) -> None
-```
-
-Initialize the provider with configuration.
-
-**Arguments**:
-
-- `config` - Provider-specific configuration dictionary
-  
-
-**Raises**:
-
-- `ConfigurationError` - If configuration is invalid
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.chat"></a>
-
-#### `chat`
-
-```python
-@abstractmethod
-async def chat(messages: List[Message], **kwargs) -> LLMResponse
-```
-
-Send chat request to the provider.
-
-**Arguments**:
-
-- `messages` - List of conversation messages
-- `**kwargs` - Additional provider-specific parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - Standardized response object
-  
-
-**Raises**:
-
-- `ProviderError` - If the request fails
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.chat_stream"></a>
-
-#### `chat_stream`
-
-```python
-@abstractmethod
-async def chat_stream(messages: List[Message],
-                      callbacks: Optional[List[BaseCallbackHandler]] = None,
-                      **kwargs) -> AsyncIterator[LLMResponseChunk]
-```
-
-Send streaming chat request to the provider with callback support.
-
-**Arguments**:
-
-- `messages` - List of conversation messages
-- `callbacks` - Optional list of callback handlers for real-time events
-- `**kwargs` - Additional provider-specific parameters
-  
-
-**Yields**:
-
-- `LLMResponseChunk` - Structured streaming response chunks
-  
-
-**Raises**:
-
-- `ProviderError` - If the request fails
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.completion"></a>
-
-#### `completion`
-
-```python
-@abstractmethod
-async def completion(prompt: str, **kwargs) -> LLMResponse
-```
-
-Send completion request to the provider.
-
-**Arguments**:
-
-- `prompt` - Text prompt for completion
-- `**kwargs` - Additional provider-specific parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - Standardized response object
-  
-
-**Raises**:
-
-- `ProviderError` - If the request fails
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.chat_with_tools"></a>
-
-#### `chat_with_tools`
-
-```python
-@abstractmethod
-async def chat_with_tools(messages: List[Message], tools: List[Dict],
-                          **kwargs) -> LLMResponse
-```
-
-Send chat request with tool support.
-
-**Arguments**:
-
-- `messages` - List of conversation messages
-- `tools` - List of available tools
-- `**kwargs` - Additional provider-specific parameters
-  
-
-**Returns**:
-
-- `LLMResponse` - Standardized response object with potential tool calls
-  
-
-**Raises**:
-
-- `ProviderError` - If the request fails
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.get_metadata"></a>
-
-#### `get_metadata`
-
-```python
-@abstractmethod
-def get_metadata() -> ProviderMetadata
-```
-
-Get provider metadata and capabilities.
-
-**Returns**:
-
-- `ProviderMetadata` - Provider information and capabilities
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.health_check"></a>
-
-#### `health_check`
-
-```python
-@abstractmethod
-async def health_check() -> bool
-```
-
-Check if provider is healthy and available.
-
-**Returns**:
-
-- `bool` - True if provider is healthy, False otherwise
-
-<a id="spoon_ai.llm.interface.LLMProviderInterface.cleanup"></a>
-
-#### `cleanup`
-
-```python
-@abstractmethod
-async def cleanup() -> None
-```
-
-Cleanup resources and connections.
-
-This method should be called when the provider is no longer needed.
-
-<a id="spoon_ai.llm.factory"></a>
-
-# Module `spoon_ai.llm.factory`
-
-<a id="spoon_ai.llm.factory.LLMFactory"></a>
-
-## `LLMFactory` Objects
-
-```python
-class LLMFactory()
-```
-
-LLM factory class, used to create different LLM instances
-
-<a id="spoon_ai.llm.factory.LLMFactory.register"></a>
-
-#### `register`
-
-```python
-@classmethod
-def register(cls, provider_name: str)
-```
-
-Register LLM provider
-
-**Arguments**:
-
-- `provider_name` - Provider name
-  
-
-**Returns**:
-
-  Decorator function
-
-<a id="spoon_ai.llm.factory.LLMFactory.create"></a>
-
-#### `create`
-
-```python
-@classmethod
-def create(cls,
-           provider: Optional[str] = None,
-           config_path: str = "config/config.toml",
-           config_name: str = "llm") -> LLMBase
-```
-
-Create LLM instance
-
-**Arguments**:
-
-- `provider` - Provider name, if None, read from configuration file
-- `config_path` - Configuration file path
-- `config_name` - Configuration name
-  
-
-**Returns**:
-
-- `LLMBase` - LLM instance
-  
-
-**Raises**:
-
-- `ValueError` - If provider does not exist
 
 <a id="spoon_ai.llm.monitoring"></a>
 
@@ -6580,6 +3214,226 @@ Get global metrics collector instance.
 
 - `MetricsCollector` - Global metrics collector
 
+<a id="spoon_ai.llm.interface"></a>
+
+# Module `spoon_ai.llm.interface`
+
+LLM Provider Interface - Abstract base class defining the unified interface for all LLM providers.
+
+<a id="spoon_ai.llm.interface.ProviderCapability"></a>
+
+## `ProviderCapability` Objects
+
+```python
+class ProviderCapability(Enum)
+```
+
+Enumeration of capabilities that LLM providers can support.
+
+<a id="spoon_ai.llm.interface.ProviderMetadata"></a>
+
+## `ProviderMetadata` Objects
+
+```python
+@dataclass
+class ProviderMetadata()
+```
+
+Metadata describing a provider's capabilities and limits.
+
+<a id="spoon_ai.llm.interface.LLMResponse"></a>
+
+## `LLMResponse` Objects
+
+```python
+@dataclass
+class LLMResponse()
+```
+
+Enhanced LLM response with comprehensive metadata and debugging information.
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface"></a>
+
+## `LLMProviderInterface` Objects
+
+```python
+class LLMProviderInterface(ABC)
+```
+
+Abstract base class defining the unified interface for all LLM providers.
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.initialize"></a>
+
+#### `initialize`
+
+```python
+@abstractmethod
+async def initialize(config: Dict[str, Any]) -> None
+```
+
+Initialize the provider with configuration.
+
+**Arguments**:
+
+- `config` - Provider-specific configuration dictionary
+  
+
+**Raises**:
+
+- `ConfigurationError` - If configuration is invalid
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.chat"></a>
+
+#### `chat`
+
+```python
+@abstractmethod
+async def chat(messages: List[Message], **kwargs) -> LLMResponse
+```
+
+Send chat request to the provider.
+
+**Arguments**:
+
+- `messages` - List of conversation messages
+- `**kwargs` - Additional provider-specific parameters
+  
+
+**Returns**:
+
+- `LLMResponse` - Standardized response object
+  
+
+**Raises**:
+
+- `ProviderError` - If the request fails
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.chat_stream"></a>
+
+#### `chat_stream`
+
+```python
+@abstractmethod
+async def chat_stream(messages: List[Message],
+                      callbacks: Optional[List[BaseCallbackHandler]] = None,
+                      **kwargs) -> AsyncIterator[LLMResponseChunk]
+```
+
+Send streaming chat request to the provider with callback support.
+
+**Arguments**:
+
+- `messages` - List of conversation messages
+- `callbacks` - Optional list of callback handlers for real-time events
+- `**kwargs` - Additional provider-specific parameters
+  
+
+**Yields**:
+
+- `LLMResponseChunk` - Structured streaming response chunks
+  
+
+**Raises**:
+
+- `ProviderError` - If the request fails
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.completion"></a>
+
+#### `completion`
+
+```python
+@abstractmethod
+async def completion(prompt: str, **kwargs) -> LLMResponse
+```
+
+Send completion request to the provider.
+
+**Arguments**:
+
+- `prompt` - Text prompt for completion
+- `**kwargs` - Additional provider-specific parameters
+  
+
+**Returns**:
+
+- `LLMResponse` - Standardized response object
+  
+
+**Raises**:
+
+- `ProviderError` - If the request fails
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.chat_with_tools"></a>
+
+#### `chat_with_tools`
+
+```python
+@abstractmethod
+async def chat_with_tools(messages: List[Message], tools: List[Dict],
+                          **kwargs) -> LLMResponse
+```
+
+Send chat request with tool support.
+
+**Arguments**:
+
+- `messages` - List of conversation messages
+- `tools` - List of available tools
+- `**kwargs` - Additional provider-specific parameters
+  
+
+**Returns**:
+
+- `LLMResponse` - Standardized response object with potential tool calls
+  
+
+**Raises**:
+
+- `ProviderError` - If the request fails
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+@abstractmethod
+def get_metadata() -> ProviderMetadata
+```
+
+Get provider metadata and capabilities.
+
+**Returns**:
+
+- `ProviderMetadata` - Provider information and capabilities
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.health_check"></a>
+
+#### `health_check`
+
+```python
+@abstractmethod
+async def health_check() -> bool
+```
+
+Check if provider is healthy and available.
+
+**Returns**:
+
+- `bool` - True if provider is healthy, False otherwise
+
+<a id="spoon_ai.llm.interface.LLMProviderInterface.cleanup"></a>
+
+#### `cleanup`
+
+```python
+@abstractmethod
+async def cleanup() -> None
+```
+
+Cleanup resources and connections.
+
+This method should be called when the provider is no longer needed.
+
 <a id="spoon_ai.llm.cache"></a>
 
 # Module `spoon_ai.llm.cache`
@@ -6782,6 +3636,100 @@ Get cache statistics.
 
   Dict[str, Any]: Cache statistics
 
+<a id="spoon_ai.llm.factory"></a>
+
+# Module `spoon_ai.llm.factory`
+
+<a id="spoon_ai.llm.factory.LLMFactory"></a>
+
+## `LLMFactory` Objects
+
+```python
+class LLMFactory()
+```
+
+LLM factory class, used to create different LLM instances
+
+<a id="spoon_ai.llm.factory.LLMFactory.register"></a>
+
+#### `register`
+
+```python
+@classmethod
+def register(cls, provider_name: str)
+```
+
+Register LLM provider
+
+**Arguments**:
+
+- `provider_name` - Provider name
+  
+
+**Returns**:
+
+  Decorator function
+
+<a id="spoon_ai.llm.factory.LLMFactory.create"></a>
+
+#### `create`
+
+```python
+@classmethod
+def create(cls,
+           provider: Optional[str] = None,
+           config_path: str = "config/config.toml",
+           config_name: str = "llm") -> LLMBase
+```
+
+Create LLM instance
+
+**Arguments**:
+
+- `provider` - Provider name, if None, read from configuration file
+- `config_path` - Configuration file path
+- `config_name` - Configuration name
+  
+
+**Returns**:
+
+- `LLMBase` - LLM instance
+  
+
+**Raises**:
+
+- `ValueError` - If provider does not exist
+
+<a id="spoon_ai.llm.message_utils"></a>
+
+# Module `spoon_ai.llm.message_utils`
+
+Shared utilities for sanitising Message sequences before provider conversion.
+
+Every provider that sends tool-role messages to an API should call
+``drop_orphaned_tool_messages`` **before** provider-specific conversion so
+that malformed / orphaned tool messages never reach the remote API.
+
+<a id="spoon_ai.llm.message_utils.drop_orphaned_tool_messages"></a>
+
+#### `drop_orphaned_tool_messages`
+
+```python
+def drop_orphaned_tool_messages(messages: List[Message]) -> List[Message]
+```
+
+Return *messages* with orphaned tool messages removed.
+
+A tool message is considered **orphaned** (and dropped) when any of the
+following is true:
+
+1. It has no ``tool_call_id`` at all.
+2. There is no preceding assistant message that contains ``tool_calls``.
+3. Its ``tool_call_id`` does not match any ``tool_calls[].id`` in the
+   nearest preceding assistant message that carries tool calls.
+
+The function preserves the original ordering of all non-orphaned messages.
+
 <a id="spoon_ai.llm.base"></a>
 
 # Module `spoon_ai.llm.base`
@@ -6916,590 +3864,2464 @@ def reset_output_handler()
 
 Reset output handler
 
-<a id="spoon_ai.callbacks.manager"></a>
+<a id="spoon_ai.schema"></a>
 
-# Module `spoon_ai.callbacks.manager`
+# Module `spoon_ai.schema`
 
-<a id="spoon_ai.callbacks.manager.CallbackManager"></a>
+<a id="spoon_ai.schema.Function"></a>
 
-## `CallbackManager` Objects
-
-```python
-class CallbackManager()
-```
-
-Lightweight dispatcher for callback handlers.
-
-<a id="spoon_ai.callbacks.skill_callback"></a>
-
-# Module `spoon_ai.callbacks.skill_callback`
-
-Skill-specific callback handler.
-
-Extends BaseCallbackHandler with skill lifecycle hooks.
-
-<a id="spoon_ai.callbacks.skill_callback.SkillCallbackHandler"></a>
-
-## `SkillCallbackHandler` Objects
+## `Function` Objects
 
 ```python
-class SkillCallbackHandler(BaseCallbackHandler)
+class Function(BaseModel)
 ```
 
-Callback handler for skill lifecycle events.
+<a id="spoon_ai.schema.Function.get_arguments_dict"></a>
 
-Extends BaseCallbackHandler with skill-specific hooks:
-- on_skill_start: Called when a skill is activated
-- on_skill_end: Called when a skill is deactivated
-- on_skill_error: Called when skill activation/execution fails
+#### `get_arguments_dict`
+
+```python
+def get_arguments_dict() -> dict
+```
+
+Parse arguments string to dictionary.
+
+**Returns**:
+
+- `dict` - Parsed arguments as dictionary
+
+<a id="spoon_ai.schema.Function.create"></a>
+
+#### `create`
+
+```python
+@classmethod
+def create(cls, name: str, arguments: Union[str, dict]) -> "Function"
+```
+
+Create Function with arguments as string or dict.
+
+**Arguments**:
+
+- `name` - Function name
+- `arguments` - Function arguments as string or dict
+  
+
+**Returns**:
+
+- `Function` - Function instance with arguments as JSON string
+
+<a id="spoon_ai.schema.AgentState"></a>
+
+## `AgentState` Objects
+
+```python
+class AgentState(str, Enum)
+```
+
+The state of the agent.
+
+<a id="spoon_ai.schema.ToolChoice"></a>
+
+## `ToolChoice` Objects
+
+```python
+class ToolChoice(str, Enum)
+```
+
+Tool choice options
+
+<a id="spoon_ai.schema.Role"></a>
+
+## `Role` Objects
+
+```python
+class Role(str, Enum)
+```
+
+Message role options
+
+<a id="spoon_ai.schema.ROLE_TYPE"></a>
+
+#### `ROLE_TYPE`
+
+type: ignore
+
+<a id="spoon_ai.schema.ContentType"></a>
+
+## `ContentType` Objects
+
+```python
+class ContentType(str, Enum)
+```
+
+Types of content blocks for multimodal messages
+
+<a id="spoon_ai.schema.ContentType.IMAGE"></a>
+
+#### `IMAGE`
+
+Base64 encoded image data
+
+<a id="spoon_ai.schema.ContentType.IMAGE_URL"></a>
+
+#### `IMAGE_URL`
+
+URL reference to image
+
+<a id="spoon_ai.schema.ContentType.DOCUMENT"></a>
+
+#### `DOCUMENT`
+
+PDF and other documents (base64)
+
+<a id="spoon_ai.schema.ContentType.FILE"></a>
+
+#### `FILE`
+
+File attachment (path-based)
+
+<a id="spoon_ai.schema.ContentType.AUDIO"></a>
+
+#### `AUDIO`
+
+Audio content (future)
+
+<a id="spoon_ai.schema.ImageMediaType"></a>
+
+## `ImageMediaType` Objects
+
+```python
+class ImageMediaType(str, Enum)
+```
+
+Supported image media types
+
+<a id="spoon_ai.schema.ImageSource"></a>
+
+## `ImageSource` Objects
+
+```python
+class ImageSource(BaseModel)
+```
+
+Source for base64-encoded image content (Anthropic style)
+
+<a id="spoon_ai.schema.ImageUrlSource"></a>
+
+## `ImageUrlSource` Objects
+
+```python
+class ImageUrlSource(BaseModel)
+```
+
+Source for URL-based image content (OpenAI style)
+
+<a id="spoon_ai.schema.TextContent"></a>
+
+## `TextContent` Objects
+
+```python
+class TextContent(BaseModel)
+```
+
+Text content block
+
+<a id="spoon_ai.schema.ImageContent"></a>
+
+## `ImageContent` Objects
+
+```python
+class ImageContent(BaseModel)
+```
+
+Image content block with base64 data (Anthropic-compatible)
+
+<a id="spoon_ai.schema.ImageUrlContent"></a>
+
+## `ImageUrlContent` Objects
+
+```python
+class ImageUrlContent(BaseModel)
+```
+
+Image content block with URL reference (OpenAI-compatible)
+
+<a id="spoon_ai.schema.FileContent"></a>
+
+## `FileContent` Objects
+
+```python
+class FileContent(BaseModel)
+```
+
+File content block (path-based, for local file references)
+
+<a id="spoon_ai.schema.DocumentSource"></a>
+
+## `DocumentSource` Objects
+
+```python
+class DocumentSource(BaseModel)
+```
+
+Source for base64-encoded document content (PDF, etc.)
+
+<a id="spoon_ai.schema.DocumentContent"></a>
+
+## `DocumentContent` Objects
+
+```python
+class DocumentContent(BaseModel)
+```
+
+Document content block for PDFs and other documents (Anthropic/Gemini compatible)
+
+Supported by:
+- Anthropic Claude: Native PDF support via base64
+- Gemini: Native PDF support via inline_data
+- OpenAI: NOT supported (will be converted to text placeholder)
+
+<a id="spoon_ai.schema.Message"></a>
+
+## `Message` Objects
+
+```python
+class Message(BaseModel)
+```
+
+Represents a chat message in the conversation.
+
+Supports both text-only and multimodal content:
+- Simple text: content="Hello world"
+- Multimodal: content=[TextContent(...), ImageUrlContent(...)]
+
+<a id="spoon_ai.schema.Message.role"></a>
+
+#### `role`
+
+type: ignore
+
+<a id="spoon_ai.schema.Message.is_multimodal"></a>
+
+#### `is_multimodal`
+
+```python
+@property
+def is_multimodal() -> bool
+```
+
+Check if this message contains multimodal content.
+
+<a id="spoon_ai.schema.Message.text_content"></a>
+
+#### `text_content`
+
+```python
+@property
+def text_content() -> str
+```
+
+Extract text content from message (for backward compatibility).
+
+**Returns**:
+
+- `str` - Combined text content from all text blocks, or empty string
+
+<a id="spoon_ai.schema.Message.has_images"></a>
+
+#### `has_images`
+
+```python
+@property
+def has_images() -> bool
+```
+
+Check if message contains any image content.
+
+<a id="spoon_ai.schema.Message.has_documents"></a>
+
+#### `has_documents`
+
+```python
+@property
+def has_documents() -> bool
+```
+
+Check if message contains any document content (PDF, etc.).
+
+<a id="spoon_ai.schema.Message.create_text"></a>
+
+#### `create_text`
+
+```python
+@classmethod
+def create_text(cls, role: str, text: str, **kwargs) -> "Message"
+```
+
+Create a simple text message.
+
+**Arguments**:
+
+- `role` - Message role (user, assistant, system, tool)
+- `text` - Text content
+- `**kwargs` - Additional message fields
+  
+
+**Returns**:
+
+- `Message` - Text message instance
+
+<a id="spoon_ai.schema.Message.create_multimodal"></a>
+
+#### `create_multimodal`
+
+```python
+@classmethod
+def create_multimodal(cls, role: str, content_blocks: List[ContentBlock],
+                      **kwargs) -> "Message"
+```
+
+Create a multimodal message with mixed content types.
+
+**Arguments**:
+
+- `role` - Message role (user, assistant, system, tool)
+- `content_blocks` - List of content blocks (TextContent, ImageContent, etc.)
+- `**kwargs` - Additional message fields
+  
+
+**Returns**:
+
+- `Message` - Multimodal message instance
+
+<a id="spoon_ai.schema.Message.create_with_image_url"></a>
+
+#### `create_with_image_url`
+
+```python
+@classmethod
+def create_with_image_url(cls,
+                          role: str,
+                          text: str,
+                          image_url: str,
+                          detail: Literal["auto", "low", "high"] = "auto",
+                          **kwargs) -> "Message"
+```
+
+Create a message with text and an image URL.
+
+**Arguments**:
+
+- `role` - Message role
+- `text` - Text content
+- `image_url` - URL of the image
+- `detail` - Image detail level (auto, low, high)
+- `**kwargs` - Additional message fields
+  
+
+**Returns**:
+
+- `Message` - Multimodal message with text and image URL
+
+<a id="spoon_ai.schema.Message.create_with_base64_image"></a>
+
+#### `create_with_base64_image`
+
+```python
+@classmethod
+def create_with_base64_image(cls,
+                             role: str,
+                             text: str,
+                             image_data: str,
+                             media_type: str = "image/png",
+                             **kwargs) -> "Message"
+```
+
+Create a message with text and a base64-encoded image.
+
+**Arguments**:
+
+- `role` - Message role
+- `text` - Text content
+- `image_data` - Base64-encoded image data
+- `media_type` - Image MIME type (image/jpeg, image/png, etc.)
+- `**kwargs` - Additional message fields
+  
+
+**Returns**:
+
+- `Message` - Multimodal message with text and base64 image
+
+<a id="spoon_ai.schema.Message.create_with_pdf"></a>
+
+#### `create_with_pdf`
+
+```python
+@classmethod
+def create_with_pdf(cls,
+                    role: str,
+                    text: str,
+                    pdf_data: str,
+                    filename: Optional[str] = None,
+                    **kwargs) -> "Message"
+```
+
+Create a message with text and a base64-encoded PDF document.
+
+Supported by Anthropic Claude and Gemini. OpenAI does not support PDFs.
+
+**Arguments**:
+
+- `role` - Message role
+- `text` - Text content / question about the PDF
+- `pdf_data` - Base64-encoded PDF data
+- `filename` - Optional filename for display
+- `**kwargs` - Additional message fields
+  
+
+**Returns**:
+
+- `Message` - Multimodal message with text and PDF document
+
+<a id="spoon_ai.schema.Message.create_with_document"></a>
+
+#### `create_with_document`
+
+```python
+@classmethod
+def create_with_document(cls,
+                         role: str,
+                         text: str,
+                         document_data: str,
+                         media_type: str = "application/pdf",
+                         filename: Optional[str] = None,
+                         **kwargs) -> "Message"
+```
+
+Create a message with text and a base64-encoded document.
+
+Supported document types vary by provider:
+- Anthropic: PDF
+- Gemini: PDF, and many other formats
+- OpenAI: NOT supported (will show placeholder)
+
+**Arguments**:
+
+- `role` - Message role
+- `text` - Text content / question about the document
+- `document_data` - Base64-encoded document data
+- `media_type` - Document MIME type (default: application/pdf)
+- `filename` - Optional filename for display
+- `**kwargs` - Additional message fields
+  
+
+**Returns**:
+
+- `Message` - Multimodal message with text and document
+
+<a id="spoon_ai.schema.SystemMessage"></a>
+
+## `SystemMessage` Objects
+
+```python
+class SystemMessage(Message)
+```
+
+<a id="spoon_ai.schema.SystemMessage.role"></a>
+
+#### `role`
+
+type: ignore
+
+<a id="spoon_ai.schema.TOOL_CHOICE_TYPE"></a>
+
+#### `TOOL_CHOICE_TYPE`
+
+type: ignore
+
+<a id="spoon_ai.schema.LLMConfig"></a>
+
+## `LLMConfig` Objects
+
+```python
+class LLMConfig(BaseModel)
+```
+
+Configuration for LLM providers
+
+<a id="spoon_ai.schema.LLMResponse"></a>
+
+## `LLMResponse` Objects
+
+```python
+class LLMResponse(BaseModel)
+```
+
+Unified LLM response model
+
+<a id="spoon_ai.schema.LLMResponse.text"></a>
+
+#### `text`
+
+Original text response
+
+<a id="spoon_ai.schema.LLMResponseChunk"></a>
+
+## `LLMResponseChunk` Objects
+
+```python
+class LLMResponseChunk(BaseModel)
+```
+
+Enhanced LLM streaming response chunk.
+
+<a id="spoon_ai.agents"></a>
+
+# Module `spoon_ai.agents`
+
+<a id="spoon_ai.agents.spoon_react_skill"></a>
+
+# Module `spoon_ai.agents.spoon_react_skill`
+
+Skill-enabled production agent.
+
+Combines SpoonReactAI with full skill system support.
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill"></a>
+
+## `SpoonReactSkill` Objects
+
+```python
+class SpoonReactSkill(SkillEnabledMixin, SpoonReactAI)
+```
+
+Production agent with full skill system support.
+
+Combines:
+- SpoonReactAI: Tool calling, MCP integration, x402 payment
+- SkillEnabledMixin: Skill activation, context injection, auto-trigger
 
 Usage:
-    class MySkillHandler(SkillCallbackHandler):
-        async def on_skill_start(self, skill_name, context, **kwargs):
-            print(f"Skill activated: &#123;skill_name&#125;")
+    agent = SpoonReactSkill(name="my_agent")
 
-        async def on_skill_end(self, skill_name, result, **kwargs):
-            print(f"Skill deactivated: &#123;skill_name&#125;")
+    # Manual skill activation
+    await agent.activate_skill("trading-analysis", &#123;"asset": "BTC"&#125;)
 
-    agent = SpoonReactSkill(callbacks=[MySkillHandler()])
+    # Run with auto-trigger
+    result = await agent.run("Analyze ETH trading signals")
+    # -&gt; Automatically activates matching skills
 
-<a id="spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_start"></a>
+    # List skills
+    print(agent.list_skills())
+    print(agent.list_active_skills())
 
-#### `on_skill_start`
+    # Deactivate
+    await agent.deactivate_skill("trading-analysis")
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__"></a>
+
+#### `__init__`
 
 ```python
-async def on_skill_start(skill_name: str,
-                         context: Dict[str, Any],
-                         *,
-                         run_id: Optional[str] = None,
-                         **kwargs) -> None
+def __init__(**kwargs)
 ```
 
-Called when a skill is activated.
+Initialize SpoonReactSkill agent.
+
+Initializes both SpoonReactAI and skill system components.
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.run"></a>
+
+#### `run`
+
+```python
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None,
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
+```
+
+Execute agent with per-turn auto skill activation.
+
+Flow:
+1. Auto-detect and activate relevant skills (ephemeral for this run)
+2. Sync skill tools into available_tools
+3. Refresh base prompts with current tools
+4. Execute parent SpoonReactAI.run()
+5. Auto-deactivate skills activated in this turn
 
 **Arguments**:
 
-- `skill_name` - Name of the activated skill
-- `context` - Skill activation context
-- `run_id` - Optional run identifier
-- `**kwargs` - Additional metadata
+- `request` - User request/message
+- `timeout` - Optional timeout in seconds
+  
 
-<a id="spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_end"></a>
+**Returns**:
 
-#### `on_skill_end`
+  Agent response
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize"></a>
+
+#### `initialize`
 
 ```python
-async def on_skill_end(skill_name: str,
-                       result: Any,
-                       *,
-                       run_id: Optional[str] = None,
-                       **kwargs) -> None
+async def initialize(__context=None)
 ```
 
-Called when a skill is deactivated.
+Initialize async components.
+
+Extends SpoonReactAI.initialize() to also initialize skill system.
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path"></a>
+
+#### `add_skill_path`
+
+```python
+def add_skill_path(path: str) -> None
+```
+
+Add a path to search for skills.
 
 **Arguments**:
 
-- `skill_name` - Name of the deactivated skill
-- `result` - Result or state from the skill
-- `run_id` - Optional run identifier
-- `**kwargs` - Additional metadata
+- `path` - Directory path to add
 
-<a id="spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_error"></a>
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills"></a>
 
-#### `on_skill_error`
+#### `discover_skills`
 
 ```python
-async def on_skill_error(skill_name: str,
-                         error: Exception,
-                         *,
-                         run_id: Optional[str] = None,
-                         **kwargs) -> None
+def discover_skills() -> int
 ```
 
-Called when a skill encounters an error.
+Re-discover skills from all configured paths.
 
-**Arguments**:
+**Returns**:
 
-- `skill_name` - Name of the skill that errored
-- `error` - The exception that occurred
-- `run_id` - Optional run identifier
-- `**kwargs` - Additional metadata
+  Number of skills discovered
 
-<a id="spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_match"></a>
+<a id="spoon_ai.agents.skill_mixin"></a>
 
-#### `on_skill_match`
+# Module `spoon_ai.agents.skill_mixin`
+
+Skill-enabled agent mixin.
+
+Follows MCPClientMixin pattern for composable agent integration.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin"></a>
+
+## `SkillEnabledMixin` Objects
 
 ```python
-async def on_skill_match(query: str,
-                         matched_skills: list,
-                         *,
-                         run_id: Optional[str] = None,
-                         **kwargs) -> None
+class SkillEnabledMixin()
 ```
 
-Called when skills are matched to a query.
+Mixin that adds skill capabilities to agents.
 
-**Arguments**:
-
-- `query` - The user query that triggered matching
-- `matched_skills` - List of skill names that matched
-- `run_id` - Optional run identifier
-- `**kwargs` - Additional metadata
-
-<a id="spoon_ai.callbacks.skill_callback.LoggingSkillCallback"></a>
-
-## `LoggingSkillCallback` Objects
-
-```python
-class LoggingSkillCallback(SkillCallbackHandler)
-```
-
-Skill callback that logs all events.
-
-Useful for debugging and monitoring skill system activity.
-
-<a id="spoon_ai.callbacks.skill_callback.MetricsSkillCallback"></a>
-
-## `MetricsSkillCallback` Objects
-
-```python
-class MetricsSkillCallback(SkillCallbackHandler)
-```
-
-Skill callback that collects metrics.
-
-Tracks:
-- Number of skill activations/deactivations
-- Error counts per skill
-- Match counts
+Integrates with ReAct cycle by:
+1. Injecting active skill instructions into system prompt
+2. Adding skill tools to available_tools
+3. Auto-triggering skills based on user input
 
 Usage:
-    metrics = MetricsSkillCallback()
-    agent = SpoonReactSkill(callbacks=[metrics])
-    # ... use agent ...
-    print(metrics.get_metrics())
+    class MyAgent(SkillEnabledMixin, SpoonReactAI):
+        pass
 
-<a id="spoon_ai.callbacks.skill_callback.MetricsSkillCallback.get_metrics"></a>
+    agent = MyAgent()
+    await agent.activate_skill("trading-analysis")
+    result = await agent.run("Analyze BTC")
 
-#### `get_metrics`
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill"></a>
 
-```python
-def get_metrics() -> Dict[str, Any]
-```
-
-Get collected metrics.
-
-<a id="spoon_ai.callbacks.skill_callback.MetricsSkillCallback.reset"></a>
-
-#### `reset`
+#### `activate_skill`
 
 ```python
-def reset() -> None
+async def activate_skill(name: str,
+                         context: Optional[Dict[str, Any]] = None) -> Skill
 ```
 
-Reset all metrics.
-
-<a id="spoon_ai.callbacks.streaming_stdout"></a>
-
-# Module `spoon_ai.callbacks.streaming_stdout`
-
-<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler"></a>
-
-## `StreamingStdOutCallbackHandler` Objects
-
-```python
-class StreamingStdOutCallbackHandler(BaseCallbackHandler)
-```
-
-Callback handler that streams tokens to standard output.
-
-<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_new_token"></a>
-
-#### `on_llm_new_token`
-
-```python
-def on_llm_new_token(token: str, **kwargs: Any) -> None
-```
-
-Print token to stdout immediately.
+Activate a skill and refresh agent state.
 
 **Arguments**:
 
-- `token` - The new token to print
-- `**kwargs` - Additional context (ignored)
+- `name` - Skill name to activate
+- `context` - Optional context data
+  
 
-<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_end"></a>
+**Returns**:
 
-#### `on_llm_end`
+  Activated Skill instance
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill"></a>
+
+#### `deactivate_skill`
 
 ```python
-def on_llm_end(response: Any, **kwargs: Any) -> None
+async def deactivate_skill(name: str) -> bool
 ```
 
-Print newline after LLM completes.
+Deactivate a skill.
 
 **Arguments**:
 
-- `response` - The complete LLM response (ignored)
-- `**kwargs` - Additional context (ignored)
+- `name` - Skill name to deactivate
+  
 
-<a id="spoon_ai.callbacks"></a>
+**Returns**:
 
-# Module `spoon_ai.callbacks`
+  True if deactivated, False if not active
 
-Callback system for streaming and event handling in Spoon AI.
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills"></a>
 
-This module provides a comprehensive callback system similar to LangChain's callbacks,
-enabling real-time monitoring and event handling for LLM calls, agent execution,
-tool invocation, and graph workflows.
-
-<a id="spoon_ai.callbacks.stream_event"></a>
-
-# Module `spoon_ai.callbacks.stream_event`
-
-<a id="spoon_ai.callbacks.stream_event.StreamEventCallbackHandler"></a>
-
-## `StreamEventCallbackHandler` Objects
+#### `auto_activate_skills`
 
 ```python
-class StreamEventCallbackHandler(BaseCallbackHandler)
+async def auto_activate_skills(user_input: str) -> List[Skill]
 ```
 
-Translate callback invocations into standardized stream events.
+Automatically activate skills matching user input.
 
-<a id="spoon_ai.callbacks.statistics"></a>
+Uses both keyword/pattern matching and LLM intent analysis.
 
-# Module `spoon_ai.callbacks.statistics`
+**Arguments**:
 
-<a id="spoon_ai.callbacks.statistics.StreamingStatisticsCallback"></a>
+- `user_input` - User's message
+  
 
-## `StreamingStatisticsCallback` Objects
+**Returns**:
+
+  List of activated skills
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills"></a>
+
+#### `list_skills`
 
 ```python
-class StreamingStatisticsCallback(BaseCallbackHandler, LLMManagerMixin)
+def list_skills() -> List[str]
 ```
 
-Collect simple throughput statistics during streaming runs.
+List all available skill names.
 
-By default, the callback prints summary metrics when the LLM finishes.
-Consumers can provide a custom ``print_fn`` to redirect output, or disable
-printing entirely and read the public attributes after execution.
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills"></a>
 
-<a id="spoon_ai.callbacks.base"></a>
-
-# Module `spoon_ai.callbacks.base`
-
-<a id="spoon_ai.callbacks.base.RetrieverManagerMixin"></a>
-
-## `RetrieverManagerMixin` Objects
+#### `list_active_skills`
 
 ```python
-class RetrieverManagerMixin()
+def list_active_skills() -> List[str]
 ```
 
-Mixin providing retriever callback hooks.
+List currently active skill names.
 
-<a id="spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_start"></a>
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info"></a>
 
-#### `on_retriever_start`
+#### `get_skill_info`
 
 ```python
-def on_retriever_start(run_id: UUID, query: Any, **kwargs: Any) -> Any
+def get_skill_info(name: str) -> Optional[Dict[str, Any]]
 ```
 
-Run when a retriever begins execution.
+Get detailed information about a skill.
 
-<a id="spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_end"></a>
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active"></a>
 
-#### `on_retriever_end`
+#### `is_skill_active`
 
 ```python
-def on_retriever_end(run_id: UUID, documents: Any, **kwargs: Any) -> Any
+def is_skill_active(name: str) -> bool
 ```
 
-Run when a retriever finishes successfully.
+Check if a skill is currently active.
 
-<a id="spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_error"></a>
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills"></a>
 
-#### `on_retriever_error`
+#### `deactivate_all_skills`
 
 ```python
-def on_retriever_error(error: BaseException, *, run_id: UUID,
-                       **kwargs: Any) -> Any
+async def deactivate_all_skills() -> int
 ```
 
-Run when a retriever raises an error.
+Deactivate all active skills.
 
-<a id="spoon_ai.callbacks.base.LLMManagerMixin"></a>
+**Returns**:
 
-## `LLMManagerMixin` Objects
+  Number of skills deactivated
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats"></a>
+
+#### `get_skill_stats`
 
 ```python
-class LLMManagerMixin()
+def get_skill_stats() -> Dict[str, Any]
 ```
 
-Mixin providing large language model callback hooks.
+Get skill system statistics.
 
-<a id="spoon_ai.callbacks.base.LLMManagerMixin.on_llm_start"></a>
+<a id="spoon_ai.agents.custom_agent"></a>
 
-#### `on_llm_start`
+# Module `spoon_ai.agents.custom_agent`
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent"></a>
+
+## `CustomAgent` Objects
 
 ```python
-def on_llm_start(run_id: UUID, messages: List[Message], **kwargs: Any) -> Any
+class CustomAgent(ToolCallAgent)
 ```
 
-Run when an LLM or chat model begins execution.
+Custom Agent class allowing users to create their own agents and add custom tools
 
-<a id="spoon_ai.callbacks.base.LLMManagerMixin.on_llm_new_token"></a>
+Usage:
+Create custom agent and add tools:
+   agent = CustomAgent(name="my_agent", description="My custom agent")
+   agent.add_tool(MyCustomTool())
+   result = await agent.run("Use my custom tool")
 
-#### `on_llm_new_token`
+<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tool"></a>
+
+#### `add_tool`
 
 ```python
-def on_llm_new_token(token: str,
-                     *,
-                     chunk: Optional[LLMResponseChunk] = None,
-                     run_id: Optional[UUID] = None,
-                     **kwargs: Any) -> Any
+def add_tool(tool: BaseTool) -> None
 ```
 
-Run for each streamed token emitted by an LLM.
+Add a tool to the agent with validation.
 
-<a id="spoon_ai.callbacks.base.LLMManagerMixin.on_llm_end"></a>
+**Arguments**:
 
-#### `on_llm_end`
+- `tool` - Tool instance to add
+  
+
+**Raises**:
+
+- `ValueError` - If tool is invalid or already exists
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tools"></a>
+
+#### `add_tools`
 
 ```python
-def on_llm_end(response: LLMResponse, *, run_id: UUID, **kwargs: Any) -> Any
+def add_tools(tools: List[BaseTool]) -> None
 ```
 
-Run when an LLM finishes successfully.
+Add multiple tools to the agent with atomic operation.
 
-<a id="spoon_ai.callbacks.base.LLMManagerMixin.on_llm_error"></a>
+**Arguments**:
 
-#### `on_llm_error`
+- `tools` - List of tool instances to add
+  
+
+**Raises**:
+
+- `ValueError` - If any tool is invalid
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.remove_tool"></a>
+
+#### `remove_tool`
 
 ```python
-def on_llm_error(error: BaseException, *, run_id: UUID, **kwargs: Any) -> Any
+def remove_tool(tool_name: str) -> bool
 ```
 
-Run when an LLM raises an error.
+Remove a tool from the agent.
 
-<a id="spoon_ai.callbacks.base.ChainManagerMixin"></a>
+**Arguments**:
 
-## `ChainManagerMixin` Objects
+- `tool_name` - Name of the tool to remove
+  
+
+**Returns**:
+
+- `bool` - True if tool was removed, False if not found
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.list_tools"></a>
+
+#### `list_tools`
 
 ```python
-class ChainManagerMixin()
+def list_tools() -> List[str]
 ```
 
-Mixin providing chain-level callback hooks.
+List all available tools in the agent.
 
-<a id="spoon_ai.callbacks.base.ChainManagerMixin.on_chain_start"></a>
+**Returns**:
 
-#### `on_chain_start`
+  List of tool names, empty list if no tools
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.get_tool_info"></a>
+
+#### `get_tool_info`
 
 ```python
-def on_chain_start(run_id: UUID, inputs: Any, **kwargs: Any) -> Any
+def get_tool_info() -> Dict[str, Dict[str, Any]]
 ```
 
-Run when a chain (Runnable) starts executing.
+Get detailed information about all tools.
 
-<a id="spoon_ai.callbacks.base.ChainManagerMixin.on_chain_end"></a>
+**Returns**:
 
-#### `on_chain_end`
+  Dictionary with tool names as keys and tool info as values
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.validate_tools"></a>
+
+#### `validate_tools`
 
 ```python
-def on_chain_end(run_id: UUID, outputs: Any, **kwargs: Any) -> Any
+def validate_tools() -> Dict[str, Any]
 ```
 
-Run when a chain finishes successfully.
+Validate all current tools and return validation report.
 
-<a id="spoon_ai.callbacks.base.ChainManagerMixin.on_chain_error"></a>
+**Returns**:
 
-#### `on_chain_error`
+  Dictionary with validation results
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.run"></a>
+
+#### `run`
 
 ```python
-def on_chain_error(error: BaseException, *, run_id: UUID,
-                   **kwargs: Any) -> Any
+async def run(request: Optional[str] = None) -> str
 ```
 
-Run when a chain raises an error.
+Run the agent with enhanced tool validation.
 
-<a id="spoon_ai.callbacks.base.ToolManagerMixin"></a>
+**Arguments**:
 
-## `ToolManagerMixin` Objects
+- `request` - User request
+  
+
+**Returns**:
+
+  Processing result
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.clear"></a>
+
+#### `clear`
 
 ```python
-class ToolManagerMixin()
+def clear()
 ```
 
-Mixin providing tool callback hooks.
+Enhanced clear method with proper tool state management.
 
-<a id="spoon_ai.callbacks.base.ToolManagerMixin.on_tool_start"></a>
+<a id="spoon_ai.agents.mcp_client_mixin"></a>
 
-#### `on_tool_start`
+# Module `spoon_ai.agents.mcp_client_mixin`
+
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin"></a>
+
+## `MCPClientMixin` Objects
 
 ```python
-def on_tool_start(tool_name: str, tool_input: Any, *, run_id: UUID,
-                  **kwargs: Any) -> Any
+class MCPClientMixin()
 ```
 
-Run when a tool invocation begins.
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session"></a>
 
-<a id="spoon_ai.callbacks.base.ToolManagerMixin.on_tool_end"></a>
-
-#### `on_tool_end`
+#### `get_session`
 
 ```python
-def on_tool_end(tool_name: str, tool_output: Any, *, run_id: UUID,
-                **kwargs: Any) -> Any
+@asynccontextmanager
+async def get_session()
 ```
 
-Run when a tool invocation succeeds.
+Get a session with robust resource management and cleanup.
 
-<a id="spoon_ai.callbacks.base.ToolManagerMixin.on_tool_error"></a>
+Features:
+- Automatic session reuse per task
+- Resource limits to prevent exhaustion
+- Proper cleanup on cancellation/failure
+- Periodic cleanup of stale sessions
 
-#### `on_tool_error`
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.list_mcp_tools"></a>
+
+#### `list_mcp_tools`
 
 ```python
-def on_tool_error(error: BaseException,
-                  *,
-                  run_id: UUID,
-                  tool_name: Optional[str] = None,
-                  **kwargs: Any) -> Any
+async def list_mcp_tools()
 ```
 
-Run when a tool invocation raises an error.
+Get the list of available tools from the MCP server
 
-<a id="spoon_ai.callbacks.base.PromptManagerMixin"></a>
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.call_mcp_tool"></a>
 
-## `PromptManagerMixin` Objects
+#### `call_mcp_tool`
 
 ```python
-class PromptManagerMixin()
+async def call_mcp_tool(tool_name: str, **kwargs)
 ```
 
-Mixin providing prompt template callback hooks.
+Call a tool on the MCP server
 
-<a id="spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_start"></a>
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.send_mcp_message"></a>
 
-#### `on_prompt_start`
+#### `send_mcp_message`
 
 ```python
-def on_prompt_start(run_id: UUID, inputs: Any, **kwargs: Any) -> Any
+async def send_mcp_message(recipient: str,
+                           message: Union[str, Dict[str, Any]],
+                           topic: Optional[str] = None,
+                           metadata: Optional[Dict[str, Any]] = None) -> bool
 ```
 
-Run when a prompt template begins formatting.
+Send a message to the MCP system
 
-<a id="spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_end"></a>
+**Arguments**:
 
-#### `on_prompt_end`
+- `recipient` - Recipient ID
+- `message` - Message content (string or dictionary)
+- `topic` - Message topic
+- `metadata` - Additional metadata
+  
+
+**Returns**:
+
+- `bool` - Whether the message was sent successfully
+
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.cleanup"></a>
+
+#### `cleanup`
 
 ```python
-def on_prompt_end(run_id: UUID, output: Any, **kwargs: Any) -> Any
+async def cleanup()
 ```
 
-Run when a prompt template finishes formatting.
+Enhanced cleanup method with comprehensive resource cleanup.
 
-<a id="spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_error"></a>
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session_stats"></a>
 
-#### `on_prompt_error`
+#### `get_session_stats`
 
 ```python
-def on_prompt_error(error: BaseException, *, run_id: UUID,
-                    **kwargs: Any) -> Any
+def get_session_stats() -> Dict[str, Any]
 ```
 
-Run when prompt formatting raises an error.
+Get session statistics for monitoring.
 
-<a id="spoon_ai.callbacks.base.BaseCallbackHandler"></a>
+<a id="spoon_ai.agents.spoon_react"></a>
 
-## `BaseCallbackHandler` Objects
+# Module `spoon_ai.agents.spoon_react`
+
+<a id="spoon_ai.agents.spoon_react.create_configured_chatbot"></a>
+
+#### `create_configured_chatbot`
 
 ```python
-class BaseCallbackHandler(LLMManagerMixin, ChainManagerMixin, ToolManagerMixin,
-                          RetrieverManagerMixin, PromptManagerMixin, ABC)
+def create_configured_chatbot()
 ```
 
-Base class for SpoonAI callback handlers.
+Create a ChatBot instance with intelligent provider selection.
 
-<a id="spoon_ai.callbacks.base.BaseCallbackHandler.raise_error"></a>
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI"></a>
 
-#### `raise_error`
+## `SpoonReactAI` Objects
 
-Whether to re-raise exceptions originating from callbacks.
+```python
+class SpoonReactAI(MCPClientMixin, ToolCallAgent)
+```
 
-<a id="spoon_ai.callbacks.base.BaseCallbackHandler.run_inline"></a>
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.__init__"></a>
 
-#### `run_inline`
+#### `__init__`
 
-Whether the callback prefers to run on the caller's event loop.
+```python
+def __init__(**kwargs)
+```
 
-<a id="spoon_ai.callbacks.base.BaseCallbackHandler.ignore_llm"></a>
+Initialize SpoonReactAI with both ToolCallAgent and MCPClientMixin initialization
 
-#### `ignore_llm`
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.connect"></a>
+
+#### `connect`
+
+```python
+async def connect()
+```
+
+Establish connection to MCP server.
+
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.initialize"></a>
+
+#### `initialize`
+
+```python
+async def initialize(__context: Any = None)
+```
+
+Initialize async components and subscribe to topics
+
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.run"></a>
+
+#### `run`
+
+```python
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None,
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
+```
+
+Ensure prompts reflect current tools before running.
+
+<a id="spoon_ai.agents.graph_agent"></a>
+
+# Module `spoon_ai.agents.graph_agent`
+
+Graph-based agent implementation for SpoonOS.
+
+This module provides the GraphAgent class that executes StateGraph workflows,
+integrating the graph execution system with the existing agent architecture.
+
+<a id="spoon_ai.agents.graph_agent.GraphAgent"></a>
+
+## `GraphAgent` Objects
+
+```python
+class GraphAgent(BaseAgent)
+```
+
+An agent that executes StateGraph workflows.
+
+This agent provides a bridge between the existing SpoonOS agent architecture
+and the new graph-based execution system. It allows complex, stateful workflows
+to be defined as graphs and executed with proper state management.
+
+Key Features:
+- Executes StateGraph workflows
+- Maintains compatibility with existing agent interfaces
+- Provides detailed execution logging and error handling
+- Supports both sync and async node functions
+
+<a id="spoon_ai.agents.graph_agent.GraphAgent.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(**kwargs)
+```
+
+Initialize the GraphAgent.
+
+**Arguments**:
+
+- `graph` - StateGraph instance to execute
+- `**kwargs` - Additional arguments passed to BaseAgent
+  
+
+**Raises**:
+
+- `ValueError` - If no graph is provided
+
+<a id="spoon_ai.agents.graph_agent.GraphAgent.validate_graph"></a>
+
+#### `validate_graph`
+
+```python
+@validator('graph')
+def validate_graph(cls, v)
+```
+
+Validate that the provided graph is a StateGraph instance.
+
+<a id="spoon_ai.agents.graph_agent.GraphAgent.run"></a>
+
+#### `run`
+
+```python
+async def run(request: Optional[str] = None) -> str
+```
+
+Execute the graph workflow.
+
+This method overrides the base run method to invoke the compiled graph
+instead of the traditional step-based execution loop.
+
+**Arguments**:
+
+- `request` - Optional input request to include in initial state
+  
+
+**Returns**:
+
+  String representation of the execution result
+  
+
+**Raises**:
+
+- `RuntimeError` - If agent is not in IDLE state
+- `GraphExecutionError` - If graph execution fails
+
+<a id="spoon_ai.agents.graph_agent.GraphAgent.step"></a>
+
+#### `step`
+
+```python
+async def step() -> str
+```
+
+Step method for compatibility with BaseAgent.
+
+Since GraphAgent uses graph execution instead of step-based execution,
+this method is not used in normal operation but is required by the
+BaseAgent interface.
+
+**Returns**:
+
+  Status message indicating graph-based execution
+
+<a id="spoon_ai.agents.graph_agent.GraphAgent.get_execution_history"></a>
+
+#### `get_execution_history`
+
+```python
+def get_execution_history() -> list
+```
+
+Get the execution history from the last graph run.
+
+**Returns**:
+
+  List of execution steps with metadata
+
+<a id="spoon_ai.agents.graph_agent.GraphAgent.get_execution_metadata"></a>
+
+#### `get_execution_metadata`
+
+```python
+def get_execution_metadata() -> Dict[str, Any]
+```
+
+Get metadata from the last execution.
+
+**Returns**:
+
+  Dictionary containing execution metadata
+
+<a id="spoon_ai.agents.graph_agent.GraphAgent.clear_state"></a>
+
+#### `clear_state`
+
+```python
+def clear_state()
+```
+
+Clear preserved state and execution history.
+
+<a id="spoon_ai.agents.graph_agent.GraphAgent.update_initial_state"></a>
+
+#### `update_initial_state`
+
+```python
+def update_initial_state(updates: Dict[str, Any])
+```
+
+Update the initial state for future executions.
+
+**Arguments**:
+
+- `updates` - Dictionary of state updates to merge
+
+<a id="spoon_ai.agents.graph_agent.GraphAgent.set_preserve_state"></a>
+
+#### `set_preserve_state`
+
+```python
+def set_preserve_state(preserve: bool)
+```
+
+Enable or disable state preservation between runs.
+
+**Arguments**:
+
+- `preserve` - Whether to preserve state between runs
+
+<a id="spoon_ai.agents.subagents"></a>
+
+# Module `spoon_ai.agents.subagents`
+
+Subagent Orchestration System
+
+Enables hierarchical agent delegation where a parent agent can create
+and manage specialized child agents for complex tasks.
+
+Compatible with LangChain DeepAgents SubAgentMiddleware interface.
+
+Features:
+- SubAgentSpec for defining subagents with tools and prompts
+- CompiledSubAgent for using pre-built graphs as subagents
+- Command return pattern for state updates
+- State inheritance and isolation
+- Hierarchical task delegation with recursion depth limits
+- Automatic task tool generation
+- General-purpose agent support
+
+Usage:
+    # Method 1: SubAgentSpec (simple cases)
+    subagents = [
+        SubAgentSpec(
+            name="researcher",
+            description="Specialized in research tasks",
+            system_prompt="You are a research expert...",
+            tools=[search_tool, summarize_tool]
+        )
+    ]
+
+    # Method 2: CompiledSubAgent (complex cases with pre-built graph)
+    custom_graph = StateGraph(...)
+    custom_graph.add_node("analyze", analyze_node)
+    compiled = custom_graph.compile()
+
+    subagents = [
+        CompiledSubAgent(
+            name="complex_analyzer",
+            description="Complex multi-step analysis",
+            runnable=compiled
+        )
+    ]
+
+    # Create parent agent with subagent support
+    middleware = SubAgentMiddleware(subagents=subagents)
+    agent = ToolCallAgent(middleware=[middleware], ...)
+
+<a id="spoon_ai.agents.subagents.Command"></a>
+
+## `Command` Objects
+
+```python
+@dataclass
+class Command()
+```
+
+Command object for returning state updates and controlling execution flow.
+
+Compatible with LangGraph Command interface. Used to:
+1. Propagate state changes from subagent execution back to the parent agent
+2. Resume from HITL interrupts with approval decisions
+
+Example - State updates from subagent:
+    ```python
+    return Command(
+        update={
+            "messages": [tool_message],
+            "some_state_key": new_value,
+        }
+    )
+    ```
+
+Example - Resume from HITL interrupt:
+    ```python
+    # After receiving interrupt with action_requests
+    result = agent.invoke(
+        Command(resume={
+            "decisions": [
+                {"type": "approve"},
+                {"type": "edit", "args": {"path": "/new/path"}},
+                {"type": "reject", "reason": "Too dangerous"},
+            ]
+        }),
+        config=config
+    )
+    ```
+
+<a id="spoon_ai.agents.subagents.Command.update"></a>
+
+#### `update`
+
+State updates to apply after subagent execution.
+
+<a id="spoon_ai.agents.subagents.Command.goto"></a>
+
+#### `goto`
+
+Optional node to go to next (for graph-based agents).
+
+<a id="spoon_ai.agents.subagents.Command.resume"></a>
+
+#### `resume`
+
+Resume data for HITL interrupts. Contains 'decisions' list.
+
+<a id="spoon_ai.agents.subagents.Command.is_resume"></a>
+
+#### `is_resume`
 
 ```python
 @property
-def ignore_llm() -> bool
+def is_resume() -> bool
 ```
 
-Return True to skip LLM callbacks.
+Check if this is a resume command.
 
-<a id="spoon_ai.callbacks.base.BaseCallbackHandler.ignore_chain"></a>
+<a id="spoon_ai.agents.subagents.Command.get_decisions"></a>
 
-#### `ignore_chain`
+#### `get_decisions`
 
 ```python
-@property
-def ignore_chain() -> bool
+def get_decisions() -> List[Dict[str, Any]]
 ```
 
-Return True to skip chain callbacks.
+Get decisions from resume data.
 
-<a id="spoon_ai.callbacks.base.BaseCallbackHandler.ignore_tool"></a>
+**Returns**:
 
-#### `ignore_tool`
+  List of decision dicts with 'type', optional 'args', optional 'reason'
+
+<a id="spoon_ai.agents.subagents.SubAgentSpec"></a>
+
+## `SubAgentSpec` Objects
 
 ```python
-@property
-def ignore_tool() -> bool
+@dataclass
+class SubAgentSpec()
 ```
 
-Return True to skip tool callbacks.
+Specification for a subagent.
 
-<a id="spoon_ai.callbacks.base.BaseCallbackHandler.ignore_retriever"></a>
+This defines how a subagent should be configured and what
+capabilities it has. When using SubAgentSpec, the middleware
+will automatically create a ToolCallAgent instance.
 
-#### `ignore_retriever`
+Compatible with LangChain DeepAgents SubAgent interface.
+
+<a id="spoon_ai.agents.subagents.SubAgentSpec.description"></a>
+
+#### `description`
+
+For parent agent to decide when to delegate
+
+<a id="spoon_ai.agents.subagents.CompiledSubAgent"></a>
+
+## `CompiledSubAgent` Objects
 
 ```python
-@property
-def ignore_retriever() -> bool
+@dataclass
+class CompiledSubAgent()
 ```
 
-Return True to skip retriever callbacks.
+A pre-compiled agent/graph specification.
 
-<a id="spoon_ai.callbacks.base.BaseCallbackHandler.ignore_prompt"></a>
+Use this when you have a complex, pre-built graph (StateGraph/CompiledGraph)
+that you want to use as a subagent. This is useful for:
+- Complex multi-step workflows
+- Custom graph topologies
+- Reusing existing graph implementations
 
-#### `ignore_prompt`
+Compatible with LangChain DeepAgents CompiledSubAgent interface.
+
+**Example**:
+
+    ```python
+    from spoon_ai.graph import StateGraph
+
+    # Build custom graph
+    graph = StateGraph(MyState)
+    graph.add_node("analyze", analyze_node)
+    graph.add_node("synthesize", synthesize_node)
+    graph.add_edge("analyze", "synthesize")
+    compiled = graph.compile()
+
+    # Use as subagent
+    subagent = CompiledSubAgent(
+        name="analyzer",
+        description="Complex multi-step analysis",
+        runnable=compiled
+    )
+    ```
+
+<a id="spoon_ai.agents.subagents.CompiledSubAgent.runnable"></a>
+
+#### `runnable`
+
+CompiledGraph or any Runnable-like object with invoke/ainvoke
+
+<a id="spoon_ai.agents.subagents.SubAgentManager"></a>
+
+## `SubAgentManager` Objects
 
 ```python
-@property
-def ignore_prompt() -> bool
+class SubAgentManager()
 ```
 
-Return True to skip prompt callbacks.
+Manages subagent creation and task delegation with recursion safety.
 
-<a id="spoon_ai.callbacks.base.AsyncCallbackHandler"></a>
+Supports both SubAgentSpec (auto-compiled) and CompiledSubAgent (pre-built).
+Returns Command objects for state updates.
+Compatible with LangChain DeepAgents subagent management.
 
-## `AsyncCallbackHandler` Objects
+<a id="spoon_ai.agents.subagents.SubAgentManager.__init__"></a>
+
+#### `__init__`
 
 ```python
-class AsyncCallbackHandler(BaseCallbackHandler)
+def __init__(
+        parent_agent: Any,
+        subagent_specs: List[SubAgentType],
+        default_middleware: Optional[List[AgentMiddleware]] = None,
+        default_tools: Optional[List[BaseTool]] = None,
+        default_interrupt_on: Optional[Dict[str,
+                                            Union[bool,
+                                                  InterruptOnConfig]]] = None,
+        max_depth: int = 3,
+        general_purpose_agent: bool = True)
 ```
 
-Async version of the callback handler base class.
+Initialize subagent manager.
+
+**Arguments**:
+
+- `parent_agent` - The parent agent instance
+- `subagent_specs` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
+- `default_middleware` - Default middleware for all subagents
+- `default_tools` - Default tools for general-purpose agent
+- `default_interrupt_on` - Default HITL configuration for all subagents.
+  This is also the fallback for any subagents that don't specify
+  their own interrupt_on configuration.
+- `max_depth` - Maximum recursion depth for subagent delegation (default: 3)
+- `general_purpose_agent` - Whether to include a general-purpose subagent (default: True)
+
+<a id="spoon_ai.agents.subagents.SubAgentManager.get_subagent"></a>
+
+#### `get_subagent`
+
+```python
+def get_subagent(name: str) -> Optional[Any]
+```
+
+Get or create a subagent instance.
+
+<a id="spoon_ai.agents.subagents.SubAgentManager.delegate_task"></a>
+
+#### `delegate_task`
+
+```python
+async def delegate_task(
+        subagent_name: str,
+        task_description: str,
+        inherit_state: bool = True,
+        tool_call_id: Optional[str] = None) -> Union[str, Command]
+```
+
+Delegate a task to a subagent with recursion depth checking.
+
+**Arguments**:
+
+- `subagent_name` - Name of the subagent
+- `task_description` - Task for the subagent
+- `inherit_state` - Whether to inherit parent state
+- `tool_call_id` - Tool call ID for Command return pattern
+  
+
+**Returns**:
+
+  Subagent's final response as string, or Command with state updates
+
+<a id="spoon_ai.agents.subagents.SubAgentManager.create_task_tool"></a>
+
+#### `create_task_tool`
+
+```python
+def create_task_tool(task_description: Optional[str] = None) -> BaseTool
+```
+
+Create the 'task' tool for delegating to subagents.
+
+**Arguments**:
+
+- `task_description` - Custom description for the task tool.
+  Supports &#123;available_agents&#125; placeholder.
+  
+
+**Returns**:
+
+  Task delegation tool
+
+<a id="spoon_ai.agents.subagents.SubAgentMiddleware"></a>
+
+## `SubAgentMiddleware` Objects
+
+```python
+class SubAgentMiddleware(AgentMiddleware)
+```
+
+Middleware that adds subagent orchestration capabilities.
+
+This middleware:
+1. Injects the 'task' tool for delegation
+2. Manages subagent lifecycle
+3. Handles state inheritance
+4. Enforces recursion depth limits
+5. Returns Command objects for state updates
+6. Propagates HITL configuration to subagents
+
+Supports both SubAgentSpec (auto-compiled) and CompiledSubAgent (pre-built graphs).
+
+Compatible with LangChain DeepAgents SubAgentMiddleware interface.
+
+Usage:
+    ```python
+    # Method 1: SubAgentSpec (simple cases)
+    middleware = SubAgentMiddleware(subagents=[
+        SubAgentSpec(
+            name="researcher",
+            description="Research and gather information",
+            system_prompt="You are a research expert...",
+            tools=[search_tool]
+        )
+    ])
+
+    # Method 2: CompiledSubAgent (complex cases)
+    custom_graph = StateGraph(...)
+    compiled = custom_graph.compile()
+
+    middleware = SubAgentMiddleware(subagents=[
+        CompiledSubAgent(
+            name="analyzer",
+            description="Complex analysis workflow",
+            runnable=compiled
+        )
+    ])
+
+    # Method 3: With HITL configuration inherited by subagents
+    middleware = SubAgentMiddleware(
+        subagents=[...],
+        default_interrupt_on={
+            "delete_file": True,
+            "send_email": {"allowed_decisions": ["approve", "reject"]},
+        },
+        general_purpose_agent=True,
+    )
+
+    # Method 4: Subagent with custom interrupt_on (overrides default)
+    middleware = SubAgentMiddleware(
+        subagents=[
+            SubAgentSpec(
+                name="careful_agent",
+                description="Agent that requires extra approval",
+                interrupt_on={"all_tools": True},  # Overrides default
+                ...
+            )
+        ],
+        default_interrupt_on={"delete_file": True},
+    )
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.agents.subagents.SubAgentMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(
+        subagents: Optional[List[SubAgentType]] = None,
+        default_middleware: Optional[List[AgentMiddleware]] = None,
+        default_tools: Optional[List[BaseTool]] = None,
+        default_interrupt_on: Optional[Dict[str,
+                                            Union[bool,
+                                                  InterruptOnConfig]]] = None,
+        max_depth: int = 3,
+        general_purpose_agent: bool = True,
+        task_description: Optional[str] = None)
+```
+
+Initialize subagent middleware.
+
+**Arguments**:
+
+- `subagents` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
+- `default_middleware` - Default middleware for all subagents
+- `default_tools` - Default tools for general-purpose agent
+- `default_interrupt_on` - Default HITL configuration for all subagents.
+  This is used for the general-purpose agent and as a fallback
+  for any SubAgentSpec that doesn't specify its own interrupt_on.
+- `max_depth` - Maximum recursion depth for subagent delegation
+- `general_purpose_agent` - Whether to include a general-purpose subagent (default: True)
+- `task_description` - Custom description for the task tool.
+  If None, uses default template.
+  Supports &#123;available_agents&#125; placeholder for dynamic agent list.
+
+<a id="spoon_ai.agents.subagents.SubAgentMiddleware.before_agent"></a>
+
+#### `before_agent`
+
+```python
+def before_agent(state: Dict[str, Any],
+                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Initialize subagent manager with parent agent reference.
+
+<a id="spoon_ai.agents.subagents.add_subagent_support"></a>
+
+#### `add_subagent_support`
+
+```python
+def add_subagent_support(
+    agent: Any,
+    subagents: List[SubAgentType],
+    max_depth: int = 3,
+    general_purpose_agent: bool = True,
+    task_description: Optional[str] = None,
+    default_interrupt_on: Optional[Dict[str, Union[bool,
+                                                   InterruptOnConfig]]] = None
+) -> Any
+```
+
+Add subagent support to an existing agent.
+
+**Arguments**:
+
+- `agent` - The agent instance
+- `subagents` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
+- `max_depth` - Maximum recursion depth for subagent delegation
+- `general_purpose_agent` - Whether to include a general-purpose subagent
+- `task_description` - Custom description for the task tool
+- `default_interrupt_on` - Default HITL configuration for all subagents
+  
+
+**Returns**:
+
+  The agent with subagent support
+
+<a id="spoon_ai.agents.subagents.create_general_purpose_subagent"></a>
+
+#### `create_general_purpose_subagent`
+
+```python
+def create_general_purpose_subagent(
+        name: str = "general-purpose",
+        description: str = DEFAULT_GENERAL_PURPOSE_DESCRIPTION,
+        tools: Optional[List[BaseTool]] = None) -> SubAgentSpec
+```
+
+Create a general-purpose subagent specification.
+
+<a id="spoon_ai.agents.subagents.create_compiled_subagent"></a>
+
+#### `create_compiled_subagent`
+
+```python
+def create_compiled_subagent(name: str, description: str,
+                             graph: Any) -> CompiledSubAgent
+```
+
+Create a CompiledSubAgent from a graph.
+
+<a id="spoon_ai.agents.rag"></a>
+
+# Module `spoon_ai.agents.rag`
+
+<a id="spoon_ai.agents.rag.RetrievalMixin"></a>
+
+## `RetrievalMixin` Objects
+
+```python
+class RetrievalMixin()
+```
+
+Mixin class for retrieval-augmented generation functionality
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client"></a>
+
+#### `initialize_retrieval_client`
+
+```python
+def initialize_retrieval_client(backend: str = 'chroma', **kwargs)
+```
+
+Initialize the retrieval client if it doesn't exist
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.add_documents"></a>
+
+#### `add_documents`
+
+```python
+def add_documents(documents, backend: str = 'chroma', **kwargs)
+```
+
+Add documents to the retrieval system
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents"></a>
+
+#### `retrieve_relevant_documents`
+
+```python
+def retrieve_relevant_documents(query, k=5, backend: str = 'chroma', **kwargs)
+```
+
+Retrieve relevant documents for a query
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.get_context_from_query"></a>
+
+#### `get_context_from_query`
+
+```python
+def get_context_from_query(query)
+```
+
+Get context string from relevant documents for a query
+
+<a id="spoon_ai.agents.monitor"></a>
+
+# Module `spoon_ai.agents.monitor`
+
+<a id="spoon_ai.agents.toolcall"></a>
+
+# Module `spoon_ai.agents.toolcall`
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent"></a>
+
+## `ToolCallAgent` Objects
+
+```python
+class ToolCallAgent(ReActAgent)
+```
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.tool_choices"></a>
+
+#### `tool_choices`
+
+type: ignore
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl"></a>
+
+#### `mcp_tools_cache_ttl`
+
+5 minutes TTL
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.run"></a>
+
+#### `run`
+
+```python
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None,
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
+```
+
+This ensures:
+1. Thread-safe execution (no concurrent runs)
+2. Proper timeout handling
+3. Plan/Reflect/Finish phases are executed
+4. Middleware hooks are called correctly
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.step"></a>
+
+#### `step`
+
+```python
+async def step(thinking: bool = False,
+               reasoning_effort: Optional[str] = None) -> str
+```
+
+Override the step method to handle finish_reason termination properly.
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.execute_tool"></a>
+
+#### `execute_tool`
+
+```python
+async def execute_tool(tool_call: ToolCall) -> str
+```
+
+Execute tool with middleware wrapping.
+
+CRITICAL: This method now routes ALL tool executions through the middleware
+pipeline, enabling HITL approval, observability, and other middleware features.
+
+<a id="spoon_ai.agents.react"></a>
+
+# Module `spoon_ai.agents.react`
+
+<a id="spoon_ai.agents.spoon_react_mcp"></a>
+
+# Module `spoon_ai.agents.spoon_react_mcp`
+
+<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP"></a>
+
+## `SpoonReactMCP` Objects
+
+```python
+class SpoonReactMCP(SpoonReactAI)
+```
+
+<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools"></a>
+
+#### `list_mcp_tools`
+
+```python
+async def list_mcp_tools()
+```
+
+Return MCP tools from available_tools manager
+
+<a id="spoon_ai.agents.base"></a>
+
+# Module `spoon_ai.agents.base`
+
+<a id="spoon_ai.agents.base.ThreadSafeOutputQueue"></a>
+
+## `ThreadSafeOutputQueue` Objects
+
+```python
+class ThreadSafeOutputQueue()
+```
+
+Thread-safe output queue with fair access and timeout protection
+
+<a id="spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait"></a>
+
+#### `put_nowait`
+
+```python
+def put_nowait(item: Any) -> None
+```
+
+Non-blocking put - delegates to the underlying asyncio.Queue.
+
+<a id="spoon_ai.agents.base.ThreadSafeOutputQueue.get"></a>
+
+#### `get`
+
+```python
+async def get(timeout: float | None = 30.0) -> Any
+```
+
+Get item with timeout and fair access
+
+<a id="spoon_ai.agents.base.BaseAgent"></a>
+
+## `BaseAgent` Objects
+
+```python
+class BaseAgent(BaseModel, ABC)
+```
+
+Thread-safe base class for all agents with proper concurrency handling.
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message"></a>
+
+#### `add_message`
+
+```python
+async def add_message(role: Literal["user", "assistant", "tool"],
+                      content: MessageContent,
+                      tool_call_id: str | None = None,
+                      tool_calls: list[ToolCall] | None = None,
+                      tool_name: str | None = None,
+                      timeout: float | None = None) -> None
+```
+
+Thread-safe message addition with timeout protection.
+
+Supports both text-only and multimodal content:
+- Text: content="Hello world"
+- Multimodal: content=[TextContent(...), ImageUrlContent(...)]
+
+**Arguments**:
+
+- `role` - Message role (user, assistant, tool)
+- `content` - Text string or list of content blocks for multimodal messages
+- `tool_call_id` - ID for tool responses
+- `tool_calls` - List of tool calls for assistant messages
+- `tool_name` - Name of the tool for tool responses
+- `timeout` - Operation timeout in seconds
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_image"></a>
+
+#### `add_message_with_image`
+
+```python
+async def add_message_with_image(role: Literal["user", "assistant"],
+                                 text: str,
+                                 image_url: str | None = None,
+                                 image_data: str | None = None,
+                                 image_media_type: str = "image/png",
+                                 detail: Literal["auto", "low",
+                                                 "high"] = "auto",
+                                 timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with an image.
+
+Supports both URL-based and base64-encoded images.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the image
+- `image_url` - URL of the image (including data URLs)
+- `image_data` - Base64-encoded image data
+- `image_media_type` - MIME type for base64 images (e.g., "image/png")
+- `detail` - Image detail level for processing
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  # With image URL
+  await agent.add_message_with_image(
+  "user",
+  "What's in this image?",
+  image_url="https://example.com/image.png"
+  )
+  
+  # With base64 data
+  await agent.add_message_with_image(
+  "user",
+  "Describe this diagram",
+  image_data="&lt;base64_string&gt;",
+  image_media_type="image/png"
+  )
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_pdf"></a>
+
+#### `add_message_with_pdf`
+
+```python
+async def add_message_with_pdf(role: Literal["user", "assistant"],
+                               text: str,
+                               pdf_data: str,
+                               filename: str | None = None,
+                               timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with a PDF document.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the PDF
+- `pdf_data` - Base64-encoded PDF data
+- `filename` - Optional filename for the PDF
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  # With base64 PDF data
+  await agent.add_message_with_pdf(
+  "user",
+  "Summarize this document",
+  pdf_data="&lt;base64_string&gt;",
+  filename="report.pdf"
+  )
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_document"></a>
+
+#### `add_message_with_document`
+
+```python
+async def add_message_with_document(role: Literal["user", "assistant"],
+                                    text: str,
+                                    document_data: str,
+                                    media_type: str = "application/pdf",
+                                    filename: str | None = None,
+                                    timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with a document.
+
+Supports various document types including PDF, text, etc.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the document
+- `document_data` - Base64-encoded document data
+- `media_type` - MIME type of the document (default: application/pdf)
+- `filename` - Optional filename for the document
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  # With PDF document
+  await agent.add_message_with_document(
+  "user",
+  "Analyze this report",
+  document_data="&lt;base64_string&gt;",
+  media_type="application/pdf",
+  filename="annual_report.pdf"
+  )
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_pdf_file"></a>
+
+#### `add_message_with_pdf_file`
+
+```python
+async def add_message_with_pdf_file(role: Literal["user", "assistant"],
+                                    text: str,
+                                    file_path: str,
+                                    timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with a PDF file from disk.
+
+Automatically handles base64 encoding.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the PDF
+- `file_path` - Path to the PDF file on disk
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  await agent.add_message_with_pdf_file(
+  "user",
+  "Summarize this document",
+  file_path="./documents/report.pdf"
+  )
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_image_file"></a>
+
+#### `add_message_with_image_file`
+
+```python
+async def add_message_with_image_file(role: Literal["user", "assistant"],
+                                      text: str,
+                                      file_path: str,
+                                      detail: str = "auto",
+                                      timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with an image file from disk.
+
+Automatically handles base64 encoding and MIME type detection.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the image
+- `file_path` - Path to the image file on disk
+- `detail` - Image detail level (auto, low, high)
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  await agent.add_message_with_image_file(
+  "user",
+  "What's in this image?",
+  file_path="./images/photo.jpg"
+  )
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_file"></a>
+
+#### `add_message_with_file`
+
+```python
+async def add_message_with_file(role: Literal["user", "assistant"],
+                                text: str,
+                                file_path: str,
+                                timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with any supported file from disk.
+
+Automatically detects file type and handles base64 encoding.
+Supports: PDF, images (png, jpg, gif, webp), text files.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the file
+- `file_path` - Path to the file on disk
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  # Works with any supported file type
+  await agent.add_message_with_file("user", "Analyze this", "./report.pdf")
+  await agent.add_message_with_file("user", "What's this?", "./photo.jpg")
+
+<a id="spoon_ai.agents.base.BaseAgent.state_context"></a>
+
+#### `state_context`
+
+```python
+@asynccontextmanager
+async def state_context(new_state: AgentState, timeout: float | None = None)
+```
+
+Thread-safe state context manager with deadlock prevention.
+Acquires the state lock only to perform quick transitions, not for the
+duration of the work inside the context, avoiding long-held locks and
+false timeouts during network calls.
+
+<a id="spoon_ai.agents.base.BaseAgent.run"></a>
+
+#### `run`
+
+```python
+async def run(request: str | None = None, timeout: float | None = None) -> str
+```
+
+Thread-safe run method with proper concurrency control, callback support, and Plan-Act-Reflect phases.
+
+<a id="spoon_ai.agents.base.BaseAgent.step"></a>
+
+#### `step`
+
+```python
+async def step(run_id: uuid.UUID | None = None) -> str
+```
+
+Override this method in subclasses - now with step-level locking and callback support.
+
+<a id="spoon_ai.agents.base.BaseAgent.is_stuck"></a>
+
+#### `is_stuck`
+
+```python
+async def is_stuck() -> bool
+```
+
+Thread-safe stuck detection.
+
+Uses text_content property for comparison to handle both
+text-only and multimodal messages.
+
+<a id="spoon_ai.agents.base.BaseAgent.handle_stuck_state"></a>
+
+#### `handle_stuck_state`
+
+```python
+async def handle_stuck_state()
+```
+
+Thread-safe stuck state handling
+
+<a id="spoon_ai.agents.base.BaseAgent.estimate_token_count"></a>
+
+#### `estimate_token_count`
+
+```python
+def estimate_token_count() -> int
+```
+
+Estimate the token count of current conversation context.
+
+Uses a simple heuristic: ~4 characters per token (conservative estimate).
+For more accurate counting, override this method with tiktoken or
+model-specific tokenizers.
+
+**Returns**:
+
+  Estimated token count of all messages
+
+<a id="spoon_ai.agents.base.BaseAgent.should_trigger_reflection"></a>
+
+#### `should_trigger_reflection`
+
+```python
+def should_trigger_reflection() -> bool
+```
+
+Determine if reflection should be triggered based on token threshold.
+
+LangChain-style token-based trigger:
+Triggers when context tokens exceed reflect_token_threshold (default 85%)
+of max_context_tokens.
+
+**Returns**:
+
+  True if reflection should be triggered
+
+<a id="spoon_ai.agents.base.BaseAgent.add_documents"></a>
+
+#### `add_documents`
+
+```python
+def add_documents(documents) -> None
+```
+
+Store documents on the agent so CLI load-docs works without RAG mixin.
+
+This default implementation keeps the documents in-memory under
+self._loaded_documents. Agents that support retrieval should override
+this method to index documents into their vector store.
+
+<a id="spoon_ai.agents.base.BaseAgent.save_chat_history"></a>
+
+#### `save_chat_history`
+
+```python
+def save_chat_history()
+```
+
+Thread-safe chat history saving
+
+<a id="spoon_ai.agents.base.BaseAgent.stream"></a>
+
+#### `stream`
+
+```python
+async def stream(timeout: float | None = None)
+```
+
+Thread-safe streaming with proper cleanup and timeout
+
+<a id="spoon_ai.agents.base.BaseAgent.process_mcp_message"></a>
+
+#### `process_mcp_message`
+
+```python
+async def process_mcp_message(content: Any,
+                              sender: str,
+                              message: dict[str, Any],
+                              agent_id: str,
+                              timeout: float | None = None)
+```
+
+Thread-safe MCP message processing with timeout protection
+
+<a id="spoon_ai.agents.base.BaseAgent.shutdown"></a>
+
+#### `shutdown`
+
+```python
+async def shutdown(timeout: float = 30.0)
+```
+
+Graceful shutdown with cleanup of active operations
+
+<a id="spoon_ai.agents.base.BaseAgent.get_agent_state"></a>
+
+#### `get_agent_state`
+
+```python
+def get_agent_state(key: str, default: Any = None) -> Any
+```
+
+Get value from agent state (for middleware access).
+
+**Arguments**:
+
+- `key` - State key
+- `default` - Default value if key not found
+  
+
+**Returns**:
+
+  State value or default
+
+<a id="spoon_ai.agents.base.BaseAgent.set_agent_state"></a>
+
+#### `set_agent_state`
+
+```python
+def set_agent_state(key: str, value: Any) -> None
+```
+
+Set value in agent state (for middleware access).
+
+**Arguments**:
+
+- `key` - State key
+- `value` - State value
+
+<a id="spoon_ai.agents.base.BaseAgent.update_agent_state"></a>
+
+#### `update_agent_state`
+
+```python
+def update_agent_state(updates: dict[str, Any]) -> None
+```
+
+Bulk update agent state (for middleware access).
+
+**Arguments**:
+
+- `updates` - Dictionary of state updates
+
+<a id="spoon_ai.agents.base.BaseAgent.get_diagnostics"></a>
+
+#### `get_diagnostics`
+
+```python
+def get_diagnostics() -> dict[str, Any]
+```
+
+Get diagnostic information about the agent's state
+
+<a id="spoon_ai.bridge"></a>
+
+# Module `spoon_ai.bridge`
+
+Cross-chain bridge module for DID synchronization
+Ethereum ← → NeoFS/IPFS event indexing
+
+<a id="spoon_ai.bridge.eth_neofs_indexer"></a>
+
+# Module `spoon_ai.bridge.eth_neofs_indexer`
+
+Ethereum to NeoFS/IPFS Event Indexer
+Listens to ERC-8004 IdentityRegistry events and ensures off-chain storage is synchronized
+
+<a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer"></a>
+
+## `EthereumNeoFSIndexer` Objects
+
+```python
+class EthereumNeoFSIndexer()
+```
+
+Event indexer that syncs Ethereum IdentityRegistry events to NeoFS/IPFS.
+Ensures content hash verification and storage consistency.
+
+<a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.register_event_handler"></a>
+
+#### `register_event_handler`
+
+```python
+def register_event_handler(event_name: str, handler: Callable)
+```
+
+Register custom event handler
+
+<a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.start_indexing"></a>
+
+#### `start_indexing`
+
+```python
+def start_indexing(block_limit: Optional[int] = None)
+```
+
+Start indexing events
+
+**Arguments**:
+
+- `block_limit` - Optional block limit for testing (stops after N blocks)
+
+<a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.stop_indexing"></a>
+
+#### `stop_indexing`
+
+```python
+def stop_indexing()
+```
+
+Stop the indexer
+
+<a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.get_indexer_status"></a>
+
+#### `get_indexer_status`
+
+```python
+def get_indexer_status() -> Dict
+```
+
+Get current indexer status
 
 <a id="spoon_ai.chat"></a>
 
@@ -7900,403 +6722,22 @@ async def astream_log(messages: List[Union[dict, Message]],
 
 Stream run log patches describing ChatBot execution.
 
-<a id="spoon_ai.middleware.summarization"></a>
-
-# Module `spoon_ai.middleware.summarization`
-
-Summarization Middleware - Context Compression for Long Conversations.
-
-Automatically summarizes conversation history when token limits are approached,
-preserving recent messages and maintaining context continuity by ensuring
-AI/Tool message pairs remain together.
-
-Compatible with LangChain DeepAgents SummarizationMiddleware interface.
-
-Usage:
-    from spoon_ai.middleware.summarization import SummarizationMiddleware
-
-    agent = ToolCallAgent(
-        middleware=[SummarizationMiddleware(
-            model=llm,
-            trigger=("fraction", 0.85),  # Trigger at 85% of max tokens
-            keep=("messages", 20),       # Keep last 20 messages
-        )],
-        ...
-    )
-
-<a id="spoon_ai.middleware.summarization.ContextFraction"></a>
-
-#### `ContextFraction`
-
-Fraction of model's maximum input tokens.
-
-**Example**:
-
-  To specify 50% of the model's max input tokens:
-    ```python
-    ("fraction", 0.5)
-    ```
-
-<a id="spoon_ai.middleware.summarization.ContextTokens"></a>
-
-#### `ContextTokens`
-
-Absolute number of tokens.
-
-**Example**:
-
-  To specify 3000 tokens:
-    ```python
-    ("tokens", 3000)
-    ```
-
-<a id="spoon_ai.middleware.summarization.ContextMessages"></a>
-
-#### `ContextMessages`
-
-Absolute number of messages.
-
-**Example**:
-
-  To specify 50 messages:
-    ```python
-    ("messages", 50)
-    ```
-
-<a id="spoon_ai.middleware.summarization.ContextSize"></a>
-
-#### `ContextSize`
-
-Union type for context size specifications.
-
-Can be either:
-- ContextFraction: A fraction of the model's maximum input tokens.
-- ContextTokens: An absolute number of tokens.
-- ContextMessages: An absolute number of messages.
-
-Depending on use with `trigger` or `keep` parameters, this type indicates either
-when to trigger summarization or how much context to retain.
-
-**Example**:
-
-    ```python
-    # ContextFraction
-    context_size: ContextSize = ("fraction", 0.5)
-
-    # ContextTokens
-    context_size: ContextSize = ("tokens", 3000)
-
-    # ContextMessages
-    context_size: ContextSize = ("messages", 50)
-    ```
-
-<a id="spoon_ai.middleware.summarization.count_tokens_approximately"></a>
-
-#### `count_tokens_approximately`
-
-```python
-def count_tokens_approximately(messages: Iterable[Message],
-                               chars_per_token: float = 4.0) -> int
-```
-
-Approximate token counter aligned with LangChain semantics.
-
-**Arguments**:
-
-- `messages` - Iterable of messages to count tokens for.
-- `chars_per_token` - Characters per token ratio (default: 4.0).
-  
-
-**Returns**:
-
-  Estimated token count.
-
-<a id="spoon_ai.middleware.summarization.RemoveMessage"></a>
-
-## `RemoveMessage` Objects
-
-```python
-class RemoveMessage()
-```
-
-Marker class indicating a message should be removed.
-
-Compatible with LangChain's RemoveMessage pattern.
-
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware"></a>
-
-## `SummarizationMiddleware` Objects
-
-```python
-class SummarizationMiddleware(AgentMiddleware)
-```
-
-Summarizes conversation history when token limits are approached.
-
-This middleware monitors message token counts and automatically summarizes older
-messages when a threshold is reached, preserving recent messages and maintaining
-context continuity by ensuring AI/Tool message pairs remain together.
-
-Compatible with LangChain DeepAgents SummarizationMiddleware interface.
-
-**Example**:
-
-    ```python
-    from spoon_ai.middleware.summarization import SummarizationMiddleware
-
-    # Basic usage with fraction trigger
-    middleware = SummarizationMiddleware(
-        model=llm,
-        trigger=("fraction", 0.85),
-        keep=("messages", 20),
-    )
-
-    # With multiple trigger conditions
-    middleware = SummarizationMiddleware(
-        model=llm,
-        trigger=[("fraction", 0.8), ("messages", 100)],
-        keep=("tokens", 3000),
-    )
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(
-        model: Optional[ChatBot] = None,
-        *,
-        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
-        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
-        token_counter: Optional[TokenCounter] = None,
-        summary_prompt: str = DEFAULT_SUMMARY_PROMPT,
-        trim_tokens_to_summarize: Optional[int] = _DEFAULT_TRIM_TOKEN_LIMIT,
-        max_context_tokens: Optional[int] = None,
-        **deprecated_kwargs: Any) -> None
-```
-
-Initialize summarization middleware.
-
-**Arguments**:
-
-- `model` - The language model to use for generating summaries.
-  If None, uses agent's LLM.
-- `trigger` - One or more thresholds that trigger summarization.
-  Provide a single ContextSize tuple or a list of tuples.
-  Summarization runs when any threshold is met.
-  
-
-**Examples**:
-
-- `-` _"messages", 50_ - Trigger at 50 messages
-- `-` _"tokens", 3000_ - Trigger at 3000 tokens
-- `-` _"fraction", 0.8_ - Trigger at 80% of max input tokens
-  - [("fraction", 0.8), ("messages", 100)]: Multiple conditions
-  
-- `keep` - Context retention policy applied after summarization.
-  Provide a ContextSize tuple to specify how much history to preserve.
-  Defaults to keeping the most recent 20 messages.
-  
-
-**Examples**:
-
-- `-` _"messages", 20_ - Keep last 20 messages
-- `-` _"tokens", 3000_ - Keep last 3000 tokens worth
-- `-` _"fraction", 0.3_ - Keep last 30% of max input tokens
-  
-- `token_counter` - Function to count tokens in messages.
-  Defaults to model-aware approximate counter.
-- `summary_prompt` - Prompt template for generating summaries.
-- `trim_tokens_to_summarize` - Maximum tokens to keep when preparing
-  messages for summarization. Pass None to skip trimming.
-- `max_context_tokens` - Maximum context tokens for fraction calculations.
-  If None, attempts to get from model profile.
-
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Process messages before model call, potentially triggering summarization.
-
-<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, Any]
-```
-
-Get summarization statistics.
-
-<a id="spoon_ai.middleware.summarization.create_summarization_middleware"></a>
-
-#### `create_summarization_middleware`
-
-```python
-def create_summarization_middleware(
-        model: Optional[ChatBot] = None,
-        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
-        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
-        max_context_tokens: Optional[int] = None,
-        **kwargs: Any) -> SummarizationMiddleware
-```
-
-Create a summarization middleware.
-
-**Arguments**:
-
-- `model` - LLM for summarization
-- `trigger` - When to trigger summarization
-- `keep` - What to keep after summarization
-- `max_context_tokens` - Maximum context tokens for fraction calculations
-- `**kwargs` - Additional arguments passed to SummarizationMiddleware
-  
-
-**Returns**:
-
-  Configured SummarizationMiddleware
-
-<a id="spoon_ai.middleware.patch_tool_calls"></a>
-
-# Module `spoon_ai.middleware.patch_tool_calls`
-
-PatchToolCalls Middleware - Fix Dangling Tool Calls.
-
-Patches message history to handle dangling tool calls that occur when:
-- HITL (Human-in-the-Loop) interrupts tool execution
-- Errors cause tool execution to be skipped
-- Agent is resumed from a checkpoint mid-execution
-
-Compatible with LangChain DeepAgents PatchToolCallsMiddleware interface.
-
-Usage:
-    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
-
-    agent = ToolCallAgent(
-        middleware=[PatchToolCallsMiddleware()],
-        ...
-    )
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware"></a>
-
-## `PatchToolCallsMiddleware` Objects
-
-```python
-class PatchToolCallsMiddleware(AgentMiddleware)
-```
-
-Middleware to patch dangling tool calls in message history.
-
-A "dangling tool call" occurs when an AI message contains tool_calls
-but there's no corresponding tool response message. This violates
-the OpenAI/Anthropic API requirements and causes errors.
-
-This middleware:
-1. Scans message history for AI messages with tool_calls
-2. Checks if each tool call has a corresponding tool response
-3. Injects synthetic tool response messages for any missing ones
-
-Common causes of dangling tool calls:
-- HITL approval flow rejects or edits a tool call
-- Error during tool execution before response is added
-- Agent resumed from checkpoint mid-execution
-- Network timeout during tool execution
-
-**Example**:
-
-    ```python
-    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
-
-    middleware = PatchToolCallsMiddleware()
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(cancelled_message_template: Optional[str] = None,
-             log_patches: bool = True)
-```
-
-Initialize PatchToolCalls middleware.
-
-**Arguments**:
-
-- `cancelled_message_template` - Custom message template for cancelled tools.
-  Must contain &#123;tool_name&#125; and &#123;tool_call_id&#125; placeholders.
-- `log_patches` - Whether to log when patches are applied (default: True)
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent"></a>
-
-#### `before_agent`
-
-```python
-def before_agent(state: Dict[str, Any],
-                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Patch dangling tool calls when agent starts.
-
-This handles cases where agent is resumed from a checkpoint
-with incomplete tool execution.
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Patch dangling tool calls before model call.
-
-<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, int]
-```
-
-Get patching statistics.
-
-<a id="spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware"></a>
-
-#### `create_patch_tool_calls_middleware`
-
-```python
-def create_patch_tool_calls_middleware(
-        log_patches: bool = True) -> PatchToolCallsMiddleware
-```
-
-Create a PatchToolCalls middleware.
-
-**Arguments**:
-
-- `log_patches` - Whether to log when patches are applied
-  
-
-**Returns**:
-
-  Configured PatchToolCallsMiddleware
+<a id="spoon_ai.middleware"></a>
+
+# Module `spoon_ai.middleware`
+
+Middleware System for Deep Agents
+
+Provides flexible middleware architecture for:
+- Plan-Act-Reflect execution cycles
+- Model and tool call interception
+- Agent lifecycle hooks
+- Declarative tool and state injection
+- Filesystem operations with 7 built-in tools
+- Todo list task tracking
+- Context summarization
+- Dangling tool call patching
+- Anthropic prompt caching
 
 <a id="spoon_ai.middleware.planning"></a>
 
@@ -8783,145 +7224,58 @@ Create an Anthropic prompt caching middleware.
 
   Configured AnthropicPromptCachingMiddleware
 
-<a id="spoon_ai.middleware"></a>
+<a id="spoon_ai.middleware.patch_tool_calls"></a>
 
-# Module `spoon_ai.middleware`
+# Module `spoon_ai.middleware.patch_tool_calls`
 
-Middleware System for Deep Agents
+PatchToolCalls Middleware - Fix Dangling Tool Calls.
 
-Provides flexible middleware architecture for:
-- Plan-Act-Reflect execution cycles
-- Model and tool call interception
-- Agent lifecycle hooks
-- Declarative tool and state injection
-- Filesystem operations with 7 built-in tools
-- Todo list task tracking
-- Context summarization
-- Dangling tool call patching
-- Anthropic prompt caching
+Patches message history to handle dangling tool calls that occur when:
+- HITL (Human-in-the-Loop) interrupts tool execution
+- Errors cause tool execution to be skipped
+- Agent is resumed from a checkpoint mid-execution
 
-<a id="spoon_ai.middleware.todolist"></a>
-
-# Module `spoon_ai.middleware.todolist`
-
-TodoList Middleware - Task Planning and Progress Tracking.
-
-Provides todo list tools to agents for structured task management:
-- write_todos: Create/update todo list with tasks
-- read_todos: Read current todo list state
-
-Compatible with LangChain DeepAgents TodoListMiddleware interface.
+Compatible with LangChain DeepAgents PatchToolCallsMiddleware interface.
 
 Usage:
-    from spoon_ai.middleware.todolist import TodoListMiddleware
+    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
 
     agent = ToolCallAgent(
-        middleware=[TodoListMiddleware()],
+        middleware=[PatchToolCallsMiddleware()],
         ...
     )
 
-<a id="spoon_ai.middleware.todolist.TodoStatus"></a>
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware"></a>
 
-## `TodoStatus` Objects
-
-```python
-class TodoStatus(str, Enum)
-```
-
-Status of a todo item.
-
-<a id="spoon_ai.middleware.todolist.TodoItem"></a>
-
-## `TodoItem` Objects
+## `PatchToolCallsMiddleware` Objects
 
 ```python
-@dataclass
-class TodoItem()
+class PatchToolCallsMiddleware(AgentMiddleware)
 ```
 
-A single todo item.
+Middleware to patch dangling tool calls in message history.
 
-<a id="spoon_ai.middleware.todolist.TodoList"></a>
+A "dangling tool call" occurs when an AI message contains tool_calls
+but there's no corresponding tool response message. This violates
+the OpenAI/Anthropic API requirements and causes errors.
 
-## `TodoList` Objects
+This middleware:
+1. Scans message history for AI messages with tool_calls
+2. Checks if each tool call has a corresponding tool response
+3. Injects synthetic tool response messages for any missing ones
 
-```python
-@dataclass
-class TodoList()
-```
-
-Container for todo items.
-
-<a id="spoon_ai.middleware.todolist.TodoList.format_display"></a>
-
-#### `format_display`
-
-```python
-def format_display() -> str
-```
-
-Format todo list for display.
-
-<a id="spoon_ai.middleware.todolist.WriteTodosTool"></a>
-
-## `WriteTodosTool` Objects
-
-```python
-class WriteTodosTool(BaseTool)
-```
-
-Tool to create/update todo list.
-
-<a id="spoon_ai.middleware.todolist.WriteTodosTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(todos: List[Dict[str, Any]], **kwargs) -> str
-```
-
-Update the todo list.
-
-<a id="spoon_ai.middleware.todolist.ReadTodosTool"></a>
-
-## `ReadTodosTool` Objects
-
-```python
-class ReadTodosTool(BaseTool)
-```
-
-Tool to read current todo list.
-
-<a id="spoon_ai.middleware.todolist.ReadTodosTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(**kwargs) -> str
-```
-
-Read the current todo list.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware"></a>
-
-## `TodoListMiddleware` Objects
-
-```python
-class TodoListMiddleware(AgentMiddleware)
-```
-
-Middleware for providing todo list tools to an agent.
-
-Provides two tools:
-- write_todos: Create/update todo list
-- read_todos: Read current todo list
+Common causes of dangling tool calls:
+- HITL approval flow rejects or edits a tool call
+- Error during tool execution before response is added
+- Agent resumed from checkpoint mid-execution
+- Network timeout during tool execution
 
 **Example**:
 
     ```python
-    from spoon_ai.middleware.todolist import TodoListMiddleware
+    from spoon_ai.middleware.patch_tool_calls import PatchToolCallsMiddleware
 
-    middleware = TodoListMiddleware()
+    middleware = PatchToolCallsMiddleware()
 
     agent = ToolCallAgent(
         middleware=[middleware],
@@ -8929,87 +7283,24 @@ Provides two tools:
     )
     ```
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.__init__"></a>
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(system_prompt: Optional[str] = None,
-             auto_inject_prompt: bool = True)
+def __init__(cancelled_message_template: Optional[str] = None,
+             log_patches: bool = True)
 ```
 
-Initialize TodoList middleware.
+Initialize PatchToolCalls middleware.
 
 **Arguments**:
 
-- `system_prompt` - Optional custom system prompt override.
-- `auto_inject_prompt` - Whether to auto-inject system prompt (default: True)
+- `cancelled_message_template` - Custom message template for cancelled tools.
+  Must contain &#123;tool_name&#125; and &#123;tool_call_id&#125; placeholders.
+- `log_patches` - Whether to log when patches are applied (default: True)
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.tools"></a>
-
-#### `tools`
-
-```python
-@property
-def tools() -> List[BaseTool]
-```
-
-Get todo list tools.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt"></a>
-
-#### `system_prompt`
-
-```python
-@property
-def system_prompt() -> str
-```
-
-Get system prompt for todo list tools.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.todo_list"></a>
-
-#### `todo_list`
-
-```python
-@property
-def todo_list() -> TodoList
-```
-
-Get current todo list.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state"></a>
-
-#### `get_todos_state`
-
-```python
-def get_todos_state() -> Dict[str, Any]
-```
-
-Get todo list as state dict (for checkpointing).
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state"></a>
-
-#### `restore_todos_state`
-
-```python
-def restore_todos_state(state: Dict[str, Any]) -> None
-```
-
-Restore todo list from state dict.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Inject system prompt for todo list tools.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.before_agent"></a>
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.before_agent"></a>
 
 #### `before_agent`
 
@@ -9018,18 +7309,665 @@ def before_agent(state: Dict[str, Any],
                  runtime: AgentRuntime) -> Optional[Dict[str, Any]]
 ```
 
-Restore todo list from agent state if available.
+Patch dangling tool calls when agent starts.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.after_agent"></a>
+This handles cases where agent is resumed from a checkpoint
+with incomplete tool execution.
 
-#### `after_agent`
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
 
 ```python
-def after_agent(state: Dict[str, Any],
-                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
 ```
 
-Save todo list to agent state.
+Patch dangling tool calls before model call.
+
+<a id="spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, int]
+```
+
+Get patching statistics.
+
+<a id="spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware"></a>
+
+#### `create_patch_tool_calls_middleware`
+
+```python
+def create_patch_tool_calls_middleware(
+        log_patches: bool = True) -> PatchToolCallsMiddleware
+```
+
+Create a PatchToolCalls middleware.
+
+**Arguments**:
+
+- `log_patches` - Whether to log when patches are applied
+  
+
+**Returns**:
+
+  Configured PatchToolCallsMiddleware
+
+<a id="spoon_ai.middleware.filesystem"></a>
+
+# Module `spoon_ai.middleware.filesystem`
+
+Filesystem Middleware - 7 Built-in Tools for File Operations.
+
+Provides filesystem tools to agents:
+1. ls - List files in directory
+2. read_file - Read file content
+3. write_file - Write new file
+4. edit_file - Edit existing file (string replacement)
+5. glob - Find files by pattern
+6. grep - Search content in files
+7. execute - Run shell commands (if backend supports)
+
+Compatible with LangChain DeepAgents filesystem middleware interface.
+
+Usage:
+    from spoon_ai.middleware.filesystem import FilesystemMiddleware
+    from spoon_ai.backends import create_state_backend
+
+    backend, runtime = create_state_backend()
+    middleware = FilesystemMiddleware(backend=backend)
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+
+<a id="spoon_ai.middleware.filesystem.validate_path"></a>
+
+#### `validate_path`
+
+```python
+def validate_path(path: str,
+                  allowed_prefixes: Optional[List[str]] = None) -> str
+```
+
+Validate and normalize file path for security.
+
+**Arguments**:
+
+- `path` - The path to validate
+- `allowed_prefixes` - Optional list of allowed path prefixes
+  
+
+**Returns**:
+
+  Normalized canonical path starting with /
+  
+
+**Raises**:
+
+- `ValueError` - If path contains traversal sequences or invalid format
+
+<a id="spoon_ai.middleware.filesystem.LsTool"></a>
+
+## `LsTool` Objects
+
+```python
+class LsTool(BaseTool)
+```
+
+List files in a directory.
+
+<a id="spoon_ai.middleware.filesystem.ReadFileTool"></a>
+
+## `ReadFileTool` Objects
+
+```python
+class ReadFileTool(BaseTool)
+```
+
+Read file content.
+
+<a id="spoon_ai.middleware.filesystem.WriteFileTool"></a>
+
+## `WriteFileTool` Objects
+
+```python
+class WriteFileTool(BaseTool)
+```
+
+Write to a new file.
+
+<a id="spoon_ai.middleware.filesystem.EditFileTool"></a>
+
+## `EditFileTool` Objects
+
+```python
+class EditFileTool(BaseTool)
+```
+
+Edit existing file with string replacement.
+
+<a id="spoon_ai.middleware.filesystem.GlobTool"></a>
+
+## `GlobTool` Objects
+
+```python
+class GlobTool(BaseTool)
+```
+
+Find files by glob pattern.
+
+<a id="spoon_ai.middleware.filesystem.GrepTool"></a>
+
+## `GrepTool` Objects
+
+```python
+class GrepTool(BaseTool)
+```
+
+Search for pattern in files.
+
+<a id="spoon_ai.middleware.filesystem.ExecuteTool"></a>
+
+## `ExecuteTool` Objects
+
+```python
+class ExecuteTool(BaseTool)
+```
+
+Execute shell command in sandbox.
+
+<a id="spoon_ai.middleware.filesystem.get_filesystem_tools"></a>
+
+#### `get_filesystem_tools`
+
+```python
+def get_filesystem_tools(backend: BackendProtocol) -> List[BaseTool]
+```
+
+Get all filesystem tools for a backend.
+
+**Arguments**:
+
+- `backend` - Backend to use for file operations
+  
+
+**Returns**:
+
+  List of 7 filesystem tools
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware"></a>
+
+## `FilesystemMiddleware` Objects
+
+```python
+class FilesystemMiddleware(AgentMiddleware)
+```
+
+Middleware for providing filesystem and execution tools to an agent.
+
+Adds 7 filesystem tools to the agent:
+- ls: list files in directory
+- read_file: read file content
+- write_file: write new file
+- edit_file: edit existing file
+- glob: find files by pattern
+- grep: search content in files
+- execute: run shell commands (if backend supports)
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.filesystem import FilesystemMiddleware
+    from spoon_ai.backends import create_state_backend, create_composite_backend
+
+    # With ephemeral storage (default)
+    middleware = FilesystemMiddleware()
+
+    # With custom backend
+    backend, runtime = create_state_backend()
+    middleware = FilesystemMiddleware(backend=backend)
+
+    # With composite backend (mixed storage)
+    composite = create_composite_backend(
+        default=state_backend,
+        routes={"/persistent/": store_backend}
+    )
+    middleware = FilesystemMiddleware(backend=composite)
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(backend: Optional[BackendProtocol] = None,
+             system_prompt: Optional[str] = None,
+             include_execute: bool = True,
+             tool_token_limit: int = TOOL_TOKEN_LIMIT)
+```
+
+Initialize filesystem middleware.
+
+**Arguments**:
+
+- `backend` - Backend for file operations. Defaults to StateBackend.
+- `system_prompt` - Optional custom system prompt override.
+- `include_execute` - Whether to include execute tool (default: True)
+- `tool_token_limit` - Token limit before truncating tool results
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.tools"></a>
+
+#### `tools`
+
+```python
+@property
+def tools() -> List[BaseTool]
+```
+
+Get filesystem tools.
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt"></a>
+
+#### `system_prompt`
+
+```python
+@property
+def system_prompt() -> str
+```
+
+Get system prompt for filesystem tools.
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.backend"></a>
+
+#### `backend`
+
+```python
+@property
+def backend() -> BackendProtocol
+```
+
+Get the backend.
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
+```
+
+Inject system prompt for filesystem tools.
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call"></a>
+
+#### `awrap_tool_call`
+
+```python
+async def awrap_tool_call(request: ToolCallRequest,
+                          handler: Callable) -> ToolCallResult
+```
+
+Handle large tool results by truncating.
+
+<a id="spoon_ai.middleware.filesystem.create_filesystem_middleware"></a>
+
+#### `create_filesystem_middleware`
+
+```python
+def create_filesystem_middleware(
+        backend: Optional[BackendProtocol] = None,
+        include_execute: bool = True) -> FilesystemMiddleware
+```
+
+Create a filesystem middleware.
+
+**Arguments**:
+
+- `backend` - Backend for file operations
+- `include_execute` - Whether to include execute tool
+  
+
+**Returns**:
+
+  FilesystemMiddleware instance
+  
+
+**Example**:
+
+    ```python
+    middleware = create_filesystem_middleware()
+    agent = ToolCallAgent(middleware=[middleware], ...)
+    ```
+
+<a id="spoon_ai.middleware.filesystem.create_sandbox_backend"></a>
+
+#### `create_sandbox_backend`
+
+```python
+def create_sandbox_backend(root_dir: Optional[str] = None,
+                           timeout: int = 30) -> "LocalSandboxBackend"
+```
+
+Create a local sandbox backend that supports command execution.
+
+**Arguments**:
+
+- `root_dir` - Root directory for sandbox
+- `timeout` - Command execution timeout in seconds
+  
+
+**Returns**:
+
+  LocalSandboxBackend instance
+
+<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend"></a>
+
+## `LocalSandboxBackend` Objects
+
+```python
+class LocalSandboxBackend(SandboxBackendProtocol)
+```
+
+Local sandbox backend with command execution support.
+
+Wraps FilesystemBackend and adds execute capability.
+
+<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.execute"></a>
+
+#### `execute`
+
+```python
+def execute(command: str) -> ExecuteResponse
+```
+
+Execute a shell command.
+
+<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute"></a>
+
+#### `aexecute`
+
+```python
+async def aexecute(command: str) -> ExecuteResponse
+```
+
+Async execute a shell command.
+
+<a id="spoon_ai.middleware.summarization"></a>
+
+# Module `spoon_ai.middleware.summarization`
+
+Summarization Middleware - Context Compression for Long Conversations.
+
+Automatically summarizes conversation history when token limits are approached,
+preserving recent messages and maintaining context continuity by ensuring
+AI/Tool message pairs remain together.
+
+Compatible with LangChain DeepAgents SummarizationMiddleware interface.
+
+Usage:
+    from spoon_ai.middleware.summarization import SummarizationMiddleware
+
+    agent = ToolCallAgent(
+        middleware=[SummarizationMiddleware(
+            model=llm,
+            trigger=("fraction", 0.85),  # Trigger at 85% of max tokens
+            keep=("messages", 20),       # Keep last 20 messages
+        )],
+        ...
+    )
+
+<a id="spoon_ai.middleware.summarization.ContextFraction"></a>
+
+#### `ContextFraction`
+
+Fraction of model's maximum input tokens.
+
+**Example**:
+
+  To specify 50% of the model's max input tokens:
+    ```python
+    ("fraction", 0.5)
+    ```
+
+<a id="spoon_ai.middleware.summarization.ContextTokens"></a>
+
+#### `ContextTokens`
+
+Absolute number of tokens.
+
+**Example**:
+
+  To specify 3000 tokens:
+    ```python
+    ("tokens", 3000)
+    ```
+
+<a id="spoon_ai.middleware.summarization.ContextMessages"></a>
+
+#### `ContextMessages`
+
+Absolute number of messages.
+
+**Example**:
+
+  To specify 50 messages:
+    ```python
+    ("messages", 50)
+    ```
+
+<a id="spoon_ai.middleware.summarization.ContextSize"></a>
+
+#### `ContextSize`
+
+Union type for context size specifications.
+
+Can be either:
+- ContextFraction: A fraction of the model's maximum input tokens.
+- ContextTokens: An absolute number of tokens.
+- ContextMessages: An absolute number of messages.
+
+Depending on use with `trigger` or `keep` parameters, this type indicates either
+when to trigger summarization or how much context to retain.
+
+**Example**:
+
+    ```python
+    # ContextFraction
+    context_size: ContextSize = ("fraction", 0.5)
+
+    # ContextTokens
+    context_size: ContextSize = ("tokens", 3000)
+
+    # ContextMessages
+    context_size: ContextSize = ("messages", 50)
+    ```
+
+<a id="spoon_ai.middleware.summarization.count_tokens_approximately"></a>
+
+#### `count_tokens_approximately`
+
+```python
+def count_tokens_approximately(messages: Iterable[Message],
+                               chars_per_token: float = 4.0) -> int
+```
+
+Approximate token counter aligned with LangChain semantics.
+
+**Arguments**:
+
+- `messages` - Iterable of messages to count tokens for.
+- `chars_per_token` - Characters per token ratio (default: 4.0).
+  
+
+**Returns**:
+
+  Estimated token count.
+
+<a id="spoon_ai.middleware.summarization.RemoveMessage"></a>
+
+## `RemoveMessage` Objects
+
+```python
+class RemoveMessage()
+```
+
+Marker class indicating a message should be removed.
+
+Compatible with LangChain's RemoveMessage pattern.
+
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware"></a>
+
+## `SummarizationMiddleware` Objects
+
+```python
+class SummarizationMiddleware(AgentMiddleware)
+```
+
+Summarizes conversation history when token limits are approached.
+
+This middleware monitors message token counts and automatically summarizes older
+messages when a threshold is reached, preserving recent messages and maintaining
+context continuity by ensuring AI/Tool message pairs remain together.
+
+Compatible with LangChain DeepAgents SummarizationMiddleware interface.
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.summarization import SummarizationMiddleware
+
+    # Basic usage with fraction trigger
+    middleware = SummarizationMiddleware(
+        model=llm,
+        trigger=("fraction", 0.85),
+        keep=("messages", 20),
+    )
+
+    # With multiple trigger conditions
+    middleware = SummarizationMiddleware(
+        model=llm,
+        trigger=[("fraction", 0.8), ("messages", 100)],
+        keep=("tokens", 3000),
+    )
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(
+        model: Optional[ChatBot] = None,
+        *,
+        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
+        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
+        token_counter: Optional[TokenCounter] = None,
+        summary_prompt: str = DEFAULT_SUMMARY_PROMPT,
+        trim_tokens_to_summarize: Optional[int] = _DEFAULT_TRIM_TOKEN_LIMIT,
+        max_context_tokens: Optional[int] = None,
+        **deprecated_kwargs: Any) -> None
+```
+
+Initialize summarization middleware.
+
+**Arguments**:
+
+- `model` - The language model to use for generating summaries.
+  If None, uses agent's LLM.
+- `trigger` - One or more thresholds that trigger summarization.
+  Provide a single ContextSize tuple or a list of tuples.
+  Summarization runs when any threshold is met.
+  
+
+**Examples**:
+
+- `-` _"messages", 50_ - Trigger at 50 messages
+- `-` _"tokens", 3000_ - Trigger at 3000 tokens
+- `-` _"fraction", 0.8_ - Trigger at 80% of max input tokens
+  - [("fraction", 0.8), ("messages", 100)]: Multiple conditions
+  
+- `keep` - Context retention policy applied after summarization.
+  Provide a ContextSize tuple to specify how much history to preserve.
+  Defaults to keeping the most recent 20 messages.
+  
+
+**Examples**:
+
+- `-` _"messages", 20_ - Keep last 20 messages
+- `-` _"tokens", 3000_ - Keep last 3000 tokens worth
+- `-` _"fraction", 0.3_ - Keep last 30% of max input tokens
+  
+- `token_counter` - Function to count tokens in messages.
+  Defaults to model-aware approximate counter.
+- `summary_prompt` - Prompt template for generating summaries.
+- `trim_tokens_to_summarize` - Maximum tokens to keep when preparing
+  messages for summarization. Pass None to skip trimming.
+- `max_context_tokens` - Maximum context tokens for fraction calculations.
+  If None, attempts to get from model profile.
+
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
+```
+
+Process messages before model call, potentially triggering summarization.
+
+<a id="spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, Any]
+```
+
+Get summarization statistics.
+
+<a id="spoon_ai.middleware.summarization.create_summarization_middleware"></a>
+
+#### `create_summarization_middleware`
+
+```python
+def create_summarization_middleware(
+        model: Optional[ChatBot] = None,
+        trigger: Optional[Union[ContextSize, List[ContextSize]]] = None,
+        keep: ContextSize = ("messages", _DEFAULT_MESSAGES_TO_KEEP),
+        max_context_tokens: Optional[int] = None,
+        **kwargs: Any) -> SummarizationMiddleware
+```
+
+Create a summarization middleware.
+
+**Arguments**:
+
+- `model` - LLM for summarization
+- `trigger` - When to trigger summarization
+- `keep` - What to keep after summarization
+- `max_context_tokens` - Maximum context tokens for fraction calculations
+- `**kwargs` - Additional arguments passed to SummarizationMiddleware
+  
+
+**Returns**:
+
+  Configured SummarizationMiddleware
 
 <a id="spoon_ai.middleware.base"></a>
 
@@ -9929,188 +8867,128 @@ Create middleware pipeline from middleware classes or instances.
   SummarizationMiddleware(),
   ])
 
-<a id="spoon_ai.middleware.filesystem"></a>
+<a id="spoon_ai.middleware.todolist"></a>
 
-# Module `spoon_ai.middleware.filesystem`
+# Module `spoon_ai.middleware.todolist`
 
-Filesystem Middleware - 7 Built-in Tools for File Operations.
+TodoList Middleware - Task Planning and Progress Tracking.
 
-Provides filesystem tools to agents:
-1. ls - List files in directory
-2. read_file - Read file content
-3. write_file - Write new file
-4. edit_file - Edit existing file (string replacement)
-5. glob - Find files by pattern
-6. grep - Search content in files
-7. execute - Run shell commands (if backend supports)
+Provides todo list tools to agents for structured task management:
+- write_todos: Create/update todo list with tasks
+- read_todos: Read current todo list state
 
-Compatible with LangChain DeepAgents filesystem middleware interface.
+Compatible with LangChain DeepAgents TodoListMiddleware interface.
 
 Usage:
-    from spoon_ai.middleware.filesystem import FilesystemMiddleware
-    from spoon_ai.backends import create_state_backend
-
-    backend, runtime = create_state_backend()
-    middleware = FilesystemMiddleware(backend=backend)
+    from spoon_ai.middleware.todolist import TodoListMiddleware
 
     agent = ToolCallAgent(
-        middleware=[middleware],
+        middleware=[TodoListMiddleware()],
         ...
     )
 
-<a id="spoon_ai.middleware.filesystem.validate_path"></a>
+<a id="spoon_ai.middleware.todolist.TodoStatus"></a>
 
-#### `validate_path`
-
-```python
-def validate_path(path: str,
-                  allowed_prefixes: Optional[List[str]] = None) -> str
-```
-
-Validate and normalize file path for security.
-
-**Arguments**:
-
-- `path` - The path to validate
-- `allowed_prefixes` - Optional list of allowed path prefixes
-  
-
-**Returns**:
-
-  Normalized canonical path starting with /
-  
-
-**Raises**:
-
-- `ValueError` - If path contains traversal sequences or invalid format
-
-<a id="spoon_ai.middleware.filesystem.LsTool"></a>
-
-## `LsTool` Objects
+## `TodoStatus` Objects
 
 ```python
-class LsTool(BaseTool)
+class TodoStatus(str, Enum)
 ```
 
-List files in a directory.
+Status of a todo item.
 
-<a id="spoon_ai.middleware.filesystem.ReadFileTool"></a>
+<a id="spoon_ai.middleware.todolist.TodoItem"></a>
 
-## `ReadFileTool` Objects
+## `TodoItem` Objects
 
 ```python
-class ReadFileTool(BaseTool)
+@dataclass
+class TodoItem()
 ```
 
-Read file content.
+A single todo item.
 
-<a id="spoon_ai.middleware.filesystem.WriteFileTool"></a>
+<a id="spoon_ai.middleware.todolist.TodoList"></a>
 
-## `WriteFileTool` Objects
+## `TodoList` Objects
 
 ```python
-class WriteFileTool(BaseTool)
+@dataclass
+class TodoList()
 ```
 
-Write to a new file.
+Container for todo items.
 
-<a id="spoon_ai.middleware.filesystem.EditFileTool"></a>
+<a id="spoon_ai.middleware.todolist.TodoList.format_display"></a>
 
-## `EditFileTool` Objects
+#### `format_display`
 
 ```python
-class EditFileTool(BaseTool)
+def format_display() -> str
 ```
 
-Edit existing file with string replacement.
+Format todo list for display.
 
-<a id="spoon_ai.middleware.filesystem.GlobTool"></a>
+<a id="spoon_ai.middleware.todolist.WriteTodosTool"></a>
 
-## `GlobTool` Objects
+## `WriteTodosTool` Objects
 
 ```python
-class GlobTool(BaseTool)
+class WriteTodosTool(BaseTool)
 ```
 
-Find files by glob pattern.
+Tool to create/update todo list.
 
-<a id="spoon_ai.middleware.filesystem.GrepTool"></a>
+<a id="spoon_ai.middleware.todolist.WriteTodosTool.execute"></a>
 
-## `GrepTool` Objects
+#### `execute`
 
 ```python
-class GrepTool(BaseTool)
+async def execute(todos: List[Dict[str, Any]], **kwargs) -> str
 ```
 
-Search for pattern in files.
+Update the todo list.
 
-<a id="spoon_ai.middleware.filesystem.ExecuteTool"></a>
+<a id="spoon_ai.middleware.todolist.ReadTodosTool"></a>
 
-## `ExecuteTool` Objects
+## `ReadTodosTool` Objects
 
 ```python
-class ExecuteTool(BaseTool)
+class ReadTodosTool(BaseTool)
 ```
 
-Execute shell command in sandbox.
+Tool to read current todo list.
 
-<a id="spoon_ai.middleware.filesystem.get_filesystem_tools"></a>
+<a id="spoon_ai.middleware.todolist.ReadTodosTool.execute"></a>
 
-#### `get_filesystem_tools`
+#### `execute`
 
 ```python
-def get_filesystem_tools(backend: BackendProtocol) -> List[BaseTool]
+async def execute(**kwargs) -> str
 ```
 
-Get all filesystem tools for a backend.
+Read the current todo list.
 
-**Arguments**:
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware"></a>
 
-- `backend` - Backend to use for file operations
-  
-
-**Returns**:
-
-  List of 7 filesystem tools
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware"></a>
-
-## `FilesystemMiddleware` Objects
+## `TodoListMiddleware` Objects
 
 ```python
-class FilesystemMiddleware(AgentMiddleware)
+class TodoListMiddleware(AgentMiddleware)
 ```
 
-Middleware for providing filesystem and execution tools to an agent.
+Middleware for providing todo list tools to an agent.
 
-Adds 7 filesystem tools to the agent:
-- ls: list files in directory
-- read_file: read file content
-- write_file: write new file
-- edit_file: edit existing file
-- glob: find files by pattern
-- grep: search content in files
-- execute: run shell commands (if backend supports)
+Provides two tools:
+- write_todos: Create/update todo list
+- read_todos: Read current todo list
 
 **Example**:
 
     ```python
-    from spoon_ai.middleware.filesystem import FilesystemMiddleware
-    from spoon_ai.backends import create_state_backend, create_composite_backend
+    from spoon_ai.middleware.todolist import TodoListMiddleware
 
-    # With ephemeral storage (default)
-    middleware = FilesystemMiddleware()
-
-    # With custom backend
-    backend, runtime = create_state_backend()
-    middleware = FilesystemMiddleware(backend=backend)
-
-    # With composite backend (mixed storage)
-    composite = create_composite_backend(
-        default=state_backend,
-        routes={"/persistent/": store_backend}
-    )
-    middleware = FilesystemMiddleware(backend=composite)
+    middleware = TodoListMiddleware()
 
     agent = ToolCallAgent(
         middleware=[middleware],
@@ -10118,27 +8996,23 @@ Adds 7 filesystem tools to the agent:
     )
     ```
 
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__"></a>
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(backend: Optional[BackendProtocol] = None,
-             system_prompt: Optional[str] = None,
-             include_execute: bool = True,
-             tool_token_limit: int = TOOL_TOKEN_LIMIT)
+def __init__(system_prompt: Optional[str] = None,
+             auto_inject_prompt: bool = True)
 ```
 
-Initialize filesystem middleware.
+Initialize TodoList middleware.
 
 **Arguments**:
 
-- `backend` - Backend for file operations. Defaults to StateBackend.
 - `system_prompt` - Optional custom system prompt override.
-- `include_execute` - Whether to include execute tool (default: True)
-- `tool_token_limit` - Token limit before truncating tool results
+- `auto_inject_prompt` - Whether to auto-inject system prompt (default: True)
 
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.tools"></a>
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.tools"></a>
 
 #### `tools`
 
@@ -10147,9 +9021,9 @@ Initialize filesystem middleware.
 def tools() -> List[BaseTool]
 ```
 
-Get filesystem tools.
+Get todo list tools.
 
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt"></a>
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt"></a>
 
 #### `system_prompt`
 
@@ -10158,20 +9032,40 @@ Get filesystem tools.
 def system_prompt() -> str
 ```
 
-Get system prompt for filesystem tools.
+Get system prompt for todo list tools.
 
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.backend"></a>
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.todo_list"></a>
 
-#### `backend`
+#### `todo_list`
 
 ```python
 @property
-def backend() -> BackendProtocol
+def todo_list() -> TodoList
 ```
 
-Get the backend.
+Get current todo list.
 
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call"></a>
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state"></a>
+
+#### `get_todos_state`
+
+```python
+def get_todos_state() -> Dict[str, Any]
+```
+
+Get todo list as state dict (for checkpointing).
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state"></a>
+
+#### `restore_todos_state`
+
+```python
+def restore_todos_state(state: Dict[str, Any]) -> None
+```
+
+Restore todo list from state dict.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call"></a>
 
 #### `awrap_model_call`
 
@@ -10180,634 +9074,1331 @@ async def awrap_model_call(request: ModelRequest,
                            handler: Callable) -> ModelResponse
 ```
 
-Inject system prompt for filesystem tools.
+Inject system prompt for todo list tools.
 
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call"></a>
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.before_agent"></a>
 
-#### `awrap_tool_call`
-
-```python
-async def awrap_tool_call(request: ToolCallRequest,
-                          handler: Callable) -> ToolCallResult
-```
-
-Handle large tool results by truncating.
-
-<a id="spoon_ai.middleware.filesystem.create_filesystem_middleware"></a>
-
-#### `create_filesystem_middleware`
+#### `before_agent`
 
 ```python
-def create_filesystem_middleware(
-        backend: Optional[BackendProtocol] = None,
-        include_execute: bool = True) -> FilesystemMiddleware
+def before_agent(state: Dict[str, Any],
+                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
 ```
 
-Create a filesystem middleware.
+Restore todo list from agent state if available.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.after_agent"></a>
+
+#### `after_agent`
+
+```python
+def after_agent(state: Dict[str, Any],
+                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Save todo list to agent state.
+
+<a id="spoon_ai.graph"></a>
+
+# Module `spoon_ai.graph`
+
+spoon_ai.graph package
+
+Public facade for the graph engine. Import from here.
+
+<a id="spoon_ai.graph.reducers"></a>
+
+# Module `spoon_ai.graph.reducers`
+
+Reducers and validators for the graph package.
+
+<a id="spoon_ai.graph.decorators"></a>
+
+# Module `spoon_ai.graph.decorators`
+
+Decorators and executor for the graph package.
+
+<a id="spoon_ai.graph.exceptions"></a>
+
+# Module `spoon_ai.graph.exceptions`
+
+Graph engine exception definitions (public within graph package).
+
+<a id="spoon_ai.graph.agent"></a>
+
+# Module `spoon_ai.graph.agent`
+
+GraphAgent implementation for the graph package.
+
+<a id="spoon_ai.graph.agent.Memory"></a>
+
+## `Memory` Objects
+
+```python
+class Memory()
+```
+
+Memory implementation with persistent storage
+
+<a id="spoon_ai.graph.agent.Memory.clear"></a>
+
+#### `clear`
+
+```python
+def clear()
+```
+
+Clear all messages and reset memory
+
+<a id="spoon_ai.graph.agent.Memory.add_message"></a>
+
+#### `add_message`
+
+```python
+def add_message(msg)
+```
+
+Add a message to memory
+
+<a id="spoon_ai.graph.agent.Memory.get_messages"></a>
+
+#### `get_messages`
+
+```python
+def get_messages(limit: Optional[int] = None) -> List[Dict[str, Any]]
+```
+
+Get messages from memory
+
+<a id="spoon_ai.graph.agent.Memory.get_recent_messages"></a>
+
+#### `get_recent_messages`
+
+```python
+def get_recent_messages(hours: int = 24) -> List[Dict[str, Any]]
+```
+
+Get messages from the last N hours
+
+<a id="spoon_ai.graph.agent.Memory.search_messages"></a>
+
+#### `search_messages`
+
+```python
+def search_messages(query: str, limit: int = 10) -> List[Dict[str, Any]]
+```
+
+Search messages containing the query
+
+<a id="spoon_ai.graph.agent.Memory.get_statistics"></a>
+
+#### `get_statistics`
+
+```python
+def get_statistics() -> Dict[str, Any]
+```
+
+Get memory statistics
+
+<a id="spoon_ai.graph.agent.Memory.set_metadata"></a>
+
+#### `set_metadata`
+
+```python
+def set_metadata(key: str, value: Any)
+```
+
+Set metadata
+
+<a id="spoon_ai.graph.agent.Memory.get_metadata"></a>
+
+#### `get_metadata`
+
+```python
+def get_metadata(key: str, default: Any = None) -> Any
+```
+
+Get metadata
+
+<a id="spoon_ai.graph.agent.MockMemory"></a>
+
+## `MockMemory` Objects
+
+```python
+class MockMemory(Memory)
+```
+
+Alias for backward compatibility - now uses persistent memory
+
+<a id="spoon_ai.graph.agent.GraphAgent"></a>
+
+## `GraphAgent` Objects
+
+```python
+class GraphAgent()
+```
+
+<a id="spoon_ai.graph.agent.GraphAgent.search_memory"></a>
+
+#### `search_memory`
+
+```python
+def search_memory(query: str, limit: int = 10) -> List[Dict[str, Any]]
+```
+
+Search memory for messages containing the query
+
+<a id="spoon_ai.graph.agent.GraphAgent.get_recent_memory"></a>
+
+#### `get_recent_memory`
+
+```python
+def get_recent_memory(hours: int = 24) -> List[Dict[str, Any]]
+```
+
+Get recent messages from memory
+
+<a id="spoon_ai.graph.agent.GraphAgent.get_memory_statistics"></a>
+
+#### `get_memory_statistics`
+
+```python
+def get_memory_statistics() -> Dict[str, Any]
+```
+
+Get memory statistics
+
+<a id="spoon_ai.graph.agent.GraphAgent.set_memory_metadata"></a>
+
+#### `set_memory_metadata`
+
+```python
+def set_memory_metadata(key: str, value: Any)
+```
+
+Set memory metadata
+
+<a id="spoon_ai.graph.agent.GraphAgent.get_memory_metadata"></a>
+
+#### `get_memory_metadata`
+
+```python
+def get_memory_metadata(key: str, default: Any = None) -> Any
+```
+
+Get memory metadata
+
+<a id="spoon_ai.graph.agent.GraphAgent.save_session"></a>
+
+#### `save_session`
+
+```python
+def save_session()
+```
+
+Manually save current session
+
+<a id="spoon_ai.graph.agent.GraphAgent.load_session"></a>
+
+#### `load_session`
+
+```python
+def load_session(session_id: str)
+```
+
+Load a specific session
+
+<a id="spoon_ai.graph.config"></a>
+
+# Module `spoon_ai.graph.config`
+
+Configuration primitives for the SpoonAI graph engine.
+
+<a id="spoon_ai.graph.config.RouterConfig"></a>
+
+## `RouterConfig` Objects
+
+```python
+@dataclass
+class RouterConfig()
+```
+
+Controls how the graph chooses the next node after each execution step.
+
+<a id="spoon_ai.graph.config.ParallelRetryPolicy"></a>
+
+## `ParallelRetryPolicy` Objects
+
+```python
+@dataclass
+class ParallelRetryPolicy()
+```
+
+Retry policy for individual nodes inside a parallel group.
+
+<a id="spoon_ai.graph.config.ParallelGroupConfig"></a>
+
+## `ParallelGroupConfig` Objects
+
+```python
+@dataclass
+class ParallelGroupConfig()
+```
+
+Controls how a parallel group executes and aggregates results.
+
+<a id="spoon_ai.graph.config.ParallelGroupConfig.quorum"></a>
+
+#### `quorum`
+
+floats in (0, 1] treated as ratio, ints as absolute
+
+<a id="spoon_ai.graph.config.ParallelGroupConfig.error_strategy"></a>
+
+#### `error_strategy`
+
+fail_fast, collect_errors, ignore_errors
+
+<a id="spoon_ai.graph.config.GraphConfig"></a>
+
+## `GraphConfig` Objects
+
+```python
+@dataclass
+class GraphConfig()
+```
+
+Top-level configuration applied to an entire graph instance.
+
+<a id="spoon_ai.graph.mcp_integration"></a>
+
+# Module `spoon_ai.graph.mcp_integration`
+
+Utility classes for intelligent MCP tool discovery and configuration.
+
+Core graph components no longer hard-code external tools; instead, user code
+registers tool specifications and optional transport/configuration details via
+these helpers.
+
+<a id="spoon_ai.graph.mcp_integration.MCPToolSpec"></a>
+
+## `MCPToolSpec` Objects
+
+```python
+@dataclass
+class MCPToolSpec()
+```
+
+Specification describing a desired MCP tool.
+
+<a id="spoon_ai.graph.mcp_integration.MCPConfigManager"></a>
+
+## `MCPConfigManager` Objects
+
+```python
+class MCPConfigManager()
+```
+
+Centralised configuration loader for MCP tools.
+
+<a id="spoon_ai.graph.mcp_integration.MCPToolDiscoveryEngine"></a>
+
+## `MCPToolDiscoveryEngine` Objects
+
+```python
+class MCPToolDiscoveryEngine()
+```
+
+Discover MCP tools based on registered intent mappings.
+
+<a id="spoon_ai.graph.mcp_integration.MCPIntegrationManager"></a>
+
+## `MCPIntegrationManager` Objects
+
+```python
+class MCPIntegrationManager()
+```
+
+High level coordinator for MCP tool usage within graphs.
+
+<a id="spoon_ai.graph.builder"></a>
+
+# Module `spoon_ai.graph.builder`
+
+Declarative builders and helpers for SpoonAI graphs.
+
+<a id="spoon_ai.graph.builder.Intent"></a>
+
+## `Intent` Objects
+
+```python
+@dataclass
+class Intent()
+```
+
+Result of intent analysis.
+
+<a id="spoon_ai.graph.builder.IntentAnalyzer"></a>
+
+## `IntentAnalyzer` Objects
+
+```python
+class IntentAnalyzer()
+```
+
+LLM-powered intent analyzer.
+
+Core stays generic; concrete prompts/parsers are supplied by callers.
+
+<a id="spoon_ai.graph.builder.AdaptiveStateBuilder"></a>
+
+## `AdaptiveStateBuilder` Objects
+
+```python
+class AdaptiveStateBuilder()
+```
+
+Construct initial graph state using query intent and optional parameters.
+
+<a id="spoon_ai.graph.builder.ParameterInferenceEngine"></a>
+
+## `ParameterInferenceEngine` Objects
+
+```python
+class ParameterInferenceEngine()
+```
+
+LLM delegator for parameter extraction.
+
+Core keeps this generic; applications provide formatting/parsing via options.
+
+<a id="spoon_ai.graph.builder.NodeSpec"></a>
+
+## `NodeSpec` Objects
+
+```python
+@dataclass
+class NodeSpec()
+```
+
+Declarative node specification.
+
+<a id="spoon_ai.graph.builder.EdgeSpec"></a>
+
+## `EdgeSpec` Objects
+
+```python
+@dataclass
+class EdgeSpec()
+```
+
+Declarative edge specification.
+
+<a id="spoon_ai.graph.builder.EdgeSpec.end"></a>
+
+#### `end`
+
+target name or callable router
+
+<a id="spoon_ai.graph.builder.ParallelGroupSpec"></a>
+
+## `ParallelGroupSpec` Objects
+
+```python
+@dataclass
+class ParallelGroupSpec()
+```
+
+Parallel group specification.
+
+<a id="spoon_ai.graph.builder.GraphTemplate"></a>
+
+## `GraphTemplate` Objects
+
+```python
+@dataclass
+class GraphTemplate()
+```
+
+Complete declarative template for a graph.
+
+<a id="spoon_ai.graph.builder.DeclarativeGraphBuilder"></a>
+
+## `DeclarativeGraphBuilder` Objects
+
+```python
+class DeclarativeGraphBuilder()
+```
+
+Build StateGraph instances from declarative templates.
+
+<a id="spoon_ai.graph.builder.NodePlugin"></a>
+
+## `NodePlugin` Objects
+
+```python
+class NodePlugin()
+```
+
+Pluggable node provider.
+
+<a id="spoon_ai.graph.builder.NodePluginSystem"></a>
+
+## `NodePluginSystem` Objects
+
+```python
+class NodePluginSystem()
+```
+
+Registry and discovery for node plugins.
+
+<a id="spoon_ai.graph.builder.HighLevelGraphAPI"></a>
+
+## `HighLevelGraphAPI` Objects
+
+```python
+class HighLevelGraphAPI()
+```
+
+Convenience facade for building graphs per query.
+
+<a id="spoon_ai.graph.checkpointer"></a>
+
+# Module `spoon_ai.graph.checkpointer`
+
+In-memory checkpointer for the graph package.
+
+<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer"></a>
+
+## `InMemoryCheckpointer` Objects
+
+```python
+class InMemoryCheckpointer()
+```
+
+<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history"></a>
+
+#### `iter_checkpoint_history`
+
+```python
+def iter_checkpoint_history(
+        config: Dict[str, Any]) -> Iterable[CheckpointTuple]
+```
+
+Return checkpoint tuples for the specified thread, newest last.
+
+<a id="spoon_ai.graph.types"></a>
+
+# Module `spoon_ai.graph.types`
+
+Typed structures for the graph package.
+
+<a id="spoon_ai.graph.engine"></a>
+
+# Module `spoon_ai.graph.engine`
+
+Graph engine: StateGraph, CompiledGraph, and interrupt API implementation.
+
+<a id="spoon_ai.graph.engine.create_multimodal_message"></a>
+
+#### `create_multimodal_message`
+
+```python
+def create_multimodal_message(
+        role: str,
+        text: str,
+        image_url: Optional[str] = None,
+        image_data: Optional[str] = None,
+        image_media_type: str = "image/png",
+        detail: Literal["auto", "low", "high"] = "auto") -> Message
+```
+
+Create a multimodal message for use in graph state.
+
+Supports both URL-based and base64-encoded images.
 
 **Arguments**:
 
-- `backend` - Backend for file operations
-- `include_execute` - Whether to include execute tool
+- `role` - Message role (user, assistant, system)
+- `text` - Text content
+- `image_url` - URL of the image (including data URLs)
+- `image_data` - Base64-encoded image data (alternative to image_url)
+- `image_media_type` - MIME type for base64 images
+- `detail` - Image detail level (auto, low, high)
   
 
 **Returns**:
 
-  FilesystemMiddleware instance
+- `Message` - A multimodal message ready for graph state
   
 
 **Example**:
 
     ```python
-    middleware = create_filesystem_middleware()
-    agent = ToolCallAgent(middleware=[middleware], ...)
+    # In a graph node function
+    async def analyze_image(state: State) -> dict:
+        msg = create_multimodal_message(
+            "user",
+            "Analyze this chart",
+            image_url="https://example.com/chart.png"
+        )
+        return {"messages": [msg]}
     ```
 
-<a id="spoon_ai.middleware.filesystem.create_sandbox_backend"></a>
+<a id="spoon_ai.graph.engine.create_vision_user_message"></a>
 
-#### `create_sandbox_backend`
+#### `create_vision_user_message`
 
 ```python
-def create_sandbox_backend(root_dir: Optional[str] = None,
-                           timeout: int = 30) -> "LocalSandboxBackend"
+def create_vision_user_message(text: str, images: List[Dict[str,
+                                                            str]]) -> Message
 ```
 
-Create a local sandbox backend that supports command execution.
+Create a user message with multiple images.
 
 **Arguments**:
 
-- `root_dir` - Root directory for sandbox
-- `timeout` - Command execution timeout in seconds
+- `text` - Text prompt
+- `images` - List of image specs, each with either:
+  - &#123;"url": "https://..."&#125; for URL-based images
+  - &#123;"data": "&lt;base64&gt;", "media_type": "image/png"&#125; for base64 images
   
 
 **Returns**:
 
-  LocalSandboxBackend instance
-
-<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend"></a>
-
-## `LocalSandboxBackend` Objects
-
-```python
-class LocalSandboxBackend(SandboxBackendProtocol)
-```
-
-Local sandbox backend with command execution support.
-
-Wraps FilesystemBackend and adds execute capability.
-
-<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.execute"></a>
-
-#### `execute`
-
-```python
-def execute(command: str) -> ExecuteResponse
-```
-
-Execute a shell command.
-
-<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute"></a>
-
-#### `aexecute`
-
-```python
-async def aexecute(command: str) -> ExecuteResponse
-```
-
-Async execute a shell command.
-
-<a id="spoon_ai.security"></a>
-
-# Module `spoon_ai.security`
-
-Environment security helpers for ENC:v2 encrypted secrets.
-
-Security model:
-- Decrypted secrets are stored in SecretVault, NOT in os.environ.
-- The `decrypted_secrets` context manager provides scoped access to secrets
-  via the vault, automatically wiping them when the context exits.
-- Legacy `decrypted_environ` is DEPRECATED and will emit a warning.
-
-This avoids the critical security issue where secrets remain in os.environ
-(readable via /proc/&#123;pid&#125;/environ, inherited by subprocesses, etc.).
-
-<a id="spoon_ai.security.init_security"></a>
-
-#### `init_security`
-
-```python
-def init_security(*, vault: Optional[SecretVault] = None) -> SecretVault
-```
-
-Initialize env security features and return the vault.
-
-Behaviour:
-- Load `.env` files (if python-dotenv is installed).
-- Detect presence of ENC:v2 encrypted values.
-- If `SPOON_SECURITY_DECRYPT_ON_IMPORT` is truthy, decrypt all encrypted
-env vars and store in SecretVault (NOT os.environ).
-- Register atexit handler to wipe vault on shutdown.
-
-**Returns**:
-
-  The SecretVault instance containing decrypted secrets.
-  
-
-**Raises**:
-
-- `RuntimeError` - If encrypted vars found but no password provided.
-- `DecryptionError` - If decryption fails.
-
-<a id="spoon_ai.security.decrypted_secrets"></a>
-
-#### `decrypted_secrets`
-
-```python
-@contextmanager
-def decrypted_secrets(
-        keys: Optional[Iterable[str]] = None,
-        *,
-        password: Optional[str] = None,
-        prompt: bool = True,
-        vault: Optional[SecretVault] = None) -> Iterator[SecretVault]
-```
-
-Context manager for scoped access to decrypted secrets via SecretVault.
-
-This is the RECOMMENDED way to access encrypted secrets. Secrets are:
-1. Decrypted and stored in the vault on context entry.
-2. Accessible via `vault.get_decoded(key)` within the context.
-3. Automatically wiped from the vault on context exit.
-
-**Arguments**:
-
-- `keys` - Specific env var names to decrypt. If None, all encrypted vars.
-- `password` - Master password. If None, resolved from env or prompt.
-- `prompt` - Whether to prompt for password if not in env.
-- `vault` - Optional vault instance (defaults to singleton).
-  
-
-**Yields**:
-
-  SecretVault instance with decrypted secrets.
+- `Message` - A multimodal message with multiple images
   
 
 **Example**:
 
-  with decrypted_secrets(["PRIVATE_KEY"]) as vault:
-  with vault.get_decoded("PRIVATE_KEY") as pk:
-  account = Account.from_key(pk)
-  # Use account...
-  # Secrets wiped automatically
+    ```python
+    msg = create_vision_user_message(
+        "Compare these two charts",
+        images=[
+            {"url": "https://example.com/chart1.png"},
+            {"url": "https://example.com/chart2.png"}
+        ]
+    )
+    ```
 
-<a id="spoon_ai.security.async_decrypted_secrets"></a>
+<a id="spoon_ai.graph.engine.create_pdf_message"></a>
 
-#### `async_decrypted_secrets`
+#### `create_pdf_message`
 
 ```python
-@asynccontextmanager
-async def async_decrypted_secrets(
-        keys: Optional[Iterable[str]] = None,
-        *,
-        password: Optional[str] = None,
-        prompt: bool = True,
-        vault: Optional[SecretVault] = None) -> Iterator[SecretVault]
+def create_pdf_message(role: str,
+                       text: str,
+                       pdf_data: str,
+                       filename: Optional[str] = None) -> Message
 ```
 
-Async version of `decrypted_secrets()` with per-event-loop locking.
-
-This prevents race conditions when multiple async tasks attempt to
-decrypt/wipe secrets concurrently.
+Create a message with a PDF document for use in graph state.
 
 **Arguments**:
 
-- `keys` - Specific env var names to decrypt. If None, all encrypted vars.
-- `password` - Master password. If None, resolved from env or prompt.
-- `prompt` - Whether to prompt for password if not in env.
-- `vault` - Optional vault instance (defaults to singleton).
+- `role` - Message role (user, assistant, system)
+- `text` - Text content
+- `pdf_data` - Base64-encoded PDF data
+- `filename` - Optional filename for the PDF
   
-
-**Yields**:
-
-  SecretVault instance with decrypted secrets.
-
-<a id="spoon_ai.security.decrypted_environ"></a>
-
-#### `decrypted_environ`
-
-```python
-@contextmanager
-def decrypted_environ(keys: Optional[Iterable[str]] = None,
-                      *,
-                      password: Optional[str] = None,
-                      prompt: bool = True) -> Iterator[None]
-```
-
-DEPRECATED: Use `decrypted_secrets()` instead.
-
-This function modifies os.environ, which is a security risk.
-Secrets in os.environ can be read via /proc/&#123;pid&#125;/environ.
-
-<a id="spoon_ai.security.async_decrypted_environ"></a>
-
-#### `async_decrypted_environ`
-
-```python
-@asynccontextmanager
-async def async_decrypted_environ(keys: Optional[Iterable[str]] = None,
-                                  *,
-                                  password: Optional[str] = None,
-                                  prompt: bool = True) -> Iterator[None]
-```
-
-DEPRECATED: Use `async_decrypted_secrets()` instead.
-
-This function modifies os.environ, which is a security risk.
-
-<a id="spoon_ai.skills.manager"></a>
-
-# Module `spoon_ai.skills.manager`
-
-Central skill manager for lifecycle, discovery, and activation.
-
-Reuses:
-- IntentAnalyzer from graph/builder.py for LLM-powered matching
-- InMemoryCheckpointer from graph/checkpointer.py for state persistence
-
-Script execution support:
-- Runs activation/deactivation scripts automatically
-- Creates ScriptTool instances for agent access
-- Global and per-skill script enable/disable
-
-<a id="spoon_ai.skills.manager.SkillManager"></a>
-
-## `SkillManager` Objects
-
-```python
-class SkillManager()
-```
-
-Central manager for skill lifecycle, discovery, and activation.
-
-Features:
-- Multi-path skill discovery
-- Keyword and pattern-based trigger matching
-- LLM-powered intent matching (via IntentAnalyzer)
-- State persistence (via InMemoryCheckpointer)
-- Skill composition (prerequisite activation)
-
-<a id="spoon_ai.skills.manager.SkillManager.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(skill_paths: Optional[List[str]] = None,
-             llm: Optional["LLMManager"] = None,
-             auto_discover: bool = True,
-             scripts_enabled: bool = True,
-             include_default_paths: bool = True)
-```
-
-Initialize the skill manager.
-
-**Arguments**:
-
-- `skill_paths` - Additional directories to search for skills
-- `llm` - LLM manager for intent-based matching
-- `auto_discover` - Whether to auto-discover skills on init
-- `scripts_enabled` - Whether to allow script execution globally
-
-<a id="spoon_ai.skills.manager.SkillManager.discover"></a>
-
-#### `discover`
-
-```python
-def discover() -> int
-```
-
-Discover and register all skills from configured paths.
 
 **Returns**:
 
-  Number of skills discovered
+- `Message` - A multimodal message with PDF ready for graph state
+  
 
-<a id="spoon_ai.skills.manager.SkillManager.add_skill_path"></a>
+**Example**:
 
-#### `add_skill_path`
+    ```python
+    # In a graph node function
+    async def analyze_document(state: State) -> dict:
+        msg = create_pdf_message(
+            "user",
+            "Summarize this whitepaper",
+            pdf_data="<base64_encoded_pdf>",
+            filename="bitcoin.pdf"
+        )
+        return {"messages": [msg]}
+    ```
+
+<a id="spoon_ai.graph.engine.create_document_message"></a>
+
+#### `create_document_message`
 
 ```python
-def add_skill_path(path: str) -> None
+def create_document_message(role: str,
+                            text: str,
+                            document_data: str,
+                            media_type: str = "application/pdf",
+                            filename: Optional[str] = None) -> Message
 ```
 
-Add a path to search for skills.
+Create a message with a document for use in graph state.
+
+Supports various document types including PDF, text files, etc.
 
 **Arguments**:
 
-- `path` - Directory path to add
+- `role` - Message role (user, assistant, system)
+- `text` - Text content
+- `document_data` - Base64-encoded document data
+- `media_type` - MIME type of the document (default: application/pdf)
+- `filename` - Optional filename for the document
+  
 
-<a id="spoon_ai.skills.manager.SkillManager.register"></a>
+**Returns**:
 
-#### `register`
+- `Message` - A multimodal message with document ready for graph state
+  
+
+**Example**:
+
+    ```python
+    # In a graph node function
+    async def process_report(state: State) -> dict:
+        msg = create_document_message(
+            "user",
+            "Extract key metrics from this report",
+            document_data="<base64_encoded_data>",
+            media_type="application/pdf",
+            filename="annual_report.pdf"
+        )
+        return {"messages": [msg]}
+    ```
+
+<a id="spoon_ai.graph.engine.BaseNode"></a>
+
+## `BaseNode` Objects
 
 ```python
-def register(skill: Skill) -> None
+class BaseNode(ABC, Generic[State])
 ```
 
-Register a skill manually.
+Base class for all graph nodes
 
-<a id="spoon_ai.skills.manager.SkillManager.unregister"></a>
+<a id="spoon_ai.graph.engine.BaseNode.__call__"></a>
 
-#### `unregister`
+#### `__call__`
 
 ```python
-def unregister(name: str) -> bool
+@abstractmethod
+async def __call__(state: State,
+                   config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
 ```
 
-Unregister a skill by name.
+Execute the node logic
 
-Also deactivates if currently active.
+<a id="spoon_ai.graph.engine.RunnableNode"></a>
 
-<a id="spoon_ai.skills.manager.SkillManager.get"></a>
+## `RunnableNode` Objects
+
+```python
+class RunnableNode(BaseNode[State])
+```
+
+Runnable node that wraps a function
+
+<a id="spoon_ai.graph.engine.RunnableNode.__call__"></a>
+
+#### `__call__`
+
+```python
+async def __call__(state: State,
+                   config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
+```
+
+Execute the wrapped function
+
+<a id="spoon_ai.graph.engine.ToolNode"></a>
+
+## `ToolNode` Objects
+
+```python
+class ToolNode(BaseNode[State])
+```
+
+Tool node for executing tools
+
+<a id="spoon_ai.graph.engine.ToolNode.__call__"></a>
+
+#### `__call__`
+
+```python
+async def __call__(state: State,
+                   config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
+```
+
+Execute tools based on state
+
+<a id="spoon_ai.graph.engine.ConditionNode"></a>
+
+## `ConditionNode` Objects
+
+```python
+class ConditionNode(BaseNode[State])
+```
+
+Conditional node for routing decisions
+
+<a id="spoon_ai.graph.engine.ConditionNode.__call__"></a>
+
+#### `__call__`
+
+```python
+async def __call__(state: State,
+                   config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
+```
+
+Execute condition and return routing decision
+
+<a id="spoon_ai.graph.engine.interrupt"></a>
+
+#### `interrupt`
+
+```python
+def interrupt(data: Dict[str, Any]) -> Any
+```
+
+Interrupt execution and wait for human input.
+
+<a id="spoon_ai.graph.engine.RouteRule"></a>
+
+## `RouteRule` Objects
+
+```python
+class RouteRule()
+```
+
+Advanced routing rule for automatic path selection
+
+<a id="spoon_ai.graph.engine.RouteRule.matches"></a>
+
+#### `matches`
+
+```python
+def matches(state: Dict[str, Any], query: str = "") -> bool
+```
+
+Check if this rule matches the current state/query
+
+<a id="spoon_ai.graph.engine.RunningSummary"></a>
+
+## `RunningSummary` Objects
+
+```python
+@dataclass
+class RunningSummary()
+```
+
+Rolling conversation summary used by the summarisation node.
+
+<a id="spoon_ai.graph.engine.SummarizationNode"></a>
+
+## `SummarizationNode` Objects
+
+```python
+class SummarizationNode(BaseNode[Dict[str, Any]])
+```
+
+Node that summarises conversation history before model invocation.
+
+<a id="spoon_ai.graph.engine.StateGraph"></a>
+
+## `StateGraph` Objects
+
+```python
+class StateGraph(Generic[State])
+```
+
+<a id="spoon_ai.graph.engine.StateGraph.add_node"></a>
+
+#### `add_node`
+
+```python
+def add_node(
+        node_name: str, node: Union[BaseNode[State],
+                                    Callable[[State], Any]]) -> "StateGraph"
+```
+
+Add a node to the graph
+
+<a id="spoon_ai.graph.engine.StateGraph.add_edge"></a>
+
+#### `add_edge`
+
+```python
+def add_edge(
+        start_node: str,
+        end_node: str,
+        condition: Optional[Callable[[State], bool]] = None) -> "StateGraph"
+```
+
+Add an edge. When condition is provided, edge becomes conditional.
+
+<a id="spoon_ai.graph.engine.StateGraph.add_conditional_edges"></a>
+
+#### `add_conditional_edges`
+
+```python
+def add_conditional_edges(start_node: str, condition: Callable[[State], str],
+                          path_map: Dict[str, str]) -> "StateGraph"
+```
+
+Add conditional edges
+
+<a id="spoon_ai.graph.engine.StateGraph.set_entry_point"></a>
+
+#### `set_entry_point`
+
+```python
+def set_entry_point(node_name: str) -> "StateGraph"
+```
+
+Set the entry point
+
+<a id="spoon_ai.graph.engine.StateGraph.add_tool_node"></a>
+
+#### `add_tool_node`
+
+```python
+def add_tool_node(tools: List[Any], name: str = "tools") -> "StateGraph"
+```
+
+Add a tool node
+
+<a id="spoon_ai.graph.engine.StateGraph.add_conditional_node"></a>
+
+#### `add_conditional_node`
+
+```python
+def add_conditional_node(condition_func: Callable[[State], str],
+                         name: str = "condition") -> "StateGraph"
+```
+
+Add a conditional node
+
+<a id="spoon_ai.graph.engine.StateGraph.add_parallel_group"></a>
+
+#### `add_parallel_group`
+
+```python
+def add_parallel_group(
+    group_name: str,
+    nodes: List[str],
+    config: Optional[Union[Dict[str, Any], ParallelGroupConfig]] = None
+) -> "StateGraph"
+```
+
+Add a parallel execution group
+
+<a id="spoon_ai.graph.engine.StateGraph.add_routing_rule"></a>
+
+#### `add_routing_rule`
+
+```python
+def add_routing_rule(source_node: str,
+                     condition: Union[str, Callable[[State, str], bool]],
+                     target_node: str,
+                     priority: int = 0) -> "StateGraph"
+```
+
+Add an intelligent routing rule
+
+<a id="spoon_ai.graph.engine.StateGraph.get_state"></a>
+
+#### `get_state`
+
+```python
+def get_state(
+        config: Optional[Dict[str, Any]] = None) -> Optional[StateSnapshot]
+```
+
+Fetch the latest (or specified) checkpoint snapshot for a thread.
+
+<a id="spoon_ai.graph.engine.StateGraph.get_state_history"></a>
+
+#### `get_state_history`
+
+```python
+def get_state_history(
+        config: Optional[Dict[str, Any]] = None) -> Iterable[StateSnapshot]
+```
+
+Return all checkpoints for the given thread, ordered by creation time.
+
+<a id="spoon_ai.graph.engine.StateGraph.add_pattern_routing"></a>
+
+#### `add_pattern_routing`
+
+```python
+def add_pattern_routing(source_node: str,
+                        pattern: str,
+                        target_node: str,
+                        priority: int = 0) -> "StateGraph"
+```
+
+Add pattern-based routing rule
+
+<a id="spoon_ai.graph.engine.StateGraph.set_intelligent_router"></a>
+
+#### `set_intelligent_router`
+
+```python
+def set_intelligent_router(
+        router_func: Callable[[Dict[str, Any], str], str]) -> "StateGraph"
+```
+
+Set the intelligent router function
+
+<a id="spoon_ai.graph.engine.StateGraph.set_llm_router"></a>
+
+#### `set_llm_router`
+
+```python
+def set_llm_router(router_func: Optional[Callable[[Dict[str, Any], str],
+                                                  str]] = None,
+                   config: Optional[Dict[str, Any]] = None) -> "StateGraph"
+```
+
+Set the LLM-powered router function
+
+**Arguments**:
+
+- `router_func` - Custom LLM router function. If None, uses default LLM router.
+- `config` - Configuration for LLM router (model, temperature, max_tokens, etc.)
+
+<a id="spoon_ai.graph.engine.StateGraph.enable_llm_routing"></a>
+
+#### `enable_llm_routing`
+
+```python
+def enable_llm_routing(
+        config: Optional[Dict[str, Any]] = None) -> "StateGraph"
+```
+
+Enable LLM-powered natural language routing
+
+This automatically sets up LLM routing for the graph entry point.
+
+<a id="spoon_ai.graph.engine.StateGraph.compile"></a>
+
+#### `compile`
+
+```python
+def compile(checkpointer: Optional[Any] = None) -> "CompiledGraph"
+```
+
+Compile the graph
+
+<a id="spoon_ai.graph.engine.StateGraph.get_graph"></a>
+
+#### `get_graph`
+
+```python
+def get_graph() -> Dict[str, Any]
+```
+
+Get graph structure for visualization/debugging
+
+<a id="spoon_ai.graph.engine.CompiledGraph"></a>
+
+## `CompiledGraph` Objects
+
+```python
+class CompiledGraph(Generic[State])
+```
+
+Compiled graph for execution
+
+<a id="spoon_ai.graph.engine.CompiledGraph.get_execution_metrics"></a>
+
+#### `get_execution_metrics`
+
+```python
+def get_execution_metrics() -> Dict[str, Any]
+```
+
+Get aggregated execution metrics
+
+<a id="spoon_ai.graph.cache"></a>
+
+# Module `spoon_ai.graph.cache`
+
+Cache System for Graph Workflows.
+
+Provides caching for node outputs in graph workflows to avoid redundant
+computation and speed up execution.
+
+Types of caching:
+1. Node-level caching - caches node outputs based on inputs
+2. In-memory and persistent (SQLite) backends
+
+Compatible with LangGraph BaseCache interface.
+
+Usage:
+    from spoon_ai.graph.cache import InMemoryCache, SQLiteCache
+
+    # In-memory cache (for testing/short sessions)
+    cache = InMemoryCache()
+
+    # SQLite cache (persistent across sessions)
+    cache = SQLiteCache("cache.db")
+
+    # Use with graph
+    graph = StateGraph(...)
+    compiled = graph.compile(cache=cache)
+
+<a id="spoon_ai.graph.cache.compute_cache_key"></a>
+
+#### `compute_cache_key`
+
+```python
+def compute_cache_key(node_name: str,
+                      inputs: Dict[str, Any],
+                      config: Optional[Dict[str, Any]] = None) -> str
+```
+
+Compute a cache key from node name and inputs.
+
+**Arguments**:
+
+- `node_name` - Name of the node
+- `inputs` - Input values to the node
+- `config` - Optional configuration
+  
+
+**Returns**:
+
+  SHA256 hash as cache key
+
+<a id="spoon_ai.graph.cache.CacheEntry"></a>
+
+## `CacheEntry` Objects
+
+```python
+class CacheEntry()
+```
+
+A cached value with metadata.
+
+<a id="spoon_ai.graph.cache.CacheEntry.is_expired"></a>
+
+#### `is_expired`
+
+```python
+def is_expired() -> bool
+```
+
+Check if cache entry has expired.
+
+<a id="spoon_ai.graph.cache.CacheEntry.to_dict"></a>
+
+#### `to_dict`
+
+```python
+def to_dict() -> Dict[str, Any]
+```
+
+Serialize to dictionary.
+
+<a id="spoon_ai.graph.cache.CacheEntry.from_dict"></a>
+
+#### `from_dict`
+
+```python
+@classmethod
+def from_dict(cls, data: Dict[str, Any]) -> "CacheEntry"
+```
+
+Deserialize from dictionary.
+
+<a id="spoon_ai.graph.cache.BaseCache"></a>
+
+## `BaseCache` Objects
+
+```python
+class BaseCache(ABC)
+```
+
+Abstract base class for graph caches.
+
+Compatible with LangGraph BaseCache interface.
+
+<a id="spoon_ai.graph.cache.BaseCache.get"></a>
 
 #### `get`
 
 ```python
-def get(name: str) -> Optional[Skill]
+@abstractmethod
+def get(key: str) -> Optional[Any]
 ```
 
-Get a skill by name.
-
-<a id="spoon_ai.skills.manager.SkillManager.list"></a>
-
-#### `list`
-
-```python
-def list() -> List[str]
-```
-
-List all registered skill names.
-
-<a id="spoon_ai.skills.manager.SkillManager.list_skills"></a>
-
-#### `list_skills`
-
-```python
-def list_skills() -> List[Skill]
-```
-
-List all registered skills.
-
-<a id="spoon_ai.skills.manager.SkillManager.match_triggers"></a>
-
-#### `match_triggers`
-
-```python
-def match_triggers(text: str) -> List[Skill]
-```
-
-Match skills by keywords and patterns (fast, no LLM).
+Get a cached value by key.
 
 **Arguments**:
 
-- `text` - User input to match against
+- `key` - Cache key
   
 
 **Returns**:
 
-  List of matching skills, sorted by priority
+  Cached value or None if not found/expired
 
-<a id="spoon_ai.skills.manager.SkillManager.match_intent"></a>
+<a id="spoon_ai.graph.cache.BaseCache.set"></a>
 
-#### `match_intent`
+#### `set`
 
 ```python
-async def match_intent(text: str) -> List[Skill]
+@abstractmethod
+def set(key: str,
+        value: Any,
+        node_name: str = "",
+        ttl_seconds: Optional[int] = None,
+        metadata: Optional[Dict[str, Any]] = None) -> None
 ```
 
-Match skills by LLM-powered intent analysis.
+Set a cached value.
 
 **Arguments**:
 
-- `text` - User input to analyze
-  
+- `key` - Cache key
+- `value` - Value to cache
+- `node_name` - Name of the node that produced this value
+- `ttl_seconds` - Time-to-live in seconds (None = no expiry)
+- `metadata` - Optional metadata
 
-**Returns**:
+<a id="spoon_ai.graph.cache.BaseCache.delete"></a>
 
-  List of matching skills
-
-<a id="spoon_ai.skills.manager.SkillManager.find_matching_skills"></a>
-
-#### `find_matching_skills`
+#### `delete`
 
 ```python
-async def find_matching_skills(text: str,
-                               use_intent: bool = True) -> List[Skill]
+@abstractmethod
+def delete(key: str) -> bool
 ```
 
-Find all matching skills using both trigger and intent matching.
+Delete a cached value.
 
 **Arguments**:
 
-- `text` - User input to match
-- `use_intent` - Whether to also use LLM intent matching
+- `key` - Cache key
   
 
 **Returns**:
 
-  Combined list of matching skills (deduplicated)
+  True if deleted, False if not found
 
-<a id="spoon_ai.skills.manager.SkillManager.activate"></a>
+<a id="spoon_ai.graph.cache.BaseCache.clear"></a>
 
-#### `activate`
+#### `clear`
 
 ```python
-async def activate(name: str,
-                   context: Optional[Dict[str, Any]] = None) -> Skill
+@abstractmethod
+def clear() -> None
 ```
 
-Activate a skill with prerequisite checking.
+Clear all cached values.
+
+<a id="spoon_ai.graph.cache.BaseCache.get_or_compute"></a>
+
+#### `get_or_compute`
+
+```python
+def get_or_compute(key: str,
+                   compute_fn: callable,
+                   node_name: str = "",
+                   ttl_seconds: Optional[int] = None) -> Tuple[Any, bool]
+```
+
+Get cached value or compute and cache it.
 
 **Arguments**:
 
-- `name` - Skill name to activate
-- `context` - Optional context data for the skill
+- `key` - Cache key
+- `compute_fn` - Function to compute value if not cached
+- `node_name` - Name of the node
+- `ttl_seconds` - Time-to-live for cached value
   
 
 **Returns**:
 
-  Activated Skill instance
-  
+  Tuple of (value, was_cached)
 
-**Raises**:
+<a id="spoon_ai.graph.cache.InMemoryCache"></a>
 
-- `ValueError` - If skill not found or prerequisites not met
-
-<a id="spoon_ai.skills.manager.SkillManager.deactivate"></a>
-
-#### `deactivate`
+## `InMemoryCache` Objects
 
 ```python
-async def deactivate(name: str) -> bool
+class InMemoryCache(BaseCache)
 ```
 
-Deactivate an active skill.
+In-memory cache implementation.
 
-Persists state if configured. Runs deactivation scripts.
+Fast but not persistent across sessions. Suitable for:
+- Testing
+- Short-running workflows
+- When persistence is not needed
+
+<a id="spoon_ai.graph.cache.InMemoryCache.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(max_entries: int = 1000,
+             default_ttl_seconds: Optional[int] = None)
+```
+
+Initialize in-memory cache.
 
 **Arguments**:
 
-- `name` - Skill name to deactivate
-  
+- `max_entries` - Maximum number of entries to keep
+- `default_ttl_seconds` - Default TTL for entries (None = no expiry)
 
-**Returns**:
+<a id="spoon_ai.graph.cache.InMemoryCache.get"></a>
 
-  True if deactivated, False if not active
-
-<a id="spoon_ai.skills.manager.SkillManager.deactivate_all"></a>
-
-#### `deactivate_all`
+#### `get`
 
 ```python
-async def deactivate_all() -> int
+def get(key: str) -> Optional[Any]
 ```
 
-Deactivate all active skills.
+Get cached value.
 
-**Returns**:
+<a id="spoon_ai.graph.cache.InMemoryCache.set"></a>
 
-  Number of skills deactivated
-
-<a id="spoon_ai.skills.manager.SkillManager.get_active_context"></a>
-
-#### `get_active_context`
+#### `set`
 
 ```python
-def get_active_context() -> str
+def set(key: str,
+        value: Any,
+        node_name: str = "",
+        ttl_seconds: Optional[int] = None,
+        metadata: Optional[Dict[str, Any]] = None) -> None
 ```
 
-Generate combined prompt content for all active skills.
+Set cached value.
 
-**Returns**:
+<a id="spoon_ai.graph.cache.InMemoryCache.delete"></a>
 
-  Formatted skill instructions for injection into system prompt
-
-<a id="spoon_ai.skills.manager.SkillManager.get_active_tools"></a>
-
-#### `get_active_tools`
+#### `delete`
 
 ```python
-def get_active_tools() -> List[BaseTool]
+def delete(key: str) -> bool
 ```
 
-Get all tools from active skills.
+Delete cached value.
 
-Includes both Python tools (from tools.py) and script tools.
+<a id="spoon_ai.graph.cache.InMemoryCache.clear"></a>
 
-**Returns**:
-
-  List of tool instances from active skills
-
-<a id="spoon_ai.skills.manager.SkillManager.get_active_skill_names"></a>
-
-#### `get_active_skill_names`
+#### `clear`
 
 ```python
-def get_active_skill_names() -> List[str]
+def clear() -> None
 ```
 
-Get names of all active skills.
+Clear all cached values.
 
-<a id="spoon_ai.skills.manager.SkillManager.is_active"></a>
-
-#### `is_active`
-
-```python
-def is_active(name: str) -> bool
-```
-
-Check if a skill is currently active.
-
-<a id="spoon_ai.skills.manager.SkillManager.execute_script"></a>
-
-#### `execute_script`
-
-```python
-async def execute_script(skill_name: str,
-                         script_name: str,
-                         input_text: Optional[str] = None) -> ScriptResult
-```
-
-Execute a specific script from a skill.
-
-**Arguments**:
-
-- `skill_name` - Name of the skill containing the script
-- `script_name` - Name of the script to execute
-- `input_text` - Optional input to pass to the script
-  
-
-**Returns**:
-
-  ScriptResult with execution details
-  
-
-**Raises**:
-
-- `ValueError` - If skill or script not found
-
-<a id="spoon_ai.skills.manager.SkillManager.set_scripts_enabled"></a>
-
-#### `set_scripts_enabled`
-
-```python
-def set_scripts_enabled(enabled: bool) -> None
-```
-
-Enable or disable script execution globally.
-
-**Arguments**:
-
-- `enabled` - Whether to enable script execution
-
-<a id="spoon_ai.skills.manager.SkillManager.get_script_tools"></a>
-
-#### `get_script_tools`
-
-```python
-def get_script_tools(skill_name: str) -> List[ScriptTool]
-```
-
-Get script tools for a specific skill.
-
-**Arguments**:
-
-- `skill_name` - Name of the skill
-  
-
-**Returns**:
-
-  List of ScriptTool instances for the skill
-
-<a id="spoon_ai.skills.manager.SkillManager.get_skill_info"></a>
-
-#### `get_skill_info`
-
-```python
-def get_skill_info(name: str) -> Optional[Dict[str, Any]]
-```
-
-Get detailed information about a skill.
-
-**Arguments**:
-
-- `name` - Skill name
-  
-
-**Returns**:
-
-  Dictionary with skill details or None if not found
-
-<a id="spoon_ai.skills.manager.SkillManager.get_stats"></a>
+<a id="spoon_ai.graph.cache.InMemoryCache.get_stats"></a>
 
 #### `get_stats`
 
@@ -10815,1052 +10406,4859 @@ Get detailed information about a skill.
 def get_stats() -> Dict[str, Any]
 ```
 
-Get statistics about the skill system.
+Get cache statistics.
 
-<a id="spoon_ai.skills.executor"></a>
+<a id="spoon_ai.graph.cache.SQLiteCache"></a>
 
-# Module `spoon_ai.skills.executor`
-
-Script execution engine for skills.
-
-Provides async subprocess management for executing skill scripts.
-AI decides how to call scripts - users only control whether scripts are allowed.
-
-<a id="spoon_ai.skills.executor.MAX_OUTPUT_SIZE"></a>
-
-#### `MAX_OUTPUT_SIZE`
-
-5MB
-
-<a id="spoon_ai.skills.executor.ScriptExecutionError"></a>
-
-## `ScriptExecutionError` Objects
+## `SQLiteCache` Objects
 
 ```python
-class ScriptExecutionError(Exception)
+class SQLiteCache(BaseCache)
 ```
 
-Raised when script execution fails.
+SQLite-based persistent cache.
 
-<a id="spoon_ai.skills.executor.ScriptExecutor"></a>
+Persistent across sessions. Suitable for:
+- Production use
+- Long-running workflows
+- When you want to reuse cached results
 
-## `ScriptExecutor` Objects
-
-```python
-class ScriptExecutor()
-```
-
-Async script executor for skill scripts.
-
-Features:
-- Async subprocess execution with timeout
-- Support for Python, shell, bash scripts
-- Environment variable passthrough
-- Output capture and size limiting
-- Global enable/disable control
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.__init__"></a>
+<a id="spoon_ai.graph.cache.SQLiteCache.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(enabled: bool = True,
-             default_timeout: int = DEFAULT_TIMEOUT,
-             max_output_size: int = MAX_OUTPUT_SIZE,
-             env_passthrough: Optional[List[str]] = None)
+def __init__(db_path: str = "graph_cache.db",
+             default_ttl_seconds: Optional[int] = None,
+             max_entries: Optional[int] = None)
 ```
 
-Initialize script executor.
+Initialize SQLite cache.
 
 **Arguments**:
 
-- `enabled` - Whether script execution is allowed
-- `default_timeout` - Default timeout in seconds
-- `max_output_size` - Max output capture size in bytes
-- `env_passthrough` - Environment variables to pass through
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.is_available"></a>
-
-#### `is_available`
-
-```python
-def is_available(script_type: ScriptType) -> bool
-```
-
-Check if a script type can be executed.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.get_interpreter"></a>
-
-#### `get_interpreter`
-
-```python
-def get_interpreter(script_type: ScriptType) -> Optional[str]
-```
-
-Get interpreter path for a script type.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(script: SkillScript,
-                  input_text: Optional[str] = None,
-                  working_directory: Optional[str] = None,
-                  extra_env: Optional[Dict[str, str]] = None,
-                  timeout: Optional[int] = None) -> ScriptResult
-```
-
-Execute a script asynchronously.
-
-**Arguments**:
-
-- `script` - Script to execute
-- `input_text` - Optional text to pass to script via stdin
-- `working_directory` - Working directory for execution
-- `extra_env` - Additional environment variables
-- `timeout` - Timeout override (uses script.timeout or default)
-  
-
-**Returns**:
-
-  ScriptResult with output and status
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, int]
-```
-
-Get execution statistics.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.set_enabled"></a>
-
-#### `set_enabled`
-
-```python
-def set_enabled(enabled: bool) -> None
-```
-
-Enable or disable script execution.
-
-<a id="spoon_ai.skills.executor.get_executor"></a>
-
-#### `get_executor`
-
-```python
-def get_executor() -> ScriptExecutor
-```
-
-Get or create the global script executor.
-
-<a id="spoon_ai.skills.executor.configure_executor"></a>
-
-#### `configure_executor`
-
-```python
-def configure_executor(**kwargs) -> ScriptExecutor
-```
-
-Configure and return the global executor.
-
-<a id="spoon_ai.skills.executor.set_scripts_enabled"></a>
-
-#### `set_scripts_enabled`
-
-```python
-def set_scripts_enabled(enabled: bool) -> None
-```
-
-Enable or disable script execution globally.
-
-<a id="spoon_ai.skills.loader"></a>
-
-# Module `spoon_ai.skills.loader`
-
-Skill loader for parsing SKILL.md files.
-
-Discovers and loads skills from multiple paths:
-1. ~/.spoon/skills/ - Global user skills
-2. ./skills/ - Project-local skills
-3. Additional user-specified paths
-
-Note: No built-in skills are included by default.
-Use additional_paths to specify skill directories.
-
-<a id="spoon_ai.skills.loader.SkillLoader"></a>
-
-## `SkillLoader` Objects
-
-```python
-class SkillLoader()
-```
-
-Loads skills from SKILL.md files with optional Python tool modules.
-
-SKILL.md Format:
----
-name: my-skill
-description: What this skill does
-version: 1.0.0
-triggers:
-  - type: keyword
-    keywords: [analyze, review]
----
-
-__Skill Instructions__
-
-
-Markdown content here...
-
-<a id="spoon_ai.skills.loader.SkillLoader.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(additional_paths: Optional[List[Path]] = None,
-             include_default_paths: bool = True)
-```
-
-Initialize loader with skill search paths.
-
-**Arguments**:
-
-- `additional_paths` - Additional directories to search for skills
-
-<a id="spoon_ai.skills.loader.SkillLoader.paths"></a>
-
-#### `paths`
-
-```python
-@property
-def paths() -> List[Path]
-```
-
-Get configured skill paths.
-
-<a id="spoon_ai.skills.loader.SkillLoader.add_path"></a>
-
-#### `add_path`
-
-```python
-def add_path(path: Path) -> None
-```
-
-Add a path to search for skills.
-
-<a id="spoon_ai.skills.loader.SkillLoader.discover"></a>
-
-#### `discover`
-
-```python
-def discover() -> List[Path]
-```
-
-Discover all SKILL.md files in configured paths.
-
-**Returns**:
-
-  List of paths to SKILL.md files
-
-<a id="spoon_ai.skills.loader.SkillLoader.parse"></a>
-
-#### `parse`
-
-```python
-def parse(file_path: Path) -> Tuple[SkillMetadata, str]
-```
-
-Parse a SKILL.md file into metadata and instructions.
-
-**Arguments**:
-
-- `file_path` - Path to SKILL.md file
-  
-
-**Returns**:
-
-  Tuple of (SkillMetadata, instructions_markdown)
-  
-
-**Raises**:
-
-- `ValueError` - If file format is invalid
-
-<a id="spoon_ai.skills.loader.SkillLoader.load_tools"></a>
-
-#### `load_tools`
-
-```python
-def load_tools(skill_dir: Path) -> List[BaseTool]
-```
-
-Load Python tools from a skill directory.
-
-Looks for tools.py containing BaseTool subclasses.
-
-**Arguments**:
-
-- `skill_dir` - Directory containing the skill
-  
-
-**Returns**:
-
-  List of loaded tool instances
-
-<a id="spoon_ai.skills.loader.SkillLoader.load"></a>
-
-#### `load`
-
-```python
-def load(file_path: Path) -> Skill
-```
-
-Load a complete skill from SKILL.md and optional modules.
-
-**Arguments**:
-
-- `file_path` - Path to SKILL.md file
-  
-
-**Returns**:
-
-  Loaded Skill instance
-
-<a id="spoon_ai.skills.loader.SkillLoader.load_all"></a>
-
-#### `load_all`
-
-```python
-def load_all() -> Dict[str, Skill]
-```
-
-Discover and load all skills from configured paths.
-
-**Returns**:
-
-  Dictionary mapping skill names to Skill instances
-
-<a id="spoon_ai.skills.loader.SkillLoader.get_skill"></a>
-
-#### `get_skill`
-
-```python
-def get_skill(name: str) -> Optional[Skill]
-```
-
-Get a loaded skill by name.
-
-<a id="spoon_ai.skills.loader.SkillLoader.get_tools"></a>
-
-#### `get_tools`
-
-```python
-def get_tools(skill_name: str) -> List[BaseTool]
-```
-
-Get loaded tools for a skill.
-
-<a id="spoon_ai.skills.loader.SkillLoader.clear_cache"></a>
-
-#### `clear_cache`
-
-```python
-def clear_cache() -> None
-```
-
-Clear all cached skills and tools.
-
-<a id="spoon_ai.skills.loader.SkillLoader.reload"></a>
-
-#### `reload`
-
-```python
-def reload(name: str) -> Optional[Skill]
-```
-
-Reload a specific skill from disk.
-
-**Arguments**:
-
-- `name` - Skill name to reload
-  
-
-**Returns**:
-
-  Reloaded Skill or None if not found
-
-<a id="spoon_ai.skills"></a>
-
-# Module `spoon_ai.skills`
-
-Skill system for SpoonAI agents.
-
-This module provides a Claude Skills-compatible system for defining and managing
-agent capabilities through SKILL.md files and optional Python tools.
-
-Key Components:
-- Skill: Data model representing a skill with metadata and triggers
-- SkillLoader: Discovers and parses SKILL.md files from configured paths
-- SkillRegistry: Thread-safe registry with fast trigger matching
-- SkillManager: Central lifecycle manager with LLM intent analysis
-- ScriptExecutor: Async subprocess execution for skill scripts
-
-Script Execution:
-Skills can define scripts (Python, shell, bash) that agents can execute.
-Users control whether scripts are allowed; AI decides how to use them.
-
-Usage:
-    from spoon_ai.skills import SkillManager, Skill
-
-    # Create manager with auto-discovery and script support
-    manager = SkillManager(auto_discover=True, scripts_enabled=True)
-
-    # Activate a skill
-    skill = await manager.activate("research", &#123;"topic": "AI"&#125;)
-
-    # Get prompt injection for active skills
-    context = manager.get_active_context()
-
-    # Execute a skill script
-    result = await manager.execute_script("data-processor", "analyze")
-
-    # Find matching skills for user input
-    matches = await manager.find_matching_skills("research quantum computing")
-
-<a id="spoon_ai.skills.registry"></a>
-
-# Module `spoon_ai.skills.registry`
-
-Thread-safe skill registry with indexing.
-
-Follows NodePluginSystem pattern from graph/builder.py.
-
-<a id="spoon_ai.skills.registry.SkillRegistry"></a>
-
-## `SkillRegistry` Objects
-
-```python
-class SkillRegistry()
-```
-
-Thread-safe registry for skills with fast trigger matching.
-
-Maintains indexes for:
-- Tags: O(1) lookup by tag
-- Keywords: O(1) lookup by keyword
-- Intents: O(1) lookup by intent category
-- Patterns: Compiled regex patterns for matching
-
-<a id="spoon_ai.skills.registry.SkillRegistry.register"></a>
-
-#### `register`
-
-```python
-def register(skill: Skill) -> None
-```
-
-Register a skill and update indexes.
-
-**Arguments**:
-
-- `skill` - Skill to register
-
-<a id="spoon_ai.skills.registry.SkillRegistry.unregister"></a>
-
-#### `unregister`
-
-```python
-def unregister(name: str) -> bool
-```
-
-Remove a skill from the registry.
-
-**Arguments**:
-
-- `name` - Skill name to remove
-  
-
-**Returns**:
-
-  True if removed, False if not found
-
-<a id="spoon_ai.skills.registry.SkillRegistry.get"></a>
+- `db_path` - Path to SQLite database file
+- `default_ttl_seconds` - Default TTL for entries (None = no expiry)
+- `max_entries` - Maximum entries to keep (None = unlimited)
+
+<a id="spoon_ai.graph.cache.SQLiteCache.get"></a>
 
 #### `get`
 
 ```python
-def get(name: str) -> Optional[Skill]
+def get(key: str) -> Optional[Any]
 ```
 
-Get a skill by name.
+Get cached value.
+
+<a id="spoon_ai.graph.cache.SQLiteCache.set"></a>
+
+#### `set`
+
+```python
+def set(key: str,
+        value: Any,
+        node_name: str = "",
+        ttl_seconds: Optional[int] = None,
+        metadata: Optional[Dict[str, Any]] = None) -> None
+```
+
+Set cached value.
+
+<a id="spoon_ai.graph.cache.SQLiteCache.delete"></a>
+
+#### `delete`
+
+```python
+def delete(key: str) -> bool
+```
+
+Delete cached value.
+
+<a id="spoon_ai.graph.cache.SQLiteCache.clear"></a>
+
+#### `clear`
+
+```python
+def clear() -> None
+```
+
+Clear all cached values.
+
+<a id="spoon_ai.graph.cache.SQLiteCache.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, Any]
+```
+
+Get cache statistics.
+
+<a id="spoon_ai.graph.cache.create_memory_cache"></a>
+
+#### `create_memory_cache`
+
+```python
+def create_memory_cache(
+        max_entries: int = 1000,
+        default_ttl_seconds: Optional[int] = None) -> InMemoryCache
+```
+
+Create an in-memory cache.
 
 **Arguments**:
 
-- `name` - Skill name
+- `max_entries` - Maximum entries to keep
+- `default_ttl_seconds` - Default TTL
   
 
 **Returns**:
 
-  Skill or None if not found
+  Configured InMemoryCache
 
-<a id="spoon_ai.skills.registry.SkillRegistry.list_names"></a>
+<a id="spoon_ai.graph.cache.create_sqlite_cache"></a>
 
-#### `list_names`
-
-```python
-def list_names() -> List[str]
-```
-
-Get all registered skill names.
-
-<a id="spoon_ai.skills.registry.SkillRegistry.list_skills"></a>
-
-#### `list_skills`
+#### `create_sqlite_cache`
 
 ```python
-def list_skills() -> List[Skill]
+def create_sqlite_cache(db_path: str = "graph_cache.db",
+                        default_ttl_seconds: Optional[int] = None,
+                        max_entries: Optional[int] = None) -> SQLiteCache
 ```
 
-Get all registered skills.
-
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_tag"></a>
-
-#### `find_by_tag`
-
-```python
-def find_by_tag(tag: str) -> List[Skill]
-```
-
-Find skills by tag.
+Create a SQLite cache.
 
 **Arguments**:
 
-- `tag` - Tag to search for
+- `db_path` - Path to database file
+- `default_ttl_seconds` - Default TTL
+- `max_entries` - Maximum entries
   
 
 **Returns**:
 
-  List of matching skills
+  Configured SQLiteCache
 
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_keyword"></a>
+<a id="spoon_ai.neofs"></a>
 
-#### `find_by_keyword`
+# Module `spoon_ai.neofs`
+
+NeoFS integration for Spoon Core.
+
+<a id="spoon_ai.neofs.utils"></a>
+
+# Module `spoon_ai.neofs.utils`
+
+<a id="spoon_ai.neofs.utils.SignatureError"></a>
+
+## `SignatureError` Objects
 
 ```python
-def find_by_keyword(text: str) -> List[Skill]
+class SignatureError(Exception)
 ```
 
-Find skills by keyword matching.
+Raised when signature payload construction fails.
 
-Extracts words from text and matches against keyword index.
+<a id="spoon_ai.neofs.utils.sign_bearer_token"></a>
+
+#### `sign_bearer_token`
+
+```python
+def sign_bearer_token(bearer_token: str,
+                      private_key_wif: str,
+                      *,
+                      wallet_connect: bool = True) -> tuple[str, str]
+```
+
+Returns (signature_hex, compressed_pubkey_hex)
+
+- wallet_connect=True:
+    msg = WC format (with prefix/len/salt/postfix), hash=SHA-256
+    X-Bearer-Signature = &lt;DER signature hex&gt; + &lt;16B salt hex&gt;
+    X-Bearer-Signature-Key = &lt;compressed public key hex&gt;
+    URL needs to append ?walletConnect=true
+
+<a id="spoon_ai.neofs.models"></a>
+
+# Module `spoon_ai.neofs.models`
+
+Pydantic models describing NeoFS REST API payloads.
+
+<a id="spoon_ai.neofs.models.NetworkInfo"></a>
+
+## `NetworkInfo` Objects
+
+```python
+class NetworkInfo(BaseModel)
+```
+
+Describes network configuration fees reported by the gateway.
+
+<a id="spoon_ai.neofs.client"></a>
+
+# Module `spoon_ai.neofs.client`
+
+<a id="spoon_ai.neofs.client.NeoFSClient"></a>
+
+## `NeoFSClient` Objects
+
+```python
+class NeoFSClient()
+```
+
+<a id="spoon_ai.neofs.client.NeoFSClient.set_container_eacl"></a>
+
+#### `set_container_eacl`
+
+```python
+def set_container_eacl(container_id: str,
+                       eacl: Eacl,
+                       *,
+                       bearer_token: Optional[str] = None,
+                       wallet_connect: bool = True) -> SuccessResponse
+```
+
+Set container eACL.
 
 **Arguments**:
 
-- `text` - Text to match keywords against
+- `container_id` - Container ID
+- `eacl` - eACL object
+- `bearer_token` - Optional Bearer Token (recommended for eACL operations)
+- `wallet_connect` - Whether to use wallet_connect mode (default True)
+
+<a id="spoon_ai.neofs.client.NeoFSClient.download_object_by_id"></a>
+
+#### `download_object_by_id`
+
+```python
+def download_object_by_id(container_id: str,
+                          object_id: str,
+                          *,
+                          bearer_token: Optional[str] = None,
+                          download: bool | None = None,
+                          range_header: str | None = None) -> httpx.Response
+```
+
+Download object by ID. Bearer token is optional for public containers.
+
+<a id="spoon_ai.neofs.client.NeoFSClient.get_object_header_by_id"></a>
+
+#### `get_object_header_by_id`
+
+```python
+def get_object_header_by_id(container_id: str,
+                            object_id: str,
+                            *,
+                            bearer_token: Optional[str] = None,
+                            range_header: str | None = None) -> httpx.Response
+```
+
+Get object header by ID. Bearer token is optional for public containers.
+
+<a id="spoon_ai.neofs.client.NeoFSClient.download_object_by_attribute"></a>
+
+#### `download_object_by_attribute`
+
+```python
+def download_object_by_attribute(
+        container_id: str,
+        attr_key: str,
+        attr_val: str,
+        *,
+        bearer_token: Optional[str] = None,
+        download: bool | None = None,
+        range_header: str | None = None) -> httpx.Response
+```
+
+Download object by attribute. Bearer token is optional for public containers.
+
+<a id="spoon_ai.neofs.client.NeoFSClient.get_object_header_by_attribute"></a>
+
+#### `get_object_header_by_attribute`
+
+```python
+def get_object_header_by_attribute(
+        container_id: str,
+        attr_key: str,
+        attr_val: str,
+        *,
+        bearer_token: Optional[str] = None,
+        range_header: str | None = None) -> httpx.Response
+```
+
+Get object header by attribute. Bearer token is optional for public containers.
+
+<a id="spoon_ai.neofs.client.NeoFSClient.delete_object"></a>
+
+#### `delete_object`
+
+```python
+def delete_object(container_id: str,
+                  object_id: str,
+                  *,
+                  bearer_token: Optional[str] = None) -> SuccessResponse
+```
+
+Delete object. Bearer token is optional for public containers, required for eACL containers with DENY DELETE rule.
+
+<a id="spoon_ai.neofs.client.NeoFSClient.search_objects"></a>
+
+#### `search_objects`
+
+```python
+def search_objects(container_id: str,
+                   search_request: SearchRequest,
+                   *,
+                   bearer_token: Optional[str] = None,
+                   cursor: str = "",
+                   limit: int = 100) -> ObjectListV2
+```
+
+Search objects. Bearer token is optional for public containers.
+
+<a id="spoon_ai.neofs.client.NeoFSException"></a>
+
+## `NeoFSException` Objects
+
+```python
+class NeoFSException(Exception)
+```
+
+Base exception for the NeoFS client.
+
+<a id="spoon_ai.neofs.client.NeoFSAPIException"></a>
+
+## `NeoFSAPIException` Objects
+
+```python
+class NeoFSAPIException(NeoFSException)
+```
+
+Raised when the API returns an error.
+
+<a id="spoon_ai.memory"></a>
+
+# Module `spoon_ai.memory`
+
+Short-term memory management for conversation history.
+
+This module provides memory management utilities for maintaining and optimizing
+conversation history in chat applications.
+
+<a id="spoon_ai.memory.mem0_client"></a>
+
+# Module `spoon_ai.memory.mem0_client`
+
+<a id="spoon_ai.memory.mem0_client.SpoonMem0"></a>
+
+## `SpoonMem0` Objects
+
+```python
+class SpoonMem0()
+```
+
+Lightweight wrapper around Mem0's MemoryClient with safe defaults.
+
+<a id="spoon_ai.memory.mem0_client.SpoonMem0.add_text"></a>
+
+#### `add_text`
+
+```python
+def add_text(data: str,
+             user_id: Optional[str] = None,
+             metadata: Optional[Dict[str, Any]] = None) -> None
+```
+
+Convenience helper for adding a single text memory.
+
+<a id="spoon_ai.memory.mem0_client.SpoonMem0.get_all_memory"></a>
+
+#### `get_all_memory`
+
+```python
+def get_all_memory(user_id: Optional[str] = None,
+                   limit: Optional[int] = None) -> List[str]
+```
+
+Retrieve all memories for a user (subject to backend limits).
+
+<a id="spoon_ai.memory.utils"></a>
+
+# Module `spoon_ai.memory.utils`
+
+Memory helpers shared across Mem0 demos and utilities.
+
+<a id="spoon_ai.memory.utils.extract_memories"></a>
+
+#### `extract_memories`
+
+```python
+def extract_memories(result: Any) -> List[str]
+```
+
+Normalize Mem0 search/get responses into a list of memory strings.
+Supports common shapes: &#123;"memories": [...]&#125;, &#123;"results": [...]&#125;, &#123;"data": [...]&#125;, list, or scalar.
+
+<a id="spoon_ai.memory.utils.extract_first_memory_id"></a>
+
+#### `extract_first_memory_id`
+
+```python
+def extract_first_memory_id(result: Any) -> Optional[str]
+```
+
+Pull the first memory id from Mem0 responses.
+Supports common id fields: id, _id, memory_id, uuid.
+
+<a id="spoon_ai.memory.checkpointer"></a>
+
+# Module `spoon_ai.memory.checkpointer`
+
+Enhanced Checkpointing System
+
+Provides persistent storage for agent state, enabling:
+- Conversation pause and resume
+- Thread-based isolation
+- State recovery after crashes
+- Cross-session persistence
+
+Backends:
+- InMemoryCheckpointer: For testing
+- SQLiteCheckpointer: Production-ready persistence
+- JSONCheckpointer: File-based persistence
+
+Usage:
+    checkpointer = SQLiteCheckpointer("agent_memory.db")
+
+    agent = ToolCallAgent(
+        thread_id="user-123",
+        middleware=[CheckpointMiddleware(checkpointer)]
+    )
+
+    # State is automatically saved after each step
+    await agent.run("Do something complex")
+
+    # Resume in a new session
+    agent2 = ToolCallAgent(
+        thread_id="user-123",  # Same thread
+        middleware=[CheckpointMiddleware(checkpointer)]
+    )
+    # Agent2 will restore state from checkpoint
+
+<a id="spoon_ai.memory.checkpointer.Checkpoint"></a>
+
+## `Checkpoint` Objects
+
+```python
+@dataclass
+class Checkpoint()
+```
+
+A single checkpoint containing agent state.
+
+<a id="spoon_ai.memory.checkpointer.Checkpoint.messages"></a>
+
+#### `messages`
+
+Serialized messages
+
+<a id="spoon_ai.memory.checkpointer.Checkpoint.agent_state"></a>
+
+#### `agent_state`
+
+Agent state dict
+
+<a id="spoon_ai.memory.checkpointer.Checkpoint.metadata"></a>
+
+#### `metadata`
+
+Additional metadata
+
+<a id="spoon_ai.memory.checkpointer.BaseCheckpointer"></a>
+
+## `BaseCheckpointer` Objects
+
+```python
+class BaseCheckpointer(ABC)
+```
+
+Abstract base class for checkpointers.
+
+<a id="spoon_ai.memory.checkpointer.BaseCheckpointer.save"></a>
+
+#### `save`
+
+```python
+@abstractmethod
+def save(checkpoint: Checkpoint) -> None
+```
+
+Save a checkpoint.
+
+**Arguments**:
+
+- `checkpoint` - Checkpoint to save
+
+<a id="spoon_ai.memory.checkpointer.BaseCheckpointer.load"></a>
+
+#### `load`
+
+```python
+@abstractmethod
+def load(thread_id: str) -> Optional[Checkpoint]
+```
+
+Load the latest checkpoint for a thread.
+
+**Arguments**:
+
+- `thread_id` - Thread identifier
   
 
 **Returns**:
 
-  List of matching skills (deduplicated)
+  Latest checkpoint or None if not found
 
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_pattern"></a>
+<a id="spoon_ai.memory.checkpointer.BaseCheckpointer.list_threads"></a>
 
-#### `find_by_pattern`
+#### `list_threads`
 
 ```python
-def find_by_pattern(text: str) -> List[Skill]
+@abstractmethod
+def list_threads() -> List[str]
 ```
 
-Find skills by regex pattern matching.
+List all thread IDs with checkpoints.
+
+**Returns**:
+
+  List of thread IDs
+
+<a id="spoon_ai.memory.checkpointer.BaseCheckpointer.delete"></a>
+
+#### `delete`
+
+```python
+@abstractmethod
+def delete(thread_id: str) -> bool
+```
+
+Delete all checkpoints for a thread.
 
 **Arguments**:
 
-- `text` - Text to match patterns against
+- `thread_id` - Thread identifier
   
 
 **Returns**:
 
-  List of matching skills
+  True if deleted, False if not found
 
-<a id="spoon_ai.skills.registry.SkillRegistry.find_by_intent"></a>
+<a id="spoon_ai.memory.checkpointer.BaseCheckpointer.get_history"></a>
 
-#### `find_by_intent`
+#### `get_history`
 
 ```python
-def find_by_intent(intent_category: str) -> List[Skill]
+@abstractmethod
+def get_history(thread_id: str, limit: int = 10) -> List[Checkpoint]
 ```
 
-Find skills by intent category.
+Get checkpoint history for a thread.
 
 **Arguments**:
 
-- `intent_category` - Intent category to match
+- `thread_id` - Thread identifier
+- `limit` - Maximum number of checkpoints to return
   
 
 **Returns**:
 
-  List of matching skills
+  List of checkpoints, most recent first
 
-<a id="spoon_ai.skills.registry.SkillRegistry.find_all_matching"></a>
+<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer"></a>
 
-#### `find_all_matching`
-
-```python
-def find_all_matching(text: str) -> List[Skill]
-```
-
-Find all skills matching by keywords or patterns.
-
-Combines keyword and pattern matching, sorted by trigger priority.
-
-**Arguments**:
-
-- `text` - Text to match against
-  
-
-**Returns**:
-
-  List of matching skills, sorted by priority (highest first)
-
-<a id="spoon_ai.skills.registry.SkillRegistry.get_intent_categories"></a>
-
-#### `get_intent_categories`
+## `InMemoryCheckpointer` Objects
 
 ```python
-def get_intent_categories() -> List[str]
+class InMemoryCheckpointer(BaseCheckpointer)
 ```
 
-Get all registered intent categories.
+In-memory checkpointer for testing and development.
 
-<a id="spoon_ai.skills.script_tool"></a>
+<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer.save"></a>
 
-# Module `spoon_ai.skills.script_tool`
-
-Script-based tool for agent integration.
-
-Wraps SkillScript as a BaseTool that agents can call.
-AI decides how to use scripts - users only control whether scripts are allowed.
-
-<a id="spoon_ai.skills.script_tool.ScriptTool"></a>
-
-## `ScriptTool` Objects
+#### `save`
 
 ```python
-class ScriptTool(BaseTool)
+def save(checkpoint: Checkpoint) -> None
 ```
 
-Tool wrapper for skill scripts.
+Save checkpoint to memory.
 
-Exposes a SkillScript as a callable tool that agents can invoke.
-When the script defines an ``input_schema``, the tool parameters are
-derived from that schema so the LLM receives a structured contract.
-Otherwise a generic ``input`` string parameter is used for backward
-compatibility.
+<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer.load"></a>
 
-<a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
+#### `load`
+
+```python
+def load(thread_id: str) -> Optional[Checkpoint]
+```
+
+Load latest checkpoint from memory.
+
+<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer.list_threads"></a>
+
+#### `list_threads`
+
+```python
+def list_threads() -> List[str]
+```
+
+List all thread IDs.
+
+<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer.delete"></a>
+
+#### `delete`
+
+```python
+def delete(thread_id: str) -> bool
+```
+
+Delete all checkpoints for thread.
+
+<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer.get_history"></a>
+
+#### `get_history`
+
+```python
+def get_history(thread_id: str, limit: int = 10) -> List[Checkpoint]
+```
+
+Get checkpoint history.
+
+<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer"></a>
+
+## `SQLiteCheckpointer` Objects
+
+```python
+class SQLiteCheckpointer(BaseCheckpointer)
+```
+
+SQLite-based checkpointer for production use.
+
+Features:
+- Persistent storage
+- Automatic schema creation
+- Thread-safe operations
+- Checkpoint history
+
+<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(script: SkillScript,
-             skill_name: str,
-             working_directory: Optional[str] = None)
+def __init__(db_path: str = "checkpoints.db")
 ```
 
-Create a tool from a script definition.
+Initialize SQLite checkpointer.
 
 **Arguments**:
 
-- `script` - SkillScript to wrap
-- `skill_name` - Parent skill name
-- `working_directory` - Base working directory
+- `db_path` - Path to SQLite database file
 
-<a id="spoon_ai.skills.script_tool.ScriptTool.execute"></a>
+<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.save"></a>
+
+#### `save`
+
+```python
+def save(checkpoint: Checkpoint) -> None
+```
+
+Save checkpoint to SQLite.
+
+<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.load"></a>
+
+#### `load`
+
+```python
+def load(thread_id: str) -> Optional[Checkpoint]
+```
+
+Load latest checkpoint from SQLite.
+
+<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.list_threads"></a>
+
+#### `list_threads`
+
+```python
+def list_threads() -> List[str]
+```
+
+List all thread IDs.
+
+<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.delete"></a>
+
+#### `delete`
+
+```python
+def delete(thread_id: str) -> bool
+```
+
+Delete all checkpoints for thread.
+
+<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.get_history"></a>
+
+#### `get_history`
+
+```python
+def get_history(thread_id: str, limit: int = 10) -> List[Checkpoint]
+```
+
+Get checkpoint history.
+
+<a id="spoon_ai.memory.checkpointer.JSONCheckpointer"></a>
+
+## `JSONCheckpointer` Objects
+
+```python
+class JSONCheckpointer(BaseCheckpointer)
+```
+
+JSON file-based checkpointer.
+
+Each thread gets its own JSON file.
+
+<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(storage_dir: str = ".checkpoints")
+```
+
+Initialize JSON checkpointer.
+
+**Arguments**:
+
+- `storage_dir` - Directory for checkpoint files
+
+<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.save"></a>
+
+#### `save`
+
+```python
+def save(checkpoint: Checkpoint) -> None
+```
+
+Save checkpoint to JSON file.
+
+<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.load"></a>
+
+#### `load`
+
+```python
+def load(thread_id: str) -> Optional[Checkpoint]
+```
+
+Load latest checkpoint from JSON file.
+
+<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.list_threads"></a>
+
+#### `list_threads`
+
+```python
+def list_threads() -> List[str]
+```
+
+List all thread IDs.
+
+<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.delete"></a>
+
+#### `delete`
+
+```python
+def delete(thread_id: str) -> bool
+```
+
+Delete checkpoint file.
+
+<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.get_history"></a>
+
+#### `get_history`
+
+```python
+def get_history(thread_id: str, limit: int = 10) -> List[Checkpoint]
+```
+
+Get checkpoint history.
+
+<a id="spoon_ai.memory.checkpointer.CheckpointMiddleware"></a>
+
+## `CheckpointMiddleware` Objects
+
+```python
+class CheckpointMiddleware(AgentMiddleware)
+```
+
+Middleware that adds automatic checkpointing.
+
+Features:
+- Automatic state saving after each step
+- Automatic state restoration on startup
+- Thread-based isolation
+- Configurable checkpoint frequency
+
+Usage:
+    checkpointer = SQLiteCheckpointer("agent.db")
+
+    agent = ToolCallAgent(
+        thread_id="user-123",
+        middleware=[CheckpointMiddleware(
+            checkpointer,
+            save_frequency=1  # Save after every step
+        )]
+    )
+
+<a id="spoon_ai.memory.checkpointer.CheckpointMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(checkpointer: BaseCheckpointer,
+             save_frequency: int = 1,
+             auto_restore: bool = True)
+```
+
+Initialize checkpoint middleware.
+
+**Arguments**:
+
+- `checkpointer` - Checkpointer backend
+- `save_frequency` - Save checkpoint every N steps
+- `auto_restore` - Automatically restore state on startup
+
+<a id="spoon_ai.memory.checkpointer.CheckpointMiddleware.before_agent"></a>
+
+#### `before_agent`
+
+```python
+def before_agent(state: Dict[str, Any],
+                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Restore state from checkpoint on startup.
+
+<a id="spoon_ai.memory.checkpointer.CheckpointMiddleware.after_agent"></a>
+
+#### `after_agent`
+
+```python
+def after_agent(state: Dict[str, Any],
+                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Save checkpoint after agent completes.
+
+<a id="spoon_ai.memory.checkpointer.create_sqlite_checkpointer"></a>
+
+#### `create_sqlite_checkpointer`
+
+```python
+def create_sqlite_checkpointer(
+        db_path: str = "agent_memory.db") -> SQLiteCheckpointer
+```
+
+Create a SQLite checkpointer.
+
+**Arguments**:
+
+- `db_path` - Path to SQLite database
+  
+
+**Returns**:
+
+  Configured SQLiteCheckpointer
+
+<a id="spoon_ai.memory.checkpointer.create_memory_checkpointer"></a>
+
+#### `create_memory_checkpointer`
+
+```python
+def create_memory_checkpointer() -> InMemoryCheckpointer
+```
+
+Create an in-memory checkpointer for testing.
+
+**Returns**:
+
+  InMemoryCheckpointer instance
+
+<a id="spoon_ai.memory.remove_message"></a>
+
+# Module `spoon_ai.memory.remove_message`
+
+Helpers for emitting message-removal directives.
+
+<a id="spoon_ai.memory.remove_message.RemoveMessage"></a>
+
+## `RemoveMessage` Objects
+
+```python
+class RemoveMessage(BaseModel)
+```
+
+Lightweight message that signals another message should be removed.
+
+<a id="spoon_ai.memory.short_term_manager"></a>
+
+# Module `spoon_ai.memory.short_term_manager`
+
+Short-term memory management for conversation history.
+
+<a id="spoon_ai.memory.short_term_manager.TrimStrategy"></a>
+
+## `TrimStrategy` Objects
+
+```python
+class TrimStrategy(str, Enum)
+```
+
+Strategy for trimming messages.
+
+<a id="spoon_ai.memory.short_term_manager.TrimStrategy.FROM_START"></a>
+
+#### `FROM_START`
+
+Remove oldest messages first
+
+<a id="spoon_ai.memory.short_term_manager.TrimStrategy.FROM_END"></a>
+
+#### `FROM_END`
+
+Remove newest messages first
+
+<a id="spoon_ai.memory.short_term_manager.MessageTokenCounter"></a>
+
+## `MessageTokenCounter` Objects
+
+```python
+class MessageTokenCounter()
+```
+
+Approximate token counter aligned with LangChain semantics.
+
+<a id="spoon_ai.memory.short_term_manager.ShortTermMemoryManager"></a>
+
+## `ShortTermMemoryManager` Objects
+
+```python
+class ShortTermMemoryManager()
+```
+
+Manager for short-term conversation memory with advanced operations.
+
+<a id="spoon_ai.memory.short_term_manager.ShortTermMemoryManager.trim_messages"></a>
+
+#### `trim_messages`
+
+```python
+async def trim_messages(messages: List[Message],
+                        max_tokens: int,
+                        strategy: TrimStrategy = TrimStrategy.FROM_END,
+                        keep_system: bool = True,
+                        model: Optional[str] = None) -> List[Message]
+```
+
+Trim messages using a LangChain-style heuristic.
+
+<a id="spoon_ai.memory.short_term_manager.ShortTermMemoryManager.summarize_messages"></a>
+
+#### `summarize_messages`
+
+```python
+async def summarize_messages(
+    messages: List[Message],
+    max_tokens_before_summary: int,
+    messages_to_keep: int = 5,
+    summary_model: Optional[str] = None,
+    llm_manager=None,
+    llm_provider: Optional[str] = None,
+    existing_summary: str = ""
+) -> Tuple[List[Message], List[RemoveMessage], Optional[str]]
+```
+
+Summarize earlier messages and emit removal directives.
+
+<a id="spoon_ai.callbacks"></a>
+
+# Module `spoon_ai.callbacks`
+
+Callback system for streaming and event handling in Spoon AI.
+
+This module provides a comprehensive callback system similar to LangChain's callbacks,
+enabling real-time monitoring and event handling for LLM calls, agent execution,
+tool invocation, and graph workflows.
+
+<a id="spoon_ai.callbacks.streaming_stdout"></a>
+
+# Module `spoon_ai.callbacks.streaming_stdout`
+
+<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler"></a>
+
+## `StreamingStdOutCallbackHandler` Objects
+
+```python
+class StreamingStdOutCallbackHandler(BaseCallbackHandler)
+```
+
+Callback handler that streams tokens to standard output.
+
+<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_new_token"></a>
+
+#### `on_llm_new_token`
+
+```python
+def on_llm_new_token(token: str, **kwargs: Any) -> None
+```
+
+Print token to stdout immediately.
+
+**Arguments**:
+
+- `token` - The new token to print
+- `**kwargs` - Additional context (ignored)
+
+<a id="spoon_ai.callbacks.streaming_stdout.StreamingStdOutCallbackHandler.on_llm_end"></a>
+
+#### `on_llm_end`
+
+```python
+def on_llm_end(response: Any, **kwargs: Any) -> None
+```
+
+Print newline after LLM completes.
+
+**Arguments**:
+
+- `response` - The complete LLM response (ignored)
+- `**kwargs` - Additional context (ignored)
+
+<a id="spoon_ai.callbacks.manager"></a>
+
+# Module `spoon_ai.callbacks.manager`
+
+<a id="spoon_ai.callbacks.manager.CallbackManager"></a>
+
+## `CallbackManager` Objects
+
+```python
+class CallbackManager()
+```
+
+Lightweight dispatcher for callback handlers.
+
+<a id="spoon_ai.callbacks.statistics"></a>
+
+# Module `spoon_ai.callbacks.statistics`
+
+<a id="spoon_ai.callbacks.statistics.StreamingStatisticsCallback"></a>
+
+## `StreamingStatisticsCallback` Objects
+
+```python
+class StreamingStatisticsCallback(BaseCallbackHandler, LLMManagerMixin)
+```
+
+Collect simple throughput statistics during streaming runs.
+
+By default, the callback prints summary metrics when the LLM finishes.
+Consumers can provide a custom ``print_fn`` to redirect output, or disable
+printing entirely and read the public attributes after execution.
+
+<a id="spoon_ai.callbacks.skill_callback"></a>
+
+# Module `spoon_ai.callbacks.skill_callback`
+
+Skill-specific callback handler.
+
+Extends BaseCallbackHandler with skill lifecycle hooks.
+
+<a id="spoon_ai.callbacks.skill_callback.SkillCallbackHandler"></a>
+
+## `SkillCallbackHandler` Objects
+
+```python
+class SkillCallbackHandler(BaseCallbackHandler)
+```
+
+Callback handler for skill lifecycle events.
+
+Extends BaseCallbackHandler with skill-specific hooks:
+- on_skill_start: Called when a skill is activated
+- on_skill_end: Called when a skill is deactivated
+- on_skill_error: Called when skill activation/execution fails
+
+Usage:
+    class MySkillHandler(SkillCallbackHandler):
+        async def on_skill_start(self, skill_name, context, **kwargs):
+            print(f"Skill activated: &#123;skill_name&#125;")
+
+        async def on_skill_end(self, skill_name, result, **kwargs):
+            print(f"Skill deactivated: &#123;skill_name&#125;")
+
+    agent = SpoonReactSkill(callbacks=[MySkillHandler()])
+
+<a id="spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_start"></a>
+
+#### `on_skill_start`
+
+```python
+async def on_skill_start(skill_name: str,
+                         context: Dict[str, Any],
+                         *,
+                         run_id: Optional[str] = None,
+                         **kwargs) -> None
+```
+
+Called when a skill is activated.
+
+**Arguments**:
+
+- `skill_name` - Name of the activated skill
+- `context` - Skill activation context
+- `run_id` - Optional run identifier
+- `**kwargs` - Additional metadata
+
+<a id="spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_end"></a>
+
+#### `on_skill_end`
+
+```python
+async def on_skill_end(skill_name: str,
+                       result: Any,
+                       *,
+                       run_id: Optional[str] = None,
+                       **kwargs) -> None
+```
+
+Called when a skill is deactivated.
+
+**Arguments**:
+
+- `skill_name` - Name of the deactivated skill
+- `result` - Result or state from the skill
+- `run_id` - Optional run identifier
+- `**kwargs` - Additional metadata
+
+<a id="spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_error"></a>
+
+#### `on_skill_error`
+
+```python
+async def on_skill_error(skill_name: str,
+                         error: Exception,
+                         *,
+                         run_id: Optional[str] = None,
+                         **kwargs) -> None
+```
+
+Called when a skill encounters an error.
+
+**Arguments**:
+
+- `skill_name` - Name of the skill that errored
+- `error` - The exception that occurred
+- `run_id` - Optional run identifier
+- `**kwargs` - Additional metadata
+
+<a id="spoon_ai.callbacks.skill_callback.SkillCallbackHandler.on_skill_match"></a>
+
+#### `on_skill_match`
+
+```python
+async def on_skill_match(query: str,
+                         matched_skills: list,
+                         *,
+                         run_id: Optional[str] = None,
+                         **kwargs) -> None
+```
+
+Called when skills are matched to a query.
+
+**Arguments**:
+
+- `query` - The user query that triggered matching
+- `matched_skills` - List of skill names that matched
+- `run_id` - Optional run identifier
+- `**kwargs` - Additional metadata
+
+<a id="spoon_ai.callbacks.skill_callback.LoggingSkillCallback"></a>
+
+## `LoggingSkillCallback` Objects
+
+```python
+class LoggingSkillCallback(SkillCallbackHandler)
+```
+
+Skill callback that logs all events.
+
+Useful for debugging and monitoring skill system activity.
+
+<a id="spoon_ai.callbacks.skill_callback.MetricsSkillCallback"></a>
+
+## `MetricsSkillCallback` Objects
+
+```python
+class MetricsSkillCallback(SkillCallbackHandler)
+```
+
+Skill callback that collects metrics.
+
+Tracks:
+- Number of skill activations/deactivations
+- Error counts per skill
+- Match counts
+
+Usage:
+    metrics = MetricsSkillCallback()
+    agent = SpoonReactSkill(callbacks=[metrics])
+    # ... use agent ...
+    print(metrics.get_metrics())
+
+<a id="spoon_ai.callbacks.skill_callback.MetricsSkillCallback.get_metrics"></a>
+
+#### `get_metrics`
+
+```python
+def get_metrics() -> Dict[str, Any]
+```
+
+Get collected metrics.
+
+<a id="spoon_ai.callbacks.skill_callback.MetricsSkillCallback.reset"></a>
+
+#### `reset`
+
+```python
+def reset() -> None
+```
+
+Reset all metrics.
+
+<a id="spoon_ai.callbacks.stream_event"></a>
+
+# Module `spoon_ai.callbacks.stream_event`
+
+<a id="spoon_ai.callbacks.stream_event.StreamEventCallbackHandler"></a>
+
+## `StreamEventCallbackHandler` Objects
+
+```python
+class StreamEventCallbackHandler(BaseCallbackHandler)
+```
+
+Translate callback invocations into standardized stream events.
+
+<a id="spoon_ai.callbacks.base"></a>
+
+# Module `spoon_ai.callbacks.base`
+
+<a id="spoon_ai.callbacks.base.RetrieverManagerMixin"></a>
+
+## `RetrieverManagerMixin` Objects
+
+```python
+class RetrieverManagerMixin()
+```
+
+Mixin providing retriever callback hooks.
+
+<a id="spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_start"></a>
+
+#### `on_retriever_start`
+
+```python
+def on_retriever_start(run_id: UUID, query: Any, **kwargs: Any) -> Any
+```
+
+Run when a retriever begins execution.
+
+<a id="spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_end"></a>
+
+#### `on_retriever_end`
+
+```python
+def on_retriever_end(run_id: UUID, documents: Any, **kwargs: Any) -> Any
+```
+
+Run when a retriever finishes successfully.
+
+<a id="spoon_ai.callbacks.base.RetrieverManagerMixin.on_retriever_error"></a>
+
+#### `on_retriever_error`
+
+```python
+def on_retriever_error(error: BaseException, *, run_id: UUID,
+                       **kwargs: Any) -> Any
+```
+
+Run when a retriever raises an error.
+
+<a id="spoon_ai.callbacks.base.LLMManagerMixin"></a>
+
+## `LLMManagerMixin` Objects
+
+```python
+class LLMManagerMixin()
+```
+
+Mixin providing large language model callback hooks.
+
+<a id="spoon_ai.callbacks.base.LLMManagerMixin.on_llm_start"></a>
+
+#### `on_llm_start`
+
+```python
+def on_llm_start(run_id: UUID, messages: List[Message], **kwargs: Any) -> Any
+```
+
+Run when an LLM or chat model begins execution.
+
+<a id="spoon_ai.callbacks.base.LLMManagerMixin.on_llm_new_token"></a>
+
+#### `on_llm_new_token`
+
+```python
+def on_llm_new_token(token: str,
+                     *,
+                     chunk: Optional[LLMResponseChunk] = None,
+                     run_id: Optional[UUID] = None,
+                     **kwargs: Any) -> Any
+```
+
+Run for each streamed token emitted by an LLM.
+
+<a id="spoon_ai.callbacks.base.LLMManagerMixin.on_llm_end"></a>
+
+#### `on_llm_end`
+
+```python
+def on_llm_end(response: LLMResponse, *, run_id: UUID, **kwargs: Any) -> Any
+```
+
+Run when an LLM finishes successfully.
+
+<a id="spoon_ai.callbacks.base.LLMManagerMixin.on_llm_error"></a>
+
+#### `on_llm_error`
+
+```python
+def on_llm_error(error: BaseException, *, run_id: UUID, **kwargs: Any) -> Any
+```
+
+Run when an LLM raises an error.
+
+<a id="spoon_ai.callbacks.base.ChainManagerMixin"></a>
+
+## `ChainManagerMixin` Objects
+
+```python
+class ChainManagerMixin()
+```
+
+Mixin providing chain-level callback hooks.
+
+<a id="spoon_ai.callbacks.base.ChainManagerMixin.on_chain_start"></a>
+
+#### `on_chain_start`
+
+```python
+def on_chain_start(run_id: UUID, inputs: Any, **kwargs: Any) -> Any
+```
+
+Run when a chain (Runnable) starts executing.
+
+<a id="spoon_ai.callbacks.base.ChainManagerMixin.on_chain_end"></a>
+
+#### `on_chain_end`
+
+```python
+def on_chain_end(run_id: UUID, outputs: Any, **kwargs: Any) -> Any
+```
+
+Run when a chain finishes successfully.
+
+<a id="spoon_ai.callbacks.base.ChainManagerMixin.on_chain_error"></a>
+
+#### `on_chain_error`
+
+```python
+def on_chain_error(error: BaseException, *, run_id: UUID,
+                   **kwargs: Any) -> Any
+```
+
+Run when a chain raises an error.
+
+<a id="spoon_ai.callbacks.base.ToolManagerMixin"></a>
+
+## `ToolManagerMixin` Objects
+
+```python
+class ToolManagerMixin()
+```
+
+Mixin providing tool callback hooks.
+
+<a id="spoon_ai.callbacks.base.ToolManagerMixin.on_tool_start"></a>
+
+#### `on_tool_start`
+
+```python
+def on_tool_start(tool_name: str, tool_input: Any, *, run_id: UUID,
+                  **kwargs: Any) -> Any
+```
+
+Run when a tool invocation begins.
+
+<a id="spoon_ai.callbacks.base.ToolManagerMixin.on_tool_end"></a>
+
+#### `on_tool_end`
+
+```python
+def on_tool_end(tool_name: str, tool_output: Any, *, run_id: UUID,
+                **kwargs: Any) -> Any
+```
+
+Run when a tool invocation succeeds.
+
+<a id="spoon_ai.callbacks.base.ToolManagerMixin.on_tool_error"></a>
+
+#### `on_tool_error`
+
+```python
+def on_tool_error(error: BaseException,
+                  *,
+                  run_id: UUID,
+                  tool_name: Optional[str] = None,
+                  **kwargs: Any) -> Any
+```
+
+Run when a tool invocation raises an error.
+
+<a id="spoon_ai.callbacks.base.PromptManagerMixin"></a>
+
+## `PromptManagerMixin` Objects
+
+```python
+class PromptManagerMixin()
+```
+
+Mixin providing prompt template callback hooks.
+
+<a id="spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_start"></a>
+
+#### `on_prompt_start`
+
+```python
+def on_prompt_start(run_id: UUID, inputs: Any, **kwargs: Any) -> Any
+```
+
+Run when a prompt template begins formatting.
+
+<a id="spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_end"></a>
+
+#### `on_prompt_end`
+
+```python
+def on_prompt_end(run_id: UUID, output: Any, **kwargs: Any) -> Any
+```
+
+Run when a prompt template finishes formatting.
+
+<a id="spoon_ai.callbacks.base.PromptManagerMixin.on_prompt_error"></a>
+
+#### `on_prompt_error`
+
+```python
+def on_prompt_error(error: BaseException, *, run_id: UUID,
+                    **kwargs: Any) -> Any
+```
+
+Run when prompt formatting raises an error.
+
+<a id="spoon_ai.callbacks.base.BaseCallbackHandler"></a>
+
+## `BaseCallbackHandler` Objects
+
+```python
+class BaseCallbackHandler(LLMManagerMixin, ChainManagerMixin, ToolManagerMixin,
+                          RetrieverManagerMixin, PromptManagerMixin, ABC)
+```
+
+Base class for SpoonAI callback handlers.
+
+<a id="spoon_ai.callbacks.base.BaseCallbackHandler.raise_error"></a>
+
+#### `raise_error`
+
+Whether to re-raise exceptions originating from callbacks.
+
+<a id="spoon_ai.callbacks.base.BaseCallbackHandler.run_inline"></a>
+
+#### `run_inline`
+
+Whether the callback prefers to run on the caller's event loop.
+
+<a id="spoon_ai.callbacks.base.BaseCallbackHandler.ignore_llm"></a>
+
+#### `ignore_llm`
+
+```python
+@property
+def ignore_llm() -> bool
+```
+
+Return True to skip LLM callbacks.
+
+<a id="spoon_ai.callbacks.base.BaseCallbackHandler.ignore_chain"></a>
+
+#### `ignore_chain`
+
+```python
+@property
+def ignore_chain() -> bool
+```
+
+Return True to skip chain callbacks.
+
+<a id="spoon_ai.callbacks.base.BaseCallbackHandler.ignore_tool"></a>
+
+#### `ignore_tool`
+
+```python
+@property
+def ignore_tool() -> bool
+```
+
+Return True to skip tool callbacks.
+
+<a id="spoon_ai.callbacks.base.BaseCallbackHandler.ignore_retriever"></a>
+
+#### `ignore_retriever`
+
+```python
+@property
+def ignore_retriever() -> bool
+```
+
+Return True to skip retriever callbacks.
+
+<a id="spoon_ai.callbacks.base.BaseCallbackHandler.ignore_prompt"></a>
+
+#### `ignore_prompt`
+
+```python
+@property
+def ignore_prompt() -> bool
+```
+
+Return True to skip prompt callbacks.
+
+<a id="spoon_ai.callbacks.base.AsyncCallbackHandler"></a>
+
+## `AsyncCallbackHandler` Objects
+
+```python
+class AsyncCallbackHandler(BaseCallbackHandler)
+```
+
+Async version of the callback handler base class.
+
+<a id="spoon_ai.identity"></a>
+
+# Module `spoon_ai.identity`
+
+SpoonOS Agent DID Identity Module
+Implements ERC-8004 compliant decentralized identity for agents
+
+<a id="spoon_ai.identity.storage_client"></a>
+
+# Module `spoon_ai.identity.storage_client`
+
+Storage clients for DID documents and agent cards
+Supports NeoFS (primary) and IPFS (backup replication)
+
+<a id="spoon_ai.identity.storage_client.DIDStorageClient"></a>
+
+## `DIDStorageClient` Objects
+
+```python
+class DIDStorageClient()
+```
+
+Unified storage client for DID documents
+NeoFS primary with IPFS replication
+
+<a id="spoon_ai.identity.storage_client.DIDStorageClient.publish_did_document"></a>
+
+#### `publish_did_document`
+
+```python
+def publish_did_document(agent_id: str, did_document: Dict,
+                         agent_card: Dict) -> Tuple[str, str]
+```
+
+Publish DID document and agent card to storage
+Returns (didDocURI, agentCardURI)
+
+<a id="spoon_ai.identity.storage_client.DIDStorageClient.fetch_did_document"></a>
+
+#### `fetch_did_document`
+
+```python
+def fetch_did_document(uri: str) -> Dict
+```
+
+Fetch DID document from URI (NeoFS or IPFS)
+
+<a id="spoon_ai.identity.storage_client.DIDStorageClient.publish_credential"></a>
+
+#### `publish_credential`
+
+```python
+def publish_credential(agent_id: str, credential: Dict) -> str
+```
+
+Publish verifiable credential
+
+<a id="spoon_ai.identity.storage_client.DIDStorageClient.close"></a>
+
+#### `close`
+
+```python
+def close()
+```
+
+Close HTTP clients
+
+<a id="spoon_ai.identity.attestation"></a>
+
+# Module `spoon_ai.identity.attestation`
+
+Attestation and Trust Score Management
+Handles verifiable credentials and reputation calculations
+
+<a id="spoon_ai.identity.attestation.AttestationManager"></a>
+
+## `AttestationManager` Objects
+
+```python
+class AttestationManager()
+```
+
+Manages verifiable attestations for agents
+
+<a id="spoon_ai.identity.attestation.AttestationManager.create_attestation"></a>
+
+#### `create_attestation`
+
+```python
+def create_attestation(issuer_did: str,
+                       subject_did: str,
+                       claim: Dict,
+                       evidence: Optional[str] = None) -> Attestation
+```
+
+Create a verifiable attestation
+
+**Arguments**:
+
+- `issuer_did` - DID of the attestation issuer
+- `subject_did` - DID of the agent being attested
+- `claim` - Attestation claim data
+- `evidence` - Optional supporting evidence
+  
+
+**Returns**:
+
+  Signed Attestation object
+
+<a id="spoon_ai.identity.attestation.AttestationManager.verify_attestation"></a>
+
+#### `verify_attestation`
+
+```python
+def verify_attestation(attestation: Attestation) -> bool
+```
+
+Verify attestation signature
+
+<a id="spoon_ai.identity.attestation.AttestationManager.submit_reputation_on_chain"></a>
+
+#### `submit_reputation_on_chain`
+
+```python
+def submit_reputation_on_chain(subject_did: str, score: int,
+                               evidence: str) -> str
+```
+
+Submit reputation score to on-chain registry
+
+**Arguments**:
+
+- `subject_did` - DID of agent being rated
+- `score` - Score between -100 and 100
+- `evidence` - Evidence for the score
+  
+
+**Returns**:
+
+  Transaction hash
+
+<a id="spoon_ai.identity.attestation.AttestationManager.submit_validation_on_chain"></a>
+
+#### `submit_validation_on_chain`
+
+```python
+def submit_validation_on_chain(subject_did: str, is_valid: bool,
+                               reason: str) -> str
+```
+
+Submit validation for an agent
+
+**Arguments**:
+
+- `subject_did` - DID of agent being validated
+- `is_valid` - Whether agent is valid
+- `reason` - Reason for validation decision
+  
+
+**Returns**:
+
+  Transaction hash
+
+<a id="spoon_ai.identity.attestation.TrustScoreCalculator"></a>
+
+## `TrustScoreCalculator` Objects
+
+```python
+class TrustScoreCalculator()
+```
+
+Calculates trust scores for agents
+
+<a id="spoon_ai.identity.attestation.TrustScoreCalculator.calculate_trust_score"></a>
+
+#### `calculate_trust_score`
+
+```python
+def calculate_trust_score(did: str) -> Dict
+```
+
+Calculate comprehensive trust score
+
+**Returns**:
+
+  Dict with trust score components:
+  - reputation_score: -100 to 100
+  - validation_status: bool
+  - trust_level: "high" | "medium" | "low" | "untrusted"
+  - confidence: 0 to 1
+
+<a id="spoon_ai.identity.attestation.TrustScoreCalculator.get_reputation_breakdown"></a>
+
+#### `get_reputation_breakdown`
+
+```python
+def get_reputation_breakdown(did: str, limit: int = 10) -> List[Dict]
+```
+
+Get detailed reputation submissions
+
+<a id="spoon_ai.identity.attestation.TrustScoreCalculator.get_validation_breakdown"></a>
+
+#### `get_validation_breakdown`
+
+```python
+def get_validation_breakdown(did: str, limit: int = 10) -> List[Dict]
+```
+
+Get detailed validation submissions
+
+<a id="spoon_ai.identity.did_resolver"></a>
+
+# Module `spoon_ai.identity.did_resolver`
+
+DID Resolver for SpoonOS Agents
+Implements unified DID resolution via IdentityRegistry with NeoFS-first policy
+
+<a id="spoon_ai.identity.did_resolver.DIDResolver"></a>
+
+## `DIDResolver` Objects
+
+```python
+class DIDResolver()
+```
+
+Unified DID resolver for SpoonOS agents.
+Resolution flow: IdentityRegistry (agentId) → NeoFS (primary) → IPFS (fallback)
+
+<a id="spoon_ai.identity.did_resolver.DIDResolver.resolve"></a>
+
+#### `resolve`
+
+```python
+def resolve(agent_id: int) -> DIDResolutionResult
+```
+
+Resolve agent identity to complete DID document.
+
+**Arguments**:
+
+- `agent_id` - On-chain agent token ID from IdentityRegistry
+  
+
+**Returns**:
+
+  DIDResolutionResult with document and metadata
+
+<a id="spoon_ai.identity.did_resolver.DIDResolver.resolve_metadata_only"></a>
+
+#### `resolve_metadata_only`
+
+```python
+def resolve_metadata_only(agent_id: int) -> Dict
+```
+
+Resolve only on-chain metadata (fast path)
+
+<a id="spoon_ai.identity.did_resolver.DIDResolver.verify_agent"></a>
+
+#### `verify_agent`
+
+```python
+def verify_agent(agent_id: int) -> bool
+```
+
+Verify agent exists and is resolvable
+
+<a id="spoon_ai.identity.erc8004_client"></a>
+
+# Module `spoon_ai.identity.erc8004_client`
+
+ERC-8004 Smart Contract Client
+Handles on-chain interactions with agent registries (IdentityRegistry only)
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client"></a>
+
+## `ERC8004Client` Objects
+
+```python
+class ERC8004Client()
+```
+
+Client for interacting with ERC-8004 agent registries
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client.get_agent_id_for_address"></a>
+
+#### `get_agent_id_for_address`
+
+```python
+def get_agent_id_for_address(address: str) -> int
+```
+
+Look up the agent ID (ERC-721 token) owned by *address*.
+
+Returns 0 if the address has no registered agent identity.
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client.register_agent"></a>
+
+#### `register_agent`
+
+```python
+def register_agent(token_uri: str,
+                   metadata: Optional[List[Tuple[str, bytes]]] = None) -> int
+```
+
+Register agent on IdentityRegistry; returns agentId.
+
+<a id="spoon_ai.identity.erc8004_client.ERC8004Client.resolve_agent"></a>
+
+#### `resolve_agent`
+
+```python
+def resolve_agent(agent_id: int) -> Dict
+```
+
+Resolve agent metadata from IdentityRegistry by agentId.
+
+Returns dict with owner, tokenURI, and common metadata fields.
+
+<a id="spoon_ai.identity.erc8004_abi"></a>
+
+# Module `spoon_ai.identity.erc8004_abi`
+
+Shared ERC-8004 ABI fragments (minimal, artifact-free).
+
+These ABIs cover the common calls used by the Python SDK and demos.
+
+<a id="spoon_ai.identity.did_models"></a>
+
+# Module `spoon_ai.identity.did_models`
+
+DID Data Models for SpoonOS Agents
+Following W3C DID Core specification and ERC-8004 standard
+
+<a id="spoon_ai.identity.did_models.VerificationMethodType"></a>
+
+## `VerificationMethodType` Objects
+
+```python
+class VerificationMethodType(str, Enum)
+```
+
+Supported verification method types
+
+<a id="spoon_ai.identity.did_models.ServiceType"></a>
+
+## `ServiceType` Objects
+
+```python
+class ServiceType(str, Enum)
+```
+
+Agent service endpoint types
+
+<a id="spoon_ai.identity.did_models.VerificationMethod"></a>
+
+## `VerificationMethod` Objects
+
+```python
+class VerificationMethod(BaseModel)
+```
+
+Cryptographic verification method for DID authentication
+
+<a id="spoon_ai.identity.did_models.ServiceEndpoint"></a>
+
+## `ServiceEndpoint` Objects
+
+```python
+class ServiceEndpoint(BaseModel)
+```
+
+Service endpoint for agent interaction
+
+<a id="spoon_ai.identity.did_models.ReputationScore"></a>
+
+## `ReputationScore` Objects
+
+```python
+class ReputationScore(BaseModel)
+```
+
+Aggregated reputation score
+
+<a id="spoon_ai.identity.did_models.Attestation"></a>
+
+## `Attestation` Objects
+
+```python
+class Attestation(BaseModel)
+```
+
+Verifiable attestation about an agent
+
+<a id="spoon_ai.identity.did_models.AgentCard"></a>
+
+## `AgentCard` Objects
+
+```python
+class AgentCard(BaseModel)
+```
+
+Agent Card following Google's A2A protocol
+Provides human-readable agent information
+
+<a id="spoon_ai.identity.did_models.AgentDID"></a>
+
+## `AgentDID` Objects
+
+```python
+class AgentDID(BaseModel)
+```
+
+Complete W3C DID Document for SpoonOS Agent
+
+<a id="spoon_ai.identity.did_models.AgentDID.to_did_document"></a>
+
+#### `to_did_document`
+
+```python
+def to_did_document() -> Dict[str, Any]
+```
+
+Export as standard W3C DID Document
+
+<a id="spoon_ai.identity.did_models.AgentDID.to_agent_card"></a>
+
+#### `to_agent_card`
+
+```python
+def to_agent_card() -> Dict[str, Any]
+```
+
+Export agent card separately
+
+<a id="spoon_ai.identity.did_models.DIDResolutionResult"></a>
+
+## `DIDResolutionResult` Objects
+
+```python
+class DIDResolutionResult(BaseModel)
+```
+
+Result of DID resolution
+
+<a id="spoon_ai.tools"></a>
+
+# Module `spoon_ai.tools`
+
+<a id="spoon_ai.tools.mcp_tool"></a>
+
+# Module `spoon_ai.tools.mcp_tool`
+
+<a id="spoon_ai.tools.mcp_tool.MCPTool"></a>
+
+## `MCPTool` Objects
+
+```python
+class MCPTool(BaseTool, MCPClientMixin)
+```
+
+<a id="spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool"></a>
+
+#### `call_mcp_tool`
+
+```python
+async def call_mcp_tool(tool_name: str, **kwargs)
+```
+
+Override the mixin method to add tool-specific error handling.
+
+<a id="spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools"></a>
+
+#### `expand_server_tools`
+
+```python
+async def expand_server_tools() -> List["MCPTool"]
+```
+
+Expand this single MCPTool (one-per-server) into one MCPTool per
+real server tool.  Each returned tool shares the same MCP transport
+config and delegates execution to ``call_mcp_tool(real_name)``.
+
+If the server is unreachable or returns no tools, an empty list is
+returned (callers should keep the original proxy as fallback).
+
+**Returns**:
+
+  List of MCPTool instances, one per discovered server tool.
+
+<a id="spoon_ai.tools.mcp_tool.MCPTool.list_available_tools"></a>
+
+#### `list_available_tools`
+
+```python
+async def list_available_tools() -> list
+```
+
+List available tools from the MCP server.
+
+<a id="spoon_ai.tools.neofs_tools"></a>
+
+# Module `spoon_ai.tools.neofs_tools`
+
+NeoFS Tools for spoon_ai framework
+
+Simple wrappers around NeoFS client methods.
+Tools do NOT auto-create bearer tokens - Agent manages tokens.
+All parameters map directly to client method parameters.
+
+<a id="spoon_ai.tools.neofs_tools.get_shared_neofs_client"></a>
+
+#### `get_shared_neofs_client`
+
+```python
+def get_shared_neofs_client() -> NeoFSClient
+```
+
+Get shared NeoFSClient instance for all NeoFS tools.
+
+Returns the same client instance across all tool calls to ensure
+bearer token authentication works correctly.
+
+<a id="spoon_ai.tools.neofs_tools.CreateBearerTokenTool"></a>
+
+## `CreateBearerTokenTool` Objects
+
+```python
+class CreateBearerTokenTool(BaseTool)
+```
+
+Create a bearer token for NeoFS operations
+
+<a id="spoon_ai.tools.neofs_tools.CreateContainerTool"></a>
+
+## `CreateContainerTool` Objects
+
+```python
+class CreateContainerTool(BaseTool)
+```
+
+Create a NeoFS container
+
+<a id="spoon_ai.tools.neofs_tools.UploadObjectTool"></a>
+
+## `UploadObjectTool` Objects
+
+```python
+class UploadObjectTool(BaseTool)
+```
+
+Upload object to container
+
+<a id="spoon_ai.tools.neofs_tools.DownloadObjectByIdTool"></a>
+
+## `DownloadObjectByIdTool` Objects
+
+```python
+class DownloadObjectByIdTool(BaseTool)
+```
+
+Download object by ID
+
+<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByIdTool"></a>
+
+## `GetObjectHeaderByIdTool` Objects
+
+```python
+class GetObjectHeaderByIdTool(BaseTool)
+```
+
+Get object header by ID
+
+<a id="spoon_ai.tools.neofs_tools.DownloadObjectByAttributeTool"></a>
+
+## `DownloadObjectByAttributeTool` Objects
+
+```python
+class DownloadObjectByAttributeTool(BaseTool)
+```
+
+Download object by attribute
+
+<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByAttributeTool"></a>
+
+## `GetObjectHeaderByAttributeTool` Objects
+
+```python
+class GetObjectHeaderByAttributeTool(BaseTool)
+```
+
+Get object header by attribute
+
+<a id="spoon_ai.tools.neofs_tools.DeleteObjectTool"></a>
+
+## `DeleteObjectTool` Objects
+
+```python
+class DeleteObjectTool(BaseTool)
+```
+
+Delete an object
+
+<a id="spoon_ai.tools.neofs_tools.SearchObjectsTool"></a>
+
+## `SearchObjectsTool` Objects
+
+```python
+class SearchObjectsTool(BaseTool)
+```
+
+Search objects in container
+
+<a id="spoon_ai.tools.neofs_tools.SetContainerEaclTool"></a>
+
+## `SetContainerEaclTool` Objects
+
+```python
+class SetContainerEaclTool(BaseTool)
+```
+
+Set eACL for container
+
+<a id="spoon_ai.tools.neofs_tools.GetContainerEaclTool"></a>
+
+## `GetContainerEaclTool` Objects
+
+```python
+class GetContainerEaclTool(BaseTool)
+```
+
+Get eACL for container
+
+<a id="spoon_ai.tools.neofs_tools.ListContainersTool"></a>
+
+## `ListContainersTool` Objects
+
+```python
+class ListContainersTool(BaseTool)
+```
+
+List all containers
+
+<a id="spoon_ai.tools.neofs_tools.GetContainerInfoTool"></a>
+
+## `GetContainerInfoTool` Objects
+
+```python
+class GetContainerInfoTool(BaseTool)
+```
+
+Get container info
+
+<a id="spoon_ai.tools.neofs_tools.DeleteContainerTool"></a>
+
+## `DeleteContainerTool` Objects
+
+```python
+class DeleteContainerTool(BaseTool)
+```
+
+Delete container
+
+<a id="spoon_ai.tools.neofs_tools.GetNetworkInfoTool"></a>
+
+## `GetNetworkInfoTool` Objects
+
+```python
+class GetNetworkInfoTool(BaseTool)
+```
+
+Get network info
+
+<a id="spoon_ai.tools.neofs_tools.GetBalanceTool"></a>
+
+## `GetBalanceTool` Objects
+
+```python
+class GetBalanceTool(BaseTool)
+```
+
+Get balance for an address
+
+<a id="spoon_ai.tools.x402_payment"></a>
+
+# Module `spoon_ai.tools.x402_payment`
+
+<a id="spoon_ai.tools.x402_payment.X402PaymentHeaderTool"></a>
+
+## `X402PaymentHeaderTool` Objects
+
+```python
+class X402PaymentHeaderTool(BaseTool)
+```
+
+Create a signed X-PAYMENT header for a given resource.
+
+<a id="spoon_ai.tools.x402_payment.X402PaywalledRequestTool"></a>
+
+## `X402PaywalledRequestTool` Objects
+
+```python
+class X402PaywalledRequestTool(BaseTool)
+```
+
+Fetch a paywalled resource, handling the x402 402 negotiation automatically.
+
+<a id="spoon_ai.tools.tool_manager"></a>
+
+# Module `spoon_ai.tools.tool_manager`
+
+<a id="spoon_ai.tools.tool_manager.ToolManager"></a>
+
+## `ToolManager` Objects
+
+```python
+class ToolManager()
+```
+
+<a id="spoon_ai.tools.tool_manager.ToolManager.reindex"></a>
+
+#### `reindex`
+
+```python
+def reindex() -> None
+```
+
+Rebuild the internal name-&gt;tool mapping. Useful if tools have been renamed dynamically.
+
+<a id="spoon_ai.tools.hitl"></a>
+
+# Module `spoon_ai.tools.hitl`
+
+Human-in-the-Loop (HITL) System
+
+Provides approval workflows for critical tool executions:
+- Tool-level approval configuration with dynamic descriptions
+- Multiple approval strategies (approve, edit, reject)
+- Batch interrupt/resume support for parallel tool calls
+- State preservation for pause/resume via Command pattern
+- Integration with checkpointing
+
+Compatible with LangChain DeepAgents HumanInTheLoopMiddleware interface.
+
+Usage:
+    from spoon_ai.tools.hitl import HumanInTheLoopMiddleware, InterruptOnConfig
+
+    # Simple configuration
+    agent = ToolCallAgent(
+        tools=[dangerous_tool],
+        middleware=[HumanInTheLoopMiddleware(interrupt_on=&#123;
+            "delete_file": True,
+            "send_email": &#123;"allowed_decisions": ["approve", "reject"]&#125;
+        &#125;)]
+    )
+
+    # With dynamic description function
+    def format_delete_description(tool_call, state, runtime):
+        return f"Delete file: &#123;tool_call['args'].get('path', 'unknown')&#125;"
+
+    middleware = HumanInTheLoopMiddleware(interrupt_on=&#123;
+        "delete_file": &#123;
+            "allowed_decisions": ["approve", "reject"],
+            "description": format_delete_description,
+        &#125;
+    &#125;)
+
+    # Resume after interrupt
+    result = agent.invoke(Command(resume=&#123;"decisions": [
+        &#123;"type": "approve"&#125;,
+        &#123;"type": "edit", "args": &#123;"path": "/new/path"&#125;&#125;,
+    ]&#125;), config=config)
+
+<a id="spoon_ai.tools.hitl.InterruptOnConfig"></a>
+
+## `InterruptOnConfig` Objects
+
+```python
+class InterruptOnConfig(TypedDict)
+```
+
+Configuration for tool interruption.
+
+Compatible with LangChain DeepAgents InterruptOnConfig.
+
+**Attributes**:
+
+- `allowed_decisions` - List of allowed approval decisions.
+  Defaults to ["approve", "edit", "reject"].
+- `description` - Either a static string or a callable that generates
+  a dynamic description based on the tool call context.
+- `Signature` - (tool_call: ToolCall, state: AgentState, runtime: Runtime) -&gt; str
+  
+
+**Example**:
+
+  # Static description
+- `config` - InterruptOnConfig = &#123;
+- `"allowed_decisions"` - ["approve", "reject"],
+- `"description"` - "This action will delete files permanently.",
+  &#125;
+  
+  # Dynamic description
+  def format_description(tool_call, state, runtime):
+  path = tool_call["args"].get("path", "unknown")
+  return f"Delete file: &#123;path&#125;"
+  
+- `config` - InterruptOnConfig = &#123;
+- `"allowed_decisions"` - ["approve", "reject"],
+- `"description"` - format_description,
+  &#125;
+
+<a id="spoon_ai.tools.hitl.ApprovalDecision"></a>
+
+## `ApprovalDecision` Objects
+
+```python
+class ApprovalDecision(str, Enum)
+```
+
+Possible approval decisions.
+
+<a id="spoon_ai.tools.hitl.ApprovalResponse"></a>
+
+## `ApprovalResponse` Objects
+
+```python
+@dataclass
+class ApprovalResponse()
+```
+
+Response from approval_callback, supporting EDIT with modified arguments.
+
+Usage:
+    # Simple approve/reject
+    return ApprovalDecision.APPROVE
+
+    # Edit with modified arguments
+    return ApprovalResponse(
+        decision=ApprovalDecision.EDIT,
+        modified_arguments=&#123;"path": "/new/path", "mode": "read"&#125;
+    )
+
+<a id="spoon_ai.tools.hitl.ApprovalResponse.__post_init__"></a>
+
+#### `__post_init__`
+
+```python
+def __post_init__()
+```
+
+Validate that EDIT decisions include modified_arguments.
+
+<a id="spoon_ai.tools.hitl.normalize_decision"></a>
+
+#### `normalize_decision`
+
+```python
+def normalize_decision(
+    decision: Union[ApprovalDecision, str, Any]
+) -> tuple[ApprovalDecision, Optional[Dict[str, Any]]]
+```
+
+Normalize approval decision from various input types.
+
+**Arguments**:
+
+- `decision` - Can be:
+  - ApprovalDecision enum
+  - str ("approve", "edit", "reject")
+  - Duck-typed ApprovalResponse object (with decision and optional modified_arguments attributes)
+  This allows cross-module compatibility without requiring exact class match.
+  
+
+**Returns**:
+
+  Tuple of (ApprovalDecision, modified_arguments)
+  - modified_arguments is None unless decision is EDIT and provided in ApprovalResponse
+  
+
+**Examples**:
+
+  &gt;&gt;&gt; normalize_decision(ApprovalDecision.APPROVE)
+  (ApprovalDecision.APPROVE, None)
+  
+  &gt;&gt;&gt; normalize_decision("approve")
+  (ApprovalDecision.APPROVE, None)
+  
+  &gt;&gt;&gt; normalize_decision(ApprovalResponse(decision=ApprovalDecision.EDIT, modified_arguments=&#123;"x": 1&#125;))
+  (ApprovalDecision.EDIT, &#123;"x": 1&#125;)
+  
+  &gt;&gt;&gt; # Duck-typed object (cross-module compatibility)
+  &gt;&gt;&gt; class CustomResponse:
+  ...     decision = ApprovalDecision.EDIT
+  ...     modified_arguments = &#123;"x": 1&#125;
+  &gt;&gt;&gt; normalize_decision(CustomResponse())
+  (ApprovalDecision.EDIT, &#123;"x": 1&#125;)
+
+<a id="spoon_ai.tools.hitl.DecisionInput"></a>
+
+## `DecisionInput` Objects
+
+```python
+@dataclass
+class DecisionInput()
+```
+
+Input for a single approval decision.
+
+Used in Command(resume=&#123;"decisions": [...]&#125;) pattern.
+
+<a id="spoon_ai.tools.hitl.DecisionInput.args"></a>
+
+#### `args`
+
+For edit decision
+
+<a id="spoon_ai.tools.hitl.DecisionInput.reason"></a>
+
+#### `reason`
+
+For reject decision
+
+<a id="spoon_ai.tools.hitl.DecisionInput.from_dict"></a>
+
+#### `from_dict`
+
+```python
+@classmethod
+def from_dict(cls, data: Dict[str, Any]) -> "DecisionInput"
+```
+
+Create from dictionary.
+
+<a id="spoon_ai.tools.hitl.ActionRequest"></a>
+
+## `ActionRequest` Objects
+
+```python
+@dataclass
+class ActionRequest()
+```
+
+A pending action request.
+
+Compatible with LangChain's action_request format.
+
+<a id="spoon_ai.tools.hitl.ActionRequest.name"></a>
+
+#### `name`
+
+Tool name
+
+<a id="spoon_ai.tools.hitl.ActionRequest.args"></a>
+
+#### `args`
+
+Tool arguments
+
+<a id="spoon_ai.tools.hitl.ActionRequest.id"></a>
+
+#### `id`
+
+Tool call ID
+
+<a id="spoon_ai.tools.hitl.ActionRequest.to_dict"></a>
+
+#### `to_dict`
+
+```python
+def to_dict() -> Dict[str, Any]
+```
+
+Convert to dictionary for serialization.
+
+<a id="spoon_ai.tools.hitl.ApprovalRequest"></a>
+
+## `ApprovalRequest` Objects
+
+```python
+@dataclass
+class ApprovalRequest()
+```
+
+Request object passed to approval_callback.
+
+Provides a simple interface for approval callbacks.
+
+<a id="spoon_ai.tools.hitl.ApprovalRequest.from_action_request"></a>
+
+#### `from_action_request`
+
+```python
+@classmethod
+def from_action_request(cls, action: ActionRequest) -> "ApprovalRequest"
+```
+
+Create from ActionRequest.
+
+<a id="spoon_ai.tools.hitl.ReviewConfig"></a>
+
+## `ReviewConfig` Objects
+
+```python
+@dataclass
+class ReviewConfig()
+```
+
+Review configuration for a pending action.
+
+Compatible with LangChain's review_config format.
+
+<a id="spoon_ai.tools.hitl.ReviewConfig.to_dict"></a>
+
+#### `to_dict`
+
+```python
+def to_dict() -> Dict[str, Any]
+```
+
+Convert to dictionary for serialization.
+
+<a id="spoon_ai.tools.hitl.InterruptValue"></a>
+
+## `InterruptValue` Objects
+
+```python
+@dataclass
+class InterruptValue()
+```
+
+Value returned in __interrupt__ for batch interrupts.
+
+Compatible with LangChain's interrupt value format.
+Contains both action_requests and review_configs.
+
+<a id="spoon_ai.tools.hitl.InterruptValue.__len__"></a>
+
+#### `__len__`
+
+```python
+def __len__() -> int
+```
+
+Return number of pending actions (for compatibility).
+
+<a id="spoon_ai.tools.hitl.InterruptValue.__iter__"></a>
+
+#### `__iter__`
+
+```python
+def __iter__()
+```
+
+Iterate over keys (for compatibility).
+
+<a id="spoon_ai.tools.hitl.InterruptValue.__getitem__"></a>
+
+#### `__getitem__`
+
+```python
+def __getitem__(key: str) -> Any
+```
+
+Get item by key (for compatibility).
+
+<a id="spoon_ai.tools.hitl.InterruptValue.to_dict"></a>
+
+#### `to_dict`
+
+```python
+def to_dict() -> Dict[str, Any]
+```
+
+Convert to dictionary for serialization.
+
+<a id="spoon_ai.tools.hitl.InterruptInfo"></a>
+
+## `InterruptInfo` Objects
+
+```python
+@dataclass
+class InterruptInfo()
+```
+
+Wrapper for interrupt information.
+
+Compatible with LangChain's __interrupt__[0] format.
+
+<a id="spoon_ai.tools.hitl.InterruptInfo.to_dict"></a>
+
+#### `to_dict`
+
+```python
+def to_dict() -> Dict[str, Any]
+```
+
+Convert to dictionary.
+
+<a id="spoon_ai.tools.hitl.ResumeData"></a>
+
+## `ResumeData` Objects
+
+```python
+@dataclass
+class ResumeData()
+```
+
+Data for resuming from an interrupt.
+
+Compatible with LangChain Command(resume=...) pattern.
+
+<a id="spoon_ai.tools.hitl.ResumeData.from_dict"></a>
+
+#### `from_dict`
+
+```python
+@classmethod
+def from_dict(cls, data: Dict[str, Any]) -> "ResumeData"
+```
+
+Create from dictionary.
+
+<a id="spoon_ai.tools.hitl.HITLInterrupt"></a>
+
+## `HITLInterrupt` Objects
+
+```python
+class HITLInterrupt(Exception)
+```
+
+Exception raised when tool execution requires batch approval.
+
+This signals to the agent that execution should pause and return
+an __interrupt__ with action_requests and review_configs.
+
+<a id="spoon_ai.tools.hitl.ParsedInterruptConfig"></a>
+
+## `ParsedInterruptConfig` Objects
+
+```python
+@dataclass
+class ParsedInterruptConfig()
+```
+
+Parsed and normalized interrupt configuration.
+
+<a id="spoon_ai.tools.hitl.ParsedInterruptConfig.from_config"></a>
+
+#### `from_config`
+
+```python
+@classmethod
+def from_config(cls,
+                config: Union[bool, InterruptOnConfig],
+                tool_name: Optional[str] = None,
+                strict: bool = True) -> Optional["ParsedInterruptConfig"]
+```
+
+Parse configuration from various formats.
+
+**Arguments**:
+
+- `config` - Configuration (bool or InterruptOnConfig dict)
+- `tool_name` - Optional tool name for error messages
+- `strict` - If True, raise ValueError on invalid allowed_decisions.
+  If False, log warning and use defaults for invalid values.
+  
+
+**Returns**:
+
+  ParsedInterruptConfig or None if config is False/None
+  
+
+**Raises**:
+
+- `ValueError` - If strict=True and allowed_decisions contains invalid values
+
+<a id="spoon_ai.tools.hitl.ParsedInterruptConfig.get_description"></a>
+
+#### `get_description`
+
+```python
+def get_description(tool_call: ToolCall, state: AgentState,
+                    runtime: Runtime) -> Optional[str]
+```
+
+Get description, calling function if needed.
+
+<a id="spoon_ai.tools.hitl.HITLManager"></a>
+
+## `HITLManager` Objects
+
+```python
+class HITLManager()
+```
+
+Manages human-in-the-loop approval workflows.
+
+Supports batch interrupts for parallel tool calls.
+
+<a id="spoon_ai.tools.hitl.HITLManager.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(interrupt_on: Dict[str, Union[bool, InterruptOnConfig]],
+             strict: bool = True)
+```
+
+Initialize HITL manager.
+
+**Arguments**:
+
+- `interrupt_on` - Tool interruption configuration.
+  - Dict[str, bool]: Simple approval (True = require approval)
+  - Dict[str, InterruptOnConfig]: Detailed configuration with
+  allowed_decisions and description
+- `strict` - If True, raise ValueError on invalid allowed_decisions.
+  If False, log warning and use defaults for invalid values.
+
+<a id="spoon_ai.tools.hitl.HITLManager.should_interrupt"></a>
+
+#### `should_interrupt`
+
+```python
+def should_interrupt(tool_name: str) -> bool
+```
+
+Check if tool requires approval.
+
+<a id="spoon_ai.tools.hitl.HITLManager.get_config"></a>
+
+#### `get_config`
+
+```python
+def get_config(tool_name: str) -> Optional[ParsedInterruptConfig]
+```
+
+Get parsed configuration for a tool.
+
+<a id="spoon_ai.tools.hitl.HITLManager.add_pending_action"></a>
+
+#### `add_pending_action`
+
+```python
+def add_pending_action(tool_call: ToolCall, state: AgentState,
+                       runtime: Runtime) -> None
+```
+
+Add a pending action for batch interrupt.
+
+**Arguments**:
+
+- `tool_call` - The tool call dict or Pydantic object with name, args, id
+- `state` - Current agent state
+- `runtime` - Agent runtime
+
+<a id="spoon_ai.tools.hitl.HITLManager.has_pending_actions"></a>
+
+#### `has_pending_actions`
+
+```python
+def has_pending_actions() -> bool
+```
+
+Check if there are pending actions.
+
+<a id="spoon_ai.tools.hitl.HITLManager.create_interrupt"></a>
+
+#### `create_interrupt`
+
+```python
+def create_interrupt() -> InterruptInfo
+```
+
+Create an interrupt with all pending actions.
+
+**Returns**:
+
+  InterruptInfo with action_requests and review_configs
+
+<a id="spoon_ai.tools.hitl.HITLManager.clear_pending"></a>
+
+#### `clear_pending`
+
+```python
+def clear_pending() -> None
+```
+
+Clear all pending actions.
+
+<a id="spoon_ai.tools.hitl.HITLManager.apply_decisions"></a>
+
+#### `apply_decisions`
+
+```python
+def apply_decisions(decisions: List[DecisionInput],
+                    tool_calls: List[ToolCall]) -> List[ToolCall]
+```
+
+Apply decisions to tool calls.
+
+**Arguments**:
+
+- `decisions` - List of decisions from Command(resume=...)
+- `tool_calls` - Original tool calls
+  
+
+**Returns**:
+
+  Modified tool calls with edits applied, rejected calls removed
+
+<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware"></a>
+
+## `HumanInTheLoopMiddleware` Objects
+
+```python
+class HumanInTheLoopMiddleware(AgentMiddleware)
+```
+
+Middleware that implements Human-in-the-Loop approval workflows.
+
+Compatible with LangChain DeepAgents HumanInTheLoopMiddleware.
+
+This middleware intercepts tool calls that require approval and creates
+an __interrupt__ with action_requests and review_configs for batch approval.
+
+Features:
+- Per-tool approval configuration
+- Dynamic description functions
+- Batch interrupt/resume for parallel tool calls
+- Command(resume=...) pattern for resuming
+
+Usage:
+    # Simple approval
+    middleware = HumanInTheLoopMiddleware(interrupt_on=&#123;
+        "delete_file": True,
+        "send_email": True
+    &#125;)
+
+    # With dynamic description
+    def format_shell_description(tool_call, state, runtime):
+        command = tool_call["args"].get("command", "N/A")
+        return f"Execute Command: &#123;command&#125;"
+
+    middleware = HumanInTheLoopMiddleware(interrupt_on=&#123;
+        "shell": &#123;
+            "allowed_decisions": ["approve", "reject"],
+            "description": format_shell_description,
+        &#125;,
+        "write_file": &#123;
+            "allowed_decisions": ["approve", "edit", "reject"],
+        &#125;,
+    &#125;)
+
+    # Resume from interrupt
+    result = agent.invoke(
+        Command(resume=&#123;"decisions": [
+            &#123;"type": "approve"&#125;,
+            &#123;"type": "edit", "args": &#123;"path": "/new/path"&#125;&#125;,
+        ]&#125;),
+        config=config
+    )
+
+Interrupt Format (returned in result["__interrupt__"]):
+    [
+        &#123;
+            "value": &#123;
+                "action_requests": [
+                    &#123;"name": "shell", "args": &#123;"command": "rm -rf"&#125;, "id": "..."&#125;,
+                ],
+                "review_configs": [
+                    &#123;
+                        "action_name": "shell",
+                        "action_id": "...",
+                        "allowed_decisions": ["approve", "reject"],
+                        "description": "Execute Command: rm -rf",
+                    &#125;,
+                ],
+            &#125;,
+            "interrupt_id": "...",
+        &#125;
+    ]
+
+<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(interrupt_on: Dict[str, Union[bool, InterruptOnConfig]],
+             approval_callback: Optional[Callable[["ApprovalRequest"], Union[
+                 ApprovalDecision, "ApprovalResponse"]]] = None,
+             strict: bool = True)
+```
+
+Initialize HITL middleware.
+
+**Arguments**:
+
+- `interrupt_on` - Tool interruption configuration.
+  Keys are tool names, values can be:
+  - True: Require approval with default allowed_decisions
+  - False: No approval needed (tool is skipped)
+  - InterruptOnConfig dict with:
+  - allowed_decisions: List of ["approve", "edit", "reject"]
+  - description: Static string or callable for dynamic description
+- `approval_callback` - Optional callback function for automatic approval.
+  If provided, this callback is called instead of raising HITLInterrupt.
+  The callback receives an ApprovalRequest and returns:
+  - ApprovalDecision (APPROVE/REJECT)
+  - ApprovalResponse (for EDIT with modified arguments)
+  
+
+**Examples**:
+
+  # Simple approve/reject
+  def auto_approve(request):
+  if request.tool_name == "dangerous_tool":
+  return ApprovalDecision.REJECT
+  return ApprovalDecision.APPROVE
+  
+  # Edit with modified arguments
+  def auto_edit(request):
+  if request.tool_name == "file_write":
+  return ApprovalResponse(
+  decision=ApprovalDecision.EDIT,
+- `modified_arguments=&#123;"path"` - "/safe/path", **request.arguments&#125;
+  )
+  return ApprovalDecision.APPROVE
+- `strict` - If True, raise ValueError on invalid allowed_decisions.
+  If False, log warning and use defaults for invalid values.
+  Defaults to True for strict validation.
+
+<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.set_resume_data"></a>
+
+#### `set_resume_data`
+
+```python
+def set_resume_data(resume: Dict[str, Any]) -> None
+```
+
+Set resume data from Command(resume=...).
+
+Called by the agent when resuming from interrupt.
+
+<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.before_agent"></a>
+
+#### `before_agent`
+
+```python
+def before_agent(state: Dict[str, Any],
+                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Initialize state for HITL tracking.
+
+<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(
+        request: ModelRequest,
+        handler: Callable[[ModelRequest], ModelResponse]) -> ModelResponse
+```
+
+Intercept model response to collect tool calls requiring approval.
+
+This processes the model response and identifies tool calls that
+need approval, then raises an HITLInterrupt if any are found.
+
+<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.awrap_tool_call"></a>
+
+#### `awrap_tool_call`
+
+```python
+async def awrap_tool_call(
+        request: ToolCallRequest,
+        handler: Callable[[ToolCallRequest],
+                          ToolCallResult]) -> ToolCallResult
+```
+
+Intercept tool execution to enforce approval decisions.
+
+This is the PRIMARY interception point for tool execution in ToolCallAgent.
+Even if a tool call makes it through awrap_model_call, we check here before
+actual execution.
+
+CRITICAL: This method MUST be called before tool execution, and MUST return
+ToolCallResult(success=False, ...) when rejected to prevent execution.
+
+<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.get_interrupt_config"></a>
+
+#### `get_interrupt_config`
+
+```python
+def get_interrupt_config(tool_name: str) -> Optional[Dict[str, Any]]
+```
+
+Get interrupt configuration for a tool.
+
+**Returns**:
+
+  Dict with allowed_decisions, or None if tool doesn't require approval
+
+<a id="spoon_ai.tools.hitl.create_hitl_middleware"></a>
+
+#### `create_hitl_middleware`
+
+```python
+def create_hitl_middleware(
+        *tool_names: str,
+        allowed_decisions: Optional[List[str]] = None
+) -> HumanInTheLoopMiddleware
+```
+
+Create HITL middleware for specified tools.
+
+**Arguments**:
+
+- `*tool_names` - Names of tools that require approval
+- `allowed_decisions` - Allowed decisions for all tools
+  
+
+**Returns**:
+
+  Configured HumanInTheLoopMiddleware
+  
+
+**Example**:
+
+  middleware = create_hitl_middleware(
+  "delete_file",
+  "send_email",
+  "shutdown_server",
+  allowed_decisions=["approve", "reject"]
+  )
+
+<a id="spoon_ai.tools.hitl.format_tool_call_description"></a>
+
+#### `format_tool_call_description`
+
+```python
+def format_tool_call_description(tool_call: ToolCall, state: AgentState,
+                                 runtime: Runtime) -> str
+```
+
+Default description formatter for tool calls.
+
+Can be used as a base for custom description functions.
+
+<a id="spoon_ai.tools.rag_tools"></a>
+
+# Module `spoon_ai.tools.rag_tools`
+
+<a id="spoon_ai.tools.turnkey_tools"></a>
+
+# Module `spoon_ai.tools.turnkey_tools`
+
+Turnkey Tools - Secure Blockchain Operations
+
+This module provides Turnkey SDK tools for secure blockchain operations including:
+- Transaction signing and broadcasting
+- Message and EIP-712 signing
+- Multi-account management
+- Activity audit and monitoring
+- Wallet and account operations
+
+<a id="spoon_ai.tools.turnkey_tools.TurnkeyBaseTool"></a>
+
+## `TurnkeyBaseTool` Objects
+
+```python
+class TurnkeyBaseTool(BaseTool)
+```
+
+Base class for Turnkey tools with shared client initialization
+
+<a id="spoon_ai.tools.turnkey_tools.TurnkeyBaseTool.client"></a>
+
+#### `client`
+
+```python
+@property
+def client()
+```
+
+Lazy initialization of Turnkey client
+
+<a id="spoon_ai.tools.turnkey_tools.SignEVMTransactionTool"></a>
+
+## `SignEVMTransactionTool` Objects
+
+```python
+class SignEVMTransactionTool(TurnkeyBaseTool)
+```
+
+Sign EVM transaction using Turnkey
+
+<a id="spoon_ai.tools.turnkey_tools.SignEVMTransactionTool.execute"></a>
 
 #### `execute`
 
 ```python
-async def execute(input: Optional[str] = None, **kwargs) -> str
+async def execute(sign_with: str, unsigned_tx: str, **kwargs) -> str
 ```
 
-Execute the script.
+Sign EVM transaction
 
-When the script declares an ``input_schema``, the LLM's structured
-kwargs are serialized to JSON and piped to stdin.  For legacy scripts
-that only declare a generic ``input`` string, the raw value is passed
-through as-is.
+<a id="spoon_ai.tools.turnkey_tools.SignMessageTool"></a>
+
+## `SignMessageTool` Objects
+
+```python
+class SignMessageTool(TurnkeyBaseTool)
+```
+
+Sign arbitrary message using Turnkey
+
+<a id="spoon_ai.tools.turnkey_tools.SignMessageTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(sign_with: str,
+                  message: str,
+                  use_keccak256: bool = True,
+                  **kwargs) -> str
+```
+
+Sign message
+
+<a id="spoon_ai.tools.turnkey_tools.SignTypedDataTool"></a>
+
+## `SignTypedDataTool` Objects
+
+```python
+class SignTypedDataTool(TurnkeyBaseTool)
+```
+
+Sign EIP-712 structured data using Turnkey
+
+<a id="spoon_ai.tools.turnkey_tools.SignTypedDataTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(sign_with: str, typed_data: dict, **kwargs) -> str
+```
+
+Sign EIP-712 typed data
+
+<a id="spoon_ai.tools.turnkey_tools.BroadcastTransactionTool"></a>
+
+## `BroadcastTransactionTool` Objects
+
+```python
+class BroadcastTransactionTool(TurnkeyBaseTool)
+```
+
+Broadcast signed transaction to blockchain
+
+<a id="spoon_ai.tools.turnkey_tools.BroadcastTransactionTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(signed_tx: str, rpc_url: str = None, **kwargs) -> str
+```
+
+Broadcast transaction
+
+<a id="spoon_ai.tools.turnkey_tools.ListWalletsTool"></a>
+
+## `ListWalletsTool` Objects
+
+```python
+class ListWalletsTool(TurnkeyBaseTool)
+```
+
+List all wallets in the organization
+
+<a id="spoon_ai.tools.turnkey_tools.ListWalletsTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(**kwargs) -> str
+```
+
+List wallets
+
+<a id="spoon_ai.tools.turnkey_tools.ListWalletAccountsTool"></a>
+
+## `ListWalletAccountsTool` Objects
+
+```python
+class ListWalletAccountsTool(TurnkeyBaseTool)
+```
+
+List accounts for a specific wallet
+
+<a id="spoon_ai.tools.turnkey_tools.ListWalletAccountsTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(wallet_id: str,
+                  limit: str = None,
+                  before: str = None,
+                  after: str = None,
+                  **kwargs) -> str
+```
+
+List wallet accounts
+
+<a id="spoon_ai.tools.turnkey_tools.GetActivityTool"></a>
+
+## `GetActivityTool` Objects
+
+```python
+class GetActivityTool(TurnkeyBaseTool)
+```
+
+Get activity details by ID
+
+<a id="spoon_ai.tools.turnkey_tools.GetActivityTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(activity_id: str, **kwargs) -> str
+```
+
+Get activity details
+
+<a id="spoon_ai.tools.turnkey_tools.ListActivitiesTool"></a>
+
+## `ListActivitiesTool` Objects
+
+```python
+class ListActivitiesTool(TurnkeyBaseTool)
+```
+
+List recent activities in the organization
+
+<a id="spoon_ai.tools.turnkey_tools.ListActivitiesTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(limit: str = "10",
+                  before: str = None,
+                  after: str = None,
+                  filter_by_status: list = None,
+                  filter_by_type: list = None,
+                  **kwargs) -> str
+```
+
+List activities
+
+<a id="spoon_ai.tools.turnkey_tools.WhoAmITool"></a>
+
+## `WhoAmITool` Objects
+
+```python
+class WhoAmITool(TurnkeyBaseTool)
+```
+
+Get organization information
+
+<a id="spoon_ai.tools.turnkey_tools.WhoAmITool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(**kwargs) -> str
+```
+
+Get organization info
+
+<a id="spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool"></a>
+
+## `BuildUnsignedEIP1559TxTool` Objects
+
+```python
+class BuildUnsignedEIP1559TxTool(BaseTool)
+```
+
+Build unsigned EIP-1559 transaction (supports NeoX)
+
+<a id="spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(from_addr: str,
+                  to_addr: str = None,
+                  value_wei: str = "0",
+                  data_hex: str = "0x",
+                  priority_gwei: str = "1",
+                  max_fee_gwei: str = None,
+                  gas_limit: str = None,
+                  rpc_url: str = None,
+                  **kwargs) -> str
+```
+
+Build unsigned transaction (auto-detects NeoX)
+
+<a id="spoon_ai.tools.turnkey_tools.ListAllAccountsTool"></a>
+
+## `ListAllAccountsTool` Objects
+
+```python
+class ListAllAccountsTool(TurnkeyBaseTool)
+```
+
+List all accounts across all wallets in the organization
+
+<a id="spoon_ai.tools.turnkey_tools.ListAllAccountsTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(limit: str = "50", **kwargs) -> str
+```
+
+List all accounts across all wallets
+
+<a id="spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool"></a>
+
+## `BatchSignTransactionsTool` Objects
+
+```python
+class BatchSignTransactionsTool(TurnkeyBaseTool)
+```
+
+Batch sign transactions for multiple accounts
+
+<a id="spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(to_address: str,
+                  value_wei: str,
+                  data_hex: str = "0x",
+                  max_accounts: str = "3",
+                  enable_broadcast: bool = False,
+                  rpc_url: str = None,
+                  **kwargs) -> str
+```
+
+Batch sign transactions for multiple accounts
+
+<a id="spoon_ai.tools.turnkey_tools.CreateWalletTool"></a>
+
+## `CreateWalletTool` Objects
+
+```python
+class CreateWalletTool(TurnkeyBaseTool)
+```
+
+Create a new wallet
+
+<a id="spoon_ai.tools.turnkey_tools.CreateWalletTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(wallet_name: str,
+                  accounts_json: str = None,
+                  mnemonic_length: str = "24",
+                  **kwargs) -> str
+```
+
+Create a new wallet
+
+<a id="spoon_ai.tools.turnkey_tools.GetWalletTool"></a>
+
+## `GetWalletTool` Objects
+
+```python
+class GetWalletTool(TurnkeyBaseTool)
+```
+
+Get wallet information by wallet ID
+
+<a id="spoon_ai.tools.turnkey_tools.GetWalletTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(wallet_id: str, **kwargs) -> str
+```
+
+Get wallet information
+
+<a id="spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool"></a>
+
+## `CreateWalletAccountsTool` Objects
+
+```python
+class CreateWalletAccountsTool(TurnkeyBaseTool)
+```
+
+Add accounts to an existing wallet
+
+<a id="spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(wallet_id: str, accounts_json: str, **kwargs) -> str
+```
+
+Add accounts to existing wallet
+
+<a id="spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool"></a>
+
+## `CompleteTransactionWorkflowTool` Objects
+
+```python
+class CompleteTransactionWorkflowTool(TurnkeyBaseTool)
+```
+
+Complete transaction workflow: build, sign, and optionally broadcast
+
+<a id="spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(sign_with: str,
+                  to_address: str,
+                  value_wei: str,
+                  data_hex: str = "0x",
+                  enable_broadcast: bool = False,
+                  rpc_url: str = None,
+                  **kwargs) -> str
+```
+
+Complete transaction workflow
+
+<a id="spoon_ai.tools.turnkey_tools.get_turnkey_tools"></a>
+
+#### `get_turnkey_tools`
+
+```python
+def get_turnkey_tools() -> List[BaseTool]
+```
+
+Get all Turnkey tools
+
+<a id="spoon_ai.tools.base"></a>
+
+# Module `spoon_ai.tools.base`
+
+<a id="spoon_ai.tools.base.reset_secrets_initialization"></a>
+
+#### `reset_secrets_initialization`
+
+```python
+def reset_secrets_initialization() -> None
+```
+
+Reset the initialization flag. Useful for testing.
+
+<a id="spoon_ai.tools.base.ToolFailure"></a>
+
+## `ToolFailure` Objects
+
+```python
+class ToolFailure(Exception)
+```
+
+Exception to indicate a tool execution failure.
+
+<a id="spoon_ai.utils"></a>
+
+# Module `spoon_ai.utils`
+
+<a id="spoon_ai.utils.utils"></a>
+
+# Module `spoon_ai.utils.utils`
+
+<a id="spoon_ai.utils.streaming"></a>
+
+# Module `spoon_ai.utils.streaming`
+
+<a id="spoon_ai.utils.streaming.StreamOutcome"></a>
+
+## `StreamOutcome` Objects
+
+```python
+@dataclass
+class StreamOutcome()
+```
+
+Accumulator for streaming output state.
+
+<a id="spoon_ai.utils.streaming.build_output_queue_event"></a>
+
+#### `build_output_queue_event`
+
+```python
+def build_output_queue_event(
+        *,
+        event_type: str,
+        delta: str = "",
+        metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
+```
+
+Build a backward-compatible output queue event payload.
+
+<a id="spoon_ai.utils.config"></a>
+
+# Module `spoon_ai.utils.config`
+
+<a id="spoon_ai.utils.config_manager"></a>
+
+# Module `spoon_ai.utils.config_manager`
+
+<a id="spoon_ai.utils.config_manager.ConfigManager"></a>
+
+## `ConfigManager` Objects
+
+```python
+class ConfigManager()
+```
+
+Environment-based configuration helper for core usage.
+
+<a id="spoon_ai.utils.config_manager.ConfigManager.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__() -> None
+```
+
+Initialize manager with environment-backed cache.
+
+<a id="spoon_ai.utils.config_manager.ConfigManager.refresh"></a>
+
+#### `refresh`
+
+```python
+def refresh() -> None
+```
+
+Reload configuration snapshot from environment variables.
+
+<a id="spoon_ai.utils.config_manager.ConfigManager.get"></a>
+
+#### `get`
+
+```python
+def get(key: str, default: Any = None) -> Any
+```
+
+Get configuration item from environment snapshot.
+
+<a id="spoon_ai.utils.config_manager.ConfigManager.set"></a>
+
+#### `set`
+
+```python
+def set(key: str, value: Any) -> None
+```
+
+Set configuration item by exporting to environment variables.
+
+<a id="spoon_ai.utils.config_manager.ConfigManager.list_config"></a>
+
+#### `list_config`
+
+```python
+def list_config() -> Dict[str, Any]
+```
+
+List configuration snapshot without persisting secrets.
+
+<a id="spoon_ai.utils.config_manager.ConfigManager.get_api_key"></a>
+
+#### `get_api_key`
+
+```python
+def get_api_key(provider: str) -> Optional[str]
+```
+
+Get API key for specified provider with environment priority.
+
+<a id="spoon_ai.utils.config_manager.ConfigManager.set_api_key"></a>
+
+#### `set_api_key`
+
+```python
+def set_api_key(provider: str, api_key: str) -> None
+```
+
+Set API key by exporting to environment variables.
+
+<a id="spoon_ai.utils.config_manager.ConfigManager.get_model_name"></a>
+
+#### `get_model_name`
+
+```python
+def get_model_name() -> Optional[str]
+```
+
+Get model name override from environment.
+
+<a id="spoon_ai.utils.config_manager.ConfigManager.get_base_url"></a>
+
+#### `get_base_url`
+
+```python
+def get_base_url() -> Optional[str]
+```
+
+Get base URL override from environment.
+
+<a id="spoon_ai.utils.config_manager.ConfigManager.get_llm_provider"></a>
+
+#### `get_llm_provider`
+
+```python
+def get_llm_provider() -> Optional[str]
+```
+
+Determine LLM provider from environment variables.
+
+<a id="spoon_ai.backends"></a>
+
+# Module `spoon_ai.backends`
+
+Pluggable Memory Backends for Deep Agents.
+
+This module provides a unified interface for file operations across different
+storage backends. Compatible with LangChain DeepAgents backend architecture.
+
+Backend Types:
+- StateBackend: Ephemeral in-memory storage (per-thread)
+- FilesystemBackend: Real filesystem access (optionally sandboxed)
+- StoreBackend: Persistent key-value storage (cross-thread)
+- CompositeBackend: Route operations to multiple backends by path prefix
+- BaseSandbox: Abstract base class for remote sandboxes (Docker, Modal, etc.)
+
+Example Usage:
+    ```python
+    from spoon_ai.backends import (
+        StateBackend,
+        FilesystemBackend,
+        StoreBackend,
+        CompositeBackend,
+        BaseSandbox,
+        BackendRuntime,
+        create_state_backend,
+        create_filesystem_backend,
+        create_store_backend,
+        create_composite_backend,
+    )
+
+    # 1. Simple ephemeral storage
+    backend, runtime = create_state_backend()
+    backend.write("/notes.txt", "Hello!")
+    print(backend.read("/notes.txt"))
+
+    # 2. Real filesystem access
+    backend = create_filesystem_backend(
+        root_dir="/workspace",
+        virtual_mode=True  # Sandbox to root_dir
+    )
+
+    # 3. Persistent database storage
+    backend = create_store_backend(db_path="agent.db")
+
+    # 4. Mixed storage with routing
+    state_backend, _ = create_state_backend()
+    store_backend = create_store_backend()
+    fs_backend = create_filesystem_backend()
+
+    backend = create_composite_backend(
+        default=state_backend,
+        routes={
+            "/persistent/": store_backend,
+            "/local/": fs_backend,
+        }
+    )
+
+    # Operations route automatically
+    backend.write("/temp.txt", "Ephemeral")         # -> state
+    backend.write("/persistent/note.txt", "Saved")  # -> database
+    backend.write("/local/code.py", "# Code")       # -> filesystem
+
+    # 5. Remote sandbox (Docker, Modal, etc.)
+    class DockerSandbox(BaseSandbox):
+        def __init__(self, container_id: str):
+            self._container_id = container_id
+
+        @property
+        def id(self) -> str:
+            return f"docker-{self._container_id}"
+
+        def execute(self, command: str) -> ExecuteResponse:
+            # Run command in Docker container
+            result = docker_exec(self._container_id, command)
+            return ExecuteResponse(output=result.output, exit_code=result.exit_code)
+
+    sandbox = DockerSandbox("my-container")
+    sandbox.write("/app/config.json", '{"key": "value"}')
+    content = sandbox.read("/app/config.json")
+    ```
+
+<a id="spoon_ai.backends.sandbox"></a>
+
+# Module `spoon_ai.backends.sandbox`
+
+Base sandbox implementation with execute() as the only required abstract method.
+
+This module provides a base class that implements all SandboxBackendProtocol
+methods using shell commands executed via execute(). Concrete implementations
+only need to implement the execute() method.
+
+This design allows for remote sandboxes (Docker, Modal, Daytona, etc.) where
+you just implement execute() to run commands remotely.
+
+Compatible with LangChain DeepAgents BaseSandbox interface.
+
+Usage:
+    # For local execution
+    class LocalSandbox(BaseSandbox):
+        def execute(self, command: str) -&gt; ExecuteResponse:
+            # Run locally
+            result = subprocess.run(command, shell=True, ...)
+            return ExecuteResponse(output=result.stdout, exit_code=result.returncode)
+
+    # For remote execution (Docker, Modal, etc.)
+    class DockerSandbox(BaseSandbox):
+        def execute(self, command: str) -&gt; ExecuteResponse:
+            # Run in Docker container
+            result = docker_client.containers.run(self.image, command, ...)
+            return ExecuteResponse(output=result, exit_code=0)
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox"></a>
+
+## `BaseSandbox` Objects
+
+```python
+class BaseSandbox(SandboxBackendProtocol, ABC)
+```
+
+Base sandbox implementation with execute() as abstract method.
+
+This class provides default implementations for all protocol methods
+using shell commands. Subclasses only need to implement:
+- execute(): Run a shell command and return output
+- id: Unique identifier property
+- upload_files(): Upload files to sandbox (optional, has default)
+- download_files(): Download files from sandbox (optional, has default)
+
+The default implementations use Python commands executed via execute()
+to perform file operations, making this suitable for remote sandboxes
+where you only have shell access.
+
+**Example**:
+
+    ```python
+    class DockerSandbox(BaseSandbox):
+        def __init__(self, container_id: str):
+            self._container_id = container_id
+
+        @property
+        def id(self) -> str:
+            return f"docker-{self._container_id}"
+
+        def execute(self, command: str) -> ExecuteResponse:
+            result = docker_exec(self._container_id, command)
+            return ExecuteResponse(
+                output=result.output,
+                exit_code=result.exit_code
+            )
+    ```
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.execute"></a>
+
+#### `execute`
+
+```python
+@abstractmethod
+def execute(command: str) -> ExecuteResponse
+```
+
+Execute a command in the sandbox and return ExecuteResponse.
+
+This is the core method that subclasses must implement.
+All other file operations are built on top of this.
 
 **Arguments**:
 
-- `input` - Optional input text (legacy path)
-- `**kwargs` - Structured arguments matching input_schema
+- `command` - Full shell command string to execute.
   
 
 **Returns**:
 
-  Script output as string
+  ExecuteResponse with combined output, exit code, and truncation flag.
 
-<a id="spoon_ai.skills.script_tool.ScriptTool.to_param"></a>
+<a id="spoon_ai.backends.sandbox.BaseSandbox.aexecute"></a>
 
-#### `to_param`
-
-```python
-def to_param() -> dict
-```
-
-Generate OpenAI-compatible function definition.
-
-<a id="spoon_ai.skills.script_tool.create_script_tools"></a>
-
-#### `create_script_tools`
+#### `aexecute`
 
 ```python
-def create_script_tools(
-        skill_name: str,
-        scripts: List[SkillScript],
-        working_directory: Optional[str] = None) -> List[ScriptTool]
+async def aexecute(command: str) -> ExecuteResponse
 ```
 
-Create ScriptTool instances from script definitions.
+Async version of execute.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.id"></a>
+
+#### `id`
+
+```python
+@property
+@abstractmethod
+def id() -> str
+```
+
+Unique identifier for the sandbox backend.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.ls_info"></a>
+
+#### `ls_info`
+
+```python
+def ls_info(path: str) -> List[FileInfo]
+```
+
+List directory contents using shell command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.read"></a>
+
+#### `read`
+
+```python
+def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Read file content with line numbers using shell command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.write"></a>
+
+#### `write`
+
+```python
+def write(file_path: str, content: str) -> WriteResult
+```
+
+Create a new file using shell command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.edit"></a>
+
+#### `edit`
+
+```python
+def edit(file_path: str,
+         old_string: str,
+         new_string: str,
+         replace_all: bool = False) -> EditResult
+```
+
+Edit a file by replacing string occurrences using shell command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.grep_raw"></a>
+
+#### `grep_raw`
+
+```python
+def grep_raw(pattern: str,
+             path: Optional[str] = None,
+             glob: Optional[str] = None) -> List[GrepMatch]
+```
+
+Search for pattern in files using grep command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.glob_info"></a>
+
+#### `glob_info`
+
+```python
+def glob_info(pattern: str, path: str = "/") -> List[FileInfo]
+```
+
+Find files matching pattern using glob command.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.upload_files"></a>
+
+#### `upload_files`
+
+```python
+def upload_files(files: List[Tuple[str, bytes]]) -> List[FileUploadResponse]
+```
+
+Upload multiple files to the sandbox.
+
+Default implementation uses base64 encoding via execute().
+Override for more efficient implementations.
 
 **Arguments**:
 
-- `skill_name` - Parent skill name
-- `scripts` - List of script definitions
-- `working_directory` - Base working directory (fallback if script has none)
+- `files` - List of (path, content) tuples
   
 
 **Returns**:
 
-  List of ScriptTool instances
+  List of FileUploadResponse for each file
 
-<a id="spoon_ai.skills.models"></a>
+<a id="spoon_ai.backends.sandbox.BaseSandbox.download_files"></a>
 
-# Module `spoon_ai.skills.models`
-
-Skill system data models.
-
-Pydantic schemas for skill definition, following Anthropic Skills specification
-with XSpoonAi extensions.
-
-<a id="spoon_ai.skills.models.SkillState"></a>
-
-## `SkillState` Objects
+#### `download_files`
 
 ```python
-class SkillState(str, Enum)
+def download_files(paths: List[str]) -> List[FileDownloadResponse]
 ```
 
-Skill activation state.
+Download multiple files from the sandbox.
 
-<a id="spoon_ai.skills.models.ScriptType"></a>
-
-## `ScriptType` Objects
-
-```python
-class ScriptType(str, Enum)
-```
-
-Supported script execution types.
-
-<a id="spoon_ai.skills.models.SkillScript"></a>
-
-## `SkillScript` Objects
-
-```python
-class SkillScript(BaseModel)
-```
-
-Script definition within a skill.
-
-Scripts are executed by the agent when needed. The AI decides
-how to call scripts - users only control whether scripts are allowed.
-
-Example in SKILL.md:
-    scripts:
-      - name: fetch_data
-        description: Fetch latest market data
-        type: python
-        file: scripts/fetch_data.py
-
-<a id="spoon_ai.skills.models.SkillScript.validate_source"></a>
-
-#### `validate_source`
-
-```python
-@model_validator(mode='after')
-def validate_source()
-```
-
-Ensure either file or inline is provided.
-
-<a id="spoon_ai.skills.models.ScriptConfig"></a>
-
-## `ScriptConfig` Objects
-
-```python
-class ScriptConfig(BaseModel)
-```
-
-Script configuration section in skill metadata.
-
-Example in SKILL.md:
-    scripts:
-      enabled: true
-      working_directory: ./scripts
-      definitions:
-        - name: analyze
-          type: python
-          file: analyze.py
-
-<a id="spoon_ai.skills.models.ScriptConfig.get_script"></a>
-
-#### `get_script`
-
-```python
-def get_script(name: str) -> Optional[SkillScript]
-```
-
-Get script by name.
-
-<a id="spoon_ai.skills.models.ScriptConfig.get_activation_scripts"></a>
-
-#### `get_activation_scripts`
-
-```python
-def get_activation_scripts() -> List[SkillScript]
-```
-
-Get scripts to run on activation.
-
-<a id="spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts"></a>
-
-#### `get_deactivation_scripts`
-
-```python
-def get_deactivation_scripts() -> List[SkillScript]
-```
-
-Get scripts to run on deactivation.
-
-<a id="spoon_ai.skills.models.ScriptResult"></a>
-
-## `ScriptResult` Objects
-
-```python
-class ScriptResult(BaseModel)
-```
-
-Result of script execution.
-
-<a id="spoon_ai.skills.models.ScriptResult.to_string"></a>
-
-#### `to_string`
-
-```python
-def to_string() -> str
-```
-
-Convert to string for agent context.
-
-<a id="spoon_ai.skills.models.SkillTrigger"></a>
-
-## `SkillTrigger` Objects
-
-```python
-class SkillTrigger(BaseModel)
-```
-
-Trigger configuration for skill activation.
-
-<a id="spoon_ai.skills.models.SkillParameter"></a>
-
-## `SkillParameter` Objects
-
-```python
-class SkillParameter(BaseModel)
-```
-
-Parameter definition for skills.
-
-<a id="spoon_ai.skills.models.SkillPrerequisite"></a>
-
-## `SkillPrerequisite` Objects
-
-```python
-class SkillPrerequisite(BaseModel)
-```
-
-Prerequisites for skill execution.
-
-<a id="spoon_ai.skills.models.SkillMetadata"></a>
-
-## `SkillMetadata` Objects
-
-```python
-class SkillMetadata(BaseModel)
-```
-
-Skill metadata from YAML frontmatter.
-
-Required fields (Anthropic-compatible):
-- name: Unique skill identifier
-- description: Human-readable description
-
-Optional fields (XSpoonAi extensions):
-- triggers, parameters, prerequisites, composes, etc.
-
-<a id="spoon_ai.skills.models.SkillMetadata.has_scripts"></a>
-
-#### `has_scripts`
-
-```python
-def has_scripts() -> bool
-```
-
-Check if skill has scripts defined.
-
-<a id="spoon_ai.skills.models.SkillMetadata.scripts_enabled"></a>
-
-#### `scripts_enabled`
-
-```python
-def scripts_enabled() -> bool
-```
-
-Check if scripts are enabled for this skill.
-
-<a id="spoon_ai.skills.models.Skill"></a>
-
-## `Skill` Objects
-
-```python
-class Skill(BaseModel)
-```
-
-Complete skill definition.
-
-Combines metadata from YAML frontmatter with markdown instructions.
-
-<a id="spoon_ai.skills.models.Skill.name"></a>
-
-#### `name`
-
-```python
-@property
-def name() -> str
-```
-
-Convenience property for skill name.
-
-<a id="spoon_ai.skills.models.Skill.description"></a>
-
-#### `description`
-
-```python
-@property
-def description() -> str
-```
-
-Convenience property for skill description.
-
-<a id="spoon_ai.skills.models.Skill.get_prompt_injection"></a>
-
-#### `get_prompt_injection`
-
-```python
-def get_prompt_injection() -> str
-```
-
-Generate prompt content to inject into agent's system prompt.
-
-**Returns**:
-
-  Formatted skill instructions with metadata
-
-<a id="spoon_ai.prompts.toolcall"></a>
-
-# Module `spoon_ai.prompts.toolcall`
-
-<a id="spoon_ai.prompts"></a>
-
-# Module `spoon_ai.prompts`
-
-<a id="spoon_ai.prompts.spoon_react"></a>
-
-# Module `spoon_ai.prompts.spoon_react`
-
-<a id="spoon_ai.bridge.eth_neofs_indexer"></a>
-
-# Module `spoon_ai.bridge.eth_neofs_indexer`
-
-Ethereum to NeoFS/IPFS Event Indexer
-Listens to ERC-8004 IdentityRegistry events and ensures off-chain storage is synchronized
-
-<a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer"></a>
-
-## `EthereumNeoFSIndexer` Objects
-
-```python
-class EthereumNeoFSIndexer()
-```
-
-Event indexer that syncs Ethereum IdentityRegistry events to NeoFS/IPFS.
-Ensures content hash verification and storage consistency.
-
-<a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.register_event_handler"></a>
-
-#### `register_event_handler`
-
-```python
-def register_event_handler(event_name: str, handler: Callable)
-```
-
-Register custom event handler
-
-<a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.start_indexing"></a>
-
-#### `start_indexing`
-
-```python
-def start_indexing(block_limit: Optional[int] = None)
-```
-
-Start indexing events
+Default implementation uses base64 encoding via execute().
+Override for more efficient implementations.
 
 **Arguments**:
 
-- `block_limit` - Optional block limit for testing (stops after N blocks)
+- `paths` - List of file paths to download
+  
 
-<a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.stop_indexing"></a>
+**Returns**:
 
-#### `stop_indexing`
+  List of FileDownloadResponse for each file
 
-```python
-def stop_indexing()
-```
+<a id="spoon_ai.backends.sandbox.BaseSandbox.als_info"></a>
 
-Stop the indexer
-
-<a id="spoon_ai.bridge.eth_neofs_indexer.EthereumNeoFSIndexer.get_indexer_status"></a>
-
-#### `get_indexer_status`
+#### `als_info`
 
 ```python
-def get_indexer_status() -> Dict
+async def als_info(path: str) -> List[FileInfo]
 ```
 
-Get current indexer status
+Async version of ls_info.
 
-<a id="spoon_ai.bridge"></a>
+<a id="spoon_ai.backends.sandbox.BaseSandbox.aread"></a>
 
-# Module `spoon_ai.bridge`
+#### `aread`
 
-Cross-chain bridge module for DID synchronization
-Ethereum ← → NeoFS/IPFS event indexing
+```python
+async def aread(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Async version of read.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.awrite"></a>
+
+#### `awrite`
+
+```python
+async def awrite(file_path: str, content: str) -> WriteResult
+```
+
+Async version of write.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.aedit"></a>
+
+#### `aedit`
+
+```python
+async def aedit(file_path: str,
+                old_string: str,
+                new_string: str,
+                replace_all: bool = False) -> EditResult
+```
+
+Async version of edit.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.agrep_raw"></a>
+
+#### `agrep_raw`
+
+```python
+async def agrep_raw(pattern: str,
+                    path: Optional[str] = None,
+                    glob: Optional[str] = None) -> List[GrepMatch]
+```
+
+Async version of grep_raw.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.aglob_info"></a>
+
+#### `aglob_info`
+
+```python
+async def aglob_info(pattern: str, path: str = "/") -> List[FileInfo]
+```
+
+Async version of glob_info.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.aupload_files"></a>
+
+#### `aupload_files`
+
+```python
+async def aupload_files(
+        files: List[Tuple[str, bytes]]) -> List[FileUploadResponse]
+```
+
+Async version of upload_files.
+
+<a id="spoon_ai.backends.sandbox.BaseSandbox.adownload_files"></a>
+
+#### `adownload_files`
+
+```python
+async def adownload_files(paths: List[str]) -> List[FileDownloadResponse]
+```
+
+Async version of download_files.
+
+<a id="spoon_ai.backends.utils"></a>
+
+# Module `spoon_ai.backends.utils`
+
+Shared utility functions for memory backend implementations.
+
+This module contains both user-facing string formatters and structured
+helpers used by backends and the composite router.
+
+<a id="spoon_ai.backends.utils.sanitize_tool_call_id"></a>
+
+#### `sanitize_tool_call_id`
+
+```python
+def sanitize_tool_call_id(tool_call_id: str) -> str
+```
+
+Sanitize tool_call_id to prevent path traversal.
+
+Replaces dangerous characters (., /, \) with underscores.
+
+<a id="spoon_ai.backends.utils.validate_path"></a>
+
+#### `validate_path`
+
+```python
+def validate_path(path: Optional[str]) -> str
+```
+
+Validate and normalize a path.
+
+**Arguments**:
+
+- `path` - Path to validate
+  
+
+**Returns**:
+
+  Normalized path starting with /
+  
+
+**Raises**:
+
+- `ValueError` - If path is invalid
+
+<a id="spoon_ai.backends.utils.format_content_with_line_numbers"></a>
+
+#### `format_content_with_line_numbers`
+
+```python
+def format_content_with_line_numbers(content: str | list[str],
+                                     start_line: int = 1) -> str
+```
+
+Format file content with line numbers (cat -n style).
+
+**Arguments**:
+
+- `content` - File content as string or list of lines
+- `start_line` - Starting line number (default: 1)
+  
+
+**Returns**:
+
+  Formatted content with line numbers
+
+<a id="spoon_ai.backends.utils.check_empty_content"></a>
+
+#### `check_empty_content`
+
+```python
+def check_empty_content(content: str) -> Optional[str]
+```
+
+Check if content is empty and return warning message.
+
+**Arguments**:
+
+- `content` - Content to check
+  
+
+**Returns**:
+
+  Warning message if empty, None otherwise
+
+<a id="spoon_ai.backends.utils.file_data_to_string"></a>
+
+#### `file_data_to_string`
+
+```python
+def file_data_to_string(file_data: dict[str, Any]) -> str
+```
+
+Convert FileData to plain string content.
+
+**Arguments**:
+
+- `file_data` - FileData dict with 'content' key
+  
+
+**Returns**:
+
+  Content as string with lines joined by newlines
+
+<a id="spoon_ai.backends.utils.create_file_data"></a>
+
+#### `create_file_data`
+
+```python
+def create_file_data(content: str,
+                     created_at: Optional[str] = None) -> dict[str, Any]
+```
+
+Create a FileData object with timestamps.
+
+**Arguments**:
+
+- `content` - File content as string
+- `created_at` - Optional creation timestamp (ISO format)
+  
+
+**Returns**:
+
+  FileData dict with content and timestamps
+
+<a id="spoon_ai.backends.utils.update_file_data"></a>
+
+#### `update_file_data`
+
+```python
+def update_file_data(file_data: dict[str, Any],
+                     content: str) -> dict[str, Any]
+```
+
+Update FileData with new content, preserving creation timestamp.
+
+**Arguments**:
+
+- `file_data` - Existing FileData dict
+- `content` - New content as string
+  
+
+**Returns**:
+
+  Updated FileData dict
+
+<a id="spoon_ai.backends.utils.format_read_response"></a>
+
+#### `format_read_response`
+
+```python
+def format_read_response(file_data: dict[str, Any], offset: int,
+                         limit: int) -> str
+```
+
+Format file data for read response with line numbers.
+
+**Arguments**:
+
+- `file_data` - FileData dict
+- `offset` - Line offset (0-indexed)
+- `limit` - Maximum number of lines
+  
+
+**Returns**:
+
+  Formatted content or error message
+
+<a id="spoon_ai.backends.utils.perform_string_replacement"></a>
+
+#### `perform_string_replacement`
+
+```python
+def perform_string_replacement(content: str, old_string: str, new_string: str,
+                               replace_all: bool) -> tuple[str, int] | str
+```
+
+Perform string replacement with occurrence validation.
+
+**Arguments**:
+
+- `content` - Original content
+- `old_string` - String to replace
+- `new_string` - Replacement string
+- `replace_all` - Whether to replace all occurrences
+  
+
+**Returns**:
+
+  Tuple of (new_content, occurrences) on success, or error message string
+
+<a id="spoon_ai.backends.utils.glob_match"></a>
+
+#### `glob_match`
+
+```python
+def glob_match(path: str, pattern: str) -> bool
+```
+
+Match a path against a glob pattern.
+
+**Arguments**:
+
+- `path` - File path to match
+- `pattern` - Glob pattern
+  
+
+**Returns**:
+
+  True if path matches pattern
+
+<a id="spoon_ai.backends.utils.glob_search_files"></a>
+
+#### `glob_search_files`
+
+```python
+def glob_search_files(files: dict[str, Any],
+                      pattern: str,
+                      path: str = "/") -> str
+```
+
+Search files dict for paths matching glob pattern.
+
+**Arguments**:
+
+- `files` - Dictionary of file paths to FileData.
+- `pattern` - Glob pattern (e.g., "*.py", "**/*.ts").
+- `path` - Base path to search from.
+  
+
+**Returns**:
+
+  Newline-separated file paths, sorted by modification time.
+  Returns "No files found" if no matches.
+
+<a id="spoon_ai.backends.utils.grep_matches_from_files"></a>
+
+#### `grep_matches_from_files`
+
+```python
+def grep_matches_from_files(
+        files: dict[str, Any],
+        pattern: str,
+        path: Optional[str] = None,
+        glob_pattern: Optional[str] = None) -> list[GrepMatch] | str
+```
+
+Return structured grep matches from an in-memory files mapping.
+
+**Arguments**:
+
+- `files` - Dictionary of file paths to FileData.
+- `pattern` - Regex pattern to search for.
+- `path` - Base path to search from.
+- `glob_pattern` - Optional glob pattern to filter files.
+  
+
+**Returns**:
+
+  List of GrepMatch on success, or error string.
+
+<a id="spoon_ai.backends.utils.format_grep_results"></a>
+
+#### `format_grep_results`
+
+```python
+def format_grep_results(
+        results: dict[str, list[tuple[int, str]]],
+        output_mode: Literal["files_with_matches", "content", "count"]) -> str
+```
+
+Format grep search results based on output mode.
+
+**Arguments**:
+
+- `results` - Dictionary mapping file paths to list of (line_num, line_content) tuples
+- `output_mode` - Output format
+  
+
+**Returns**:
+
+  Formatted string output
+
+<a id="spoon_ai.backends.utils.truncate_if_too_long"></a>
+
+#### `truncate_if_too_long`
+
+```python
+def truncate_if_too_long(result: list[str] | str) -> list[str] | str
+```
+
+Truncate result if it exceeds token limit.
+
+<a id="spoon_ai.backends.store"></a>
+
+# Module `spoon_ai.backends.store`
+
+StoreBackend: Persistent key-value store backend (cross-thread).
+
+Uses a simple key-value store interface for persistent, cross-conversation storage.
+Files persist across all threads and sessions.
+
+<a id="spoon_ai.backends.store.BaseStore"></a>
+
+## `BaseStore` Objects
+
+```python
+class BaseStore(abc.ABC)
+```
+
+Abstract base class for persistent stores.
+
+Implementations can use SQLite, Redis, S3, or any other storage backend.
+
+<a id="spoon_ai.backends.store.BaseStore.get"></a>
+
+#### `get`
+
+```python
+@abc.abstractmethod
+def get(namespace: tuple[str, ...], key: str) -> Optional[dict[str, Any]]
+```
+
+Get a value by key.
+
+**Arguments**:
+
+- `namespace` - Hierarchical namespace tuple.
+- `key` - The key to retrieve.
+  
+
+**Returns**:
+
+  The stored value dict, or None if not found.
+
+<a id="spoon_ai.backends.store.BaseStore.put"></a>
+
+#### `put`
+
+```python
+@abc.abstractmethod
+def put(namespace: tuple[str, ...], key: str, value: dict[str, Any]) -> None
+```
+
+Store a value by key.
+
+**Arguments**:
+
+- `namespace` - Hierarchical namespace tuple.
+- `key` - The key to store under.
+- `value` - The value dict to store.
+
+<a id="spoon_ai.backends.store.BaseStore.delete"></a>
+
+#### `delete`
+
+```python
+@abc.abstractmethod
+def delete(namespace: tuple[str, ...], key: str) -> None
+```
+
+Delete a value by key.
+
+**Arguments**:
+
+- `namespace` - Hierarchical namespace tuple.
+- `key` - The key to delete.
+
+<a id="spoon_ai.backends.store.BaseStore.search"></a>
+
+#### `search`
+
+```python
+@abc.abstractmethod
+def search(namespace: tuple[str, ...],
+           query: Optional[str] = None,
+           filter: Optional[dict[str, Any]] = None,
+           limit: int = 100,
+           offset: int = 0) -> list[dict[str, Any]]
+```
+
+Search for values in a namespace.
+
+**Arguments**:
+
+- `namespace` - Hierarchical namespace tuple.
+- `query` - Optional search query.
+- `filter` - Optional key-value filter.
+- `limit` - Maximum results to return.
+- `offset` - Number of results to skip.
+  
+
+**Returns**:
+
+  List of matching items with 'key' and 'value' fields.
+
+<a id="spoon_ai.backends.store.InMemoryStore"></a>
+
+## `InMemoryStore` Objects
+
+```python
+class InMemoryStore(BaseStore)
+```
+
+Simple in-memory store implementation.
+
+Useful for testing and development. Data is lost when process exits.
+
+<a id="spoon_ai.backends.store.SQLiteStore"></a>
+
+## `SQLiteStore` Objects
+
+```python
+class SQLiteStore(BaseStore)
+```
+
+SQLite-based persistent store.
+
+Data persists across process restarts.
+
+<a id="spoon_ai.backends.store.StoreBackend"></a>
+
+## `StoreBackend` Objects
+
+```python
+class StoreBackend(BackendProtocol)
+```
+
+Backend that stores files in a persistent store (cross-thread).
+
+Uses a key-value store for persistent, cross-conversation storage.
+Files are organized via namespaces and persist across all threads.
+
+**Example**:
+
+    ```python
+    store = SQLiteStore("agent_files.db")
+    backend = StoreBackend(store)
+
+    # Write persists across sessions
+    backend.write("/notes.txt", "Important notes")
+
+    # Read from any thread
+    content = backend.read("/notes.txt")
+    ```
+
+<a id="spoon_ai.backends.store.StoreBackend.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(store: BaseStore,
+             namespace: Optional[tuple[str, ...]] = None,
+             assistant_id: Optional[str] = None)
+```
+
+Initialize StoreBackend.
+
+**Arguments**:
+
+- `store` - BaseStore implementation.
+- `namespace` - Optional namespace tuple. Defaults to ("filesystem",).
+- `assistant_id` - Optional assistant ID for multi-agent isolation.
+
+<a id="spoon_ai.backends.store.StoreBackend.ls_info"></a>
+
+#### `ls_info`
+
+```python
+def ls_info(path: str) -> list[FileInfo]
+```
+
+List files and directories in the specified directory.
+
+<a id="spoon_ai.backends.store.StoreBackend.read"></a>
+
+#### `read`
+
+```python
+def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Read file content with line numbers.
+
+<a id="spoon_ai.backends.store.StoreBackend.write"></a>
+
+#### `write`
+
+```python
+def write(file_path: str, content: str) -> WriteResult
+```
+
+Create a new file with content.
+
+<a id="spoon_ai.backends.store.StoreBackend.edit"></a>
+
+#### `edit`
+
+```python
+def edit(file_path: str,
+         old_string: str,
+         new_string: str,
+         replace_all: bool = False) -> EditResult
+```
+
+Edit a file by replacing string occurrences.
+
+<a id="spoon_ai.backends.store.StoreBackend.grep_raw"></a>
+
+#### `grep_raw`
+
+```python
+def grep_raw(pattern: str,
+             path: Optional[str] = None,
+             glob: Optional[str] = None) -> list[GrepMatch] | str
+```
+
+Search for pattern in files.
+
+<a id="spoon_ai.backends.store.StoreBackend.glob_info"></a>
+
+#### `glob_info`
+
+```python
+def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
+```
+
+Find files matching glob pattern.
+
+<a id="spoon_ai.backends.store.StoreBackend.upload_files"></a>
+
+#### `upload_files`
+
+```python
+def upload_files(files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
+```
+
+Upload multiple files to the store.
+
+<a id="spoon_ai.backends.store.StoreBackend.download_files"></a>
+
+#### `download_files`
+
+```python
+def download_files(paths: list[str]) -> list[FileDownloadResponse]
+```
+
+Download multiple files from the store.
+
+<a id="spoon_ai.backends.store.create_store_backend"></a>
+
+#### `create_store_backend`
+
+```python
+def create_store_backend(store: Optional[BaseStore] = None,
+                         db_path: str = "store.db",
+                         use_sqlite: bool = True,
+                         namespace: Optional[tuple[str, ...]] = None,
+                         assistant_id: Optional[str] = None) -> StoreBackend
+```
+
+Create a StoreBackend.
+
+**Arguments**:
+
+- `store` - Optional BaseStore instance. If not provided, creates one.
+- `db_path` - Path to SQLite database (if using SQLite).
+- `use_sqlite` - If True, use SQLite. Otherwise, use in-memory store.
+- `namespace` - Optional namespace tuple.
+- `assistant_id` - Optional assistant ID for isolation.
+  
+
+**Returns**:
+
+  StoreBackend instance.
+  
+
+**Example**:
+
+    ```python
+    # Use SQLite for persistence
+    backend = create_store_backend(db_path="agent.db")
+
+    # Use in-memory store for testing
+    backend = create_store_backend(use_sqlite=False)
+
+    # With assistant isolation
+    backend = create_store_backend(assistant_id="agent-001")
+    ```
+
+<a id="spoon_ai.backends.state"></a>
+
+# Module `spoon_ai.backends.state`
+
+StateBackend: Store files in agent state (ephemeral).
+
+Files persist within a conversation thread but not across threads.
+State is automatically checkpointed after each agent step.
+
+<a id="spoon_ai.backends.state.StateBackend"></a>
+
+## `StateBackend` Objects
+
+```python
+class StateBackend(BackendProtocol)
+```
+
+Backend that stores files in agent state (ephemeral).
+
+Uses agent's state management and checkpointing. Files persist within
+a conversation thread but not across threads. State is automatically
+checkpointed after each agent step.
+
+**Example**:
+
+    ```python
+    runtime = BackendRuntime(state={"files": {}})
+    backend = StateBackend(runtime)
+
+    # Write a file
+    result = backend.write("/hello.txt", "Hello, World!")
+
+    # Read the file
+    content = backend.read("/hello.txt")
+    ```
+
+<a id="spoon_ai.backends.state.StateBackend.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(runtime: BackendRuntime)
+```
+
+Initialize StateBackend with runtime.
+
+**Arguments**:
+
+- `runtime` - BackendRuntime instance providing state access.
+
+<a id="spoon_ai.backends.state.StateBackend.ls_info"></a>
+
+#### `ls_info`
+
+```python
+def ls_info(path: str) -> list[FileInfo]
+```
+
+List files and directories in the specified directory (non-recursive).
+
+**Arguments**:
+
+- `path` - Absolute path to directory.
+  
+
+**Returns**:
+
+  List of FileInfo dicts for files and directories in the directory.
+
+<a id="spoon_ai.backends.state.StateBackend.read"></a>
+
+#### `read`
+
+```python
+def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
+```
+
+Read file content with line numbers.
+
+**Arguments**:
+
+- `file_path` - Absolute file path.
+- `offset` - Line offset to start reading from (0-indexed).
+- `limit` - Maximum number of lines to read.
+  
+
+**Returns**:
+
+  Formatted file content with line numbers, or error message.
+
+<a id="spoon_ai.backends.state.StateBackend.write"></a>
+
+#### `write`
+
+```python
+def write(file_path: str, content: str) -> WriteResult
+```
+
+Create a new file with content.
+
+Returns WriteResult with files_update to update state.
+
+<a id="spoon_ai.backends.state.StateBackend.edit"></a>
+
+#### `edit`
+
+```python
+def edit(file_path: str,
+         old_string: str,
+         new_string: str,
+         replace_all: bool = False) -> EditResult
+```
+
+Edit a file by replacing string occurrences.
+
+Returns EditResult with files_update and occurrences.
+
+<a id="spoon_ai.backends.state.StateBackend.grep_raw"></a>
+
+#### `grep_raw`
+
+```python
+def grep_raw(pattern: str,
+             path: Optional[str] = None,
+             glob: Optional[str] = None) -> list[GrepMatch] | str
+```
+
+Search for pattern in files.
+
+<a id="spoon_ai.backends.state.StateBackend.glob_info"></a>
+
+#### `glob_info`
+
+```python
+def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
+```
+
+Get FileInfo for files matching glob pattern.
+
+<a id="spoon_ai.backends.state.create_state_backend"></a>
+
+#### `create_state_backend`
+
+```python
+def create_state_backend(
+    initial_files: Optional[dict[str, Any]] = None
+) -> tuple[StateBackend, BackendRuntime]
+```
+
+Create a StateBackend with optional initial files.
+
+**Arguments**:
+
+- `initial_files` - Optional dict of file paths to FileData.
+  
+
+**Returns**:
+
+  Tuple of (StateBackend, BackendRuntime).
+  
+
+**Example**:
+
+    ```python
+    backend, runtime = create_state_backend()
+    backend.write("/hello.txt", "Hello!")
+    ```
 
 <a id="spoon_ai.backends.protocol"></a>
 
@@ -12859,863 +16257,6 @@ Can be either:
 - A BackendProtocol instance (pre-created backend)
 - A BackendFactory callable (creates backend from runtime)
 
-<a id="spoon_ai.backends.state"></a>
-
-# Module `spoon_ai.backends.state`
-
-StateBackend: Store files in agent state (ephemeral).
-
-Files persist within a conversation thread but not across threads.
-State is automatically checkpointed after each agent step.
-
-<a id="spoon_ai.backends.state.StateBackend"></a>
-
-## `StateBackend` Objects
-
-```python
-class StateBackend(BackendProtocol)
-```
-
-Backend that stores files in agent state (ephemeral).
-
-Uses agent's state management and checkpointing. Files persist within
-a conversation thread but not across threads. State is automatically
-checkpointed after each agent step.
-
-**Example**:
-
-    ```python
-    runtime = BackendRuntime(state={"files": {}})
-    backend = StateBackend(runtime)
-
-    # Write a file
-    result = backend.write("/hello.txt", "Hello, World!")
-
-    # Read the file
-    content = backend.read("/hello.txt")
-    ```
-
-<a id="spoon_ai.backends.state.StateBackend.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(runtime: BackendRuntime)
-```
-
-Initialize StateBackend with runtime.
-
-**Arguments**:
-
-- `runtime` - BackendRuntime instance providing state access.
-
-<a id="spoon_ai.backends.state.StateBackend.ls_info"></a>
-
-#### `ls_info`
-
-```python
-def ls_info(path: str) -> list[FileInfo]
-```
-
-List files and directories in the specified directory (non-recursive).
-
-**Arguments**:
-
-- `path` - Absolute path to directory.
-  
-
-**Returns**:
-
-  List of FileInfo dicts for files and directories in the directory.
-
-<a id="spoon_ai.backends.state.StateBackend.read"></a>
-
-#### `read`
-
-```python
-def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Read file content with line numbers.
-
-**Arguments**:
-
-- `file_path` - Absolute file path.
-- `offset` - Line offset to start reading from (0-indexed).
-- `limit` - Maximum number of lines to read.
-  
-
-**Returns**:
-
-  Formatted file content with line numbers, or error message.
-
-<a id="spoon_ai.backends.state.StateBackend.write"></a>
-
-#### `write`
-
-```python
-def write(file_path: str, content: str) -> WriteResult
-```
-
-Create a new file with content.
-
-Returns WriteResult with files_update to update state.
-
-<a id="spoon_ai.backends.state.StateBackend.edit"></a>
-
-#### `edit`
-
-```python
-def edit(file_path: str,
-         old_string: str,
-         new_string: str,
-         replace_all: bool = False) -> EditResult
-```
-
-Edit a file by replacing string occurrences.
-
-Returns EditResult with files_update and occurrences.
-
-<a id="spoon_ai.backends.state.StateBackend.grep_raw"></a>
-
-#### `grep_raw`
-
-```python
-def grep_raw(pattern: str,
-             path: Optional[str] = None,
-             glob: Optional[str] = None) -> list[GrepMatch] | str
-```
-
-Search for pattern in files.
-
-<a id="spoon_ai.backends.state.StateBackend.glob_info"></a>
-
-#### `glob_info`
-
-```python
-def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
-```
-
-Get FileInfo for files matching glob pattern.
-
-<a id="spoon_ai.backends.state.create_state_backend"></a>
-
-#### `create_state_backend`
-
-```python
-def create_state_backend(
-    initial_files: Optional[dict[str, Any]] = None
-) -> tuple[StateBackend, BackendRuntime]
-```
-
-Create a StateBackend with optional initial files.
-
-**Arguments**:
-
-- `initial_files` - Optional dict of file paths to FileData.
-  
-
-**Returns**:
-
-  Tuple of (StateBackend, BackendRuntime).
-  
-
-**Example**:
-
-    ```python
-    backend, runtime = create_state_backend()
-    backend.write("/hello.txt", "Hello!")
-    ```
-
-<a id="spoon_ai.backends.sandbox"></a>
-
-# Module `spoon_ai.backends.sandbox`
-
-Base sandbox implementation with execute() as the only required abstract method.
-
-This module provides a base class that implements all SandboxBackendProtocol
-methods using shell commands executed via execute(). Concrete implementations
-only need to implement the execute() method.
-
-This design allows for remote sandboxes (Docker, Modal, Daytona, etc.) where
-you just implement execute() to run commands remotely.
-
-Compatible with LangChain DeepAgents BaseSandbox interface.
-
-Usage:
-    # For local execution
-    class LocalSandbox(BaseSandbox):
-        def execute(self, command: str) -&gt; ExecuteResponse:
-            # Run locally
-            result = subprocess.run(command, shell=True, ...)
-            return ExecuteResponse(output=result.stdout, exit_code=result.returncode)
-
-    # For remote execution (Docker, Modal, etc.)
-    class DockerSandbox(BaseSandbox):
-        def execute(self, command: str) -&gt; ExecuteResponse:
-            # Run in Docker container
-            result = docker_client.containers.run(self.image, command, ...)
-            return ExecuteResponse(output=result, exit_code=0)
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox"></a>
-
-## `BaseSandbox` Objects
-
-```python
-class BaseSandbox(SandboxBackendProtocol, ABC)
-```
-
-Base sandbox implementation with execute() as abstract method.
-
-This class provides default implementations for all protocol methods
-using shell commands. Subclasses only need to implement:
-- execute(): Run a shell command and return output
-- id: Unique identifier property
-- upload_files(): Upload files to sandbox (optional, has default)
-- download_files(): Download files from sandbox (optional, has default)
-
-The default implementations use Python commands executed via execute()
-to perform file operations, making this suitable for remote sandboxes
-where you only have shell access.
-
-**Example**:
-
-    ```python
-    class DockerSandbox(BaseSandbox):
-        def __init__(self, container_id: str):
-            self._container_id = container_id
-
-        @property
-        def id(self) -> str:
-            return f"docker-{self._container_id}"
-
-        def execute(self, command: str) -> ExecuteResponse:
-            result = docker_exec(self._container_id, command)
-            return ExecuteResponse(
-                output=result.output,
-                exit_code=result.exit_code
-            )
-    ```
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.execute"></a>
-
-#### `execute`
-
-```python
-@abstractmethod
-def execute(command: str) -> ExecuteResponse
-```
-
-Execute a command in the sandbox and return ExecuteResponse.
-
-This is the core method that subclasses must implement.
-All other file operations are built on top of this.
-
-**Arguments**:
-
-- `command` - Full shell command string to execute.
-  
-
-**Returns**:
-
-  ExecuteResponse with combined output, exit code, and truncation flag.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.aexecute"></a>
-
-#### `aexecute`
-
-```python
-async def aexecute(command: str) -> ExecuteResponse
-```
-
-Async version of execute.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.id"></a>
-
-#### `id`
-
-```python
-@property
-@abstractmethod
-def id() -> str
-```
-
-Unique identifier for the sandbox backend.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.ls_info"></a>
-
-#### `ls_info`
-
-```python
-def ls_info(path: str) -> List[FileInfo]
-```
-
-List directory contents using shell command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.read"></a>
-
-#### `read`
-
-```python
-def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Read file content with line numbers using shell command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.write"></a>
-
-#### `write`
-
-```python
-def write(file_path: str, content: str) -> WriteResult
-```
-
-Create a new file using shell command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.edit"></a>
-
-#### `edit`
-
-```python
-def edit(file_path: str,
-         old_string: str,
-         new_string: str,
-         replace_all: bool = False) -> EditResult
-```
-
-Edit a file by replacing string occurrences using shell command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.grep_raw"></a>
-
-#### `grep_raw`
-
-```python
-def grep_raw(pattern: str,
-             path: Optional[str] = None,
-             glob: Optional[str] = None) -> List[GrepMatch]
-```
-
-Search for pattern in files using grep command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.glob_info"></a>
-
-#### `glob_info`
-
-```python
-def glob_info(pattern: str, path: str = "/") -> List[FileInfo]
-```
-
-Find files matching pattern using glob command.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.upload_files"></a>
-
-#### `upload_files`
-
-```python
-def upload_files(files: List[Tuple[str, bytes]]) -> List[FileUploadResponse]
-```
-
-Upload multiple files to the sandbox.
-
-Default implementation uses base64 encoding via execute().
-Override for more efficient implementations.
-
-**Arguments**:
-
-- `files` - List of (path, content) tuples
-  
-
-**Returns**:
-
-  List of FileUploadResponse for each file
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.download_files"></a>
-
-#### `download_files`
-
-```python
-def download_files(paths: List[str]) -> List[FileDownloadResponse]
-```
-
-Download multiple files from the sandbox.
-
-Default implementation uses base64 encoding via execute().
-Override for more efficient implementations.
-
-**Arguments**:
-
-- `paths` - List of file paths to download
-  
-
-**Returns**:
-
-  List of FileDownloadResponse for each file
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.als_info"></a>
-
-#### `als_info`
-
-```python
-async def als_info(path: str) -> List[FileInfo]
-```
-
-Async version of ls_info.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.aread"></a>
-
-#### `aread`
-
-```python
-async def aread(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Async version of read.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.awrite"></a>
-
-#### `awrite`
-
-```python
-async def awrite(file_path: str, content: str) -> WriteResult
-```
-
-Async version of write.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.aedit"></a>
-
-#### `aedit`
-
-```python
-async def aedit(file_path: str,
-                old_string: str,
-                new_string: str,
-                replace_all: bool = False) -> EditResult
-```
-
-Async version of edit.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.agrep_raw"></a>
-
-#### `agrep_raw`
-
-```python
-async def agrep_raw(pattern: str,
-                    path: Optional[str] = None,
-                    glob: Optional[str] = None) -> List[GrepMatch]
-```
-
-Async version of grep_raw.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.aglob_info"></a>
-
-#### `aglob_info`
-
-```python
-async def aglob_info(pattern: str, path: str = "/") -> List[FileInfo]
-```
-
-Async version of glob_info.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.aupload_files"></a>
-
-#### `aupload_files`
-
-```python
-async def aupload_files(
-        files: List[Tuple[str, bytes]]) -> List[FileUploadResponse]
-```
-
-Async version of upload_files.
-
-<a id="spoon_ai.backends.sandbox.BaseSandbox.adownload_files"></a>
-
-#### `adownload_files`
-
-```python
-async def adownload_files(paths: List[str]) -> List[FileDownloadResponse]
-```
-
-Async version of download_files.
-
-<a id="spoon_ai.backends"></a>
-
-# Module `spoon_ai.backends`
-
-Pluggable Memory Backends for Deep Agents.
-
-This module provides a unified interface for file operations across different
-storage backends. Compatible with LangChain DeepAgents backend architecture.
-
-Backend Types:
-- StateBackend: Ephemeral in-memory storage (per-thread)
-- FilesystemBackend: Real filesystem access (optionally sandboxed)
-- StoreBackend: Persistent key-value storage (cross-thread)
-- CompositeBackend: Route operations to multiple backends by path prefix
-- BaseSandbox: Abstract base class for remote sandboxes (Docker, Modal, etc.)
-
-Example Usage:
-    ```python
-    from spoon_ai.backends import (
-        StateBackend,
-        FilesystemBackend,
-        StoreBackend,
-        CompositeBackend,
-        BaseSandbox,
-        BackendRuntime,
-        create_state_backend,
-        create_filesystem_backend,
-        create_store_backend,
-        create_composite_backend,
-    )
-
-    # 1. Simple ephemeral storage
-    backend, runtime = create_state_backend()
-    backend.write("/notes.txt", "Hello!")
-    print(backend.read("/notes.txt"))
-
-    # 2. Real filesystem access
-    backend = create_filesystem_backend(
-        root_dir="/workspace",
-        virtual_mode=True  # Sandbox to root_dir
-    )
-
-    # 3. Persistent database storage
-    backend = create_store_backend(db_path="agent.db")
-
-    # 4. Mixed storage with routing
-    state_backend, _ = create_state_backend()
-    store_backend = create_store_backend()
-    fs_backend = create_filesystem_backend()
-
-    backend = create_composite_backend(
-        default=state_backend,
-        routes={
-            "/persistent/": store_backend,
-            "/local/": fs_backend,
-        }
-    )
-
-    # Operations route automatically
-    backend.write("/temp.txt", "Ephemeral")         # -> state
-    backend.write("/persistent/note.txt", "Saved")  # -> database
-    backend.write("/local/code.py", "# Code")       # -> filesystem
-
-    # 5. Remote sandbox (Docker, Modal, etc.)
-    class DockerSandbox(BaseSandbox):
-        def __init__(self, container_id: str):
-            self._container_id = container_id
-
-        @property
-        def id(self) -> str:
-            return f"docker-{self._container_id}"
-
-        def execute(self, command: str) -> ExecuteResponse:
-            # Run command in Docker container
-            result = docker_exec(self._container_id, command)
-            return ExecuteResponse(output=result.output, exit_code=result.exit_code)
-
-    sandbox = DockerSandbox("my-container")
-    sandbox.write("/app/config.json", '{"key": "value"}')
-    content = sandbox.read("/app/config.json")
-    ```
-
-<a id="spoon_ai.backends.store"></a>
-
-# Module `spoon_ai.backends.store`
-
-StoreBackend: Persistent key-value store backend (cross-thread).
-
-Uses a simple key-value store interface for persistent, cross-conversation storage.
-Files persist across all threads and sessions.
-
-<a id="spoon_ai.backends.store.BaseStore"></a>
-
-## `BaseStore` Objects
-
-```python
-class BaseStore(abc.ABC)
-```
-
-Abstract base class for persistent stores.
-
-Implementations can use SQLite, Redis, S3, or any other storage backend.
-
-<a id="spoon_ai.backends.store.BaseStore.get"></a>
-
-#### `get`
-
-```python
-@abc.abstractmethod
-def get(namespace: tuple[str, ...], key: str) -> Optional[dict[str, Any]]
-```
-
-Get a value by key.
-
-**Arguments**:
-
-- `namespace` - Hierarchical namespace tuple.
-- `key` - The key to retrieve.
-  
-
-**Returns**:
-
-  The stored value dict, or None if not found.
-
-<a id="spoon_ai.backends.store.BaseStore.put"></a>
-
-#### `put`
-
-```python
-@abc.abstractmethod
-def put(namespace: tuple[str, ...], key: str, value: dict[str, Any]) -> None
-```
-
-Store a value by key.
-
-**Arguments**:
-
-- `namespace` - Hierarchical namespace tuple.
-- `key` - The key to store under.
-- `value` - The value dict to store.
-
-<a id="spoon_ai.backends.store.BaseStore.delete"></a>
-
-#### `delete`
-
-```python
-@abc.abstractmethod
-def delete(namespace: tuple[str, ...], key: str) -> None
-```
-
-Delete a value by key.
-
-**Arguments**:
-
-- `namespace` - Hierarchical namespace tuple.
-- `key` - The key to delete.
-
-<a id="spoon_ai.backends.store.BaseStore.search"></a>
-
-#### `search`
-
-```python
-@abc.abstractmethod
-def search(namespace: tuple[str, ...],
-           query: Optional[str] = None,
-           filter: Optional[dict[str, Any]] = None,
-           limit: int = 100,
-           offset: int = 0) -> list[dict[str, Any]]
-```
-
-Search for values in a namespace.
-
-**Arguments**:
-
-- `namespace` - Hierarchical namespace tuple.
-- `query` - Optional search query.
-- `filter` - Optional key-value filter.
-- `limit` - Maximum results to return.
-- `offset` - Number of results to skip.
-  
-
-**Returns**:
-
-  List of matching items with 'key' and 'value' fields.
-
-<a id="spoon_ai.backends.store.InMemoryStore"></a>
-
-## `InMemoryStore` Objects
-
-```python
-class InMemoryStore(BaseStore)
-```
-
-Simple in-memory store implementation.
-
-Useful for testing and development. Data is lost when process exits.
-
-<a id="spoon_ai.backends.store.SQLiteStore"></a>
-
-## `SQLiteStore` Objects
-
-```python
-class SQLiteStore(BaseStore)
-```
-
-SQLite-based persistent store.
-
-Data persists across process restarts.
-
-<a id="spoon_ai.backends.store.StoreBackend"></a>
-
-## `StoreBackend` Objects
-
-```python
-class StoreBackend(BackendProtocol)
-```
-
-Backend that stores files in a persistent store (cross-thread).
-
-Uses a key-value store for persistent, cross-conversation storage.
-Files are organized via namespaces and persist across all threads.
-
-**Example**:
-
-    ```python
-    store = SQLiteStore("agent_files.db")
-    backend = StoreBackend(store)
-
-    # Write persists across sessions
-    backend.write("/notes.txt", "Important notes")
-
-    # Read from any thread
-    content = backend.read("/notes.txt")
-    ```
-
-<a id="spoon_ai.backends.store.StoreBackend.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(store: BaseStore,
-             namespace: Optional[tuple[str, ...]] = None,
-             assistant_id: Optional[str] = None)
-```
-
-Initialize StoreBackend.
-
-**Arguments**:
-
-- `store` - BaseStore implementation.
-- `namespace` - Optional namespace tuple. Defaults to ("filesystem",).
-- `assistant_id` - Optional assistant ID for multi-agent isolation.
-
-<a id="spoon_ai.backends.store.StoreBackend.ls_info"></a>
-
-#### `ls_info`
-
-```python
-def ls_info(path: str) -> list[FileInfo]
-```
-
-List files and directories in the specified directory.
-
-<a id="spoon_ai.backends.store.StoreBackend.read"></a>
-
-#### `read`
-
-```python
-def read(file_path: str, offset: int = 0, limit: int = 2000) -> str
-```
-
-Read file content with line numbers.
-
-<a id="spoon_ai.backends.store.StoreBackend.write"></a>
-
-#### `write`
-
-```python
-def write(file_path: str, content: str) -> WriteResult
-```
-
-Create a new file with content.
-
-<a id="spoon_ai.backends.store.StoreBackend.edit"></a>
-
-#### `edit`
-
-```python
-def edit(file_path: str,
-         old_string: str,
-         new_string: str,
-         replace_all: bool = False) -> EditResult
-```
-
-Edit a file by replacing string occurrences.
-
-<a id="spoon_ai.backends.store.StoreBackend.grep_raw"></a>
-
-#### `grep_raw`
-
-```python
-def grep_raw(pattern: str,
-             path: Optional[str] = None,
-             glob: Optional[str] = None) -> list[GrepMatch] | str
-```
-
-Search for pattern in files.
-
-<a id="spoon_ai.backends.store.StoreBackend.glob_info"></a>
-
-#### `glob_info`
-
-```python
-def glob_info(pattern: str, path: str = "/") -> list[FileInfo]
-```
-
-Find files matching glob pattern.
-
-<a id="spoon_ai.backends.store.StoreBackend.upload_files"></a>
-
-#### `upload_files`
-
-```python
-def upload_files(files: list[tuple[str, bytes]]) -> list[FileUploadResponse]
-```
-
-Upload multiple files to the store.
-
-<a id="spoon_ai.backends.store.StoreBackend.download_files"></a>
-
-#### `download_files`
-
-```python
-def download_files(paths: list[str]) -> list[FileDownloadResponse]
-```
-
-Download multiple files from the store.
-
-<a id="spoon_ai.backends.store.create_store_backend"></a>
-
-#### `create_store_backend`
-
-```python
-def create_store_backend(store: Optional[BaseStore] = None,
-                         db_path: str = "store.db",
-                         use_sqlite: bool = True,
-                         namespace: Optional[tuple[str, ...]] = None,
-                         assistant_id: Optional[str] = None) -> StoreBackend
-```
-
-Create a StoreBackend.
-
-**Arguments**:
-
-- `store` - Optional BaseStore instance. If not provided, creates one.
-- `db_path` - Path to SQLite database (if using SQLite).
-- `use_sqlite` - If True, use SQLite. Otherwise, use in-memory store.
-- `namespace` - Optional namespace tuple.
-- `assistant_id` - Optional assistant ID for isolation.
-  
-
-**Returns**:
-
-  StoreBackend instance.
-  
-
-**Example**:
-
-    ```python
-    # Use SQLite for persistence
-    backend = create_store_backend(db_path="agent.db")
-
-    # Use in-memory store for testing
-    backend = create_store_backend(use_sqlite=False)
-
-    # With assistant isolation
-    backend = create_store_backend(assistant_id="agent-001")
-    ```
-
 <a id="spoon_ai.backends.composite"></a>
 
 # Module `spoon_ai.backends.composite`
@@ -14225,4660 +16766,654 @@ Create a FilesystemBackend.
     )
     ```
 
-<a id="spoon_ai.backends.utils"></a>
+<a id="spoon_ai.security"></a>
 
-# Module `spoon_ai.backends.utils`
+# Module `spoon_ai.security`
 
-Shared utility functions for memory backend implementations.
+Environment security helpers for ENC:v2 encrypted secrets.
 
-This module contains both user-facing string formatters and structured
-helpers used by backends and the composite router.
+Security model:
+- Decrypted secrets are stored in SecretVault, NOT in os.environ.
+- The `decrypted_secrets` context manager provides scoped access to secrets
+  via the vault, automatically wiping them when the context exits.
+- Legacy `decrypted_environ` is DEPRECATED and will emit a warning.
 
-<a id="spoon_ai.backends.utils.sanitize_tool_call_id"></a>
+This avoids the critical security issue where secrets remain in os.environ
+(readable via /proc/&#123;pid&#125;/environ, inherited by subprocesses, etc.).
 
-#### `sanitize_tool_call_id`
+<a id="spoon_ai.security.init_security"></a>
 
-```python
-def sanitize_tool_call_id(tool_call_id: str) -> str
-```
-
-Sanitize tool_call_id to prevent path traversal.
-
-Replaces dangerous characters (., /, \) with underscores.
-
-<a id="spoon_ai.backends.utils.validate_path"></a>
-
-#### `validate_path`
+#### `init_security`
 
 ```python
-def validate_path(path: Optional[str]) -> str
+def init_security(*, vault: Optional[SecretVault] = None) -> SecretVault
 ```
 
-Validate and normalize a path.
+Initialize env security features and return the vault.
 
-**Arguments**:
-
-- `path` - Path to validate
-  
+Behaviour:
+- Load `.env` files (if python-dotenv is installed).
+- Detect presence of ENC:v2 encrypted values.
+- If `SPOON_SECURITY_DECRYPT_ON_IMPORT` is truthy, decrypt all encrypted
+env vars and store in SecretVault (NOT os.environ).
+- Register atexit handler to wipe vault on shutdown.
 
 **Returns**:
 
-  Normalized path starting with /
+  The SecretVault instance containing decrypted secrets.
   
 
 **Raises**:
 
-- `ValueError` - If path is invalid
+- `RuntimeError` - If encrypted vars found but no password provided.
+- `DecryptionError` - If decryption fails.
 
-<a id="spoon_ai.backends.utils.format_content_with_line_numbers"></a>
+<a id="spoon_ai.security.decrypted_secrets"></a>
 
-#### `format_content_with_line_numbers`
+#### `decrypted_secrets`
 
 ```python
-def format_content_with_line_numbers(content: str | list[str],
-                                     start_line: int = 1) -> str
+@contextmanager
+def decrypted_secrets(
+        keys: Optional[Iterable[str]] = None,
+        *,
+        password: Optional[str] = None,
+        prompt: bool = True,
+        vault: Optional[SecretVault] = None) -> Iterator[SecretVault]
 ```
 
-Format file content with line numbers (cat -n style).
+Context manager for scoped access to decrypted secrets via SecretVault.
+
+This is the RECOMMENDED way to access encrypted secrets. Secrets are:
+1. Decrypted and stored in the vault on context entry.
+2. Accessible via `vault.get_decoded(key)` within the context.
+3. Automatically wiped from the vault on context exit.
 
 **Arguments**:
 
-- `content` - File content as string or list of lines
-- `start_line` - Starting line number (default: 1)
+- `keys` - Specific env var names to decrypt. If None, all encrypted vars.
+- `password` - Master password. If None, resolved from env or prompt.
+- `prompt` - Whether to prompt for password if not in env.
+- `vault` - Optional vault instance (defaults to singleton).
   
 
-**Returns**:
+**Yields**:
 
-  Formatted content with line numbers
-
-<a id="spoon_ai.backends.utils.check_empty_content"></a>
-
-#### `check_empty_content`
-
-```python
-def check_empty_content(content: str) -> Optional[str]
-```
-
-Check if content is empty and return warning message.
-
-**Arguments**:
-
-- `content` - Content to check
+  SecretVault instance with decrypted secrets.
   
 
-**Returns**:
+**Example**:
 
-  Warning message if empty, None otherwise
+  with decrypted_secrets(["PRIVATE_KEY"]) as vault:
+  with vault.get_decoded("PRIVATE_KEY") as pk:
+  account = Account.from_key(pk)
+  # Use account...
+  # Secrets wiped automatically
 
-<a id="spoon_ai.backends.utils.file_data_to_string"></a>
+<a id="spoon_ai.security.async_decrypted_secrets"></a>
 
-#### `file_data_to_string`
-
-```python
-def file_data_to_string(file_data: dict[str, Any]) -> str
-```
-
-Convert FileData to plain string content.
-
-**Arguments**:
-
-- `file_data` - FileData dict with 'content' key
-  
-
-**Returns**:
-
-  Content as string with lines joined by newlines
-
-<a id="spoon_ai.backends.utils.create_file_data"></a>
-
-#### `create_file_data`
-
-```python
-def create_file_data(content: str,
-                     created_at: Optional[str] = None) -> dict[str, Any]
-```
-
-Create a FileData object with timestamps.
-
-**Arguments**:
-
-- `content` - File content as string
-- `created_at` - Optional creation timestamp (ISO format)
-  
-
-**Returns**:
-
-  FileData dict with content and timestamps
-
-<a id="spoon_ai.backends.utils.update_file_data"></a>
-
-#### `update_file_data`
-
-```python
-def update_file_data(file_data: dict[str, Any],
-                     content: str) -> dict[str, Any]
-```
-
-Update FileData with new content, preserving creation timestamp.
-
-**Arguments**:
-
-- `file_data` - Existing FileData dict
-- `content` - New content as string
-  
-
-**Returns**:
-
-  Updated FileData dict
-
-<a id="spoon_ai.backends.utils.format_read_response"></a>
-
-#### `format_read_response`
-
-```python
-def format_read_response(file_data: dict[str, Any], offset: int,
-                         limit: int) -> str
-```
-
-Format file data for read response with line numbers.
-
-**Arguments**:
-
-- `file_data` - FileData dict
-- `offset` - Line offset (0-indexed)
-- `limit` - Maximum number of lines
-  
-
-**Returns**:
-
-  Formatted content or error message
-
-<a id="spoon_ai.backends.utils.perform_string_replacement"></a>
-
-#### `perform_string_replacement`
-
-```python
-def perform_string_replacement(content: str, old_string: str, new_string: str,
-                               replace_all: bool) -> tuple[str, int] | str
-```
-
-Perform string replacement with occurrence validation.
-
-**Arguments**:
-
-- `content` - Original content
-- `old_string` - String to replace
-- `new_string` - Replacement string
-- `replace_all` - Whether to replace all occurrences
-  
-
-**Returns**:
-
-  Tuple of (new_content, occurrences) on success, or error message string
-
-<a id="spoon_ai.backends.utils.glob_match"></a>
-
-#### `glob_match`
-
-```python
-def glob_match(path: str, pattern: str) -> bool
-```
-
-Match a path against a glob pattern.
-
-**Arguments**:
-
-- `path` - File path to match
-- `pattern` - Glob pattern
-  
-
-**Returns**:
-
-  True if path matches pattern
-
-<a id="spoon_ai.backends.utils.glob_search_files"></a>
-
-#### `glob_search_files`
-
-```python
-def glob_search_files(files: dict[str, Any],
-                      pattern: str,
-                      path: str = "/") -> str
-```
-
-Search files dict for paths matching glob pattern.
-
-**Arguments**:
-
-- `files` - Dictionary of file paths to FileData.
-- `pattern` - Glob pattern (e.g., "*.py", "**/*.ts").
-- `path` - Base path to search from.
-  
-
-**Returns**:
-
-  Newline-separated file paths, sorted by modification time.
-  Returns "No files found" if no matches.
-
-<a id="spoon_ai.backends.utils.grep_matches_from_files"></a>
-
-#### `grep_matches_from_files`
-
-```python
-def grep_matches_from_files(
-        files: dict[str, Any],
-        pattern: str,
-        path: Optional[str] = None,
-        glob_pattern: Optional[str] = None) -> list[GrepMatch] | str
-```
-
-Return structured grep matches from an in-memory files mapping.
-
-**Arguments**:
-
-- `files` - Dictionary of file paths to FileData.
-- `pattern` - Regex pattern to search for.
-- `path` - Base path to search from.
-- `glob_pattern` - Optional glob pattern to filter files.
-  
-
-**Returns**:
-
-  List of GrepMatch on success, or error string.
-
-<a id="spoon_ai.backends.utils.format_grep_results"></a>
-
-#### `format_grep_results`
-
-```python
-def format_grep_results(
-        results: dict[str, list[tuple[int, str]]],
-        output_mode: Literal["files_with_matches", "content", "count"]) -> str
-```
-
-Format grep search results based on output mode.
-
-**Arguments**:
-
-- `results` - Dictionary mapping file paths to list of (line_num, line_content) tuples
-- `output_mode` - Output format
-  
-
-**Returns**:
-
-  Formatted string output
-
-<a id="spoon_ai.backends.utils.truncate_if_too_long"></a>
-
-#### `truncate_if_too_long`
-
-```python
-def truncate_if_too_long(result: list[str] | str) -> list[str] | str
-```
-
-Truncate result if it exceeds token limit.
-
-<a id="spoon_ai.memory"></a>
-
-# Module `spoon_ai.memory`
-
-Short-term memory management for conversation history.
-
-This module provides memory management utilities for maintaining and optimizing
-conversation history in chat applications.
-
-<a id="spoon_ai.memory.short_term_manager"></a>
-
-# Module `spoon_ai.memory.short_term_manager`
-
-Short-term memory management for conversation history.
-
-<a id="spoon_ai.memory.short_term_manager.TrimStrategy"></a>
-
-## `TrimStrategy` Objects
-
-```python
-class TrimStrategy(str, Enum)
-```
-
-Strategy for trimming messages.
-
-<a id="spoon_ai.memory.short_term_manager.TrimStrategy.FROM_START"></a>
-
-#### `FROM_START`
-
-Remove oldest messages first
-
-<a id="spoon_ai.memory.short_term_manager.TrimStrategy.FROM_END"></a>
-
-#### `FROM_END`
-
-Remove newest messages first
-
-<a id="spoon_ai.memory.short_term_manager.MessageTokenCounter"></a>
-
-## `MessageTokenCounter` Objects
-
-```python
-class MessageTokenCounter()
-```
-
-Approximate token counter aligned with LangChain semantics.
-
-<a id="spoon_ai.memory.short_term_manager.ShortTermMemoryManager"></a>
-
-## `ShortTermMemoryManager` Objects
-
-```python
-class ShortTermMemoryManager()
-```
-
-Manager for short-term conversation memory with advanced operations.
-
-<a id="spoon_ai.memory.short_term_manager.ShortTermMemoryManager.trim_messages"></a>
-
-#### `trim_messages`
-
-```python
-async def trim_messages(messages: List[Message],
-                        max_tokens: int,
-                        strategy: TrimStrategy = TrimStrategy.FROM_END,
-                        keep_system: bool = True,
-                        model: Optional[str] = None) -> List[Message]
-```
-
-Trim messages using a LangChain-style heuristic.
-
-<a id="spoon_ai.memory.short_term_manager.ShortTermMemoryManager.summarize_messages"></a>
-
-#### `summarize_messages`
-
-```python
-async def summarize_messages(
-    messages: List[Message],
-    max_tokens_before_summary: int,
-    messages_to_keep: int = 5,
-    summary_model: Optional[str] = None,
-    llm_manager=None,
-    llm_provider: Optional[str] = None,
-    existing_summary: str = ""
-) -> Tuple[List[Message], List[RemoveMessage], Optional[str]]
-```
-
-Summarize earlier messages and emit removal directives.
-
-<a id="spoon_ai.memory.checkpointer"></a>
-
-# Module `spoon_ai.memory.checkpointer`
-
-Enhanced Checkpointing System
-
-Provides persistent storage for agent state, enabling:
-- Conversation pause and resume
-- Thread-based isolation
-- State recovery after crashes
-- Cross-session persistence
-
-Backends:
-- InMemoryCheckpointer: For testing
-- SQLiteCheckpointer: Production-ready persistence
-- JSONCheckpointer: File-based persistence
-
-Usage:
-    checkpointer = SQLiteCheckpointer("agent_memory.db")
-
-    agent = ToolCallAgent(
-        thread_id="user-123",
-        middleware=[CheckpointMiddleware(checkpointer)]
-    )
-
-    # State is automatically saved after each step
-    await agent.run("Do something complex")
-
-    # Resume in a new session
-    agent2 = ToolCallAgent(
-        thread_id="user-123",  # Same thread
-        middleware=[CheckpointMiddleware(checkpointer)]
-    )
-    # Agent2 will restore state from checkpoint
-
-<a id="spoon_ai.memory.checkpointer.Checkpoint"></a>
-
-## `Checkpoint` Objects
-
-```python
-@dataclass
-class Checkpoint()
-```
-
-A single checkpoint containing agent state.
-
-<a id="spoon_ai.memory.checkpointer.Checkpoint.messages"></a>
-
-#### `messages`
-
-Serialized messages
-
-<a id="spoon_ai.memory.checkpointer.Checkpoint.agent_state"></a>
-
-#### `agent_state`
-
-Agent state dict
-
-<a id="spoon_ai.memory.checkpointer.Checkpoint.metadata"></a>
-
-#### `metadata`
-
-Additional metadata
-
-<a id="spoon_ai.memory.checkpointer.BaseCheckpointer"></a>
-
-## `BaseCheckpointer` Objects
-
-```python
-class BaseCheckpointer(ABC)
-```
-
-Abstract base class for checkpointers.
-
-<a id="spoon_ai.memory.checkpointer.BaseCheckpointer.save"></a>
-
-#### `save`
-
-```python
-@abstractmethod
-def save(checkpoint: Checkpoint) -> None
-```
-
-Save a checkpoint.
-
-**Arguments**:
-
-- `checkpoint` - Checkpoint to save
-
-<a id="spoon_ai.memory.checkpointer.BaseCheckpointer.load"></a>
-
-#### `load`
-
-```python
-@abstractmethod
-def load(thread_id: str) -> Optional[Checkpoint]
-```
-
-Load the latest checkpoint for a thread.
-
-**Arguments**:
-
-- `thread_id` - Thread identifier
-  
-
-**Returns**:
-
-  Latest checkpoint or None if not found
-
-<a id="spoon_ai.memory.checkpointer.BaseCheckpointer.list_threads"></a>
-
-#### `list_threads`
-
-```python
-@abstractmethod
-def list_threads() -> List[str]
-```
-
-List all thread IDs with checkpoints.
-
-**Returns**:
-
-  List of thread IDs
-
-<a id="spoon_ai.memory.checkpointer.BaseCheckpointer.delete"></a>
-
-#### `delete`
-
-```python
-@abstractmethod
-def delete(thread_id: str) -> bool
-```
-
-Delete all checkpoints for a thread.
-
-**Arguments**:
-
-- `thread_id` - Thread identifier
-  
-
-**Returns**:
-
-  True if deleted, False if not found
-
-<a id="spoon_ai.memory.checkpointer.BaseCheckpointer.get_history"></a>
-
-#### `get_history`
-
-```python
-@abstractmethod
-def get_history(thread_id: str, limit: int = 10) -> List[Checkpoint]
-```
-
-Get checkpoint history for a thread.
-
-**Arguments**:
-
-- `thread_id` - Thread identifier
-- `limit` - Maximum number of checkpoints to return
-  
-
-**Returns**:
-
-  List of checkpoints, most recent first
-
-<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer"></a>
-
-## `InMemoryCheckpointer` Objects
-
-```python
-class InMemoryCheckpointer(BaseCheckpointer)
-```
-
-In-memory checkpointer for testing and development.
-
-<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer.save"></a>
-
-#### `save`
-
-```python
-def save(checkpoint: Checkpoint) -> None
-```
-
-Save checkpoint to memory.
-
-<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer.load"></a>
-
-#### `load`
-
-```python
-def load(thread_id: str) -> Optional[Checkpoint]
-```
-
-Load latest checkpoint from memory.
-
-<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer.list_threads"></a>
-
-#### `list_threads`
-
-```python
-def list_threads() -> List[str]
-```
-
-List all thread IDs.
-
-<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer.delete"></a>
-
-#### `delete`
-
-```python
-def delete(thread_id: str) -> bool
-```
-
-Delete all checkpoints for thread.
-
-<a id="spoon_ai.memory.checkpointer.InMemoryCheckpointer.get_history"></a>
-
-#### `get_history`
-
-```python
-def get_history(thread_id: str, limit: int = 10) -> List[Checkpoint]
-```
-
-Get checkpoint history.
-
-<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer"></a>
-
-## `SQLiteCheckpointer` Objects
-
-```python
-class SQLiteCheckpointer(BaseCheckpointer)
-```
-
-SQLite-based checkpointer for production use.
-
-Features:
-- Persistent storage
-- Automatic schema creation
-- Thread-safe operations
-- Checkpoint history
-
-<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(db_path: str = "checkpoints.db")
-```
-
-Initialize SQLite checkpointer.
-
-**Arguments**:
-
-- `db_path` - Path to SQLite database file
-
-<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.save"></a>
-
-#### `save`
-
-```python
-def save(checkpoint: Checkpoint) -> None
-```
-
-Save checkpoint to SQLite.
-
-<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.load"></a>
-
-#### `load`
-
-```python
-def load(thread_id: str) -> Optional[Checkpoint]
-```
-
-Load latest checkpoint from SQLite.
-
-<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.list_threads"></a>
-
-#### `list_threads`
-
-```python
-def list_threads() -> List[str]
-```
-
-List all thread IDs.
-
-<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.delete"></a>
-
-#### `delete`
-
-```python
-def delete(thread_id: str) -> bool
-```
-
-Delete all checkpoints for thread.
-
-<a id="spoon_ai.memory.checkpointer.SQLiteCheckpointer.get_history"></a>
-
-#### `get_history`
-
-```python
-def get_history(thread_id: str, limit: int = 10) -> List[Checkpoint]
-```
-
-Get checkpoint history.
-
-<a id="spoon_ai.memory.checkpointer.JSONCheckpointer"></a>
-
-## `JSONCheckpointer` Objects
-
-```python
-class JSONCheckpointer(BaseCheckpointer)
-```
-
-JSON file-based checkpointer.
-
-Each thread gets its own JSON file.
-
-<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(storage_dir: str = ".checkpoints")
-```
-
-Initialize JSON checkpointer.
-
-**Arguments**:
-
-- `storage_dir` - Directory for checkpoint files
-
-<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.save"></a>
-
-#### `save`
-
-```python
-def save(checkpoint: Checkpoint) -> None
-```
-
-Save checkpoint to JSON file.
-
-<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.load"></a>
-
-#### `load`
-
-```python
-def load(thread_id: str) -> Optional[Checkpoint]
-```
-
-Load latest checkpoint from JSON file.
-
-<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.list_threads"></a>
-
-#### `list_threads`
-
-```python
-def list_threads() -> List[str]
-```
-
-List all thread IDs.
-
-<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.delete"></a>
-
-#### `delete`
-
-```python
-def delete(thread_id: str) -> bool
-```
-
-Delete checkpoint file.
-
-<a id="spoon_ai.memory.checkpointer.JSONCheckpointer.get_history"></a>
-
-#### `get_history`
-
-```python
-def get_history(thread_id: str, limit: int = 10) -> List[Checkpoint]
-```
-
-Get checkpoint history.
-
-<a id="spoon_ai.memory.checkpointer.CheckpointMiddleware"></a>
-
-## `CheckpointMiddleware` Objects
-
-```python
-class CheckpointMiddleware(AgentMiddleware)
-```
-
-Middleware that adds automatic checkpointing.
-
-Features:
-- Automatic state saving after each step
-- Automatic state restoration on startup
-- Thread-based isolation
-- Configurable checkpoint frequency
-
-Usage:
-    checkpointer = SQLiteCheckpointer("agent.db")
-
-    agent = ToolCallAgent(
-        thread_id="user-123",
-        middleware=[CheckpointMiddleware(
-            checkpointer,
-            save_frequency=1  # Save after every step
-        )]
-    )
-
-<a id="spoon_ai.memory.checkpointer.CheckpointMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(checkpointer: BaseCheckpointer,
-             save_frequency: int = 1,
-             auto_restore: bool = True)
-```
-
-Initialize checkpoint middleware.
-
-**Arguments**:
-
-- `checkpointer` - Checkpointer backend
-- `save_frequency` - Save checkpoint every N steps
-- `auto_restore` - Automatically restore state on startup
-
-<a id="spoon_ai.memory.checkpointer.CheckpointMiddleware.before_agent"></a>
-
-#### `before_agent`
-
-```python
-def before_agent(state: Dict[str, Any],
-                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Restore state from checkpoint on startup.
-
-<a id="spoon_ai.memory.checkpointer.CheckpointMiddleware.after_agent"></a>
-
-#### `after_agent`
-
-```python
-def after_agent(state: Dict[str, Any],
-                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Save checkpoint after agent completes.
-
-<a id="spoon_ai.memory.checkpointer.create_sqlite_checkpointer"></a>
-
-#### `create_sqlite_checkpointer`
-
-```python
-def create_sqlite_checkpointer(
-        db_path: str = "agent_memory.db") -> SQLiteCheckpointer
-```
-
-Create a SQLite checkpointer.
-
-**Arguments**:
-
-- `db_path` - Path to SQLite database
-  
-
-**Returns**:
-
-  Configured SQLiteCheckpointer
-
-<a id="spoon_ai.memory.checkpointer.create_memory_checkpointer"></a>
-
-#### `create_memory_checkpointer`
-
-```python
-def create_memory_checkpointer() -> InMemoryCheckpointer
-```
-
-Create an in-memory checkpointer for testing.
-
-**Returns**:
-
-  InMemoryCheckpointer instance
-
-<a id="spoon_ai.memory.remove_message"></a>
-
-# Module `spoon_ai.memory.remove_message`
-
-Helpers for emitting message-removal directives.
-
-<a id="spoon_ai.memory.remove_message.RemoveMessage"></a>
-
-## `RemoveMessage` Objects
-
-```python
-class RemoveMessage(BaseModel)
-```
-
-Lightweight message that signals another message should be removed.
-
-<a id="spoon_ai.memory.mem0_client"></a>
-
-# Module `spoon_ai.memory.mem0_client`
-
-<a id="spoon_ai.memory.mem0_client.SpoonMem0"></a>
-
-## `SpoonMem0` Objects
-
-```python
-class SpoonMem0()
-```
-
-Lightweight wrapper around Mem0's MemoryClient with safe defaults.
-
-<a id="spoon_ai.memory.mem0_client.SpoonMem0.add_text"></a>
-
-#### `add_text`
-
-```python
-def add_text(data: str,
-             user_id: Optional[str] = None,
-             metadata: Optional[Dict[str, Any]] = None) -> None
-```
-
-Convenience helper for adding a single text memory.
-
-<a id="spoon_ai.memory.mem0_client.SpoonMem0.get_all_memory"></a>
-
-#### `get_all_memory`
-
-```python
-def get_all_memory(user_id: Optional[str] = None,
-                   limit: Optional[int] = None) -> List[str]
-```
-
-Retrieve all memories for a user (subject to backend limits).
-
-<a id="spoon_ai.memory.utils"></a>
-
-# Module `spoon_ai.memory.utils`
-
-Memory helpers shared across Mem0 demos and utilities.
-
-<a id="spoon_ai.memory.utils.extract_memories"></a>
-
-#### `extract_memories`
-
-```python
-def extract_memories(result: Any) -> List[str]
-```
-
-Normalize Mem0 search/get responses into a list of memory strings.
-Supports common shapes: &#123;"memories": [...]&#125;, &#123;"results": [...]&#125;, &#123;"data": [...]&#125;, list, or scalar.
-
-<a id="spoon_ai.memory.utils.extract_first_memory_id"></a>
-
-#### `extract_first_memory_id`
-
-```python
-def extract_first_memory_id(result: Any) -> Optional[str]
-```
-
-Pull the first memory id from Mem0 responses.
-Supports common id fields: id, _id, memory_id, uuid.
-
-<a id="spoon_ai.agents.spoon_react_skill"></a>
-
-# Module `spoon_ai.agents.spoon_react_skill`
-
-Skill-enabled production agent.
-
-Combines SpoonReactAI with full skill system support.
-
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill"></a>
-
-## `SpoonReactSkill` Objects
-
-```python
-class SpoonReactSkill(SkillEnabledMixin, SpoonReactAI)
-```
-
-Production agent with full skill system support.
-
-Combines:
-- SpoonReactAI: Tool calling, MCP integration, x402 payment
-- SkillEnabledMixin: Skill activation, context injection, auto-trigger
-
-Usage:
-    agent = SpoonReactSkill(name="my_agent")
-
-    # Manual skill activation
-    await agent.activate_skill("trading-analysis", &#123;"asset": "BTC"&#125;)
-
-    # Run with auto-trigger
-    result = await agent.run("Analyze ETH trading signals")
-    # -&gt; Automatically activates matching skills
-
-    # List skills
-    print(agent.list_skills())
-    print(agent.list_active_skills())
-
-    # Deactivate
-    await agent.deactivate_skill("trading-analysis")
-
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(**kwargs)
-```
-
-Initialize SpoonReactSkill agent.
-
-Initializes both SpoonReactAI and skill system components.
-
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.run"></a>
-
-#### `run`
-
-```python
-async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None,
-              thinking: bool = False,
-              reasoning_effort: Optional[str] = None) -> str
-```
-
-Execute agent with per-turn auto skill activation.
-
-Flow:
-1. Auto-detect and activate relevant skills (ephemeral for this run)
-2. Sync skill tools into available_tools
-3. Refresh base prompts with current tools
-4. Execute parent SpoonReactAI.run()
-5. Auto-deactivate skills activated in this turn
-
-**Arguments**:
-
-- `request` - User request/message
-- `timeout` - Optional timeout in seconds
-  
-
-**Returns**:
-
-  Agent response
-
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize"></a>
-
-#### `initialize`
-
-```python
-async def initialize(__context=None)
-```
-
-Initialize async components.
-
-Extends SpoonReactAI.initialize() to also initialize skill system.
-
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path"></a>
-
-#### `add_skill_path`
-
-```python
-def add_skill_path(path: str) -> None
-```
-
-Add a path to search for skills.
-
-**Arguments**:
-
-- `path` - Directory path to add
-
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills"></a>
-
-#### `discover_skills`
-
-```python
-def discover_skills() -> int
-```
-
-Re-discover skills from all configured paths.
-
-**Returns**:
-
-  Number of skills discovered
-
-<a id="spoon_ai.agents.rag"></a>
-
-# Module `spoon_ai.agents.rag`
-
-<a id="spoon_ai.agents.rag.RetrievalMixin"></a>
-
-## `RetrievalMixin` Objects
-
-```python
-class RetrievalMixin()
-```
-
-Mixin class for retrieval-augmented generation functionality
-
-<a id="spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client"></a>
-
-#### `initialize_retrieval_client`
-
-```python
-def initialize_retrieval_client(backend: str = 'chroma', **kwargs)
-```
-
-Initialize the retrieval client if it doesn't exist
-
-<a id="spoon_ai.agents.rag.RetrievalMixin.add_documents"></a>
-
-#### `add_documents`
-
-```python
-def add_documents(documents, backend: str = 'chroma', **kwargs)
-```
-
-Add documents to the retrieval system
-
-<a id="spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents"></a>
-
-#### `retrieve_relevant_documents`
-
-```python
-def retrieve_relevant_documents(query, k=5, backend: str = 'chroma', **kwargs)
-```
-
-Retrieve relevant documents for a query
-
-<a id="spoon_ai.agents.rag.RetrievalMixin.get_context_from_query"></a>
-
-#### `get_context_from_query`
-
-```python
-def get_context_from_query(query)
-```
-
-Get context string from relevant documents for a query
-
-<a id="spoon_ai.agents.react"></a>
-
-# Module `spoon_ai.agents.react`
-
-<a id="spoon_ai.agents.toolcall"></a>
-
-# Module `spoon_ai.agents.toolcall`
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent"></a>
-
-## `ToolCallAgent` Objects
-
-```python
-class ToolCallAgent(ReActAgent)
-```
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.tool_choices"></a>
-
-#### `tool_choices`
-
-type: ignore
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl"></a>
-
-#### `mcp_tools_cache_ttl`
-
-5 minutes TTL
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.run"></a>
-
-#### `run`
-
-```python
-async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None,
-              thinking: bool = False,
-              reasoning_effort: Optional[str] = None) -> str
-```
-
-This ensures:
-1. Thread-safe execution (no concurrent runs)
-2. Proper timeout handling
-3. Plan/Reflect/Finish phases are executed
-4. Middleware hooks are called correctly
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.step"></a>
-
-#### `step`
-
-```python
-async def step(thinking: bool = False,
-               reasoning_effort: Optional[str] = None) -> str
-```
-
-Override the step method to handle finish_reason termination properly.
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.execute_tool"></a>
-
-#### `execute_tool`
-
-```python
-async def execute_tool(tool_call: ToolCall) -> str
-```
-
-Execute tool with middleware wrapping.
-
-CRITICAL: This method now routes ALL tool executions through the middleware
-pipeline, enabling HITL approval, observability, and other middleware features.
-
-<a id="spoon_ai.agents.spoon_react_mcp"></a>
-
-# Module `spoon_ai.agents.spoon_react_mcp`
-
-<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP"></a>
-
-## `SpoonReactMCP` Objects
-
-```python
-class SpoonReactMCP(SpoonReactAI)
-```
-
-<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools"></a>
-
-#### `list_mcp_tools`
-
-```python
-async def list_mcp_tools()
-```
-
-Return MCP tools from available_tools manager
-
-<a id="spoon_ai.agents.custom_agent"></a>
-
-# Module `spoon_ai.agents.custom_agent`
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent"></a>
-
-## `CustomAgent` Objects
-
-```python
-class CustomAgent(ToolCallAgent)
-```
-
-Custom Agent class allowing users to create their own agents and add custom tools
-
-Usage:
-Create custom agent and add tools:
-   agent = CustomAgent(name="my_agent", description="My custom agent")
-   agent.add_tool(MyCustomTool())
-   result = await agent.run("Use my custom tool")
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tool"></a>
-
-#### `add_tool`
-
-```python
-def add_tool(tool: BaseTool) -> None
-```
-
-Add a tool to the agent with validation.
-
-**Arguments**:
-
-- `tool` - Tool instance to add
-  
-
-**Raises**:
-
-- `ValueError` - If tool is invalid or already exists
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tools"></a>
-
-#### `add_tools`
-
-```python
-def add_tools(tools: List[BaseTool]) -> None
-```
-
-Add multiple tools to the agent with atomic operation.
-
-**Arguments**:
-
-- `tools` - List of tool instances to add
-  
-
-**Raises**:
-
-- `ValueError` - If any tool is invalid
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.remove_tool"></a>
-
-#### `remove_tool`
-
-```python
-def remove_tool(tool_name: str) -> bool
-```
-
-Remove a tool from the agent.
-
-**Arguments**:
-
-- `tool_name` - Name of the tool to remove
-  
-
-**Returns**:
-
-- `bool` - True if tool was removed, False if not found
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.list_tools"></a>
-
-#### `list_tools`
-
-```python
-def list_tools() -> List[str]
-```
-
-List all available tools in the agent.
-
-**Returns**:
-
-  List of tool names, empty list if no tools
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.get_tool_info"></a>
-
-#### `get_tool_info`
-
-```python
-def get_tool_info() -> Dict[str, Dict[str, Any]]
-```
-
-Get detailed information about all tools.
-
-**Returns**:
-
-  Dictionary with tool names as keys and tool info as values
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.validate_tools"></a>
-
-#### `validate_tools`
-
-```python
-def validate_tools() -> Dict[str, Any]
-```
-
-Validate all current tools and return validation report.
-
-**Returns**:
-
-  Dictionary with validation results
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.run"></a>
-
-#### `run`
-
-```python
-async def run(request: Optional[str] = None) -> str
-```
-
-Run the agent with enhanced tool validation.
-
-**Arguments**:
-
-- `request` - User request
-  
-
-**Returns**:
-
-  Processing result
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.clear"></a>
-
-#### `clear`
-
-```python
-def clear()
-```
-
-Enhanced clear method with proper tool state management.
-
-<a id="spoon_ai.agents"></a>
-
-# Module `spoon_ai.agents`
-
-<a id="spoon_ai.agents.skill_mixin"></a>
-
-# Module `spoon_ai.agents.skill_mixin`
-
-Skill-enabled agent mixin.
-
-Follows MCPClientMixin pattern for composable agent integration.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin"></a>
-
-## `SkillEnabledMixin` Objects
-
-```python
-class SkillEnabledMixin()
-```
-
-Mixin that adds skill capabilities to agents.
-
-Integrates with ReAct cycle by:
-1. Injecting active skill instructions into system prompt
-2. Adding skill tools to available_tools
-3. Auto-triggering skills based on user input
-
-Usage:
-    class MyAgent(SkillEnabledMixin, SpoonReactAI):
-        pass
-
-    agent = MyAgent()
-    await agent.activate_skill("trading-analysis")
-    result = await agent.run("Analyze BTC")
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill"></a>
-
-#### `activate_skill`
-
-```python
-async def activate_skill(name: str,
-                         context: Optional[Dict[str, Any]] = None) -> Skill
-```
-
-Activate a skill and refresh agent state.
-
-**Arguments**:
-
-- `name` - Skill name to activate
-- `context` - Optional context data
-  
-
-**Returns**:
-
-  Activated Skill instance
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill"></a>
-
-#### `deactivate_skill`
-
-```python
-async def deactivate_skill(name: str) -> bool
-```
-
-Deactivate a skill.
-
-**Arguments**:
-
-- `name` - Skill name to deactivate
-  
-
-**Returns**:
-
-  True if deactivated, False if not active
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills"></a>
-
-#### `auto_activate_skills`
-
-```python
-async def auto_activate_skills(user_input: str) -> List[Skill]
-```
-
-Automatically activate skills matching user input.
-
-Uses both keyword/pattern matching and LLM intent analysis.
-
-**Arguments**:
-
-- `user_input` - User's message
-  
-
-**Returns**:
-
-  List of activated skills
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills"></a>
-
-#### `list_skills`
-
-```python
-def list_skills() -> List[str]
-```
-
-List all available skill names.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills"></a>
-
-#### `list_active_skills`
-
-```python
-def list_active_skills() -> List[str]
-```
-
-List currently active skill names.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info"></a>
-
-#### `get_skill_info`
-
-```python
-def get_skill_info(name: str) -> Optional[Dict[str, Any]]
-```
-
-Get detailed information about a skill.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active"></a>
-
-#### `is_skill_active`
-
-```python
-def is_skill_active(name: str) -> bool
-```
-
-Check if a skill is currently active.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills"></a>
-
-#### `deactivate_all_skills`
-
-```python
-async def deactivate_all_skills() -> int
-```
-
-Deactivate all active skills.
-
-**Returns**:
-
-  Number of skills deactivated
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats"></a>
-
-#### `get_skill_stats`
-
-```python
-def get_skill_stats() -> Dict[str, Any]
-```
-
-Get skill system statistics.
-
-<a id="spoon_ai.agents.spoon_react"></a>
-
-# Module `spoon_ai.agents.spoon_react`
-
-<a id="spoon_ai.agents.spoon_react.create_configured_chatbot"></a>
-
-#### `create_configured_chatbot`
-
-```python
-def create_configured_chatbot()
-```
-
-Create a ChatBot instance with intelligent provider selection.
-
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI"></a>
-
-## `SpoonReactAI` Objects
-
-```python
-class SpoonReactAI(MCPClientMixin, ToolCallAgent)
-```
-
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(**kwargs)
-```
-
-Initialize SpoonReactAI with both ToolCallAgent and MCPClientMixin initialization
-
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.connect"></a>
-
-#### `connect`
-
-```python
-async def connect()
-```
-
-Establish connection to MCP server.
-
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.initialize"></a>
-
-#### `initialize`
-
-```python
-async def initialize(__context: Any = None)
-```
-
-Initialize async components and subscribe to topics
-
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.run"></a>
-
-#### `run`
-
-```python
-async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None,
-              thinking: bool = False,
-              reasoning_effort: Optional[str] = None) -> str
-```
-
-Ensure prompts reflect current tools before running.
-
-<a id="spoon_ai.agents.monitor"></a>
-
-# Module `spoon_ai.agents.monitor`
-
-<a id="spoon_ai.agents.mcp_client_mixin"></a>
-
-# Module `spoon_ai.agents.mcp_client_mixin`
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin"></a>
-
-## `MCPClientMixin` Objects
-
-```python
-class MCPClientMixin()
-```
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session"></a>
-
-#### `get_session`
+#### `async_decrypted_secrets`
 
 ```python
 @asynccontextmanager
-async def get_session()
+async def async_decrypted_secrets(
+        keys: Optional[Iterable[str]] = None,
+        *,
+        password: Optional[str] = None,
+        prompt: bool = True,
+        vault: Optional[SecretVault] = None) -> Iterator[SecretVault]
 ```
 
-Get a session with robust resource management and cleanup.
+Async version of `decrypted_secrets()` with per-event-loop locking.
 
-Features:
-- Automatic session reuse per task
-- Resource limits to prevent exhaustion
-- Proper cleanup on cancellation/failure
-- Periodic cleanup of stale sessions
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.list_mcp_tools"></a>
-
-#### `list_mcp_tools`
-
-```python
-async def list_mcp_tools()
-```
-
-Get the list of available tools from the MCP server
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.call_mcp_tool"></a>
-
-#### `call_mcp_tool`
-
-```python
-async def call_mcp_tool(tool_name: str, **kwargs)
-```
-
-Call a tool on the MCP server
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.send_mcp_message"></a>
-
-#### `send_mcp_message`
-
-```python
-async def send_mcp_message(recipient: str,
-                           message: Union[str, Dict[str, Any]],
-                           topic: Optional[str] = None,
-                           metadata: Optional[Dict[str, Any]] = None) -> bool
-```
-
-Send a message to the MCP system
+This prevents race conditions when multiple async tasks attempt to
+decrypt/wipe secrets concurrently.
 
 **Arguments**:
 
-- `recipient` - Recipient ID
-- `message` - Message content (string or dictionary)
-- `topic` - Message topic
-- `metadata` - Additional metadata
+- `keys` - Specific env var names to decrypt. If None, all encrypted vars.
+- `password` - Master password. If None, resolved from env or prompt.
+- `prompt` - Whether to prompt for password if not in env.
+- `vault` - Optional vault instance (defaults to singleton).
   
 
-**Returns**:
+**Yields**:
 
-- `bool` - Whether the message was sent successfully
+  SecretVault instance with decrypted secrets.
 
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.cleanup"></a>
+<a id="spoon_ai.security.decrypted_environ"></a>
 
-#### `cleanup`
-
-```python
-async def cleanup()
-```
-
-Enhanced cleanup method with comprehensive resource cleanup.
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session_stats"></a>
-
-#### `get_session_stats`
+#### `decrypted_environ`
 
 ```python
-def get_session_stats() -> Dict[str, Any]
+@contextmanager
+def decrypted_environ(keys: Optional[Iterable[str]] = None,
+                      *,
+                      password: Optional[str] = None,
+                      prompt: bool = True) -> Iterator[None]
 ```
 
-Get session statistics for monitoring.
+DEPRECATED: Use `decrypted_secrets()` instead.
 
-<a id="spoon_ai.agents.subagents"></a>
+This function modifies os.environ, which is a security risk.
+Secrets in os.environ can be read via /proc/&#123;pid&#125;/environ.
 
-# Module `spoon_ai.agents.subagents`
+<a id="spoon_ai.security.async_decrypted_environ"></a>
 
-Subagent Orchestration System
-
-Enables hierarchical agent delegation where a parent agent can create
-and manage specialized child agents for complex tasks.
-
-Compatible with LangChain DeepAgents SubAgentMiddleware interface.
-
-Features:
-- SubAgentSpec for defining subagents with tools and prompts
-- CompiledSubAgent for using pre-built graphs as subagents
-- Command return pattern for state updates
-- State inheritance and isolation
-- Hierarchical task delegation with recursion depth limits
-- Automatic task tool generation
-- General-purpose agent support
-
-Usage:
-    # Method 1: SubAgentSpec (simple cases)
-    subagents = [
-        SubAgentSpec(
-            name="researcher",
-            description="Specialized in research tasks",
-            system_prompt="You are a research expert...",
-            tools=[search_tool, summarize_tool]
-        )
-    ]
-
-    # Method 2: CompiledSubAgent (complex cases with pre-built graph)
-    custom_graph = StateGraph(...)
-    custom_graph.add_node("analyze", analyze_node)
-    compiled = custom_graph.compile()
-
-    subagents = [
-        CompiledSubAgent(
-            name="complex_analyzer",
-            description="Complex multi-step analysis",
-            runnable=compiled
-        )
-    ]
-
-    # Create parent agent with subagent support
-    middleware = SubAgentMiddleware(subagents=subagents)
-    agent = ToolCallAgent(middleware=[middleware], ...)
-
-<a id="spoon_ai.agents.subagents.Command"></a>
-
-## `Command` Objects
-
-```python
-@dataclass
-class Command()
-```
-
-Command object for returning state updates and controlling execution flow.
-
-Compatible with LangGraph Command interface. Used to:
-1. Propagate state changes from subagent execution back to the parent agent
-2. Resume from HITL interrupts with approval decisions
-
-Example - State updates from subagent:
-    ```python
-    return Command(
-        update={
-            "messages": [tool_message],
-            "some_state_key": new_value,
-        }
-    )
-    ```
-
-Example - Resume from HITL interrupt:
-    ```python
-    # After receiving interrupt with action_requests
-    result = agent.invoke(
-        Command(resume={
-            "decisions": [
-                {"type": "approve"},
-                {"type": "edit", "args": {"path": "/new/path"}},
-                {"type": "reject", "reason": "Too dangerous"},
-            ]
-        }),
-        config=config
-    )
-    ```
-
-<a id="spoon_ai.agents.subagents.Command.update"></a>
-
-#### `update`
-
-State updates to apply after subagent execution.
-
-<a id="spoon_ai.agents.subagents.Command.goto"></a>
-
-#### `goto`
-
-Optional node to go to next (for graph-based agents).
-
-<a id="spoon_ai.agents.subagents.Command.resume"></a>
-
-#### `resume`
-
-Resume data for HITL interrupts. Contains 'decisions' list.
-
-<a id="spoon_ai.agents.subagents.Command.is_resume"></a>
-
-#### `is_resume`
-
-```python
-@property
-def is_resume() -> bool
-```
-
-Check if this is a resume command.
-
-<a id="spoon_ai.agents.subagents.Command.get_decisions"></a>
-
-#### `get_decisions`
-
-```python
-def get_decisions() -> List[Dict[str, Any]]
-```
-
-Get decisions from resume data.
-
-**Returns**:
-
-  List of decision dicts with 'type', optional 'args', optional 'reason'
-
-<a id="spoon_ai.agents.subagents.SubAgentSpec"></a>
-
-## `SubAgentSpec` Objects
-
-```python
-@dataclass
-class SubAgentSpec()
-```
-
-Specification for a subagent.
-
-This defines how a subagent should be configured and what
-capabilities it has. When using SubAgentSpec, the middleware
-will automatically create a ToolCallAgent instance.
-
-Compatible with LangChain DeepAgents SubAgent interface.
-
-<a id="spoon_ai.agents.subagents.SubAgentSpec.description"></a>
-
-#### `description`
-
-For parent agent to decide when to delegate
-
-<a id="spoon_ai.agents.subagents.CompiledSubAgent"></a>
-
-## `CompiledSubAgent` Objects
-
-```python
-@dataclass
-class CompiledSubAgent()
-```
-
-A pre-compiled agent/graph specification.
-
-Use this when you have a complex, pre-built graph (StateGraph/CompiledGraph)
-that you want to use as a subagent. This is useful for:
-- Complex multi-step workflows
-- Custom graph topologies
-- Reusing existing graph implementations
-
-Compatible with LangChain DeepAgents CompiledSubAgent interface.
-
-**Example**:
-
-    ```python
-    from spoon_ai.graph import StateGraph
-
-    # Build custom graph
-    graph = StateGraph(MyState)
-    graph.add_node("analyze", analyze_node)
-    graph.add_node("synthesize", synthesize_node)
-    graph.add_edge("analyze", "synthesize")
-    compiled = graph.compile()
-
-    # Use as subagent
-    subagent = CompiledSubAgent(
-        name="analyzer",
-        description="Complex multi-step analysis",
-        runnable=compiled
-    )
-    ```
-
-<a id="spoon_ai.agents.subagents.CompiledSubAgent.runnable"></a>
-
-#### `runnable`
-
-CompiledGraph or any Runnable-like object with invoke/ainvoke
-
-<a id="spoon_ai.agents.subagents.SubAgentManager"></a>
-
-## `SubAgentManager` Objects
-
-```python
-class SubAgentManager()
-```
-
-Manages subagent creation and task delegation with recursion safety.
-
-Supports both SubAgentSpec (auto-compiled) and CompiledSubAgent (pre-built).
-Returns Command objects for state updates.
-Compatible with LangChain DeepAgents subagent management.
-
-<a id="spoon_ai.agents.subagents.SubAgentManager.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(
-        parent_agent: Any,
-        subagent_specs: List[SubAgentType],
-        default_middleware: Optional[List[AgentMiddleware]] = None,
-        default_tools: Optional[List[BaseTool]] = None,
-        default_interrupt_on: Optional[Dict[str,
-                                            Union[bool,
-                                                  InterruptOnConfig]]] = None,
-        max_depth: int = 3,
-        general_purpose_agent: bool = True)
-```
-
-Initialize subagent manager.
-
-**Arguments**:
-
-- `parent_agent` - The parent agent instance
-- `subagent_specs` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
-- `default_middleware` - Default middleware for all subagents
-- `default_tools` - Default tools for general-purpose agent
-- `default_interrupt_on` - Default HITL configuration for all subagents.
-  This is also the fallback for any subagents that don't specify
-  their own interrupt_on configuration.
-- `max_depth` - Maximum recursion depth for subagent delegation (default: 3)
-- `general_purpose_agent` - Whether to include a general-purpose subagent (default: True)
-
-<a id="spoon_ai.agents.subagents.SubAgentManager.get_subagent"></a>
-
-#### `get_subagent`
-
-```python
-def get_subagent(name: str) -> Optional[Any]
-```
-
-Get or create a subagent instance.
-
-<a id="spoon_ai.agents.subagents.SubAgentManager.delegate_task"></a>
-
-#### `delegate_task`
-
-```python
-async def delegate_task(
-        subagent_name: str,
-        task_description: str,
-        inherit_state: bool = True,
-        tool_call_id: Optional[str] = None) -> Union[str, Command]
-```
-
-Delegate a task to a subagent with recursion depth checking.
-
-**Arguments**:
-
-- `subagent_name` - Name of the subagent
-- `task_description` - Task for the subagent
-- `inherit_state` - Whether to inherit parent state
-- `tool_call_id` - Tool call ID for Command return pattern
-  
-
-**Returns**:
-
-  Subagent's final response as string, or Command with state updates
-
-<a id="spoon_ai.agents.subagents.SubAgentManager.create_task_tool"></a>
-
-#### `create_task_tool`
-
-```python
-def create_task_tool(task_description: Optional[str] = None) -> BaseTool
-```
-
-Create the 'task' tool for delegating to subagents.
-
-**Arguments**:
-
-- `task_description` - Custom description for the task tool.
-  Supports &#123;available_agents&#125; placeholder.
-  
-
-**Returns**:
-
-  Task delegation tool
-
-<a id="spoon_ai.agents.subagents.SubAgentMiddleware"></a>
-
-## `SubAgentMiddleware` Objects
-
-```python
-class SubAgentMiddleware(AgentMiddleware)
-```
-
-Middleware that adds subagent orchestration capabilities.
-
-This middleware:
-1. Injects the 'task' tool for delegation
-2. Manages subagent lifecycle
-3. Handles state inheritance
-4. Enforces recursion depth limits
-5. Returns Command objects for state updates
-6. Propagates HITL configuration to subagents
-
-Supports both SubAgentSpec (auto-compiled) and CompiledSubAgent (pre-built graphs).
-
-Compatible with LangChain DeepAgents SubAgentMiddleware interface.
-
-Usage:
-    ```python
-    # Method 1: SubAgentSpec (simple cases)
-    middleware = SubAgentMiddleware(subagents=[
-        SubAgentSpec(
-            name="researcher",
-            description="Research and gather information",
-            system_prompt="You are a research expert...",
-            tools=[search_tool]
-        )
-    ])
-
-    # Method 2: CompiledSubAgent (complex cases)
-    custom_graph = StateGraph(...)
-    compiled = custom_graph.compile()
-
-    middleware = SubAgentMiddleware(subagents=[
-        CompiledSubAgent(
-            name="analyzer",
-            description="Complex analysis workflow",
-            runnable=compiled
-        )
-    ])
-
-    # Method 3: With HITL configuration inherited by subagents
-    middleware = SubAgentMiddleware(
-        subagents=[...],
-        default_interrupt_on={
-            "delete_file": True,
-            "send_email": {"allowed_decisions": ["approve", "reject"]},
-        },
-        general_purpose_agent=True,
-    )
-
-    # Method 4: Subagent with custom interrupt_on (overrides default)
-    middleware = SubAgentMiddleware(
-        subagents=[
-            SubAgentSpec(
-                name="careful_agent",
-                description="Agent that requires extra approval",
-                interrupt_on={"all_tools": True},  # Overrides default
-                ...
-            )
-        ],
-        default_interrupt_on={"delete_file": True},
-    )
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.agents.subagents.SubAgentMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(
-        subagents: Optional[List[SubAgentType]] = None,
-        default_middleware: Optional[List[AgentMiddleware]] = None,
-        default_tools: Optional[List[BaseTool]] = None,
-        default_interrupt_on: Optional[Dict[str,
-                                            Union[bool,
-                                                  InterruptOnConfig]]] = None,
-        max_depth: int = 3,
-        general_purpose_agent: bool = True,
-        task_description: Optional[str] = None)
-```
-
-Initialize subagent middleware.
-
-**Arguments**:
-
-- `subagents` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
-- `default_middleware` - Default middleware for all subagents
-- `default_tools` - Default tools for general-purpose agent
-- `default_interrupt_on` - Default HITL configuration for all subagents.
-  This is used for the general-purpose agent and as a fallback
-  for any SubAgentSpec that doesn't specify its own interrupt_on.
-- `max_depth` - Maximum recursion depth for subagent delegation
-- `general_purpose_agent` - Whether to include a general-purpose subagent (default: True)
-- `task_description` - Custom description for the task tool.
-  If None, uses default template.
-  Supports &#123;available_agents&#125; placeholder for dynamic agent list.
-
-<a id="spoon_ai.agents.subagents.SubAgentMiddleware.before_agent"></a>
-
-#### `before_agent`
-
-```python
-def before_agent(state: Dict[str, Any],
-                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Initialize subagent manager with parent agent reference.
-
-<a id="spoon_ai.agents.subagents.add_subagent_support"></a>
-
-#### `add_subagent_support`
-
-```python
-def add_subagent_support(
-    agent: Any,
-    subagents: List[SubAgentType],
-    max_depth: int = 3,
-    general_purpose_agent: bool = True,
-    task_description: Optional[str] = None,
-    default_interrupt_on: Optional[Dict[str, Union[bool,
-                                                   InterruptOnConfig]]] = None
-) -> Any
-```
-
-Add subagent support to an existing agent.
-
-**Arguments**:
-
-- `agent` - The agent instance
-- `subagents` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
-- `max_depth` - Maximum recursion depth for subagent delegation
-- `general_purpose_agent` - Whether to include a general-purpose subagent
-- `task_description` - Custom description for the task tool
-- `default_interrupt_on` - Default HITL configuration for all subagents
-  
-
-**Returns**:
-
-  The agent with subagent support
-
-<a id="spoon_ai.agents.subagents.create_general_purpose_subagent"></a>
-
-#### `create_general_purpose_subagent`
-
-```python
-def create_general_purpose_subagent(
-        name: str = "general-purpose",
-        description: str = DEFAULT_GENERAL_PURPOSE_DESCRIPTION,
-        tools: Optional[List[BaseTool]] = None) -> SubAgentSpec
-```
-
-Create a general-purpose subagent specification.
-
-<a id="spoon_ai.agents.subagents.create_compiled_subagent"></a>
-
-#### `create_compiled_subagent`
-
-```python
-def create_compiled_subagent(name: str, description: str,
-                             graph: Any) -> CompiledSubAgent
-```
-
-Create a CompiledSubAgent from a graph.
-
-<a id="spoon_ai.agents.base"></a>
-
-# Module `spoon_ai.agents.base`
-
-<a id="spoon_ai.agents.base.ThreadSafeOutputQueue"></a>
-
-## `ThreadSafeOutputQueue` Objects
-
-```python
-class ThreadSafeOutputQueue()
-```
-
-Thread-safe output queue with fair access and timeout protection
-
-<a id="spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait"></a>
-
-#### `put_nowait`
-
-```python
-def put_nowait(item: Any) -> None
-```
-
-Non-blocking put - delegates to the underlying asyncio.Queue.
-
-<a id="spoon_ai.agents.base.ThreadSafeOutputQueue.get"></a>
-
-#### `get`
-
-```python
-async def get(timeout: float | None = 30.0) -> Any
-```
-
-Get item with timeout and fair access
-
-<a id="spoon_ai.agents.base.BaseAgent"></a>
-
-## `BaseAgent` Objects
-
-```python
-class BaseAgent(BaseModel, ABC)
-```
-
-Thread-safe base class for all agents with proper concurrency handling.
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message"></a>
-
-#### `add_message`
-
-```python
-async def add_message(role: Literal["user", "assistant", "tool"],
-                      content: MessageContent,
-                      tool_call_id: str | None = None,
-                      tool_calls: list[ToolCall] | None = None,
-                      tool_name: str | None = None,
-                      timeout: float | None = None) -> None
-```
-
-Thread-safe message addition with timeout protection.
-
-Supports both text-only and multimodal content:
-- Text: content="Hello world"
-- Multimodal: content=[TextContent(...), ImageUrlContent(...)]
-
-**Arguments**:
-
-- `role` - Message role (user, assistant, tool)
-- `content` - Text string or list of content blocks for multimodal messages
-- `tool_call_id` - ID for tool responses
-- `tool_calls` - List of tool calls for assistant messages
-- `tool_name` - Name of the tool for tool responses
-- `timeout` - Operation timeout in seconds
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_image"></a>
-
-#### `add_message_with_image`
-
-```python
-async def add_message_with_image(role: Literal["user", "assistant"],
-                                 text: str,
-                                 image_url: str | None = None,
-                                 image_data: str | None = None,
-                                 image_media_type: str = "image/png",
-                                 detail: Literal["auto", "low",
-                                                 "high"] = "auto",
-                                 timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with an image.
-
-Supports both URL-based and base64-encoded images.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the image
-- `image_url` - URL of the image (including data URLs)
-- `image_data` - Base64-encoded image data
-- `image_media_type` - MIME type for base64 images (e.g., "image/png")
-- `detail` - Image detail level for processing
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  # With image URL
-  await agent.add_message_with_image(
-  "user",
-  "What's in this image?",
-  image_url="https://example.com/image.png"
-  )
-  
-  # With base64 data
-  await agent.add_message_with_image(
-  "user",
-  "Describe this diagram",
-  image_data="&lt;base64_string&gt;",
-  image_media_type="image/png"
-  )
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_pdf"></a>
-
-#### `add_message_with_pdf`
-
-```python
-async def add_message_with_pdf(role: Literal["user", "assistant"],
-                               text: str,
-                               pdf_data: str,
-                               filename: str | None = None,
-                               timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with a PDF document.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the PDF
-- `pdf_data` - Base64-encoded PDF data
-- `filename` - Optional filename for the PDF
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  # With base64 PDF data
-  await agent.add_message_with_pdf(
-  "user",
-  "Summarize this document",
-  pdf_data="&lt;base64_string&gt;",
-  filename="report.pdf"
-  )
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_document"></a>
-
-#### `add_message_with_document`
-
-```python
-async def add_message_with_document(role: Literal["user", "assistant"],
-                                    text: str,
-                                    document_data: str,
-                                    media_type: str = "application/pdf",
-                                    filename: str | None = None,
-                                    timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with a document.
-
-Supports various document types including PDF, text, etc.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the document
-- `document_data` - Base64-encoded document data
-- `media_type` - MIME type of the document (default: application/pdf)
-- `filename` - Optional filename for the document
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  # With PDF document
-  await agent.add_message_with_document(
-  "user",
-  "Analyze this report",
-  document_data="&lt;base64_string&gt;",
-  media_type="application/pdf",
-  filename="annual_report.pdf"
-  )
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_pdf_file"></a>
-
-#### `add_message_with_pdf_file`
-
-```python
-async def add_message_with_pdf_file(role: Literal["user", "assistant"],
-                                    text: str,
-                                    file_path: str,
-                                    timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with a PDF file from disk.
-
-Automatically handles base64 encoding.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the PDF
-- `file_path` - Path to the PDF file on disk
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  await agent.add_message_with_pdf_file(
-  "user",
-  "Summarize this document",
-  file_path="./documents/report.pdf"
-  )
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_image_file"></a>
-
-#### `add_message_with_image_file`
-
-```python
-async def add_message_with_image_file(role: Literal["user", "assistant"],
-                                      text: str,
-                                      file_path: str,
-                                      detail: str = "auto",
-                                      timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with an image file from disk.
-
-Automatically handles base64 encoding and MIME type detection.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the image
-- `file_path` - Path to the image file on disk
-- `detail` - Image detail level (auto, low, high)
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  await agent.add_message_with_image_file(
-  "user",
-  "What's in this image?",
-  file_path="./images/photo.jpg"
-  )
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_file"></a>
-
-#### `add_message_with_file`
-
-```python
-async def add_message_with_file(role: Literal["user", "assistant"],
-                                text: str,
-                                file_path: str,
-                                timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with any supported file from disk.
-
-Automatically detects file type and handles base64 encoding.
-Supports: PDF, images (png, jpg, gif, webp), text files.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the file
-- `file_path` - Path to the file on disk
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  # Works with any supported file type
-  await agent.add_message_with_file("user", "Analyze this", "./report.pdf")
-  await agent.add_message_with_file("user", "What's this?", "./photo.jpg")
-
-<a id="spoon_ai.agents.base.BaseAgent.state_context"></a>
-
-#### `state_context`
+#### `async_decrypted_environ`
 
 ```python
 @asynccontextmanager
-async def state_context(new_state: AgentState, timeout: float | None = None)
+async def async_decrypted_environ(keys: Optional[Iterable[str]] = None,
+                                  *,
+                                  password: Optional[str] = None,
+                                  prompt: bool = True) -> Iterator[None]
 ```
 
-Thread-safe state context manager with deadlock prevention.
-Acquires the state lock only to perform quick transitions, not for the
-duration of the work inside the context, avoiding long-held locks and
-false timeouts during network calls.
+DEPRECATED: Use `async_decrypted_secrets()` instead.
 
-<a id="spoon_ai.agents.base.BaseAgent.run"></a>
+This function modifies os.environ, which is a security risk.
 
-#### `run`
+<a id="spoon_ai.turnkey"></a>
+
+# Module `spoon_ai.turnkey`
+
+Turnkey client integration for SpoonAI.
+
+Provides `Turnkey` for secure signing via Turnkey API.
+
+<a id="spoon_ai.turnkey.client"></a>
+
+# Module `spoon_ai.turnkey.client`
+
+<a id="spoon_ai.turnkey.client.Turnkey"></a>
+
+## `Turnkey` Objects
 
 ```python
-async def run(request: str | None = None, timeout: float | None = None) -> str
+class Turnkey()
 ```
 
-Thread-safe run method with proper concurrency control, callback support, and Plan-Act-Reflect phases.
+Turnkey API client class for managing blockchain private keys and wallet operations.
 
-<a id="spoon_ai.agents.base.BaseAgent.step"></a>
-
-#### `step`
-
-```python
-async def step(run_id: uuid.UUID | None = None) -> str
-```
-
-Override this method in subclasses - now with step-level locking and callback support.
-
-<a id="spoon_ai.agents.base.BaseAgent.is_stuck"></a>
-
-#### `is_stuck`
-
-```python
-async def is_stuck() -> bool
-```
-
-Thread-safe stuck detection.
-
-Uses text_content property for comparison to handle both
-text-only and multimodal messages.
-
-<a id="spoon_ai.agents.base.BaseAgent.handle_stuck_state"></a>
-
-#### `handle_stuck_state`
-
-```python
-async def handle_stuck_state()
-```
-
-Thread-safe stuck state handling
-
-<a id="spoon_ai.agents.base.BaseAgent.estimate_token_count"></a>
-
-#### `estimate_token_count`
-
-```python
-def estimate_token_count() -> int
-```
-
-Estimate the token count of current conversation context.
-
-Uses a simple heuristic: ~4 characters per token (conservative estimate).
-For more accurate counting, override this method with tiktoken or
-model-specific tokenizers.
-
-**Returns**:
-
-  Estimated token count of all messages
-
-<a id="spoon_ai.agents.base.BaseAgent.should_trigger_reflection"></a>
-
-#### `should_trigger_reflection`
-
-```python
-def should_trigger_reflection() -> bool
-```
-
-Determine if reflection should be triggered based on token threshold.
-
-LangChain-style token-based trigger:
-Triggers when context tokens exceed reflect_token_threshold (default 85%)
-of max_context_tokens.
-
-**Returns**:
-
-  True if reflection should be triggered
-
-<a id="spoon_ai.agents.base.BaseAgent.add_documents"></a>
-
-#### `add_documents`
-
-```python
-def add_documents(documents) -> None
-```
-
-Store documents on the agent so CLI load-docs works without RAG mixin.
-
-This default implementation keeps the documents in-memory under
-self._loaded_documents. Agents that support retrieval should override
-this method to index documents into their vector store.
-
-<a id="spoon_ai.agents.base.BaseAgent.save_chat_history"></a>
-
-#### `save_chat_history`
-
-```python
-def save_chat_history()
-```
-
-Thread-safe chat history saving
-
-<a id="spoon_ai.agents.base.BaseAgent.stream"></a>
-
-#### `stream`
-
-```python
-async def stream(timeout: float | None = None)
-```
-
-Thread-safe streaming with proper cleanup and timeout
-
-<a id="spoon_ai.agents.base.BaseAgent.process_mcp_message"></a>
-
-#### `process_mcp_message`
-
-```python
-async def process_mcp_message(content: Any,
-                              sender: str,
-                              message: dict[str, Any],
-                              agent_id: str,
-                              timeout: float | None = None)
-```
-
-Thread-safe MCP message processing with timeout protection
-
-<a id="spoon_ai.agents.base.BaseAgent.shutdown"></a>
-
-#### `shutdown`
-
-```python
-async def shutdown(timeout: float = 30.0)
-```
-
-Graceful shutdown with cleanup of active operations
-
-<a id="spoon_ai.agents.base.BaseAgent.get_agent_state"></a>
-
-#### `get_agent_state`
-
-```python
-def get_agent_state(key: str, default: Any = None) -> Any
-```
-
-Get value from agent state (for middleware access).
-
-**Arguments**:
-
-- `key` - State key
-- `default` - Default value if key not found
-  
-
-**Returns**:
-
-  State value or default
-
-<a id="spoon_ai.agents.base.BaseAgent.set_agent_state"></a>
-
-#### `set_agent_state`
-
-```python
-def set_agent_state(key: str, value: Any) -> None
-```
-
-Set value in agent state (for middleware access).
-
-**Arguments**:
-
-- `key` - State key
-- `value` - State value
-
-<a id="spoon_ai.agents.base.BaseAgent.update_agent_state"></a>
-
-#### `update_agent_state`
-
-```python
-def update_agent_state(updates: dict[str, Any]) -> None
-```
-
-Bulk update agent state (for middleware access).
-
-**Arguments**:
-
-- `updates` - Dictionary of state updates
-
-<a id="spoon_ai.agents.base.BaseAgent.get_diagnostics"></a>
-
-#### `get_diagnostics`
-
-```python
-def get_diagnostics() -> dict[str, Any]
-```
-
-Get diagnostic information about the agent's state
-
-<a id="spoon_ai.agents.graph_agent"></a>
-
-# Module `spoon_ai.agents.graph_agent`
-
-Graph-based agent implementation for SpoonOS.
-
-This module provides the GraphAgent class that executes StateGraph workflows,
-integrating the graph execution system with the existing agent architecture.
-
-<a id="spoon_ai.agents.graph_agent.GraphAgent"></a>
-
-## `GraphAgent` Objects
-
-```python
-class GraphAgent(BaseAgent)
-```
-
-An agent that executes StateGraph workflows.
-
-This agent provides a bridge between the existing SpoonOS agent architecture
-and the new graph-based execution system. It allows complex, stateful workflows
-to be defined as graphs and executed with proper state management.
-
-Key Features:
-- Executes StateGraph workflows
-- Maintains compatibility with existing agent interfaces
-- Provides detailed execution logging and error handling
-- Supports both sync and async node functions
-
-<a id="spoon_ai.agents.graph_agent.GraphAgent.__init__"></a>
+<a id="spoon_ai.turnkey.client.Turnkey.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(**kwargs)
+def __init__(base_url=None,
+             api_public_key=None,
+             api_private_key=None,
+             org_id=None)
 ```
 
-Initialize the GraphAgent.
+Initialize Turnkey client.
 
 **Arguments**:
 
-- `graph` - StateGraph instance to execute
-- `**kwargs` - Additional arguments passed to BaseAgent
+- `base_url` _str_ - Turnkey API base URL (defaults from .env or default value).
+- `api_public_key` _str_ - Turnkey API public key.
+- `api_private_key` _str_ - Turnkey API private key.
+- `org_id` _str_ - Turnkey organization ID.
   
 
 **Raises**:
 
-- `ValueError` - If no graph is provided
+- `ValueError` - If required configuration parameters are missing.
 
-<a id="spoon_ai.agents.graph_agent.GraphAgent.validate_graph"></a>
+<a id="spoon_ai.turnkey.client.Turnkey.whoami"></a>
 
-#### `validate_graph`
-
-```python
-@validator('graph')
-def validate_graph(cls, v)
-```
-
-Validate that the provided graph is a StateGraph instance.
-
-<a id="spoon_ai.agents.graph_agent.GraphAgent.run"></a>
-
-#### `run`
+#### `whoami`
 
 ```python
-async def run(request: Optional[str] = None) -> str
+def whoami()
 ```
 
-Execute the graph workflow.
+Call whoami API to get organization information.
 
-This method overrides the base run method to invoke the compiled graph
-instead of the traditional step-based execution loop.
+**Returns**:
+
+- `dict` - JSON response containing organization information.
+
+<a id="spoon_ai.turnkey.client.Turnkey.import_private_key"></a>
+
+#### `import_private_key`
+
+```python
+def import_private_key(user_id,
+                       private_key_name,
+                       encrypted_bundle,
+                       curve="CURVE_SECP256K1",
+                       address_formats=["ADDRESS_FORMAT_ETHEREUM"])
+```
+
+Import private key to Turnkey.
 
 **Arguments**:
 
-- `request` - Optional input request to include in initial state
+- `user_id` _str_ - User ID.
+- `private_key_name` _str_ - Private key name.
+- `encrypted_bundle` _str_ - Encrypted private key bundle.
+- `curve` _str_ - Elliptic curve type, defaults to CURVE_SECP256K1.
+- `address_formats` _list_ - Address format list, defaults to ["ADDRESS_FORMAT_ETHEREUM"].
   
 
 **Returns**:
 
-  String representation of the execution result
+- `dict` - JSON response containing imported private key information.
+
+<a id="spoon_ai.turnkey.client.Turnkey.sign_evm_transaction"></a>
+
+#### `sign_evm_transaction`
+
+```python
+def sign_evm_transaction(sign_with, unsigned_tx)
+```
+
+Sign EVM transaction using Turnkey.
+
+**Arguments**:
+
+- `sign_with` _str_ - Signing identity (wallet account address / private key address / private key ID).
+- `unsigned_tx` _str_ - Raw unsigned transaction (hex string).
+  
+
+**Returns**:
+
+- `dict` - JSON response containing signing result, see signTransactionResult.signedTransaction.
+  
+  Reference:
+  https://docs.turnkey.com/api-reference/activities/sign-transaction
+
+<a id="spoon_ai.turnkey.client.Turnkey.sign_typed_data"></a>
+
+#### `sign_typed_data`
+
+```python
+def sign_typed_data(sign_with, typed_data)
+```
+
+Sign EIP-712 structured data.
+
+**Arguments**:
+
+- `sign_with` _str_ - Signing identity (wallet account address / private key address / private key ID).
+- `typed_data` _dict|str_ - EIP-712 structure (domain/types/message) or its JSON string.
+  
+
+**Returns**:
+
+- `dict` - Activity response, result contains r/s/v.
+  
+
+**Notes**:
+
+  - encoding uses PAYLOAD_ENCODING_EIP712
+  - hashFunction uses HASH_FUNCTION_NOT_APPLICABLE (server completes EIP-712 spec hashing)
+
+<a id="spoon_ai.turnkey.client.Turnkey.sign_message"></a>
+
+#### `sign_message`
+
+```python
+def sign_message(sign_with, message, use_keccak256=True)
+```
+
+Sign arbitrary message (defaults to KECCAK256 following Ethereum convention).
+
+**Arguments**:
+
+- `sign_with` _str_ - Signing identity (wallet account address / private key address / private key ID).
+- `message` _str|bytes_ - Text to be signed; bytes will be decoded as UTF-8.
+- `use_keccak256` _bool_ - Whether to use KECCAK256 as hash function (default True).
+  
+
+**Returns**:
+
+- `dict` - Activity response, result contains r/s/v.
+
+<a id="spoon_ai.turnkey.client.Turnkey.get_activity"></a>
+
+#### `get_activity`
+
+```python
+def get_activity(activity_id)
+```
+
+Query Activity details.
+
+**Arguments**:
+
+- `activity_id` _str_ - Activity ID.
+  
+
+**Returns**:
+
+- `dict` - Activity details.
+  
+  Reference:
+  https://docs.turnkey.com/api-reference/queries/get-activity
+
+<a id="spoon_ai.turnkey.client.Turnkey.list_activities"></a>
+
+#### `list_activities`
+
+```python
+def list_activities(limit=None,
+                    before=None,
+                    after=None,
+                    filter_by_status=None,
+                    filter_by_type=None)
+```
+
+List activities within organization (paginated).
+
+**Arguments**:
+
+- `limit` _str|None_ - Number per page.
+- `before` _str|None_ - Pagination cursor (before).
+- `after` _str|None_ - Pagination cursor (after).
+- `filter_by_status` _list|None_ - Filter by activity status (e.g., ['ACTIVITY_STATUS_COMPLETED']).
+- `filter_by_type` _list|None_ - Filter by activity type (e.g., ['ACTIVITY_TYPE_SIGN_TRANSACTION_V2']).
+  
+
+**Returns**:
+
+- `dict` - Activity list.
+  
+  Reference:
+  https://docs.turnkey.com/api-reference/queries/list-activities
+
+<a id="spoon_ai.turnkey.client.Turnkey.get_policy_evaluations"></a>
+
+#### `get_policy_evaluations`
+
+```python
+def get_policy_evaluations(activity_id)
+```
+
+Query policy evaluation results for an Activity (if available).
+
+**Arguments**:
+
+- `activity_id` _str_ - Activity ID.
+  
+
+**Returns**:
+
+- `dict` - Policy evaluation details.
+  
+  Reference:
+  https://docs.turnkey.com/api-reference/queries/get-policy-evaluations
+
+<a id="spoon_ai.turnkey.client.Turnkey.get_private_key"></a>
+
+#### `get_private_key`
+
+```python
+def get_private_key(private_key_id)
+```
+
+Query information for specified private key.
+
+**Arguments**:
+
+- `private_key_id` _str_ - Private key ID.
+  
+
+**Returns**:
+
+- `dict` - JSON response containing private key information.
+
+<a id="spoon_ai.turnkey.client.Turnkey.create_wallet"></a>
+
+#### `create_wallet`
+
+```python
+def create_wallet(wallet_name, accounts, mnemonic_length=24)
+```
+
+Create new wallet.
+
+**Arguments**:
+
+- `wallet_name` _str_ - Wallet name.
+- `accounts` _list_ - Account configuration list, each account contains curve, pathFormat, path, addressFormat.
+- `mnemonic_length` _int_ - Mnemonic length (default 24).
+  
+
+**Returns**:
+
+- `dict` - JSON response containing new wallet information.
+
+<a id="spoon_ai.turnkey.client.Turnkey.create_wallet_accounts"></a>
+
+#### `create_wallet_accounts`
+
+```python
+def create_wallet_accounts(wallet_id, accounts)
+```
+
+Add accounts to existing wallet.
+
+**Arguments**:
+
+- `wallet_id` _str_ - Wallet ID.
+- `accounts` _list_ - New account configuration list, each account contains curve, pathFormat, path, addressFormat.
+  
+
+**Returns**:
+
+- `dict` - JSON response containing new account information.
+
+<a id="spoon_ai.turnkey.client.Turnkey.get_wallet"></a>
+
+#### `get_wallet`
+
+```python
+def get_wallet(wallet_id)
+```
+
+Query information for specified wallet.
+
+**Arguments**:
+
+- `wallet_id` _str_ - Wallet ID.
+  
+
+**Returns**:
+
+- `dict` - JSON response containing wallet information.
+
+<a id="spoon_ai.turnkey.client.Turnkey.get_wallet_account"></a>
+
+#### `get_wallet_account`
+
+```python
+def get_wallet_account(wallet_id, address=None, path=None)
+```
+
+Query information for specified wallet account.
+
+**Arguments**:
+
+- `wallet_id` _str_ - Wallet ID.
+- `address` _str, optional_ - Account address.
+- `path` _str, optional_ - Account path (e.g., m/44'/60'/0'/0/0).
+  
+
+**Returns**:
+
+- `dict` - JSON response containing account information.
   
 
 **Raises**:
 
-- `RuntimeError` - If agent is not in IDLE state
-- `GraphExecutionError` - If graph execution fails
+- `ValueError` - If neither address nor path is provided.
 
-<a id="spoon_ai.agents.graph_agent.GraphAgent.step"></a>
+<a id="spoon_ai.turnkey.client.Turnkey.list_wallets"></a>
 
-#### `step`
+#### `list_wallets`
 
 ```python
-async def step() -> str
+def list_wallets()
 ```
 
-Step method for compatibility with BaseAgent.
-
-Since GraphAgent uses graph execution instead of step-based execution,
-this method is not used in normal operation but is required by the
-BaseAgent interface.
+List all wallets in the organization.
 
 **Returns**:
 
-  Status message indicating graph-based execution
+- `dict` - JSON response containing wallet list.
 
-<a id="spoon_ai.agents.graph_agent.GraphAgent.get_execution_history"></a>
+<a id="spoon_ai.turnkey.client.Turnkey.list_wallet_accounts"></a>
 
-#### `get_execution_history`
-
-```python
-def get_execution_history() -> list
-```
-
-Get the execution history from the last graph run.
-
-**Returns**:
-
-  List of execution steps with metadata
-
-<a id="spoon_ai.agents.graph_agent.GraphAgent.get_execution_metadata"></a>
-
-#### `get_execution_metadata`
+#### `list_wallet_accounts`
 
 ```python
-def get_execution_metadata() -> Dict[str, Any]
+def list_wallet_accounts(wallet_id, limit=None, before=None, after=None)
 ```
 
-Get metadata from the last execution.
-
-**Returns**:
-
-  Dictionary containing execution metadata
-
-<a id="spoon_ai.agents.graph_agent.GraphAgent.clear_state"></a>
-
-#### `clear_state`
-
-```python
-def clear_state()
-```
-
-Clear preserved state and execution history.
-
-<a id="spoon_ai.agents.graph_agent.GraphAgent.update_initial_state"></a>
-
-#### `update_initial_state`
-
-```python
-def update_initial_state(updates: Dict[str, Any])
-```
-
-Update the initial state for future executions.
+List account list for specified wallet.
 
 **Arguments**:
 
-- `updates` - Dictionary of state updates to merge
-
-<a id="spoon_ai.agents.graph_agent.GraphAgent.set_preserve_state"></a>
-
-#### `set_preserve_state`
-
-```python
-def set_preserve_state(preserve: bool)
-```
-
-Enable or disable state preservation between runs.
-
-**Arguments**:
-
-- `preserve` - Whether to preserve state between runs
-
-<a id="spoon_ai.tools.x402_payment"></a>
-
-# Module `spoon_ai.tools.x402_payment`
-
-<a id="spoon_ai.tools.x402_payment.X402PaymentHeaderTool"></a>
-
-## `X402PaymentHeaderTool` Objects
-
-```python
-class X402PaymentHeaderTool(BaseTool)
-```
-
-Create a signed X-PAYMENT header for a given resource.
-
-<a id="spoon_ai.tools.x402_payment.X402PaywalledRequestTool"></a>
-
-## `X402PaywalledRequestTool` Objects
-
-```python
-class X402PaywalledRequestTool(BaseTool)
-```
-
-Fetch a paywalled resource, handling the x402 402 negotiation automatically.
-
-<a id="spoon_ai.tools.neofs_tools"></a>
-
-# Module `spoon_ai.tools.neofs_tools`
-
-NeoFS Tools for spoon_ai framework
-
-Simple wrappers around NeoFS client methods.
-Tools do NOT auto-create bearer tokens - Agent manages tokens.
-All parameters map directly to client method parameters.
-
-<a id="spoon_ai.tools.neofs_tools.get_shared_neofs_client"></a>
-
-#### `get_shared_neofs_client`
-
-```python
-def get_shared_neofs_client() -> NeoFSClient
-```
-
-Get shared NeoFSClient instance for all NeoFS tools.
-
-Returns the same client instance across all tool calls to ensure
-bearer token authentication works correctly.
-
-<a id="spoon_ai.tools.neofs_tools.CreateBearerTokenTool"></a>
-
-## `CreateBearerTokenTool` Objects
-
-```python
-class CreateBearerTokenTool(BaseTool)
-```
-
-Create a bearer token for NeoFS operations
-
-<a id="spoon_ai.tools.neofs_tools.CreateContainerTool"></a>
-
-## `CreateContainerTool` Objects
-
-```python
-class CreateContainerTool(BaseTool)
-```
-
-Create a NeoFS container
-
-<a id="spoon_ai.tools.neofs_tools.UploadObjectTool"></a>
-
-## `UploadObjectTool` Objects
-
-```python
-class UploadObjectTool(BaseTool)
-```
-
-Upload object to container
-
-<a id="spoon_ai.tools.neofs_tools.DownloadObjectByIdTool"></a>
-
-## `DownloadObjectByIdTool` Objects
-
-```python
-class DownloadObjectByIdTool(BaseTool)
-```
-
-Download object by ID
-
-<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByIdTool"></a>
-
-## `GetObjectHeaderByIdTool` Objects
-
-```python
-class GetObjectHeaderByIdTool(BaseTool)
-```
-
-Get object header by ID
-
-<a id="spoon_ai.tools.neofs_tools.DownloadObjectByAttributeTool"></a>
-
-## `DownloadObjectByAttributeTool` Objects
-
-```python
-class DownloadObjectByAttributeTool(BaseTool)
-```
-
-Download object by attribute
-
-<a id="spoon_ai.tools.neofs_tools.GetObjectHeaderByAttributeTool"></a>
-
-## `GetObjectHeaderByAttributeTool` Objects
-
-```python
-class GetObjectHeaderByAttributeTool(BaseTool)
-```
-
-Get object header by attribute
-
-<a id="spoon_ai.tools.neofs_tools.DeleteObjectTool"></a>
-
-## `DeleteObjectTool` Objects
-
-```python
-class DeleteObjectTool(BaseTool)
-```
-
-Delete an object
-
-<a id="spoon_ai.tools.neofs_tools.SearchObjectsTool"></a>
-
-## `SearchObjectsTool` Objects
-
-```python
-class SearchObjectsTool(BaseTool)
-```
-
-Search objects in container
-
-<a id="spoon_ai.tools.neofs_tools.SetContainerEaclTool"></a>
-
-## `SetContainerEaclTool` Objects
-
-```python
-class SetContainerEaclTool(BaseTool)
-```
-
-Set eACL for container
-
-<a id="spoon_ai.tools.neofs_tools.GetContainerEaclTool"></a>
-
-## `GetContainerEaclTool` Objects
-
-```python
-class GetContainerEaclTool(BaseTool)
-```
-
-Get eACL for container
-
-<a id="spoon_ai.tools.neofs_tools.ListContainersTool"></a>
-
-## `ListContainersTool` Objects
-
-```python
-class ListContainersTool(BaseTool)
-```
-
-List all containers
-
-<a id="spoon_ai.tools.neofs_tools.GetContainerInfoTool"></a>
-
-## `GetContainerInfoTool` Objects
-
-```python
-class GetContainerInfoTool(BaseTool)
-```
-
-Get container info
-
-<a id="spoon_ai.tools.neofs_tools.DeleteContainerTool"></a>
-
-## `DeleteContainerTool` Objects
-
-```python
-class DeleteContainerTool(BaseTool)
-```
-
-Delete container
-
-<a id="spoon_ai.tools.neofs_tools.GetNetworkInfoTool"></a>
-
-## `GetNetworkInfoTool` Objects
-
-```python
-class GetNetworkInfoTool(BaseTool)
-```
-
-Get network info
-
-<a id="spoon_ai.tools.neofs_tools.GetBalanceTool"></a>
-
-## `GetBalanceTool` Objects
-
-```python
-class GetBalanceTool(BaseTool)
-```
-
-Get balance for an address
-
-<a id="spoon_ai.tools.tool_manager"></a>
-
-# Module `spoon_ai.tools.tool_manager`
-
-<a id="spoon_ai.tools.tool_manager.ToolManager"></a>
-
-## `ToolManager` Objects
-
-```python
-class ToolManager()
-```
-
-<a id="spoon_ai.tools.tool_manager.ToolManager.reindex"></a>
-
-#### `reindex`
-
-```python
-def reindex() -> None
-```
-
-Rebuild the internal name-&gt;tool mapping. Useful if tools have been renamed dynamically.
-
-<a id="spoon_ai.tools.hitl"></a>
-
-# Module `spoon_ai.tools.hitl`
-
-Human-in-the-Loop (HITL) System
-
-Provides approval workflows for critical tool executions:
-- Tool-level approval configuration with dynamic descriptions
-- Multiple approval strategies (approve, edit, reject)
-- Batch interrupt/resume support for parallel tool calls
-- State preservation for pause/resume via Command pattern
-- Integration with checkpointing
-
-Compatible with LangChain DeepAgents HumanInTheLoopMiddleware interface.
-
-Usage:
-    from spoon_ai.tools.hitl import HumanInTheLoopMiddleware, InterruptOnConfig
-
-    # Simple configuration
-    agent = ToolCallAgent(
-        tools=[dangerous_tool],
-        middleware=[HumanInTheLoopMiddleware(interrupt_on=&#123;
-            "delete_file": True,
-            "send_email": &#123;"allowed_decisions": ["approve", "reject"]&#125;
-        &#125;)]
-    )
-
-    # With dynamic description function
-    def format_delete_description(tool_call, state, runtime):
-        return f"Delete file: &#123;tool_call['args'].get('path', 'unknown')&#125;"
-
-    middleware = HumanInTheLoopMiddleware(interrupt_on=&#123;
-        "delete_file": &#123;
-            "allowed_decisions": ["approve", "reject"],
-            "description": format_delete_description,
-        &#125;
-    &#125;)
-
-    # Resume after interrupt
-    result = agent.invoke(Command(resume=&#123;"decisions": [
-        &#123;"type": "approve"&#125;,
-        &#123;"type": "edit", "args": &#123;"path": "/new/path"&#125;&#125;,
-    ]&#125;), config=config)
-
-<a id="spoon_ai.tools.hitl.InterruptOnConfig"></a>
-
-## `InterruptOnConfig` Objects
-
-```python
-class InterruptOnConfig(TypedDict)
-```
-
-Configuration for tool interruption.
-
-Compatible with LangChain DeepAgents InterruptOnConfig.
-
-**Attributes**:
-
-- `allowed_decisions` - List of allowed approval decisions.
-  Defaults to ["approve", "edit", "reject"].
-- `description` - Either a static string or a callable that generates
-  a dynamic description based on the tool call context.
-- `Signature` - (tool_call: ToolCall, state: AgentState, runtime: Runtime) -&gt; str
-  
-
-**Example**:
-
-  # Static description
-- `config` - InterruptOnConfig = &#123;
-- `"allowed_decisions"` - ["approve", "reject"],
-- `"description"` - "This action will delete files permanently.",
-  &#125;
-  
-  # Dynamic description
-  def format_description(tool_call, state, runtime):
-  path = tool_call["args"].get("path", "unknown")
-  return f"Delete file: &#123;path&#125;"
-  
-- `config` - InterruptOnConfig = &#123;
-- `"allowed_decisions"` - ["approve", "reject"],
-- `"description"` - format_description,
-  &#125;
-
-<a id="spoon_ai.tools.hitl.ApprovalDecision"></a>
-
-## `ApprovalDecision` Objects
-
-```python
-class ApprovalDecision(str, Enum)
-```
-
-Possible approval decisions.
-
-<a id="spoon_ai.tools.hitl.ApprovalResponse"></a>
-
-## `ApprovalResponse` Objects
-
-```python
-@dataclass
-class ApprovalResponse()
-```
-
-Response from approval_callback, supporting EDIT with modified arguments.
-
-Usage:
-    # Simple approve/reject
-    return ApprovalDecision.APPROVE
-
-    # Edit with modified arguments
-    return ApprovalResponse(
-        decision=ApprovalDecision.EDIT,
-        modified_arguments=&#123;"path": "/new/path", "mode": "read"&#125;
-    )
-
-<a id="spoon_ai.tools.hitl.ApprovalResponse.__post_init__"></a>
-
-#### `__post_init__`
-
-```python
-def __post_init__()
-```
-
-Validate that EDIT decisions include modified_arguments.
-
-<a id="spoon_ai.tools.hitl.normalize_decision"></a>
-
-#### `normalize_decision`
-
-```python
-def normalize_decision(
-    decision: Union[ApprovalDecision, str, Any]
-) -> tuple[ApprovalDecision, Optional[Dict[str, Any]]]
-```
-
-Normalize approval decision from various input types.
-
-**Arguments**:
-
-- `decision` - Can be:
-  - ApprovalDecision enum
-  - str ("approve", "edit", "reject")
-  - Duck-typed ApprovalResponse object (with decision and optional modified_arguments attributes)
-  This allows cross-module compatibility without requiring exact class match.
+- `wallet_id` _str_ - Wallet ID.
+- `limit` _str, optional_ - Number of accounts returned per page.
+- `before` _str, optional_ - Pagination cursor, returns accounts before this ID.
+- `after` _str, optional_ - Pagination cursor, returns accounts after this ID.
   
 
 **Returns**:
 
-  Tuple of (ApprovalDecision, modified_arguments)
-  - modified_arguments is None unless decision is EDIT and provided in ApprovalResponse
-  
+- `dict` - JSON response containing account list.
 
-**Examples**:
+<a id="spoon_ai.turnkey.client.Turnkey.init_import_wallet"></a>
 
-  &gt;&gt;&gt; normalize_decision(ApprovalDecision.APPROVE)
-  (ApprovalDecision.APPROVE, None)
-  
-  &gt;&gt;&gt; normalize_decision("approve")
-  (ApprovalDecision.APPROVE, None)
-  
-  &gt;&gt;&gt; normalize_decision(ApprovalResponse(decision=ApprovalDecision.EDIT, modified_arguments=&#123;"x": 1&#125;))
-  (ApprovalDecision.EDIT, &#123;"x": 1&#125;)
-  
-  &gt;&gt;&gt; # Duck-typed object (cross-module compatibility)
-  &gt;&gt;&gt; class CustomResponse:
-  ...     decision = ApprovalDecision.EDIT
-  ...     modified_arguments = &#123;"x": 1&#125;
-  &gt;&gt;&gt; normalize_decision(CustomResponse())
-  (ApprovalDecision.EDIT, &#123;"x": 1&#125;)
-
-<a id="spoon_ai.tools.hitl.DecisionInput"></a>
-
-## `DecisionInput` Objects
+#### `init_import_wallet`
 
 ```python
-@dataclass
-class DecisionInput()
+def init_import_wallet(user_id)
 ```
 
-Input for a single approval decision.
-
-Used in Command(resume=&#123;"decisions": [...]&#125;) pattern.
-
-<a id="spoon_ai.tools.hitl.DecisionInput.args"></a>
-
-#### `args`
-
-For edit decision
-
-<a id="spoon_ai.tools.hitl.DecisionInput.reason"></a>
-
-#### `reason`
-
-For reject decision
-
-<a id="spoon_ai.tools.hitl.DecisionInput.from_dict"></a>
-
-#### `from_dict`
-
-```python
-@classmethod
-def from_dict(cls, data: Dict[str, Any]) -> "DecisionInput"
-```
-
-Create from dictionary.
-
-<a id="spoon_ai.tools.hitl.ActionRequest"></a>
-
-## `ActionRequest` Objects
-
-```python
-@dataclass
-class ActionRequest()
-```
-
-A pending action request.
-
-Compatible with LangChain's action_request format.
-
-<a id="spoon_ai.tools.hitl.ActionRequest.name"></a>
-
-#### `name`
-
-Tool name
-
-<a id="spoon_ai.tools.hitl.ActionRequest.args"></a>
-
-#### `args`
-
-Tool arguments
-
-<a id="spoon_ai.tools.hitl.ActionRequest.id"></a>
-
-#### `id`
-
-Tool call ID
-
-<a id="spoon_ai.tools.hitl.ActionRequest.to_dict"></a>
-
-#### `to_dict`
-
-```python
-def to_dict() -> Dict[str, Any]
-```
-
-Convert to dictionary for serialization.
-
-<a id="spoon_ai.tools.hitl.ApprovalRequest"></a>
-
-## `ApprovalRequest` Objects
-
-```python
-@dataclass
-class ApprovalRequest()
-```
-
-Request object passed to approval_callback.
-
-Provides a simple interface for approval callbacks.
-
-<a id="spoon_ai.tools.hitl.ApprovalRequest.from_action_request"></a>
-
-#### `from_action_request`
-
-```python
-@classmethod
-def from_action_request(cls, action: ActionRequest) -> "ApprovalRequest"
-```
-
-Create from ActionRequest.
-
-<a id="spoon_ai.tools.hitl.ReviewConfig"></a>
-
-## `ReviewConfig` Objects
-
-```python
-@dataclass
-class ReviewConfig()
-```
-
-Review configuration for a pending action.
-
-Compatible with LangChain's review_config format.
-
-<a id="spoon_ai.tools.hitl.ReviewConfig.to_dict"></a>
-
-#### `to_dict`
-
-```python
-def to_dict() -> Dict[str, Any]
-```
-
-Convert to dictionary for serialization.
-
-<a id="spoon_ai.tools.hitl.InterruptValue"></a>
-
-## `InterruptValue` Objects
-
-```python
-@dataclass
-class InterruptValue()
-```
-
-Value returned in __interrupt__ for batch interrupts.
-
-Compatible with LangChain's interrupt value format.
-Contains both action_requests and review_configs.
-
-<a id="spoon_ai.tools.hitl.InterruptValue.__len__"></a>
-
-#### `__len__`
-
-```python
-def __len__() -> int
-```
-
-Return number of pending actions (for compatibility).
-
-<a id="spoon_ai.tools.hitl.InterruptValue.__iter__"></a>
-
-#### `__iter__`
-
-```python
-def __iter__()
-```
-
-Iterate over keys (for compatibility).
-
-<a id="spoon_ai.tools.hitl.InterruptValue.__getitem__"></a>
-
-#### `__getitem__`
-
-```python
-def __getitem__(key: str) -> Any
-```
-
-Get item by key (for compatibility).
-
-<a id="spoon_ai.tools.hitl.InterruptValue.to_dict"></a>
-
-#### `to_dict`
-
-```python
-def to_dict() -> Dict[str, Any]
-```
-
-Convert to dictionary for serialization.
-
-<a id="spoon_ai.tools.hitl.InterruptInfo"></a>
-
-## `InterruptInfo` Objects
-
-```python
-@dataclass
-class InterruptInfo()
-```
-
-Wrapper for interrupt information.
-
-Compatible with LangChain's __interrupt__[0] format.
-
-<a id="spoon_ai.tools.hitl.InterruptInfo.to_dict"></a>
-
-#### `to_dict`
-
-```python
-def to_dict() -> Dict[str, Any]
-```
-
-Convert to dictionary.
-
-<a id="spoon_ai.tools.hitl.ResumeData"></a>
-
-## `ResumeData` Objects
-
-```python
-@dataclass
-class ResumeData()
-```
-
-Data for resuming from an interrupt.
-
-Compatible with LangChain Command(resume=...) pattern.
-
-<a id="spoon_ai.tools.hitl.ResumeData.from_dict"></a>
-
-#### `from_dict`
-
-```python
-@classmethod
-def from_dict(cls, data: Dict[str, Any]) -> "ResumeData"
-```
-
-Create from dictionary.
-
-<a id="spoon_ai.tools.hitl.HITLInterrupt"></a>
-
-## `HITLInterrupt` Objects
-
-```python
-class HITLInterrupt(Exception)
-```
-
-Exception raised when tool execution requires batch approval.
-
-This signals to the agent that execution should pause and return
-an __interrupt__ with action_requests and review_configs.
-
-<a id="spoon_ai.tools.hitl.ParsedInterruptConfig"></a>
-
-## `ParsedInterruptConfig` Objects
-
-```python
-@dataclass
-class ParsedInterruptConfig()
-```
-
-Parsed and normalized interrupt configuration.
-
-<a id="spoon_ai.tools.hitl.ParsedInterruptConfig.from_config"></a>
-
-#### `from_config`
-
-```python
-@classmethod
-def from_config(cls,
-                config: Union[bool, InterruptOnConfig],
-                tool_name: Optional[str] = None,
-                strict: bool = True) -> Optional["ParsedInterruptConfig"]
-```
-
-Parse configuration from various formats.
+Initialize wallet import process, generate import_bundle.
 
 **Arguments**:
 
-- `config` - Configuration (bool or InterruptOnConfig dict)
-- `tool_name` - Optional tool name for error messages
-- `strict` - If True, raise ValueError on invalid allowed_decisions.
-  If False, log warning and use defaults for invalid values.
+- `user_id` _str_ - User ID.
   
 
 **Returns**:
 
-  ParsedInterruptConfig or None if config is False/None
+- `dict` - JSON response containing import_bundle.
+
+<a id="spoon_ai.turnkey.client.Turnkey.encrypt_wallet"></a>
+
+#### `encrypt_wallet`
+
+```python
+def encrypt_wallet(mnemonic,
+                   user_id,
+                   import_bundle,
+                   encryption_key_name="demo-encryption-key")
+```
+
+Encrypt mnemonic using Turnkey CLI, generate encrypted_bundle.
+
+**Arguments**:
+
+- `mnemonic` _str_ - Mnemonic phrase (12/15/18/21/24 words).
+- `user_id` _str_ - User ID.
+- `import_bundle` _str_ - import_bundle obtained from init_import_wallet.
+- `encryption_key_name` _str_ - Encryption key name, defaults to demo-encryption-key.
+  
+
+**Returns**:
+
+- `str` - Encrypted encrypted_bundle.
   
 
 **Raises**:
 
-- `ValueError` - If strict=True and allowed_decisions contains invalid values
+- `RuntimeError` - If CLI command fails or turnkey CLI is not installed.
 
-<a id="spoon_ai.tools.hitl.ParsedInterruptConfig.get_description"></a>
+<a id="spoon_ai.turnkey.client.Turnkey.encrypt_private_key"></a>
 
-#### `get_description`
-
-```python
-def get_description(tool_call: ToolCall, state: AgentState,
-                    runtime: Runtime) -> Optional[str]
-```
-
-Get description, calling function if needed.
-
-<a id="spoon_ai.tools.hitl.HITLManager"></a>
-
-## `HITLManager` Objects
+#### `encrypt_private_key`
 
 ```python
-class HITLManager()
+def encrypt_private_key(private_key,
+                        user_id,
+                        import_bundle,
+                        key_format="hexadecimal",
+                        encryption_key_name="demo-encryption-key")
 ```
 
-Manages human-in-the-loop approval workflows.
-
-Supports batch interrupts for parallel tool calls.
-
-<a id="spoon_ai.tools.hitl.HITLManager.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(interrupt_on: Dict[str, Union[bool, InterruptOnConfig]],
-             strict: bool = True)
-```
-
-Initialize HITL manager.
+Encrypt private key using Turnkey CLI, generate encrypted_bundle, equivalent to:
+`turnkey encrypt --import-bundle-input "./import_bundle.txt" --plaintext-input /dev/fd/3 --key-format "hexadecimal" --encrypted-bundle-output "./encrypted_bundle.txt"`
 
 **Arguments**:
 
-- `interrupt_on` - Tool interruption configuration.
-  - Dict[str, bool]: Simple approval (True = require approval)
-  - Dict[str, InterruptOnConfig]: Detailed configuration with
-  allowed_decisions and description
-- `strict` - If True, raise ValueError on invalid allowed_decisions.
-  If False, log warning and use defaults for invalid values.
-
-<a id="spoon_ai.tools.hitl.HITLManager.should_interrupt"></a>
-
-#### `should_interrupt`
-
-```python
-def should_interrupt(tool_name: str) -> bool
-```
-
-Check if tool requires approval.
-
-<a id="spoon_ai.tools.hitl.HITLManager.get_config"></a>
-
-#### `get_config`
-
-```python
-def get_config(tool_name: str) -> Optional[ParsedInterruptConfig]
-```
-
-Get parsed configuration for a tool.
-
-<a id="spoon_ai.tools.hitl.HITLManager.add_pending_action"></a>
-
-#### `add_pending_action`
-
-```python
-def add_pending_action(tool_call: ToolCall, state: AgentState,
-                       runtime: Runtime) -> None
-```
-
-Add a pending action for batch interrupt.
-
-**Arguments**:
-
-- `tool_call` - The tool call dict or Pydantic object with name, args, id
-- `state` - Current agent state
-- `runtime` - Agent runtime
-
-<a id="spoon_ai.tools.hitl.HITLManager.has_pending_actions"></a>
-
-#### `has_pending_actions`
-
-```python
-def has_pending_actions() -> bool
-```
-
-Check if there are pending actions.
-
-<a id="spoon_ai.tools.hitl.HITLManager.create_interrupt"></a>
-
-#### `create_interrupt`
-
-```python
-def create_interrupt() -> InterruptInfo
-```
-
-Create an interrupt with all pending actions.
-
-**Returns**:
-
-  InterruptInfo with action_requests and review_configs
-
-<a id="spoon_ai.tools.hitl.HITLManager.clear_pending"></a>
-
-#### `clear_pending`
-
-```python
-def clear_pending() -> None
-```
-
-Clear all pending actions.
-
-<a id="spoon_ai.tools.hitl.HITLManager.apply_decisions"></a>
-
-#### `apply_decisions`
-
-```python
-def apply_decisions(decisions: List[DecisionInput],
-                    tool_calls: List[ToolCall]) -> List[ToolCall]
-```
-
-Apply decisions to tool calls.
-
-**Arguments**:
-
-- `decisions` - List of decisions from Command(resume=...)
-- `tool_calls` - Original tool calls
+- `private_key` _str_ - Private key string (hexadecimal or Solana format).
+- `user_id` _str_ - User ID.
+- `import_bundle` _str_ - import_bundle obtained from init_import_private_key.
+- `key_format` _str_ - Private key format, defaults to "hexadecimal" (supports "hexadecimal", "solana").
+- `encryption_key_name` _str_ - Encryption key name, defaults to "demo-encryption-key".
   
 
 **Returns**:
 
-  Modified tool calls with edits applied, rejected calls removed
+- `str` - Encrypted encrypted_bundle (Base64 encoded string).
+  
 
-<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware"></a>
+**Raises**:
 
-## `HumanInTheLoopMiddleware` Objects
+- `ValueError` - If private_key, user_id, import_bundle is empty or key_format is invalid.
+- `RuntimeError` - If CLI command fails or turnkey CLI is not installed.
 
-```python
-class HumanInTheLoopMiddleware(AgentMiddleware)
-```
+<a id="spoon_ai.turnkey.client.Turnkey.init_import_private_key"></a>
 
-Middleware that implements Human-in-the-Loop approval workflows.
-
-Compatible with LangChain DeepAgents HumanInTheLoopMiddleware.
-
-This middleware intercepts tool calls that require approval and creates
-an __interrupt__ with action_requests and review_configs for batch approval.
-
-Features:
-- Per-tool approval configuration
-- Dynamic description functions
-- Batch interrupt/resume for parallel tool calls
-- Command(resume=...) pattern for resuming
-
-Usage:
-    # Simple approval
-    middleware = HumanInTheLoopMiddleware(interrupt_on=&#123;
-        "delete_file": True,
-        "send_email": True
-    &#125;)
-
-    # With dynamic description
-    def format_shell_description(tool_call, state, runtime):
-        command = tool_call["args"].get("command", "N/A")
-        return f"Execute Command: &#123;command&#125;"
-
-    middleware = HumanInTheLoopMiddleware(interrupt_on=&#123;
-        "shell": &#123;
-            "allowed_decisions": ["approve", "reject"],
-            "description": format_shell_description,
-        &#125;,
-        "write_file": &#123;
-            "allowed_decisions": ["approve", "edit", "reject"],
-        &#125;,
-    &#125;)
-
-    # Resume from interrupt
-    result = agent.invoke(
-        Command(resume=&#123;"decisions": [
-            &#123;"type": "approve"&#125;,
-            &#123;"type": "edit", "args": &#123;"path": "/new/path"&#125;&#125;,
-        ]&#125;),
-        config=config
-    )
-
-Interrupt Format (returned in result["__interrupt__"]):
-    [
-        &#123;
-            "value": &#123;
-                "action_requests": [
-                    &#123;"name": "shell", "args": &#123;"command": "rm -rf"&#125;, "id": "..."&#125;,
-                ],
-                "review_configs": [
-                    &#123;
-                        "action_name": "shell",
-                        "action_id": "...",
-                        "allowed_decisions": ["approve", "reject"],
-                        "description": "Execute Command: rm -rf",
-                    &#125;,
-                ],
-            &#125;,
-            "interrupt_id": "...",
-        &#125;
-    ]
-
-<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.__init__"></a>
-
-#### `__init__`
+#### `init_import_private_key`
 
 ```python
-def __init__(interrupt_on: Dict[str, Union[bool, InterruptOnConfig]],
-             approval_callback: Optional[Callable[["ApprovalRequest"], Union[
-                 ApprovalDecision, "ApprovalResponse"]]] = None,
-             strict: bool = True)
+def init_import_private_key(user_id)
 ```
 
-Initialize HITL middleware.
+Initialize private key import process, generate import_bundle.
 
 **Arguments**:
 
-- `interrupt_on` - Tool interruption configuration.
-  Keys are tool names, values can be:
-  - True: Require approval with default allowed_decisions
-  - False: No approval needed (tool is skipped)
-  - InterruptOnConfig dict with:
-  - allowed_decisions: List of ["approve", "edit", "reject"]
-  - description: Static string or callable for dynamic description
-- `approval_callback` - Optional callback function for automatic approval.
-  If provided, this callback is called instead of raising HITLInterrupt.
-  The callback receives an ApprovalRequest and returns:
-  - ApprovalDecision (APPROVE/REJECT)
-  - ApprovalResponse (for EDIT with modified arguments)
+- `user_id` _str_ - User ID.
   
-
-**Examples**:
-
-  # Simple approve/reject
-  def auto_approve(request):
-  if request.tool_name == "dangerous_tool":
-  return ApprovalDecision.REJECT
-  return ApprovalDecision.APPROVE
-  
-  # Edit with modified arguments
-  def auto_edit(request):
-  if request.tool_name == "file_write":
-  return ApprovalResponse(
-  decision=ApprovalDecision.EDIT,
-- `modified_arguments=&#123;"path"` - "/safe/path", **request.arguments&#125;
-  )
-  return ApprovalDecision.APPROVE
-- `strict` - If True, raise ValueError on invalid allowed_decisions.
-  If False, log warning and use defaults for invalid values.
-  Defaults to True for strict validation.
-
-<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.set_resume_data"></a>
-
-#### `set_resume_data`
-
-```python
-def set_resume_data(resume: Dict[str, Any]) -> None
-```
-
-Set resume data from Command(resume=...).
-
-Called by the agent when resuming from interrupt.
-
-<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.before_agent"></a>
-
-#### `before_agent`
-
-```python
-def before_agent(state: Dict[str, Any],
-                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Initialize state for HITL tracking.
-
-<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(
-        request: ModelRequest,
-        handler: Callable[[ModelRequest], ModelResponse]) -> ModelResponse
-```
-
-Intercept model response to collect tool calls requiring approval.
-
-This processes the model response and identifies tool calls that
-need approval, then raises an HITLInterrupt if any are found.
-
-<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.awrap_tool_call"></a>
-
-#### `awrap_tool_call`
-
-```python
-async def awrap_tool_call(
-        request: ToolCallRequest,
-        handler: Callable[[ToolCallRequest],
-                          ToolCallResult]) -> ToolCallResult
-```
-
-Intercept tool execution to enforce approval decisions.
-
-This is the PRIMARY interception point for tool execution in ToolCallAgent.
-Even if a tool call makes it through awrap_model_call, we check here before
-actual execution.
-
-CRITICAL: This method MUST be called before tool execution, and MUST return
-ToolCallResult(success=False, ...) when rejected to prevent execution.
-
-<a id="spoon_ai.tools.hitl.HumanInTheLoopMiddleware.get_interrupt_config"></a>
-
-#### `get_interrupt_config`
-
-```python
-def get_interrupt_config(tool_name: str) -> Optional[Dict[str, Any]]
-```
-
-Get interrupt configuration for a tool.
 
 **Returns**:
 
-  Dict with allowed_decisions, or None if tool doesn't require approval
+- `dict` - JSON response containing import_bundle.
 
-<a id="spoon_ai.tools.hitl.create_hitl_middleware"></a>
+<a id="spoon_ai.turnkey.client.Turnkey.import_wallet"></a>
 
-#### `create_hitl_middleware`
+#### `import_wallet`
 
 ```python
-def create_hitl_middleware(
-        *tool_names: str,
-        allowed_decisions: Optional[List[str]] = None
-) -> HumanInTheLoopMiddleware
+def import_wallet(user_id, wallet_name, encrypted_bundle, accounts=None)
 ```
 
-Create HITL middleware for specified tools.
+Import wallet to Turnkey.
 
 **Arguments**:
 
-- `*tool_names` - Names of tools that require approval
-- `allowed_decisions` - Allowed decisions for all tools
+- `user_id` _str_ - User ID.
+- `wallet_name` _str_ - Wallet name.
+- `encrypted_bundle` _str_ - Encrypted mnemonic bundle.
+- `accounts` _list, optional_ - Account configuration list, each account contains curve, pathFormat, path, addressFormat.
   
 
 **Returns**:
 
-  Configured HumanInTheLoopMiddleware
-  
-
-**Example**:
-
-  middleware = create_hitl_middleware(
-  "delete_file",
-  "send_email",
-  "shutdown_server",
-  allowed_decisions=["approve", "reject"]
-  )
-
-<a id="spoon_ai.tools.hitl.format_tool_call_description"></a>
-
-#### `format_tool_call_description`
-
-```python
-def format_tool_call_description(tool_call: ToolCall, state: AgentState,
-                                 runtime: Runtime) -> str
-```
-
-Default description formatter for tool calls.
-
-Can be used as a base for custom description functions.
-
-<a id="spoon_ai.tools.rag_tools"></a>
-
-# Module `spoon_ai.tools.rag_tools`
-
-<a id="spoon_ai.tools"></a>
-
-# Module `spoon_ai.tools`
-
-<a id="spoon_ai.tools.mcp_tool"></a>
-
-# Module `spoon_ai.tools.mcp_tool`
-
-<a id="spoon_ai.tools.mcp_tool.MCPTool"></a>
-
-## `MCPTool` Objects
-
-```python
-class MCPTool(BaseTool, MCPClientMixin)
-```
-
-<a id="spoon_ai.tools.mcp_tool.MCPTool.call_mcp_tool"></a>
-
-#### `call_mcp_tool`
-
-```python
-async def call_mcp_tool(tool_name: str, **kwargs)
-```
-
-Override the mixin method to add tool-specific error handling.
-
-<a id="spoon_ai.tools.mcp_tool.MCPTool.expand_server_tools"></a>
-
-#### `expand_server_tools`
-
-```python
-async def expand_server_tools() -> List["MCPTool"]
-```
-
-Expand this single MCPTool (one-per-server) into one MCPTool per
-real server tool.  Each returned tool shares the same MCP transport
-config and delegates execution to ``call_mcp_tool(real_name)``.
-
-If the server is unreachable or returns no tools, an empty list is
-returned (callers should keep the original proxy as fallback).
-
-**Returns**:
-
-  List of MCPTool instances, one per discovered server tool.
-
-<a id="spoon_ai.tools.mcp_tool.MCPTool.list_available_tools"></a>
-
-#### `list_available_tools`
-
-```python
-async def list_available_tools() -> list
-```
-
-List available tools from the MCP server.
-
-<a id="spoon_ai.tools.turnkey_tools"></a>
-
-# Module `spoon_ai.tools.turnkey_tools`
-
-Turnkey Tools - Secure Blockchain Operations
-
-This module provides Turnkey SDK tools for secure blockchain operations including:
-- Transaction signing and broadcasting
-- Message and EIP-712 signing
-- Multi-account management
-- Activity audit and monitoring
-- Wallet and account operations
-
-<a id="spoon_ai.tools.turnkey_tools.TurnkeyBaseTool"></a>
-
-## `TurnkeyBaseTool` Objects
-
-```python
-class TurnkeyBaseTool(BaseTool)
-```
-
-Base class for Turnkey tools with shared client initialization
-
-<a id="spoon_ai.tools.turnkey_tools.TurnkeyBaseTool.client"></a>
-
-#### `client`
-
-```python
-@property
-def client()
-```
-
-Lazy initialization of Turnkey client
-
-<a id="spoon_ai.tools.turnkey_tools.SignEVMTransactionTool"></a>
-
-## `SignEVMTransactionTool` Objects
-
-```python
-class SignEVMTransactionTool(TurnkeyBaseTool)
-```
-
-Sign EVM transaction using Turnkey
-
-<a id="spoon_ai.tools.turnkey_tools.SignEVMTransactionTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(sign_with: str, unsigned_tx: str, **kwargs) -> str
-```
-
-Sign EVM transaction
-
-<a id="spoon_ai.tools.turnkey_tools.SignMessageTool"></a>
-
-## `SignMessageTool` Objects
-
-```python
-class SignMessageTool(TurnkeyBaseTool)
-```
-
-Sign arbitrary message using Turnkey
-
-<a id="spoon_ai.tools.turnkey_tools.SignMessageTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(sign_with: str,
-                  message: str,
-                  use_keccak256: bool = True,
-                  **kwargs) -> str
-```
-
-Sign message
-
-<a id="spoon_ai.tools.turnkey_tools.SignTypedDataTool"></a>
-
-## `SignTypedDataTool` Objects
-
-```python
-class SignTypedDataTool(TurnkeyBaseTool)
-```
-
-Sign EIP-712 structured data using Turnkey
-
-<a id="spoon_ai.tools.turnkey_tools.SignTypedDataTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(sign_with: str, typed_data: dict, **kwargs) -> str
-```
-
-Sign EIP-712 typed data
-
-<a id="spoon_ai.tools.turnkey_tools.BroadcastTransactionTool"></a>
-
-## `BroadcastTransactionTool` Objects
-
-```python
-class BroadcastTransactionTool(TurnkeyBaseTool)
-```
-
-Broadcast signed transaction to blockchain
-
-<a id="spoon_ai.tools.turnkey_tools.BroadcastTransactionTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(signed_tx: str, rpc_url: str = None, **kwargs) -> str
-```
-
-Broadcast transaction
-
-<a id="spoon_ai.tools.turnkey_tools.ListWalletsTool"></a>
-
-## `ListWalletsTool` Objects
-
-```python
-class ListWalletsTool(TurnkeyBaseTool)
-```
-
-List all wallets in the organization
-
-<a id="spoon_ai.tools.turnkey_tools.ListWalletsTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(**kwargs) -> str
-```
-
-List wallets
-
-<a id="spoon_ai.tools.turnkey_tools.ListWalletAccountsTool"></a>
-
-## `ListWalletAccountsTool` Objects
-
-```python
-class ListWalletAccountsTool(TurnkeyBaseTool)
-```
-
-List accounts for a specific wallet
-
-<a id="spoon_ai.tools.turnkey_tools.ListWalletAccountsTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(wallet_id: str,
-                  limit: str = None,
-                  before: str = None,
-                  after: str = None,
-                  **kwargs) -> str
-```
-
-List wallet accounts
-
-<a id="spoon_ai.tools.turnkey_tools.GetActivityTool"></a>
-
-## `GetActivityTool` Objects
-
-```python
-class GetActivityTool(TurnkeyBaseTool)
-```
-
-Get activity details by ID
-
-<a id="spoon_ai.tools.turnkey_tools.GetActivityTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(activity_id: str, **kwargs) -> str
-```
-
-Get activity details
-
-<a id="spoon_ai.tools.turnkey_tools.ListActivitiesTool"></a>
-
-## `ListActivitiesTool` Objects
-
-```python
-class ListActivitiesTool(TurnkeyBaseTool)
-```
-
-List recent activities in the organization
-
-<a id="spoon_ai.tools.turnkey_tools.ListActivitiesTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(limit: str = "10",
-                  before: str = None,
-                  after: str = None,
-                  filter_by_status: list = None,
-                  filter_by_type: list = None,
-                  **kwargs) -> str
-```
-
-List activities
-
-<a id="spoon_ai.tools.turnkey_tools.WhoAmITool"></a>
-
-## `WhoAmITool` Objects
-
-```python
-class WhoAmITool(TurnkeyBaseTool)
-```
-
-Get organization information
-
-<a id="spoon_ai.tools.turnkey_tools.WhoAmITool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(**kwargs) -> str
-```
-
-Get organization info
-
-<a id="spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool"></a>
-
-## `BuildUnsignedEIP1559TxTool` Objects
-
-```python
-class BuildUnsignedEIP1559TxTool(BaseTool)
-```
-
-Build unsigned EIP-1559 transaction (supports NeoX)
-
-<a id="spoon_ai.tools.turnkey_tools.BuildUnsignedEIP1559TxTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(from_addr: str,
-                  to_addr: str = None,
-                  value_wei: str = "0",
-                  data_hex: str = "0x",
-                  priority_gwei: str = "1",
-                  max_fee_gwei: str = None,
-                  gas_limit: str = None,
-                  rpc_url: str = None,
-                  **kwargs) -> str
-```
-
-Build unsigned transaction (auto-detects NeoX)
-
-<a id="spoon_ai.tools.turnkey_tools.ListAllAccountsTool"></a>
-
-## `ListAllAccountsTool` Objects
-
-```python
-class ListAllAccountsTool(TurnkeyBaseTool)
-```
-
-List all accounts across all wallets in the organization
-
-<a id="spoon_ai.tools.turnkey_tools.ListAllAccountsTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(limit: str = "50", **kwargs) -> str
-```
-
-List all accounts across all wallets
-
-<a id="spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool"></a>
-
-## `BatchSignTransactionsTool` Objects
-
-```python
-class BatchSignTransactionsTool(TurnkeyBaseTool)
-```
-
-Batch sign transactions for multiple accounts
-
-<a id="spoon_ai.tools.turnkey_tools.BatchSignTransactionsTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(to_address: str,
-                  value_wei: str,
-                  data_hex: str = "0x",
-                  max_accounts: str = "3",
-                  enable_broadcast: bool = False,
-                  rpc_url: str = None,
-                  **kwargs) -> str
-```
-
-Batch sign transactions for multiple accounts
-
-<a id="spoon_ai.tools.turnkey_tools.CreateWalletTool"></a>
-
-## `CreateWalletTool` Objects
-
-```python
-class CreateWalletTool(TurnkeyBaseTool)
-```
-
-Create a new wallet
-
-<a id="spoon_ai.tools.turnkey_tools.CreateWalletTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(wallet_name: str,
-                  accounts_json: str = None,
-                  mnemonic_length: str = "24",
-                  **kwargs) -> str
-```
-
-Create a new wallet
-
-<a id="spoon_ai.tools.turnkey_tools.GetWalletTool"></a>
-
-## `GetWalletTool` Objects
-
-```python
-class GetWalletTool(TurnkeyBaseTool)
-```
-
-Get wallet information by wallet ID
-
-<a id="spoon_ai.tools.turnkey_tools.GetWalletTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(wallet_id: str, **kwargs) -> str
-```
-
-Get wallet information
-
-<a id="spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool"></a>
-
-## `CreateWalletAccountsTool` Objects
-
-```python
-class CreateWalletAccountsTool(TurnkeyBaseTool)
-```
-
-Add accounts to an existing wallet
-
-<a id="spoon_ai.tools.turnkey_tools.CreateWalletAccountsTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(wallet_id: str, accounts_json: str, **kwargs) -> str
-```
-
-Add accounts to existing wallet
-
-<a id="spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool"></a>
-
-## `CompleteTransactionWorkflowTool` Objects
-
-```python
-class CompleteTransactionWorkflowTool(TurnkeyBaseTool)
-```
-
-Complete transaction workflow: build, sign, and optionally broadcast
-
-<a id="spoon_ai.tools.turnkey_tools.CompleteTransactionWorkflowTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(sign_with: str,
-                  to_address: str,
-                  value_wei: str,
-                  data_hex: str = "0x",
-                  enable_broadcast: bool = False,
-                  rpc_url: str = None,
-                  **kwargs) -> str
-```
-
-Complete transaction workflow
-
-<a id="spoon_ai.tools.turnkey_tools.get_turnkey_tools"></a>
-
-#### `get_turnkey_tools`
-
-```python
-def get_turnkey_tools() -> List[BaseTool]
-```
-
-Get all Turnkey tools
-
-<a id="spoon_ai.tools.base"></a>
-
-# Module `spoon_ai.tools.base`
-
-<a id="spoon_ai.tools.base.reset_secrets_initialization"></a>
-
-#### `reset_secrets_initialization`
-
-```python
-def reset_secrets_initialization() -> None
-```
-
-Reset the initialization flag. Useful for testing.
-
-<a id="spoon_ai.tools.base.ToolFailure"></a>
-
-## `ToolFailure` Objects
-
-```python
-class ToolFailure(Exception)
-```
-
-Exception to indicate a tool execution failure.
-
-<a id="spoon_ai.rag.embeddings"></a>
-
-# Module `spoon_ai.rag.embeddings`
-
-<a id="spoon_ai.rag.embeddings.HashEmbeddingClient"></a>
-
-## `HashEmbeddingClient` Objects
-
-```python
-class HashEmbeddingClient(EmbeddingClient)
-```
-
-Deterministic offline embedding via hashing.
-
-Produces fixed-length vectors in [0,1] normalized range. Not semantically meaningful
-but stable for tests and offline demos.
-
-<a id="spoon_ai.rag.embeddings.get_embedding_client"></a>
-
-#### `get_embedding_client`
-
-```python
-def get_embedding_client(
-        provider: Optional[str],
-        *,
-        openai_api_key: Optional[str] = None,
-        openai_model: str = "text-embedding-3-small") -> EmbeddingClient
-```
-
-Create an embedding client.
-
-Provider selection rules:
-- provider is None/"auto": pick the first configured embeddings provider using a dedicated
-  priority order (OpenAI &gt; OpenRouter &gt; Gemini).
-- provider is "openai" / "openrouter" / "gemini" / "ollama": force that provider (uses core env config when applicable).
-- provider is "openai_compatible": use OpenAI-compatible embeddings via RAG_EMBEDDINGS_* env vars.
-- otherwise: deterministic hash embeddings (offline).
-
-<a id="spoon_ai.rag.vectorstores.faiss_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.faiss_store`
-
-<a id="spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore"></a>
-
-## `FaissVectorStore` Objects
-
-```python
-class FaissVectorStore(VectorStore)
-```
-
-FAISS-backed local vector store (cosine via inner product + L2 norm).
-
-<a id="spoon_ai.rag.vectorstores"></a>
-
-# Module `spoon_ai.rag.vectorstores`
-
-<a id="spoon_ai.rag.vectorstores.registry"></a>
-
-# Module `spoon_ai.rag.vectorstores.registry`
-
-<a id="spoon_ai.rag.vectorstores.registry.get_vector_store"></a>
-
-#### `get_vector_store`
-
-```python
-def get_vector_store(backend: Optional[str] = None) -> VectorStore
-```
-
-Return a vector store by backend name.
-
-Backends:
-- faiss: local/offline (mapped to in-memory cosine store)
-- pinecone: cloud Pinecone (requires PINECONE_API_KEY)
-- qdrant: local/cloud Qdrant (requires qdrant-client, default http://localhost:6333)
-- chroma: local Chroma (requires chromadb)
-
-<a id="spoon_ai.rag.vectorstores.pinecone_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.pinecone_store`
-
-<a id="spoon_ai.rag.vectorstores.qdrant_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.qdrant_store`
-
-<a id="spoon_ai.rag.vectorstores.chroma_store"></a>
-
-# Module `spoon_ai.rag.vectorstores.chroma_store`
-
-<a id="spoon_ai.rag.vectorstores.base"></a>
-
-# Module `spoon_ai.rag.vectorstores.base`
-
-<a id="spoon_ai.rag.vectorstores.base.VectorStore"></a>
-
-## `VectorStore` Objects
-
-```python
-class VectorStore(ABC)
-```
-
-<a id="spoon_ai.rag.vectorstores.base.VectorStore.query"></a>
-
-#### `query`
-
-```python
-@abstractmethod
-def query(
-        *,
-        collection: str,
-        query_embeddings: List[List[float]],
-        top_k: int = 5,
-        filter: Optional[Dict] = None) -> List[List[Tuple[str, float, Dict]]]
-```
-
-Return per-query list of (id, score, metadata). Higher score is better.
-
-<a id="spoon_ai.rag.chunk"></a>
-
-# Module `spoon_ai.rag.chunk`
-
-Recursive chunking module for RAG system.
-
-Provides element-aware chunking that:
-- Keeps atomic elements (tables, code, formulas) intact
-- Starts new chunks at title/header elements
-- Splits long text elements by paragraphs
-- Adds overlap between chunks
-
-<a id="spoon_ai.rag.chunk.recursive_chunk"></a>
-
-#### `recursive_chunk`
-
-```python
-def recursive_chunk(elements: List,
-                    chunk_size: int = 1200,
-                    overlap: int = 120) -> List[str]
-```
-
-Recursively chunk elements based on element types with overlap.
-
-**Arguments**:
-
-- `elements` - List of unstructured elements
-- `chunk_size` - Maximum characters per chunk
-- `overlap` - Overlap characters between chunks
-  
-
-**Returns**:
-
-  List of chunk texts (strings)
-
-<a id="spoon_ai.rag.chunk.simple_chunk"></a>
-
-#### `simple_chunk`
-
-```python
-def simple_chunk(text: str,
-                 chunk_size: int = 1200,
-                 overlap: int = 120) -> List[str]
-```
-
-Simple sliding window chunking with overlap.
-
-**Arguments**:
-
-- `text` - Text to chunk
-- `chunk_size` - Maximum characters per chunk
-- `overlap` - Overlap characters between chunks
-  
-
-**Returns**:
-
-  List of chunk texts
-
-<a id="spoon_ai.rag.chunk.paragraph_chunk"></a>
-
-#### `paragraph_chunk`
-
-```python
-def paragraph_chunk(text: str,
-                    chunk_size: int = 1200,
-                    overlap: int = 120) -> List[str]
-```
-
-Paragraph-based chunking with overlap.
-
-**Arguments**:
-
-- `text` - Text to chunk
-- `chunk_size` - Maximum characters per chunk
-- `overlap` - Overlap characters between chunks
-  
-
-**Returns**:
-
-  List of chunk texts
-
-<a id="spoon_ai.rag.chunk.chunk_text"></a>
-
-#### `chunk_text`
-
-```python
-def chunk_text(text: str,
-               chunk_size: int = 1200,
-               overlap: int = 120,
-               chunk_method: str = 'recursive',
-               elements: Optional[List] = None) -> List[str]
-```
-
-Chunk text using specified method.
-
-**Arguments**:
-
-- `text` - Text to chunk
-- `chunk_size` - Maximum characters per chunk
-- `overlap` - Overlap characters between chunks
-- `chunk_method` - Chunking method - 'simple', 'paragraph', or 'recursive'
-- `elements` - Optional unstructured elements (required for 'recursive')
-  
-
-**Returns**:
-
-  List of chunk texts
-
-<a id="spoon_ai.rag.config"></a>
-
-# Module `spoon_ai.rag.config`
-
-<a id="spoon_ai.rag.config.ensure_dotenv"></a>
-
-#### `ensure_dotenv`
-
-```python
-def ensure_dotenv() -> None
-```
-
-Load .env file once if python-dotenv is available.
-
-Does NOT override existing environment variables (e.g. those injected by
-CI/CD).  Call this explicitly before reading env-based config rather than
-relying on import-time side effects.
-
-<a id="spoon_ai.rag.config.RagConfig"></a>
-
-## `RagConfig` Objects
-
-```python
-@dataclass
-class RagConfig()
-```
-
-<a id="spoon_ai.rag.config.RagConfig.backend"></a>
-
-#### `backend`
-
-faiss|pinecone|qdrant|chroma
-
-<a id="spoon_ai.rag.config.RagConfig.embeddings_model"></a>
-
-#### `embeddings_model`
-
-Generic model name for all embedding providers
-
-<a id="spoon_ai.rag.config.RagConfig.retrieval_overfetch_factor"></a>
-
-#### `retrieval_overfetch_factor`
-
-overfetch multiplier: max(top_k * factor, 20)
-
-<a id="spoon_ai.rag.config.RagConfig.rrf_k"></a>
-
-#### `rrf_k`
-
-RRF smoothing constant
-
-<a id="spoon_ai.rag.config.RagConfig.openai_embeddings_model"></a>
-
-#### `openai_embeddings_model`
-
-```python
-@property
-def openai_embeddings_model() -> str
-```
-
-Deprecated: use 'embeddings_model' instead. Kept for backward compatibility.
+- `dict` - JSON response containing imported wallet information.
 
 <a id="spoon_ai.rag"></a>
 
 # Module `spoon_ai.rag`
-
-<a id="spoon_ai.rag.index"></a>
-
-# Module `spoon_ai.rag.index`
-
-<a id="spoon_ai.rag.qa"></a>
-
-# Module `spoon_ai.rag.qa`
 
 <a id="spoon_ai.rag.parser"></a>
 
@@ -19031,342 +17566,307 @@ Parse documents from multiple sources (URLs, directories, files).
 
   List of ParsedDocument
 
+<a id="spoon_ai.rag.index"></a>
+
+# Module `spoon_ai.rag.index`
+
 <a id="spoon_ai.rag.retriever"></a>
 
 # Module `spoon_ai.rag.retriever`
 
-<a id="spoon_ai.runnables.events"></a>
+<a id="spoon_ai.rag.config"></a>
 
-# Module `spoon_ai.runnables.events`
+# Module `spoon_ai.rag.config`
 
-<a id="spoon_ai.runnables.events.StreamEventBuilder"></a>
+<a id="spoon_ai.rag.config.ensure_dotenv"></a>
 
-## `StreamEventBuilder` Objects
-
-```python
-class StreamEventBuilder()
-```
-
-<a id="spoon_ai.runnables.events.StreamEventBuilder.chain_start"></a>
-
-#### `chain_start`
+#### `ensure_dotenv`
 
 ```python
-@staticmethod
-def chain_start(run_id: UUID, name: str, inputs: Any,
-                **kwargs: Any) -> StreamEvent
+def ensure_dotenv() -> None
 ```
 
-Build chain start event.
+Load .env file once if python-dotenv is available.
 
-<a id="spoon_ai.runnables.events.StreamEventBuilder.chain_stream"></a>
+Does NOT override existing environment variables (e.g. those injected by
+CI/CD).  Call this explicitly before reading env-based config rather than
+relying on import-time side effects.
 
-#### `chain_stream`
+<a id="spoon_ai.rag.config.RagConfig"></a>
+
+## `RagConfig` Objects
 
 ```python
-@staticmethod
-def chain_stream(run_id: UUID, name: str, chunk: Any,
-                 **kwargs: Any) -> StreamEvent
+@dataclass
+class RagConfig()
 ```
 
-Build chain stream event.
+<a id="spoon_ai.rag.config.RagConfig.backend"></a>
 
-<a id="spoon_ai.runnables.events.StreamEventBuilder.chain_end"></a>
+#### `backend`
 
-#### `chain_end`
+faiss|pinecone|qdrant|chroma
+
+<a id="spoon_ai.rag.config.RagConfig.embeddings_model"></a>
+
+#### `embeddings_model`
+
+Generic model name for all embedding providers
+
+<a id="spoon_ai.rag.config.RagConfig.retrieval_overfetch_factor"></a>
+
+#### `retrieval_overfetch_factor`
+
+overfetch multiplier: max(top_k * factor, 20)
+
+<a id="spoon_ai.rag.config.RagConfig.rrf_k"></a>
+
+#### `rrf_k`
+
+RRF smoothing constant
+
+<a id="spoon_ai.rag.config.RagConfig.openai_embeddings_model"></a>
+
+#### `openai_embeddings_model`
 
 ```python
-@staticmethod
-def chain_end(run_id: UUID, name: str, output: Any,
-              **kwargs: Any) -> StreamEvent
+@property
+def openai_embeddings_model() -> str
 ```
 
-Build chain end event.
+Deprecated: use 'embeddings_model' instead. Kept for backward compatibility.
 
-<a id="spoon_ai.runnables.events.StreamEventBuilder.chain_error"></a>
+<a id="spoon_ai.rag.qa"></a>
 
-#### `chain_error`
+# Module `spoon_ai.rag.qa`
+
+<a id="spoon_ai.rag.chunk"></a>
+
+# Module `spoon_ai.rag.chunk`
+
+Recursive chunking module for RAG system.
+
+Provides element-aware chunking that:
+- Keeps atomic elements (tables, code, formulas) intact
+- Starts new chunks at title/header elements
+- Splits long text elements by paragraphs
+- Adds overlap between chunks
+
+<a id="spoon_ai.rag.chunk.recursive_chunk"></a>
+
+#### `recursive_chunk`
 
 ```python
-@staticmethod
-def chain_error(run_id: UUID, name: str, error: Exception,
-                **kwargs: Any) -> StreamEvent
+def recursive_chunk(elements: List,
+                    chunk_size: int = 1200,
+                    overlap: int = 120) -> List[str]
 ```
 
-Build chain error event.
-
-<a id="spoon_ai.runnables.events.StreamEventBuilder.llm_stream"></a>
-
-#### `llm_stream`
-
-```python
-@staticmethod
-def llm_stream(run_id: UUID,
-               name: str,
-               token: str,
-               chunk: Optional[Any] = None,
-               **kwargs: Any) -> StreamEvent
-```
-
-Build LLM stream event.
-
-<a id="spoon_ai.runnables"></a>
-
-# Module `spoon_ai.runnables`
-
-Runnable interface and utilities for composable AI components.
-
-This module provides the foundational Runnable interface that all Spoon AI
-components implement, enabling streaming, composition, and standardized execution.
-
-<a id="spoon_ai.runnables.base"></a>
-
-# Module `spoon_ai.runnables.base`
-
-<a id="spoon_ai.runnables.base.log_patches_from_events"></a>
-
-#### `log_patches_from_events`
-
-```python
-async def log_patches_from_events(
-        event_iter: AsyncIterator[Dict[str, Any]],
-        *,
-        diff: bool = True) -> AsyncIterator[RunLogPatch]
-```
-
-Convert a stream of events into run log patches.
-
-<a id="spoon_ai.runnables.base.Runnable"></a>
-
-## `Runnable` Objects
-
-```python
-class Runnable(ABC, Generic[Input, Output])
-```
-
-<a id="spoon_ai.runnables.base.Runnable.astream_log"></a>
-
-#### `astream_log`
-
-```python
-async def astream_log(input: Input,
-                      config: Optional[RunnableConfig] = None,
-                      *,
-                      diff: bool = True) -> AsyncIterator[RunLogPatch]
-```
-
-Asynchronously stream structured log patches derived from execution events.
-
-<a id="spoon_ai.runnables.base.Runnable.astream_events"></a>
-
-#### `astream_events`
-
-```python
-async def astream_events(
-        input: Input,
-        config: Optional[RunnableConfig] = None
-) -> AsyncIterator[Dict[str, Any]]
-```
-
-Asynchronously stream structured execution events.
-
-<a id="spoon_ai.neofs"></a>
-
-# Module `spoon_ai.neofs`
-
-NeoFS integration for Spoon Core.
-
-<a id="spoon_ai.neofs.client"></a>
-
-# Module `spoon_ai.neofs.client`
-
-<a id="spoon_ai.neofs.client.NeoFSClient"></a>
-
-## `NeoFSClient` Objects
-
-```python
-class NeoFSClient()
-```
-
-<a id="spoon_ai.neofs.client.NeoFSClient.set_container_eacl"></a>
-
-#### `set_container_eacl`
-
-```python
-def set_container_eacl(container_id: str,
-                       eacl: Eacl,
-                       *,
-                       bearer_token: Optional[str] = None,
-                       wallet_connect: bool = True) -> SuccessResponse
-```
-
-Set container eACL.
+Recursively chunk elements based on element types with overlap.
 
 **Arguments**:
 
-- `container_id` - Container ID
-- `eacl` - eACL object
-- `bearer_token` - Optional Bearer Token (recommended for eACL operations)
-- `wallet_connect` - Whether to use wallet_connect mode (default True)
+- `elements` - List of unstructured elements
+- `chunk_size` - Maximum characters per chunk
+- `overlap` - Overlap characters between chunks
+  
 
-<a id="spoon_ai.neofs.client.NeoFSClient.download_object_by_id"></a>
+**Returns**:
 
-#### `download_object_by_id`
+  List of chunk texts (strings)
+
+<a id="spoon_ai.rag.chunk.simple_chunk"></a>
+
+#### `simple_chunk`
 
 ```python
-def download_object_by_id(container_id: str,
-                          object_id: str,
-                          *,
-                          bearer_token: Optional[str] = None,
-                          download: bool | None = None,
-                          range_header: str | None = None) -> httpx.Response
+def simple_chunk(text: str,
+                 chunk_size: int = 1200,
+                 overlap: int = 120) -> List[str]
 ```
 
-Download object by ID. Bearer token is optional for public containers.
+Simple sliding window chunking with overlap.
 
-<a id="spoon_ai.neofs.client.NeoFSClient.get_object_header_by_id"></a>
+**Arguments**:
 
-#### `get_object_header_by_id`
+- `text` - Text to chunk
+- `chunk_size` - Maximum characters per chunk
+- `overlap` - Overlap characters between chunks
+  
+
+**Returns**:
+
+  List of chunk texts
+
+<a id="spoon_ai.rag.chunk.paragraph_chunk"></a>
+
+#### `paragraph_chunk`
 
 ```python
-def get_object_header_by_id(container_id: str,
-                            object_id: str,
-                            *,
-                            bearer_token: Optional[str] = None,
-                            range_header: str | None = None) -> httpx.Response
+def paragraph_chunk(text: str,
+                    chunk_size: int = 1200,
+                    overlap: int = 120) -> List[str]
 ```
 
-Get object header by ID. Bearer token is optional for public containers.
+Paragraph-based chunking with overlap.
 
-<a id="spoon_ai.neofs.client.NeoFSClient.download_object_by_attribute"></a>
+**Arguments**:
 
-#### `download_object_by_attribute`
+- `text` - Text to chunk
+- `chunk_size` - Maximum characters per chunk
+- `overlap` - Overlap characters between chunks
+  
+
+**Returns**:
+
+  List of chunk texts
+
+<a id="spoon_ai.rag.chunk.chunk_text"></a>
+
+#### `chunk_text`
 
 ```python
-def download_object_by_attribute(
-        container_id: str,
-        attr_key: str,
-        attr_val: str,
+def chunk_text(text: str,
+               chunk_size: int = 1200,
+               overlap: int = 120,
+               chunk_method: str = 'recursive',
+               elements: Optional[List] = None) -> List[str]
+```
+
+Chunk text using specified method.
+
+**Arguments**:
+
+- `text` - Text to chunk
+- `chunk_size` - Maximum characters per chunk
+- `overlap` - Overlap characters between chunks
+- `chunk_method` - Chunking method - 'simple', 'paragraph', or 'recursive'
+- `elements` - Optional unstructured elements (required for 'recursive')
+  
+
+**Returns**:
+
+  List of chunk texts
+
+<a id="spoon_ai.rag.embeddings"></a>
+
+# Module `spoon_ai.rag.embeddings`
+
+<a id="spoon_ai.rag.embeddings.HashEmbeddingClient"></a>
+
+## `HashEmbeddingClient` Objects
+
+```python
+class HashEmbeddingClient(EmbeddingClient)
+```
+
+Deterministic offline embedding via hashing.
+
+Produces fixed-length vectors in [0,1] normalized range. Not semantically meaningful
+but stable for tests and offline demos.
+
+<a id="spoon_ai.rag.embeddings.get_embedding_client"></a>
+
+#### `get_embedding_client`
+
+```python
+def get_embedding_client(
+        provider: Optional[str],
         *,
-        bearer_token: Optional[str] = None,
-        download: bool | None = None,
-        range_header: str | None = None) -> httpx.Response
+        openai_api_key: Optional[str] = None,
+        openai_model: str = "text-embedding-3-small") -> EmbeddingClient
 ```
 
-Download object by attribute. Bearer token is optional for public containers.
+Create an embedding client.
 
-<a id="spoon_ai.neofs.client.NeoFSClient.get_object_header_by_attribute"></a>
+Provider selection rules:
+- provider is None/"auto": pick the first configured embeddings provider using a dedicated
+  priority order (OpenAI &gt; OpenRouter &gt; Gemini).
+- provider is "openai" / "openrouter" / "gemini" / "ollama": force that provider (uses core env config when applicable).
+- provider is "openai_compatible": use OpenAI-compatible embeddings via RAG_EMBEDDINGS_* env vars.
+- otherwise: deterministic hash embeddings (offline).
 
-#### `get_object_header_by_attribute`
+<a id="spoon_ai.rag.vectorstores"></a>
+
+# Module `spoon_ai.rag.vectorstores`
+
+<a id="spoon_ai.rag.vectorstores.pinecone_store"></a>
+
+# Module `spoon_ai.rag.vectorstores.pinecone_store`
+
+<a id="spoon_ai.rag.vectorstores.registry"></a>
+
+# Module `spoon_ai.rag.vectorstores.registry`
+
+<a id="spoon_ai.rag.vectorstores.registry.get_vector_store"></a>
+
+#### `get_vector_store`
 
 ```python
-def get_object_header_by_attribute(
-        container_id: str,
-        attr_key: str,
-        attr_val: str,
+def get_vector_store(backend: Optional[str] = None) -> VectorStore
+```
+
+Return a vector store by backend name.
+
+Backends:
+- faiss: local/offline (mapped to in-memory cosine store)
+- pinecone: cloud Pinecone (requires PINECONE_API_KEY)
+- qdrant: local/cloud Qdrant (requires qdrant-client, default http://localhost:6333)
+- chroma: local Chroma (requires chromadb)
+
+<a id="spoon_ai.rag.vectorstores.chroma_store"></a>
+
+# Module `spoon_ai.rag.vectorstores.chroma_store`
+
+<a id="spoon_ai.rag.vectorstores.faiss_store"></a>
+
+# Module `spoon_ai.rag.vectorstores.faiss_store`
+
+<a id="spoon_ai.rag.vectorstores.faiss_store.FaissVectorStore"></a>
+
+## `FaissVectorStore` Objects
+
+```python
+class FaissVectorStore(VectorStore)
+```
+
+FAISS-backed local vector store (cosine via inner product + L2 norm).
+
+<a id="spoon_ai.rag.vectorstores.qdrant_store"></a>
+
+# Module `spoon_ai.rag.vectorstores.qdrant_store`
+
+<a id="spoon_ai.rag.vectorstores.base"></a>
+
+# Module `spoon_ai.rag.vectorstores.base`
+
+<a id="spoon_ai.rag.vectorstores.base.VectorStore"></a>
+
+## `VectorStore` Objects
+
+```python
+class VectorStore(ABC)
+```
+
+<a id="spoon_ai.rag.vectorstores.base.VectorStore.query"></a>
+
+#### `query`
+
+```python
+@abstractmethod
+def query(
         *,
-        bearer_token: Optional[str] = None,
-        range_header: str | None = None) -> httpx.Response
+        collection: str,
+        query_embeddings: List[List[float]],
+        top_k: int = 5,
+        filter: Optional[Dict] = None) -> List[List[Tuple[str, float, Dict]]]
 ```
 
-Get object header by attribute. Bearer token is optional for public containers.
+Return per-query list of (id, score, metadata). Higher score is better.
 
-<a id="spoon_ai.neofs.client.NeoFSClient.delete_object"></a>
+<a id="spoon_ai.wallet"></a>
 
-#### `delete_object`
-
-```python
-def delete_object(container_id: str,
-                  object_id: str,
-                  *,
-                  bearer_token: Optional[str] = None) -> SuccessResponse
-```
-
-Delete object. Bearer token is optional for public containers, required for eACL containers with DENY DELETE rule.
-
-<a id="spoon_ai.neofs.client.NeoFSClient.search_objects"></a>
-
-#### `search_objects`
-
-```python
-def search_objects(container_id: str,
-                   search_request: SearchRequest,
-                   *,
-                   bearer_token: Optional[str] = None,
-                   cursor: str = "",
-                   limit: int = 100) -> ObjectListV2
-```
-
-Search objects. Bearer token is optional for public containers.
-
-<a id="spoon_ai.neofs.client.NeoFSException"></a>
-
-## `NeoFSException` Objects
-
-```python
-class NeoFSException(Exception)
-```
-
-Base exception for the NeoFS client.
-
-<a id="spoon_ai.neofs.client.NeoFSAPIException"></a>
-
-## `NeoFSAPIException` Objects
-
-```python
-class NeoFSAPIException(NeoFSException)
-```
-
-Raised when the API returns an error.
-
-<a id="spoon_ai.neofs.models"></a>
-
-# Module `spoon_ai.neofs.models`
-
-Pydantic models describing NeoFS REST API payloads.
-
-<a id="spoon_ai.neofs.models.NetworkInfo"></a>
-
-## `NetworkInfo` Objects
-
-```python
-class NetworkInfo(BaseModel)
-```
-
-Describes network configuration fees reported by the gateway.
-
-<a id="spoon_ai.neofs.utils"></a>
-
-# Module `spoon_ai.neofs.utils`
-
-<a id="spoon_ai.neofs.utils.SignatureError"></a>
-
-## `SignatureError` Objects
-
-```python
-class SignatureError(Exception)
-```
-
-Raised when signature payload construction fails.
-
-<a id="spoon_ai.neofs.utils.sign_bearer_token"></a>
-
-#### `sign_bearer_token`
-
-```python
-def sign_bearer_token(bearer_token: str,
-                      private_key_wif: str,
-                      *,
-                      wallet_connect: bool = True) -> tuple[str, str]
-```
-
-Returns (signature_hex, compressed_pubkey_hex)
-
-- wallet_connect=True:
-    msg = WC format (with prefix/len/salt/postfix), hash=SHA-256
-    X-Bearer-Signature = &lt;DER signature hex&gt; + &lt;16B salt hex&gt;
-    X-Bearer-Signature-Key = &lt;compressed public key hex&gt;
-    URL needs to append ?walletConnect=true
+# Module `spoon_ai.wallet`
 
 <a id="spoon_ai.wallet.encrypt_key"></a>
 
@@ -19375,10 +17875,6 @@ Returns (signature_hex, compressed_pubkey_hex)
 Interactive helper to produce ENC:v2 payloads for PRIVATE_KEY (or any secret).
 
 Uses AES-256-GCM encryption with Argon2id key derivation.
-
-<a id="spoon_ai.wallet"></a>
-
-# Module `spoon_ai.wallet`
 
 <a id="spoon_ai.wallet.security"></a>
 
@@ -19744,115 +18240,1509 @@ def get_vault() -> SecretVault
 
 Get the singleton SecretVault instance.
 
-<a id="spoon_ai.payments.app"></a>
+<a id="spoon_ai.prompts"></a>
 
-# Module `spoon_ai.payments.app`
+# Module `spoon_ai.prompts`
 
-<a id="spoon_ai.payments.server"></a>
+<a id="spoon_ai.prompts.spoon_react"></a>
 
-# Module `spoon_ai.payments.server`
+# Module `spoon_ai.prompts.spoon_react`
 
-<a id="spoon_ai.payments.server.create_paywalled_router"></a>
+<a id="spoon_ai.prompts.toolcall"></a>
 
-#### `create_paywalled_router`
+# Module `spoon_ai.prompts.toolcall`
+
+<a id="spoon_ai.runnables"></a>
+
+# Module `spoon_ai.runnables`
+
+Runnable interface and utilities for composable AI components.
+
+This module provides the foundational Runnable interface that all Spoon AI
+components implement, enabling streaming, composition, and standardized execution.
+
+<a id="spoon_ai.runnables.events"></a>
+
+# Module `spoon_ai.runnables.events`
+
+<a id="spoon_ai.runnables.events.StreamEventBuilder"></a>
+
+## `StreamEventBuilder` Objects
 
 ```python
-def create_paywalled_router(
-    service: Optional[X402PaymentService] = None,
-    agent_factory: AgentFactory = _default_agent_factory,
-    payment_message: str = "Payment required to invoke this agent."
-) -> APIRouter
+class StreamEventBuilder()
 ```
 
-Build a FastAPI router that protects agent invocations behind an x402 paywall.
+<a id="spoon_ai.runnables.events.StreamEventBuilder.chain_start"></a>
+
+#### `chain_start`
+
+```python
+@staticmethod
+def chain_start(run_id: UUID, name: str, inputs: Any,
+                **kwargs: Any) -> StreamEvent
+```
+
+Build chain start event.
+
+<a id="spoon_ai.runnables.events.StreamEventBuilder.chain_stream"></a>
+
+#### `chain_stream`
+
+```python
+@staticmethod
+def chain_stream(run_id: UUID, name: str, chunk: Any,
+                 **kwargs: Any) -> StreamEvent
+```
+
+Build chain stream event.
+
+<a id="spoon_ai.runnables.events.StreamEventBuilder.chain_end"></a>
+
+#### `chain_end`
+
+```python
+@staticmethod
+def chain_end(run_id: UUID, name: str, output: Any,
+              **kwargs: Any) -> StreamEvent
+```
+
+Build chain end event.
+
+<a id="spoon_ai.runnables.events.StreamEventBuilder.chain_error"></a>
+
+#### `chain_error`
+
+```python
+@staticmethod
+def chain_error(run_id: UUID, name: str, error: Exception,
+                **kwargs: Any) -> StreamEvent
+```
+
+Build chain error event.
+
+<a id="spoon_ai.runnables.events.StreamEventBuilder.llm_stream"></a>
+
+#### `llm_stream`
+
+```python
+@staticmethod
+def llm_stream(run_id: UUID,
+               name: str,
+               token: str,
+               chunk: Optional[Any] = None,
+               **kwargs: Any) -> StreamEvent
+```
+
+Build LLM stream event.
+
+<a id="spoon_ai.runnables.base"></a>
+
+# Module `spoon_ai.runnables.base`
+
+<a id="spoon_ai.runnables.base.log_patches_from_events"></a>
+
+#### `log_patches_from_events`
+
+```python
+async def log_patches_from_events(
+        event_iter: AsyncIterator[Dict[str, Any]],
+        *,
+        diff: bool = True) -> AsyncIterator[RunLogPatch]
+```
+
+Convert a stream of events into run log patches.
+
+<a id="spoon_ai.runnables.base.Runnable"></a>
+
+## `Runnable` Objects
+
+```python
+class Runnable(ABC, Generic[Input, Output])
+```
+
+<a id="spoon_ai.runnables.base.Runnable.astream_log"></a>
+
+#### `astream_log`
+
+```python
+async def astream_log(input: Input,
+                      config: Optional[RunnableConfig] = None,
+                      *,
+                      diff: bool = True) -> AsyncIterator[RunLogPatch]
+```
+
+Asynchronously stream structured log patches derived from execution events.
+
+<a id="spoon_ai.runnables.base.Runnable.astream_events"></a>
+
+#### `astream_events`
+
+```python
+async def astream_events(
+        input: Input,
+        config: Optional[RunnableConfig] = None
+) -> AsyncIterator[Dict[str, Any]]
+```
+
+Asynchronously stream structured execution events.
+
+<a id="spoon_ai.skills"></a>
+
+# Module `spoon_ai.skills`
+
+Skill system for SpoonAI agents.
+
+This module provides a Claude Skills-compatible system for defining and managing
+agent capabilities through SKILL.md files and optional Python tools.
+
+Key Components:
+- Skill: Data model representing a skill with metadata and triggers
+- SkillLoader: Discovers and parses SKILL.md files from configured paths
+- SkillRegistry: Thread-safe registry with fast trigger matching
+- SkillManager: Central lifecycle manager with LLM intent analysis
+- ScriptExecutor: Async subprocess execution for skill scripts
+
+Script Execution:
+Skills can define scripts (Python, shell, bash) that agents can execute.
+Users control whether scripts are allowed; AI decides how to use them.
+
+Usage:
+    from spoon_ai.skills import SkillManager, Skill
+
+    # Create manager with auto-discovery and script support
+    manager = SkillManager(auto_discover=True, scripts_enabled=True)
+
+    # Activate a skill
+    skill = await manager.activate("research", &#123;"topic": "AI"&#125;)
+
+    # Get prompt injection for active skills
+    context = manager.get_active_context()
+
+    # Execute a skill script
+    result = await manager.execute_script("data-processor", "analyze")
+
+    # Find matching skills for user input
+    matches = await manager.find_matching_skills("research quantum computing")
+
+<a id="spoon_ai.skills.script_tool"></a>
+
+# Module `spoon_ai.skills.script_tool`
+
+Script-based tool for agent integration.
+
+Wraps SkillScript as a BaseTool that agents can call.
+AI decides how to use scripts - users only control whether scripts are allowed.
+
+<a id="spoon_ai.skills.script_tool.ScriptTool"></a>
+
+## `ScriptTool` Objects
+
+```python
+class ScriptTool(BaseTool)
+```
+
+Tool wrapper for skill scripts.
+
+Exposes a SkillScript as a callable tool that agents can invoke.
+When the script defines an ``input_schema``, the tool parameters are
+derived from that schema so the LLM receives a structured contract.
+Otherwise a generic ``input`` string parameter is used for backward
+compatibility.
+
+<a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(script: SkillScript,
+             skill_name: str,
+             working_directory: Optional[str] = None)
+```
+
+Create a tool from a script definition.
 
 **Arguments**:
 
-- `service` - Optional pre-configured payment service.
-- `agent_factory` - Coroutine that returns an initialized agent given its name.
-- `payment_message` - Message displayed when payment is required.
+- `script` - SkillScript to wrap
+- `skill_name` - Parent skill name
+- `working_directory` - Base working directory
+
+<a id="spoon_ai.skills.script_tool.ScriptTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(input: Optional[str] = None, **kwargs) -> str
+```
+
+Execute the script.
+
+When the script declares an ``input_schema``, the LLM's structured
+kwargs are serialized to JSON and piped to stdin.  For legacy scripts
+that only declare a generic ``input`` string, the raw value is passed
+through as-is.
+
+**Arguments**:
+
+- `input` - Optional input text (legacy path)
+- `**kwargs` - Structured arguments matching input_schema
   
 
 **Returns**:
 
-- `APIRouter` - Router with `/invoke/&#123;agent_name&#125;` endpoint ready to mount.
+  Script output as string
 
-<a id="spoon_ai.payments.config"></a>
+<a id="spoon_ai.skills.script_tool.ScriptTool.to_param"></a>
 
-# Module `spoon_ai.payments.config`
-
-<a id="spoon_ai.payments.config.X402ConfigurationError"></a>
-
-## `X402ConfigurationError` Objects
+#### `to_param`
 
 ```python
-class X402ConfigurationError(Exception)
+def to_param() -> dict
 ```
 
-Raised when required x402 configuration is missing or invalid.
+Generate OpenAI-compatible function definition.
 
-<a id="spoon_ai.payments.config.X402PaywallBranding"></a>
+<a id="spoon_ai.skills.script_tool.create_script_tools"></a>
 
-## `X402PaywallBranding` Objects
+#### `create_script_tools`
 
 ```python
-class X402PaywallBranding(BaseModel)
+def create_script_tools(
+        skill_name: str,
+        scripts: List[SkillScript],
+        working_directory: Optional[str] = None) -> List[ScriptTool]
 ```
 
-Optional branding customisations for the embedded paywall template.
+Create ScriptTool instances from script definitions.
 
-<a id="spoon_ai.payments.config.X402ClientConfig"></a>
+**Arguments**:
 
-## `X402ClientConfig` Objects
+- `skill_name` - Parent skill name
+- `scripts` - List of script definitions
+- `working_directory` - Base working directory (fallback if script has none)
+  
+
+**Returns**:
+
+  List of ScriptTool instances
+
+<a id="spoon_ai.skills.models"></a>
+
+# Module `spoon_ai.skills.models`
+
+Skill system data models.
+
+Pydantic schemas for skill definition, following Anthropic Skills specification
+with XSpoonAi extensions.
+
+<a id="spoon_ai.skills.models.SkillState"></a>
+
+## `SkillState` Objects
 
 ```python
-class X402ClientConfig(BaseModel)
+class SkillState(str, Enum)
 ```
 
-Holds client-side signing configuration used for outbound payments.
+Skill activation state.
 
-<a id="spoon_ai.payments.config.X402Settings"></a>
+<a id="spoon_ai.skills.models.ScriptType"></a>
 
-## `X402Settings` Objects
+## `ScriptType` Objects
 
 ```python
-class X402Settings(BaseModel)
+class ScriptType(str, Enum)
 ```
 
-Resolved configuration view for x402 payments inside SpoonOS.
+Supported script execution types.
 
-<a id="spoon_ai.payments.config.X402Settings.amount_in_atomic_units"></a>
+<a id="spoon_ai.skills.models.SkillScript"></a>
 
-#### `amount_in_atomic_units`
+## `SkillScript` Objects
+
+```python
+class SkillScript(BaseModel)
+```
+
+Script definition within a skill.
+
+Scripts are executed by the agent when needed. The AI decides
+how to call scripts - users only control whether scripts are allowed.
+
+Example in SKILL.md:
+    scripts:
+      - name: fetch_data
+        description: Fetch latest market data
+        type: python
+        file: scripts/fetch_data.py
+
+<a id="spoon_ai.skills.models.SkillScript.validate_source"></a>
+
+#### `validate_source`
+
+```python
+@model_validator(mode='after')
+def validate_source()
+```
+
+Ensure either file or inline is provided.
+
+<a id="spoon_ai.skills.models.ScriptConfig"></a>
+
+## `ScriptConfig` Objects
+
+```python
+class ScriptConfig(BaseModel)
+```
+
+Script configuration section in skill metadata.
+
+Example in SKILL.md:
+    scripts:
+      enabled: true
+      working_directory: ./scripts
+      definitions:
+        - name: analyze
+          type: python
+          file: analyze.py
+
+<a id="spoon_ai.skills.models.ScriptConfig.get_script"></a>
+
+#### `get_script`
+
+```python
+def get_script(name: str) -> Optional[SkillScript]
+```
+
+Get script by name.
+
+<a id="spoon_ai.skills.models.ScriptConfig.get_activation_scripts"></a>
+
+#### `get_activation_scripts`
+
+```python
+def get_activation_scripts() -> List[SkillScript]
+```
+
+Get scripts to run on activation.
+
+<a id="spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts"></a>
+
+#### `get_deactivation_scripts`
+
+```python
+def get_deactivation_scripts() -> List[SkillScript]
+```
+
+Get scripts to run on deactivation.
+
+<a id="spoon_ai.skills.models.ScriptResult"></a>
+
+## `ScriptResult` Objects
+
+```python
+class ScriptResult(BaseModel)
+```
+
+Result of script execution.
+
+<a id="spoon_ai.skills.models.ScriptResult.to_string"></a>
+
+#### `to_string`
+
+```python
+def to_string() -> str
+```
+
+Convert to string for agent context.
+
+<a id="spoon_ai.skills.models.SkillTrigger"></a>
+
+## `SkillTrigger` Objects
+
+```python
+class SkillTrigger(BaseModel)
+```
+
+Trigger configuration for skill activation.
+
+<a id="spoon_ai.skills.models.SkillParameter"></a>
+
+## `SkillParameter` Objects
+
+```python
+class SkillParameter(BaseModel)
+```
+
+Parameter definition for skills.
+
+<a id="spoon_ai.skills.models.SkillPrerequisite"></a>
+
+## `SkillPrerequisite` Objects
+
+```python
+class SkillPrerequisite(BaseModel)
+```
+
+Prerequisites for skill execution.
+
+<a id="spoon_ai.skills.models.SkillMetadata"></a>
+
+## `SkillMetadata` Objects
+
+```python
+class SkillMetadata(BaseModel)
+```
+
+Skill metadata from YAML frontmatter.
+
+Required fields (Anthropic-compatible):
+- name: Unique skill identifier
+- description: Human-readable description
+
+Optional fields (XSpoonAi extensions):
+- triggers, parameters, prerequisites, composes, etc.
+
+<a id="spoon_ai.skills.models.SkillMetadata.has_scripts"></a>
+
+#### `has_scripts`
+
+```python
+def has_scripts() -> bool
+```
+
+Check if skill has scripts defined.
+
+<a id="spoon_ai.skills.models.SkillMetadata.scripts_enabled"></a>
+
+#### `scripts_enabled`
+
+```python
+def scripts_enabled() -> bool
+```
+
+Check if scripts are enabled for this skill.
+
+<a id="spoon_ai.skills.models.Skill"></a>
+
+## `Skill` Objects
+
+```python
+class Skill(BaseModel)
+```
+
+Complete skill definition.
+
+Combines metadata from YAML frontmatter with markdown instructions.
+
+<a id="spoon_ai.skills.models.Skill.name"></a>
+
+#### `name`
 
 ```python
 @property
-def amount_in_atomic_units() -> str
+def name() -> str
 ```
 
-Return the configured maximum amount encoded as atomic units (string).
+Convenience property for skill name.
 
-<a id="spoon_ai.payments.config.X402Settings.build_asset_extra"></a>
+<a id="spoon_ai.skills.models.Skill.description"></a>
 
-#### `build_asset_extra`
+#### `description`
 
 ```python
-def build_asset_extra() -> Dict[str, Any]
+@property
+def description() -> str
 ```
 
-Construct the `extra` payload for the payment requirements.
+Convenience property for skill description.
 
-<a id="spoon_ai.payments.config.X402Settings.load"></a>
+<a id="spoon_ai.skills.models.Skill.get_prompt_injection"></a>
+
+#### `get_prompt_injection`
+
+```python
+def get_prompt_injection() -> str
+```
+
+Generate prompt content to inject into agent's system prompt.
+
+**Returns**:
+
+  Formatted skill instructions with metadata
+
+<a id="spoon_ai.skills.manager"></a>
+
+# Module `spoon_ai.skills.manager`
+
+Central skill manager for lifecycle, discovery, and activation.
+
+Reuses:
+- IntentAnalyzer from graph/builder.py for LLM-powered matching
+- InMemoryCheckpointer from graph/checkpointer.py for state persistence
+
+Script execution support:
+- Runs activation/deactivation scripts automatically
+- Creates ScriptTool instances for agent access
+- Global and per-skill script enable/disable
+
+<a id="spoon_ai.skills.manager.SkillManager"></a>
+
+## `SkillManager` Objects
+
+```python
+class SkillManager()
+```
+
+Central manager for skill lifecycle, discovery, and activation.
+
+Features:
+- Multi-path skill discovery
+- Keyword and pattern-based trigger matching
+- LLM-powered intent matching (via IntentAnalyzer)
+- State persistence (via InMemoryCheckpointer)
+- Skill composition (prerequisite activation)
+
+<a id="spoon_ai.skills.manager.SkillManager.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(skill_paths: Optional[List[str]] = None,
+             llm: Optional["LLMManager"] = None,
+             auto_discover: bool = True,
+             scripts_enabled: bool = True,
+             include_default_paths: bool = True)
+```
+
+Initialize the skill manager.
+
+**Arguments**:
+
+- `skill_paths` - Additional directories to search for skills
+- `llm` - LLM manager for intent-based matching
+- `auto_discover` - Whether to auto-discover skills on init
+- `scripts_enabled` - Whether to allow script execution globally
+
+<a id="spoon_ai.skills.manager.SkillManager.discover"></a>
+
+#### `discover`
+
+```python
+def discover() -> int
+```
+
+Discover and register all skills from configured paths.
+
+**Returns**:
+
+  Number of skills discovered
+
+<a id="spoon_ai.skills.manager.SkillManager.add_skill_path"></a>
+
+#### `add_skill_path`
+
+```python
+def add_skill_path(path: str) -> None
+```
+
+Add a path to search for skills.
+
+**Arguments**:
+
+- `path` - Directory path to add
+
+<a id="spoon_ai.skills.manager.SkillManager.register"></a>
+
+#### `register`
+
+```python
+def register(skill: Skill) -> None
+```
+
+Register a skill manually.
+
+<a id="spoon_ai.skills.manager.SkillManager.unregister"></a>
+
+#### `unregister`
+
+```python
+def unregister(name: str) -> bool
+```
+
+Unregister a skill by name.
+
+Also deactivates if currently active.
+
+<a id="spoon_ai.skills.manager.SkillManager.get"></a>
+
+#### `get`
+
+```python
+def get(name: str) -> Optional[Skill]
+```
+
+Get a skill by name.
+
+<a id="spoon_ai.skills.manager.SkillManager.list"></a>
+
+#### `list`
+
+```python
+def list() -> List[str]
+```
+
+List all registered skill names.
+
+<a id="spoon_ai.skills.manager.SkillManager.list_skills"></a>
+
+#### `list_skills`
+
+```python
+def list_skills() -> List[Skill]
+```
+
+List all registered skills.
+
+<a id="spoon_ai.skills.manager.SkillManager.match_triggers"></a>
+
+#### `match_triggers`
+
+```python
+def match_triggers(text: str) -> List[Skill]
+```
+
+Match skills by keywords and patterns (fast, no LLM).
+
+**Arguments**:
+
+- `text` - User input to match against
+  
+
+**Returns**:
+
+  List of matching skills, sorted by priority
+
+<a id="spoon_ai.skills.manager.SkillManager.match_intent"></a>
+
+#### `match_intent`
+
+```python
+async def match_intent(text: str) -> List[Skill]
+```
+
+Match skills by LLM-powered intent analysis.
+
+**Arguments**:
+
+- `text` - User input to analyze
+  
+
+**Returns**:
+
+  List of matching skills
+
+<a id="spoon_ai.skills.manager.SkillManager.find_matching_skills"></a>
+
+#### `find_matching_skills`
+
+```python
+async def find_matching_skills(text: str,
+                               use_intent: bool = True) -> List[Skill]
+```
+
+Find all matching skills using both trigger and intent matching.
+
+**Arguments**:
+
+- `text` - User input to match
+- `use_intent` - Whether to also use LLM intent matching
+  
+
+**Returns**:
+
+  Combined list of matching skills (deduplicated)
+
+<a id="spoon_ai.skills.manager.SkillManager.activate"></a>
+
+#### `activate`
+
+```python
+async def activate(name: str,
+                   context: Optional[Dict[str, Any]] = None) -> Skill
+```
+
+Activate a skill with prerequisite checking.
+
+**Arguments**:
+
+- `name` - Skill name to activate
+- `context` - Optional context data for the skill
+  
+
+**Returns**:
+
+  Activated Skill instance
+  
+
+**Raises**:
+
+- `ValueError` - If skill not found or prerequisites not met
+
+<a id="spoon_ai.skills.manager.SkillManager.deactivate"></a>
+
+#### `deactivate`
+
+```python
+async def deactivate(name: str) -> bool
+```
+
+Deactivate an active skill.
+
+Persists state if configured. Runs deactivation scripts.
+
+**Arguments**:
+
+- `name` - Skill name to deactivate
+  
+
+**Returns**:
+
+  True if deactivated, False if not active
+
+<a id="spoon_ai.skills.manager.SkillManager.deactivate_all"></a>
+
+#### `deactivate_all`
+
+```python
+async def deactivate_all() -> int
+```
+
+Deactivate all active skills.
+
+**Returns**:
+
+  Number of skills deactivated
+
+<a id="spoon_ai.skills.manager.SkillManager.get_active_context"></a>
+
+#### `get_active_context`
+
+```python
+def get_active_context() -> str
+```
+
+Generate combined prompt content for all active skills.
+
+**Returns**:
+
+  Formatted skill instructions for injection into system prompt
+
+<a id="spoon_ai.skills.manager.SkillManager.get_active_tools"></a>
+
+#### `get_active_tools`
+
+```python
+def get_active_tools() -> List[BaseTool]
+```
+
+Get all tools from active skills.
+
+Includes both Python tools (from tools.py) and script tools.
+
+**Returns**:
+
+  List of tool instances from active skills
+
+<a id="spoon_ai.skills.manager.SkillManager.get_active_skill_names"></a>
+
+#### `get_active_skill_names`
+
+```python
+def get_active_skill_names() -> List[str]
+```
+
+Get names of all active skills.
+
+<a id="spoon_ai.skills.manager.SkillManager.is_active"></a>
+
+#### `is_active`
+
+```python
+def is_active(name: str) -> bool
+```
+
+Check if a skill is currently active.
+
+<a id="spoon_ai.skills.manager.SkillManager.execute_script"></a>
+
+#### `execute_script`
+
+```python
+async def execute_script(skill_name: str,
+                         script_name: str,
+                         input_text: Optional[str] = None) -> ScriptResult
+```
+
+Execute a specific script from a skill.
+
+**Arguments**:
+
+- `skill_name` - Name of the skill containing the script
+- `script_name` - Name of the script to execute
+- `input_text` - Optional input to pass to the script
+  
+
+**Returns**:
+
+  ScriptResult with execution details
+  
+
+**Raises**:
+
+- `ValueError` - If skill or script not found
+
+<a id="spoon_ai.skills.manager.SkillManager.set_scripts_enabled"></a>
+
+#### `set_scripts_enabled`
+
+```python
+def set_scripts_enabled(enabled: bool) -> None
+```
+
+Enable or disable script execution globally.
+
+**Arguments**:
+
+- `enabled` - Whether to enable script execution
+
+<a id="spoon_ai.skills.manager.SkillManager.get_script_tools"></a>
+
+#### `get_script_tools`
+
+```python
+def get_script_tools(skill_name: str) -> List[ScriptTool]
+```
+
+Get script tools for a specific skill.
+
+**Arguments**:
+
+- `skill_name` - Name of the skill
+  
+
+**Returns**:
+
+  List of ScriptTool instances for the skill
+
+<a id="spoon_ai.skills.manager.SkillManager.get_skill_info"></a>
+
+#### `get_skill_info`
+
+```python
+def get_skill_info(name: str) -> Optional[Dict[str, Any]]
+```
+
+Get detailed information about a skill.
+
+**Arguments**:
+
+- `name` - Skill name
+  
+
+**Returns**:
+
+  Dictionary with skill details or None if not found
+
+<a id="spoon_ai.skills.manager.SkillManager.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, Any]
+```
+
+Get statistics about the skill system.
+
+<a id="spoon_ai.skills.registry"></a>
+
+# Module `spoon_ai.skills.registry`
+
+Thread-safe skill registry with indexing.
+
+Follows NodePluginSystem pattern from graph/builder.py.
+
+<a id="spoon_ai.skills.registry.SkillRegistry"></a>
+
+## `SkillRegistry` Objects
+
+```python
+class SkillRegistry()
+```
+
+Thread-safe registry for skills with fast trigger matching.
+
+Maintains indexes for:
+- Tags: O(1) lookup by tag
+- Keywords: O(1) lookup by keyword
+- Intents: O(1) lookup by intent category
+- Patterns: Compiled regex patterns for matching
+
+<a id="spoon_ai.skills.registry.SkillRegistry.register"></a>
+
+#### `register`
+
+```python
+def register(skill: Skill) -> None
+```
+
+Register a skill and update indexes.
+
+**Arguments**:
+
+- `skill` - Skill to register
+
+<a id="spoon_ai.skills.registry.SkillRegistry.unregister"></a>
+
+#### `unregister`
+
+```python
+def unregister(name: str) -> bool
+```
+
+Remove a skill from the registry.
+
+**Arguments**:
+
+- `name` - Skill name to remove
+  
+
+**Returns**:
+
+  True if removed, False if not found
+
+<a id="spoon_ai.skills.registry.SkillRegistry.get"></a>
+
+#### `get`
+
+```python
+def get(name: str) -> Optional[Skill]
+```
+
+Get a skill by name.
+
+**Arguments**:
+
+- `name` - Skill name
+  
+
+**Returns**:
+
+  Skill or None if not found
+
+<a id="spoon_ai.skills.registry.SkillRegistry.list_names"></a>
+
+#### `list_names`
+
+```python
+def list_names() -> List[str]
+```
+
+Get all registered skill names.
+
+<a id="spoon_ai.skills.registry.SkillRegistry.list_skills"></a>
+
+#### `list_skills`
+
+```python
+def list_skills() -> List[Skill]
+```
+
+Get all registered skills.
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_tag"></a>
+
+#### `find_by_tag`
+
+```python
+def find_by_tag(tag: str) -> List[Skill]
+```
+
+Find skills by tag.
+
+**Arguments**:
+
+- `tag` - Tag to search for
+  
+
+**Returns**:
+
+  List of matching skills
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_keyword"></a>
+
+#### `find_by_keyword`
+
+```python
+def find_by_keyword(text: str) -> List[Skill]
+```
+
+Find skills by keyword matching.
+
+Extracts words from text and matches against keyword index.
+
+**Arguments**:
+
+- `text` - Text to match keywords against
+  
+
+**Returns**:
+
+  List of matching skills (deduplicated)
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_pattern"></a>
+
+#### `find_by_pattern`
+
+```python
+def find_by_pattern(text: str) -> List[Skill]
+```
+
+Find skills by regex pattern matching.
+
+**Arguments**:
+
+- `text` - Text to match patterns against
+  
+
+**Returns**:
+
+  List of matching skills
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_by_intent"></a>
+
+#### `find_by_intent`
+
+```python
+def find_by_intent(intent_category: str) -> List[Skill]
+```
+
+Find skills by intent category.
+
+**Arguments**:
+
+- `intent_category` - Intent category to match
+  
+
+**Returns**:
+
+  List of matching skills
+
+<a id="spoon_ai.skills.registry.SkillRegistry.find_all_matching"></a>
+
+#### `find_all_matching`
+
+```python
+def find_all_matching(text: str) -> List[Skill]
+```
+
+Find all skills matching by keywords or patterns.
+
+Combines keyword and pattern matching, sorted by trigger priority.
+
+**Arguments**:
+
+- `text` - Text to match against
+  
+
+**Returns**:
+
+  List of matching skills, sorted by priority (highest first)
+
+<a id="spoon_ai.skills.registry.SkillRegistry.get_intent_categories"></a>
+
+#### `get_intent_categories`
+
+```python
+def get_intent_categories() -> List[str]
+```
+
+Get all registered intent categories.
+
+<a id="spoon_ai.skills.executor"></a>
+
+# Module `spoon_ai.skills.executor`
+
+Script execution engine for skills.
+
+Provides async subprocess management for executing skill scripts.
+AI decides how to call scripts - users only control whether scripts are allowed.
+
+<a id="spoon_ai.skills.executor.MAX_OUTPUT_SIZE"></a>
+
+#### `MAX_OUTPUT_SIZE`
+
+5MB
+
+<a id="spoon_ai.skills.executor.ScriptExecutionError"></a>
+
+## `ScriptExecutionError` Objects
+
+```python
+class ScriptExecutionError(Exception)
+```
+
+Raised when script execution fails.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor"></a>
+
+## `ScriptExecutor` Objects
+
+```python
+class ScriptExecutor()
+```
+
+Async script executor for skill scripts.
+
+Features:
+- Async subprocess execution with timeout
+- Support for Python, shell, bash scripts
+- Environment variable passthrough
+- Output capture and size limiting
+- Global enable/disable control
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(enabled: bool = True,
+             default_timeout: int = DEFAULT_TIMEOUT,
+             max_output_size: int = MAX_OUTPUT_SIZE,
+             env_passthrough: Optional[List[str]] = None)
+```
+
+Initialize script executor.
+
+**Arguments**:
+
+- `enabled` - Whether script execution is allowed
+- `default_timeout` - Default timeout in seconds
+- `max_output_size` - Max output capture size in bytes
+- `env_passthrough` - Environment variables to pass through
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.is_available"></a>
+
+#### `is_available`
+
+```python
+def is_available(script_type: ScriptType) -> bool
+```
+
+Check if a script type can be executed.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.get_interpreter"></a>
+
+#### `get_interpreter`
+
+```python
+def get_interpreter(script_type: ScriptType) -> Optional[str]
+```
+
+Get interpreter path for a script type.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(script: SkillScript,
+                  input_text: Optional[str] = None,
+                  working_directory: Optional[str] = None,
+                  extra_env: Optional[Dict[str, str]] = None,
+                  timeout: Optional[int] = None) -> ScriptResult
+```
+
+Execute a script asynchronously.
+
+**Arguments**:
+
+- `script` - Script to execute
+- `input_text` - Optional text to pass to script via stdin
+- `working_directory` - Working directory for execution
+- `extra_env` - Additional environment variables
+- `timeout` - Timeout override (uses script.timeout or default)
+  
+
+**Returns**:
+
+  ScriptResult with output and status
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, int]
+```
+
+Get execution statistics.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.set_enabled"></a>
+
+#### `set_enabled`
+
+```python
+def set_enabled(enabled: bool) -> None
+```
+
+Enable or disable script execution.
+
+<a id="spoon_ai.skills.executor.get_executor"></a>
+
+#### `get_executor`
+
+```python
+def get_executor() -> ScriptExecutor
+```
+
+Get or create the global script executor.
+
+<a id="spoon_ai.skills.executor.configure_executor"></a>
+
+#### `configure_executor`
+
+```python
+def configure_executor(**kwargs) -> ScriptExecutor
+```
+
+Configure and return the global executor.
+
+<a id="spoon_ai.skills.executor.set_scripts_enabled"></a>
+
+#### `set_scripts_enabled`
+
+```python
+def set_scripts_enabled(enabled: bool) -> None
+```
+
+Enable or disable script execution globally.
+
+<a id="spoon_ai.skills.loader"></a>
+
+# Module `spoon_ai.skills.loader`
+
+Skill loader for parsing SKILL.md files.
+
+Discovers and loads skills from multiple paths:
+1. ~/.spoon/skills/ - Global user skills
+2. ./skills/ - Project-local skills
+3. Additional user-specified paths
+
+Note: No built-in skills are included by default.
+Use additional_paths to specify skill directories.
+
+<a id="spoon_ai.skills.loader.SkillLoader"></a>
+
+## `SkillLoader` Objects
+
+```python
+class SkillLoader()
+```
+
+Loads skills from SKILL.md files with optional Python tool modules.
+
+SKILL.md Format:
+---
+name: my-skill
+description: What this skill does
+version: 1.0.0
+triggers:
+  - type: keyword
+    keywords: [analyze, review]
+---
+
+__Skill Instructions__
+
+
+Markdown content here...
+
+<a id="spoon_ai.skills.loader.SkillLoader.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(additional_paths: Optional[List[Path]] = None,
+             include_default_paths: bool = True)
+```
+
+Initialize loader with skill search paths.
+
+**Arguments**:
+
+- `additional_paths` - Additional directories to search for skills
+
+<a id="spoon_ai.skills.loader.SkillLoader.paths"></a>
+
+#### `paths`
+
+```python
+@property
+def paths() -> List[Path]
+```
+
+Get configured skill paths.
+
+<a id="spoon_ai.skills.loader.SkillLoader.add_path"></a>
+
+#### `add_path`
+
+```python
+def add_path(path: Path) -> None
+```
+
+Add a path to search for skills.
+
+<a id="spoon_ai.skills.loader.SkillLoader.discover"></a>
+
+#### `discover`
+
+```python
+def discover() -> List[Path]
+```
+
+Discover all SKILL.md files in configured paths.
+
+**Returns**:
+
+  List of paths to SKILL.md files
+
+<a id="spoon_ai.skills.loader.SkillLoader.parse"></a>
+
+#### `parse`
+
+```python
+def parse(file_path: Path) -> Tuple[SkillMetadata, str]
+```
+
+Parse a SKILL.md file into metadata and instructions.
+
+**Arguments**:
+
+- `file_path` - Path to SKILL.md file
+  
+
+**Returns**:
+
+  Tuple of (SkillMetadata, instructions_markdown)
+  
+
+**Raises**:
+
+- `ValueError` - If file format is invalid
+
+<a id="spoon_ai.skills.loader.SkillLoader.load_tools"></a>
+
+#### `load_tools`
+
+```python
+def load_tools(skill_dir: Path) -> List[BaseTool]
+```
+
+Load Python tools from a skill directory.
+
+Looks for tools.py containing BaseTool subclasses.
+
+**Arguments**:
+
+- `skill_dir` - Directory containing the skill
+  
+
+**Returns**:
+
+  List of loaded tool instances
+
+<a id="spoon_ai.skills.loader.SkillLoader.load"></a>
 
 #### `load`
 
 ```python
-@classmethod
-def load(cls,
-         config_manager: Optional[ConfigManager] = None) -> "X402Settings"
+def load(file_path: Path) -> Skill
 ```
 
-Load settings from config.json with .env fallbacks.
+Load a complete skill from SKILL.md and optional modules.
+
+**Arguments**:
+
+- `file_path` - Path to SKILL.md file
+  
+
+**Returns**:
+
+  Loaded Skill instance
+
+<a id="spoon_ai.skills.loader.SkillLoader.load_all"></a>
+
+#### `load_all`
+
+```python
+def load_all() -> Dict[str, Skill]
+```
+
+Discover and load all skills from configured paths.
+
+**Returns**:
+
+  Dictionary mapping skill names to Skill instances
+
+<a id="spoon_ai.skills.loader.SkillLoader.get_skill"></a>
+
+#### `get_skill`
+
+```python
+def get_skill(name: str) -> Optional[Skill]
+```
+
+Get a loaded skill by name.
+
+<a id="spoon_ai.skills.loader.SkillLoader.get_tools"></a>
+
+#### `get_tools`
+
+```python
+def get_tools(skill_name: str) -> List[BaseTool]
+```
+
+Get loaded tools for a skill.
+
+<a id="spoon_ai.skills.loader.SkillLoader.clear_cache"></a>
+
+#### `clear_cache`
+
+```python
+def clear_cache() -> None
+```
+
+Clear all cached skills and tools.
+
+<a id="spoon_ai.skills.loader.SkillLoader.reload"></a>
+
+#### `reload`
+
+```python
+def reload(name: str) -> Optional[Skill]
+```
+
+Reload a specific skill from disk.
+
+**Arguments**:
+
+- `name` - Skill name to reload
+  
+
+**Returns**:
+
+  Reloaded Skill or None if not found
 
 <a id="spoon_ai.payments"></a>
 
@@ -19864,23 +19754,71 @@ This package wraps the upstream `x402` Python SDK with configuration and service
 abstractions that align to SpoonOS conventions (config.json priority, .env overrides,
 and async-friendly helper utilities).
 
-<a id="spoon_ai.payments.facilitator_client"></a>
+<a id="spoon_ai.payments.app"></a>
 
-# Module `spoon_ai.payments.facilitator_client`
+# Module `spoon_ai.payments.app`
 
-<a id="spoon_ai.payments.facilitator_client.X402FacilitatorClient"></a>
+<a id="spoon_ai.payments.x402_service"></a>
 
-## `X402FacilitatorClient` Objects
+# Module `spoon_ai.payments.x402_service`
+
+<a id="spoon_ai.payments.x402_service.X402PaymentService"></a>
+
+## `X402PaymentService` Objects
 
 ```python
-class X402FacilitatorClient()
+class X402PaymentService()
 ```
 
-Thin wrapper over the upstream facilitator client with async header hooks.
+High level service that aligns the x402 SDK with SpoonOS conventions.
 
-<a id="spoon_ai.payments.cli"></a>
+<a id="spoon_ai.payments.x402_service.X402PaymentService.discover_resources"></a>
 
-# Module `spoon_ai.payments.cli`
+#### `discover_resources`
+
+```python
+async def discover_resources(
+        *,
+        resource_type: Optional[str] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None) -> ListDiscoveryResourcesResponse
+```
+
+Query the facilitator discovery endpoint for registered paywalled resources.
+
+<a id="spoon_ai.payments.x402_service.X402PaymentService.render_paywall_html"></a>
+
+#### `render_paywall_html`
+
+```python
+def render_paywall_html(error: str,
+                        request: Optional[X402PaymentRequest] = None,
+                        headers: Optional[Dict[str, Any]] = None) -> str
+```
+
+Render the embedded paywall HTML with payment requirements.
+
+<a id="spoon_ai.payments.x402_service.X402PaymentService.build_payment_header"></a>
+
+#### `build_payment_header`
+
+```python
+def build_payment_header(requirements: PaymentRequirements,
+                         *,
+                         max_value: Optional[int] = None) -> str
+```
+
+Create a signed X-PAYMENT header for outbound requests.
+
+<a id="spoon_ai.payments.x402_service.X402PaymentService.decode_payment_response"></a>
+
+#### `decode_payment_response`
+
+```python
+def decode_payment_response(header_value: str) -> X402PaymentReceipt
+```
+
+Decode an X-PAYMENT-RESPONSE header into a structured receipt.
 
 <a id="spoon_ai.payments.exceptions"></a>
 
@@ -19980,65 +19918,127 @@ class X402PaymentReceipt(BaseModel)
 
 Decoded representation of the X-PAYMENT-RESPONSE header.
 
-<a id="spoon_ai.payments.x402_service"></a>
+<a id="spoon_ai.payments.config"></a>
 
-# Module `spoon_ai.payments.x402_service`
+# Module `spoon_ai.payments.config`
 
-<a id="spoon_ai.payments.x402_service.X402PaymentService"></a>
+<a id="spoon_ai.payments.config.X402ConfigurationError"></a>
 
-## `X402PaymentService` Objects
-
-```python
-class X402PaymentService()
-```
-
-High level service that aligns the x402 SDK with SpoonOS conventions.
-
-<a id="spoon_ai.payments.x402_service.X402PaymentService.discover_resources"></a>
-
-#### `discover_resources`
+## `X402ConfigurationError` Objects
 
 ```python
-async def discover_resources(
-        *,
-        resource_type: Optional[str] = None,
-        limit: Optional[int] = None,
-        offset: Optional[int] = None) -> ListDiscoveryResourcesResponse
+class X402ConfigurationError(Exception)
 ```
 
-Query the facilitator discovery endpoint for registered paywalled resources.
+Raised when required x402 configuration is missing or invalid.
 
-<a id="spoon_ai.payments.x402_service.X402PaymentService.render_paywall_html"></a>
+<a id="spoon_ai.payments.config.X402PaywallBranding"></a>
 
-#### `render_paywall_html`
+## `X402PaywallBranding` Objects
 
 ```python
-def render_paywall_html(error: str,
-                        request: Optional[X402PaymentRequest] = None,
-                        headers: Optional[Dict[str, Any]] = None) -> str
+class X402PaywallBranding(BaseModel)
 ```
 
-Render the embedded paywall HTML with payment requirements.
+Optional branding customisations for the embedded paywall template.
 
-<a id="spoon_ai.payments.x402_service.X402PaymentService.build_payment_header"></a>
+<a id="spoon_ai.payments.config.X402ClientConfig"></a>
 
-#### `build_payment_header`
+## `X402ClientConfig` Objects
 
 ```python
-def build_payment_header(requirements: PaymentRequirements,
-                         *,
-                         max_value: Optional[int] = None) -> str
+class X402ClientConfig(BaseModel)
 ```
 
-Create a signed X-PAYMENT header for outbound requests.
+Holds client-side signing configuration used for outbound payments.
 
-<a id="spoon_ai.payments.x402_service.X402PaymentService.decode_payment_response"></a>
+<a id="spoon_ai.payments.config.X402Settings"></a>
 
-#### `decode_payment_response`
+## `X402Settings` Objects
 
 ```python
-def decode_payment_response(header_value: str) -> X402PaymentReceipt
+class X402Settings(BaseModel)
 ```
 
-Decode an X-PAYMENT-RESPONSE header into a structured receipt.
+Resolved configuration view for x402 payments inside SpoonOS.
+
+<a id="spoon_ai.payments.config.X402Settings.amount_in_atomic_units"></a>
+
+#### `amount_in_atomic_units`
+
+```python
+@property
+def amount_in_atomic_units() -> str
+```
+
+Return the configured maximum amount encoded as atomic units (string).
+
+<a id="spoon_ai.payments.config.X402Settings.build_asset_extra"></a>
+
+#### `build_asset_extra`
+
+```python
+def build_asset_extra() -> Dict[str, Any]
+```
+
+Construct the `extra` payload for the payment requirements.
+
+<a id="spoon_ai.payments.config.X402Settings.load"></a>
+
+#### `load`
+
+```python
+@classmethod
+def load(cls,
+         config_manager: Optional[ConfigManager] = None) -> "X402Settings"
+```
+
+Load settings from config.json with .env fallbacks.
+
+<a id="spoon_ai.payments.cli"></a>
+
+# Module `spoon_ai.payments.cli`
+
+<a id="spoon_ai.payments.facilitator_client"></a>
+
+# Module `spoon_ai.payments.facilitator_client`
+
+<a id="spoon_ai.payments.facilitator_client.X402FacilitatorClient"></a>
+
+## `X402FacilitatorClient` Objects
+
+```python
+class X402FacilitatorClient()
+```
+
+Thin wrapper over the upstream facilitator client with async header hooks.
+
+<a id="spoon_ai.payments.server"></a>
+
+# Module `spoon_ai.payments.server`
+
+<a id="spoon_ai.payments.server.create_paywalled_router"></a>
+
+#### `create_paywalled_router`
+
+```python
+def create_paywalled_router(
+    service: Optional[X402PaymentService] = None,
+    agent_factory: AgentFactory = _default_agent_factory,
+    payment_message: str = "Payment required to invoke this agent."
+) -> APIRouter
+```
+
+Build a FastAPI router that protects agent invocations behind an x402 paywall.
+
+**Arguments**:
+
+- `service` - Optional pre-configured payment service.
+- `agent_factory` - Coroutine that returns an initialized agent given its name.
+- `payment_message` - Message displayed when payment is required.
+  
+
+**Returns**:
+
+- `APIRouter` - Router with `/invoke/&#123;agent_name&#125;` endpoint ready to mount.
 
