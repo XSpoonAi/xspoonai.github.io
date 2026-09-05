@@ -30,15 +30,6 @@ title: spoon_ai.middleware
     * [get\_current\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.get_current_plan)
     * [set\_plan](#spoon_ai.middleware.planning.PlanningMiddleware.set_plan)
   * [create\_planning\_middleware](#spoon_ai.middleware.planning.create_planning_middleware)
-* [spoon\_ai.middleware.prompt\_caching](#spoon_ai.middleware.prompt_caching)
-  * [is\_anthropic\_model](#spoon_ai.middleware.prompt_caching.is_anthropic_model)
-  * [add\_cache\_control](#spoon_ai.middleware.prompt_caching.add_cache_control)
-  * [should\_cache\_content](#spoon_ai.middleware.prompt_caching.should_cache_content)
-  * [AnthropicPromptCachingMiddleware](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.__init__)
-    * [awrap\_model\_call](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.awrap_model_call)
-    * [get\_stats](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.get_stats)
-  * [create\_prompt\_caching\_middleware](#spoon_ai.middleware.prompt_caching.create_prompt_caching_middleware)
 * [spoon\_ai.middleware.patch\_tool\_calls](#spoon_ai.middleware.patch_tool_calls)
   * [PatchToolCallsMiddleware](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware)
     * [\_\_init\_\_](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.__init__)
@@ -46,28 +37,6 @@ title: spoon_ai.middleware
     * [awrap\_model\_call](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.awrap_model_call)
     * [get\_stats](#spoon_ai.middleware.patch_tool_calls.PatchToolCallsMiddleware.get_stats)
   * [create\_patch\_tool\_calls\_middleware](#spoon_ai.middleware.patch_tool_calls.create_patch_tool_calls_middleware)
-* [spoon\_ai.middleware.filesystem](#spoon_ai.middleware.filesystem)
-  * [validate\_path](#spoon_ai.middleware.filesystem.validate_path)
-  * [LsTool](#spoon_ai.middleware.filesystem.LsTool)
-  * [ReadFileTool](#spoon_ai.middleware.filesystem.ReadFileTool)
-  * [WriteFileTool](#spoon_ai.middleware.filesystem.WriteFileTool)
-  * [EditFileTool](#spoon_ai.middleware.filesystem.EditFileTool)
-  * [GlobTool](#spoon_ai.middleware.filesystem.GlobTool)
-  * [GrepTool](#spoon_ai.middleware.filesystem.GrepTool)
-  * [ExecuteTool](#spoon_ai.middleware.filesystem.ExecuteTool)
-  * [get\_filesystem\_tools](#spoon_ai.middleware.filesystem.get_filesystem_tools)
-  * [FilesystemMiddleware](#spoon_ai.middleware.filesystem.FilesystemMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__)
-    * [tools](#spoon_ai.middleware.filesystem.FilesystemMiddleware.tools)
-    * [system\_prompt](#spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt)
-    * [backend](#spoon_ai.middleware.filesystem.FilesystemMiddleware.backend)
-    * [awrap\_model\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call)
-    * [awrap\_tool\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call)
-  * [create\_filesystem\_middleware](#spoon_ai.middleware.filesystem.create_filesystem_middleware)
-  * [create\_sandbox\_backend](#spoon_ai.middleware.filesystem.create_sandbox_backend)
-  * [LocalSandboxBackend](#spoon_ai.middleware.filesystem.LocalSandboxBackend)
-    * [execute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.execute)
-    * [aexecute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute)
 * [spoon\_ai.middleware.summarization](#spoon_ai.middleware.summarization)
   * [ContextFraction](#spoon_ai.middleware.summarization.ContextFraction)
   * [ContextTokens](#spoon_ai.middleware.summarization.ContextTokens)
@@ -80,6 +49,34 @@ title: spoon_ai.middleware
     * [awrap\_model\_call](#spoon_ai.middleware.summarization.SummarizationMiddleware.awrap_model_call)
     * [get\_stats](#spoon_ai.middleware.summarization.SummarizationMiddleware.get_stats)
   * [create\_summarization\_middleware](#spoon_ai.middleware.summarization.create_summarization_middleware)
+* [spoon\_ai.middleware.prompt\_caching](#spoon_ai.middleware.prompt_caching)
+  * [is\_anthropic\_model](#spoon_ai.middleware.prompt_caching.is_anthropic_model)
+  * [add\_cache\_control](#spoon_ai.middleware.prompt_caching.add_cache_control)
+  * [should\_cache\_content](#spoon_ai.middleware.prompt_caching.should_cache_content)
+  * [AnthropicPromptCachingMiddleware](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.__init__)
+    * [awrap\_model\_call](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.awrap_model_call)
+    * [get\_stats](#spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.get_stats)
+  * [create\_prompt\_caching\_middleware](#spoon_ai.middleware.prompt_caching.create_prompt_caching_middleware)
+* [spoon\_ai.middleware.todolist](#spoon_ai.middleware.todolist)
+  * [TodoStatus](#spoon_ai.middleware.todolist.TodoStatus)
+  * [TodoItem](#spoon_ai.middleware.todolist.TodoItem)
+  * [TodoList](#spoon_ai.middleware.todolist.TodoList)
+    * [format\_display](#spoon_ai.middleware.todolist.TodoList.format_display)
+  * [WriteTodosTool](#spoon_ai.middleware.todolist.WriteTodosTool)
+    * [execute](#spoon_ai.middleware.todolist.WriteTodosTool.execute)
+  * [ReadTodosTool](#spoon_ai.middleware.todolist.ReadTodosTool)
+    * [execute](#spoon_ai.middleware.todolist.ReadTodosTool.execute)
+  * [TodoListMiddleware](#spoon_ai.middleware.todolist.TodoListMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.todolist.TodoListMiddleware.__init__)
+    * [tools](#spoon_ai.middleware.todolist.TodoListMiddleware.tools)
+    * [system\_prompt](#spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt)
+    * [todo\_list](#spoon_ai.middleware.todolist.TodoListMiddleware.todo_list)
+    * [get\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state)
+    * [restore\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state)
+    * [awrap\_model\_call](#spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call)
+    * [before\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.before_agent)
+    * [after\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.after_agent)
 * [spoon\_ai.middleware.base](#spoon_ai.middleware.base)
   * [AgentPhase](#spoon_ai.middleware.base.AgentPhase)
     * [PLAN](#spoon_ai.middleware.base.AgentPhase.PLAN)
@@ -133,25 +130,28 @@ title: spoon_ai.middleware
     * [collect\_tools](#spoon_ai.middleware.base.MiddlewarePipeline.collect_tools)
     * [build\_system\_prompt](#spoon_ai.middleware.base.MiddlewarePipeline.build_system_prompt)
   * [create\_middleware\_pipeline](#spoon_ai.middleware.base.create_middleware_pipeline)
-* [spoon\_ai.middleware.todolist](#spoon_ai.middleware.todolist)
-  * [TodoStatus](#spoon_ai.middleware.todolist.TodoStatus)
-  * [TodoItem](#spoon_ai.middleware.todolist.TodoItem)
-  * [TodoList](#spoon_ai.middleware.todolist.TodoList)
-    * [format\_display](#spoon_ai.middleware.todolist.TodoList.format_display)
-  * [WriteTodosTool](#spoon_ai.middleware.todolist.WriteTodosTool)
-    * [execute](#spoon_ai.middleware.todolist.WriteTodosTool.execute)
-  * [ReadTodosTool](#spoon_ai.middleware.todolist.ReadTodosTool)
-    * [execute](#spoon_ai.middleware.todolist.ReadTodosTool.execute)
-  * [TodoListMiddleware](#spoon_ai.middleware.todolist.TodoListMiddleware)
-    * [\_\_init\_\_](#spoon_ai.middleware.todolist.TodoListMiddleware.__init__)
-    * [tools](#spoon_ai.middleware.todolist.TodoListMiddleware.tools)
-    * [system\_prompt](#spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt)
-    * [todo\_list](#spoon_ai.middleware.todolist.TodoListMiddleware.todo_list)
-    * [get\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state)
-    * [restore\_todos\_state](#spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state)
-    * [awrap\_model\_call](#spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call)
-    * [before\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.before_agent)
-    * [after\_agent](#spoon_ai.middleware.todolist.TodoListMiddleware.after_agent)
+* [spoon\_ai.middleware.filesystem](#spoon_ai.middleware.filesystem)
+  * [validate\_path](#spoon_ai.middleware.filesystem.validate_path)
+  * [LsTool](#spoon_ai.middleware.filesystem.LsTool)
+  * [ReadFileTool](#spoon_ai.middleware.filesystem.ReadFileTool)
+  * [WriteFileTool](#spoon_ai.middleware.filesystem.WriteFileTool)
+  * [EditFileTool](#spoon_ai.middleware.filesystem.EditFileTool)
+  * [GlobTool](#spoon_ai.middleware.filesystem.GlobTool)
+  * [GrepTool](#spoon_ai.middleware.filesystem.GrepTool)
+  * [ExecuteTool](#spoon_ai.middleware.filesystem.ExecuteTool)
+  * [get\_filesystem\_tools](#spoon_ai.middleware.filesystem.get_filesystem_tools)
+  * [FilesystemMiddleware](#spoon_ai.middleware.filesystem.FilesystemMiddleware)
+    * [\_\_init\_\_](#spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__)
+    * [tools](#spoon_ai.middleware.filesystem.FilesystemMiddleware.tools)
+    * [system\_prompt](#spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt)
+    * [backend](#spoon_ai.middleware.filesystem.FilesystemMiddleware.backend)
+    * [awrap\_model\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call)
+    * [awrap\_tool\_call](#spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call)
+  * [create\_filesystem\_middleware](#spoon_ai.middleware.filesystem.create_filesystem_middleware)
+  * [create\_sandbox\_backend](#spoon_ai.middleware.filesystem.create_sandbox_backend)
+  * [LocalSandboxBackend](#spoon_ai.middleware.filesystem.LocalSandboxBackend)
+    * [execute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.execute)
+    * [aexecute](#spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute)
 
 <a id="spoon_ai.middleware"></a>
 
@@ -458,203 +458,6 @@ Create a planning middleware with common settings.
 
   Configured PlanningMiddleware
 
-<a id="spoon_ai.middleware.prompt_caching"></a>
-
-# Module `spoon_ai.middleware.prompt_caching`
-
-Anthropic Prompt Caching Middleware.
-
-Adds cache_control markers to system prompts and messages for Anthropic models,
-enabling prompt caching to reduce costs and latency for repeated content.
-
-How Anthropic Prompt Caching Works:
-- Content marked with cache_control: &#123;"type": "ephemeral"&#125; is cached for ~5 minutes
-- Subsequent requests within the cache window reuse the cached content
-- This reduces input token costs and speeds up responses
-- Only works with Claude models (claude-3-*, claude-2-*, etc.)
-
-Compatible with LangChain DeepAgents AnthropicPromptCachingMiddleware interface.
-
-Usage:
-    from spoon_ai.middleware.prompt_caching import AnthropicPromptCachingMiddleware
-
-    agent = ToolCallAgent(
-        middleware=[AnthropicPromptCachingMiddleware()],
-        ...
-    )
-
-<a id="spoon_ai.middleware.prompt_caching.is_anthropic_model"></a>
-
-#### `is_anthropic_model`
-
-```python
-def is_anthropic_model(model_name: Optional[str]) -> bool
-```
-
-Check if a model name indicates an Anthropic Claude model.
-
-**Arguments**:
-
-- `model_name` - Model identifier string
-  
-
-**Returns**:
-
-  True if this is an Anthropic model that supports caching
-
-<a id="spoon_ai.middleware.prompt_caching.add_cache_control"></a>
-
-#### `add_cache_control`
-
-```python
-def add_cache_control(content: Any) -> Any
-```
-
-Add cache_control marker to content.
-
-Anthropic expects content to be a list of content blocks, where each
-block can have a cache_control field.
-
-**Arguments**:
-
-- `content` - Content to add cache control to (string or list of blocks)
-  
-
-**Returns**:
-
-  Content with cache_control added
-
-<a id="spoon_ai.middleware.prompt_caching.should_cache_content"></a>
-
-#### `should_cache_content`
-
-```python
-def should_cache_content(content: Any) -> bool
-```
-
-Determine if content is worth caching based on length.
-
-**Arguments**:
-
-- `content` - Content to evaluate
-  
-
-**Returns**:
-
-  True if content should be cached
-
-<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware"></a>
-
-## `AnthropicPromptCachingMiddleware` Objects
-
-```python
-class AnthropicPromptCachingMiddleware(AgentMiddleware)
-```
-
-Middleware that adds cache control markers for Anthropic prompt caching.
-
-When using Anthropic Claude models, this middleware:
-1. Adds cache_control to system prompts (if long enough)
-2. Optionally adds cache_control to tool definitions
-3. Skips caching for non-Anthropic models
-
-Benefits:
-- Reduces input token costs for repeated content
-- Speeds up response time for cached prompts
-- Automatic cache invalidation after ~5 minutes
-
-**Example**:
-
-    ```python
-    from spoon_ai.middleware.prompt_caching import AnthropicPromptCachingMiddleware
-
-    # Basic usage - caches system prompt
-    middleware = AnthropicPromptCachingMiddleware()
-
-    # With options
-    middleware = AnthropicPromptCachingMiddleware(
-        cache_system_prompt=True,
-        cache_tools=True,
-        min_cache_length=1024,
-        unsupported_model_behavior="ignore",  # or "warn"
-    )
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(cache_system_prompt: bool = True,
-             cache_tools: bool = True,
-             min_cache_length: int = MIN_CACHE_LENGTH,
-             unsupported_model_behavior: Literal["ignore", "warn"] = "ignore")
-```
-
-Initialize Anthropic prompt caching middleware.
-
-**Arguments**:
-
-- `cache_system_prompt` - Whether to cache the system prompt (default: True)
-- `cache_tools` - Whether to cache tool definitions (default: True)
-- `min_cache_length` - Minimum content length to cache (default: 1024 chars)
-- `unsupported_model_behavior` - What to do for non-Anthropic models:
-  - "ignore": Silently skip caching
-  - "warn": Log a warning and skip caching
-
-<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Add cache control markers before model call.
-
-<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, int]
-```
-
-Get caching statistics.
-
-<a id="spoon_ai.middleware.prompt_caching.create_prompt_caching_middleware"></a>
-
-#### `create_prompt_caching_middleware`
-
-```python
-def create_prompt_caching_middleware(
-    cache_system_prompt: bool = True,
-    cache_tools: bool = True,
-    min_cache_length: int = MIN_CACHE_LENGTH,
-    unsupported_model_behavior: Literal["ignore", "warn"] = "ignore"
-) -> AnthropicPromptCachingMiddleware
-```
-
-Create an Anthropic prompt caching middleware.
-
-**Arguments**:
-
-- `cache_system_prompt` - Whether to cache system prompts
-- `cache_tools` - Whether to cache tool definitions
-- `min_cache_length` - Minimum content length to cache
-- `unsupported_model_behavior` - How to handle non-Anthropic models
-  
-
-**Returns**:
-
-  Configured AnthropicPromptCachingMiddleware
-
 <a id="spoon_ai.middleware.patch_tool_calls"></a>
 
 # Module `spoon_ai.middleware.patch_tool_calls`
@@ -785,353 +588,6 @@ Create a PatchToolCalls middleware.
 **Returns**:
 
   Configured PatchToolCallsMiddleware
-
-<a id="spoon_ai.middleware.filesystem"></a>
-
-# Module `spoon_ai.middleware.filesystem`
-
-Filesystem Middleware - 7 Built-in Tools for File Operations.
-
-Provides filesystem tools to agents:
-1. ls - List files in directory
-2. read_file - Read file content
-3. write_file - Write new file
-4. edit_file - Edit existing file (string replacement)
-5. glob - Find files by pattern
-6. grep - Search content in files
-7. execute - Run shell commands (if backend supports)
-
-Compatible with LangChain DeepAgents filesystem middleware interface.
-
-Usage:
-    from spoon_ai.middleware.filesystem import FilesystemMiddleware
-    from spoon_ai.backends import create_state_backend
-
-    backend, runtime = create_state_backend()
-    middleware = FilesystemMiddleware(backend=backend)
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-
-<a id="spoon_ai.middleware.filesystem.validate_path"></a>
-
-#### `validate_path`
-
-```python
-def validate_path(path: str,
-                  allowed_prefixes: Optional[List[str]] = None) -> str
-```
-
-Validate and normalize file path for security.
-
-**Arguments**:
-
-- `path` - The path to validate
-- `allowed_prefixes` - Optional list of allowed path prefixes
-  
-
-**Returns**:
-
-  Normalized canonical path starting with /
-  
-
-**Raises**:
-
-- `ValueError` - If path contains traversal sequences or invalid format
-
-<a id="spoon_ai.middleware.filesystem.LsTool"></a>
-
-## `LsTool` Objects
-
-```python
-class LsTool(BaseTool)
-```
-
-List files in a directory.
-
-<a id="spoon_ai.middleware.filesystem.ReadFileTool"></a>
-
-## `ReadFileTool` Objects
-
-```python
-class ReadFileTool(BaseTool)
-```
-
-Read file content.
-
-<a id="spoon_ai.middleware.filesystem.WriteFileTool"></a>
-
-## `WriteFileTool` Objects
-
-```python
-class WriteFileTool(BaseTool)
-```
-
-Write to a new file.
-
-<a id="spoon_ai.middleware.filesystem.EditFileTool"></a>
-
-## `EditFileTool` Objects
-
-```python
-class EditFileTool(BaseTool)
-```
-
-Edit existing file with string replacement.
-
-<a id="spoon_ai.middleware.filesystem.GlobTool"></a>
-
-## `GlobTool` Objects
-
-```python
-class GlobTool(BaseTool)
-```
-
-Find files by glob pattern.
-
-<a id="spoon_ai.middleware.filesystem.GrepTool"></a>
-
-## `GrepTool` Objects
-
-```python
-class GrepTool(BaseTool)
-```
-
-Search for pattern in files.
-
-<a id="spoon_ai.middleware.filesystem.ExecuteTool"></a>
-
-## `ExecuteTool` Objects
-
-```python
-class ExecuteTool(BaseTool)
-```
-
-Execute shell command in sandbox.
-
-<a id="spoon_ai.middleware.filesystem.get_filesystem_tools"></a>
-
-#### `get_filesystem_tools`
-
-```python
-def get_filesystem_tools(backend: BackendProtocol) -> List[BaseTool]
-```
-
-Get all filesystem tools for a backend.
-
-**Arguments**:
-
-- `backend` - Backend to use for file operations
-  
-
-**Returns**:
-
-  List of 7 filesystem tools
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware"></a>
-
-## `FilesystemMiddleware` Objects
-
-```python
-class FilesystemMiddleware(AgentMiddleware)
-```
-
-Middleware for providing filesystem and execution tools to an agent.
-
-Adds 7 filesystem tools to the agent:
-- ls: list files in directory
-- read_file: read file content
-- write_file: write new file
-- edit_file: edit existing file
-- glob: find files by pattern
-- grep: search content in files
-- execute: run shell commands (if backend supports)
-
-**Example**:
-
-    ```python
-    from spoon_ai.middleware.filesystem import FilesystemMiddleware
-    from spoon_ai.backends import create_state_backend, create_composite_backend
-
-    # With ephemeral storage (default)
-    middleware = FilesystemMiddleware()
-
-    # With custom backend
-    backend, runtime = create_state_backend()
-    middleware = FilesystemMiddleware(backend=backend)
-
-    # With composite backend (mixed storage)
-    composite = create_composite_backend(
-        default=state_backend,
-        routes={"/persistent/": store_backend}
-    )
-    middleware = FilesystemMiddleware(backend=composite)
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(backend: Optional[BackendProtocol] = None,
-             system_prompt: Optional[str] = None,
-             include_execute: bool = True,
-             tool_token_limit: int = TOOL_TOKEN_LIMIT)
-```
-
-Initialize filesystem middleware.
-
-**Arguments**:
-
-- `backend` - Backend for file operations. Defaults to StateBackend.
-- `system_prompt` - Optional custom system prompt override.
-- `include_execute` - Whether to include execute tool (default: True)
-- `tool_token_limit` - Token limit before truncating tool results
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.tools"></a>
-
-#### `tools`
-
-```python
-@property
-def tools() -> List[BaseTool]
-```
-
-Get filesystem tools.
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt"></a>
-
-#### `system_prompt`
-
-```python
-@property
-def system_prompt() -> str
-```
-
-Get system prompt for filesystem tools.
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.backend"></a>
-
-#### `backend`
-
-```python
-@property
-def backend() -> BackendProtocol
-```
-
-Get the backend.
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call"></a>
-
-#### `awrap_model_call`
-
-```python
-async def awrap_model_call(request: ModelRequest,
-                           handler: Callable) -> ModelResponse
-```
-
-Inject system prompt for filesystem tools.
-
-<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call"></a>
-
-#### `awrap_tool_call`
-
-```python
-async def awrap_tool_call(request: ToolCallRequest,
-                          handler: Callable) -> ToolCallResult
-```
-
-Handle large tool results by truncating.
-
-<a id="spoon_ai.middleware.filesystem.create_filesystem_middleware"></a>
-
-#### `create_filesystem_middleware`
-
-```python
-def create_filesystem_middleware(
-        backend: Optional[BackendProtocol] = None,
-        include_execute: bool = True) -> FilesystemMiddleware
-```
-
-Create a filesystem middleware.
-
-**Arguments**:
-
-- `backend` - Backend for file operations
-- `include_execute` - Whether to include execute tool
-  
-
-**Returns**:
-
-  FilesystemMiddleware instance
-  
-
-**Example**:
-
-    ```python
-    middleware = create_filesystem_middleware()
-    agent = ToolCallAgent(middleware=[middleware], ...)
-    ```
-
-<a id="spoon_ai.middleware.filesystem.create_sandbox_backend"></a>
-
-#### `create_sandbox_backend`
-
-```python
-def create_sandbox_backend(root_dir: Optional[str] = None,
-                           timeout: int = 30) -> "LocalSandboxBackend"
-```
-
-Create a local sandbox backend that supports command execution.
-
-**Arguments**:
-
-- `root_dir` - Root directory for sandbox
-- `timeout` - Command execution timeout in seconds
-  
-
-**Returns**:
-
-  LocalSandboxBackend instance
-
-<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend"></a>
-
-## `LocalSandboxBackend` Objects
-
-```python
-class LocalSandboxBackend(SandboxBackendProtocol)
-```
-
-Local sandbox backend with command execution support.
-
-Wraps FilesystemBackend and adds execute capability.
-
-<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.execute"></a>
-
-#### `execute`
-
-```python
-def execute(command: str) -> ExecuteResponse
-```
-
-Execute a shell command.
-
-<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute"></a>
-
-#### `aexecute`
-
-```python
-async def aexecute(command: str) -> ExecuteResponse
-```
-
-Async execute a shell command.
 
 <a id="spoon_ai.middleware.summarization"></a>
 
@@ -1399,6 +855,434 @@ Create a summarization middleware.
 **Returns**:
 
   Configured SummarizationMiddleware
+
+<a id="spoon_ai.middleware.prompt_caching"></a>
+
+# Module `spoon_ai.middleware.prompt_caching`
+
+Anthropic Prompt Caching Middleware.
+
+Adds cache_control markers to system prompts and messages for Anthropic models,
+enabling prompt caching to reduce costs and latency for repeated content.
+
+How Anthropic Prompt Caching Works:
+- Content marked with cache_control: &#123;"type": "ephemeral"&#125; is cached for ~5 minutes
+- Subsequent requests within the cache window reuse the cached content
+- This reduces input token costs and speeds up responses
+- Only works with Claude models (claude-3-*, claude-2-*, etc.)
+
+Compatible with LangChain DeepAgents AnthropicPromptCachingMiddleware interface.
+
+Usage:
+    from spoon_ai.middleware.prompt_caching import AnthropicPromptCachingMiddleware
+
+    agent = ToolCallAgent(
+        middleware=[AnthropicPromptCachingMiddleware()],
+        ...
+    )
+
+<a id="spoon_ai.middleware.prompt_caching.is_anthropic_model"></a>
+
+#### `is_anthropic_model`
+
+```python
+def is_anthropic_model(model_name: Optional[str]) -> bool
+```
+
+Check if a model name indicates an Anthropic Claude model.
+
+**Arguments**:
+
+- `model_name` - Model identifier string
+  
+
+**Returns**:
+
+  True if this is an Anthropic model that supports caching
+
+<a id="spoon_ai.middleware.prompt_caching.add_cache_control"></a>
+
+#### `add_cache_control`
+
+```python
+def add_cache_control(content: Any) -> Any
+```
+
+Add cache_control marker to content.
+
+Anthropic expects content to be a list of content blocks, where each
+block can have a cache_control field.
+
+**Arguments**:
+
+- `content` - Content to add cache control to (string or list of blocks)
+  
+
+**Returns**:
+
+  Content with cache_control added
+
+<a id="spoon_ai.middleware.prompt_caching.should_cache_content"></a>
+
+#### `should_cache_content`
+
+```python
+def should_cache_content(content: Any) -> bool
+```
+
+Determine if content is worth caching based on length.
+
+**Arguments**:
+
+- `content` - Content to evaluate
+  
+
+**Returns**:
+
+  True if content should be cached
+
+<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware"></a>
+
+## `AnthropicPromptCachingMiddleware` Objects
+
+```python
+class AnthropicPromptCachingMiddleware(AgentMiddleware)
+```
+
+Middleware that adds cache control markers for Anthropic prompt caching.
+
+When using Anthropic Claude models, this middleware:
+1. Adds cache_control to system prompts (if long enough)
+2. Optionally adds cache_control to tool definitions
+3. Skips caching for non-Anthropic models
+
+Benefits:
+- Reduces input token costs for repeated content
+- Speeds up response time for cached prompts
+- Automatic cache invalidation after ~5 minutes
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.prompt_caching import AnthropicPromptCachingMiddleware
+
+    # Basic usage - caches system prompt
+    middleware = AnthropicPromptCachingMiddleware()
+
+    # With options
+    middleware = AnthropicPromptCachingMiddleware(
+        cache_system_prompt=True,
+        cache_tools=True,
+        min_cache_length=1024,
+        unsupported_model_behavior="ignore",  # or "warn"
+    )
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(cache_system_prompt: bool = True,
+             cache_tools: bool = True,
+             min_cache_length: int = MIN_CACHE_LENGTH,
+             unsupported_model_behavior: Literal["ignore", "warn"] = "ignore")
+```
+
+Initialize Anthropic prompt caching middleware.
+
+**Arguments**:
+
+- `cache_system_prompt` - Whether to cache the system prompt (default: True)
+- `cache_tools` - Whether to cache tool definitions (default: True)
+- `min_cache_length` - Minimum content length to cache (default: 1024 chars)
+- `unsupported_model_behavior` - What to do for non-Anthropic models:
+  - "ignore": Silently skip caching
+  - "warn": Log a warning and skip caching
+
+<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
+```
+
+Add cache control markers before model call.
+
+<a id="spoon_ai.middleware.prompt_caching.AnthropicPromptCachingMiddleware.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, int]
+```
+
+Get caching statistics.
+
+<a id="spoon_ai.middleware.prompt_caching.create_prompt_caching_middleware"></a>
+
+#### `create_prompt_caching_middleware`
+
+```python
+def create_prompt_caching_middleware(
+    cache_system_prompt: bool = True,
+    cache_tools: bool = True,
+    min_cache_length: int = MIN_CACHE_LENGTH,
+    unsupported_model_behavior: Literal["ignore", "warn"] = "ignore"
+) -> AnthropicPromptCachingMiddleware
+```
+
+Create an Anthropic prompt caching middleware.
+
+**Arguments**:
+
+- `cache_system_prompt` - Whether to cache system prompts
+- `cache_tools` - Whether to cache tool definitions
+- `min_cache_length` - Minimum content length to cache
+- `unsupported_model_behavior` - How to handle non-Anthropic models
+  
+
+**Returns**:
+
+  Configured AnthropicPromptCachingMiddleware
+
+<a id="spoon_ai.middleware.todolist"></a>
+
+# Module `spoon_ai.middleware.todolist`
+
+TodoList Middleware - Task Planning and Progress Tracking.
+
+Provides todo list tools to agents for structured task management:
+- write_todos: Create/update todo list with tasks
+- read_todos: Read current todo list state
+
+Compatible with LangChain DeepAgents TodoListMiddleware interface.
+
+Usage:
+    from spoon_ai.middleware.todolist import TodoListMiddleware
+
+    agent = ToolCallAgent(
+        middleware=[TodoListMiddleware()],
+        ...
+    )
+
+<a id="spoon_ai.middleware.todolist.TodoStatus"></a>
+
+## `TodoStatus` Objects
+
+```python
+class TodoStatus(str, Enum)
+```
+
+Status of a todo item.
+
+<a id="spoon_ai.middleware.todolist.TodoItem"></a>
+
+## `TodoItem` Objects
+
+```python
+@dataclass
+class TodoItem()
+```
+
+A single todo item.
+
+<a id="spoon_ai.middleware.todolist.TodoList"></a>
+
+## `TodoList` Objects
+
+```python
+@dataclass
+class TodoList()
+```
+
+Container for todo items.
+
+<a id="spoon_ai.middleware.todolist.TodoList.format_display"></a>
+
+#### `format_display`
+
+```python
+def format_display() -> str
+```
+
+Format todo list for display.
+
+<a id="spoon_ai.middleware.todolist.WriteTodosTool"></a>
+
+## `WriteTodosTool` Objects
+
+```python
+class WriteTodosTool(BaseTool)
+```
+
+Tool to create/update todo list.
+
+<a id="spoon_ai.middleware.todolist.WriteTodosTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(todos: List[Dict[str, Any]], **kwargs) -> str
+```
+
+Update the todo list.
+
+<a id="spoon_ai.middleware.todolist.ReadTodosTool"></a>
+
+## `ReadTodosTool` Objects
+
+```python
+class ReadTodosTool(BaseTool)
+```
+
+Tool to read current todo list.
+
+<a id="spoon_ai.middleware.todolist.ReadTodosTool.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(**kwargs) -> str
+```
+
+Read the current todo list.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware"></a>
+
+## `TodoListMiddleware` Objects
+
+```python
+class TodoListMiddleware(AgentMiddleware)
+```
+
+Middleware for providing todo list tools to an agent.
+
+Provides two tools:
+- write_todos: Create/update todo list
+- read_todos: Read current todo list
+
+**Example**:
+
+    ```python
+    from spoon_ai.middleware.todolist import TodoListMiddleware
+
+    middleware = TodoListMiddleware()
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(system_prompt: Optional[str] = None,
+             auto_inject_prompt: bool = True)
+```
+
+Initialize TodoList middleware.
+
+**Arguments**:
+
+- `system_prompt` - Optional custom system prompt override.
+- `auto_inject_prompt` - Whether to auto-inject system prompt (default: True)
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.tools"></a>
+
+#### `tools`
+
+```python
+@property
+def tools() -> List[BaseTool]
+```
+
+Get todo list tools.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt"></a>
+
+#### `system_prompt`
+
+```python
+@property
+def system_prompt() -> str
+```
+
+Get system prompt for todo list tools.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.todo_list"></a>
+
+#### `todo_list`
+
+```python
+@property
+def todo_list() -> TodoList
+```
+
+Get current todo list.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state"></a>
+
+#### `get_todos_state`
+
+```python
+def get_todos_state() -> Dict[str, Any]
+```
+
+Get todo list as state dict (for checkpointing).
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state"></a>
+
+#### `restore_todos_state`
+
+```python
+def restore_todos_state(state: Dict[str, Any]) -> None
+```
+
+Restore todo list from state dict.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call"></a>
+
+#### `awrap_model_call`
+
+```python
+async def awrap_model_call(request: ModelRequest,
+                           handler: Callable) -> ModelResponse
+```
+
+Inject system prompt for todo list tools.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.before_agent"></a>
+
+#### `before_agent`
+
+```python
+def before_agent(state: Dict[str, Any],
+                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Restore todo list from agent state if available.
+
+<a id="spoon_ai.middleware.todolist.TodoListMiddleware.after_agent"></a>
+
+#### `after_agent`
+
+```python
+def after_agent(state: Dict[str, Any],
+                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+```
+
+Save todo list to agent state.
 
 <a id="spoon_ai.middleware.base"></a>
 
@@ -2298,128 +2182,188 @@ Create middleware pipeline from middleware classes or instances.
   SummarizationMiddleware(),
   ])
 
-<a id="spoon_ai.middleware.todolist"></a>
+<a id="spoon_ai.middleware.filesystem"></a>
 
-# Module `spoon_ai.middleware.todolist`
+# Module `spoon_ai.middleware.filesystem`
 
-TodoList Middleware - Task Planning and Progress Tracking.
+Filesystem Middleware - 7 Built-in Tools for File Operations.
 
-Provides todo list tools to agents for structured task management:
-- write_todos: Create/update todo list with tasks
-- read_todos: Read current todo list state
+Provides filesystem tools to agents:
+1. ls - List files in directory
+2. read_file - Read file content
+3. write_file - Write new file
+4. edit_file - Edit existing file (string replacement)
+5. glob - Find files by pattern
+6. grep - Search content in files
+7. execute - Run shell commands (if backend supports)
 
-Compatible with LangChain DeepAgents TodoListMiddleware interface.
+Compatible with LangChain DeepAgents filesystem middleware interface.
 
 Usage:
-    from spoon_ai.middleware.todolist import TodoListMiddleware
+    from spoon_ai.middleware.filesystem import FilesystemMiddleware
+    from spoon_ai.backends import create_state_backend
+
+    backend, runtime = create_state_backend()
+    middleware = FilesystemMiddleware(backend=backend)
 
     agent = ToolCallAgent(
-        middleware=[TodoListMiddleware()],
+        middleware=[middleware],
         ...
     )
 
-<a id="spoon_ai.middleware.todolist.TodoStatus"></a>
+<a id="spoon_ai.middleware.filesystem.validate_path"></a>
 
-## `TodoStatus` Objects
-
-```python
-class TodoStatus(str, Enum)
-```
-
-Status of a todo item.
-
-<a id="spoon_ai.middleware.todolist.TodoItem"></a>
-
-## `TodoItem` Objects
+#### `validate_path`
 
 ```python
-@dataclass
-class TodoItem()
+def validate_path(path: str,
+                  allowed_prefixes: Optional[List[str]] = None) -> str
 ```
 
-A single todo item.
+Validate and normalize file path for security.
 
-<a id="spoon_ai.middleware.todolist.TodoList"></a>
+**Arguments**:
 
-## `TodoList` Objects
+- `path` - The path to validate
+- `allowed_prefixes` - Optional list of allowed path prefixes
+  
+
+**Returns**:
+
+  Normalized canonical path starting with /
+  
+
+**Raises**:
+
+- `ValueError` - If path contains traversal sequences or invalid format
+
+<a id="spoon_ai.middleware.filesystem.LsTool"></a>
+
+## `LsTool` Objects
 
 ```python
-@dataclass
-class TodoList()
+class LsTool(BaseTool)
 ```
 
-Container for todo items.
+List files in a directory.
 
-<a id="spoon_ai.middleware.todolist.TodoList.format_display"></a>
+<a id="spoon_ai.middleware.filesystem.ReadFileTool"></a>
 
-#### `format_display`
+## `ReadFileTool` Objects
 
 ```python
-def format_display() -> str
+class ReadFileTool(BaseTool)
 ```
 
-Format todo list for display.
+Read file content.
 
-<a id="spoon_ai.middleware.todolist.WriteTodosTool"></a>
+<a id="spoon_ai.middleware.filesystem.WriteFileTool"></a>
 
-## `WriteTodosTool` Objects
+## `WriteFileTool` Objects
 
 ```python
-class WriteTodosTool(BaseTool)
+class WriteFileTool(BaseTool)
 ```
 
-Tool to create/update todo list.
+Write to a new file.
 
-<a id="spoon_ai.middleware.todolist.WriteTodosTool.execute"></a>
+<a id="spoon_ai.middleware.filesystem.EditFileTool"></a>
 
-#### `execute`
+## `EditFileTool` Objects
 
 ```python
-async def execute(todos: List[Dict[str, Any]], **kwargs) -> str
+class EditFileTool(BaseTool)
 ```
 
-Update the todo list.
+Edit existing file with string replacement.
 
-<a id="spoon_ai.middleware.todolist.ReadTodosTool"></a>
+<a id="spoon_ai.middleware.filesystem.GlobTool"></a>
 
-## `ReadTodosTool` Objects
+## `GlobTool` Objects
 
 ```python
-class ReadTodosTool(BaseTool)
+class GlobTool(BaseTool)
 ```
 
-Tool to read current todo list.
+Find files by glob pattern.
 
-<a id="spoon_ai.middleware.todolist.ReadTodosTool.execute"></a>
+<a id="spoon_ai.middleware.filesystem.GrepTool"></a>
 
-#### `execute`
+## `GrepTool` Objects
 
 ```python
-async def execute(**kwargs) -> str
+class GrepTool(BaseTool)
 ```
 
-Read the current todo list.
+Search for pattern in files.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware"></a>
+<a id="spoon_ai.middleware.filesystem.ExecuteTool"></a>
 
-## `TodoListMiddleware` Objects
+## `ExecuteTool` Objects
 
 ```python
-class TodoListMiddleware(AgentMiddleware)
+class ExecuteTool(BaseTool)
 ```
 
-Middleware for providing todo list tools to an agent.
+Execute shell command in sandbox.
 
-Provides two tools:
-- write_todos: Create/update todo list
-- read_todos: Read current todo list
+<a id="spoon_ai.middleware.filesystem.get_filesystem_tools"></a>
+
+#### `get_filesystem_tools`
+
+```python
+def get_filesystem_tools(backend: BackendProtocol) -> List[BaseTool]
+```
+
+Get all filesystem tools for a backend.
+
+**Arguments**:
+
+- `backend` - Backend to use for file operations
+  
+
+**Returns**:
+
+  List of 7 filesystem tools
+
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware"></a>
+
+## `FilesystemMiddleware` Objects
+
+```python
+class FilesystemMiddleware(AgentMiddleware)
+```
+
+Middleware for providing filesystem and execution tools to an agent.
+
+Adds 7 filesystem tools to the agent:
+- ls: list files in directory
+- read_file: read file content
+- write_file: write new file
+- edit_file: edit existing file
+- glob: find files by pattern
+- grep: search content in files
+- execute: run shell commands (if backend supports)
 
 **Example**:
 
     ```python
-    from spoon_ai.middleware.todolist import TodoListMiddleware
+    from spoon_ai.middleware.filesystem import FilesystemMiddleware
+    from spoon_ai.backends import create_state_backend, create_composite_backend
 
-    middleware = TodoListMiddleware()
+    # With ephemeral storage (default)
+    middleware = FilesystemMiddleware()
+
+    # With custom backend
+    backend, runtime = create_state_backend()
+    middleware = FilesystemMiddleware(backend=backend)
+
+    # With composite backend (mixed storage)
+    composite = create_composite_backend(
+        default=state_backend,
+        routes={"/persistent/": store_backend}
+    )
+    middleware = FilesystemMiddleware(backend=composite)
 
     agent = ToolCallAgent(
         middleware=[middleware],
@@ -2427,23 +2371,27 @@ Provides two tools:
     )
     ```
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.__init__"></a>
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(system_prompt: Optional[str] = None,
-             auto_inject_prompt: bool = True)
+def __init__(backend: Optional[BackendProtocol] = None,
+             system_prompt: Optional[str] = None,
+             include_execute: bool = True,
+             tool_token_limit: int = TOOL_TOKEN_LIMIT)
 ```
 
-Initialize TodoList middleware.
+Initialize filesystem middleware.
 
 **Arguments**:
 
+- `backend` - Backend for file operations. Defaults to StateBackend.
 - `system_prompt` - Optional custom system prompt override.
-- `auto_inject_prompt` - Whether to auto-inject system prompt (default: True)
+- `include_execute` - Whether to include execute tool (default: True)
+- `tool_token_limit` - Token limit before truncating tool results
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.tools"></a>
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.tools"></a>
 
 #### `tools`
 
@@ -2452,9 +2400,9 @@ Initialize TodoList middleware.
 def tools() -> List[BaseTool]
 ```
 
-Get todo list tools.
+Get filesystem tools.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.system_prompt"></a>
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.system_prompt"></a>
 
 #### `system_prompt`
 
@@ -2463,40 +2411,20 @@ Get todo list tools.
 def system_prompt() -> str
 ```
 
-Get system prompt for todo list tools.
+Get system prompt for filesystem tools.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.todo_list"></a>
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.backend"></a>
 
-#### `todo_list`
+#### `backend`
 
 ```python
 @property
-def todo_list() -> TodoList
+def backend() -> BackendProtocol
 ```
 
-Get current todo list.
+Get the backend.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.get_todos_state"></a>
-
-#### `get_todos_state`
-
-```python
-def get_todos_state() -> Dict[str, Any]
-```
-
-Get todo list as state dict (for checkpointing).
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.restore_todos_state"></a>
-
-#### `restore_todos_state`
-
-```python
-def restore_todos_state(state: Dict[str, Any]) -> None
-```
-
-Restore todo list from state dict.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.awrap_model_call"></a>
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_model_call"></a>
 
 #### `awrap_model_call`
 
@@ -2505,27 +2433,99 @@ async def awrap_model_call(request: ModelRequest,
                            handler: Callable) -> ModelResponse
 ```
 
-Inject system prompt for todo list tools.
+Inject system prompt for filesystem tools.
 
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.before_agent"></a>
+<a id="spoon_ai.middleware.filesystem.FilesystemMiddleware.awrap_tool_call"></a>
 
-#### `before_agent`
-
-```python
-def before_agent(state: Dict[str, Any],
-                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Restore todo list from agent state if available.
-
-<a id="spoon_ai.middleware.todolist.TodoListMiddleware.after_agent"></a>
-
-#### `after_agent`
+#### `awrap_tool_call`
 
 ```python
-def after_agent(state: Dict[str, Any],
-                runtime: AgentRuntime) -> Optional[Dict[str, Any]]
+async def awrap_tool_call(request: ToolCallRequest,
+                          handler: Callable) -> ToolCallResult
 ```
 
-Save todo list to agent state.
+Handle large tool results by truncating.
+
+<a id="spoon_ai.middleware.filesystem.create_filesystem_middleware"></a>
+
+#### `create_filesystem_middleware`
+
+```python
+def create_filesystem_middleware(
+        backend: Optional[BackendProtocol] = None,
+        include_execute: bool = True) -> FilesystemMiddleware
+```
+
+Create a filesystem middleware.
+
+**Arguments**:
+
+- `backend` - Backend for file operations
+- `include_execute` - Whether to include execute tool
+  
+
+**Returns**:
+
+  FilesystemMiddleware instance
+  
+
+**Example**:
+
+    ```python
+    middleware = create_filesystem_middleware()
+    agent = ToolCallAgent(middleware=[middleware], ...)
+    ```
+
+<a id="spoon_ai.middleware.filesystem.create_sandbox_backend"></a>
+
+#### `create_sandbox_backend`
+
+```python
+def create_sandbox_backend(root_dir: Optional[str] = None,
+                           timeout: int = 30) -> "LocalSandboxBackend"
+```
+
+Create a local sandbox backend that supports command execution.
+
+**Arguments**:
+
+- `root_dir` - Root directory for sandbox
+- `timeout` - Command execution timeout in seconds
+  
+
+**Returns**:
+
+  LocalSandboxBackend instance
+
+<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend"></a>
+
+## `LocalSandboxBackend` Objects
+
+```python
+class LocalSandboxBackend(SandboxBackendProtocol)
+```
+
+Local sandbox backend with command execution support.
+
+Wraps FilesystemBackend and adds execute capability.
+
+<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.execute"></a>
+
+#### `execute`
+
+```python
+def execute(command: str) -> ExecuteResponse
+```
+
+Execute a shell command.
+
+<a id="spoon_ai.middleware.filesystem.LocalSandboxBackend.aexecute"></a>
+
+#### `aexecute`
+
+```python
+async def aexecute(command: str) -> ExecuteResponse
+```
+
+Async execute a shell command.
 
