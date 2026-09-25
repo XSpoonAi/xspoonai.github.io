@@ -9,9 +9,16 @@ Traditional payments don't work for autonomous agents:
 | Problem | With Traditional Payments | With x402 |
 |---------|---------------------------|-----------|
 | Agent hits paywall | ❌ Wait for human to enter credit card | ✅ Auto-sign and retry |
-| Micropayments ($0.001) | ❌ Fees exceed payment | ✅ Low-cost on L2s |
+| Micropayments ($0.001) | ❌ Fees exceed payment | ✅ Low-cost on L2s (and zero-fee on a feeless native coin) |
 | Settlement | ❌ 1-3 days | ✅ Instant |
 | Verification | ❌ Trust Stripe API | ✅ Cryptographic proof |
+
+The x402 `exact` scheme is asset-agnostic: the server declares `scheme`, `network`, and
+`asset` per charge, so besides an L2 stablecoin the same handshake serves a fee-free
+native coin with no gas and no network fee for the buyer. A live merchant advertises
+`scheme: exact, network: nano:mainnet, asset: XNO` at 0.0001 XNO per call
+(`curl -s 'https://extract.paypercall.dev/api/v1/extract?url=https%3A%2F%2Fexample.com'`
+returns HTTP 402 with that `accepts[0]` entry, checkable directly).
 
 ## How It Works
 
