@@ -15,10 +15,10 @@ Traditional payments don't work for autonomous agents:
 
 The x402 `exact` scheme is asset-agnostic: the server declares `scheme`, `network`, and
 `asset` per charge, so besides an L2 stablecoin the same handshake serves a fee-free
-native coin with no gas and no network fee for the buyer. A live merchant advertises
-`scheme: exact, network: nano:mainnet, asset: XNO` at 0.0001 XNO per call
-(`curl -s 'https://extract.paypercall.dev/api/v1/extract?url=https%3A%2F%2Fexample.com'`
-returns HTTP 402 with that `accepts[0]` entry, checkable directly).
+native coin with no gas and no network fee for the buyer. For example, a live
+merchant's manifest (`curl -s https://extract.paypercall.dev/.well-known/x402`) lists
+`scheme: exact, network: nano:mainnet, asset: XNO` with `amount` 10^26 raw
+(0.0001 XNO) per call.
 
 ## How It Works
 
