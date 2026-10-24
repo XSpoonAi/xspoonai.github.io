@@ -7,62 +7,6 @@ title: spoon_ai.agents
 # Table of Contents
 
 * [spoon\_ai.agents](#spoon_ai.agents)
-* [spoon\_ai.agents.spoon\_react\_skill](#spoon_ai.agents.spoon_react_skill)
-  * [SpoonReactSkill](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill)
-    * [\_\_init\_\_](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__)
-    * [run](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.run)
-    * [initialize](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize)
-    * [add\_skill\_path](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path)
-    * [discover\_skills](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills)
-* [spoon\_ai.agents.mcp\_client\_mixin](#spoon_ai.agents.mcp_client_mixin)
-  * [MCPClientMixin](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin)
-    * [get\_session](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session)
-    * [list\_mcp\_tools](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.list_mcp_tools)
-    * [call\_mcp\_tool](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.call_mcp_tool)
-    * [send\_mcp\_message](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.send_mcp_message)
-    * [cleanup](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.cleanup)
-    * [get\_session\_stats](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session_stats)
-* [spoon\_ai.agents.subagents](#spoon_ai.agents.subagents)
-  * [Command](#spoon_ai.agents.subagents.Command)
-    * [update](#spoon_ai.agents.subagents.Command.update)
-    * [goto](#spoon_ai.agents.subagents.Command.goto)
-    * [resume](#spoon_ai.agents.subagents.Command.resume)
-    * [is\_resume](#spoon_ai.agents.subagents.Command.is_resume)
-    * [get\_decisions](#spoon_ai.agents.subagents.Command.get_decisions)
-  * [SubAgentSpec](#spoon_ai.agents.subagents.SubAgentSpec)
-    * [description](#spoon_ai.agents.subagents.SubAgentSpec.description)
-  * [CompiledSubAgent](#spoon_ai.agents.subagents.CompiledSubAgent)
-    * [runnable](#spoon_ai.agents.subagents.CompiledSubAgent.runnable)
-  * [SubAgentManager](#spoon_ai.agents.subagents.SubAgentManager)
-    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentManager.__init__)
-    * [get\_subagent](#spoon_ai.agents.subagents.SubAgentManager.get_subagent)
-    * [delegate\_task](#spoon_ai.agents.subagents.SubAgentManager.delegate_task)
-    * [create\_task\_tool](#spoon_ai.agents.subagents.SubAgentManager.create_task_tool)
-  * [SubAgentMiddleware](#spoon_ai.agents.subagents.SubAgentMiddleware)
-    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentMiddleware.__init__)
-    * [before\_agent](#spoon_ai.agents.subagents.SubAgentMiddleware.before_agent)
-  * [add\_subagent\_support](#spoon_ai.agents.subagents.add_subagent_support)
-  * [create\_general\_purpose\_subagent](#spoon_ai.agents.subagents.create_general_purpose_subagent)
-  * [create\_compiled\_subagent](#spoon_ai.agents.subagents.create_compiled_subagent)
-* [spoon\_ai.agents.rag](#spoon_ai.agents.rag)
-  * [RetrievalMixin](#spoon_ai.agents.rag.RetrievalMixin)
-    * [initialize\_retrieval\_client](#spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client)
-    * [add\_documents](#spoon_ai.agents.rag.RetrievalMixin.add_documents)
-    * [retrieve\_relevant\_documents](#spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents)
-    * [get\_context\_from\_query](#spoon_ai.agents.rag.RetrievalMixin.get_context_from_query)
-* [spoon\_ai.agents.spoon\_react\_mcp](#spoon_ai.agents.spoon_react_mcp)
-  * [SpoonReactMCP](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP)
-    * [list\_mcp\_tools](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools)
-* [spoon\_ai.agents.custom\_agent](#spoon_ai.agents.custom_agent)
-  * [CustomAgent](#spoon_ai.agents.custom_agent.CustomAgent)
-    * [add\_tool](#spoon_ai.agents.custom_agent.CustomAgent.add_tool)
-    * [add\_tools](#spoon_ai.agents.custom_agent.CustomAgent.add_tools)
-    * [remove\_tool](#spoon_ai.agents.custom_agent.CustomAgent.remove_tool)
-    * [list\_tools](#spoon_ai.agents.custom_agent.CustomAgent.list_tools)
-    * [get\_tool\_info](#spoon_ai.agents.custom_agent.CustomAgent.get_tool_info)
-    * [validate\_tools](#spoon_ai.agents.custom_agent.CustomAgent.validate_tools)
-    * [run](#spoon_ai.agents.custom_agent.CustomAgent.run)
-    * [clear](#spoon_ai.agents.custom_agent.CustomAgent.clear)
 * [spoon\_ai.agents.spoon\_react](#spoon_ai.agents.spoon_react)
   * [create\_configured\_chatbot](#spoon_ai.agents.spoon_react.create_configured_chatbot)
   * [SpoonReactAI](#spoon_ai.agents.spoon_react.SpoonReactAI)
@@ -70,36 +14,7 @@ title: spoon_ai.agents
     * [connect](#spoon_ai.agents.spoon_react.SpoonReactAI.connect)
     * [initialize](#spoon_ai.agents.spoon_react.SpoonReactAI.initialize)
     * [run](#spoon_ai.agents.spoon_react.SpoonReactAI.run)
-* [spoon\_ai.agents.react](#spoon_ai.agents.react)
-* [spoon\_ai.agents.graph\_agent](#spoon_ai.agents.graph_agent)
-  * [GraphAgent](#spoon_ai.agents.graph_agent.GraphAgent)
-    * [\_\_init\_\_](#spoon_ai.agents.graph_agent.GraphAgent.__init__)
-    * [validate\_graph](#spoon_ai.agents.graph_agent.GraphAgent.validate_graph)
-    * [run](#spoon_ai.agents.graph_agent.GraphAgent.run)
-    * [step](#spoon_ai.agents.graph_agent.GraphAgent.step)
-    * [get\_execution\_history](#spoon_ai.agents.graph_agent.GraphAgent.get_execution_history)
-    * [get\_execution\_metadata](#spoon_ai.agents.graph_agent.GraphAgent.get_execution_metadata)
-    * [clear\_state](#spoon_ai.agents.graph_agent.GraphAgent.clear_state)
-    * [update\_initial\_state](#spoon_ai.agents.graph_agent.GraphAgent.update_initial_state)
-    * [set\_preserve\_state](#spoon_ai.agents.graph_agent.GraphAgent.set_preserve_state)
-* [spoon\_ai.agents.toolcall](#spoon_ai.agents.toolcall)
-  * [ToolCallAgent](#spoon_ai.agents.toolcall.ToolCallAgent)
-    * [tool\_choices](#spoon_ai.agents.toolcall.ToolCallAgent.tool_choices)
-    * [mcp\_tools\_cache\_ttl](#spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl)
-    * [run](#spoon_ai.agents.toolcall.ToolCallAgent.run)
-    * [step](#spoon_ai.agents.toolcall.ToolCallAgent.step)
-    * [execute\_tool](#spoon_ai.agents.toolcall.ToolCallAgent.execute_tool)
-* [spoon\_ai.agents.skill\_mixin](#spoon_ai.agents.skill_mixin)
-  * [SkillEnabledMixin](#spoon_ai.agents.skill_mixin.SkillEnabledMixin)
-    * [activate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill)
-    * [deactivate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill)
-    * [auto\_activate\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills)
-    * [list\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills)
-    * [list\_active\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills)
-    * [get\_skill\_info](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info)
-    * [is\_skill\_active](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active)
-    * [deactivate\_all\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills)
-    * [get\_skill\_stats](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats)
+* [spoon\_ai.agents.monitor](#spoon_ai.agents.monitor)
 * [spoon\_ai.agents.base](#spoon_ai.agents.base)
   * [ThreadSafeOutputQueue](#spoon_ai.agents.base.ThreadSafeOutputQueue)
     * [put\_nowait](#spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait)
@@ -128,11 +43,992 @@ title: spoon_ai.agents
     * [set\_agent\_state](#spoon_ai.agents.base.BaseAgent.set_agent_state)
     * [update\_agent\_state](#spoon_ai.agents.base.BaseAgent.update_agent_state)
     * [get\_diagnostics](#spoon_ai.agents.base.BaseAgent.get_diagnostics)
-* [spoon\_ai.agents.monitor](#spoon_ai.agents.monitor)
+* [spoon\_ai.agents.spoon\_react\_mcp](#spoon_ai.agents.spoon_react_mcp)
+  * [SpoonReactMCP](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP)
+    * [list\_mcp\_tools](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools)
+* [spoon\_ai.agents.react](#spoon_ai.agents.react)
+* [spoon\_ai.agents.mcp\_client\_mixin](#spoon_ai.agents.mcp_client_mixin)
+  * [MCPClientMixin](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin)
+    * [get\_session](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session)
+    * [list\_mcp\_tools](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.list_mcp_tools)
+    * [call\_mcp\_tool](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.call_mcp_tool)
+    * [send\_mcp\_message](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.send_mcp_message)
+    * [cleanup](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.cleanup)
+    * [get\_session\_stats](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session_stats)
+* [spoon\_ai.agents.toolcall](#spoon_ai.agents.toolcall)
+  * [ToolCallAgent](#spoon_ai.agents.toolcall.ToolCallAgent)
+    * [tool\_choices](#spoon_ai.agents.toolcall.ToolCallAgent.tool_choices)
+    * [mcp\_tools\_cache\_ttl](#spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl)
+    * [run](#spoon_ai.agents.toolcall.ToolCallAgent.run)
+    * [step](#spoon_ai.agents.toolcall.ToolCallAgent.step)
+    * [execute\_tool](#spoon_ai.agents.toolcall.ToolCallAgent.execute_tool)
+* [spoon\_ai.agents.custom\_agent](#spoon_ai.agents.custom_agent)
+  * [CustomAgent](#spoon_ai.agents.custom_agent.CustomAgent)
+    * [add\_tool](#spoon_ai.agents.custom_agent.CustomAgent.add_tool)
+    * [add\_tools](#spoon_ai.agents.custom_agent.CustomAgent.add_tools)
+    * [remove\_tool](#spoon_ai.agents.custom_agent.CustomAgent.remove_tool)
+    * [list\_tools](#spoon_ai.agents.custom_agent.CustomAgent.list_tools)
+    * [get\_tool\_info](#spoon_ai.agents.custom_agent.CustomAgent.get_tool_info)
+    * [validate\_tools](#spoon_ai.agents.custom_agent.CustomAgent.validate_tools)
+    * [run](#spoon_ai.agents.custom_agent.CustomAgent.run)
+    * [clear](#spoon_ai.agents.custom_agent.CustomAgent.clear)
+* [spoon\_ai.agents.spoon\_react\_skill](#spoon_ai.agents.spoon_react_skill)
+  * [SpoonReactSkill](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill)
+    * [\_\_init\_\_](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__)
+    * [run](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.run)
+    * [initialize](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize)
+    * [add\_skill\_path](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path)
+    * [discover\_skills](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills)
+* [spoon\_ai.agents.subagents](#spoon_ai.agents.subagents)
+  * [Command](#spoon_ai.agents.subagents.Command)
+    * [update](#spoon_ai.agents.subagents.Command.update)
+    * [goto](#spoon_ai.agents.subagents.Command.goto)
+    * [resume](#spoon_ai.agents.subagents.Command.resume)
+    * [is\_resume](#spoon_ai.agents.subagents.Command.is_resume)
+    * [get\_decisions](#spoon_ai.agents.subagents.Command.get_decisions)
+  * [SubAgentSpec](#spoon_ai.agents.subagents.SubAgentSpec)
+    * [description](#spoon_ai.agents.subagents.SubAgentSpec.description)
+  * [CompiledSubAgent](#spoon_ai.agents.subagents.CompiledSubAgent)
+    * [runnable](#spoon_ai.agents.subagents.CompiledSubAgent.runnable)
+  * [SubAgentManager](#spoon_ai.agents.subagents.SubAgentManager)
+    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentManager.__init__)
+    * [get\_subagent](#spoon_ai.agents.subagents.SubAgentManager.get_subagent)
+    * [delegate\_task](#spoon_ai.agents.subagents.SubAgentManager.delegate_task)
+    * [create\_task\_tool](#spoon_ai.agents.subagents.SubAgentManager.create_task_tool)
+  * [SubAgentMiddleware](#spoon_ai.agents.subagents.SubAgentMiddleware)
+    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentMiddleware.__init__)
+    * [before\_agent](#spoon_ai.agents.subagents.SubAgentMiddleware.before_agent)
+  * [add\_subagent\_support](#spoon_ai.agents.subagents.add_subagent_support)
+  * [create\_general\_purpose\_subagent](#spoon_ai.agents.subagents.create_general_purpose_subagent)
+  * [create\_compiled\_subagent](#spoon_ai.agents.subagents.create_compiled_subagent)
+* [spoon\_ai.agents.rag](#spoon_ai.agents.rag)
+  * [RetrievalMixin](#spoon_ai.agents.rag.RetrievalMixin)
+    * [initialize\_retrieval\_client](#spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client)
+    * [add\_documents](#spoon_ai.agents.rag.RetrievalMixin.add_documents)
+    * [retrieve\_relevant\_documents](#spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents)
+    * [get\_context\_from\_query](#spoon_ai.agents.rag.RetrievalMixin.get_context_from_query)
+* [spoon\_ai.agents.skill\_mixin](#spoon_ai.agents.skill_mixin)
+  * [SkillEnabledMixin](#spoon_ai.agents.skill_mixin.SkillEnabledMixin)
+    * [activate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill)
+    * [deactivate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill)
+    * [auto\_activate\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills)
+    * [list\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills)
+    * [list\_active\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills)
+    * [get\_skill\_info](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info)
+    * [is\_skill\_active](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active)
+    * [deactivate\_all\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills)
+    * [get\_skill\_stats](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats)
+* [spoon\_ai.agents.graph\_agent](#spoon_ai.agents.graph_agent)
+  * [GraphAgent](#spoon_ai.agents.graph_agent.GraphAgent)
+    * [\_\_init\_\_](#spoon_ai.agents.graph_agent.GraphAgent.__init__)
+    * [validate\_graph](#spoon_ai.agents.graph_agent.GraphAgent.validate_graph)
+    * [run](#spoon_ai.agents.graph_agent.GraphAgent.run)
+    * [step](#spoon_ai.agents.graph_agent.GraphAgent.step)
+    * [get\_execution\_history](#spoon_ai.agents.graph_agent.GraphAgent.get_execution_history)
+    * [get\_execution\_metadata](#spoon_ai.agents.graph_agent.GraphAgent.get_execution_metadata)
+    * [clear\_state](#spoon_ai.agents.graph_agent.GraphAgent.clear_state)
+    * [update\_initial\_state](#spoon_ai.agents.graph_agent.GraphAgent.update_initial_state)
+    * [set\_preserve\_state](#spoon_ai.agents.graph_agent.GraphAgent.set_preserve_state)
 
 <a id="spoon_ai.agents"></a>
 
 # Module `spoon_ai.agents`
+
+<a id="spoon_ai.agents.spoon_react"></a>
+
+# Module `spoon_ai.agents.spoon_react`
+
+<a id="spoon_ai.agents.spoon_react.create_configured_chatbot"></a>
+
+#### `create_configured_chatbot`
+
+```python
+def create_configured_chatbot()
+```
+
+Create a ChatBot instance with intelligent provider selection.
+
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI"></a>
+
+## `SpoonReactAI` Objects
+
+```python
+class SpoonReactAI(MCPClientMixin, ToolCallAgent)
+```
+
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(**kwargs)
+```
+
+Initialize SpoonReactAI with both ToolCallAgent and MCPClientMixin initialization
+
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.connect"></a>
+
+#### `connect`
+
+```python
+async def connect()
+```
+
+Establish connection to MCP server.
+
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.initialize"></a>
+
+#### `initialize`
+
+```python
+async def initialize(__context: Any = None)
+```
+
+Initialize async components and subscribe to topics
+
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.run"></a>
+
+#### `run`
+
+```python
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None,
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
+```
+
+Ensure prompts reflect current tools before running.
+
+<a id="spoon_ai.agents.monitor"></a>
+
+# Module `spoon_ai.agents.monitor`
+
+<a id="spoon_ai.agents.base"></a>
+
+# Module `spoon_ai.agents.base`
+
+<a id="spoon_ai.agents.base.ThreadSafeOutputQueue"></a>
+
+## `ThreadSafeOutputQueue` Objects
+
+```python
+class ThreadSafeOutputQueue()
+```
+
+Thread-safe output queue with fair access and timeout protection
+
+<a id="spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait"></a>
+
+#### `put_nowait`
+
+```python
+def put_nowait(item: Any) -> None
+```
+
+Non-blocking put - delegates to the underlying asyncio.Queue.
+
+<a id="spoon_ai.agents.base.ThreadSafeOutputQueue.get"></a>
+
+#### `get`
+
+```python
+async def get(timeout: float | None = 30.0) -> Any
+```
+
+Get item with timeout and fair access
+
+<a id="spoon_ai.agents.base.BaseAgent"></a>
+
+## `BaseAgent` Objects
+
+```python
+class BaseAgent(BaseModel, ABC)
+```
+
+Thread-safe base class for all agents with proper concurrency handling.
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message"></a>
+
+#### `add_message`
+
+```python
+async def add_message(role: Literal["user", "assistant", "tool"],
+                      content: MessageContent,
+                      tool_call_id: str | None = None,
+                      tool_calls: list[ToolCall] | None = None,
+                      tool_name: str | None = None,
+                      timeout: float | None = None) -> None
+```
+
+Thread-safe message addition with timeout protection.
+
+Supports both text-only and multimodal content:
+- Text: content="Hello world"
+- Multimodal: content=[TextContent(...), ImageUrlContent(...)]
+
+**Arguments**:
+
+- `role` - Message role (user, assistant, tool)
+- `content` - Text string or list of content blocks for multimodal messages
+- `tool_call_id` - ID for tool responses
+- `tool_calls` - List of tool calls for assistant messages
+- `tool_name` - Name of the tool for tool responses
+- `timeout` - Operation timeout in seconds
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_image"></a>
+
+#### `add_message_with_image`
+
+```python
+async def add_message_with_image(role: Literal["user", "assistant"],
+                                 text: str,
+                                 image_url: str | None = None,
+                                 image_data: str | None = None,
+                                 image_media_type: str = "image/png",
+                                 detail: Literal["auto", "low",
+                                                 "high"] = "auto",
+                                 timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with an image.
+
+Supports both URL-based and base64-encoded images.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the image
+- `image_url` - URL of the image (including data URLs)
+- `image_data` - Base64-encoded image data
+- `image_media_type` - MIME type for base64 images (e.g., "image/png")
+- `detail` - Image detail level for processing
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  # With image URL
+  await agent.add_message_with_image(
+  "user",
+  "What's in this image?",
+  image_url="https://example.com/image.png"
+  )
+  
+  # With base64 data
+  await agent.add_message_with_image(
+  "user",
+  "Describe this diagram",
+  image_data="&lt;base64_string&gt;",
+  image_media_type="image/png"
+  )
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_pdf"></a>
+
+#### `add_message_with_pdf`
+
+```python
+async def add_message_with_pdf(role: Literal["user", "assistant"],
+                               text: str,
+                               pdf_data: str,
+                               filename: str | None = None,
+                               timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with a PDF document.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the PDF
+- `pdf_data` - Base64-encoded PDF data
+- `filename` - Optional filename for the PDF
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  # With base64 PDF data
+  await agent.add_message_with_pdf(
+  "user",
+  "Summarize this document",
+  pdf_data="&lt;base64_string&gt;",
+  filename="report.pdf"
+  )
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_document"></a>
+
+#### `add_message_with_document`
+
+```python
+async def add_message_with_document(role: Literal["user", "assistant"],
+                                    text: str,
+                                    document_data: str,
+                                    media_type: str = "application/pdf",
+                                    filename: str | None = None,
+                                    timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with a document.
+
+Supports various document types including PDF, text, etc.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the document
+- `document_data` - Base64-encoded document data
+- `media_type` - MIME type of the document (default: application/pdf)
+- `filename` - Optional filename for the document
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  # With PDF document
+  await agent.add_message_with_document(
+  "user",
+  "Analyze this report",
+  document_data="&lt;base64_string&gt;",
+  media_type="application/pdf",
+  filename="annual_report.pdf"
+  )
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_pdf_file"></a>
+
+#### `add_message_with_pdf_file`
+
+```python
+async def add_message_with_pdf_file(role: Literal["user", "assistant"],
+                                    text: str,
+                                    file_path: str,
+                                    timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with a PDF file from disk.
+
+Automatically handles base64 encoding.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the PDF
+- `file_path` - Path to the PDF file on disk
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  await agent.add_message_with_pdf_file(
+  "user",
+  "Summarize this document",
+  file_path="./documents/report.pdf"
+  )
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_image_file"></a>
+
+#### `add_message_with_image_file`
+
+```python
+async def add_message_with_image_file(role: Literal["user", "assistant"],
+                                      text: str,
+                                      file_path: str,
+                                      detail: str = "auto",
+                                      timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with an image file from disk.
+
+Automatically handles base64 encoding and MIME type detection.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the image
+- `file_path` - Path to the image file on disk
+- `detail` - Image detail level (auto, low, high)
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  await agent.add_message_with_image_file(
+  "user",
+  "What's in this image?",
+  file_path="./images/photo.jpg"
+  )
+
+<a id="spoon_ai.agents.base.BaseAgent.add_message_with_file"></a>
+
+#### `add_message_with_file`
+
+```python
+async def add_message_with_file(role: Literal["user", "assistant"],
+                                text: str,
+                                file_path: str,
+                                timeout: float | None = None) -> None
+```
+
+Convenience method to add a message with any supported file from disk.
+
+Automatically detects file type and handles base64 encoding.
+Supports: PDF, images (png, jpg, gif, webp), text files.
+
+**Arguments**:
+
+- `role` - Message role (user or assistant)
+- `text` - Text content accompanying the file
+- `file_path` - Path to the file on disk
+- `timeout` - Operation timeout in seconds
+  
+
+**Example**:
+
+  # Works with any supported file type
+  await agent.add_message_with_file("user", "Analyze this", "./report.pdf")
+  await agent.add_message_with_file("user", "What's this?", "./photo.jpg")
+
+<a id="spoon_ai.agents.base.BaseAgent.state_context"></a>
+
+#### `state_context`
+
+```python
+@asynccontextmanager
+async def state_context(new_state: AgentState, timeout: float | None = None)
+```
+
+Thread-safe state context manager with deadlock prevention.
+Acquires the state lock only to perform quick transitions, not for the
+duration of the work inside the context, avoiding long-held locks and
+false timeouts during network calls.
+
+<a id="spoon_ai.agents.base.BaseAgent.run"></a>
+
+#### `run`
+
+```python
+async def run(request: str | None = None, timeout: float | None = None) -> str
+```
+
+Thread-safe run method with proper concurrency control, callback support, and Plan-Act-Reflect phases.
+
+<a id="spoon_ai.agents.base.BaseAgent.step"></a>
+
+#### `step`
+
+```python
+async def step(run_id: uuid.UUID | None = None) -> str
+```
+
+Override this method in subclasses - now with step-level locking and callback support.
+
+<a id="spoon_ai.agents.base.BaseAgent.is_stuck"></a>
+
+#### `is_stuck`
+
+```python
+async def is_stuck() -> bool
+```
+
+Thread-safe stuck detection.
+
+Uses text_content property for comparison to handle both
+text-only and multimodal messages.
+
+<a id="spoon_ai.agents.base.BaseAgent.handle_stuck_state"></a>
+
+#### `handle_stuck_state`
+
+```python
+async def handle_stuck_state()
+```
+
+Thread-safe stuck state handling
+
+<a id="spoon_ai.agents.base.BaseAgent.estimate_token_count"></a>
+
+#### `estimate_token_count`
+
+```python
+def estimate_token_count() -> int
+```
+
+Estimate the token count of current conversation context.
+
+Uses a simple heuristic: ~4 characters per token (conservative estimate).
+For more accurate counting, override this method with tiktoken or
+model-specific tokenizers.
+
+**Returns**:
+
+  Estimated token count of all messages
+
+<a id="spoon_ai.agents.base.BaseAgent.should_trigger_reflection"></a>
+
+#### `should_trigger_reflection`
+
+```python
+def should_trigger_reflection() -> bool
+```
+
+Determine if reflection should be triggered based on token threshold.
+
+LangChain-style token-based trigger:
+Triggers when context tokens exceed reflect_token_threshold (default 85%)
+of max_context_tokens.
+
+**Returns**:
+
+  True if reflection should be triggered
+
+<a id="spoon_ai.agents.base.BaseAgent.add_documents"></a>
+
+#### `add_documents`
+
+```python
+def add_documents(documents) -> None
+```
+
+Store documents on the agent so CLI load-docs works without RAG mixin.
+
+This default implementation keeps the documents in-memory under
+self._loaded_documents. Agents that support retrieval should override
+this method to index documents into their vector store.
+
+<a id="spoon_ai.agents.base.BaseAgent.save_chat_history"></a>
+
+#### `save_chat_history`
+
+```python
+def save_chat_history()
+```
+
+Thread-safe chat history saving
+
+<a id="spoon_ai.agents.base.BaseAgent.stream"></a>
+
+#### `stream`
+
+```python
+async def stream(timeout: float | None = None)
+```
+
+Thread-safe streaming with proper cleanup and timeout
+
+<a id="spoon_ai.agents.base.BaseAgent.process_mcp_message"></a>
+
+#### `process_mcp_message`
+
+```python
+async def process_mcp_message(content: Any,
+                              sender: str,
+                              message: dict[str, Any],
+                              agent_id: str,
+                              timeout: float | None = None)
+```
+
+Thread-safe MCP message processing with timeout protection
+
+<a id="spoon_ai.agents.base.BaseAgent.shutdown"></a>
+
+#### `shutdown`
+
+```python
+async def shutdown(timeout: float = 30.0)
+```
+
+Graceful shutdown with cleanup of active operations
+
+<a id="spoon_ai.agents.base.BaseAgent.get_agent_state"></a>
+
+#### `get_agent_state`
+
+```python
+def get_agent_state(key: str, default: Any = None) -> Any
+```
+
+Get value from agent state (for middleware access).
+
+**Arguments**:
+
+- `key` - State key
+- `default` - Default value if key not found
+  
+
+**Returns**:
+
+  State value or default
+
+<a id="spoon_ai.agents.base.BaseAgent.set_agent_state"></a>
+
+#### `set_agent_state`
+
+```python
+def set_agent_state(key: str, value: Any) -> None
+```
+
+Set value in agent state (for middleware access).
+
+**Arguments**:
+
+- `key` - State key
+- `value` - State value
+
+<a id="spoon_ai.agents.base.BaseAgent.update_agent_state"></a>
+
+#### `update_agent_state`
+
+```python
+def update_agent_state(updates: dict[str, Any]) -> None
+```
+
+Bulk update agent state (for middleware access).
+
+**Arguments**:
+
+- `updates` - Dictionary of state updates
+
+<a id="spoon_ai.agents.base.BaseAgent.get_diagnostics"></a>
+
+#### `get_diagnostics`
+
+```python
+def get_diagnostics() -> dict[str, Any]
+```
+
+Get diagnostic information about the agent's state
+
+<a id="spoon_ai.agents.spoon_react_mcp"></a>
+
+# Module `spoon_ai.agents.spoon_react_mcp`
+
+<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP"></a>
+
+## `SpoonReactMCP` Objects
+
+```python
+class SpoonReactMCP(SpoonReactAI)
+```
+
+<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools"></a>
+
+#### `list_mcp_tools`
+
+```python
+async def list_mcp_tools()
+```
+
+Return MCP tools from available_tools manager
+
+<a id="spoon_ai.agents.react"></a>
+
+# Module `spoon_ai.agents.react`
+
+<a id="spoon_ai.agents.mcp_client_mixin"></a>
+
+# Module `spoon_ai.agents.mcp_client_mixin`
+
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin"></a>
+
+## `MCPClientMixin` Objects
+
+```python
+class MCPClientMixin()
+```
+
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session"></a>
+
+#### `get_session`
+
+```python
+@asynccontextmanager
+async def get_session()
+```
+
+Get a session with robust resource management and cleanup.
+
+Features:
+- Automatic session reuse per task
+- Resource limits to prevent exhaustion
+- Proper cleanup on cancellation/failure
+- Periodic cleanup of stale sessions
+
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.list_mcp_tools"></a>
+
+#### `list_mcp_tools`
+
+```python
+async def list_mcp_tools()
+```
+
+Get the list of available tools from the MCP server
+
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.call_mcp_tool"></a>
+
+#### `call_mcp_tool`
+
+```python
+async def call_mcp_tool(tool_name: str, **kwargs)
+```
+
+Call a tool on the MCP server
+
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.send_mcp_message"></a>
+
+#### `send_mcp_message`
+
+```python
+async def send_mcp_message(recipient: str,
+                           message: Union[str, Dict[str, Any]],
+                           topic: Optional[str] = None,
+                           metadata: Optional[Dict[str, Any]] = None) -> bool
+```
+
+Send a message to the MCP system
+
+**Arguments**:
+
+- `recipient` - Recipient ID
+- `message` - Message content (string or dictionary)
+- `topic` - Message topic
+- `metadata` - Additional metadata
+  
+
+**Returns**:
+
+- `bool` - Whether the message was sent successfully
+
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.cleanup"></a>
+
+#### `cleanup`
+
+```python
+async def cleanup()
+```
+
+Enhanced cleanup method with comprehensive resource cleanup.
+
+<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session_stats"></a>
+
+#### `get_session_stats`
+
+```python
+def get_session_stats() -> Dict[str, Any]
+```
+
+Get session statistics for monitoring.
+
+<a id="spoon_ai.agents.toolcall"></a>
+
+# Module `spoon_ai.agents.toolcall`
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent"></a>
+
+## `ToolCallAgent` Objects
+
+```python
+class ToolCallAgent(ReActAgent)
+```
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.tool_choices"></a>
+
+#### `tool_choices`
+
+type: ignore
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl"></a>
+
+#### `mcp_tools_cache_ttl`
+
+5 minutes TTL
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.run"></a>
+
+#### `run`
+
+```python
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None,
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
+```
+
+This ensures:
+1. Thread-safe execution (no concurrent runs)
+2. Proper timeout handling
+3. Plan/Reflect/Finish phases are executed
+4. Middleware hooks are called correctly
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.step"></a>
+
+#### `step`
+
+```python
+async def step(thinking: bool = False,
+               reasoning_effort: Optional[str] = None) -> str
+```
+
+Override the step method to handle finish_reason termination properly.
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.execute_tool"></a>
+
+#### `execute_tool`
+
+```python
+async def execute_tool(tool_call: ToolCall) -> str
+```
+
+Execute tool with middleware wrapping.
+
+CRITICAL: This method now routes ALL tool executions through the middleware
+pipeline, enabling HITL approval, observability, and other middleware features.
+
+<a id="spoon_ai.agents.custom_agent"></a>
+
+# Module `spoon_ai.agents.custom_agent`
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent"></a>
+
+## `CustomAgent` Objects
+
+```python
+class CustomAgent(ToolCallAgent)
+```
+
+Custom Agent class allowing users to create their own agents and add custom tools
+
+Usage:
+Create custom agent and add tools:
+   agent = CustomAgent(name="my_agent", description="My custom agent")
+   agent.add_tool(MyCustomTool())
+   result = await agent.run("Use my custom tool")
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tool"></a>
+
+#### `add_tool`
+
+```python
+def add_tool(tool: BaseTool) -> None
+```
+
+Add a tool to the agent with validation.
+
+**Arguments**:
+
+- `tool` - Tool instance to add
+  
+
+**Raises**:
+
+- `ValueError` - If tool is invalid or already exists
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tools"></a>
+
+#### `add_tools`
+
+```python
+def add_tools(tools: List[BaseTool]) -> None
+```
+
+Add multiple tools to the agent with atomic operation.
+
+**Arguments**:
+
+- `tools` - List of tool instances to add
+  
+
+**Raises**:
+
+- `ValueError` - If any tool is invalid
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.remove_tool"></a>
+
+#### `remove_tool`
+
+```python
+def remove_tool(tool_name: str) -> bool
+```
+
+Remove a tool from the agent.
+
+**Arguments**:
+
+- `tool_name` - Name of the tool to remove
+  
+
+**Returns**:
+
+- `bool` - True if tool was removed, False if not found
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.list_tools"></a>
+
+#### `list_tools`
+
+```python
+def list_tools() -> List[str]
+```
+
+List all available tools in the agent.
+
+**Returns**:
+
+  List of tool names, empty list if no tools
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.get_tool_info"></a>
+
+#### `get_tool_info`
+
+```python
+def get_tool_info() -> Dict[str, Dict[str, Any]]
+```
+
+Get detailed information about all tools.
+
+**Returns**:
+
+  Dictionary with tool names as keys and tool info as values
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.validate_tools"></a>
+
+#### `validate_tools`
+
+```python
+def validate_tools() -> Dict[str, Any]
+```
+
+Validate all current tools and return validation report.
+
+**Returns**:
+
+  Dictionary with validation results
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.run"></a>
+
+#### `run`
+
+```python
+async def run(request: Optional[str] = None) -> str
+```
+
+Run the agent with enhanced tool validation.
+
+**Arguments**:
+
+- `request` - User request
+  
+
+**Returns**:
+
+  Processing result
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.clear"></a>
+
+#### `clear`
+
+```python
+def clear()
+```
+
+Enhanced clear method with proper tool state management.
 
 <a id="spoon_ai.agents.spoon_react_skill"></a>
 
@@ -254,100 +1150,6 @@ Re-discover skills from all configured paths.
 **Returns**:
 
   Number of skills discovered
-
-<a id="spoon_ai.agents.mcp_client_mixin"></a>
-
-# Module `spoon_ai.agents.mcp_client_mixin`
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin"></a>
-
-## `MCPClientMixin` Objects
-
-```python
-class MCPClientMixin()
-```
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session"></a>
-
-#### `get_session`
-
-```python
-@asynccontextmanager
-async def get_session()
-```
-
-Get a session with robust resource management and cleanup.
-
-Features:
-- Automatic session reuse per task
-- Resource limits to prevent exhaustion
-- Proper cleanup on cancellation/failure
-- Periodic cleanup of stale sessions
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.list_mcp_tools"></a>
-
-#### `list_mcp_tools`
-
-```python
-async def list_mcp_tools()
-```
-
-Get the list of available tools from the MCP server
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.call_mcp_tool"></a>
-
-#### `call_mcp_tool`
-
-```python
-async def call_mcp_tool(tool_name: str, **kwargs)
-```
-
-Call a tool on the MCP server
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.send_mcp_message"></a>
-
-#### `send_mcp_message`
-
-```python
-async def send_mcp_message(recipient: str,
-                           message: Union[str, Dict[str, Any]],
-                           topic: Optional[str] = None,
-                           metadata: Optional[Dict[str, Any]] = None) -> bool
-```
-
-Send a message to the MCP system
-
-**Arguments**:
-
-- `recipient` - Recipient ID
-- `message` - Message content (string or dictionary)
-- `topic` - Message topic
-- `metadata` - Additional metadata
-  
-
-**Returns**:
-
-- `bool` - Whether the message was sent successfully
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.cleanup"></a>
-
-#### `cleanup`
-
-```python
-async def cleanup()
-```
-
-Enhanced cleanup method with comprehensive resource cleanup.
-
-<a id="spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session_stats"></a>
-
-#### `get_session_stats`
-
-```python
-def get_session_stats() -> Dict[str, Any]
-```
-
-Get session statistics for monitoring.
 
 <a id="spoon_ai.agents.subagents"></a>
 
@@ -878,244 +1680,161 @@ def get_context_from_query(query)
 
 Get context string from relevant documents for a query
 
-<a id="spoon_ai.agents.spoon_react_mcp"></a>
+<a id="spoon_ai.agents.skill_mixin"></a>
 
-# Module `spoon_ai.agents.spoon_react_mcp`
+# Module `spoon_ai.agents.skill_mixin`
 
-<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP"></a>
+Skill-enabled agent mixin.
 
-## `SpoonReactMCP` Objects
+Follows MCPClientMixin pattern for composable agent integration.
 
-```python
-class SpoonReactMCP(SpoonReactAI)
-```
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin"></a>
 
-<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools"></a>
-
-#### `list_mcp_tools`
+## `SkillEnabledMixin` Objects
 
 ```python
-async def list_mcp_tools()
+class SkillEnabledMixin()
 ```
 
-Return MCP tools from available_tools manager
+Mixin that adds skill capabilities to agents.
 
-<a id="spoon_ai.agents.custom_agent"></a>
-
-# Module `spoon_ai.agents.custom_agent`
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent"></a>
-
-## `CustomAgent` Objects
-
-```python
-class CustomAgent(ToolCallAgent)
-```
-
-Custom Agent class allowing users to create their own agents and add custom tools
+Integrates with ReAct cycle by:
+1. Injecting active skill instructions into system prompt
+2. Adding skill tools to available_tools
+3. Auto-triggering skills based on user input
 
 Usage:
-Create custom agent and add tools:
-   agent = CustomAgent(name="my_agent", description="My custom agent")
-   agent.add_tool(MyCustomTool())
-   result = await agent.run("Use my custom tool")
+    class MyAgent(SkillEnabledMixin, SpoonReactAI):
+        pass
 
-<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tool"></a>
+    agent = MyAgent()
+    await agent.activate_skill("trading-analysis")
+    result = await agent.run("Analyze BTC")
 
-#### `add_tool`
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill"></a>
+
+#### `activate_skill`
 
 ```python
-def add_tool(tool: BaseTool) -> None
+async def activate_skill(name: str,
+                         context: Optional[Dict[str, Any]] = None) -> Skill
 ```
 
-Add a tool to the agent with validation.
+Activate a skill and refresh agent state.
 
 **Arguments**:
 
-- `tool` - Tool instance to add
-  
-
-**Raises**:
-
-- `ValueError` - If tool is invalid or already exists
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tools"></a>
-
-#### `add_tools`
-
-```python
-def add_tools(tools: List[BaseTool]) -> None
-```
-
-Add multiple tools to the agent with atomic operation.
-
-**Arguments**:
-
-- `tools` - List of tool instances to add
-  
-
-**Raises**:
-
-- `ValueError` - If any tool is invalid
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.remove_tool"></a>
-
-#### `remove_tool`
-
-```python
-def remove_tool(tool_name: str) -> bool
-```
-
-Remove a tool from the agent.
-
-**Arguments**:
-
-- `tool_name` - Name of the tool to remove
+- `name` - Skill name to activate
+- `context` - Optional context data
   
 
 **Returns**:
 
-- `bool` - True if tool was removed, False if not found
+  Activated Skill instance
 
-<a id="spoon_ai.agents.custom_agent.CustomAgent.list_tools"></a>
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill"></a>
 
-#### `list_tools`
-
-```python
-def list_tools() -> List[str]
-```
-
-List all available tools in the agent.
-
-**Returns**:
-
-  List of tool names, empty list if no tools
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.get_tool_info"></a>
-
-#### `get_tool_info`
+#### `deactivate_skill`
 
 ```python
-def get_tool_info() -> Dict[str, Dict[str, Any]]
+async def deactivate_skill(name: str) -> bool
 ```
 
-Get detailed information about all tools.
-
-**Returns**:
-
-  Dictionary with tool names as keys and tool info as values
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.validate_tools"></a>
-
-#### `validate_tools`
-
-```python
-def validate_tools() -> Dict[str, Any]
-```
-
-Validate all current tools and return validation report.
-
-**Returns**:
-
-  Dictionary with validation results
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.run"></a>
-
-#### `run`
-
-```python
-async def run(request: Optional[str] = None) -> str
-```
-
-Run the agent with enhanced tool validation.
+Deactivate a skill.
 
 **Arguments**:
 
-- `request` - User request
+- `name` - Skill name to deactivate
   
 
 **Returns**:
 
-  Processing result
+  True if deactivated, False if not active
 
-<a id="spoon_ai.agents.custom_agent.CustomAgent.clear"></a>
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills"></a>
 
-#### `clear`
-
-```python
-def clear()
-```
-
-Enhanced clear method with proper tool state management.
-
-<a id="spoon_ai.agents.spoon_react"></a>
-
-# Module `spoon_ai.agents.spoon_react`
-
-<a id="spoon_ai.agents.spoon_react.create_configured_chatbot"></a>
-
-#### `create_configured_chatbot`
+#### `auto_activate_skills`
 
 ```python
-def create_configured_chatbot()
+async def auto_activate_skills(user_input: str) -> List[Skill]
 ```
 
-Create a ChatBot instance with intelligent provider selection.
+Automatically activate skills matching user input.
 
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI"></a>
+Uses both keyword/pattern matching and LLM intent analysis.
 
-## `SpoonReactAI` Objects
+**Arguments**:
+
+- `user_input` - User's message
+  
+
+**Returns**:
+
+  List of activated skills
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills"></a>
+
+#### `list_skills`
 
 ```python
-class SpoonReactAI(MCPClientMixin, ToolCallAgent)
+def list_skills() -> List[str]
 ```
 
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.__init__"></a>
+List all available skill names.
 
-#### `__init__`
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills"></a>
+
+#### `list_active_skills`
 
 ```python
-def __init__(**kwargs)
+def list_active_skills() -> List[str]
 ```
 
-Initialize SpoonReactAI with both ToolCallAgent and MCPClientMixin initialization
+List currently active skill names.
 
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.connect"></a>
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info"></a>
 
-#### `connect`
+#### `get_skill_info`
 
 ```python
-async def connect()
+def get_skill_info(name: str) -> Optional[Dict[str, Any]]
 ```
 
-Establish connection to MCP server.
+Get detailed information about a skill.
 
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.initialize"></a>
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active"></a>
 
-#### `initialize`
+#### `is_skill_active`
 
 ```python
-async def initialize(__context: Any = None)
+def is_skill_active(name: str) -> bool
 ```
 
-Initialize async components and subscribe to topics
+Check if a skill is currently active.
 
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.run"></a>
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills"></a>
 
-#### `run`
+#### `deactivate_all_skills`
 
 ```python
-async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None,
-              thinking: bool = False,
-              reasoning_effort: Optional[str] = None) -> str
+async def deactivate_all_skills() -> int
 ```
 
-Ensure prompts reflect current tools before running.
+Deactivate all active skills.
 
-<a id="spoon_ai.agents.react"></a>
+**Returns**:
 
-# Module `spoon_ai.agents.react`
+  Number of skills deactivated
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats"></a>
+
+#### `get_skill_stats`
+
+```python
+def get_skill_stats() -> Dict[str, Any]
+```
+
+Get skill system statistics.
 
 <a id="spoon_ai.agents.graph_agent"></a>
 
@@ -1288,723 +2007,4 @@ Enable or disable state preservation between runs.
 **Arguments**:
 
 - `preserve` - Whether to preserve state between runs
-
-<a id="spoon_ai.agents.toolcall"></a>
-
-# Module `spoon_ai.agents.toolcall`
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent"></a>
-
-## `ToolCallAgent` Objects
-
-```python
-class ToolCallAgent(ReActAgent)
-```
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.tool_choices"></a>
-
-#### `tool_choices`
-
-type: ignore
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl"></a>
-
-#### `mcp_tools_cache_ttl`
-
-5 minutes TTL
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.run"></a>
-
-#### `run`
-
-```python
-async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None,
-              thinking: bool = False,
-              reasoning_effort: Optional[str] = None) -> str
-```
-
-This ensures:
-1. Thread-safe execution (no concurrent runs)
-2. Proper timeout handling
-3. Plan/Reflect/Finish phases are executed
-4. Middleware hooks are called correctly
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.step"></a>
-
-#### `step`
-
-```python
-async def step(thinking: bool = False,
-               reasoning_effort: Optional[str] = None) -> str
-```
-
-Override the step method to handle finish_reason termination properly.
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.execute_tool"></a>
-
-#### `execute_tool`
-
-```python
-async def execute_tool(tool_call: ToolCall) -> str
-```
-
-Execute tool with middleware wrapping.
-
-CRITICAL: This method now routes ALL tool executions through the middleware
-pipeline, enabling HITL approval, observability, and other middleware features.
-
-<a id="spoon_ai.agents.skill_mixin"></a>
-
-# Module `spoon_ai.agents.skill_mixin`
-
-Skill-enabled agent mixin.
-
-Follows MCPClientMixin pattern for composable agent integration.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin"></a>
-
-## `SkillEnabledMixin` Objects
-
-```python
-class SkillEnabledMixin()
-```
-
-Mixin that adds skill capabilities to agents.
-
-Integrates with ReAct cycle by:
-1. Injecting active skill instructions into system prompt
-2. Adding skill tools to available_tools
-3. Auto-triggering skills based on user input
-
-Usage:
-    class MyAgent(SkillEnabledMixin, SpoonReactAI):
-        pass
-
-    agent = MyAgent()
-    await agent.activate_skill("trading-analysis")
-    result = await agent.run("Analyze BTC")
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill"></a>
-
-#### `activate_skill`
-
-```python
-async def activate_skill(name: str,
-                         context: Optional[Dict[str, Any]] = None) -> Skill
-```
-
-Activate a skill and refresh agent state.
-
-**Arguments**:
-
-- `name` - Skill name to activate
-- `context` - Optional context data
-  
-
-**Returns**:
-
-  Activated Skill instance
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill"></a>
-
-#### `deactivate_skill`
-
-```python
-async def deactivate_skill(name: str) -> bool
-```
-
-Deactivate a skill.
-
-**Arguments**:
-
-- `name` - Skill name to deactivate
-  
-
-**Returns**:
-
-  True if deactivated, False if not active
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills"></a>
-
-#### `auto_activate_skills`
-
-```python
-async def auto_activate_skills(user_input: str) -> List[Skill]
-```
-
-Automatically activate skills matching user input.
-
-Uses both keyword/pattern matching and LLM intent analysis.
-
-**Arguments**:
-
-- `user_input` - User's message
-  
-
-**Returns**:
-
-  List of activated skills
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills"></a>
-
-#### `list_skills`
-
-```python
-def list_skills() -> List[str]
-```
-
-List all available skill names.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills"></a>
-
-#### `list_active_skills`
-
-```python
-def list_active_skills() -> List[str]
-```
-
-List currently active skill names.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info"></a>
-
-#### `get_skill_info`
-
-```python
-def get_skill_info(name: str) -> Optional[Dict[str, Any]]
-```
-
-Get detailed information about a skill.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active"></a>
-
-#### `is_skill_active`
-
-```python
-def is_skill_active(name: str) -> bool
-```
-
-Check if a skill is currently active.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills"></a>
-
-#### `deactivate_all_skills`
-
-```python
-async def deactivate_all_skills() -> int
-```
-
-Deactivate all active skills.
-
-**Returns**:
-
-  Number of skills deactivated
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats"></a>
-
-#### `get_skill_stats`
-
-```python
-def get_skill_stats() -> Dict[str, Any]
-```
-
-Get skill system statistics.
-
-<a id="spoon_ai.agents.base"></a>
-
-# Module `spoon_ai.agents.base`
-
-<a id="spoon_ai.agents.base.ThreadSafeOutputQueue"></a>
-
-## `ThreadSafeOutputQueue` Objects
-
-```python
-class ThreadSafeOutputQueue()
-```
-
-Thread-safe output queue with fair access and timeout protection
-
-<a id="spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait"></a>
-
-#### `put_nowait`
-
-```python
-def put_nowait(item: Any) -> None
-```
-
-Non-blocking put - delegates to the underlying asyncio.Queue.
-
-<a id="spoon_ai.agents.base.ThreadSafeOutputQueue.get"></a>
-
-#### `get`
-
-```python
-async def get(timeout: float | None = 30.0) -> Any
-```
-
-Get item with timeout and fair access
-
-<a id="spoon_ai.agents.base.BaseAgent"></a>
-
-## `BaseAgent` Objects
-
-```python
-class BaseAgent(BaseModel, ABC)
-```
-
-Thread-safe base class for all agents with proper concurrency handling.
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message"></a>
-
-#### `add_message`
-
-```python
-async def add_message(role: Literal["user", "assistant", "tool"],
-                      content: MessageContent,
-                      tool_call_id: str | None = None,
-                      tool_calls: list[ToolCall] | None = None,
-                      tool_name: str | None = None,
-                      timeout: float | None = None) -> None
-```
-
-Thread-safe message addition with timeout protection.
-
-Supports both text-only and multimodal content:
-- Text: content="Hello world"
-- Multimodal: content=[TextContent(...), ImageUrlContent(...)]
-
-**Arguments**:
-
-- `role` - Message role (user, assistant, tool)
-- `content` - Text string or list of content blocks for multimodal messages
-- `tool_call_id` - ID for tool responses
-- `tool_calls` - List of tool calls for assistant messages
-- `tool_name` - Name of the tool for tool responses
-- `timeout` - Operation timeout in seconds
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_image"></a>
-
-#### `add_message_with_image`
-
-```python
-async def add_message_with_image(role: Literal["user", "assistant"],
-                                 text: str,
-                                 image_url: str | None = None,
-                                 image_data: str | None = None,
-                                 image_media_type: str = "image/png",
-                                 detail: Literal["auto", "low",
-                                                 "high"] = "auto",
-                                 timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with an image.
-
-Supports both URL-based and base64-encoded images.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the image
-- `image_url` - URL of the image (including data URLs)
-- `image_data` - Base64-encoded image data
-- `image_media_type` - MIME type for base64 images (e.g., "image/png")
-- `detail` - Image detail level for processing
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  # With image URL
-  await agent.add_message_with_image(
-  "user",
-  "What's in this image?",
-  image_url="https://example.com/image.png"
-  )
-  
-  # With base64 data
-  await agent.add_message_with_image(
-  "user",
-  "Describe this diagram",
-  image_data="&lt;base64_string&gt;",
-  image_media_type="image/png"
-  )
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_pdf"></a>
-
-#### `add_message_with_pdf`
-
-```python
-async def add_message_with_pdf(role: Literal["user", "assistant"],
-                               text: str,
-                               pdf_data: str,
-                               filename: str | None = None,
-                               timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with a PDF document.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the PDF
-- `pdf_data` - Base64-encoded PDF data
-- `filename` - Optional filename for the PDF
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  # With base64 PDF data
-  await agent.add_message_with_pdf(
-  "user",
-  "Summarize this document",
-  pdf_data="&lt;base64_string&gt;",
-  filename="report.pdf"
-  )
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_document"></a>
-
-#### `add_message_with_document`
-
-```python
-async def add_message_with_document(role: Literal["user", "assistant"],
-                                    text: str,
-                                    document_data: str,
-                                    media_type: str = "application/pdf",
-                                    filename: str | None = None,
-                                    timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with a document.
-
-Supports various document types including PDF, text, etc.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the document
-- `document_data` - Base64-encoded document data
-- `media_type` - MIME type of the document (default: application/pdf)
-- `filename` - Optional filename for the document
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  # With PDF document
-  await agent.add_message_with_document(
-  "user",
-  "Analyze this report",
-  document_data="&lt;base64_string&gt;",
-  media_type="application/pdf",
-  filename="annual_report.pdf"
-  )
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_pdf_file"></a>
-
-#### `add_message_with_pdf_file`
-
-```python
-async def add_message_with_pdf_file(role: Literal["user", "assistant"],
-                                    text: str,
-                                    file_path: str,
-                                    timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with a PDF file from disk.
-
-Automatically handles base64 encoding.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the PDF
-- `file_path` - Path to the PDF file on disk
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  await agent.add_message_with_pdf_file(
-  "user",
-  "Summarize this document",
-  file_path="./documents/report.pdf"
-  )
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_image_file"></a>
-
-#### `add_message_with_image_file`
-
-```python
-async def add_message_with_image_file(role: Literal["user", "assistant"],
-                                      text: str,
-                                      file_path: str,
-                                      detail: str = "auto",
-                                      timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with an image file from disk.
-
-Automatically handles base64 encoding and MIME type detection.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the image
-- `file_path` - Path to the image file on disk
-- `detail` - Image detail level (auto, low, high)
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  await agent.add_message_with_image_file(
-  "user",
-  "What's in this image?",
-  file_path="./images/photo.jpg"
-  )
-
-<a id="spoon_ai.agents.base.BaseAgent.add_message_with_file"></a>
-
-#### `add_message_with_file`
-
-```python
-async def add_message_with_file(role: Literal["user", "assistant"],
-                                text: str,
-                                file_path: str,
-                                timeout: float | None = None) -> None
-```
-
-Convenience method to add a message with any supported file from disk.
-
-Automatically detects file type and handles base64 encoding.
-Supports: PDF, images (png, jpg, gif, webp), text files.
-
-**Arguments**:
-
-- `role` - Message role (user or assistant)
-- `text` - Text content accompanying the file
-- `file_path` - Path to the file on disk
-- `timeout` - Operation timeout in seconds
-  
-
-**Example**:
-
-  # Works with any supported file type
-  await agent.add_message_with_file("user", "Analyze this", "./report.pdf")
-  await agent.add_message_with_file("user", "What's this?", "./photo.jpg")
-
-<a id="spoon_ai.agents.base.BaseAgent.state_context"></a>
-
-#### `state_context`
-
-```python
-@asynccontextmanager
-async def state_context(new_state: AgentState, timeout: float | None = None)
-```
-
-Thread-safe state context manager with deadlock prevention.
-Acquires the state lock only to perform quick transitions, not for the
-duration of the work inside the context, avoiding long-held locks and
-false timeouts during network calls.
-
-<a id="spoon_ai.agents.base.BaseAgent.run"></a>
-
-#### `run`
-
-```python
-async def run(request: str | None = None, timeout: float | None = None) -> str
-```
-
-Thread-safe run method with proper concurrency control, callback support, and Plan-Act-Reflect phases.
-
-<a id="spoon_ai.agents.base.BaseAgent.step"></a>
-
-#### `step`
-
-```python
-async def step(run_id: uuid.UUID | None = None) -> str
-```
-
-Override this method in subclasses - now with step-level locking and callback support.
-
-<a id="spoon_ai.agents.base.BaseAgent.is_stuck"></a>
-
-#### `is_stuck`
-
-```python
-async def is_stuck() -> bool
-```
-
-Thread-safe stuck detection.
-
-Uses text_content property for comparison to handle both
-text-only and multimodal messages.
-
-<a id="spoon_ai.agents.base.BaseAgent.handle_stuck_state"></a>
-
-#### `handle_stuck_state`
-
-```python
-async def handle_stuck_state()
-```
-
-Thread-safe stuck state handling
-
-<a id="spoon_ai.agents.base.BaseAgent.estimate_token_count"></a>
-
-#### `estimate_token_count`
-
-```python
-def estimate_token_count() -> int
-```
-
-Estimate the token count of current conversation context.
-
-Uses a simple heuristic: ~4 characters per token (conservative estimate).
-For more accurate counting, override this method with tiktoken or
-model-specific tokenizers.
-
-**Returns**:
-
-  Estimated token count of all messages
-
-<a id="spoon_ai.agents.base.BaseAgent.should_trigger_reflection"></a>
-
-#### `should_trigger_reflection`
-
-```python
-def should_trigger_reflection() -> bool
-```
-
-Determine if reflection should be triggered based on token threshold.
-
-LangChain-style token-based trigger:
-Triggers when context tokens exceed reflect_token_threshold (default 85%)
-of max_context_tokens.
-
-**Returns**:
-
-  True if reflection should be triggered
-
-<a id="spoon_ai.agents.base.BaseAgent.add_documents"></a>
-
-#### `add_documents`
-
-```python
-def add_documents(documents) -> None
-```
-
-Store documents on the agent so CLI load-docs works without RAG mixin.
-
-This default implementation keeps the documents in-memory under
-self._loaded_documents. Agents that support retrieval should override
-this method to index documents into their vector store.
-
-<a id="spoon_ai.agents.base.BaseAgent.save_chat_history"></a>
-
-#### `save_chat_history`
-
-```python
-def save_chat_history()
-```
-
-Thread-safe chat history saving
-
-<a id="spoon_ai.agents.base.BaseAgent.stream"></a>
-
-#### `stream`
-
-```python
-async def stream(timeout: float | None = None)
-```
-
-Thread-safe streaming with proper cleanup and timeout
-
-<a id="spoon_ai.agents.base.BaseAgent.process_mcp_message"></a>
-
-#### `process_mcp_message`
-
-```python
-async def process_mcp_message(content: Any,
-                              sender: str,
-                              message: dict[str, Any],
-                              agent_id: str,
-                              timeout: float | None = None)
-```
-
-Thread-safe MCP message processing with timeout protection
-
-<a id="spoon_ai.agents.base.BaseAgent.shutdown"></a>
-
-#### `shutdown`
-
-```python
-async def shutdown(timeout: float = 30.0)
-```
-
-Graceful shutdown with cleanup of active operations
-
-<a id="spoon_ai.agents.base.BaseAgent.get_agent_state"></a>
-
-#### `get_agent_state`
-
-```python
-def get_agent_state(key: str, default: Any = None) -> Any
-```
-
-Get value from agent state (for middleware access).
-
-**Arguments**:
-
-- `key` - State key
-- `default` - Default value if key not found
-  
-
-**Returns**:
-
-  State value or default
-
-<a id="spoon_ai.agents.base.BaseAgent.set_agent_state"></a>
-
-#### `set_agent_state`
-
-```python
-def set_agent_state(key: str, value: Any) -> None
-```
-
-Set value in agent state (for middleware access).
-
-**Arguments**:
-
-- `key` - State key
-- `value` - State value
-
-<a id="spoon_ai.agents.base.BaseAgent.update_agent_state"></a>
-
-#### `update_agent_state`
-
-```python
-def update_agent_state(updates: dict[str, Any]) -> None
-```
-
-Bulk update agent state (for middleware access).
-
-**Arguments**:
-
-- `updates` - Dictionary of state updates
-
-<a id="spoon_ai.agents.base.BaseAgent.get_diagnostics"></a>
-
-#### `get_diagnostics`
-
-```python
-def get_diagnostics() -> dict[str, Any]
-```
-
-Get diagnostic information about the agent's state
-
-<a id="spoon_ai.agents.monitor"></a>
-
-# Module `spoon_ai.agents.monitor`
 
