@@ -7,14 +7,7 @@ title: spoon_ai.agents
 # Table of Contents
 
 * [spoon\_ai.agents](#spoon_ai.agents)
-* [spoon\_ai.agents.spoon\_react](#spoon_ai.agents.spoon_react)
-  * [create\_configured\_chatbot](#spoon_ai.agents.spoon_react.create_configured_chatbot)
-  * [SpoonReactAI](#spoon_ai.agents.spoon_react.SpoonReactAI)
-    * [\_\_init\_\_](#spoon_ai.agents.spoon_react.SpoonReactAI.__init__)
-    * [connect](#spoon_ai.agents.spoon_react.SpoonReactAI.connect)
-    * [initialize](#spoon_ai.agents.spoon_react.SpoonReactAI.initialize)
-    * [run](#spoon_ai.agents.spoon_react.SpoonReactAI.run)
-* [spoon\_ai.agents.monitor](#spoon_ai.agents.monitor)
+* [spoon\_ai.agents.react](#spoon_ai.agents.react)
 * [spoon\_ai.agents.base](#spoon_ai.agents.base)
   * [ThreadSafeOutputQueue](#spoon_ai.agents.base.ThreadSafeOutputQueue)
     * [put\_nowait](#spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait)
@@ -43,10 +36,6 @@ title: spoon_ai.agents
     * [set\_agent\_state](#spoon_ai.agents.base.BaseAgent.set_agent_state)
     * [update\_agent\_state](#spoon_ai.agents.base.BaseAgent.update_agent_state)
     * [get\_diagnostics](#spoon_ai.agents.base.BaseAgent.get_diagnostics)
-* [spoon\_ai.agents.spoon\_react\_mcp](#spoon_ai.agents.spoon_react_mcp)
-  * [SpoonReactMCP](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP)
-    * [list\_mcp\_tools](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools)
-* [spoon\_ai.agents.react](#spoon_ai.agents.react)
 * [spoon\_ai.agents.mcp\_client\_mixin](#spoon_ai.agents.mcp_client_mixin)
   * [MCPClientMixin](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin)
     * [get\_session](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session)
@@ -55,13 +44,6 @@ title: spoon_ai.agents
     * [send\_mcp\_message](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.send_mcp_message)
     * [cleanup](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.cleanup)
     * [get\_session\_stats](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session_stats)
-* [spoon\_ai.agents.toolcall](#spoon_ai.agents.toolcall)
-  * [ToolCallAgent](#spoon_ai.agents.toolcall.ToolCallAgent)
-    * [tool\_choices](#spoon_ai.agents.toolcall.ToolCallAgent.tool_choices)
-    * [mcp\_tools\_cache\_ttl](#spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl)
-    * [run](#spoon_ai.agents.toolcall.ToolCallAgent.run)
-    * [step](#spoon_ai.agents.toolcall.ToolCallAgent.step)
-    * [execute\_tool](#spoon_ai.agents.toolcall.ToolCallAgent.execute_tool)
 * [spoon\_ai.agents.custom\_agent](#spoon_ai.agents.custom_agent)
   * [CustomAgent](#spoon_ai.agents.custom_agent.CustomAgent)
     * [add\_tool](#spoon_ai.agents.custom_agent.CustomAgent.add_tool)
@@ -72,13 +54,17 @@ title: spoon_ai.agents
     * [validate\_tools](#spoon_ai.agents.custom_agent.CustomAgent.validate_tools)
     * [run](#spoon_ai.agents.custom_agent.CustomAgent.run)
     * [clear](#spoon_ai.agents.custom_agent.CustomAgent.clear)
-* [spoon\_ai.agents.spoon\_react\_skill](#spoon_ai.agents.spoon_react_skill)
-  * [SpoonReactSkill](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill)
-    * [\_\_init\_\_](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__)
-    * [run](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.run)
-    * [initialize](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize)
-    * [add\_skill\_path](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path)
-    * [discover\_skills](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills)
+* [spoon\_ai.agents.monitor](#spoon_ai.agents.monitor)
+* [spoon\_ai.agents.spoon\_react](#spoon_ai.agents.spoon_react)
+  * [create\_configured\_chatbot](#spoon_ai.agents.spoon_react.create_configured_chatbot)
+  * [SpoonReactAI](#spoon_ai.agents.spoon_react.SpoonReactAI)
+    * [\_\_init\_\_](#spoon_ai.agents.spoon_react.SpoonReactAI.__init__)
+    * [connect](#spoon_ai.agents.spoon_react.SpoonReactAI.connect)
+    * [initialize](#spoon_ai.agents.spoon_react.SpoonReactAI.initialize)
+    * [run](#spoon_ai.agents.spoon_react.SpoonReactAI.run)
+* [spoon\_ai.agents.spoon\_react\_mcp](#spoon_ai.agents.spoon_react_mcp)
+  * [SpoonReactMCP](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP)
+    * [list\_mcp\_tools](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools)
 * [spoon\_ai.agents.subagents](#spoon_ai.agents.subagents)
   * [Command](#spoon_ai.agents.subagents.Command)
     * [update](#spoon_ai.agents.subagents.Command.update)
@@ -101,23 +87,13 @@ title: spoon_ai.agents
   * [add\_subagent\_support](#spoon_ai.agents.subagents.add_subagent_support)
   * [create\_general\_purpose\_subagent](#spoon_ai.agents.subagents.create_general_purpose_subagent)
   * [create\_compiled\_subagent](#spoon_ai.agents.subagents.create_compiled_subagent)
-* [spoon\_ai.agents.rag](#spoon_ai.agents.rag)
-  * [RetrievalMixin](#spoon_ai.agents.rag.RetrievalMixin)
-    * [initialize\_retrieval\_client](#spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client)
-    * [add\_documents](#spoon_ai.agents.rag.RetrievalMixin.add_documents)
-    * [retrieve\_relevant\_documents](#spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents)
-    * [get\_context\_from\_query](#spoon_ai.agents.rag.RetrievalMixin.get_context_from_query)
-* [spoon\_ai.agents.skill\_mixin](#spoon_ai.agents.skill_mixin)
-  * [SkillEnabledMixin](#spoon_ai.agents.skill_mixin.SkillEnabledMixin)
-    * [activate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill)
-    * [deactivate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill)
-    * [auto\_activate\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills)
-    * [list\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills)
-    * [list\_active\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills)
-    * [get\_skill\_info](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info)
-    * [is\_skill\_active](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active)
-    * [deactivate\_all\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills)
-    * [get\_skill\_stats](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats)
+* [spoon\_ai.agents.toolcall](#spoon_ai.agents.toolcall)
+  * [ToolCallAgent](#spoon_ai.agents.toolcall.ToolCallAgent)
+    * [tool\_choices](#spoon_ai.agents.toolcall.ToolCallAgent.tool_choices)
+    * [mcp\_tools\_cache\_ttl](#spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl)
+    * [run](#spoon_ai.agents.toolcall.ToolCallAgent.run)
+    * [step](#spoon_ai.agents.toolcall.ToolCallAgent.step)
+    * [execute\_tool](#spoon_ai.agents.toolcall.ToolCallAgent.execute_tool)
 * [spoon\_ai.agents.graph\_agent](#spoon_ai.agents.graph_agent)
   * [GraphAgent](#spoon_ai.agents.graph_agent.GraphAgent)
     * [\_\_init\_\_](#spoon_ai.agents.graph_agent.GraphAgent.__init__)
@@ -129,79 +105,38 @@ title: spoon_ai.agents
     * [clear\_state](#spoon_ai.agents.graph_agent.GraphAgent.clear_state)
     * [update\_initial\_state](#spoon_ai.agents.graph_agent.GraphAgent.update_initial_state)
     * [set\_preserve\_state](#spoon_ai.agents.graph_agent.GraphAgent.set_preserve_state)
+* [spoon\_ai.agents.skill\_mixin](#spoon_ai.agents.skill_mixin)
+  * [SkillEnabledMixin](#spoon_ai.agents.skill_mixin.SkillEnabledMixin)
+    * [activate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill)
+    * [deactivate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill)
+    * [auto\_activate\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills)
+    * [list\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills)
+    * [list\_active\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills)
+    * [get\_skill\_info](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info)
+    * [is\_skill\_active](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active)
+    * [deactivate\_all\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills)
+    * [get\_skill\_stats](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats)
+* [spoon\_ai.agents.spoon\_react\_skill](#spoon_ai.agents.spoon_react_skill)
+  * [SpoonReactSkill](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill)
+    * [\_\_init\_\_](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__)
+    * [run](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.run)
+    * [initialize](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize)
+    * [add\_skill\_path](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path)
+    * [discover\_skills](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills)
+* [spoon\_ai.agents.rag](#spoon_ai.agents.rag)
+  * [RetrievalMixin](#spoon_ai.agents.rag.RetrievalMixin)
+    * [initialize\_retrieval\_client](#spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client)
+    * [add\_documents](#spoon_ai.agents.rag.RetrievalMixin.add_documents)
+    * [retrieve\_relevant\_documents](#spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents)
+    * [get\_context\_from\_query](#spoon_ai.agents.rag.RetrievalMixin.get_context_from_query)
 
 <a id="spoon_ai.agents"></a>
 
 # Module `spoon_ai.agents`
 
-<a id="spoon_ai.agents.spoon_react"></a>
+<a id="spoon_ai.agents.react"></a>
 
-# Module `spoon_ai.agents.spoon_react`
-
-<a id="spoon_ai.agents.spoon_react.create_configured_chatbot"></a>
-
-#### `create_configured_chatbot`
-
-```python
-def create_configured_chatbot()
-```
-
-Create a ChatBot instance with intelligent provider selection.
-
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI"></a>
-
-## `SpoonReactAI` Objects
-
-```python
-class SpoonReactAI(MCPClientMixin, ToolCallAgent)
-```
-
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(**kwargs)
-```
-
-Initialize SpoonReactAI with both ToolCallAgent and MCPClientMixin initialization
-
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.connect"></a>
-
-#### `connect`
-
-```python
-async def connect()
-```
-
-Establish connection to MCP server.
-
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.initialize"></a>
-
-#### `initialize`
-
-```python
-async def initialize(__context: Any = None)
-```
-
-Initialize async components and subscribe to topics
-
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.run"></a>
-
-#### `run`
-
-```python
-async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None,
-              thinking: bool = False,
-              reasoning_effort: Optional[str] = None) -> str
-```
-
-Ensure prompts reflect current tools before running.
-
-<a id="spoon_ai.agents.monitor"></a>
-
-# Module `spoon_ai.agents.monitor`
+# Module `spoon_ai.agents.react`
 
 <a id="spoon_ai.agents.base"></a>
 
@@ -697,32 +632,6 @@ def get_diagnostics() -> dict[str, Any]
 
 Get diagnostic information about the agent's state
 
-<a id="spoon_ai.agents.spoon_react_mcp"></a>
-
-# Module `spoon_ai.agents.spoon_react_mcp`
-
-<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP"></a>
-
-## `SpoonReactMCP` Objects
-
-```python
-class SpoonReactMCP(SpoonReactAI)
-```
-
-<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools"></a>
-
-#### `list_mcp_tools`
-
-```python
-async def list_mcp_tools()
-```
-
-Return MCP tools from available_tools manager
-
-<a id="spoon_ai.agents.react"></a>
-
-# Module `spoon_ai.agents.react`
-
 <a id="spoon_ai.agents.mcp_client_mixin"></a>
 
 # Module `spoon_ai.agents.mcp_client_mixin`
@@ -816,71 +725,6 @@ def get_session_stats() -> Dict[str, Any]
 ```
 
 Get session statistics for monitoring.
-
-<a id="spoon_ai.agents.toolcall"></a>
-
-# Module `spoon_ai.agents.toolcall`
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent"></a>
-
-## `ToolCallAgent` Objects
-
-```python
-class ToolCallAgent(ReActAgent)
-```
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.tool_choices"></a>
-
-#### `tool_choices`
-
-type: ignore
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl"></a>
-
-#### `mcp_tools_cache_ttl`
-
-5 minutes TTL
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.run"></a>
-
-#### `run`
-
-```python
-async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None,
-              thinking: bool = False,
-              reasoning_effort: Optional[str] = None) -> str
-```
-
-This ensures:
-1. Thread-safe execution (no concurrent runs)
-2. Proper timeout handling
-3. Plan/Reflect/Finish phases are executed
-4. Middleware hooks are called correctly
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.step"></a>
-
-#### `step`
-
-```python
-async def step(thinking: bool = False,
-               reasoning_effort: Optional[str] = None) -> str
-```
-
-Override the step method to handle finish_reason termination properly.
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.execute_tool"></a>
-
-#### `execute_tool`
-
-```python
-async def execute_tool(tool_call: ToolCall) -> str
-```
-
-Execute tool with middleware wrapping.
-
-CRITICAL: This method now routes ALL tool executions through the middleware
-pipeline, enabling HITL approval, observability, and other middleware features.
 
 <a id="spoon_ai.agents.custom_agent"></a>
 
@@ -1030,46 +874,33 @@ def clear()
 
 Enhanced clear method with proper tool state management.
 
-<a id="spoon_ai.agents.spoon_react_skill"></a>
+<a id="spoon_ai.agents.monitor"></a>
 
-# Module `spoon_ai.agents.spoon_react_skill`
+# Module `spoon_ai.agents.monitor`
 
-Skill-enabled production agent.
+<a id="spoon_ai.agents.spoon_react"></a>
 
-Combines SpoonReactAI with full skill system support.
+# Module `spoon_ai.agents.spoon_react`
 
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill"></a>
+<a id="spoon_ai.agents.spoon_react.create_configured_chatbot"></a>
 
-## `SpoonReactSkill` Objects
+#### `create_configured_chatbot`
 
 ```python
-class SpoonReactSkill(SkillEnabledMixin, SpoonReactAI)
+def create_configured_chatbot()
 ```
 
-Production agent with full skill system support.
+Create a ChatBot instance with intelligent provider selection.
 
-Combines:
-- SpoonReactAI: Tool calling, MCP integration, x402 payment
-- SkillEnabledMixin: Skill activation, context injection, auto-trigger
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI"></a>
 
-Usage:
-    agent = SpoonReactSkill(name="my_agent")
+## `SpoonReactAI` Objects
 
-    # Manual skill activation
-    await agent.activate_skill("trading-analysis", &#123;"asset": "BTC"&#125;)
+```python
+class SpoonReactAI(MCPClientMixin, ToolCallAgent)
+```
 
-    # Run with auto-trigger
-    result = await agent.run("Analyze ETH trading signals")
-    # -&gt; Automatically activates matching skills
-
-    # List skills
-    print(agent.list_skills())
-    print(agent.list_active_skills())
-
-    # Deactivate
-    await agent.deactivate_skill("trading-analysis")
-
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__"></a>
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.__init__"></a>
 
 #### `__init__`
 
@@ -1077,11 +908,29 @@ Usage:
 def __init__(**kwargs)
 ```
 
-Initialize SpoonReactSkill agent.
+Initialize SpoonReactAI with both ToolCallAgent and MCPClientMixin initialization
 
-Initializes both SpoonReactAI and skill system components.
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.connect"></a>
 
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.run"></a>
+#### `connect`
+
+```python
+async def connect()
+```
+
+Establish connection to MCP server.
+
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.initialize"></a>
+
+#### `initialize`
+
+```python
+async def initialize(__context: Any = None)
+```
+
+Initialize async components and subscribe to topics
+
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.run"></a>
 
 #### `run`
 
@@ -1092,64 +941,29 @@ async def run(request: Optional[str] = None,
               reasoning_effort: Optional[str] = None) -> str
 ```
 
-Execute agent with per-turn auto skill activation.
+Ensure prompts reflect current tools before running.
 
-Flow:
-1. Auto-detect and activate relevant skills (ephemeral for this run)
-2. Sync skill tools into available_tools
-3. Refresh base prompts with current tools
-4. Execute parent SpoonReactAI.run()
-5. Auto-deactivate skills activated in this turn
+<a id="spoon_ai.agents.spoon_react_mcp"></a>
 
-**Arguments**:
+# Module `spoon_ai.agents.spoon_react_mcp`
 
-- `request` - User request/message
-- `timeout` - Optional timeout in seconds
-  
+<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP"></a>
 
-**Returns**:
-
-  Agent response
-
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize"></a>
-
-#### `initialize`
+## `SpoonReactMCP` Objects
 
 ```python
-async def initialize(__context=None)
+class SpoonReactMCP(SpoonReactAI)
 ```
 
-Initialize async components.
+<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools"></a>
 
-Extends SpoonReactAI.initialize() to also initialize skill system.
-
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path"></a>
-
-#### `add_skill_path`
+#### `list_mcp_tools`
 
 ```python
-def add_skill_path(path: str) -> None
+async def list_mcp_tools()
 ```
 
-Add a path to search for skills.
-
-**Arguments**:
-
-- `path` - Directory path to add
-
-<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills"></a>
-
-#### `discover_skills`
-
-```python
-def discover_skills() -> int
-```
-
-Re-discover skills from all configured paths.
-
-**Returns**:
-
-  Number of skills discovered
+Return MCP tools from available_tools manager
 
 <a id="spoon_ai.agents.subagents"></a>
 
@@ -1626,215 +1440,70 @@ def create_compiled_subagent(name: str, description: str,
 
 Create a CompiledSubAgent from a graph.
 
-<a id="spoon_ai.agents.rag"></a>
+<a id="spoon_ai.agents.toolcall"></a>
 
-# Module `spoon_ai.agents.rag`
+# Module `spoon_ai.agents.toolcall`
 
-<a id="spoon_ai.agents.rag.RetrievalMixin"></a>
+<a id="spoon_ai.agents.toolcall.ToolCallAgent"></a>
 
-## `RetrievalMixin` Objects
-
-```python
-class RetrievalMixin()
-```
-
-Mixin class for retrieval-augmented generation functionality
-
-<a id="spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client"></a>
-
-#### `initialize_retrieval_client`
+## `ToolCallAgent` Objects
 
 ```python
-def initialize_retrieval_client(backend: str = 'chroma', **kwargs)
+class ToolCallAgent(ReActAgent)
 ```
 
-Initialize the retrieval client if it doesn't exist
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.tool_choices"></a>
 
-<a id="spoon_ai.agents.rag.RetrievalMixin.add_documents"></a>
+#### `tool_choices`
 
-#### `add_documents`
+type: ignore
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl"></a>
+
+#### `mcp_tools_cache_ttl`
+
+5 minutes TTL
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.run"></a>
+
+#### `run`
 
 ```python
-def add_documents(documents, backend: str = 'chroma', **kwargs)
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None,
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
 ```
 
-Add documents to the retrieval system
+This ensures:
+1. Thread-safe execution (no concurrent runs)
+2. Proper timeout handling
+3. Plan/Reflect/Finish phases are executed
+4. Middleware hooks are called correctly
 
-<a id="spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents"></a>
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.step"></a>
 
-#### `retrieve_relevant_documents`
+#### `step`
 
 ```python
-def retrieve_relevant_documents(query, k=5, backend: str = 'chroma', **kwargs)
+async def step(thinking: bool = False,
+               reasoning_effort: Optional[str] = None) -> str
 ```
 
-Retrieve relevant documents for a query
+Override the step method to handle finish_reason termination properly.
 
-<a id="spoon_ai.agents.rag.RetrievalMixin.get_context_from_query"></a>
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.execute_tool"></a>
 
-#### `get_context_from_query`
+#### `execute_tool`
 
 ```python
-def get_context_from_query(query)
+async def execute_tool(tool_call: ToolCall) -> str
 ```
 
-Get context string from relevant documents for a query
+Execute tool with middleware wrapping.
 
-<a id="spoon_ai.agents.skill_mixin"></a>
-
-# Module `spoon_ai.agents.skill_mixin`
-
-Skill-enabled agent mixin.
-
-Follows MCPClientMixin pattern for composable agent integration.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin"></a>
-
-## `SkillEnabledMixin` Objects
-
-```python
-class SkillEnabledMixin()
-```
-
-Mixin that adds skill capabilities to agents.
-
-Integrates with ReAct cycle by:
-1. Injecting active skill instructions into system prompt
-2. Adding skill tools to available_tools
-3. Auto-triggering skills based on user input
-
-Usage:
-    class MyAgent(SkillEnabledMixin, SpoonReactAI):
-        pass
-
-    agent = MyAgent()
-    await agent.activate_skill("trading-analysis")
-    result = await agent.run("Analyze BTC")
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill"></a>
-
-#### `activate_skill`
-
-```python
-async def activate_skill(name: str,
-                         context: Optional[Dict[str, Any]] = None) -> Skill
-```
-
-Activate a skill and refresh agent state.
-
-**Arguments**:
-
-- `name` - Skill name to activate
-- `context` - Optional context data
-  
-
-**Returns**:
-
-  Activated Skill instance
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill"></a>
-
-#### `deactivate_skill`
-
-```python
-async def deactivate_skill(name: str) -> bool
-```
-
-Deactivate a skill.
-
-**Arguments**:
-
-- `name` - Skill name to deactivate
-  
-
-**Returns**:
-
-  True if deactivated, False if not active
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills"></a>
-
-#### `auto_activate_skills`
-
-```python
-async def auto_activate_skills(user_input: str) -> List[Skill]
-```
-
-Automatically activate skills matching user input.
-
-Uses both keyword/pattern matching and LLM intent analysis.
-
-**Arguments**:
-
-- `user_input` - User's message
-  
-
-**Returns**:
-
-  List of activated skills
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills"></a>
-
-#### `list_skills`
-
-```python
-def list_skills() -> List[str]
-```
-
-List all available skill names.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills"></a>
-
-#### `list_active_skills`
-
-```python
-def list_active_skills() -> List[str]
-```
-
-List currently active skill names.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info"></a>
-
-#### `get_skill_info`
-
-```python
-def get_skill_info(name: str) -> Optional[Dict[str, Any]]
-```
-
-Get detailed information about a skill.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active"></a>
-
-#### `is_skill_active`
-
-```python
-def is_skill_active(name: str) -> bool
-```
-
-Check if a skill is currently active.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills"></a>
-
-#### `deactivate_all_skills`
-
-```python
-async def deactivate_all_skills() -> int
-```
-
-Deactivate all active skills.
-
-**Returns**:
-
-  Number of skills deactivated
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats"></a>
-
-#### `get_skill_stats`
-
-```python
-def get_skill_stats() -> Dict[str, Any]
-```
-
-Get skill system statistics.
+CRITICAL: This method now routes ALL tool executions through the middleware
+pipeline, enabling HITL approval, observability, and other middleware features.
 
 <a id="spoon_ai.agents.graph_agent"></a>
 
@@ -2007,4 +1676,335 @@ Enable or disable state preservation between runs.
 **Arguments**:
 
 - `preserve` - Whether to preserve state between runs
+
+<a id="spoon_ai.agents.skill_mixin"></a>
+
+# Module `spoon_ai.agents.skill_mixin`
+
+Skill-enabled agent mixin.
+
+Follows MCPClientMixin pattern for composable agent integration.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin"></a>
+
+## `SkillEnabledMixin` Objects
+
+```python
+class SkillEnabledMixin()
+```
+
+Mixin that adds skill capabilities to agents.
+
+Integrates with ReAct cycle by:
+1. Injecting active skill instructions into system prompt
+2. Adding skill tools to available_tools
+3. Auto-triggering skills based on user input
+
+Usage:
+    class MyAgent(SkillEnabledMixin, SpoonReactAI):
+        pass
+
+    agent = MyAgent()
+    await agent.activate_skill("trading-analysis")
+    result = await agent.run("Analyze BTC")
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill"></a>
+
+#### `activate_skill`
+
+```python
+async def activate_skill(name: str,
+                         context: Optional[Dict[str, Any]] = None) -> Skill
+```
+
+Activate a skill and refresh agent state.
+
+**Arguments**:
+
+- `name` - Skill name to activate
+- `context` - Optional context data
+  
+
+**Returns**:
+
+  Activated Skill instance
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill"></a>
+
+#### `deactivate_skill`
+
+```python
+async def deactivate_skill(name: str) -> bool
+```
+
+Deactivate a skill.
+
+**Arguments**:
+
+- `name` - Skill name to deactivate
+  
+
+**Returns**:
+
+  True if deactivated, False if not active
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills"></a>
+
+#### `auto_activate_skills`
+
+```python
+async def auto_activate_skills(user_input: str) -> List[Skill]
+```
+
+Automatically activate skills matching user input.
+
+Uses both keyword/pattern matching and LLM intent analysis.
+
+**Arguments**:
+
+- `user_input` - User's message
+  
+
+**Returns**:
+
+  List of activated skills
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills"></a>
+
+#### `list_skills`
+
+```python
+def list_skills() -> List[str]
+```
+
+List all available skill names.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills"></a>
+
+#### `list_active_skills`
+
+```python
+def list_active_skills() -> List[str]
+```
+
+List currently active skill names.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info"></a>
+
+#### `get_skill_info`
+
+```python
+def get_skill_info(name: str) -> Optional[Dict[str, Any]]
+```
+
+Get detailed information about a skill.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active"></a>
+
+#### `is_skill_active`
+
+```python
+def is_skill_active(name: str) -> bool
+```
+
+Check if a skill is currently active.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills"></a>
+
+#### `deactivate_all_skills`
+
+```python
+async def deactivate_all_skills() -> int
+```
+
+Deactivate all active skills.
+
+**Returns**:
+
+  Number of skills deactivated
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats"></a>
+
+#### `get_skill_stats`
+
+```python
+def get_skill_stats() -> Dict[str, Any]
+```
+
+Get skill system statistics.
+
+<a id="spoon_ai.agents.spoon_react_skill"></a>
+
+# Module `spoon_ai.agents.spoon_react_skill`
+
+Skill-enabled production agent.
+
+Combines SpoonReactAI with full skill system support.
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill"></a>
+
+## `SpoonReactSkill` Objects
+
+```python
+class SpoonReactSkill(SkillEnabledMixin, SpoonReactAI)
+```
+
+Production agent with full skill system support.
+
+Combines:
+- SpoonReactAI: Tool calling, MCP integration, x402 payment
+- SkillEnabledMixin: Skill activation, context injection, auto-trigger
+
+Usage:
+    agent = SpoonReactSkill(name="my_agent")
+
+    # Manual skill activation
+    await agent.activate_skill("trading-analysis", &#123;"asset": "BTC"&#125;)
+
+    # Run with auto-trigger
+    result = await agent.run("Analyze ETH trading signals")
+    # -&gt; Automatically activates matching skills
+
+    # List skills
+    print(agent.list_skills())
+    print(agent.list_active_skills())
+
+    # Deactivate
+    await agent.deactivate_skill("trading-analysis")
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(**kwargs)
+```
+
+Initialize SpoonReactSkill agent.
+
+Initializes both SpoonReactAI and skill system components.
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.run"></a>
+
+#### `run`
+
+```python
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None,
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
+```
+
+Execute agent with per-turn auto skill activation.
+
+Flow:
+1. Auto-detect and activate relevant skills (ephemeral for this run)
+2. Sync skill tools into available_tools
+3. Refresh base prompts with current tools
+4. Execute parent SpoonReactAI.run()
+5. Auto-deactivate skills activated in this turn
+
+**Arguments**:
+
+- `request` - User request/message
+- `timeout` - Optional timeout in seconds
+  
+
+**Returns**:
+
+  Agent response
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize"></a>
+
+#### `initialize`
+
+```python
+async def initialize(__context=None)
+```
+
+Initialize async components.
+
+Extends SpoonReactAI.initialize() to also initialize skill system.
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path"></a>
+
+#### `add_skill_path`
+
+```python
+def add_skill_path(path: str) -> None
+```
+
+Add a path to search for skills.
+
+**Arguments**:
+
+- `path` - Directory path to add
+
+<a id="spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills"></a>
+
+#### `discover_skills`
+
+```python
+def discover_skills() -> int
+```
+
+Re-discover skills from all configured paths.
+
+**Returns**:
+
+  Number of skills discovered
+
+<a id="spoon_ai.agents.rag"></a>
+
+# Module `spoon_ai.agents.rag`
+
+<a id="spoon_ai.agents.rag.RetrievalMixin"></a>
+
+## `RetrievalMixin` Objects
+
+```python
+class RetrievalMixin()
+```
+
+Mixin class for retrieval-augmented generation functionality
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client"></a>
+
+#### `initialize_retrieval_client`
+
+```python
+def initialize_retrieval_client(backend: str = 'chroma', **kwargs)
+```
+
+Initialize the retrieval client if it doesn't exist
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.add_documents"></a>
+
+#### `add_documents`
+
+```python
+def add_documents(documents, backend: str = 'chroma', **kwargs)
+```
+
+Add documents to the retrieval system
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents"></a>
+
+#### `retrieve_relevant_documents`
+
+```python
+def retrieve_relevant_documents(query, k=5, backend: str = 'chroma', **kwargs)
+```
+
+Retrieve relevant documents for a query
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.get_context_from_query"></a>
+
+#### `get_context_from_query`
+
+```python
+def get_context_from_query(query)
+```
+
+Get context string from relevant documents for a query
 
