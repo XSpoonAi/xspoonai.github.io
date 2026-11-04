@@ -7,19 +7,12 @@ title: spoon_ai.skills
 # Table of Contents
 
 * [spoon\_ai.skills](#spoon_ai.skills)
-* [spoon\_ai.skills.executor](#spoon_ai.skills.executor)
-  * [MAX\_OUTPUT\_SIZE](#spoon_ai.skills.executor.MAX_OUTPUT_SIZE)
-  * [ScriptExecutionError](#spoon_ai.skills.executor.ScriptExecutionError)
-  * [ScriptExecutor](#spoon_ai.skills.executor.ScriptExecutor)
-    * [\_\_init\_\_](#spoon_ai.skills.executor.ScriptExecutor.__init__)
-    * [is\_available](#spoon_ai.skills.executor.ScriptExecutor.is_available)
-    * [get\_interpreter](#spoon_ai.skills.executor.ScriptExecutor.get_interpreter)
-    * [execute](#spoon_ai.skills.executor.ScriptExecutor.execute)
-    * [get\_stats](#spoon_ai.skills.executor.ScriptExecutor.get_stats)
-    * [set\_enabled](#spoon_ai.skills.executor.ScriptExecutor.set_enabled)
-  * [get\_executor](#spoon_ai.skills.executor.get_executor)
-  * [configure\_executor](#spoon_ai.skills.executor.configure_executor)
-  * [set\_scripts\_enabled](#spoon_ai.skills.executor.set_scripts_enabled)
+* [spoon\_ai.skills.script\_tool](#spoon_ai.skills.script_tool)
+  * [ScriptTool](#spoon_ai.skills.script_tool.ScriptTool)
+    * [\_\_init\_\_](#spoon_ai.skills.script_tool.ScriptTool.__init__)
+    * [execute](#spoon_ai.skills.script_tool.ScriptTool.execute)
+    * [to\_param](#spoon_ai.skills.script_tool.ScriptTool.to_param)
+  * [create\_script\_tools](#spoon_ai.skills.script_tool.create_script_tools)
 * [spoon\_ai.skills.manager](#spoon_ai.skills.manager)
   * [SkillManager](#spoon_ai.skills.manager.SkillManager)
     * [\_\_init\_\_](#spoon_ai.skills.manager.SkillManager.__init__)
@@ -45,6 +38,19 @@ title: spoon_ai.skills
     * [get\_script\_tools](#spoon_ai.skills.manager.SkillManager.get_script_tools)
     * [get\_skill\_info](#spoon_ai.skills.manager.SkillManager.get_skill_info)
     * [get\_stats](#spoon_ai.skills.manager.SkillManager.get_stats)
+* [spoon\_ai.skills.executor](#spoon_ai.skills.executor)
+  * [MAX\_OUTPUT\_SIZE](#spoon_ai.skills.executor.MAX_OUTPUT_SIZE)
+  * [ScriptExecutionError](#spoon_ai.skills.executor.ScriptExecutionError)
+  * [ScriptExecutor](#spoon_ai.skills.executor.ScriptExecutor)
+    * [\_\_init\_\_](#spoon_ai.skills.executor.ScriptExecutor.__init__)
+    * [is\_available](#spoon_ai.skills.executor.ScriptExecutor.is_available)
+    * [get\_interpreter](#spoon_ai.skills.executor.ScriptExecutor.get_interpreter)
+    * [execute](#spoon_ai.skills.executor.ScriptExecutor.execute)
+    * [get\_stats](#spoon_ai.skills.executor.ScriptExecutor.get_stats)
+    * [set\_enabled](#spoon_ai.skills.executor.ScriptExecutor.set_enabled)
+  * [get\_executor](#spoon_ai.skills.executor.get_executor)
+  * [configure\_executor](#spoon_ai.skills.executor.configure_executor)
+  * [set\_scripts\_enabled](#spoon_ai.skills.executor.set_scripts_enabled)
 * [spoon\_ai.skills.registry](#spoon_ai.skills.registry)
   * [SkillRegistry](#spoon_ai.skills.registry.SkillRegistry)
     * [register](#spoon_ai.skills.registry.SkillRegistry.register)
@@ -93,12 +99,6 @@ title: spoon_ai.skills
     * [get\_tools](#spoon_ai.skills.loader.SkillLoader.get_tools)
     * [clear\_cache](#spoon_ai.skills.loader.SkillLoader.clear_cache)
     * [reload](#spoon_ai.skills.loader.SkillLoader.reload)
-* [spoon\_ai.skills.script\_tool](#spoon_ai.skills.script_tool)
-  * [ScriptTool](#spoon_ai.skills.script_tool.ScriptTool)
-    * [\_\_init\_\_](#spoon_ai.skills.script_tool.ScriptTool.__init__)
-    * [execute](#spoon_ai.skills.script_tool.ScriptTool.execute)
-    * [to\_param](#spoon_ai.skills.script_tool.ScriptTool.to_param)
-  * [create\_script\_tools](#spoon_ai.skills.script_tool.create_script_tools)
 
 <a id="spoon_ai.skills"></a>
 
@@ -138,164 +138,107 @@ Usage:
     # Find matching skills for user input
     matches = await manager.find_matching_skills("research quantum computing")
 
-<a id="spoon_ai.skills.executor"></a>
+<a id="spoon_ai.skills.script_tool"></a>
 
-# Module `spoon_ai.skills.executor`
+# Module `spoon_ai.skills.script_tool`
 
-Script execution engine for skills.
+Script-based tool for agent integration.
 
-Provides async subprocess management for executing skill scripts.
-AI decides how to call scripts - users only control whether scripts are allowed.
+Wraps SkillScript as a BaseTool that agents can call.
+AI decides how to use scripts - users only control whether scripts are allowed.
 
-<a id="spoon_ai.skills.executor.MAX_OUTPUT_SIZE"></a>
+<a id="spoon_ai.skills.script_tool.ScriptTool"></a>
 
-#### `MAX_OUTPUT_SIZE`
-
-5MB
-
-<a id="spoon_ai.skills.executor.ScriptExecutionError"></a>
-
-## `ScriptExecutionError` Objects
+## `ScriptTool` Objects
 
 ```python
-class ScriptExecutionError(Exception)
+class ScriptTool(BaseTool)
 ```
 
-Raised when script execution fails.
+Tool wrapper for skill scripts.
 
-<a id="spoon_ai.skills.executor.ScriptExecutor"></a>
+Exposes a SkillScript as a callable tool that agents can invoke.
+When the script defines an ``input_schema``, the tool parameters are
+derived from that schema so the LLM receives a structured contract.
+Otherwise a generic ``input`` string parameter is used for backward
+compatibility.
 
-## `ScriptExecutor` Objects
-
-```python
-class ScriptExecutor()
-```
-
-Async script executor for skill scripts.
-
-Features:
-- Async subprocess execution with timeout
-- Support for Python, shell, bash scripts
-- Environment variable passthrough
-- Output capture and size limiting
-- Global enable/disable control
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.__init__"></a>
+<a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(enabled: bool = True,
-             default_timeout: int = DEFAULT_TIMEOUT,
-             max_output_size: int = MAX_OUTPUT_SIZE,
-             env_passthrough: Optional[List[str]] = None)
+def __init__(script: SkillScript,
+             skill_name: str,
+             working_directory: Optional[str] = None)
 ```
 
-Initialize script executor.
+Create a tool from a script definition.
 
 **Arguments**:
 
-- `enabled` - Whether script execution is allowed
-- `default_timeout` - Default timeout in seconds
-- `max_output_size` - Max output capture size in bytes
-- `env_passthrough` - Environment variables to pass through
+- `script` - SkillScript to wrap
+- `skill_name` - Parent skill name
+- `working_directory` - Base working directory
 
-<a id="spoon_ai.skills.executor.ScriptExecutor.is_available"></a>
-
-#### `is_available`
-
-```python
-def is_available(script_type: ScriptType) -> bool
-```
-
-Check if a script type can be executed.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.get_interpreter"></a>
-
-#### `get_interpreter`
-
-```python
-def get_interpreter(script_type: ScriptType) -> Optional[str]
-```
-
-Get interpreter path for a script type.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.execute"></a>
+<a id="spoon_ai.skills.script_tool.ScriptTool.execute"></a>
 
 #### `execute`
 
 ```python
-async def execute(script: SkillScript,
-                  input_text: Optional[str] = None,
-                  working_directory: Optional[str] = None,
-                  extra_env: Optional[Dict[str, str]] = None,
-                  timeout: Optional[int] = None) -> ScriptResult
+async def execute(input: Optional[str] = None, **kwargs) -> str
 ```
 
-Execute a script asynchronously.
+Execute the script.
+
+When the script declares an ``input_schema``, the LLM's structured
+kwargs are serialized to JSON and piped to stdin.  For legacy scripts
+that only declare a generic ``input`` string, the raw value is passed
+through as-is.
 
 **Arguments**:
 
-- `script` - Script to execute
-- `input_text` - Optional text to pass to script via stdin
-- `working_directory` - Working directory for execution
-- `extra_env` - Additional environment variables
-- `timeout` - Timeout override (uses script.timeout or default)
+- `input` - Optional input text (legacy path)
+- `**kwargs` - Structured arguments matching input_schema
   
 
 **Returns**:
 
-  ScriptResult with output and status
+  Script output as string
 
-<a id="spoon_ai.skills.executor.ScriptExecutor.get_stats"></a>
+<a id="spoon_ai.skills.script_tool.ScriptTool.to_param"></a>
 
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, int]
-```
-
-Get execution statistics.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.set_enabled"></a>
-
-#### `set_enabled`
+#### `to_param`
 
 ```python
-def set_enabled(enabled: bool) -> None
+def to_param() -> dict
 ```
 
-Enable or disable script execution.
+Generate OpenAI-compatible function definition.
 
-<a id="spoon_ai.skills.executor.get_executor"></a>
+<a id="spoon_ai.skills.script_tool.create_script_tools"></a>
 
-#### `get_executor`
+#### `create_script_tools`
 
 ```python
-def get_executor() -> ScriptExecutor
+def create_script_tools(
+        skill_name: str,
+        scripts: List[SkillScript],
+        working_directory: Optional[str] = None) -> List[ScriptTool]
 ```
 
-Get or create the global script executor.
+Create ScriptTool instances from script definitions.
 
-<a id="spoon_ai.skills.executor.configure_executor"></a>
+**Arguments**:
 
-#### `configure_executor`
+- `skill_name` - Parent skill name
+- `scripts` - List of script definitions
+- `working_directory` - Base working directory (fallback if script has none)
+  
 
-```python
-def configure_executor(**kwargs) -> ScriptExecutor
-```
+**Returns**:
 
-Configure and return the global executor.
-
-<a id="spoon_ai.skills.executor.set_scripts_enabled"></a>
-
-#### `set_scripts_enabled`
-
-```python
-def set_scripts_enabled(enabled: bool) -> None
-```
-
-Enable or disable script execution globally.
+  List of ScriptTool instances
 
 <a id="spoon_ai.skills.manager"></a>
 
@@ -689,6 +632,165 @@ def get_stats() -> Dict[str, Any]
 ```
 
 Get statistics about the skill system.
+
+<a id="spoon_ai.skills.executor"></a>
+
+# Module `spoon_ai.skills.executor`
+
+Script execution engine for skills.
+
+Provides async subprocess management for executing skill scripts.
+AI decides how to call scripts - users only control whether scripts are allowed.
+
+<a id="spoon_ai.skills.executor.MAX_OUTPUT_SIZE"></a>
+
+#### `MAX_OUTPUT_SIZE`
+
+5MB
+
+<a id="spoon_ai.skills.executor.ScriptExecutionError"></a>
+
+## `ScriptExecutionError` Objects
+
+```python
+class ScriptExecutionError(Exception)
+```
+
+Raised when script execution fails.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor"></a>
+
+## `ScriptExecutor` Objects
+
+```python
+class ScriptExecutor()
+```
+
+Async script executor for skill scripts.
+
+Features:
+- Async subprocess execution with timeout
+- Support for Python, shell, bash scripts
+- Environment variable passthrough
+- Output capture and size limiting
+- Global enable/disable control
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(enabled: bool = True,
+             default_timeout: int = DEFAULT_TIMEOUT,
+             max_output_size: int = MAX_OUTPUT_SIZE,
+             env_passthrough: Optional[List[str]] = None)
+```
+
+Initialize script executor.
+
+**Arguments**:
+
+- `enabled` - Whether script execution is allowed
+- `default_timeout` - Default timeout in seconds
+- `max_output_size` - Max output capture size in bytes
+- `env_passthrough` - Environment variables to pass through
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.is_available"></a>
+
+#### `is_available`
+
+```python
+def is_available(script_type: ScriptType) -> bool
+```
+
+Check if a script type can be executed.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.get_interpreter"></a>
+
+#### `get_interpreter`
+
+```python
+def get_interpreter(script_type: ScriptType) -> Optional[str]
+```
+
+Get interpreter path for a script type.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.execute"></a>
+
+#### `execute`
+
+```python
+async def execute(script: SkillScript,
+                  input_text: Optional[str] = None,
+                  working_directory: Optional[str] = None,
+                  extra_env: Optional[Dict[str, str]] = None,
+                  timeout: Optional[int] = None) -> ScriptResult
+```
+
+Execute a script asynchronously.
+
+**Arguments**:
+
+- `script` - Script to execute
+- `input_text` - Optional text to pass to script via stdin
+- `working_directory` - Working directory for execution
+- `extra_env` - Additional environment variables
+- `timeout` - Timeout override (uses script.timeout or default)
+  
+
+**Returns**:
+
+  ScriptResult with output and status
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.get_stats"></a>
+
+#### `get_stats`
+
+```python
+def get_stats() -> Dict[str, int]
+```
+
+Get execution statistics.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.set_enabled"></a>
+
+#### `set_enabled`
+
+```python
+def set_enabled(enabled: bool) -> None
+```
+
+Enable or disable script execution.
+
+<a id="spoon_ai.skills.executor.get_executor"></a>
+
+#### `get_executor`
+
+```python
+def get_executor() -> ScriptExecutor
+```
+
+Get or create the global script executor.
+
+<a id="spoon_ai.skills.executor.configure_executor"></a>
+
+#### `configure_executor`
+
+```python
+def configure_executor(**kwargs) -> ScriptExecutor
+```
+
+Configure and return the global executor.
+
+<a id="spoon_ai.skills.executor.set_scripts_enabled"></a>
+
+#### `set_scripts_enabled`
+
+```python
+def set_scripts_enabled(enabled: bool) -> None
+```
+
+Enable or disable script execution globally.
 
 <a id="spoon_ai.skills.registry"></a>
 
@@ -1354,106 +1456,4 @@ Reload a specific skill from disk.
 **Returns**:
 
   Reloaded Skill or None if not found
-
-<a id="spoon_ai.skills.script_tool"></a>
-
-# Module `spoon_ai.skills.script_tool`
-
-Script-based tool for agent integration.
-
-Wraps SkillScript as a BaseTool that agents can call.
-AI decides how to use scripts - users only control whether scripts are allowed.
-
-<a id="spoon_ai.skills.script_tool.ScriptTool"></a>
-
-## `ScriptTool` Objects
-
-```python
-class ScriptTool(BaseTool)
-```
-
-Tool wrapper for skill scripts.
-
-Exposes a SkillScript as a callable tool that agents can invoke.
-When the script defines an ``input_schema``, the tool parameters are
-derived from that schema so the LLM receives a structured contract.
-Otherwise a generic ``input`` string parameter is used for backward
-compatibility.
-
-<a id="spoon_ai.skills.script_tool.ScriptTool.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(script: SkillScript,
-             skill_name: str,
-             working_directory: Optional[str] = None)
-```
-
-Create a tool from a script definition.
-
-**Arguments**:
-
-- `script` - SkillScript to wrap
-- `skill_name` - Parent skill name
-- `working_directory` - Base working directory
-
-<a id="spoon_ai.skills.script_tool.ScriptTool.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(input: Optional[str] = None, **kwargs) -> str
-```
-
-Execute the script.
-
-When the script declares an ``input_schema``, the LLM's structured
-kwargs are serialized to JSON and piped to stdin.  For legacy scripts
-that only declare a generic ``input`` string, the raw value is passed
-through as-is.
-
-**Arguments**:
-
-- `input` - Optional input text (legacy path)
-- `**kwargs` - Structured arguments matching input_schema
-  
-
-**Returns**:
-
-  Script output as string
-
-<a id="spoon_ai.skills.script_tool.ScriptTool.to_param"></a>
-
-#### `to_param`
-
-```python
-def to_param() -> dict
-```
-
-Generate OpenAI-compatible function definition.
-
-<a id="spoon_ai.skills.script_tool.create_script_tools"></a>
-
-#### `create_script_tools`
-
-```python
-def create_script_tools(
-        skill_name: str,
-        scripts: List[SkillScript],
-        working_directory: Optional[str] = None) -> List[ScriptTool]
-```
-
-Create ScriptTool instances from script definitions.
-
-**Arguments**:
-
-- `skill_name` - Parent skill name
-- `scripts` - List of script definitions
-- `working_directory` - Base working directory (fallback if script has none)
-  
-
-**Returns**:
-
-  List of ScriptTool instances
 

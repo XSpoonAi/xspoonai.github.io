@@ -7,6 +7,10 @@ title: spoon_ai.memory
 # Table of Contents
 
 * [spoon\_ai.memory](#spoon_ai.memory)
+* [spoon\_ai.memory.mem0\_client](#spoon_ai.memory.mem0_client)
+  * [SpoonMem0](#spoon_ai.memory.mem0_client.SpoonMem0)
+    * [add\_text](#spoon_ai.memory.mem0_client.SpoonMem0.add_text)
+    * [get\_all\_memory](#spoon_ai.memory.mem0_client.SpoonMem0.get_all_memory)
 * [spoon\_ai.memory.utils](#spoon_ai.memory.utils)
   * [extract\_memories](#spoon_ai.memory.utils.extract_memories)
   * [extract\_first\_memory\_id](#spoon_ai.memory.utils.extract_first_memory_id)
@@ -18,6 +22,8 @@ title: spoon_ai.memory
   * [ShortTermMemoryManager](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager)
     * [trim\_messages](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager.trim_messages)
     * [summarize\_messages](#spoon_ai.memory.short_term_manager.ShortTermMemoryManager.summarize_messages)
+* [spoon\_ai.memory.remove\_message](#spoon_ai.memory.remove_message)
+  * [RemoveMessage](#spoon_ai.memory.remove_message.RemoveMessage)
 * [spoon\_ai.memory.checkpointer](#spoon_ai.memory.checkpointer)
   * [Checkpoint](#spoon_ai.memory.checkpointer.Checkpoint)
     * [messages](#spoon_ai.memory.checkpointer.Checkpoint.messages)
@@ -55,12 +61,6 @@ title: spoon_ai.memory
     * [after\_agent](#spoon_ai.memory.checkpointer.CheckpointMiddleware.after_agent)
   * [create\_sqlite\_checkpointer](#spoon_ai.memory.checkpointer.create_sqlite_checkpointer)
   * [create\_memory\_checkpointer](#spoon_ai.memory.checkpointer.create_memory_checkpointer)
-* [spoon\_ai.memory.mem0\_client](#spoon_ai.memory.mem0_client)
-  * [SpoonMem0](#spoon_ai.memory.mem0_client.SpoonMem0)
-    * [add\_text](#spoon_ai.memory.mem0_client.SpoonMem0.add_text)
-    * [get\_all\_memory](#spoon_ai.memory.mem0_client.SpoonMem0.get_all_memory)
-* [spoon\_ai.memory.remove\_message](#spoon_ai.memory.remove_message)
-  * [RemoveMessage](#spoon_ai.memory.remove_message.RemoveMessage)
 
 <a id="spoon_ai.memory"></a>
 
@@ -70,6 +70,43 @@ Short-term memory management for conversation history.
 
 This module provides memory management utilities for maintaining and optimizing
 conversation history in chat applications.
+
+<a id="spoon_ai.memory.mem0_client"></a>
+
+# Module `spoon_ai.memory.mem0_client`
+
+<a id="spoon_ai.memory.mem0_client.SpoonMem0"></a>
+
+## `SpoonMem0` Objects
+
+```python
+class SpoonMem0()
+```
+
+Lightweight wrapper around Mem0's MemoryClient with safe defaults.
+
+<a id="spoon_ai.memory.mem0_client.SpoonMem0.add_text"></a>
+
+#### `add_text`
+
+```python
+def add_text(data: str,
+             user_id: Optional[str] = None,
+             metadata: Optional[Dict[str, Any]] = None) -> None
+```
+
+Convenience helper for adding a single text memory.
+
+<a id="spoon_ai.memory.mem0_client.SpoonMem0.get_all_memory"></a>
+
+#### `get_all_memory`
+
+```python
+def get_all_memory(user_id: Optional[str] = None,
+                   limit: Optional[int] = None) -> List[str]
+```
+
+Retrieve all memories for a user (subject to backend limits).
 
 <a id="spoon_ai.memory.utils"></a>
 
@@ -178,6 +215,22 @@ async def summarize_messages(
 ```
 
 Summarize earlier messages and emit removal directives.
+
+<a id="spoon_ai.memory.remove_message"></a>
+
+# Module `spoon_ai.memory.remove_message`
+
+Helpers for emitting message-removal directives.
+
+<a id="spoon_ai.memory.remove_message.RemoveMessage"></a>
+
+## `RemoveMessage` Objects
+
+```python
+class RemoveMessage(BaseModel)
+```
+
+Lightweight message that signals another message should be removed.
 
 <a id="spoon_ai.memory.checkpointer"></a>
 
@@ -660,57 +713,4 @@ Create an in-memory checkpointer for testing.
 **Returns**:
 
   InMemoryCheckpointer instance
-
-<a id="spoon_ai.memory.mem0_client"></a>
-
-# Module `spoon_ai.memory.mem0_client`
-
-<a id="spoon_ai.memory.mem0_client.SpoonMem0"></a>
-
-## `SpoonMem0` Objects
-
-```python
-class SpoonMem0()
-```
-
-Lightweight wrapper around Mem0's MemoryClient with safe defaults.
-
-<a id="spoon_ai.memory.mem0_client.SpoonMem0.add_text"></a>
-
-#### `add_text`
-
-```python
-def add_text(data: str,
-             user_id: Optional[str] = None,
-             metadata: Optional[Dict[str, Any]] = None) -> None
-```
-
-Convenience helper for adding a single text memory.
-
-<a id="spoon_ai.memory.mem0_client.SpoonMem0.get_all_memory"></a>
-
-#### `get_all_memory`
-
-```python
-def get_all_memory(user_id: Optional[str] = None,
-                   limit: Optional[int] = None) -> List[str]
-```
-
-Retrieve all memories for a user (subject to backend limits).
-
-<a id="spoon_ai.memory.remove_message"></a>
-
-# Module `spoon_ai.memory.remove_message`
-
-Helpers for emitting message-removal directives.
-
-<a id="spoon_ai.memory.remove_message.RemoveMessage"></a>
-
-## `RemoveMessage` Objects
-
-```python
-class RemoveMessage(BaseModel)
-```
-
-Lightweight message that signals another message should be removed.
 

@@ -7,7 +7,6 @@ title: spoon_ai.utils
 # Table of Contents
 
 * [spoon\_ai.utils](#spoon_ai.utils)
-* [spoon\_ai.utils.config](#spoon_ai.utils.config)
 * [spoon\_ai.utils.streaming](#spoon_ai.utils.streaming)
   * [StreamOutcome](#spoon_ai.utils.streaming.StreamOutcome)
   * [build\_output\_queue\_event](#spoon_ai.utils.streaming.build_output_queue_event)
@@ -24,14 +23,11 @@ title: spoon_ai.utils
     * [get\_model\_name](#spoon_ai.utils.config_manager.ConfigManager.get_model_name)
     * [get\_base\_url](#spoon_ai.utils.config_manager.ConfigManager.get_base_url)
     * [get\_llm\_provider](#spoon_ai.utils.config_manager.ConfigManager.get_llm_provider)
+* [spoon\_ai.utils.config](#spoon_ai.utils.config)
 
 <a id="spoon_ai.utils"></a>
 
 # Module `spoon_ai.utils`
-
-<a id="spoon_ai.utils.config"></a>
-
-# Module `spoon_ai.utils.config`
 
 <a id="spoon_ai.utils.streaming"></a>
 
@@ -179,4 +175,8 @@ def get_llm_provider() -> Optional[str]
 ```
 
 Determine LLM provider from environment variables.
+
+<a id="spoon_ai.utils.config"></a>
+
+# Module `spoon_ai.utils.config`
 

@@ -38,10 +38,10 @@ title: spoon_ai.callbacks
     * [ignore\_retriever](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_retriever)
     * [ignore\_prompt](#spoon_ai.callbacks.base.BaseCallbackHandler.ignore_prompt)
   * [AsyncCallbackHandler](#spoon_ai.callbacks.base.AsyncCallbackHandler)
-* [spoon\_ai.callbacks.stream\_event](#spoon_ai.callbacks.stream_event)
-  * [StreamEventCallbackHandler](#spoon_ai.callbacks.stream_event.StreamEventCallbackHandler)
 * [spoon\_ai.callbacks.manager](#spoon_ai.callbacks.manager)
   * [CallbackManager](#spoon_ai.callbacks.manager.CallbackManager)
+* [spoon\_ai.callbacks.stream\_event](#spoon_ai.callbacks.stream_event)
+  * [StreamEventCallbackHandler](#spoon_ai.callbacks.stream_event.StreamEventCallbackHandler)
 * [spoon\_ai.callbacks.statistics](#spoon_ai.callbacks.statistics)
   * [StreamingStatisticsCallback](#spoon_ai.callbacks.statistics.StreamingStatisticsCallback)
 * [spoon\_ai.callbacks.streaming\_stdout](#spoon_ai.callbacks.streaming_stdout)
@@ -384,20 +384,6 @@ class AsyncCallbackHandler(BaseCallbackHandler)
 
 Async version of the callback handler base class.
 
-<a id="spoon_ai.callbacks.stream_event"></a>
-
-# Module `spoon_ai.callbacks.stream_event`
-
-<a id="spoon_ai.callbacks.stream_event.StreamEventCallbackHandler"></a>
-
-## `StreamEventCallbackHandler` Objects
-
-```python
-class StreamEventCallbackHandler(BaseCallbackHandler)
-```
-
-Translate callback invocations into standardized stream events.
-
 <a id="spoon_ai.callbacks.manager"></a>
 
 # Module `spoon_ai.callbacks.manager`
@@ -411,6 +397,20 @@ class CallbackManager()
 ```
 
 Lightweight dispatcher for callback handlers.
+
+<a id="spoon_ai.callbacks.stream_event"></a>
+
+# Module `spoon_ai.callbacks.stream_event`
+
+<a id="spoon_ai.callbacks.stream_event.StreamEventCallbackHandler"></a>
+
+## `StreamEventCallbackHandler` Objects
+
+```python
+class StreamEventCallbackHandler(BaseCallbackHandler)
+```
+
+Translate callback invocations into standardized stream events.
 
 <a id="spoon_ai.callbacks.statistics"></a>
 
