@@ -7,40 +7,6 @@ title: spoon_ai.skills
 # Table of Contents
 
 * [spoon\_ai.skills](#spoon_ai.skills)
-* [spoon\_ai.skills.executor](#spoon_ai.skills.executor)
-  * [MAX\_OUTPUT\_SIZE](#spoon_ai.skills.executor.MAX_OUTPUT_SIZE)
-  * [ScriptExecutionError](#spoon_ai.skills.executor.ScriptExecutionError)
-  * [ScriptExecutor](#spoon_ai.skills.executor.ScriptExecutor)
-    * [\_\_init\_\_](#spoon_ai.skills.executor.ScriptExecutor.__init__)
-    * [is\_available](#spoon_ai.skills.executor.ScriptExecutor.is_available)
-    * [get\_interpreter](#spoon_ai.skills.executor.ScriptExecutor.get_interpreter)
-    * [execute](#spoon_ai.skills.executor.ScriptExecutor.execute)
-    * [get\_stats](#spoon_ai.skills.executor.ScriptExecutor.get_stats)
-    * [set\_enabled](#spoon_ai.skills.executor.ScriptExecutor.set_enabled)
-  * [get\_executor](#spoon_ai.skills.executor.get_executor)
-  * [configure\_executor](#spoon_ai.skills.executor.configure_executor)
-  * [set\_scripts\_enabled](#spoon_ai.skills.executor.set_scripts_enabled)
-* [spoon\_ai.skills.models](#spoon_ai.skills.models)
-  * [SkillState](#spoon_ai.skills.models.SkillState)
-  * [ScriptType](#spoon_ai.skills.models.ScriptType)
-  * [SkillScript](#spoon_ai.skills.models.SkillScript)
-    * [validate\_source](#spoon_ai.skills.models.SkillScript.validate_source)
-  * [ScriptConfig](#spoon_ai.skills.models.ScriptConfig)
-    * [get\_script](#spoon_ai.skills.models.ScriptConfig.get_script)
-    * [get\_activation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_activation_scripts)
-    * [get\_deactivation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts)
-  * [ScriptResult](#spoon_ai.skills.models.ScriptResult)
-    * [to\_string](#spoon_ai.skills.models.ScriptResult.to_string)
-  * [SkillTrigger](#spoon_ai.skills.models.SkillTrigger)
-  * [SkillParameter](#spoon_ai.skills.models.SkillParameter)
-  * [SkillPrerequisite](#spoon_ai.skills.models.SkillPrerequisite)
-  * [SkillMetadata](#spoon_ai.skills.models.SkillMetadata)
-    * [has\_scripts](#spoon_ai.skills.models.SkillMetadata.has_scripts)
-    * [scripts\_enabled](#spoon_ai.skills.models.SkillMetadata.scripts_enabled)
-  * [Skill](#spoon_ai.skills.models.Skill)
-    * [name](#spoon_ai.skills.models.Skill.name)
-    * [description](#spoon_ai.skills.models.Skill.description)
-    * [get\_prompt\_injection](#spoon_ai.skills.models.Skill.get_prompt_injection)
 * [spoon\_ai.skills.registry](#spoon_ai.skills.registry)
   * [SkillRegistry](#spoon_ai.skills.registry.SkillRegistry)
     * [register](#spoon_ai.skills.registry.SkillRegistry.register)
@@ -54,6 +20,20 @@ title: spoon_ai.skills
     * [find\_by\_intent](#spoon_ai.skills.registry.SkillRegistry.find_by_intent)
     * [find\_all\_matching](#spoon_ai.skills.registry.SkillRegistry.find_all_matching)
     * [get\_intent\_categories](#spoon_ai.skills.registry.SkillRegistry.get_intent_categories)
+* [spoon\_ai.skills.loader](#spoon_ai.skills.loader)
+  * [SkillLoader](#spoon_ai.skills.loader.SkillLoader)
+    * [\_\_init\_\_](#spoon_ai.skills.loader.SkillLoader.__init__)
+    * [paths](#spoon_ai.skills.loader.SkillLoader.paths)
+    * [add\_path](#spoon_ai.skills.loader.SkillLoader.add_path)
+    * [discover](#spoon_ai.skills.loader.SkillLoader.discover)
+    * [parse](#spoon_ai.skills.loader.SkillLoader.parse)
+    * [load\_tools](#spoon_ai.skills.loader.SkillLoader.load_tools)
+    * [load](#spoon_ai.skills.loader.SkillLoader.load)
+    * [load\_all](#spoon_ai.skills.loader.SkillLoader.load_all)
+    * [get\_skill](#spoon_ai.skills.loader.SkillLoader.get_skill)
+    * [get\_tools](#spoon_ai.skills.loader.SkillLoader.get_tools)
+    * [clear\_cache](#spoon_ai.skills.loader.SkillLoader.clear_cache)
+    * [reload](#spoon_ai.skills.loader.SkillLoader.reload)
 * [spoon\_ai.skills.manager](#spoon_ai.skills.manager)
   * [SkillManager](#spoon_ai.skills.manager.SkillManager)
     * [\_\_init\_\_](#spoon_ai.skills.manager.SkillManager.__init__)
@@ -79,20 +59,40 @@ title: spoon_ai.skills
     * [get\_script\_tools](#spoon_ai.skills.manager.SkillManager.get_script_tools)
     * [get\_skill\_info](#spoon_ai.skills.manager.SkillManager.get_skill_info)
     * [get\_stats](#spoon_ai.skills.manager.SkillManager.get_stats)
-* [spoon\_ai.skills.loader](#spoon_ai.skills.loader)
-  * [SkillLoader](#spoon_ai.skills.loader.SkillLoader)
-    * [\_\_init\_\_](#spoon_ai.skills.loader.SkillLoader.__init__)
-    * [paths](#spoon_ai.skills.loader.SkillLoader.paths)
-    * [add\_path](#spoon_ai.skills.loader.SkillLoader.add_path)
-    * [discover](#spoon_ai.skills.loader.SkillLoader.discover)
-    * [parse](#spoon_ai.skills.loader.SkillLoader.parse)
-    * [load\_tools](#spoon_ai.skills.loader.SkillLoader.load_tools)
-    * [load](#spoon_ai.skills.loader.SkillLoader.load)
-    * [load\_all](#spoon_ai.skills.loader.SkillLoader.load_all)
-    * [get\_skill](#spoon_ai.skills.loader.SkillLoader.get_skill)
-    * [get\_tools](#spoon_ai.skills.loader.SkillLoader.get_tools)
-    * [clear\_cache](#spoon_ai.skills.loader.SkillLoader.clear_cache)
-    * [reload](#spoon_ai.skills.loader.SkillLoader.reload)
+* [spoon\_ai.skills.models](#spoon_ai.skills.models)
+  * [SkillState](#spoon_ai.skills.models.SkillState)
+  * [ScriptType](#spoon_ai.skills.models.ScriptType)
+  * [SkillScript](#spoon_ai.skills.models.SkillScript)
+    * [validate\_source](#spoon_ai.skills.models.SkillScript.validate_source)
+  * [ScriptConfig](#spoon_ai.skills.models.ScriptConfig)
+    * [get\_script](#spoon_ai.skills.models.ScriptConfig.get_script)
+    * [get\_activation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_activation_scripts)
+    * [get\_deactivation\_scripts](#spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts)
+  * [ScriptResult](#spoon_ai.skills.models.ScriptResult)
+    * [to\_string](#spoon_ai.skills.models.ScriptResult.to_string)
+  * [SkillTrigger](#spoon_ai.skills.models.SkillTrigger)
+  * [SkillParameter](#spoon_ai.skills.models.SkillParameter)
+  * [SkillPrerequisite](#spoon_ai.skills.models.SkillPrerequisite)
+  * [SkillMetadata](#spoon_ai.skills.models.SkillMetadata)
+    * [has\_scripts](#spoon_ai.skills.models.SkillMetadata.has_scripts)
+    * [scripts\_enabled](#spoon_ai.skills.models.SkillMetadata.scripts_enabled)
+  * [Skill](#spoon_ai.skills.models.Skill)
+    * [name](#spoon_ai.skills.models.Skill.name)
+    * [description](#spoon_ai.skills.models.Skill.description)
+    * [get\_prompt\_injection](#spoon_ai.skills.models.Skill.get_prompt_injection)
+* [spoon\_ai.skills.executor](#spoon_ai.skills.executor)
+  * [MAX\_OUTPUT\_SIZE](#spoon_ai.skills.executor.MAX_OUTPUT_SIZE)
+  * [ScriptExecutionError](#spoon_ai.skills.executor.ScriptExecutionError)
+  * [ScriptExecutor](#spoon_ai.skills.executor.ScriptExecutor)
+    * [\_\_init\_\_](#spoon_ai.skills.executor.ScriptExecutor.__init__)
+    * [is\_available](#spoon_ai.skills.executor.ScriptExecutor.is_available)
+    * [get\_interpreter](#spoon_ai.skills.executor.ScriptExecutor.get_interpreter)
+    * [execute](#spoon_ai.skills.executor.ScriptExecutor.execute)
+    * [get\_stats](#spoon_ai.skills.executor.ScriptExecutor.get_stats)
+    * [set\_enabled](#spoon_ai.skills.executor.ScriptExecutor.set_enabled)
+  * [get\_executor](#spoon_ai.skills.executor.get_executor)
+  * [configure\_executor](#spoon_ai.skills.executor.configure_executor)
+  * [set\_scripts\_enabled](#spoon_ai.skills.executor.set_scripts_enabled)
 * [spoon\_ai.skills.script\_tool](#spoon_ai.skills.script_tool)
   * [ScriptTool](#spoon_ai.skills.script_tool.ScriptTool)
     * [\_\_init\_\_](#spoon_ai.skills.script_tool.ScriptTool.__init__)
@@ -137,409 +137,6 @@ Usage:
 
     # Find matching skills for user input
     matches = await manager.find_matching_skills("research quantum computing")
-
-<a id="spoon_ai.skills.executor"></a>
-
-# Module `spoon_ai.skills.executor`
-
-Script execution engine for skills.
-
-Provides async subprocess management for executing skill scripts.
-AI decides how to call scripts - users only control whether scripts are allowed.
-
-<a id="spoon_ai.skills.executor.MAX_OUTPUT_SIZE"></a>
-
-#### `MAX_OUTPUT_SIZE`
-
-5MB
-
-<a id="spoon_ai.skills.executor.ScriptExecutionError"></a>
-
-## `ScriptExecutionError` Objects
-
-```python
-class ScriptExecutionError(Exception)
-```
-
-Raised when script execution fails.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor"></a>
-
-## `ScriptExecutor` Objects
-
-```python
-class ScriptExecutor()
-```
-
-Async script executor for skill scripts.
-
-Features:
-- Async subprocess execution with timeout
-- Support for Python, shell, bash scripts
-- Environment variable passthrough
-- Output capture and size limiting
-- Global enable/disable control
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(enabled: bool = True,
-             default_timeout: int = DEFAULT_TIMEOUT,
-             max_output_size: int = MAX_OUTPUT_SIZE,
-             env_passthrough: Optional[List[str]] = None)
-```
-
-Initialize script executor.
-
-**Arguments**:
-
-- `enabled` - Whether script execution is allowed
-- `default_timeout` - Default timeout in seconds
-- `max_output_size` - Max output capture size in bytes
-- `env_passthrough` - Environment variables to pass through
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.is_available"></a>
-
-#### `is_available`
-
-```python
-def is_available(script_type: ScriptType) -> bool
-```
-
-Check if a script type can be executed.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.get_interpreter"></a>
-
-#### `get_interpreter`
-
-```python
-def get_interpreter(script_type: ScriptType) -> Optional[str]
-```
-
-Get interpreter path for a script type.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.execute"></a>
-
-#### `execute`
-
-```python
-async def execute(script: SkillScript,
-                  input_text: Optional[str] = None,
-                  working_directory: Optional[str] = None,
-                  extra_env: Optional[Dict[str, str]] = None,
-                  timeout: Optional[int] = None) -> ScriptResult
-```
-
-Execute a script asynchronously.
-
-**Arguments**:
-
-- `script` - Script to execute
-- `input_text` - Optional text to pass to script via stdin
-- `working_directory` - Working directory for execution
-- `extra_env` - Additional environment variables
-- `timeout` - Timeout override (uses script.timeout or default)
-  
-
-**Returns**:
-
-  ScriptResult with output and status
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.get_stats"></a>
-
-#### `get_stats`
-
-```python
-def get_stats() -> Dict[str, int]
-```
-
-Get execution statistics.
-
-<a id="spoon_ai.skills.executor.ScriptExecutor.set_enabled"></a>
-
-#### `set_enabled`
-
-```python
-def set_enabled(enabled: bool) -> None
-```
-
-Enable or disable script execution.
-
-<a id="spoon_ai.skills.executor.get_executor"></a>
-
-#### `get_executor`
-
-```python
-def get_executor() -> ScriptExecutor
-```
-
-Get or create the global script executor.
-
-<a id="spoon_ai.skills.executor.configure_executor"></a>
-
-#### `configure_executor`
-
-```python
-def configure_executor(**kwargs) -> ScriptExecutor
-```
-
-Configure and return the global executor.
-
-<a id="spoon_ai.skills.executor.set_scripts_enabled"></a>
-
-#### `set_scripts_enabled`
-
-```python
-def set_scripts_enabled(enabled: bool) -> None
-```
-
-Enable or disable script execution globally.
-
-<a id="spoon_ai.skills.models"></a>
-
-# Module `spoon_ai.skills.models`
-
-Skill system data models.
-
-Pydantic schemas for skill definition, following Anthropic Skills specification
-with XSpoonAi extensions.
-
-<a id="spoon_ai.skills.models.SkillState"></a>
-
-## `SkillState` Objects
-
-```python
-class SkillState(str, Enum)
-```
-
-Skill activation state.
-
-<a id="spoon_ai.skills.models.ScriptType"></a>
-
-## `ScriptType` Objects
-
-```python
-class ScriptType(str, Enum)
-```
-
-Supported script execution types.
-
-<a id="spoon_ai.skills.models.SkillScript"></a>
-
-## `SkillScript` Objects
-
-```python
-class SkillScript(BaseModel)
-```
-
-Script definition within a skill.
-
-Scripts are executed by the agent when needed. The AI decides
-how to call scripts - users only control whether scripts are allowed.
-
-Example in SKILL.md:
-    scripts:
-      - name: fetch_data
-        description: Fetch latest market data
-        type: python
-        file: scripts/fetch_data.py
-
-<a id="spoon_ai.skills.models.SkillScript.validate_source"></a>
-
-#### `validate_source`
-
-```python
-@model_validator(mode='after')
-def validate_source()
-```
-
-Ensure either file or inline is provided.
-
-<a id="spoon_ai.skills.models.ScriptConfig"></a>
-
-## `ScriptConfig` Objects
-
-```python
-class ScriptConfig(BaseModel)
-```
-
-Script configuration section in skill metadata.
-
-Example in SKILL.md:
-    scripts:
-      enabled: true
-      working_directory: ./scripts
-      definitions:
-        - name: analyze
-          type: python
-          file: analyze.py
-
-<a id="spoon_ai.skills.models.ScriptConfig.get_script"></a>
-
-#### `get_script`
-
-```python
-def get_script(name: str) -> Optional[SkillScript]
-```
-
-Get script by name.
-
-<a id="spoon_ai.skills.models.ScriptConfig.get_activation_scripts"></a>
-
-#### `get_activation_scripts`
-
-```python
-def get_activation_scripts() -> List[SkillScript]
-```
-
-Get scripts to run on activation.
-
-<a id="spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts"></a>
-
-#### `get_deactivation_scripts`
-
-```python
-def get_deactivation_scripts() -> List[SkillScript]
-```
-
-Get scripts to run on deactivation.
-
-<a id="spoon_ai.skills.models.ScriptResult"></a>
-
-## `ScriptResult` Objects
-
-```python
-class ScriptResult(BaseModel)
-```
-
-Result of script execution.
-
-<a id="spoon_ai.skills.models.ScriptResult.to_string"></a>
-
-#### `to_string`
-
-```python
-def to_string() -> str
-```
-
-Convert to string for agent context.
-
-<a id="spoon_ai.skills.models.SkillTrigger"></a>
-
-## `SkillTrigger` Objects
-
-```python
-class SkillTrigger(BaseModel)
-```
-
-Trigger configuration for skill activation.
-
-<a id="spoon_ai.skills.models.SkillParameter"></a>
-
-## `SkillParameter` Objects
-
-```python
-class SkillParameter(BaseModel)
-```
-
-Parameter definition for skills.
-
-<a id="spoon_ai.skills.models.SkillPrerequisite"></a>
-
-## `SkillPrerequisite` Objects
-
-```python
-class SkillPrerequisite(BaseModel)
-```
-
-Prerequisites for skill execution.
-
-<a id="spoon_ai.skills.models.SkillMetadata"></a>
-
-## `SkillMetadata` Objects
-
-```python
-class SkillMetadata(BaseModel)
-```
-
-Skill metadata from YAML frontmatter.
-
-Required fields (Anthropic-compatible):
-- name: Unique skill identifier
-- description: Human-readable description
-
-Optional fields (XSpoonAi extensions):
-- triggers, parameters, prerequisites, composes, etc.
-
-<a id="spoon_ai.skills.models.SkillMetadata.has_scripts"></a>
-
-#### `has_scripts`
-
-```python
-def has_scripts() -> bool
-```
-
-Check if skill has scripts defined.
-
-<a id="spoon_ai.skills.models.SkillMetadata.scripts_enabled"></a>
-
-#### `scripts_enabled`
-
-```python
-def scripts_enabled() -> bool
-```
-
-Check if scripts are enabled for this skill.
-
-<a id="spoon_ai.skills.models.Skill"></a>
-
-## `Skill` Objects
-
-```python
-class Skill(BaseModel)
-```
-
-Complete skill definition.
-
-Combines metadata from YAML frontmatter with markdown instructions.
-
-<a id="spoon_ai.skills.models.Skill.name"></a>
-
-#### `name`
-
-```python
-@property
-def name() -> str
-```
-
-Convenience property for skill name.
-
-<a id="spoon_ai.skills.models.Skill.description"></a>
-
-#### `description`
-
-```python
-@property
-def description() -> str
-```
-
-Convenience property for skill description.
-
-<a id="spoon_ai.skills.models.Skill.get_prompt_injection"></a>
-
-#### `get_prompt_injection`
-
-```python
-def get_prompt_injection() -> str
-```
-
-Generate prompt content to inject into agent's system prompt.
-
-**Returns**:
-
-  Formatted skill instructions with metadata
 
 <a id="spoon_ai.skills.registry"></a>
 
@@ -745,6 +342,222 @@ def get_intent_categories() -> List[str]
 ```
 
 Get all registered intent categories.
+
+<a id="spoon_ai.skills.loader"></a>
+
+# Module `spoon_ai.skills.loader`
+
+Skill loader for parsing SKILL.md files.
+
+Discovers and loads skills from multiple paths:
+1. ~/.spoon/skills/ - Global user skills
+2. ./skills/ - Project-local skills
+3. Additional user-specified paths
+
+Note: No built-in skills are included by default.
+Use additional_paths to specify skill directories.
+
+<a id="spoon_ai.skills.loader.SkillLoader"></a>
+
+## `SkillLoader` Objects
+
+```python
+class SkillLoader()
+```
+
+Loads skills from SKILL.md files with optional Python tool modules.
+
+SKILL.md Format:
+---
+name: my-skill
+description: What this skill does
+version: 1.0.0
+triggers:
+  - type: keyword
+    keywords: [analyze, review]
+---
+
+__Skill Instructions__
+
+
+Markdown content here...
+
+<a id="spoon_ai.skills.loader.SkillLoader.__init__"></a>
+
+#### `__init__`
+
+```python
+def __init__(additional_paths: Optional[List[Path]] = None,
+             include_default_paths: bool = True)
+```
+
+Initialize loader with skill search paths.
+
+**Arguments**:
+
+- `additional_paths` - Additional directories to search for skills
+
+<a id="spoon_ai.skills.loader.SkillLoader.paths"></a>
+
+#### `paths`
+
+```python
+@property
+def paths() -> List[Path]
+```
+
+Get configured skill paths.
+
+<a id="spoon_ai.skills.loader.SkillLoader.add_path"></a>
+
+#### `add_path`
+
+```python
+def add_path(path: Path) -> None
+```
+
+Add a path to search for skills.
+
+<a id="spoon_ai.skills.loader.SkillLoader.discover"></a>
+
+#### `discover`
+
+```python
+def discover() -> List[Path]
+```
+
+Discover all SKILL.md files in configured paths.
+
+**Returns**:
+
+  List of paths to SKILL.md files
+
+<a id="spoon_ai.skills.loader.SkillLoader.parse"></a>
+
+#### `parse`
+
+```python
+def parse(file_path: Path) -> Tuple[SkillMetadata, str]
+```
+
+Parse a SKILL.md file into metadata and instructions.
+
+**Arguments**:
+
+- `file_path` - Path to SKILL.md file
+  
+
+**Returns**:
+
+  Tuple of (SkillMetadata, instructions_markdown)
+  
+
+**Raises**:
+
+- `ValueError` - If file format is invalid
+
+<a id="spoon_ai.skills.loader.SkillLoader.load_tools"></a>
+
+#### `load_tools`
+
+```python
+def load_tools(skill_dir: Path) -> List[BaseTool]
+```
+
+Load Python tools from a skill directory.
+
+Looks for tools.py containing BaseTool subclasses.
+
+**Arguments**:
+
+- `skill_dir` - Directory containing the skill
+  
+
+**Returns**:
+
+  List of loaded tool instances
+
+<a id="spoon_ai.skills.loader.SkillLoader.load"></a>
+
+#### `load`
+
+```python
+def load(file_path: Path) -> Skill
+```
+
+Load a complete skill from SKILL.md and optional modules.
+
+**Arguments**:
+
+- `file_path` - Path to SKILL.md file
+  
+
+**Returns**:
+
+  Loaded Skill instance
+
+<a id="spoon_ai.skills.loader.SkillLoader.load_all"></a>
+
+#### `load_all`
+
+```python
+def load_all() -> Dict[str, Skill]
+```
+
+Discover and load all skills from configured paths.
+
+**Returns**:
+
+  Dictionary mapping skill names to Skill instances
+
+<a id="spoon_ai.skills.loader.SkillLoader.get_skill"></a>
+
+#### `get_skill`
+
+```python
+def get_skill(name: str) -> Optional[Skill]
+```
+
+Get a loaded skill by name.
+
+<a id="spoon_ai.skills.loader.SkillLoader.get_tools"></a>
+
+#### `get_tools`
+
+```python
+def get_tools(skill_name: str) -> List[BaseTool]
+```
+
+Get loaded tools for a skill.
+
+<a id="spoon_ai.skills.loader.SkillLoader.clear_cache"></a>
+
+#### `clear_cache`
+
+```python
+def clear_cache() -> None
+```
+
+Clear all cached skills and tools.
+
+<a id="spoon_ai.skills.loader.SkillLoader.reload"></a>
+
+#### `reload`
+
+```python
+def reload(name: str) -> Optional[Skill]
+```
+
+Reload a specific skill from disk.
+
+**Arguments**:
+
+- `name` - Skill name to reload
+  
+
+**Returns**:
+
+  Reloaded Skill or None if not found
 
 <a id="spoon_ai.skills.manager"></a>
 
@@ -1139,221 +952,408 @@ def get_stats() -> Dict[str, Any]
 
 Get statistics about the skill system.
 
-<a id="spoon_ai.skills.loader"></a>
+<a id="spoon_ai.skills.models"></a>
 
-# Module `spoon_ai.skills.loader`
+# Module `spoon_ai.skills.models`
 
-Skill loader for parsing SKILL.md files.
+Skill system data models.
 
-Discovers and loads skills from multiple paths:
-1. ~/.spoon/skills/ - Global user skills
-2. ./skills/ - Project-local skills
-3. Additional user-specified paths
+Pydantic schemas for skill definition, following Anthropic Skills specification
+with XSpoonAi extensions.
 
-Note: No built-in skills are included by default.
-Use additional_paths to specify skill directories.
+<a id="spoon_ai.skills.models.SkillState"></a>
 
-<a id="spoon_ai.skills.loader.SkillLoader"></a>
-
-## `SkillLoader` Objects
+## `SkillState` Objects
 
 ```python
-class SkillLoader()
+class SkillState(str, Enum)
 ```
 
-Loads skills from SKILL.md files with optional Python tool modules.
+Skill activation state.
 
-SKILL.md Format:
----
-name: my-skill
-description: What this skill does
-version: 1.0.0
-triggers:
-  - type: keyword
-    keywords: [analyze, review]
----
+<a id="spoon_ai.skills.models.ScriptType"></a>
 
-__Skill Instructions__
+## `ScriptType` Objects
 
+```python
+class ScriptType(str, Enum)
+```
 
-Markdown content here...
+Supported script execution types.
 
-<a id="spoon_ai.skills.loader.SkillLoader.__init__"></a>
+<a id="spoon_ai.skills.models.SkillScript"></a>
+
+## `SkillScript` Objects
+
+```python
+class SkillScript(BaseModel)
+```
+
+Script definition within a skill.
+
+Scripts are executed by the agent when needed. The AI decides
+how to call scripts - users only control whether scripts are allowed.
+
+Example in SKILL.md:
+    scripts:
+      - name: fetch_data
+        description: Fetch latest market data
+        type: python
+        file: scripts/fetch_data.py
+
+<a id="spoon_ai.skills.models.SkillScript.validate_source"></a>
+
+#### `validate_source`
+
+```python
+@model_validator(mode='after')
+def validate_source()
+```
+
+Ensure either file or inline is provided.
+
+<a id="spoon_ai.skills.models.ScriptConfig"></a>
+
+## `ScriptConfig` Objects
+
+```python
+class ScriptConfig(BaseModel)
+```
+
+Script configuration section in skill metadata.
+
+Example in SKILL.md:
+    scripts:
+      enabled: true
+      working_directory: ./scripts
+      definitions:
+        - name: analyze
+          type: python
+          file: analyze.py
+
+<a id="spoon_ai.skills.models.ScriptConfig.get_script"></a>
+
+#### `get_script`
+
+```python
+def get_script(name: str) -> Optional[SkillScript]
+```
+
+Get script by name.
+
+<a id="spoon_ai.skills.models.ScriptConfig.get_activation_scripts"></a>
+
+#### `get_activation_scripts`
+
+```python
+def get_activation_scripts() -> List[SkillScript]
+```
+
+Get scripts to run on activation.
+
+<a id="spoon_ai.skills.models.ScriptConfig.get_deactivation_scripts"></a>
+
+#### `get_deactivation_scripts`
+
+```python
+def get_deactivation_scripts() -> List[SkillScript]
+```
+
+Get scripts to run on deactivation.
+
+<a id="spoon_ai.skills.models.ScriptResult"></a>
+
+## `ScriptResult` Objects
+
+```python
+class ScriptResult(BaseModel)
+```
+
+Result of script execution.
+
+<a id="spoon_ai.skills.models.ScriptResult.to_string"></a>
+
+#### `to_string`
+
+```python
+def to_string() -> str
+```
+
+Convert to string for agent context.
+
+<a id="spoon_ai.skills.models.SkillTrigger"></a>
+
+## `SkillTrigger` Objects
+
+```python
+class SkillTrigger(BaseModel)
+```
+
+Trigger configuration for skill activation.
+
+<a id="spoon_ai.skills.models.SkillParameter"></a>
+
+## `SkillParameter` Objects
+
+```python
+class SkillParameter(BaseModel)
+```
+
+Parameter definition for skills.
+
+<a id="spoon_ai.skills.models.SkillPrerequisite"></a>
+
+## `SkillPrerequisite` Objects
+
+```python
+class SkillPrerequisite(BaseModel)
+```
+
+Prerequisites for skill execution.
+
+<a id="spoon_ai.skills.models.SkillMetadata"></a>
+
+## `SkillMetadata` Objects
+
+```python
+class SkillMetadata(BaseModel)
+```
+
+Skill metadata from YAML frontmatter.
+
+Required fields (Anthropic-compatible):
+- name: Unique skill identifier
+- description: Human-readable description
+
+Optional fields (XSpoonAi extensions):
+- triggers, parameters, prerequisites, composes, etc.
+
+<a id="spoon_ai.skills.models.SkillMetadata.has_scripts"></a>
+
+#### `has_scripts`
+
+```python
+def has_scripts() -> bool
+```
+
+Check if skill has scripts defined.
+
+<a id="spoon_ai.skills.models.SkillMetadata.scripts_enabled"></a>
+
+#### `scripts_enabled`
+
+```python
+def scripts_enabled() -> bool
+```
+
+Check if scripts are enabled for this skill.
+
+<a id="spoon_ai.skills.models.Skill"></a>
+
+## `Skill` Objects
+
+```python
+class Skill(BaseModel)
+```
+
+Complete skill definition.
+
+Combines metadata from YAML frontmatter with markdown instructions.
+
+<a id="spoon_ai.skills.models.Skill.name"></a>
+
+#### `name`
+
+```python
+@property
+def name() -> str
+```
+
+Convenience property for skill name.
+
+<a id="spoon_ai.skills.models.Skill.description"></a>
+
+#### `description`
+
+```python
+@property
+def description() -> str
+```
+
+Convenience property for skill description.
+
+<a id="spoon_ai.skills.models.Skill.get_prompt_injection"></a>
+
+#### `get_prompt_injection`
+
+```python
+def get_prompt_injection() -> str
+```
+
+Generate prompt content to inject into agent's system prompt.
+
+**Returns**:
+
+  Formatted skill instructions with metadata
+
+<a id="spoon_ai.skills.executor"></a>
+
+# Module `spoon_ai.skills.executor`
+
+Script execution engine for skills.
+
+Provides async subprocess management for executing skill scripts.
+AI decides how to call scripts - users only control whether scripts are allowed.
+
+<a id="spoon_ai.skills.executor.MAX_OUTPUT_SIZE"></a>
+
+#### `MAX_OUTPUT_SIZE`
+
+5MB
+
+<a id="spoon_ai.skills.executor.ScriptExecutionError"></a>
+
+## `ScriptExecutionError` Objects
+
+```python
+class ScriptExecutionError(Exception)
+```
+
+Raised when script execution fails.
+
+<a id="spoon_ai.skills.executor.ScriptExecutor"></a>
+
+## `ScriptExecutor` Objects
+
+```python
+class ScriptExecutor()
+```
+
+Async script executor for skill scripts.
+
+Features:
+- Async subprocess execution with timeout
+- Support for Python, shell, bash scripts
+- Environment variable passthrough
+- Output capture and size limiting
+- Global enable/disable control
+
+<a id="spoon_ai.skills.executor.ScriptExecutor.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(additional_paths: Optional[List[Path]] = None,
-             include_default_paths: bool = True)
+def __init__(enabled: bool = True,
+             default_timeout: int = DEFAULT_TIMEOUT,
+             max_output_size: int = MAX_OUTPUT_SIZE,
+             env_passthrough: Optional[List[str]] = None)
 ```
 
-Initialize loader with skill search paths.
+Initialize script executor.
 
 **Arguments**:
 
-- `additional_paths` - Additional directories to search for skills
+- `enabled` - Whether script execution is allowed
+- `default_timeout` - Default timeout in seconds
+- `max_output_size` - Max output capture size in bytes
+- `env_passthrough` - Environment variables to pass through
 
-<a id="spoon_ai.skills.loader.SkillLoader.paths"></a>
+<a id="spoon_ai.skills.executor.ScriptExecutor.is_available"></a>
 
-#### `paths`
-
-```python
-@property
-def paths() -> List[Path]
-```
-
-Get configured skill paths.
-
-<a id="spoon_ai.skills.loader.SkillLoader.add_path"></a>
-
-#### `add_path`
+#### `is_available`
 
 ```python
-def add_path(path: Path) -> None
+def is_available(script_type: ScriptType) -> bool
 ```
 
-Add a path to search for skills.
+Check if a script type can be executed.
 
-<a id="spoon_ai.skills.loader.SkillLoader.discover"></a>
+<a id="spoon_ai.skills.executor.ScriptExecutor.get_interpreter"></a>
 
-#### `discover`
+#### `get_interpreter`
 
 ```python
-def discover() -> List[Path]
+def get_interpreter(script_type: ScriptType) -> Optional[str]
 ```
 
-Discover all SKILL.md files in configured paths.
+Get interpreter path for a script type.
 
-**Returns**:
+<a id="spoon_ai.skills.executor.ScriptExecutor.execute"></a>
 
-  List of paths to SKILL.md files
-
-<a id="spoon_ai.skills.loader.SkillLoader.parse"></a>
-
-#### `parse`
+#### `execute`
 
 ```python
-def parse(file_path: Path) -> Tuple[SkillMetadata, str]
+async def execute(script: SkillScript,
+                  input_text: Optional[str] = None,
+                  working_directory: Optional[str] = None,
+                  extra_env: Optional[Dict[str, str]] = None,
+                  timeout: Optional[int] = None) -> ScriptResult
 ```
 
-Parse a SKILL.md file into metadata and instructions.
+Execute a script asynchronously.
 
 **Arguments**:
 
-- `file_path` - Path to SKILL.md file
+- `script` - Script to execute
+- `input_text` - Optional text to pass to script via stdin
+- `working_directory` - Working directory for execution
+- `extra_env` - Additional environment variables
+- `timeout` - Timeout override (uses script.timeout or default)
   
 
 **Returns**:
 
-  Tuple of (SkillMetadata, instructions_markdown)
-  
+  ScriptResult with output and status
 
-**Raises**:
+<a id="spoon_ai.skills.executor.ScriptExecutor.get_stats"></a>
 
-- `ValueError` - If file format is invalid
-
-<a id="spoon_ai.skills.loader.SkillLoader.load_tools"></a>
-
-#### `load_tools`
+#### `get_stats`
 
 ```python
-def load_tools(skill_dir: Path) -> List[BaseTool]
+def get_stats() -> Dict[str, int]
 ```
 
-Load Python tools from a skill directory.
+Get execution statistics.
 
-Looks for tools.py containing BaseTool subclasses.
+<a id="spoon_ai.skills.executor.ScriptExecutor.set_enabled"></a>
 
-**Arguments**:
-
-- `skill_dir` - Directory containing the skill
-  
-
-**Returns**:
-
-  List of loaded tool instances
-
-<a id="spoon_ai.skills.loader.SkillLoader.load"></a>
-
-#### `load`
+#### `set_enabled`
 
 ```python
-def load(file_path: Path) -> Skill
+def set_enabled(enabled: bool) -> None
 ```
 
-Load a complete skill from SKILL.md and optional modules.
+Enable or disable script execution.
 
-**Arguments**:
+<a id="spoon_ai.skills.executor.get_executor"></a>
 
-- `file_path` - Path to SKILL.md file
-  
-
-**Returns**:
-
-  Loaded Skill instance
-
-<a id="spoon_ai.skills.loader.SkillLoader.load_all"></a>
-
-#### `load_all`
+#### `get_executor`
 
 ```python
-def load_all() -> Dict[str, Skill]
+def get_executor() -> ScriptExecutor
 ```
 
-Discover and load all skills from configured paths.
+Get or create the global script executor.
 
-**Returns**:
+<a id="spoon_ai.skills.executor.configure_executor"></a>
 
-  Dictionary mapping skill names to Skill instances
-
-<a id="spoon_ai.skills.loader.SkillLoader.get_skill"></a>
-
-#### `get_skill`
+#### `configure_executor`
 
 ```python
-def get_skill(name: str) -> Optional[Skill]
+def configure_executor(**kwargs) -> ScriptExecutor
 ```
 
-Get a loaded skill by name.
+Configure and return the global executor.
 
-<a id="spoon_ai.skills.loader.SkillLoader.get_tools"></a>
+<a id="spoon_ai.skills.executor.set_scripts_enabled"></a>
 
-#### `get_tools`
+#### `set_scripts_enabled`
 
 ```python
-def get_tools(skill_name: str) -> List[BaseTool]
+def set_scripts_enabled(enabled: bool) -> None
 ```
 
-Get loaded tools for a skill.
-
-<a id="spoon_ai.skills.loader.SkillLoader.clear_cache"></a>
-
-#### `clear_cache`
-
-```python
-def clear_cache() -> None
-```
-
-Clear all cached skills and tools.
-
-<a id="spoon_ai.skills.loader.SkillLoader.reload"></a>
-
-#### `reload`
-
-```python
-def reload(name: str) -> Optional[Skill]
-```
-
-Reload a specific skill from disk.
-
-**Arguments**:
-
-- `name` - Skill name to reload
-  
-
-**Returns**:
-
-  Reloaded Skill or None if not found
+Enable or disable script execution globally.
 
 <a id="spoon_ai.skills.script_tool"></a>
 

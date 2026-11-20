@@ -7,34 +7,16 @@ title: spoon_ai.agents
 # Table of Contents
 
 * [spoon\_ai.agents](#spoon_ai.agents)
-* [spoon\_ai.agents.custom\_agent](#spoon_ai.agents.custom_agent)
-  * [CustomAgent](#spoon_ai.agents.custom_agent.CustomAgent)
-    * [add\_tool](#spoon_ai.agents.custom_agent.CustomAgent.add_tool)
-    * [add\_tools](#spoon_ai.agents.custom_agent.CustomAgent.add_tools)
-    * [remove\_tool](#spoon_ai.agents.custom_agent.CustomAgent.remove_tool)
-    * [list\_tools](#spoon_ai.agents.custom_agent.CustomAgent.list_tools)
-    * [get\_tool\_info](#spoon_ai.agents.custom_agent.CustomAgent.get_tool_info)
-    * [validate\_tools](#spoon_ai.agents.custom_agent.CustomAgent.validate_tools)
-    * [run](#spoon_ai.agents.custom_agent.CustomAgent.run)
-    * [clear](#spoon_ai.agents.custom_agent.CustomAgent.clear)
-* [spoon\_ai.agents.skill\_mixin](#spoon_ai.agents.skill_mixin)
-  * [SkillEnabledMixin](#spoon_ai.agents.skill_mixin.SkillEnabledMixin)
-    * [activate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill)
-    * [deactivate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill)
-    * [auto\_activate\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills)
-    * [list\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills)
-    * [list\_active\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills)
-    * [get\_skill\_info](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info)
-    * [is\_skill\_active](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active)
-    * [deactivate\_all\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills)
-    * [get\_skill\_stats](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats)
-* [spoon\_ai.agents.toolcall](#spoon_ai.agents.toolcall)
-  * [ToolCallAgent](#spoon_ai.agents.toolcall.ToolCallAgent)
-    * [tool\_choices](#spoon_ai.agents.toolcall.ToolCallAgent.tool_choices)
-    * [mcp\_tools\_cache\_ttl](#spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl)
-    * [run](#spoon_ai.agents.toolcall.ToolCallAgent.run)
-    * [step](#spoon_ai.agents.toolcall.ToolCallAgent.step)
-    * [execute\_tool](#spoon_ai.agents.toolcall.ToolCallAgent.execute_tool)
+* [spoon\_ai.agents.spoon\_react\_mcp](#spoon_ai.agents.spoon_react_mcp)
+  * [SpoonReactMCP](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP)
+    * [list\_mcp\_tools](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools)
+* [spoon\_ai.agents.spoon\_react](#spoon_ai.agents.spoon_react)
+  * [create\_configured\_chatbot](#spoon_ai.agents.spoon_react.create_configured_chatbot)
+  * [SpoonReactAI](#spoon_ai.agents.spoon_react.SpoonReactAI)
+    * [\_\_init\_\_](#spoon_ai.agents.spoon_react.SpoonReactAI.__init__)
+    * [connect](#spoon_ai.agents.spoon_react.SpoonReactAI.connect)
+    * [initialize](#spoon_ai.agents.spoon_react.SpoonReactAI.initialize)
+    * [run](#spoon_ai.agents.spoon_react.SpoonReactAI.run)
 * [spoon\_ai.agents.graph\_agent](#spoon_ai.agents.graph_agent)
   * [GraphAgent](#spoon_ai.agents.graph_agent.GraphAgent)
     * [\_\_init\_\_](#spoon_ai.agents.graph_agent.GraphAgent.__init__)
@@ -46,23 +28,28 @@ title: spoon_ai.agents
     * [clear\_state](#spoon_ai.agents.graph_agent.GraphAgent.clear_state)
     * [update\_initial\_state](#spoon_ai.agents.graph_agent.GraphAgent.update_initial_state)
     * [set\_preserve\_state](#spoon_ai.agents.graph_agent.GraphAgent.set_preserve_state)
-* [spoon\_ai.agents.spoon\_react\_mcp](#spoon_ai.agents.spoon_react_mcp)
-  * [SpoonReactMCP](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP)
-    * [list\_mcp\_tools](#spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools)
-* [spoon\_ai.agents.spoon\_react](#spoon_ai.agents.spoon_react)
-  * [create\_configured\_chatbot](#spoon_ai.agents.spoon_react.create_configured_chatbot)
-  * [SpoonReactAI](#spoon_ai.agents.spoon_react.SpoonReactAI)
-    * [\_\_init\_\_](#spoon_ai.agents.spoon_react.SpoonReactAI.__init__)
-    * [connect](#spoon_ai.agents.spoon_react.SpoonReactAI.connect)
-    * [initialize](#spoon_ai.agents.spoon_react.SpoonReactAI.initialize)
-    * [run](#spoon_ai.agents.spoon_react.SpoonReactAI.run)
-* [spoon\_ai.agents.monitor](#spoon_ai.agents.monitor)
-* [spoon\_ai.agents.rag](#spoon_ai.agents.rag)
-  * [RetrievalMixin](#spoon_ai.agents.rag.RetrievalMixin)
-    * [initialize\_retrieval\_client](#spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client)
-    * [add\_documents](#spoon_ai.agents.rag.RetrievalMixin.add_documents)
-    * [retrieve\_relevant\_documents](#spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents)
-    * [get\_context\_from\_query](#spoon_ai.agents.rag.RetrievalMixin.get_context_from_query)
+* [spoon\_ai.agents.subagents](#spoon_ai.agents.subagents)
+  * [Command](#spoon_ai.agents.subagents.Command)
+    * [update](#spoon_ai.agents.subagents.Command.update)
+    * [goto](#spoon_ai.agents.subagents.Command.goto)
+    * [resume](#spoon_ai.agents.subagents.Command.resume)
+    * [is\_resume](#spoon_ai.agents.subagents.Command.is_resume)
+    * [get\_decisions](#spoon_ai.agents.subagents.Command.get_decisions)
+  * [SubAgentSpec](#spoon_ai.agents.subagents.SubAgentSpec)
+    * [description](#spoon_ai.agents.subagents.SubAgentSpec.description)
+  * [CompiledSubAgent](#spoon_ai.agents.subagents.CompiledSubAgent)
+    * [runnable](#spoon_ai.agents.subagents.CompiledSubAgent.runnable)
+  * [SubAgentManager](#spoon_ai.agents.subagents.SubAgentManager)
+    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentManager.__init__)
+    * [get\_subagent](#spoon_ai.agents.subagents.SubAgentManager.get_subagent)
+    * [delegate\_task](#spoon_ai.agents.subagents.SubAgentManager.delegate_task)
+    * [create\_task\_tool](#spoon_ai.agents.subagents.SubAgentManager.create_task_tool)
+  * [SubAgentMiddleware](#spoon_ai.agents.subagents.SubAgentMiddleware)
+    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentMiddleware.__init__)
+    * [before\_agent](#spoon_ai.agents.subagents.SubAgentMiddleware.before_agent)
+  * [add\_subagent\_support](#spoon_ai.agents.subagents.add_subagent_support)
+  * [create\_general\_purpose\_subagent](#spoon_ai.agents.subagents.create_general_purpose_subagent)
+  * [create\_compiled\_subagent](#spoon_ai.agents.subagents.create_compiled_subagent)
 * [spoon\_ai.agents.base](#spoon_ai.agents.base)
   * [ThreadSafeOutputQueue](#spoon_ai.agents.base.ThreadSafeOutputQueue)
     * [put\_nowait](#spoon_ai.agents.base.ThreadSafeOutputQueue.put_nowait)
@@ -91,6 +78,20 @@ title: spoon_ai.agents
     * [set\_agent\_state](#spoon_ai.agents.base.BaseAgent.set_agent_state)
     * [update\_agent\_state](#spoon_ai.agents.base.BaseAgent.update_agent_state)
     * [get\_diagnostics](#spoon_ai.agents.base.BaseAgent.get_diagnostics)
+* [spoon\_ai.agents.monitor](#spoon_ai.agents.monitor)
+* [spoon\_ai.agents.toolcall](#spoon_ai.agents.toolcall)
+  * [ToolCallAgent](#spoon_ai.agents.toolcall.ToolCallAgent)
+    * [tool\_choices](#spoon_ai.agents.toolcall.ToolCallAgent.tool_choices)
+    * [mcp\_tools\_cache\_ttl](#spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl)
+    * [run](#spoon_ai.agents.toolcall.ToolCallAgent.run)
+    * [step](#spoon_ai.agents.toolcall.ToolCallAgent.step)
+    * [execute\_tool](#spoon_ai.agents.toolcall.ToolCallAgent.execute_tool)
+* [spoon\_ai.agents.rag](#spoon_ai.agents.rag)
+  * [RetrievalMixin](#spoon_ai.agents.rag.RetrievalMixin)
+    * [initialize\_retrieval\_client](#spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client)
+    * [add\_documents](#spoon_ai.agents.rag.RetrievalMixin.add_documents)
+    * [retrieve\_relevant\_documents](#spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents)
+    * [get\_context\_from\_query](#spoon_ai.agents.rag.RetrievalMixin.get_context_from_query)
 * [spoon\_ai.agents.spoon\_react\_skill](#spoon_ai.agents.spoon_react_skill)
   * [SpoonReactSkill](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill)
     * [\_\_init\_\_](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.__init__)
@@ -98,7 +99,28 @@ title: spoon_ai.agents
     * [initialize](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.initialize)
     * [add\_skill\_path](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.add_skill_path)
     * [discover\_skills](#spoon_ai.agents.spoon_react_skill.SpoonReactSkill.discover_skills)
+* [spoon\_ai.agents.custom\_agent](#spoon_ai.agents.custom_agent)
+  * [CustomAgent](#spoon_ai.agents.custom_agent.CustomAgent)
+    * [add\_tool](#spoon_ai.agents.custom_agent.CustomAgent.add_tool)
+    * [add\_tools](#spoon_ai.agents.custom_agent.CustomAgent.add_tools)
+    * [remove\_tool](#spoon_ai.agents.custom_agent.CustomAgent.remove_tool)
+    * [list\_tools](#spoon_ai.agents.custom_agent.CustomAgent.list_tools)
+    * [get\_tool\_info](#spoon_ai.agents.custom_agent.CustomAgent.get_tool_info)
+    * [validate\_tools](#spoon_ai.agents.custom_agent.CustomAgent.validate_tools)
+    * [run](#spoon_ai.agents.custom_agent.CustomAgent.run)
+    * [clear](#spoon_ai.agents.custom_agent.CustomAgent.clear)
 * [spoon\_ai.agents.react](#spoon_ai.agents.react)
+* [spoon\_ai.agents.skill\_mixin](#spoon_ai.agents.skill_mixin)
+  * [SkillEnabledMixin](#spoon_ai.agents.skill_mixin.SkillEnabledMixin)
+    * [activate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill)
+    * [deactivate\_skill](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill)
+    * [auto\_activate\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills)
+    * [list\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills)
+    * [list\_active\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills)
+    * [get\_skill\_info](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info)
+    * [is\_skill\_active](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active)
+    * [deactivate\_all\_skills](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills)
+    * [get\_skill\_stats](#spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats)
 * [spoon\_ai.agents.mcp\_client\_mixin](#spoon_ai.agents.mcp_client_mixin)
   * [MCPClientMixin](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin)
     * [get\_session](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session)
@@ -107,362 +129,86 @@ title: spoon_ai.agents
     * [send\_mcp\_message](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.send_mcp_message)
     * [cleanup](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.cleanup)
     * [get\_session\_stats](#spoon_ai.agents.mcp_client_mixin.MCPClientMixin.get_session_stats)
-* [spoon\_ai.agents.subagents](#spoon_ai.agents.subagents)
-  * [Command](#spoon_ai.agents.subagents.Command)
-    * [update](#spoon_ai.agents.subagents.Command.update)
-    * [goto](#spoon_ai.agents.subagents.Command.goto)
-    * [resume](#spoon_ai.agents.subagents.Command.resume)
-    * [is\_resume](#spoon_ai.agents.subagents.Command.is_resume)
-    * [get\_decisions](#spoon_ai.agents.subagents.Command.get_decisions)
-  * [SubAgentSpec](#spoon_ai.agents.subagents.SubAgentSpec)
-    * [description](#spoon_ai.agents.subagents.SubAgentSpec.description)
-  * [CompiledSubAgent](#spoon_ai.agents.subagents.CompiledSubAgent)
-    * [runnable](#spoon_ai.agents.subagents.CompiledSubAgent.runnable)
-  * [SubAgentManager](#spoon_ai.agents.subagents.SubAgentManager)
-    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentManager.__init__)
-    * [get\_subagent](#spoon_ai.agents.subagents.SubAgentManager.get_subagent)
-    * [delegate\_task](#spoon_ai.agents.subagents.SubAgentManager.delegate_task)
-    * [create\_task\_tool](#spoon_ai.agents.subagents.SubAgentManager.create_task_tool)
-  * [SubAgentMiddleware](#spoon_ai.agents.subagents.SubAgentMiddleware)
-    * [\_\_init\_\_](#spoon_ai.agents.subagents.SubAgentMiddleware.__init__)
-    * [before\_agent](#spoon_ai.agents.subagents.SubAgentMiddleware.before_agent)
-  * [add\_subagent\_support](#spoon_ai.agents.subagents.add_subagent_support)
-  * [create\_general\_purpose\_subagent](#spoon_ai.agents.subagents.create_general_purpose_subagent)
-  * [create\_compiled\_subagent](#spoon_ai.agents.subagents.create_compiled_subagent)
 
 <a id="spoon_ai.agents"></a>
 
 # Module `spoon_ai.agents`
 
-<a id="spoon_ai.agents.custom_agent"></a>
+<a id="spoon_ai.agents.spoon_react_mcp"></a>
 
-# Module `spoon_ai.agents.custom_agent`
+# Module `spoon_ai.agents.spoon_react_mcp`
 
-<a id="spoon_ai.agents.custom_agent.CustomAgent"></a>
+<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP"></a>
 
-## `CustomAgent` Objects
-
-```python
-class CustomAgent(ToolCallAgent)
-```
-
-Custom Agent class allowing users to create their own agents and add custom tools
-
-Usage:
-Create custom agent and add tools:
-   agent = CustomAgent(name="my_agent", description="My custom agent")
-   agent.add_tool(MyCustomTool())
-   result = await agent.run("Use my custom tool")
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tool"></a>
-
-#### `add_tool`
+## `SpoonReactMCP` Objects
 
 ```python
-def add_tool(tool: BaseTool) -> None
+class SpoonReactMCP(SpoonReactAI)
 ```
 
-Add a tool to the agent with validation.
+<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools"></a>
 
-**Arguments**:
-
-- `tool` - Tool instance to add
-  
-
-**Raises**:
-
-- `ValueError` - If tool is invalid or already exists
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tools"></a>
-
-#### `add_tools`
+#### `list_mcp_tools`
 
 ```python
-def add_tools(tools: List[BaseTool]) -> None
+async def list_mcp_tools()
 ```
 
-Add multiple tools to the agent with atomic operation.
+Return MCP tools from available_tools manager
 
-**Arguments**:
+<a id="spoon_ai.agents.spoon_react"></a>
 
-- `tools` - List of tool instances to add
-  
+# Module `spoon_ai.agents.spoon_react`
 
-**Raises**:
+<a id="spoon_ai.agents.spoon_react.create_configured_chatbot"></a>
 
-- `ValueError` - If any tool is invalid
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.remove_tool"></a>
-
-#### `remove_tool`
+#### `create_configured_chatbot`
 
 ```python
-def remove_tool(tool_name: str) -> bool
+def create_configured_chatbot()
 ```
 
-Remove a tool from the agent.
+Create a ChatBot instance with intelligent provider selection.
 
-**Arguments**:
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI"></a>
 
-- `tool_name` - Name of the tool to remove
-  
-
-**Returns**:
-
-- `bool` - True if tool was removed, False if not found
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.list_tools"></a>
-
-#### `list_tools`
+## `SpoonReactAI` Objects
 
 ```python
-def list_tools() -> List[str]
+class SpoonReactAI(MCPClientMixin, ToolCallAgent)
 ```
 
-List all available tools in the agent.
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.__init__"></a>
 
-**Returns**:
-
-  List of tool names, empty list if no tools
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.get_tool_info"></a>
-
-#### `get_tool_info`
+#### `__init__`
 
 ```python
-def get_tool_info() -> Dict[str, Dict[str, Any]]
+def __init__(**kwargs)
 ```
 
-Get detailed information about all tools.
+Initialize SpoonReactAI with both ToolCallAgent and MCPClientMixin initialization
 
-**Returns**:
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.connect"></a>
 
-  Dictionary with tool names as keys and tool info as values
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.validate_tools"></a>
-
-#### `validate_tools`
+#### `connect`
 
 ```python
-def validate_tools() -> Dict[str, Any]
+async def connect()
 ```
 
-Validate all current tools and return validation report.
+Establish connection to MCP server.
 
-**Returns**:
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.initialize"></a>
 
-  Dictionary with validation results
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.run"></a>
-
-#### `run`
+#### `initialize`
 
 ```python
-async def run(request: Optional[str] = None) -> str
+async def initialize(__context: Any = None)
 ```
 
-Run the agent with enhanced tool validation.
+Initialize async components and subscribe to topics
 
-**Arguments**:
-
-- `request` - User request
-  
-
-**Returns**:
-
-  Processing result
-
-<a id="spoon_ai.agents.custom_agent.CustomAgent.clear"></a>
-
-#### `clear`
-
-```python
-def clear()
-```
-
-Enhanced clear method with proper tool state management.
-
-<a id="spoon_ai.agents.skill_mixin"></a>
-
-# Module `spoon_ai.agents.skill_mixin`
-
-Skill-enabled agent mixin.
-
-Follows MCPClientMixin pattern for composable agent integration.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin"></a>
-
-## `SkillEnabledMixin` Objects
-
-```python
-class SkillEnabledMixin()
-```
-
-Mixin that adds skill capabilities to agents.
-
-Integrates with ReAct cycle by:
-1. Injecting active skill instructions into system prompt
-2. Adding skill tools to available_tools
-3. Auto-triggering skills based on user input
-
-Usage:
-    class MyAgent(SkillEnabledMixin, SpoonReactAI):
-        pass
-
-    agent = MyAgent()
-    await agent.activate_skill("trading-analysis")
-    result = await agent.run("Analyze BTC")
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill"></a>
-
-#### `activate_skill`
-
-```python
-async def activate_skill(name: str,
-                         context: Optional[Dict[str, Any]] = None) -> Skill
-```
-
-Activate a skill and refresh agent state.
-
-**Arguments**:
-
-- `name` - Skill name to activate
-- `context` - Optional context data
-  
-
-**Returns**:
-
-  Activated Skill instance
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill"></a>
-
-#### `deactivate_skill`
-
-```python
-async def deactivate_skill(name: str) -> bool
-```
-
-Deactivate a skill.
-
-**Arguments**:
-
-- `name` - Skill name to deactivate
-  
-
-**Returns**:
-
-  True if deactivated, False if not active
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills"></a>
-
-#### `auto_activate_skills`
-
-```python
-async def auto_activate_skills(user_input: str) -> List[Skill]
-```
-
-Automatically activate skills matching user input.
-
-Uses both keyword/pattern matching and LLM intent analysis.
-
-**Arguments**:
-
-- `user_input` - User's message
-  
-
-**Returns**:
-
-  List of activated skills
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills"></a>
-
-#### `list_skills`
-
-```python
-def list_skills() -> List[str]
-```
-
-List all available skill names.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills"></a>
-
-#### `list_active_skills`
-
-```python
-def list_active_skills() -> List[str]
-```
-
-List currently active skill names.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info"></a>
-
-#### `get_skill_info`
-
-```python
-def get_skill_info(name: str) -> Optional[Dict[str, Any]]
-```
-
-Get detailed information about a skill.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active"></a>
-
-#### `is_skill_active`
-
-```python
-def is_skill_active(name: str) -> bool
-```
-
-Check if a skill is currently active.
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills"></a>
-
-#### `deactivate_all_skills`
-
-```python
-async def deactivate_all_skills() -> int
-```
-
-Deactivate all active skills.
-
-**Returns**:
-
-  Number of skills deactivated
-
-<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats"></a>
-
-#### `get_skill_stats`
-
-```python
-def get_skill_stats() -> Dict[str, Any]
-```
-
-Get skill system statistics.
-
-<a id="spoon_ai.agents.toolcall"></a>
-
-# Module `spoon_ai.agents.toolcall`
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent"></a>
-
-## `ToolCallAgent` Objects
-
-```python
-class ToolCallAgent(ReActAgent)
-```
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.tool_choices"></a>
-
-#### `tool_choices`
-
-type: ignore
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl"></a>
-
-#### `mcp_tools_cache_ttl`
-
-5 minutes TTL
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.run"></a>
+<a id="spoon_ai.agents.spoon_react.SpoonReactAI.run"></a>
 
 #### `run`
 
@@ -473,35 +219,7 @@ async def run(request: Optional[str] = None,
               reasoning_effort: Optional[str] = None) -> str
 ```
 
-This ensures:
-1. Thread-safe execution (no concurrent runs)
-2. Proper timeout handling
-3. Plan/Reflect/Finish phases are executed
-4. Middleware hooks are called correctly
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.step"></a>
-
-#### `step`
-
-```python
-async def step(thinking: bool = False,
-               reasoning_effort: Optional[str] = None) -> str
-```
-
-Override the step method to handle finish_reason termination properly.
-
-<a id="spoon_ai.agents.toolcall.ToolCallAgent.execute_tool"></a>
-
-#### `execute_tool`
-
-```python
-async def execute_tool(tool_call: ToolCall) -> str
-```
-
-Execute tool with middleware wrapping.
-
-CRITICAL: This method now routes ALL tool executions through the middleware
-pipeline, enabling HITL approval, observability, and other middleware features.
+Ensure prompts reflect current tools before running.
 
 <a id="spoon_ai.agents.graph_agent"></a>
 
@@ -675,150 +393,480 @@ Enable or disable state preservation between runs.
 
 - `preserve` - Whether to preserve state between runs
 
-<a id="spoon_ai.agents.spoon_react_mcp"></a>
+<a id="spoon_ai.agents.subagents"></a>
 
-# Module `spoon_ai.agents.spoon_react_mcp`
+# Module `spoon_ai.agents.subagents`
 
-<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP"></a>
+Subagent Orchestration System
 
-## `SpoonReactMCP` Objects
+Enables hierarchical agent delegation where a parent agent can create
+and manage specialized child agents for complex tasks.
+
+Compatible with LangChain DeepAgents SubAgentMiddleware interface.
+
+Features:
+- SubAgentSpec for defining subagents with tools and prompts
+- CompiledSubAgent for using pre-built graphs as subagents
+- Command return pattern for state updates
+- State inheritance and isolation
+- Hierarchical task delegation with recursion depth limits
+- Automatic task tool generation
+- General-purpose agent support
+
+Usage:
+    # Method 1: SubAgentSpec (simple cases)
+    subagents = [
+        SubAgentSpec(
+            name="researcher",
+            description="Specialized in research tasks",
+            system_prompt="You are a research expert...",
+            tools=[search_tool, summarize_tool]
+        )
+    ]
+
+    # Method 2: CompiledSubAgent (complex cases with pre-built graph)
+    custom_graph = StateGraph(...)
+    custom_graph.add_node("analyze", analyze_node)
+    compiled = custom_graph.compile()
+
+    subagents = [
+        CompiledSubAgent(
+            name="complex_analyzer",
+            description="Complex multi-step analysis",
+            runnable=compiled
+        )
+    ]
+
+    # Create parent agent with subagent support
+    middleware = SubAgentMiddleware(subagents=subagents)
+    agent = ToolCallAgent(middleware=[middleware], ...)
+
+<a id="spoon_ai.agents.subagents.Command"></a>
+
+## `Command` Objects
 
 ```python
-class SpoonReactMCP(SpoonReactAI)
+@dataclass
+class Command()
 ```
 
-<a id="spoon_ai.agents.spoon_react_mcp.SpoonReactMCP.list_mcp_tools"></a>
+Command object for returning state updates and controlling execution flow.
 
-#### `list_mcp_tools`
+Compatible with LangGraph Command interface. Used to:
+1. Propagate state changes from subagent execution back to the parent agent
+2. Resume from HITL interrupts with approval decisions
+
+Example - State updates from subagent:
+    ```python
+    return Command(
+        update={
+            "messages": [tool_message],
+            "some_state_key": new_value,
+        }
+    )
+    ```
+
+Example - Resume from HITL interrupt:
+    ```python
+    # After receiving interrupt with action_requests
+    result = agent.invoke(
+        Command(resume={
+            "decisions": [
+                {"type": "approve"},
+                {"type": "edit", "args": {"path": "/new/path"}},
+                {"type": "reject", "reason": "Too dangerous"},
+            ]
+        }),
+        config=config
+    )
+    ```
+
+<a id="spoon_ai.agents.subagents.Command.update"></a>
+
+#### `update`
+
+State updates to apply after subagent execution.
+
+<a id="spoon_ai.agents.subagents.Command.goto"></a>
+
+#### `goto`
+
+Optional node to go to next (for graph-based agents).
+
+<a id="spoon_ai.agents.subagents.Command.resume"></a>
+
+#### `resume`
+
+Resume data for HITL interrupts. Contains 'decisions' list.
+
+<a id="spoon_ai.agents.subagents.Command.is_resume"></a>
+
+#### `is_resume`
 
 ```python
-async def list_mcp_tools()
+@property
+def is_resume() -> bool
 ```
 
-Return MCP tools from available_tools manager
+Check if this is a resume command.
 
-<a id="spoon_ai.agents.spoon_react"></a>
+<a id="spoon_ai.agents.subagents.Command.get_decisions"></a>
 
-# Module `spoon_ai.agents.spoon_react`
-
-<a id="spoon_ai.agents.spoon_react.create_configured_chatbot"></a>
-
-#### `create_configured_chatbot`
+#### `get_decisions`
 
 ```python
-def create_configured_chatbot()
+def get_decisions() -> List[Dict[str, Any]]
 ```
 
-Create a ChatBot instance with intelligent provider selection.
+Get decisions from resume data.
 
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI"></a>
+**Returns**:
 
-## `SpoonReactAI` Objects
+  List of decision dicts with 'type', optional 'args', optional 'reason'
+
+<a id="spoon_ai.agents.subagents.SubAgentSpec"></a>
+
+## `SubAgentSpec` Objects
 
 ```python
-class SpoonReactAI(MCPClientMixin, ToolCallAgent)
+@dataclass
+class SubAgentSpec()
 ```
 
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.__init__"></a>
+Specification for a subagent.
+
+This defines how a subagent should be configured and what
+capabilities it has. When using SubAgentSpec, the middleware
+will automatically create a ToolCallAgent instance.
+
+Compatible with LangChain DeepAgents SubAgent interface.
+
+<a id="spoon_ai.agents.subagents.SubAgentSpec.description"></a>
+
+#### `description`
+
+For parent agent to decide when to delegate
+
+<a id="spoon_ai.agents.subagents.CompiledSubAgent"></a>
+
+## `CompiledSubAgent` Objects
+
+```python
+@dataclass
+class CompiledSubAgent()
+```
+
+A pre-compiled agent/graph specification.
+
+Use this when you have a complex, pre-built graph (StateGraph/CompiledGraph)
+that you want to use as a subagent. This is useful for:
+- Complex multi-step workflows
+- Custom graph topologies
+- Reusing existing graph implementations
+
+Compatible with LangChain DeepAgents CompiledSubAgent interface.
+
+**Example**:
+
+    ```python
+    from spoon_ai.graph import StateGraph
+
+    # Build custom graph
+    graph = StateGraph(MyState)
+    graph.add_node("analyze", analyze_node)
+    graph.add_node("synthesize", synthesize_node)
+    graph.add_edge("analyze", "synthesize")
+    compiled = graph.compile()
+
+    # Use as subagent
+    subagent = CompiledSubAgent(
+        name="analyzer",
+        description="Complex multi-step analysis",
+        runnable=compiled
+    )
+    ```
+
+<a id="spoon_ai.agents.subagents.CompiledSubAgent.runnable"></a>
+
+#### `runnable`
+
+CompiledGraph or any Runnable-like object with invoke/ainvoke
+
+<a id="spoon_ai.agents.subagents.SubAgentManager"></a>
+
+## `SubAgentManager` Objects
+
+```python
+class SubAgentManager()
+```
+
+Manages subagent creation and task delegation with recursion safety.
+
+Supports both SubAgentSpec (auto-compiled) and CompiledSubAgent (pre-built).
+Returns Command objects for state updates.
+Compatible with LangChain DeepAgents subagent management.
+
+<a id="spoon_ai.agents.subagents.SubAgentManager.__init__"></a>
 
 #### `__init__`
 
 ```python
-def __init__(**kwargs)
+def __init__(
+        parent_agent: Any,
+        subagent_specs: List[SubAgentType],
+        default_middleware: Optional[List[AgentMiddleware]] = None,
+        default_tools: Optional[List[BaseTool]] = None,
+        default_interrupt_on: Optional[Dict[str,
+                                            Union[bool,
+                                                  InterruptOnConfig]]] = None,
+        max_depth: int = 3,
+        general_purpose_agent: bool = True)
 ```
 
-Initialize SpoonReactAI with both ToolCallAgent and MCPClientMixin initialization
+Initialize subagent manager.
 
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.connect"></a>
+**Arguments**:
 
-#### `connect`
+- `parent_agent` - The parent agent instance
+- `subagent_specs` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
+- `default_middleware` - Default middleware for all subagents
+- `default_tools` - Default tools for general-purpose agent
+- `default_interrupt_on` - Default HITL configuration for all subagents.
+  This is also the fallback for any subagents that don't specify
+  their own interrupt_on configuration.
+- `max_depth` - Maximum recursion depth for subagent delegation (default: 3)
+- `general_purpose_agent` - Whether to include a general-purpose subagent (default: True)
+
+<a id="spoon_ai.agents.subagents.SubAgentManager.get_subagent"></a>
+
+#### `get_subagent`
 
 ```python
-async def connect()
+def get_subagent(name: str) -> Optional[Any]
 ```
 
-Establish connection to MCP server.
+Get or create a subagent instance.
 
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.initialize"></a>
+<a id="spoon_ai.agents.subagents.SubAgentManager.delegate_task"></a>
 
-#### `initialize`
+#### `delegate_task`
 
 ```python
-async def initialize(__context: Any = None)
+async def delegate_task(
+        subagent_name: str,
+        task_description: str,
+        inherit_state: bool = True,
+        tool_call_id: Optional[str] = None) -> Union[str, Command]
 ```
 
-Initialize async components and subscribe to topics
+Delegate a task to a subagent with recursion depth checking.
 
-<a id="spoon_ai.agents.spoon_react.SpoonReactAI.run"></a>
+**Arguments**:
 
-#### `run`
+- `subagent_name` - Name of the subagent
+- `task_description` - Task for the subagent
+- `inherit_state` - Whether to inherit parent state
+- `tool_call_id` - Tool call ID for Command return pattern
+  
+
+**Returns**:
+
+  Subagent's final response as string, or Command with state updates
+
+<a id="spoon_ai.agents.subagents.SubAgentManager.create_task_tool"></a>
+
+#### `create_task_tool`
 
 ```python
-async def run(request: Optional[str] = None,
-              timeout: Optional[float] = None,
-              thinking: bool = False,
-              reasoning_effort: Optional[str] = None) -> str
+def create_task_tool(task_description: Optional[str] = None) -> BaseTool
 ```
 
-Ensure prompts reflect current tools before running.
+Create the 'task' tool for delegating to subagents.
 
-<a id="spoon_ai.agents.monitor"></a>
+**Arguments**:
 
-# Module `spoon_ai.agents.monitor`
+- `task_description` - Custom description for the task tool.
+  Supports &#123;available_agents&#125; placeholder.
+  
 
-<a id="spoon_ai.agents.rag"></a>
+**Returns**:
 
-# Module `spoon_ai.agents.rag`
+  Task delegation tool
 
-<a id="spoon_ai.agents.rag.RetrievalMixin"></a>
+<a id="spoon_ai.agents.subagents.SubAgentMiddleware"></a>
 
-## `RetrievalMixin` Objects
+## `SubAgentMiddleware` Objects
 
 ```python
-class RetrievalMixin()
+class SubAgentMiddleware(AgentMiddleware)
 ```
 
-Mixin class for retrieval-augmented generation functionality
+Middleware that adds subagent orchestration capabilities.
 
-<a id="spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client"></a>
+This middleware:
+1. Injects the 'task' tool for delegation
+2. Manages subagent lifecycle
+3. Handles state inheritance
+4. Enforces recursion depth limits
+5. Returns Command objects for state updates
+6. Propagates HITL configuration to subagents
 
-#### `initialize_retrieval_client`
+Supports both SubAgentSpec (auto-compiled) and CompiledSubAgent (pre-built graphs).
+
+Compatible with LangChain DeepAgents SubAgentMiddleware interface.
+
+Usage:
+    ```python
+    # Method 1: SubAgentSpec (simple cases)
+    middleware = SubAgentMiddleware(subagents=[
+        SubAgentSpec(
+            name="researcher",
+            description="Research and gather information",
+            system_prompt="You are a research expert...",
+            tools=[search_tool]
+        )
+    ])
+
+    # Method 2: CompiledSubAgent (complex cases)
+    custom_graph = StateGraph(...)
+    compiled = custom_graph.compile()
+
+    middleware = SubAgentMiddleware(subagents=[
+        CompiledSubAgent(
+            name="analyzer",
+            description="Complex analysis workflow",
+            runnable=compiled
+        )
+    ])
+
+    # Method 3: With HITL configuration inherited by subagents
+    middleware = SubAgentMiddleware(
+        subagents=[...],
+        default_interrupt_on={
+            "delete_file": True,
+            "send_email": {"allowed_decisions": ["approve", "reject"]},
+        },
+        general_purpose_agent=True,
+    )
+
+    # Method 4: Subagent with custom interrupt_on (overrides default)
+    middleware = SubAgentMiddleware(
+        subagents=[
+            SubAgentSpec(
+                name="careful_agent",
+                description="Agent that requires extra approval",
+                interrupt_on={"all_tools": True},  # Overrides default
+                ...
+            )
+        ],
+        default_interrupt_on={"delete_file": True},
+    )
+
+    agent = ToolCallAgent(
+        middleware=[middleware],
+        ...
+    )
+    ```
+
+<a id="spoon_ai.agents.subagents.SubAgentMiddleware.__init__"></a>
+
+#### `__init__`
 
 ```python
-def initialize_retrieval_client(backend: str = 'chroma', **kwargs)
+def __init__(
+        subagents: Optional[List[SubAgentType]] = None,
+        default_middleware: Optional[List[AgentMiddleware]] = None,
+        default_tools: Optional[List[BaseTool]] = None,
+        default_interrupt_on: Optional[Dict[str,
+                                            Union[bool,
+                                                  InterruptOnConfig]]] = None,
+        max_depth: int = 3,
+        general_purpose_agent: bool = True,
+        task_description: Optional[str] = None)
 ```
 
-Initialize the retrieval client if it doesn't exist
+Initialize subagent middleware.
 
-<a id="spoon_ai.agents.rag.RetrievalMixin.add_documents"></a>
+**Arguments**:
 
-#### `add_documents`
+- `subagents` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
+- `default_middleware` - Default middleware for all subagents
+- `default_tools` - Default tools for general-purpose agent
+- `default_interrupt_on` - Default HITL configuration for all subagents.
+  This is used for the general-purpose agent and as a fallback
+  for any SubAgentSpec that doesn't specify its own interrupt_on.
+- `max_depth` - Maximum recursion depth for subagent delegation
+- `general_purpose_agent` - Whether to include a general-purpose subagent (default: True)
+- `task_description` - Custom description for the task tool.
+  If None, uses default template.
+  Supports &#123;available_agents&#125; placeholder for dynamic agent list.
+
+<a id="spoon_ai.agents.subagents.SubAgentMiddleware.before_agent"></a>
+
+#### `before_agent`
 
 ```python
-def add_documents(documents, backend: str = 'chroma', **kwargs)
+def before_agent(state: Dict[str, Any],
+                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
 ```
 
-Add documents to the retrieval system
+Initialize subagent manager with parent agent reference.
 
-<a id="spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents"></a>
+<a id="spoon_ai.agents.subagents.add_subagent_support"></a>
 
-#### `retrieve_relevant_documents`
+#### `add_subagent_support`
 
 ```python
-def retrieve_relevant_documents(query, k=5, backend: str = 'chroma', **kwargs)
+def add_subagent_support(
+    agent: Any,
+    subagents: List[SubAgentType],
+    max_depth: int = 3,
+    general_purpose_agent: bool = True,
+    task_description: Optional[str] = None,
+    default_interrupt_on: Optional[Dict[str, Union[bool,
+                                                   InterruptOnConfig]]] = None
+) -> Any
 ```
 
-Retrieve relevant documents for a query
+Add subagent support to an existing agent.
 
-<a id="spoon_ai.agents.rag.RetrievalMixin.get_context_from_query"></a>
+**Arguments**:
 
-#### `get_context_from_query`
+- `agent` - The agent instance
+- `subagents` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
+- `max_depth` - Maximum recursion depth for subagent delegation
+- `general_purpose_agent` - Whether to include a general-purpose subagent
+- `task_description` - Custom description for the task tool
+- `default_interrupt_on` - Default HITL configuration for all subagents
+  
+
+**Returns**:
+
+  The agent with subagent support
+
+<a id="spoon_ai.agents.subagents.create_general_purpose_subagent"></a>
+
+#### `create_general_purpose_subagent`
 
 ```python
-def get_context_from_query(query)
+def create_general_purpose_subagent(
+        name: str = "general-purpose",
+        description: str = DEFAULT_GENERAL_PURPOSE_DESCRIPTION,
+        tools: Optional[List[BaseTool]] = None) -> SubAgentSpec
 ```
 
-Get context string from relevant documents for a query
+Create a general-purpose subagent specification.
+
+<a id="spoon_ai.agents.subagents.create_compiled_subagent"></a>
+
+#### `create_compiled_subagent`
+
+```python
+def create_compiled_subagent(name: str, description: str,
+                             graph: Any) -> CompiledSubAgent
+```
+
+Create a CompiledSubAgent from a graph.
 
 <a id="spoon_ai.agents.base"></a>
 
@@ -1314,6 +1362,129 @@ def get_diagnostics() -> dict[str, Any]
 
 Get diagnostic information about the agent's state
 
+<a id="spoon_ai.agents.monitor"></a>
+
+# Module `spoon_ai.agents.monitor`
+
+<a id="spoon_ai.agents.toolcall"></a>
+
+# Module `spoon_ai.agents.toolcall`
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent"></a>
+
+## `ToolCallAgent` Objects
+
+```python
+class ToolCallAgent(ReActAgent)
+```
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.tool_choices"></a>
+
+#### `tool_choices`
+
+type: ignore
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.mcp_tools_cache_ttl"></a>
+
+#### `mcp_tools_cache_ttl`
+
+5 minutes TTL
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.run"></a>
+
+#### `run`
+
+```python
+async def run(request: Optional[str] = None,
+              timeout: Optional[float] = None,
+              thinking: bool = False,
+              reasoning_effort: Optional[str] = None) -> str
+```
+
+This ensures:
+1. Thread-safe execution (no concurrent runs)
+2. Proper timeout handling
+3. Plan/Reflect/Finish phases are executed
+4. Middleware hooks are called correctly
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.step"></a>
+
+#### `step`
+
+```python
+async def step(thinking: bool = False,
+               reasoning_effort: Optional[str] = None) -> str
+```
+
+Override the step method to handle finish_reason termination properly.
+
+<a id="spoon_ai.agents.toolcall.ToolCallAgent.execute_tool"></a>
+
+#### `execute_tool`
+
+```python
+async def execute_tool(tool_call: ToolCall) -> str
+```
+
+Execute tool with middleware wrapping.
+
+CRITICAL: This method now routes ALL tool executions through the middleware
+pipeline, enabling HITL approval, observability, and other middleware features.
+
+<a id="spoon_ai.agents.rag"></a>
+
+# Module `spoon_ai.agents.rag`
+
+<a id="spoon_ai.agents.rag.RetrievalMixin"></a>
+
+## `RetrievalMixin` Objects
+
+```python
+class RetrievalMixin()
+```
+
+Mixin class for retrieval-augmented generation functionality
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.initialize_retrieval_client"></a>
+
+#### `initialize_retrieval_client`
+
+```python
+def initialize_retrieval_client(backend: str = 'chroma', **kwargs)
+```
+
+Initialize the retrieval client if it doesn't exist
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.add_documents"></a>
+
+#### `add_documents`
+
+```python
+def add_documents(documents, backend: str = 'chroma', **kwargs)
+```
+
+Add documents to the retrieval system
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.retrieve_relevant_documents"></a>
+
+#### `retrieve_relevant_documents`
+
+```python
+def retrieve_relevant_documents(query, k=5, backend: str = 'chroma', **kwargs)
+```
+
+Retrieve relevant documents for a query
+
+<a id="spoon_ai.agents.rag.RetrievalMixin.get_context_from_query"></a>
+
+#### `get_context_from_query`
+
+```python
+def get_context_from_query(query)
+```
+
+Get context string from relevant documents for a query
+
 <a id="spoon_ai.agents.spoon_react_skill"></a>
 
 # Module `spoon_ai.agents.spoon_react_skill`
@@ -1435,9 +1606,313 @@ Re-discover skills from all configured paths.
 
   Number of skills discovered
 
+<a id="spoon_ai.agents.custom_agent"></a>
+
+# Module `spoon_ai.agents.custom_agent`
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent"></a>
+
+## `CustomAgent` Objects
+
+```python
+class CustomAgent(ToolCallAgent)
+```
+
+Custom Agent class allowing users to create their own agents and add custom tools
+
+Usage:
+Create custom agent and add tools:
+   agent = CustomAgent(name="my_agent", description="My custom agent")
+   agent.add_tool(MyCustomTool())
+   result = await agent.run("Use my custom tool")
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tool"></a>
+
+#### `add_tool`
+
+```python
+def add_tool(tool: BaseTool) -> None
+```
+
+Add a tool to the agent with validation.
+
+**Arguments**:
+
+- `tool` - Tool instance to add
+  
+
+**Raises**:
+
+- `ValueError` - If tool is invalid or already exists
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.add_tools"></a>
+
+#### `add_tools`
+
+```python
+def add_tools(tools: List[BaseTool]) -> None
+```
+
+Add multiple tools to the agent with atomic operation.
+
+**Arguments**:
+
+- `tools` - List of tool instances to add
+  
+
+**Raises**:
+
+- `ValueError` - If any tool is invalid
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.remove_tool"></a>
+
+#### `remove_tool`
+
+```python
+def remove_tool(tool_name: str) -> bool
+```
+
+Remove a tool from the agent.
+
+**Arguments**:
+
+- `tool_name` - Name of the tool to remove
+  
+
+**Returns**:
+
+- `bool` - True if tool was removed, False if not found
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.list_tools"></a>
+
+#### `list_tools`
+
+```python
+def list_tools() -> List[str]
+```
+
+List all available tools in the agent.
+
+**Returns**:
+
+  List of tool names, empty list if no tools
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.get_tool_info"></a>
+
+#### `get_tool_info`
+
+```python
+def get_tool_info() -> Dict[str, Dict[str, Any]]
+```
+
+Get detailed information about all tools.
+
+**Returns**:
+
+  Dictionary with tool names as keys and tool info as values
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.validate_tools"></a>
+
+#### `validate_tools`
+
+```python
+def validate_tools() -> Dict[str, Any]
+```
+
+Validate all current tools and return validation report.
+
+**Returns**:
+
+  Dictionary with validation results
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.run"></a>
+
+#### `run`
+
+```python
+async def run(request: Optional[str] = None) -> str
+```
+
+Run the agent with enhanced tool validation.
+
+**Arguments**:
+
+- `request` - User request
+  
+
+**Returns**:
+
+  Processing result
+
+<a id="spoon_ai.agents.custom_agent.CustomAgent.clear"></a>
+
+#### `clear`
+
+```python
+def clear()
+```
+
+Enhanced clear method with proper tool state management.
+
 <a id="spoon_ai.agents.react"></a>
 
 # Module `spoon_ai.agents.react`
+
+<a id="spoon_ai.agents.skill_mixin"></a>
+
+# Module `spoon_ai.agents.skill_mixin`
+
+Skill-enabled agent mixin.
+
+Follows MCPClientMixin pattern for composable agent integration.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin"></a>
+
+## `SkillEnabledMixin` Objects
+
+```python
+class SkillEnabledMixin()
+```
+
+Mixin that adds skill capabilities to agents.
+
+Integrates with ReAct cycle by:
+1. Injecting active skill instructions into system prompt
+2. Adding skill tools to available_tools
+3. Auto-triggering skills based on user input
+
+Usage:
+    class MyAgent(SkillEnabledMixin, SpoonReactAI):
+        pass
+
+    agent = MyAgent()
+    await agent.activate_skill("trading-analysis")
+    result = await agent.run("Analyze BTC")
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.activate_skill"></a>
+
+#### `activate_skill`
+
+```python
+async def activate_skill(name: str,
+                         context: Optional[Dict[str, Any]] = None) -> Skill
+```
+
+Activate a skill and refresh agent state.
+
+**Arguments**:
+
+- `name` - Skill name to activate
+- `context` - Optional context data
+  
+
+**Returns**:
+
+  Activated Skill instance
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_skill"></a>
+
+#### `deactivate_skill`
+
+```python
+async def deactivate_skill(name: str) -> bool
+```
+
+Deactivate a skill.
+
+**Arguments**:
+
+- `name` - Skill name to deactivate
+  
+
+**Returns**:
+
+  True if deactivated, False if not active
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.auto_activate_skills"></a>
+
+#### `auto_activate_skills`
+
+```python
+async def auto_activate_skills(user_input: str) -> List[Skill]
+```
+
+Automatically activate skills matching user input.
+
+Uses both keyword/pattern matching and LLM intent analysis.
+
+**Arguments**:
+
+- `user_input` - User's message
+  
+
+**Returns**:
+
+  List of activated skills
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_skills"></a>
+
+#### `list_skills`
+
+```python
+def list_skills() -> List[str]
+```
+
+List all available skill names.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.list_active_skills"></a>
+
+#### `list_active_skills`
+
+```python
+def list_active_skills() -> List[str]
+```
+
+List currently active skill names.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_info"></a>
+
+#### `get_skill_info`
+
+```python
+def get_skill_info(name: str) -> Optional[Dict[str, Any]]
+```
+
+Get detailed information about a skill.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.is_skill_active"></a>
+
+#### `is_skill_active`
+
+```python
+def is_skill_active(name: str) -> bool
+```
+
+Check if a skill is currently active.
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.deactivate_all_skills"></a>
+
+#### `deactivate_all_skills`
+
+```python
+async def deactivate_all_skills() -> int
+```
+
+Deactivate all active skills.
+
+**Returns**:
+
+  Number of skills deactivated
+
+<a id="spoon_ai.agents.skill_mixin.SkillEnabledMixin.get_skill_stats"></a>
+
+#### `get_skill_stats`
+
+```python
+def get_skill_stats() -> Dict[str, Any]
+```
+
+Get skill system statistics.
 
 <a id="spoon_ai.agents.mcp_client_mixin"></a>
 
@@ -1532,479 +2007,4 @@ def get_session_stats() -> Dict[str, Any]
 ```
 
 Get session statistics for monitoring.
-
-<a id="spoon_ai.agents.subagents"></a>
-
-# Module `spoon_ai.agents.subagents`
-
-Subagent Orchestration System
-
-Enables hierarchical agent delegation where a parent agent can create
-and manage specialized child agents for complex tasks.
-
-Compatible with LangChain DeepAgents SubAgentMiddleware interface.
-
-Features:
-- SubAgentSpec for defining subagents with tools and prompts
-- CompiledSubAgent for using pre-built graphs as subagents
-- Command return pattern for state updates
-- State inheritance and isolation
-- Hierarchical task delegation with recursion depth limits
-- Automatic task tool generation
-- General-purpose agent support
-
-Usage:
-    # Method 1: SubAgentSpec (simple cases)
-    subagents = [
-        SubAgentSpec(
-            name="researcher",
-            description="Specialized in research tasks",
-            system_prompt="You are a research expert...",
-            tools=[search_tool, summarize_tool]
-        )
-    ]
-
-    # Method 2: CompiledSubAgent (complex cases with pre-built graph)
-    custom_graph = StateGraph(...)
-    custom_graph.add_node("analyze", analyze_node)
-    compiled = custom_graph.compile()
-
-    subagents = [
-        CompiledSubAgent(
-            name="complex_analyzer",
-            description="Complex multi-step analysis",
-            runnable=compiled
-        )
-    ]
-
-    # Create parent agent with subagent support
-    middleware = SubAgentMiddleware(subagents=subagents)
-    agent = ToolCallAgent(middleware=[middleware], ...)
-
-<a id="spoon_ai.agents.subagents.Command"></a>
-
-## `Command` Objects
-
-```python
-@dataclass
-class Command()
-```
-
-Command object for returning state updates and controlling execution flow.
-
-Compatible with LangGraph Command interface. Used to:
-1. Propagate state changes from subagent execution back to the parent agent
-2. Resume from HITL interrupts with approval decisions
-
-Example - State updates from subagent:
-    ```python
-    return Command(
-        update={
-            "messages": [tool_message],
-            "some_state_key": new_value,
-        }
-    )
-    ```
-
-Example - Resume from HITL interrupt:
-    ```python
-    # After receiving interrupt with action_requests
-    result = agent.invoke(
-        Command(resume={
-            "decisions": [
-                {"type": "approve"},
-                {"type": "edit", "args": {"path": "/new/path"}},
-                {"type": "reject", "reason": "Too dangerous"},
-            ]
-        }),
-        config=config
-    )
-    ```
-
-<a id="spoon_ai.agents.subagents.Command.update"></a>
-
-#### `update`
-
-State updates to apply after subagent execution.
-
-<a id="spoon_ai.agents.subagents.Command.goto"></a>
-
-#### `goto`
-
-Optional node to go to next (for graph-based agents).
-
-<a id="spoon_ai.agents.subagents.Command.resume"></a>
-
-#### `resume`
-
-Resume data for HITL interrupts. Contains 'decisions' list.
-
-<a id="spoon_ai.agents.subagents.Command.is_resume"></a>
-
-#### `is_resume`
-
-```python
-@property
-def is_resume() -> bool
-```
-
-Check if this is a resume command.
-
-<a id="spoon_ai.agents.subagents.Command.get_decisions"></a>
-
-#### `get_decisions`
-
-```python
-def get_decisions() -> List[Dict[str, Any]]
-```
-
-Get decisions from resume data.
-
-**Returns**:
-
-  List of decision dicts with 'type', optional 'args', optional 'reason'
-
-<a id="spoon_ai.agents.subagents.SubAgentSpec"></a>
-
-## `SubAgentSpec` Objects
-
-```python
-@dataclass
-class SubAgentSpec()
-```
-
-Specification for a subagent.
-
-This defines how a subagent should be configured and what
-capabilities it has. When using SubAgentSpec, the middleware
-will automatically create a ToolCallAgent instance.
-
-Compatible with LangChain DeepAgents SubAgent interface.
-
-<a id="spoon_ai.agents.subagents.SubAgentSpec.description"></a>
-
-#### `description`
-
-For parent agent to decide when to delegate
-
-<a id="spoon_ai.agents.subagents.CompiledSubAgent"></a>
-
-## `CompiledSubAgent` Objects
-
-```python
-@dataclass
-class CompiledSubAgent()
-```
-
-A pre-compiled agent/graph specification.
-
-Use this when you have a complex, pre-built graph (StateGraph/CompiledGraph)
-that you want to use as a subagent. This is useful for:
-- Complex multi-step workflows
-- Custom graph topologies
-- Reusing existing graph implementations
-
-Compatible with LangChain DeepAgents CompiledSubAgent interface.
-
-**Example**:
-
-    ```python
-    from spoon_ai.graph import StateGraph
-
-    # Build custom graph
-    graph = StateGraph(MyState)
-    graph.add_node("analyze", analyze_node)
-    graph.add_node("synthesize", synthesize_node)
-    graph.add_edge("analyze", "synthesize")
-    compiled = graph.compile()
-
-    # Use as subagent
-    subagent = CompiledSubAgent(
-        name="analyzer",
-        description="Complex multi-step analysis",
-        runnable=compiled
-    )
-    ```
-
-<a id="spoon_ai.agents.subagents.CompiledSubAgent.runnable"></a>
-
-#### `runnable`
-
-CompiledGraph or any Runnable-like object with invoke/ainvoke
-
-<a id="spoon_ai.agents.subagents.SubAgentManager"></a>
-
-## `SubAgentManager` Objects
-
-```python
-class SubAgentManager()
-```
-
-Manages subagent creation and task delegation with recursion safety.
-
-Supports both SubAgentSpec (auto-compiled) and CompiledSubAgent (pre-built).
-Returns Command objects for state updates.
-Compatible with LangChain DeepAgents subagent management.
-
-<a id="spoon_ai.agents.subagents.SubAgentManager.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(
-        parent_agent: Any,
-        subagent_specs: List[SubAgentType],
-        default_middleware: Optional[List[AgentMiddleware]] = None,
-        default_tools: Optional[List[BaseTool]] = None,
-        default_interrupt_on: Optional[Dict[str,
-                                            Union[bool,
-                                                  InterruptOnConfig]]] = None,
-        max_depth: int = 3,
-        general_purpose_agent: bool = True)
-```
-
-Initialize subagent manager.
-
-**Arguments**:
-
-- `parent_agent` - The parent agent instance
-- `subagent_specs` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
-- `default_middleware` - Default middleware for all subagents
-- `default_tools` - Default tools for general-purpose agent
-- `default_interrupt_on` - Default HITL configuration for all subagents.
-  This is also the fallback for any subagents that don't specify
-  their own interrupt_on configuration.
-- `max_depth` - Maximum recursion depth for subagent delegation (default: 3)
-- `general_purpose_agent` - Whether to include a general-purpose subagent (default: True)
-
-<a id="spoon_ai.agents.subagents.SubAgentManager.get_subagent"></a>
-
-#### `get_subagent`
-
-```python
-def get_subagent(name: str) -> Optional[Any]
-```
-
-Get or create a subagent instance.
-
-<a id="spoon_ai.agents.subagents.SubAgentManager.delegate_task"></a>
-
-#### `delegate_task`
-
-```python
-async def delegate_task(
-        subagent_name: str,
-        task_description: str,
-        inherit_state: bool = True,
-        tool_call_id: Optional[str] = None) -> Union[str, Command]
-```
-
-Delegate a task to a subagent with recursion depth checking.
-
-**Arguments**:
-
-- `subagent_name` - Name of the subagent
-- `task_description` - Task for the subagent
-- `inherit_state` - Whether to inherit parent state
-- `tool_call_id` - Tool call ID for Command return pattern
-  
-
-**Returns**:
-
-  Subagent's final response as string, or Command with state updates
-
-<a id="spoon_ai.agents.subagents.SubAgentManager.create_task_tool"></a>
-
-#### `create_task_tool`
-
-```python
-def create_task_tool(task_description: Optional[str] = None) -> BaseTool
-```
-
-Create the 'task' tool for delegating to subagents.
-
-**Arguments**:
-
-- `task_description` - Custom description for the task tool.
-  Supports &#123;available_agents&#125; placeholder.
-  
-
-**Returns**:
-
-  Task delegation tool
-
-<a id="spoon_ai.agents.subagents.SubAgentMiddleware"></a>
-
-## `SubAgentMiddleware` Objects
-
-```python
-class SubAgentMiddleware(AgentMiddleware)
-```
-
-Middleware that adds subagent orchestration capabilities.
-
-This middleware:
-1. Injects the 'task' tool for delegation
-2. Manages subagent lifecycle
-3. Handles state inheritance
-4. Enforces recursion depth limits
-5. Returns Command objects for state updates
-6. Propagates HITL configuration to subagents
-
-Supports both SubAgentSpec (auto-compiled) and CompiledSubAgent (pre-built graphs).
-
-Compatible with LangChain DeepAgents SubAgentMiddleware interface.
-
-Usage:
-    ```python
-    # Method 1: SubAgentSpec (simple cases)
-    middleware = SubAgentMiddleware(subagents=[
-        SubAgentSpec(
-            name="researcher",
-            description="Research and gather information",
-            system_prompt="You are a research expert...",
-            tools=[search_tool]
-        )
-    ])
-
-    # Method 2: CompiledSubAgent (complex cases)
-    custom_graph = StateGraph(...)
-    compiled = custom_graph.compile()
-
-    middleware = SubAgentMiddleware(subagents=[
-        CompiledSubAgent(
-            name="analyzer",
-            description="Complex analysis workflow",
-            runnable=compiled
-        )
-    ])
-
-    # Method 3: With HITL configuration inherited by subagents
-    middleware = SubAgentMiddleware(
-        subagents=[...],
-        default_interrupt_on={
-            "delete_file": True,
-            "send_email": {"allowed_decisions": ["approve", "reject"]},
-        },
-        general_purpose_agent=True,
-    )
-
-    # Method 4: Subagent with custom interrupt_on (overrides default)
-    middleware = SubAgentMiddleware(
-        subagents=[
-            SubAgentSpec(
-                name="careful_agent",
-                description="Agent that requires extra approval",
-                interrupt_on={"all_tools": True},  # Overrides default
-                ...
-            )
-        ],
-        default_interrupt_on={"delete_file": True},
-    )
-
-    agent = ToolCallAgent(
-        middleware=[middleware],
-        ...
-    )
-    ```
-
-<a id="spoon_ai.agents.subagents.SubAgentMiddleware.__init__"></a>
-
-#### `__init__`
-
-```python
-def __init__(
-        subagents: Optional[List[SubAgentType]] = None,
-        default_middleware: Optional[List[AgentMiddleware]] = None,
-        default_tools: Optional[List[BaseTool]] = None,
-        default_interrupt_on: Optional[Dict[str,
-                                            Union[bool,
-                                                  InterruptOnConfig]]] = None,
-        max_depth: int = 3,
-        general_purpose_agent: bool = True,
-        task_description: Optional[str] = None)
-```
-
-Initialize subagent middleware.
-
-**Arguments**:
-
-- `subagents` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
-- `default_middleware` - Default middleware for all subagents
-- `default_tools` - Default tools for general-purpose agent
-- `default_interrupt_on` - Default HITL configuration for all subagents.
-  This is used for the general-purpose agent and as a fallback
-  for any SubAgentSpec that doesn't specify its own interrupt_on.
-- `max_depth` - Maximum recursion depth for subagent delegation
-- `general_purpose_agent` - Whether to include a general-purpose subagent (default: True)
-- `task_description` - Custom description for the task tool.
-  If None, uses default template.
-  Supports &#123;available_agents&#125; placeholder for dynamic agent list.
-
-<a id="spoon_ai.agents.subagents.SubAgentMiddleware.before_agent"></a>
-
-#### `before_agent`
-
-```python
-def before_agent(state: Dict[str, Any],
-                 runtime: AgentRuntime) -> Optional[Dict[str, Any]]
-```
-
-Initialize subagent manager with parent agent reference.
-
-<a id="spoon_ai.agents.subagents.add_subagent_support"></a>
-
-#### `add_subagent_support`
-
-```python
-def add_subagent_support(
-    agent: Any,
-    subagents: List[SubAgentType],
-    max_depth: int = 3,
-    general_purpose_agent: bool = True,
-    task_description: Optional[str] = None,
-    default_interrupt_on: Optional[Dict[str, Union[bool,
-                                                   InterruptOnConfig]]] = None
-) -> Any
-```
-
-Add subagent support to an existing agent.
-
-**Arguments**:
-
-- `agent` - The agent instance
-- `subagents` - List of subagent specifications (SubAgentSpec or CompiledSubAgent)
-- `max_depth` - Maximum recursion depth for subagent delegation
-- `general_purpose_agent` - Whether to include a general-purpose subagent
-- `task_description` - Custom description for the task tool
-- `default_interrupt_on` - Default HITL configuration for all subagents
-  
-
-**Returns**:
-
-  The agent with subagent support
-
-<a id="spoon_ai.agents.subagents.create_general_purpose_subagent"></a>
-
-#### `create_general_purpose_subagent`
-
-```python
-def create_general_purpose_subagent(
-        name: str = "general-purpose",
-        description: str = DEFAULT_GENERAL_PURPOSE_DESCRIPTION,
-        tools: Optional[List[BaseTool]] = None) -> SubAgentSpec
-```
-
-Create a general-purpose subagent specification.
-
-<a id="spoon_ai.agents.subagents.create_compiled_subagent"></a>
-
-#### `create_compiled_subagent`
-
-```python
-def create_compiled_subagent(name: str, description: str,
-                             graph: Any) -> CompiledSubAgent
-```
-
-Create a CompiledSubAgent from a graph.
 
