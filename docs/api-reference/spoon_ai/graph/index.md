@@ -7,29 +7,6 @@ title: spoon_ai.graph
 # Table of Contents
 
 * [spoon\_ai.graph](#spoon_ai.graph)
-* [spoon\_ai.graph.decorators](#spoon_ai.graph.decorators)
-* [spoon\_ai.graph.builder](#spoon_ai.graph.builder)
-  * [Intent](#spoon_ai.graph.builder.Intent)
-  * [IntentAnalyzer](#spoon_ai.graph.builder.IntentAnalyzer)
-  * [AdaptiveStateBuilder](#spoon_ai.graph.builder.AdaptiveStateBuilder)
-  * [ParameterInferenceEngine](#spoon_ai.graph.builder.ParameterInferenceEngine)
-  * [NodeSpec](#spoon_ai.graph.builder.NodeSpec)
-  * [EdgeSpec](#spoon_ai.graph.builder.EdgeSpec)
-    * [end](#spoon_ai.graph.builder.EdgeSpec.end)
-  * [ParallelGroupSpec](#spoon_ai.graph.builder.ParallelGroupSpec)
-  * [GraphTemplate](#spoon_ai.graph.builder.GraphTemplate)
-  * [DeclarativeGraphBuilder](#spoon_ai.graph.builder.DeclarativeGraphBuilder)
-  * [NodePlugin](#spoon_ai.graph.builder.NodePlugin)
-  * [NodePluginSystem](#spoon_ai.graph.builder.NodePluginSystem)
-  * [HighLevelGraphAPI](#spoon_ai.graph.builder.HighLevelGraphAPI)
-* [spoon\_ai.graph.config](#spoon_ai.graph.config)
-  * [RouterConfig](#spoon_ai.graph.config.RouterConfig)
-  * [ParallelRetryPolicy](#spoon_ai.graph.config.ParallelRetryPolicy)
-  * [ParallelGroupConfig](#spoon_ai.graph.config.ParallelGroupConfig)
-    * [quorum](#spoon_ai.graph.config.ParallelGroupConfig.quorum)
-    * [error\_strategy](#spoon_ai.graph.config.ParallelGroupConfig.error_strategy)
-  * [GraphConfig](#spoon_ai.graph.config.GraphConfig)
-* [spoon\_ai.graph.exceptions](#spoon_ai.graph.exceptions)
 * [spoon\_ai.graph.engine](#spoon_ai.graph.engine)
   * [create\_multimodal\_message](#spoon_ai.graph.engine.create_multimodal_message)
   * [create\_vision\_user\_message](#spoon_ai.graph.engine.create_vision_user_message)
@@ -86,7 +63,26 @@ title: spoon_ai.graph
     * [get\_memory\_metadata](#spoon_ai.graph.agent.GraphAgent.get_memory_metadata)
     * [save\_session](#spoon_ai.graph.agent.GraphAgent.save_session)
     * [load\_session](#spoon_ai.graph.agent.GraphAgent.load_session)
+* [spoon\_ai.graph.types](#spoon_ai.graph.types)
+* [spoon\_ai.graph.builder](#spoon_ai.graph.builder)
+  * [Intent](#spoon_ai.graph.builder.Intent)
+  * [IntentAnalyzer](#spoon_ai.graph.builder.IntentAnalyzer)
+  * [AdaptiveStateBuilder](#spoon_ai.graph.builder.AdaptiveStateBuilder)
+  * [ParameterInferenceEngine](#spoon_ai.graph.builder.ParameterInferenceEngine)
+  * [NodeSpec](#spoon_ai.graph.builder.NodeSpec)
+  * [EdgeSpec](#spoon_ai.graph.builder.EdgeSpec)
+    * [end](#spoon_ai.graph.builder.EdgeSpec.end)
+  * [ParallelGroupSpec](#spoon_ai.graph.builder.ParallelGroupSpec)
+  * [GraphTemplate](#spoon_ai.graph.builder.GraphTemplate)
+  * [DeclarativeGraphBuilder](#spoon_ai.graph.builder.DeclarativeGraphBuilder)
+  * [NodePlugin](#spoon_ai.graph.builder.NodePlugin)
+  * [NodePluginSystem](#spoon_ai.graph.builder.NodePluginSystem)
+  * [HighLevelGraphAPI](#spoon_ai.graph.builder.HighLevelGraphAPI)
 * [spoon\_ai.graph.reducers](#spoon_ai.graph.reducers)
+* [spoon\_ai.graph.checkpointer](#spoon_ai.graph.checkpointer)
+  * [InMemoryCheckpointer](#spoon_ai.graph.checkpointer.InMemoryCheckpointer)
+    * [iter\_checkpoint\_history](#spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history)
+* [spoon\_ai.graph.decorators](#spoon_ai.graph.decorators)
 * [spoon\_ai.graph.cache](#spoon_ai.graph.cache)
   * [compute\_cache\_key](#spoon_ai.graph.cache.compute_cache_key)
   * [CacheEntry](#spoon_ai.graph.cache.CacheEntry)
@@ -115,15 +111,19 @@ title: spoon_ai.graph
     * [get\_stats](#spoon_ai.graph.cache.SQLiteCache.get_stats)
   * [create\_memory\_cache](#spoon_ai.graph.cache.create_memory_cache)
   * [create\_sqlite\_cache](#spoon_ai.graph.cache.create_sqlite_cache)
-* [spoon\_ai.graph.types](#spoon_ai.graph.types)
 * [spoon\_ai.graph.mcp\_integration](#spoon_ai.graph.mcp_integration)
   * [MCPToolSpec](#spoon_ai.graph.mcp_integration.MCPToolSpec)
   * [MCPConfigManager](#spoon_ai.graph.mcp_integration.MCPConfigManager)
   * [MCPToolDiscoveryEngine](#spoon_ai.graph.mcp_integration.MCPToolDiscoveryEngine)
   * [MCPIntegrationManager](#spoon_ai.graph.mcp_integration.MCPIntegrationManager)
-* [spoon\_ai.graph.checkpointer](#spoon_ai.graph.checkpointer)
-  * [InMemoryCheckpointer](#spoon_ai.graph.checkpointer.InMemoryCheckpointer)
-    * [iter\_checkpoint\_history](#spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history)
+* [spoon\_ai.graph.exceptions](#spoon_ai.graph.exceptions)
+* [spoon\_ai.graph.config](#spoon_ai.graph.config)
+  * [RouterConfig](#spoon_ai.graph.config.RouterConfig)
+  * [ParallelRetryPolicy](#spoon_ai.graph.config.ParallelRetryPolicy)
+  * [ParallelGroupConfig](#spoon_ai.graph.config.ParallelGroupConfig)
+    * [quorum](#spoon_ai.graph.config.ParallelGroupConfig.quorum)
+    * [error\_strategy](#spoon_ai.graph.config.ParallelGroupConfig.error_strategy)
+  * [GraphConfig](#spoon_ai.graph.config.GraphConfig)
 
 <a id="spoon_ai.graph"></a>
 
@@ -132,221 +132,6 @@ title: spoon_ai.graph
 spoon_ai.graph package
 
 Public facade for the graph engine. Import from here.
-
-<a id="spoon_ai.graph.decorators"></a>
-
-# Module `spoon_ai.graph.decorators`
-
-Decorators and executor for the graph package.
-
-<a id="spoon_ai.graph.builder"></a>
-
-# Module `spoon_ai.graph.builder`
-
-Declarative builders and helpers for SpoonAI graphs.
-
-<a id="spoon_ai.graph.builder.Intent"></a>
-
-## `Intent` Objects
-
-```python
-@dataclass
-class Intent()
-```
-
-Result of intent analysis.
-
-<a id="spoon_ai.graph.builder.IntentAnalyzer"></a>
-
-## `IntentAnalyzer` Objects
-
-```python
-class IntentAnalyzer()
-```
-
-LLM-powered intent analyzer.
-
-Core stays generic; concrete prompts/parsers are supplied by callers.
-
-<a id="spoon_ai.graph.builder.AdaptiveStateBuilder"></a>
-
-## `AdaptiveStateBuilder` Objects
-
-```python
-class AdaptiveStateBuilder()
-```
-
-Construct initial graph state using query intent and optional parameters.
-
-<a id="spoon_ai.graph.builder.ParameterInferenceEngine"></a>
-
-## `ParameterInferenceEngine` Objects
-
-```python
-class ParameterInferenceEngine()
-```
-
-LLM delegator for parameter extraction.
-
-Core keeps this generic; applications provide formatting/parsing via options.
-
-<a id="spoon_ai.graph.builder.NodeSpec"></a>
-
-## `NodeSpec` Objects
-
-```python
-@dataclass
-class NodeSpec()
-```
-
-Declarative node specification.
-
-<a id="spoon_ai.graph.builder.EdgeSpec"></a>
-
-## `EdgeSpec` Objects
-
-```python
-@dataclass
-class EdgeSpec()
-```
-
-Declarative edge specification.
-
-<a id="spoon_ai.graph.builder.EdgeSpec.end"></a>
-
-#### `end`
-
-target name or callable router
-
-<a id="spoon_ai.graph.builder.ParallelGroupSpec"></a>
-
-## `ParallelGroupSpec` Objects
-
-```python
-@dataclass
-class ParallelGroupSpec()
-```
-
-Parallel group specification.
-
-<a id="spoon_ai.graph.builder.GraphTemplate"></a>
-
-## `GraphTemplate` Objects
-
-```python
-@dataclass
-class GraphTemplate()
-```
-
-Complete declarative template for a graph.
-
-<a id="spoon_ai.graph.builder.DeclarativeGraphBuilder"></a>
-
-## `DeclarativeGraphBuilder` Objects
-
-```python
-class DeclarativeGraphBuilder()
-```
-
-Build StateGraph instances from declarative templates.
-
-<a id="spoon_ai.graph.builder.NodePlugin"></a>
-
-## `NodePlugin` Objects
-
-```python
-class NodePlugin()
-```
-
-Pluggable node provider.
-
-<a id="spoon_ai.graph.builder.NodePluginSystem"></a>
-
-## `NodePluginSystem` Objects
-
-```python
-class NodePluginSystem()
-```
-
-Registry and discovery for node plugins.
-
-<a id="spoon_ai.graph.builder.HighLevelGraphAPI"></a>
-
-## `HighLevelGraphAPI` Objects
-
-```python
-class HighLevelGraphAPI()
-```
-
-Convenience facade for building graphs per query.
-
-<a id="spoon_ai.graph.config"></a>
-
-# Module `spoon_ai.graph.config`
-
-Configuration primitives for the SpoonAI graph engine.
-
-<a id="spoon_ai.graph.config.RouterConfig"></a>
-
-## `RouterConfig` Objects
-
-```python
-@dataclass
-class RouterConfig()
-```
-
-Controls how the graph chooses the next node after each execution step.
-
-<a id="spoon_ai.graph.config.ParallelRetryPolicy"></a>
-
-## `ParallelRetryPolicy` Objects
-
-```python
-@dataclass
-class ParallelRetryPolicy()
-```
-
-Retry policy for individual nodes inside a parallel group.
-
-<a id="spoon_ai.graph.config.ParallelGroupConfig"></a>
-
-## `ParallelGroupConfig` Objects
-
-```python
-@dataclass
-class ParallelGroupConfig()
-```
-
-Controls how a parallel group executes and aggregates results.
-
-<a id="spoon_ai.graph.config.ParallelGroupConfig.quorum"></a>
-
-#### `quorum`
-
-floats in (0, 1] treated as ratio, ints as absolute
-
-<a id="spoon_ai.graph.config.ParallelGroupConfig.error_strategy"></a>
-
-#### `error_strategy`
-
-fail_fast, collect_errors, ignore_errors
-
-<a id="spoon_ai.graph.config.GraphConfig"></a>
-
-## `GraphConfig` Objects
-
-```python
-@dataclass
-class GraphConfig()
-```
-
-Top-level configuration applied to an entire graph instance.
-
-<a id="spoon_ai.graph.exceptions"></a>
-
-# Module `spoon_ai.graph.exceptions`
-
-Graph engine exception definitions (public within graph package).
 
 <a id="spoon_ai.graph.engine"></a>
 
@@ -1059,11 +844,189 @@ def load_session(session_id: str)
 
 Load a specific session
 
+<a id="spoon_ai.graph.types"></a>
+
+# Module `spoon_ai.graph.types`
+
+Typed structures for the graph package.
+
+<a id="spoon_ai.graph.builder"></a>
+
+# Module `spoon_ai.graph.builder`
+
+Declarative builders and helpers for SpoonAI graphs.
+
+<a id="spoon_ai.graph.builder.Intent"></a>
+
+## `Intent` Objects
+
+```python
+@dataclass
+class Intent()
+```
+
+Result of intent analysis.
+
+<a id="spoon_ai.graph.builder.IntentAnalyzer"></a>
+
+## `IntentAnalyzer` Objects
+
+```python
+class IntentAnalyzer()
+```
+
+LLM-powered intent analyzer.
+
+Core stays generic; concrete prompts/parsers are supplied by callers.
+
+<a id="spoon_ai.graph.builder.AdaptiveStateBuilder"></a>
+
+## `AdaptiveStateBuilder` Objects
+
+```python
+class AdaptiveStateBuilder()
+```
+
+Construct initial graph state using query intent and optional parameters.
+
+<a id="spoon_ai.graph.builder.ParameterInferenceEngine"></a>
+
+## `ParameterInferenceEngine` Objects
+
+```python
+class ParameterInferenceEngine()
+```
+
+LLM delegator for parameter extraction.
+
+Core keeps this generic; applications provide formatting/parsing via options.
+
+<a id="spoon_ai.graph.builder.NodeSpec"></a>
+
+## `NodeSpec` Objects
+
+```python
+@dataclass
+class NodeSpec()
+```
+
+Declarative node specification.
+
+<a id="spoon_ai.graph.builder.EdgeSpec"></a>
+
+## `EdgeSpec` Objects
+
+```python
+@dataclass
+class EdgeSpec()
+```
+
+Declarative edge specification.
+
+<a id="spoon_ai.graph.builder.EdgeSpec.end"></a>
+
+#### `end`
+
+target name or callable router
+
+<a id="spoon_ai.graph.builder.ParallelGroupSpec"></a>
+
+## `ParallelGroupSpec` Objects
+
+```python
+@dataclass
+class ParallelGroupSpec()
+```
+
+Parallel group specification.
+
+<a id="spoon_ai.graph.builder.GraphTemplate"></a>
+
+## `GraphTemplate` Objects
+
+```python
+@dataclass
+class GraphTemplate()
+```
+
+Complete declarative template for a graph.
+
+<a id="spoon_ai.graph.builder.DeclarativeGraphBuilder"></a>
+
+## `DeclarativeGraphBuilder` Objects
+
+```python
+class DeclarativeGraphBuilder()
+```
+
+Build StateGraph instances from declarative templates.
+
+<a id="spoon_ai.graph.builder.NodePlugin"></a>
+
+## `NodePlugin` Objects
+
+```python
+class NodePlugin()
+```
+
+Pluggable node provider.
+
+<a id="spoon_ai.graph.builder.NodePluginSystem"></a>
+
+## `NodePluginSystem` Objects
+
+```python
+class NodePluginSystem()
+```
+
+Registry and discovery for node plugins.
+
+<a id="spoon_ai.graph.builder.HighLevelGraphAPI"></a>
+
+## `HighLevelGraphAPI` Objects
+
+```python
+class HighLevelGraphAPI()
+```
+
+Convenience facade for building graphs per query.
+
 <a id="spoon_ai.graph.reducers"></a>
 
 # Module `spoon_ai.graph.reducers`
 
 Reducers and validators for the graph package.
+
+<a id="spoon_ai.graph.checkpointer"></a>
+
+# Module `spoon_ai.graph.checkpointer`
+
+In-memory checkpointer for the graph package.
+
+<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer"></a>
+
+## `InMemoryCheckpointer` Objects
+
+```python
+class InMemoryCheckpointer()
+```
+
+<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history"></a>
+
+#### `iter_checkpoint_history`
+
+```python
+def iter_checkpoint_history(
+        config: Dict[str, Any]) -> Iterable[CheckpointTuple]
+```
+
+Return checkpoint tuples for the specified thread, newest last.
+
+<a id="spoon_ai.graph.decorators"></a>
+
+# Module `spoon_ai.graph.decorators`
+
+Decorators and executor for the graph package.
 
 <a id="spoon_ai.graph.cache"></a>
 
@@ -1485,12 +1448,6 @@ Create a SQLite cache.
 
   Configured SQLiteCache
 
-<a id="spoon_ai.graph.types"></a>
-
-# Module `spoon_ai.graph.types`
-
-Typed structures for the graph package.
-
 <a id="spoon_ai.graph.mcp_integration"></a>
 
 # Module `spoon_ai.graph.mcp_integration`
@@ -1542,28 +1499,71 @@ class MCPIntegrationManager()
 
 High level coordinator for MCP tool usage within graphs.
 
-<a id="spoon_ai.graph.checkpointer"></a>
+<a id="spoon_ai.graph.exceptions"></a>
 
-# Module `spoon_ai.graph.checkpointer`
+# Module `spoon_ai.graph.exceptions`
 
-In-memory checkpointer for the graph package.
+Graph engine exception definitions (public within graph package).
 
-<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer"></a>
+<a id="spoon_ai.graph.config"></a>
 
-## `InMemoryCheckpointer` Objects
+# Module `spoon_ai.graph.config`
 
-```python
-class InMemoryCheckpointer()
-```
+Configuration primitives for the SpoonAI graph engine.
 
-<a id="spoon_ai.graph.checkpointer.InMemoryCheckpointer.iter_checkpoint_history"></a>
+<a id="spoon_ai.graph.config.RouterConfig"></a>
 
-#### `iter_checkpoint_history`
+## `RouterConfig` Objects
 
 ```python
-def iter_checkpoint_history(
-        config: Dict[str, Any]) -> Iterable[CheckpointTuple]
+@dataclass
+class RouterConfig()
 ```
 
-Return checkpoint tuples for the specified thread, newest last.
+Controls how the graph chooses the next node after each execution step.
+
+<a id="spoon_ai.graph.config.ParallelRetryPolicy"></a>
+
+## `ParallelRetryPolicy` Objects
+
+```python
+@dataclass
+class ParallelRetryPolicy()
+```
+
+Retry policy for individual nodes inside a parallel group.
+
+<a id="spoon_ai.graph.config.ParallelGroupConfig"></a>
+
+## `ParallelGroupConfig` Objects
+
+```python
+@dataclass
+class ParallelGroupConfig()
+```
+
+Controls how a parallel group executes and aggregates results.
+
+<a id="spoon_ai.graph.config.ParallelGroupConfig.quorum"></a>
+
+#### `quorum`
+
+floats in (0, 1] treated as ratio, ints as absolute
+
+<a id="spoon_ai.graph.config.ParallelGroupConfig.error_strategy"></a>
+
+#### `error_strategy`
+
+fail_fast, collect_errors, ignore_errors
+
+<a id="spoon_ai.graph.config.GraphConfig"></a>
+
+## `GraphConfig` Objects
+
+```python
+@dataclass
+class GraphConfig()
+```
+
+Top-level configuration applied to an entire graph instance.
 
